@@ -6,6 +6,8 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { isArray } from 'util';
 import { DbService } from './../db.service';
+import * as firebase from 'firebase/app';
+import 'firebase/firestore';
 
 
 @Injectable()
@@ -30,7 +32,15 @@ export class WebDbService extends DbService {
         return collectionRef.add(document);
     }
 
-    public setDoc(collectionName: string, docId: any, document: any) {
+    public setDoc(collectionName: string, docId: any, document: any, timeStamp = null) {
+        if (timeStamp) {
+            if (timeStamp.createdOn) {
+                document = {...document, createdOn: firebase.firestore.FieldValue.serverTimestamp()};
+            }
+            if (timeStamp.updatedOn) {
+                document = {...document, updatedOn: firebase.firestore.FieldValue.serverTimestamp()};
+            }
+        }
         return this._afStore.doc(`/${collectionName}/${docId}`).set(document, { merge: true });
     }
 
@@ -98,5 +108,9 @@ export class WebDbService extends DbService {
 
     public upload(filePath: string, imageBlob: any) {
         return this._afstorage.upload(filePath, imageBlob);
+    }
+
+    public deleteDoc(collectionName: string, docId: any): any {
+        return this._afStore.firestore.collection(collectionName).doc(docId).delete();
     }
 }

@@ -26,7 +26,13 @@ export class TNSDbService extends DbService {
         return collectionRef.add(document);
     }
 
-    public setDoc(collectionName: string, docId: any, document: any) {
+    public setDoc(collectionName: string, docId: any, document: any, timeStamp = null) {
+        if (timeStamp.createdOn) {
+            document = {...document, createdOn: firebaseApp.firestore().FieldValue().serverTimestamp()};
+        }
+        if (timeStamp.updatedOn) {
+            document = {...document, updatedOn: firebaseApp.firestore().FieldValue().serverTimestamp()};
+        }
         const userCollection = firebaseApp.firestore().collection(collectionName);
         return userCollection.doc(docId).set(document, { merge: true });
     }
@@ -95,11 +101,17 @@ export class TNSDbService extends DbService {
     }
 
     public getDoc(collectionName: string, docId: any): any {
-
+        const collectionRef = firebaseApp.firestore().collection(collectionName);
+        return collectionRef.doc(docId);
     }
 
     public upload(filePath: string, imageBlob: any): any {
 
+    }
+
+    public deleteDoc(collectionName: string, docId: any): any {
+        const collectionRef = firebaseApp.firestore().collection(collectionName);
+        return collectionRef.doc(docId).delete();
     }
 
 }

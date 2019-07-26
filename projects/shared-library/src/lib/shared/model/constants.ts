@@ -114,6 +114,7 @@ export enum CollectionConstants {
     STATS_SYSTEM = 'system',
     ACHIEVEMENTS = 'achievements',
     ACHIEVEMENT_RULES = 'achievement_rules',
+    REACTIONS = 'reactions'
 }
 
 export enum UserConstants {

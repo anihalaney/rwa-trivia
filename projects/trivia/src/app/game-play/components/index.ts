@@ -6,6 +6,8 @@ import { GameOverComponent } from './game-over/game-over.component';
 import { GameDialogComponent } from './game-dialog/game-dialog.component';
 import { ReportGameComponent } from './report-game/report-game.component';
 import { GameContinueComponent } from './game-continue/game-continue.component';
+import { UserReactionComponent } from './user-reaction/user-reaction.component';
+
 export {
     NewGameComponent,
     GameComponent,
@@ -14,7 +16,8 @@ export {
     GameOverComponent,
     GameDialogComponent,
     ReportGameComponent,
-    GameContinueComponent
+    GameContinueComponent,
+    UserReactionComponent
 };
 
 export default [
@@ -25,5 +28,6 @@ export default [
     GameOverComponent,
     GameDialogComponent,
     ReportGameComponent,
-    GameContinueComponent
+    GameContinueComponent,
+    UserReactionComponent
 ];

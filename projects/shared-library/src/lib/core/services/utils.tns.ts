@@ -5,7 +5,9 @@ import {
   Parameter, User, FirebaseAnalyticsKeyConstants, FirebaseAnalyticsEventConstants, GameOptions,
   PlayerMode, GameConstant, OpponentType, GameMode, Game, GeneralConstants
 } from '../../shared/model';
-import { of, Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
+import { UtilsCore } from './utilsCore';
+
 
 @Injectable()
 export class Utils extends UtilsCore {

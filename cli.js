@@ -132,8 +132,12 @@ const commandList = {
         },
         "builder": args => {
             const env = args.argv.env;
-            const project = args.argv.projectName;
-            args.argv.setConfig = env === 'production' ? `npm run firebase -P ${project} functions:config:set environment.production=true` : '';
+            const project = args.argv.productVariant;
+            args.options(
+                {
+                    'setConfig': { 'default': env === 'production' ? `npm run firebase -P ${project} functions:config:set environment.production=true` : '' }
+                }
+            );
             replaceVariableInIndex(['trivia', 'trivia-admin'], args.argv.productVariant);
         }
     },
@@ -191,7 +195,7 @@ const commandList = {
                 "default": '1.0',
                 "alias": ['VN', 'vn']
             },
-        },       
+        },
         "builder": args => args.argv.platform === 'ios' && args.argv.env && args.argv.environment.search('--env.prod') >= 0 ? args.argv.forDevice = ' --for-device' : args.argv.forDevice = '',
         "preCommand" : async (argv) => await updateAppVersion(argv, false)
     },
