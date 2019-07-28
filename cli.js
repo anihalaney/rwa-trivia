@@ -191,8 +191,8 @@ const commandList = {
                 "default": '1.0',
                 "alias": ['VN', 'vn']
             },
-        },
-        "builder": args => args.argv.platform === 'ios' && args.argv.environment.search('--env.prod') >= 0 ? args.argv.forDevice = ' --for-device' : args.argv.forDevice = '',
+        },       
+        "builder": args => args.argv.platform === 'ios' && args.argv.env && args.argv.environment.search('--env.prod') >= 0 ? args.argv.forDevice = ' --for-device' : args.argv.forDevice = '',
         "preCommand" : async (argv) => await updateAppVersion(argv, false)
     },
     "release-mobile": {
