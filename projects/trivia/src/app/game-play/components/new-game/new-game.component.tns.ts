@@ -67,7 +67,6 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
           this.friendUserId = data.userid;
         }
         if (data && data.mode) {
-          console.log('mode::', data.mode);
           this.modeAvailable = true;
           if (data.mode === 'Single') {
             this.gameOptions.playerMode = 0;
