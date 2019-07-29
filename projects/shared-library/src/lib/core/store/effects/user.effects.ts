@@ -22,8 +22,8 @@ export class UserEffects {
             map((user: User) => this.userActions.addUserWithRoles(user)),
             catchError((error) => {
                 console.log(error);
-                this.userActions.addUserWithRoles(null);
-                return of({});
+                this.userActions.logoff();
+                return empty();
             })
         );
 
@@ -43,6 +43,7 @@ export class UserEffects {
         .pipe(map((action: ActionWithPayload<string>) => action.payload),
             distinct(),
             mergeMap((userId: string) => this.svc.loadOtherUserProfile(userId)),
+            mergeMap((user: User) => this.svc.getUserStatus(user)),
             map((user: User) => this.userActions.loadOtherUserProfileSuccess(user)));
 
     @Effect()

@@ -8,7 +8,7 @@ import { Country } from 'shared-library/shared/mobile/component/countryList/mode
 export class UserActions {
 
   static LOGOFF = 'LOGOFF';
-  logoff(): ActionWithPayload<null> {
+  logoff(): ActionWithPayload<any> {
     return {
       type: UserActions.LOGOFF,
       payload: null

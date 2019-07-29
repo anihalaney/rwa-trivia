@@ -231,4 +231,13 @@ export class UserService {
         const url = `${CONFIG.functionsUrl}/${this.RC.USER}/${this.RC.ADDRESS_SUGGESTION}/${address}`;
         return this.http.get<any>(url);
     }
+
+    getUserStatus(user: User): Observable<User> {
+
+        return this.dbService.valueChanges('user_status', user.userId)
+            .pipe(map(u => {
+                user.online = (u) ? u.online : false;
+                return user;
+            }));
+    }
 }
