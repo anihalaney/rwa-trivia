@@ -14,7 +14,7 @@ import { coreState } from 'shared-library/core/store';
 import { GameActions, UserActions } from 'shared-library/core/store/actions';
 import { Category, PlayerMode } from 'shared-library/shared/model';
 import { ObservableArray } from 'tns-core-modules/data/observable-array';
-import { Page } from 'tns-core-modules/ui/page/page';
+import { Page, isIOS } from 'tns-core-modules/ui/page/page';
 import { AppState, appState } from '../../../store';
 import * as gamePlayActions from './../../store/actions';
 import { NewGame } from './new-game';
@@ -73,6 +73,22 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
           this.friendUserId = data.userid;
         }
       }));
+
+    this.userDict$ = this.store.select(appState.coreState).pipe(select(s => s.userDict));
+    this.subscriptions.push(this.userDict$.subscribe(userDict => {
+      this.userDict = userDict;
+
+      // Here listview is refresh in ios because it is not able to render user details.
+      // https://github.com/NativeScript/nativescript-ui-feedback/issues/753
+
+      if (this.listViewComponent) {
+        if (isIOS) {
+          this.listViewComponent.listView.refresh();
+        }
+      }
+      this.cd.markForCheck();
+    }
+    ));
 
     this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.newGameId), filter(g => g !== '')).subscribe(gameObj => {
       if (gameObj && gameObj['gameId']) {
@@ -270,6 +286,17 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
 
   get tagsHeight() {
     return (60 * this.selectedTags.length) + 20;
+  }
+
+  userChange(user) {
+    console.log('user changed');
+    if (this.listViewComponent) {
+      console.log('refresh');
+      // setTimeout(() => {
+      // this.listViewComponent.listView.refresh();
+      // this.cd.markForCheck();
+      // }, 0);
+    }
   }
 
 

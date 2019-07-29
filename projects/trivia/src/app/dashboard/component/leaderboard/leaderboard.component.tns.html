@@ -29,7 +29,7 @@
                                 <Label text="#{{j+1}}" row="0" col="0" class="padding-5 text-black Hind-Bold" fontSize="16"
                                     verticalAlignment="center"></Label>
                                     <StackLayout row="0" col="1" class="padding-10">
-                                            <app-user-card [user]=userDict[user.userId] [userId]="user.userId" [type]="userCardType.USER_IMAGE_NAME_LOCATION_HORIZONTAL"></app-user-card>
+                                            <app-user-card [userId]="user.userId" [type]="userCardType.USER_IMAGE_NAME_LOCATION_HORIZONTAL"></app-user-card>
                                     </StackLayout>
                                 <GridLayout row="0" col="3" rows="*, *" columns="*" class="padding-10">
                                     <Label [text]="user.score" row="0" col="0" class="text-black" fontSize="16"></Label>

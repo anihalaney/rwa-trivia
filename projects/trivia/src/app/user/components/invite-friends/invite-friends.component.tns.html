@@ -10,15 +10,9 @@
         <RadListView [items]="uFriends">
             <ng-template tkListItemTemplate let-row="item">
                 <GridLayout rows="*" columns="*,70,50,50" class="friend-list">
-                    <!-- <Image [stlOpenUserProfile]="{userId: row.userId, redirectTo: 'otherUserProfile'}"  row="0" col="0" [src]="getImageUrl(userDict[row.userId])" stretch="aspectFill" height="40"
-                        width="40" marginLeft="10" verticalAlignment="center" marginRight="15" borderRadius="50"></Image>
-                    <Label class="name Hind-Regular" verticalAlignment="center" [text]="userDict[row.userId]?.displayName" row="0" col="1"></Label> -->
-                    <StackLayout row="0" col="0">
-                        <!-- [user]="userDict[row.userId]" -->
-                        <!-- [user]="userDict[row.userId]"  -->
+                        <StackLayout row="0" col="0">
                         <app-user-card [userId]="row.userId" [type]="userCardType.USER_IMAGE_NAME_HORIZONTAL">
                         </app-user-card>
-
                     </StackLayout>
                     <Label class="name Hind-Regular" verticalAlignment="center" textAlignment="center" *ngIf="row?.gamePlayed"
                         text="{{row?.gamePlayed}}" row="0" col="1"></Label>

@@ -1,5 +1,5 @@
 <GridLayout rows="auto,auto,auto" columns="*,auto,auto" padding="5"  iosOverflowSafeArea="false">
-    <app-user-card row="0" col="0" [user]="userDict[game.playerIds[0]]" [type]="userCardType.USER_IMAGE_NAME_CATEGORY_HORIZONTAL" [otherInfo]="{category:categoryDict[game.gameOptions?.categoryIds[randomCategoryId]]?.categoryName?.charAt(0)?.toUpperCase()
+    <app-user-card row="0" col="0" [userId]="game.playerIds[0]" [type]="userCardType.USER_IMAGE_NAME_CATEGORY_HORIZONTAL" [otherInfo]="{category:categoryDict[game.gameOptions?.categoryIds[randomCategoryId]]?.categoryName?.charAt(0)?.toUpperCase()
         + categoryDict[game.gameOptions?.categoryIds[randomCategoryId]]?.categoryName?.slice(1), remainingDays:remainingDays}"></app-user-card>
     <Button row="0" col="1" class="fa " text="&#xf058;" width="50" fontSize="40" verticalAlignment="top" backgroundColor="#fff" color="#71b02b" [nsRouterLink]="['/game-play', game.gameId]" stlRippleEffect></Button>
     <Button row="0" col="2" class="fa " text="&#xf057;" width="50" fontSize="40" backgroundColor="#fff" color="#f50057" verticalAlignment="top"  (tap)="rejectGameInvitation()" stlRippleEffect></Button>

@@ -51,11 +51,6 @@ export class GameContinue implements OnInit {
     }
   }
 
-  getImageUrl(user: User) {
-    return this.utils.getImageUrl(user, 44, 40, '44X40');
-  }
-
-
   destroy() {
     this.user$ = undefined;
     this.user = undefined;

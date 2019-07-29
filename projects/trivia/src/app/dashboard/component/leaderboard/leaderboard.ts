@@ -60,7 +60,6 @@ export class Leaderboard implements OnDestroy {
     this.subscriptions.push(this.userDict$.subscribe(userDict => {
       this.userDict = userDict;
       this.cd.markForCheck();
-      // console.log(JSON.stringify(this.userDict)); 
     }));
 
     this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
@@ -103,33 +102,12 @@ export class Leaderboard implements OnDestroy {
           });
 
           if (this.leaderBoardCat && this.leaderBoardCat.length > 0) {
-
-            // this.leaderBoardCat.map((cat, catIndex) => {
-            //   if (Array.isArray(this.leaderBoardStatDict[cat])) {
-            //     this.leaderBoardStatDict[cat].map((user: LeaderBoardUser) => {
-            //       const userId = user.userId;
-            //       if (!this.loggedInUserId) {
-            //         if (this.userDict && !this.userDict[userId]) {
-            //           this.store.dispatch(this.userActions.loadOtherUserProfile(userId));
-            //         }
-            //       }
-            //       if (this.loggedInUserId) {
-            //         if (!this.userDict[userId] || !this.userDict[userId].account) {
-            //           this.store.dispatch(this.userActions.loadOtherUserExtendedInfo(userId));
-            //         }
-            //       }
-            //     });
-            //   }
-            // });
-            console.log('tester');
-            this.cd.markForCheck();
             if (this.lbsSliceStartIndex === -1) {
               this.lbsSliceStartIndex = Math.floor((Math.random() * (this.leaderBoardCat.length - 3)) + 1);
               this.lbsSliceLastIndex = this.lbsSliceStartIndex + 3;
               this.lbsUsersSliceStartIndex = 0;
               this.lbsUsersSliceLastIndex = 3;
             }
-            console.log('tester 131');
             this.selectedCatList = this.leaderBoardStatDict[1];
             this.cd.markForCheck();
           }

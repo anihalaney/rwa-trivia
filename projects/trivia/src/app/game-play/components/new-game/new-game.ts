@@ -163,7 +163,7 @@ export class NewGame implements OnDestroy {
   }
 
   selectFriendId(friendId: string) {
-    console.log('event fired', friendId);
+    // console.log('event fired', friendId);
     this.friendUserId = friendId;
     this.errMsg = undefined;
   }

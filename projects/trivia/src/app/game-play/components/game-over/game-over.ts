@@ -98,11 +98,6 @@ export class GameOver implements OnInit {
     this.subscriptions.push(this.store.select(gamePlayState).pipe(select(s => s.userAnsweredQuestion)).subscribe(stats => {
       if (stats != null) {
         this.questionsArray = stats;
-        this.questionsArray.map((question) => {
-          if (!this.userDict[question.created_uid]) {
-            this.store.dispatch(this.userActions.loadOtherUserProfile(question.created_uid));
-          }
-        });
         this.cd.detectChanges();
       }
     }));

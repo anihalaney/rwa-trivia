@@ -6,19 +6,7 @@
                 <StackLayout>
                     <GridLayout row="auto,*" columns="auto,*,auto" marginRight="5" class="sideStackLayoutHeader" *ngIf="user"
                         paddingTop="10">
-                        <!-- <Image row="0" col="0" src="{{photoUrl}}" backgroundColor="gray" stretch="aspectFill" height="64"
-                            width="64" marginLeft="10" verticalAlignment="center" marginRight="10" borderRadius="50"></Image>
-                        <StackLayout row="0" col="1" class="Roboto-Regular">
-                            <Label text="You" textWrap="true" fontSize="18" color="#616161" class="main-title"></Label>
-                            <Label text="Score {{correctCount}} | Round {{questionRound}} / {{totalRound}}" textWrap="true"
-                                class="sub-title" color="#8c8c8c"></Label>
-                            <StackLayout orientation="vertical" class="Hind-Regular">
-                                <Label *ngIf="otherPlayer?.displayName" text="Playing with {{otherPlayer?.displayName}}"
-                                    textWrap="true" class="sub-title" color="#3b5998" fontWeight="500"></Label>
-                            </StackLayout>
-
-                        </StackLayout> -->
-                        <app-user-card [user]="user" [isGamePlay]=true [type]="userCardType.USER_IMAGE_NAME_WITH_SCORE" [otherInfo]="{correctCount:correctCount,questionRound:questionRound,totalRound:totalRound,otherPlayer:otherPlayer}">
+                        <app-user-card [userId]="user.userId" [isGamePlay]=true [type]="userCardType.USER_IMAGE_NAME_WITH_SCORE" [otherInfo]="{correctCount:correctCount,questionRound:questionRound,totalRound:totalRound,otherPlayer:otherPlayer}">
                         </app-user-card>
                         <StackLayout row="0" col="2" orientation="horizontal" horizontalAlignment="center">
                             <Image *ngIf="correctCount>=1" src="~/assets/images/score1.png" height="30" width="30"
@@ -87,7 +75,7 @@
                     </StackLayout>
                     <GridLayout margin="0 15" rows="auto" columns="auto" *ngIf="question" style=" horizontal-align:right;"
                         class="Roboto-Medium">
-                        <author [isGamePlay]="true" [userDict]="userDict" [userId]="question.created_uid"></author>
+                        <author [isGamePlay]="true" [userId]="question.created_uid"></author>
                     </GridLayout>
                 </StackLayout>
             </CardView>

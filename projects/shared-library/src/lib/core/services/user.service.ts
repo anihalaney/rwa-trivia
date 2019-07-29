@@ -96,8 +96,6 @@ export class UserService {
 
     loadOtherUserProfileWithExtendedInfo(userId: string): Observable<User> {
         const url = `${CONFIG.functionsUrl}/user/extendedInfo/${userId}`;
-        console.log('extend info');
-        this.http.get<User>(url).subscribe(res => console.log(JSON.stringify(res)));
         return this.http.get<User>(url);
     }
 

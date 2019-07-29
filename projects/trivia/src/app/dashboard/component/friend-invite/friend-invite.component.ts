@@ -13,7 +13,6 @@ import { AppState } from '../../../store';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FriendInviteComponent implements OnInit {
-  @Input() userDict: { [key: string]: User } = {};
   @Input() invitation: Invitation;
   invitations: Invitation[];
   @Input() user: User;
@@ -26,10 +25,6 @@ export class FriendInviteComponent implements OnInit {
   }
 
   ngOnInit() {
-  }
-
-  getImageUrl(user: User) {
-    return this.utils.getImageUrl(user, 44, 40, '44X40');
   }
 
   acceptFriendInvitation(): void {

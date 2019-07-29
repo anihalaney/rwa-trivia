@@ -12,12 +12,7 @@
                                 textWrap="true"></Label>
 
                             <StackLayout *ngIf="game.gameOptions?.playerMode == PlayerMode.Single" class="game-continue">
-                                <!-- <Image  [stlOpenUserProfile]="{userId: user.userId, redirectTo: 'userProfile'}" src="{{getImageUrl(user)}}" backgroundColor="gray" stretch="aspectFill"
-                                    height="64" width="64" marginLeft="10" verticalAlignment="center" marginRight="10"
-                                    borderRadius="50"></Image>
-                                <Label class="username" horizontalAlignment="center" text="{{playerUserName}}"
-                                    textWrap="true"></Label> -->
-                                <app-user-card [user]="user" [type]="userCardType.USER_IMAGE_NAME_VERTICAL"> </app-user-card>
+                                <app-user-card [userId]="user.userId" [type]="userCardType.USER_IMAGE_NAME_VERTICAL"> </app-user-card>
                                 <Label class="roundandscore" horizontalAlignment="center"
                                     text="Score {{game.stats[user.userId]?.score}} / {{game.round}}"
                                     textWrap="true"></Label>
@@ -45,17 +40,9 @@
                             <GridLayout rows="*" columns="*,auto,*" horizontalAlignment="center"
                                 *ngIf="game.gameOptions.playerMode == PlayerMode.Opponent">
                                 <StackLayout row="0" col="0" class="game-continue">
-                                    <!-- <Image  [stlOpenUserProfile]="{userId: user.userId, redirectTo: 'userProfile'}" src="{{getImageUrl(user)}}" backgroundColor="gray" stretch="aspectFill"
-                                        height="64" width="64" marginLeft="10" verticalAlignment="center"
-                                        marginRight="10" borderRadius="50"></Image>
-                                    <Label class="username-double user-name" horizontalAlignment="center"
-                                        text="{{playerUserName}}" textWrap="true"></Label> -->
-                                    <Label text="FIRSTPLAYER" textWrap="true"></Label>
-                                        <app-user-card [user]="user" [type]="userCardType.USER_IMAGE_NAME_VERTICAL"> </app-user-card>
-                                    <!-- <StackLayout paddingTop="10"> -->
-                                        <Label class="roundandscore tagging" horizontalAlignment="center"
+                                    <app-user-card [userId]="user.userId" [type]="userCardType.USER_IMAGE_NAME_VERTICAL"> </app-user-card>
+                                    <Label class="roundandscore tagging" horizontalAlignment="center"
                                             text="Score {{game.stats[user.userId]?.score}}" textWrap="true"> </Label>
-                                    <!-- </StackLayout> -->
                                     <StackLayout class="earnedsymbolsStack" orientation="horizontal"
                                         horizontalAlignment="center">
                                         <Image *ngIf="game.stats[user.userId]?.score>=1"
@@ -84,17 +71,9 @@
                                 <Label row="0" col="1" text="V/S" verticalAlignment="top" textWrap="true"> </Label>
 
                                 <StackLayout row="0" col="2" class="game-continue">
-                                    <!-- <Image [stlOpenUserProfile]="{userId: otherUserId, redirectTo: 'otherUserProfile'}"  src="{{getImageUrl(otherUserInfo)}}" backgroundColor="gray"
-                                        stretch="aspectFill" height="64" width="64" marginLeft="10"
-                                        verticalAlignment="center" marginRight="10" borderRadius="50"></Image>
-                                    <Label class="username-double user-name" horizontalAlignment="center"
-                                        text="{{otherUserInfo?.displayName}}" textWrap="true"></Label> -->
-                                    <Label text="SECONDPLAYER" textWrap="true"></Label>
-                                    <app-user-card [user]="otherUserInfo" [type]="userCardType.USER_IMAGE_NAME_VERTICAL"> </app-user-card>
-                                    <!-- <StackLayout paddingTop="10">    -->
-                                        <Label class="roundandscore tagging" horizontalAlignment="center"
+                                    <app-user-card [userId]="otherUserId" [type]="userCardType.USER_IMAGE_NAME_VERTICAL"> </app-user-card>
+                                    <Label class="roundandscore tagging" horizontalAlignment="center"
                                             text="Score {{game.stats[otherUserId]?.score}}" textWrap="true"> </Label>
-                                    <!-- </StackLayout> -->
                                     <StackLayout class="earnedsymbolsStack" orientation="horizontal"
                                         horizontalAlignment="center">
                                         <Image *ngIf="game.stats[otherUserId]?.score>=1"

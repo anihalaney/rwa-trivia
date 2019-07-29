@@ -5,16 +5,7 @@
             <StackLayout class="game-continue">
                 <StackLayout (onloaded)="stackLoaded($event)" backgroundColor="#ffffff" marginTop="30">
                     <StackLayout *ngIf="game.gameOptions?.playerMode == PlayerMode.Single" marginBottom="10">
-                        <!-- <StackLayout marginLeft="10" verticalAlignment="center" marginRight="10" borderRadius="50"
-                            borderColor="#3b5998" borderWidth="1" height="90" width="90" paddingTop="2" paddingLeft="1"
-                            paddingRight="1">
-                            <Image src="{{getImageUrl(user)}}" height="90" width="90" backgroundColor="gray"
-                                stretch="aspectFill" borderRadius="50" borderWidth="1" borderColor="#fff"
-                                horizontalAlignment="center"></Image>
-                        </StackLayout>
-                        <Label class="username user" horizontalAlignment="center" text="{{playerUserName}}"
-                            textWrap="true"></Label> -->
-                        <app-user-card [user]="user" [isGamePlay]=true [type]="userCardType.USER_IMAGE_NAME_VERTICAL"> </app-user-card>
+                        <app-user-card [userId]="user.userId" [isGamePlay]=true [type]="userCardType.USER_IMAGE_NAME_VERTICAL"> </app-user-card>
                         <Label class="roundandscore" horizontalAlignment="center" text="Score {{game.stats[user.userId]?.score}} / {{game.round}}"
                             textWrap="true"></Label>
                         <StackLayout class="earnedsymbolsStack" orientation="horizontal" horizontalAlignment="center">
@@ -38,17 +29,7 @@
 
                     <GridLayout rows="*" columns="*,auto,*" *ngIf="game.gameOptions.playerMode == PlayerMode.Opponent">
                         <StackLayout row="0" col="0" horizontalAlignment="center" width="120">
-                            <!-- <StackLayout marginLeft="10" verticalAlignment="center" marginRight="10" borderRadius="50"
-                                borderColor="#3b5998" borderWidth="1" height="90" width="90" paddingTop="2" paddingLeft="1"
-                                paddingRight="1">
-                                <Image src="{{getImageUrl(user)}}" height="90" width="90" backgroundColor="gray"
-                                    stretch="aspectFill" borderRadius="50" borderWidth="1" borderColor="#fff"
-                                    horizontalAlignment="center"></Image>
-                            </StackLayout>
-                            <Label class="username-double user-name" paddingTop="10" horizontalAlignment="center" text="{{playerUserName}} teste"
-                            textWrap="true"></Label> -->
-
-                            <app-user-card [user]="user" [isGamePlay]=true [type]="userCardType.USER_IMAGE_NAME_VERTICAL"> </app-user-card>
+                            <app-user-card [userId]="user.userId" [isGamePlay]=true [type]="userCardType.USER_IMAGE_NAME_VERTICAL"> </app-user-card>
 
                             <StackLayout textWrap="true">
                                 <Label class="roundandscore tagging" horizontalAlignment="center" text="Score {{game.stats[user.userId]?.score}}"
@@ -79,17 +60,7 @@
                         </Label>
 
                         <StackLayout row="0" col="2" horizontalAlignment="center" width="120">
-                            <!-- <StackLayout marginLeft="10" verticalAlignment="center" marginRight="10" borderRadius="50"
-                                borderColor="#3b5998" borderWidth="1" height="90" width="90" paddingTop="2" paddingLeft="1"
-                                paddingRight="1">
-                                <Image src="{{getImageUrl(otherUserInfo)}}" height="90" width="90" backgroundColor="gray"
-                                    stretch="aspectFill" borderRadius="50" borderWidth="1" borderColor="#fff"
-                                    horizontalAlignment="center"></Image>
-                            </StackLayout>
-                            <Label class="username-double user-name" paddingTop="10" horizontalAlignment="center" text="{{otherUserInfo?.displayName}}"
-                                    textWrap="true"></Label> -->
-
-                            <app-user-card [user]="otherUserInfo" [isGamePlay]=true [type]="userCardType.USER_IMAGE_NAME_VERTICAL"> </app-user-card>
+                            <app-user-card [userId]="otherUserId" [isGamePlay]=true [type]="userCardType.USER_IMAGE_NAME_VERTICAL"> </app-user-card>
 
                             <StackLayout>
                                 <Label class="roundandscore tagging" horizontalAlignment="center" text="Score {{game.stats[otherUserId]?.score}}"
