@@ -126,10 +126,10 @@ export class ProfileSettings {
 
     initializeUserProfile() {
         return combineLatest(
-            this.store.select(appState.coreState).pipe(select(s => s.account)),
+           [this.store.select(appState.coreState).pipe(select(s => s.account)),
             this.store.select(getCategories),
             this.store.select(categoryDictionary),
-            this.initializeSocialSetting(),
+            this.initializeSocialSetting()]
         ).pipe(map(values => {
             this.account = values[0] || new Account();
             this.categories = values[1] || [];
@@ -160,10 +160,10 @@ export class ProfileSettings {
             select(s => s.userDict),
             skipWhile(userDict => !userDict),
             map(userDict => {
-                this.userDict = userDict;      
+                this.userDict = userDict;
                 if (user && !this.loggedInUser) {
                     this.loggedInUser = user;
-                    this.store.dispatch(this.userAction.loadOtherUserFriendExtendedInfo(this.userId));
+                    this.store.dispatch(this.userAction.loadOtherUserExtendedInfo(this.userId));
                 } else if (!this.userDict[this.userId] || !this.userDict[this.userId].account) {
                     this.store.dispatch(this.userAction.loadOtherUserExtendedInfo(this.userId));
                 } else {
@@ -199,9 +199,7 @@ export class ProfileSettings {
         );
     }
 
-    initializedLoggedInUserAccoutInfo() {
-        return this.store.select(appState.coreState).pipe(select(s => s.account));
-    }
+
     get tagsArray(): FormArray {
         return this.userForm.get('tagsArray') as FormArray;
     }
