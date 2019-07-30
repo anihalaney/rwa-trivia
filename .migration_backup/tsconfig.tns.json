@@ -1,0 +1,28 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "module": "es2015",
+    "moduleResolution": "node",
+    "experimentalDecorators": true,
+    "baseUrl": "./",
+    "paths": {
+      "shared-library/*": [
+        "./projects/shared-library/src/lib/*"
+      ],
+      "*": [
+        "./node_modules/tns-core-modules/*",
+        "./node_modules/*"
+      ]
+    }
+  },
+  "exclude": [
+    "**/*.tns.ts",
+    "**/*.android.ts",
+    "**/*.ios.ts",
+    "app/main.aot.ts",
+    "./functions/*",
+    "./scheduler/*",
+    "**/*.spec.ts",
+    "server.ts",
+  ]
+}

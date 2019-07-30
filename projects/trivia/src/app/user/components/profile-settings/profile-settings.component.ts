@@ -27,7 +27,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnInit,
 
   dialogRef: MatDialogRef<LocationResetDialogComponent>;
 
-  @ViewChild('cropper') cropper: ImageCropperComponent;
+  @ViewChild('cropper', { static: false }) cropper: ImageCropperComponent;
   // Properties
   cropperSettings: CropperSettings;
   notificationMsg: string;

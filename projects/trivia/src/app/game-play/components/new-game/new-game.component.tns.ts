@@ -44,8 +44,8 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
   // it delay complex UI show Router navigation can finish first to have smooth transition
   renderView = false;
   challengerUserId: string;
-  @ViewChild('autocomplete') autocomplete: RadAutoCompleteTextViewComponent;
-  @ViewChild('friendListView') listViewComponent: RadListViewComponent;
+  @ViewChild('autocomplete', { static: false }) autocomplete: RadAutoCompleteTextViewComponent;
+  @ViewChild('friendListView', { static: false }) listViewComponent: RadListViewComponent;
 
   constructor(public store: Store<AppState>,
     public gameActions: GameActions,

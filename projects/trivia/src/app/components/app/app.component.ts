@@ -26,7 +26,7 @@ export class AppComponent implements OnInit, OnDestroy {
   subscriptions = [];
   theme = '';
 
-  @ViewChild('cookieLaw')
+  @ViewChild('cookieLaw', { static: true })
   private cookieLawEl: CookieLawComponent;
 
   constructor(private renderer: Renderer2,

@@ -2,7 +2,7 @@ import { ActivatedRouteSnapshot, RouterStateSnapshot, Params } from '@angular/ro
 
 import * as fromRouter from '@ngrx/router-store';
 import { ActionReducerMap, createFeatureSelector } from '@ngrx/store';
-import { RouterStateSerializer } from '@ngrx/router-store/src/serializer';
+import { RouterStateSerializer } from '@ngrx/router-store';
 import { RouterStateUrl } from 'shared-library/shared/model';
 
 export interface State {

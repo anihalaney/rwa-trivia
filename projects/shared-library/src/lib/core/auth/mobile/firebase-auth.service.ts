@@ -71,7 +71,7 @@ export class TNSFirebaseAuthService implements FirebaseAuthService {
         return firebase.login({
             type: firebase.LoginType.FACEBOOK,
             facebookOptions: {
-                scope: ['public_profile', 'email']
+                scopes: ['public_profile', 'email']
             }
         });
     }

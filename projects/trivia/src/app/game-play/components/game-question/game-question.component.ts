@@ -11,8 +11,8 @@ import { GameQuestion } from './game-question';
 })
 export class GameQuestionComponent extends GameQuestion implements OnInit, OnDestroy, AfterViewInit, OnChanges {
 
-  @ViewChild('overlay') overlay: ElementRef;
-  @ViewChild('loader') loader: ElementRef;
+  @ViewChild('overlay', { static: false }) overlay: ElementRef;
+  @ViewChild('loader', { static: true }) loader: ElementRef;
   alpha = 0;
   setTimeOutLimit = 0;
 
