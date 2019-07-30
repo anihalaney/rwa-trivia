@@ -7,17 +7,17 @@ import { RadAutoCompleteTextViewComponent } from 'nativescript-ui-autocomplete/a
 import { ListViewEventData } from 'nativescript-ui-listview';
 import { RadListViewComponent } from 'nativescript-ui-listview/angular';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
-import { Observable } from 'rxjs';
 import { filter, take } from 'rxjs/operators';
-import { Utils, WindowRef } from 'shared-library/core/services';
 import { coreState } from 'shared-library/core/store';
-import { GameActions, UserActions } from 'shared-library/core/store/actions';
-import { Category, PlayerMode } from 'shared-library/shared/model';
-import { ObservableArray } from 'tns-core-modules/data/observable-array';
 import { Page, isIOS } from 'tns-core-modules/ui/page/page';
 import { AppState, appState } from '../../../store';
 import * as gamePlayActions from './../../store/actions';
 import { NewGame } from './new-game';
+import { Utils, WindowRef } from 'shared-library/core/services';
+import { GameActions, UserActions } from 'shared-library/core/store/actions';
+import { Category, PlayerMode } from 'shared-library/shared/model';
+import { ObservableArray } from 'tns-core-modules/data/observable-array';
+
 
 @Component({
   selector: 'new-game',
@@ -29,16 +29,12 @@ import { NewGame } from './new-game';
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
 
-  playerMode = 0;
+
   showSelectPlayer = false;
   showSelectCategory = false;
   showSelectTag = false;
-  dataItem;
-  categoriesObs: Observable<Category[]>;
   customTag: string;
-  categoryIds: number[] = [];
   private tagItems: ObservableArray<TokenModel>;
-  filteredCategories: Category[];
   subscriptions = [];
   // This is magic variable
   // it delay complex UI show Router navigation can finish first to have smooth transition
@@ -80,7 +76,6 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
 
       // Here listview is refresh in ios because it is not able to render user details.
       // https://github.com/NativeScript/nativescript-ui-feedback/issues/753
-
       if (this.listViewComponent) {
         if (isIOS) {
           this.listViewComponent.listView.refresh();
@@ -156,13 +151,14 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
         uFriends.map(friend => {
           this.uFriends = [...this.uFriends, ...friend.userId];
         });
-        this.dataItem = this.uFriends;
+        // this.dataItems = this.uFriends;
         this.noFriendsStatus = false;
       } else {
         this.noFriendsStatus = true;
       }
       this.cd.markForCheck();
     }));
+
 
     // update to variable needed to do in ngZone otherwise it did not understand it
     this.page.on('loaded', () => this.ngZone.run(() => {
@@ -172,16 +168,12 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.playerMode = undefined;
     this.showSelectPlayer = undefined;
     this.showSelectCategory = undefined;
     this.showSelectTag = undefined;
-    this.dataItem = undefined;
-    this.categoriesObs = undefined;
     this.categories = [];
     this.subscriptions = [];
     this.customTag = undefined;
-    this.categoryIds = [];
     this.tagItems = undefined;
     this.filteredCategories = [];
     this.destroy();
@@ -288,17 +280,4 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     return (60 * this.selectedTags.length) + 20;
   }
 
-  userChange(user) {
-    console.log('user changed');
-    if (this.listViewComponent) {
-      console.log('refresh');
-      // setTimeout(() => {
-      // this.listViewComponent.listView.refresh();
-      // this.cd.markForCheck();
-      // }, 0);
-    }
-  }
-
-
 }
-

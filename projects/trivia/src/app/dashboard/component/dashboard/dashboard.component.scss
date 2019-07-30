@@ -1,22 +1,25 @@
 mat-card {
   margin: 15px;
 }
+
 .dash-card {
   width: 400px;
   min-width: 350px;
 }
-mat-card>:last-child{
+
+mat-card>:last-child {
   margin-bottom: 15px;
 }
-mat-card>:first-child{
+
+mat-card>:first-child {
   margin-top: 15px;
 }
-.card-spacing
-{
+
+.card-spacing {
   margin-right: 3%;
 }
-.no-card
-{
+
+.no-card {
   height: 415px;
   border-style: dashed;
   border-width: 2px;
@@ -24,21 +27,21 @@ mat-card>:first-child{
   width: 100%;
   border-radius: 4px;
 }
-.no-card p
-{
+
+.no-card p {
   font-family: 'hindmedium';
   font-size: 14px;
-  text-align:center; 
+  text-align: center;
   vertical-align: middle;
-  display: table-cell;  
-   
+  display: table-cell;
+
 }
-.subtext
-{
+
+.subtext {
   line-height: 2;
 }
-.invitation-title span
-{
+
+.invitation-title span {
   padding-left: 0px;
 }
 
@@ -48,14 +51,14 @@ mat-card>:first-child{
 }
 
 .text-black {
-  color:black;
+  color: black;
 }
 
 .text-gray {
-  color:gray;
+  color: gray;
 }
 
-.border-bottom{
+.border-bottom {
   border-color: #333;
   border-width: 0 0 1 0;
   border-style: solid;
@@ -71,15 +74,17 @@ mat-card>:first-child{
   background: silver;
 }
 
-.disabled-btn{
+.disabled-btn {
   background: silver;
   margin: 10;
 }
+
 .btn-red {
   margin: 10;
 }
-.text-center{
-  text-align:center;
+
+.text-center {
+  text-align: center;
   vertical-align: middle;
 }
 
@@ -87,7 +92,7 @@ mat-card>:first-child{
   color: #3b5998;
   font-weight: bold;
   font-size: 16;
-  padding:10 0;
+  padding: 10 0;
 }
 
 .lives {
@@ -105,7 +110,7 @@ mat-card>:first-child{
   text-align: center;
 }
 
-.lives-text{
+.lives-text {
   text-align: center;
   line-height: 32px;
 }
@@ -113,28 +118,30 @@ mat-card>:first-child{
 .startgame {
   min-width: 190px;
 }
+
 .min-startgame {
   min-width: 230px;
   text-align: left !important;
   padding-left: 24px !important;
 }
 
-.margin-r-25{
+.margin-r-25 {
   margin: 10 25 10 10;
 }
 
-.lives-count{
-  font-size:20;
-  font-weight:700;
-  color:#ffffff;
-  width:50;
-  height:50;
-  border-color:#ffffff;
-  border-width:2;
-  border-radius:50%;
-  background-color:#71b02f;
+.lives-count {
+  font-size: 20;
+  font-weight: 700;
+  color: #ffffff;
+  width: 50;
+  height: 50;
+  border-color: #ffffff;
+  border-width: 2;
+  border-radius: 50%;
+  background-color: #71b02f;
 }
-.points{
+
+.points {
   background-color: #3b5998;
   width: 130px;
   color: #fff;
@@ -145,7 +152,7 @@ mat-card>:first-child{
   line-height: 42px
 }
 
-.points-count{
+.points-count {
   background-color: #fff;
   color: #000;
   border-radius: 20px;
@@ -162,9 +169,15 @@ mat-card>:first-child{
   margin-right: 5px;
   font-size: 15px;
 }
-.m-l-20{margin-left:20px }
-.p-t-10{float: left;}
-    
+
+.m-l-20 {
+  margin-left: 20px
+}
+
+.p-t-10 {
+  float: left;
+}
+
 .bytes {
   background-color: #71b02f !important;
 }
@@ -172,62 +185,70 @@ mat-card>:first-child{
 .points-count-f-12 {
   font-size: 12px;
 }
-.pageheading{height: auto !important;margin-bottom: 5px}
-@media(max-width :767px){
-  .points{
+
+.pageheading {
+  height: auto !important;
+  margin-bottom: 5px
+}
+
+@media(max-width :767px) {
+  .points {
     margin-bottom: 10px;
     float: left;
     display: inline-block;
   }
 
   .min-startgame {
-    padding-left: calc( 50% - 90px) !important;
+    padding-left: calc(50% - 90px) !important;
   }
 }
 
 
 .mobile {
   .points-label {
-    color:#ffffff;
-    font-size:17;
-    margin-left:22;
-  }
-  .points-m {
-    color:#000000;
-    background-color:#ffffff;
-    min-width:42;
-    margin-right:5;
-    font-size:17;
-    height:42;
-    width:auto;
-    border-radius:50%;
-  }
-  .points-m-f-15{
-    font-size:15;
+    color: #ffffff;
+    font-size: 17;
+    margin-left: 22;
   }
 
-  .points-container{
-    height:50;
-    border-radius:25;
+  .points-m {
+    color: #000000;
+    background-color: #ffffff;
+    min-width: 42;
+    margin-right: 5;
+    font-size: 17;
+    height: 42;
+    width: auto;
+    border-radius: 50%;
+  }
+
+  .points-m-f-15 {
+    font-size: 15;
+  }
+
+  .points-container {
+    height: 50;
+    border-radius: 25;
   }
 }
 
 
 .pb-12 {
-  padding-bottom:12;
+  padding-bottom: 12;
 }
 
 .card-opacity {
   background-color: #eaeaea;
   opacity: 0.8 !important;
-  filter: Alpha(opacity=80) !important; /* IE8 and earlier */
+  filter: Alpha(opacity=80) !important;
+  /* IE8 and earlier */
 }
 
 .title {
   color: #fff;
   font-weight: bold;
   font-size: 16;
-  padding:12 0;
+  padding: 12 0;
   text-align: center;
 }
 
@@ -244,26 +265,65 @@ mat-card>:first-child{
   border-color: #71b02f;
 }
 
-.my-turn-title{
+.my-turn-title {
   background-color: #71b02f;
 }
 
+.sign-up-block {
+  background-color: #71b02f;
+  height: 50;
+}
 
 .their-turn-card {
   border-width: 1;
   border-color: #f9ba01;
 }
 
-.their-turn-title{
+.their-turn-title {
   background-color: #f9ba01;
 }
 
-.hr-my-turn{
+.hr-my-turn {
   background-color: #71b02f;
 }
 
-.hr-their-turn{
+.hr-their-turn {
   background-color: #f9ba01;
 }
 
+.submit-question {
 
+  margin-top: 10;
+  padding: 10;
+
+  .q-title {
+    font-size: 20;
+    color: black;
+    font-weight: bold;
+    margin-bottom: 10;
+  }
+
+  .q-subtitle {
+    margin-bottom: 10;
+  }
+
+  .q-button {
+    background-color: #71b02f;
+    color: white;
+    font-weight: bold;
+  }
+ 
+}
+
+.game-buttons {
+  padding: 10;
+  margin: 10;
+  border-width: 1;
+  border-color: #D4493D;
+
+  .g-btn {
+    background-color: #D4493D;
+    color: white;
+    font-weight: bold;
+  }
+}

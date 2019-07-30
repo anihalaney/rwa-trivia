@@ -99,7 +99,7 @@
 
                         <StackLayout row="2" col="0" colSpan="3" *ngIf="gameOptions.opponentType == 1"
                             paddingBottom="0">
-                            <RadListView #friendListView [items]="dataItem" ios:height="130">
+                            <RadListView #friendListView [items]="uFriends" ios:height="130">
                                 <ng-template let-item="item">
                                     <GridLayout paddingTop="10" rows="auto,*" columns="*" (tap)="selectFriendIdApp(item)">                   
                                         <app-user-card  row="0" col="0" horizontalAlignment="center" [userId]="item" [type]="userCardType.USER_IMAGE_NAME_VERTICAL_NO_REDIRECT" > </app-user-card>

@@ -8,7 +8,6 @@ import {
 } from '../../shared/model';
 import { UtilsCore } from './utilsCore';
 
-
 @Injectable()
 export class Utils extends UtilsCore {
 
@@ -44,7 +43,6 @@ export class Utils extends UtilsCore {
     firebase.crashlytics.log(type, error);
     firebase.crashlytics.sendCrashLog(error);
   }
-
 
   setAnalyticsParameter(key: string, value: string, analyticsParameter: Array<Parameter>): Array<Parameter> {
     analyticsParameter.push({ key: key, value: value });

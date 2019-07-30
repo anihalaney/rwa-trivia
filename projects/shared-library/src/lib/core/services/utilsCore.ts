@@ -1,10 +1,9 @@
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { Inject, PLATFORM_ID } from '@angular/core';
-import { Subscription, Observable } from 'rxjs';
+import { DomSanitizer } from '@angular/platform-browser';
+import { Observable, Subscription } from 'rxjs';
 import { CONFIG } from '../../environments/environment';
-import { Answer, User, GameOptions, Game } from '../../shared/model';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-
+import { Answer, Game, GameOptions, User } from '../../shared/model';
 
 export abstract class UtilsCore {
 

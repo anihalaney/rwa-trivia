@@ -61,13 +61,16 @@ export class DashboardComponent extends Dashboard implements OnInit, OnDestroy {
     ));
   }
 
-  startNewGame() {
+  startNewGame(mode: string) {
+    console.log('mode::', mode);
     if (this.applicationSettings && this.applicationSettings.lives.enable) {
       if (this.account.lives > 0) {
-        this.routerExtension.navigate(['/game-play'], { clearHistory: true });
+        console.log('mode::', mode);
+        this.routerExtension.navigate(['/game-play/game-options', mode], { clearHistory: true });
       }
     } else {
-      this.routerExtension.navigate(['/game-play'], { clearHistory: true });
+      console.log('mode::', mode);
+      this.routerExtension.navigate(['/game-play/game-options', mode], { clearHistory: true });
     }
 
   }
@@ -91,6 +94,14 @@ export class DashboardComponent extends Dashboard implements OnInit, OnDestroy {
 
   filterTwoPlayerWaitNextQGame = (game: Game): boolean => {
     return game.GameStatus === GameStatus.WAITING_FOR_NEXT_Q && game.nextTurnPlayerId !== this.user.userId;
+  }
+
+  navigateToLogin(): void {
+    this.routerExtension.navigate(['/login'], { clearHistory: true });
+  }
+
+  navigateToMyQuestion() {
+    this.routerExtension.navigate(['/user/my/questions']);
   }
 
   ngOnDestroy(): void {
