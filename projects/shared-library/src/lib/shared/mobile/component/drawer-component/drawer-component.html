@@ -86,8 +86,7 @@
             </ScrollView>
         </StackLayout>
 
-        <StackLayout row="1">
-            
+        <StackLayout row="1">            
             <Label *ngIf="authProvider.isAuthenticated" (rippleTap)="logout()" verticalAlignment="bottom" backgroundColor="#39454D"
                 textAlignment="center" fontSize="16" text="Logout" class="sideLabel sideStackLayout" stlRippleEffect></Label>
 

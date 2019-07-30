@@ -134,7 +134,7 @@ export class DrawerComponent implements OnInit, OnDestroy {
         this.routerExtension.navigate(['/dashboard'], { clearHistory: true });
         this.closeDrawer();
     }
- 
+
     logout() {
         this.logOut = true;
         this.setLogoutFirebaseAnalyticsParameter(this.user);
