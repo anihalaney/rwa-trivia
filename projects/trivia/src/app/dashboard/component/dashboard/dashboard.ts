@@ -16,6 +16,8 @@ export class Dashboard implements OnDestroy {
 
     START_A_NEW_GAME = 'Start New Game';
     NEW_GAME_IN = 'New Game In';
+    SINGLE_PLAYER = 'Single Player';
+    TWO_PLAYER = 'Two Player';
     user: User;
     users: User[];
     activeGames$: Observable<Game[]>;
@@ -89,11 +91,11 @@ export class Dashboard implements OnDestroy {
                 }
 
                 this.subscriptions.push(this.store.select(appState.coreState)
-                .pipe(select(s => s.questionOfTheDay)).subscribe(questionOfTheDay => {
-                    if (questionOfTheDay) {
-                        this.serverCreatedTime = questionOfTheDay.serverTimeQCreated;
-                    }
-                }));
+                    .pipe(select(s => s.questionOfTheDay)).subscribe(questionOfTheDay => {
+                        if (questionOfTheDay) {
+                            this.serverCreatedTime = questionOfTheDay.serverTimeQCreated;
+                        }
+                    }));
 
                 if (this.user) {
                     this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings))
@@ -316,6 +318,32 @@ export class Dashboard implements OnDestroy {
         const startString = this.startGame + ((this.user && this.applicationSettings.lives.enable && this.timeoutLive) ? '   |   ' + this.timeoutLive : '');
         this.cd.markForCheck();
         return startString;
+    }
+
+    get singlePlayer() {
+        let gameName = '';
+        if (this.user && this.account && this.account.lives === 0 && this.applicationSettings.lives.enable) {
+            gameName = this.NEW_GAME_IN;
+        } else {
+            gameName = this.SINGLE_PLAYER;
+        }
+        // tslint:disable-next-line:max-line-length
+        gameName = gameName + ((this.user && this.applicationSettings.lives.enable && this.timeoutLive) ? '   |   ' + this.timeoutLive : '');
+        this.cd.markForCheck();
+        return gameName;
+    }
+
+    get twoPlayer() {
+        let gameName = '';
+        if (this.user && this.account && this.account.lives === 0 && this.applicationSettings.lives.enable) {
+            gameName = this.NEW_GAME_IN;
+        } else {
+            gameName = this.TWO_PLAYER;
+        }
+        // tslint:disable-next-line:max-line-length
+        gameName = gameName + ((this.user && this.applicationSettings.lives.enable && this.timeoutLive) ? '   |   ' + this.timeoutLive : '');
+        this.cd.markForCheck();
+        return gameName;
     }
 
     get isLivesEnable(): Boolean {

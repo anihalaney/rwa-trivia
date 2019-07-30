@@ -377,6 +377,7 @@ export enum RoutesConstants {
     LOCATION = 'location',
     LAT_LONG = 'latLong',
     ADDRESS_SUGGESTION = 'addressSuggestion',
+    UPDATE_APP_VERSION = 'updateAppVersion'
 }
 
 export enum TermsAndPrivacyUrlConstant {

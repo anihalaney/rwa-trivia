@@ -1,5 +1,9 @@
 const execSync = require('child_process').execSync;
 const yargs = require('yargs');
+const path = require('path');
+const fs = require("fs");
+const axios = require('axios');
+const template = require('lodash.template');
 // Projects refers to different web application which we need to run
 const projects = ["trivia", "trivia-admin", "trivia-editor"];
 // Product variants
@@ -17,7 +21,6 @@ const firebaseProjects = ["trivia-dev",
 ];
 const schedularEnv = ['dev', 'prod'];
 const platForms = ['android', 'ios'];
-
 
 
 
@@ -72,6 +75,9 @@ const commandList = {
                 "default": 'dev',
                 "alias": 'e'
             }
+        },
+        "builder": (args) => {
+            replaceVariableInIndex([args.argv.project], args.argv.productVariant);
         }
     },
     "run-functions":
@@ -128,6 +134,7 @@ const commandList = {
             const env = args.argv.env;
             const project = args.argv.projectName;
             args.argv.setConfig = env === 'production' ? `npm run firebase -P ${project} functions:config:set environment.production=true` : '';
+            replaceVariableInIndex(['trivia', 'trivia-admin'], args.argv.productVariant);
         }
     },
     "run-mobile":
@@ -161,7 +168,6 @@ const commandList = {
             },
             "environment": {
                 "demand": false,
-                "default": "",
                 "coerce": args => args === 'production' ? '--env.prod --env.aot --env.uglify' : '',
                 "default": 'dev',
                 "alias": ['E', 'e']
@@ -170,9 +176,24 @@ const commandList = {
                 "demand": false,
                 "default": "",
                 "hidden": true
-            }
-        },
-        "builder": args => args.argv.platform === 'ios' && args.argv.env && args.argv.env.search('--env.prod') >= 0 ? args.argv.forDevice = ' --for-device' : args.argv.forDevice = ''
+            },
+            "versionCode": {
+                "demand": false,
+                "description": 'versionCode for android/ios build ',
+                "type": 'string',
+                "default": '28',
+                "alias": ['V', 'v']
+            },
+            "versionName": {
+                "demand": false,
+                "description": 'versionName for android build CFBundleShortVersionString for ios ',
+                "type": 'string',
+                "default": '1.0',
+                "alias": ['VN', 'vn']
+            },
+        },       
+        "builder": args => args.argv.platform === 'ios' && args.argv.env && args.argv.environment.search('--env.prod') >= 0 ? args.argv.forDevice = ' --for-device' : args.argv.forDevice = '',
+        "preCommand" : async (argv) => await updateAppVersion(argv, false)
     },
     "release-mobile": {
         "command": `tns buildCmd platformName --bundle 
@@ -211,10 +232,30 @@ const commandList = {
             },
             "environment": {
                 "demand": false,
-                "default": "dev",
+                "default": "staging",
                 "description": 'project environment e.g. production',
                 "coerce": args => args === 'production' ? '--env.prod' : '',
                 "alias": ['E', 'e']
+            },
+            "versionCode": {
+                "demand": true,
+                "description": 'versionCode for android/ios build ',
+                "type": 'string',
+                "default": '28.0',
+                "alias": ['V', 'v']
+            },
+            "versionName": {
+                "demand": false,
+                "description": 'versionName for android build CFBundleShortVersionString for ios ',
+                "type": 'string',
+                "default": '1.0',
+                "alias": ['VN', 'vn']
+            },
+            "token": {
+                "demand": false,
+                "description": 'token from schedular token ',
+                "type": 'string',
+                "alias": ['T', 't']
             },
             "androidRelease": {
                 "demand": false,
@@ -259,7 +300,6 @@ const commandList = {
                     }
                 );
 
-
                 args.argv.androidRelease = ` --key-store-path certificates/${productVariant}/${platformName}/bitwiser.keystore
                     --key-store-password ${keyStorePassword}
                     --key-store-alias ${keyStoreAlias} 
@@ -269,7 +309,8 @@ const commandList = {
                 args.options({ 'buildCmd': { 'default': 'prepare' }, 'forDevice': { 'default': '--for-device' } });
                 args.argv.androidRelease = '';
             }
-        }
+        },
+        "preCommand" : async (argv) => await updateAppVersion(argv, true)
     },
     "run-schedular": {
         "command": "npx rimraf scheduler/server  & tsc --project scheduler && node scheduler/server/run-scheduler.js env",
@@ -295,16 +336,20 @@ function buildCommands() {
     for (const cmd in commandList) {
         argv = argv
             .command(cmd, commandList[cmd].description, function (args) {
-                argv = yargs.options(commandList[cmd].options);
-                if (commandList[cmd].builder) {
-                    commandList[cmd].builder(args);
-                }
-            }, function (argv) {
+                argv = yargs.options(commandList[cmd].options);  
+                if(commandList[cmd].builder){
+                     commandList[cmd].builder(args);
+                }     
+                
+            }, async function (argv) {
                 let executableCmd = commandList[cmd].command;
                 for (const opt in commandList[cmd].options) {
                     if (commandList[cmd].options.hasOwnProperty(opt)) {
                         executableCmd = executableCmd.replace(new RegExp(escapeRegExp(opt), 'g'), argv[opt]);
                     }
+                }
+                if (commandList[cmd].preCommand) {
+                    await commandList[cmd].preCommand(argv);
                 }
                 executeCommand(executableCmd);
             });
@@ -328,6 +373,54 @@ function checkCommands(yargs, argv, numRequired) {
     }
 }
 
+function replaceVariableInIndex(projectList, productVarient){
+
+    for (const project of projectList) {
+        const filepath = `./projects/${project}/src/index.html`;
+        let buffer = fs.readFileSync(filepath, {encoding:'utf-8', flag:'r'});
+        const config = getConfig(productVarient);
+        const compiled = template(buffer);
+        buffer = compiled(config);
+        const options = {encoding:'utf-8', flag:'w'};
+        fs.writeFileSync(filepath, buffer, options);        
+    }
+
+}
+
+async function updateAppVersion(argv, isRelease){
+    try{
+        const platform = argv.plt;
+        const environment = argv.environment.search('--env.prod') >= 0 ? 'production': 'staging'; 
+        const filepath = platform === 'android' ? 
+        `./App_Resources/Android/AndroidManifest.xml` : `./configurations/${argv.productVariant}/ios/info.plist.${environment === 'production' ? 'prod' : 'dev'}`;
+        let buffer = fs.readFileSync(filepath, {encoding:'utf-8', flag:'r'});
+        const compiled = template(buffer);
+        buffer = compiled({'versionCode' : argv.versionCode, 'versionName' : argv.versionName, 'EXECUTABLE_NAME': '${EXECUTABLE_NAME}'});
+        var options = {encoding:'utf-8', flag:'w'};
+        fs.writeFileSync(filepath, buffer, options);
+        const config = getConfig(argv.productVariant);
+        if (isRelease) {
+            await axios({
+                method: 'post',
+                url: `${config.functionsUrl[environment]}/general/updateAppVersion`,
+                headers: {'token': argv.token, 'Content-Type': 'application/json'},
+                data: { 
+                    'versionCode': argv.versionCode,
+                    'platform': platform
+                }
+              });
+        }
+        
+        
+    } catch(error) {
+        console.log(error, 'error');
+    }
+
+}
+
+function getConfig(productVarient) {
+    return JSON.parse(fs.readFileSync(path.resolve(__dirname, `projects/shared-library/src/lib/config/${productVarient}.json`), 'utf8'));
+}
 function escapeRegExp(string) {
     return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
