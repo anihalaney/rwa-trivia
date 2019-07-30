@@ -156,14 +156,14 @@ export class AppComponent implements OnInit, OnDestroy {
         if (appSettings && appSettings.length > 0) {
 
           this.applicationSettings = appSettings[0];
-          //   console.log('appSettings', this.applicationSettings.crashlytics);
-          // if (isAndroid && version && this.applicationSettings.android_version
-          //   && this.applicationSettings.android_version > version) {
-          //   this.displayForceUpdateDialog(projectMeta.playStoreUrl);
-          // } else if (!isAndroid && version && this.applicationSettings.ios_version
-          //   && this.applicationSettings.ios_version > version) {
-          //   this.displayForceUpdateDialog(projectMeta.appStoreUrl);
-          // }
+            // console.log('appSettings', this.applicationSettings.crashlytics);
+          if (isAndroid && version && this.applicationSettings.android_version
+            && this.applicationSettings.android_version > version) {
+            this.displayForceUpdateDialog(projectMeta.playStoreUrl);
+          } else if (!isAndroid && version && this.applicationSettings.ios_version
+            && this.applicationSettings.ios_version > version) {
+            this.displayForceUpdateDialog(projectMeta.appStoreUrl);
+          }
 
         }
         this.cd.markForCheck();
