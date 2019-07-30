@@ -5,7 +5,7 @@ import { User, RouterStateUrl, Game, Friends, Invitation, Account } from '../../
 import { UserService, GameService, Utils } from '../../services';
 import { switchMap, map, distinct, mergeMap, filter, take, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { empty } from 'rxjs';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { coreState, CoreState } from '../reducers';
 import { ROUTER_NAVIGATION } from '@ngrx/router-store';
 
@@ -36,7 +36,7 @@ export class UserEffects {
     loadOtherUserProfile$ = this.actions$
         .pipe(ofType(UserActions.LOAD_OTHER_USER_PROFILE))
         .pipe(map((action: ActionWithPayload<string>) => action.payload),
-            distinct(),
+            distinct(null, this.store.select(coreState).pipe(select(s => s.user))),
             mergeMap((userId: string) => this.svc.loadOtherUserProfile(userId)),
             map((user: User) => this.userActions.loadOtherUserProfileSuccess(user)));
 
@@ -45,7 +45,7 @@ export class UserEffects {
     loadOtherUserExtendedInfo$ = this.actions$
         .pipe(ofType(UserActions.LOAD_OTHER_USER_EXTEDED_INFO))
         .pipe(map((action: ActionWithPayload<string>) => action.payload),
-            distinct(),
+            distinct(null, this.store.select(coreState).pipe(select(s => s.user))),
             mergeMap((userId: string) => this.svc.loadOtherUserProfileWithExtendedInfo(userId)),
             map((user: User) => this.userActions.loadOtherUserProfileWithExtendedInfoSuccess(user)));
 

@@ -83,16 +83,8 @@ export class UserCardComponent implements OnInit, OnDestroy, OnChanges {
 
   loadUserInfo() {
     if (this.userId) {
-      if (this.loggedInUserId) {
-        if (!this.userDict[this.userId] || !this.userDict[this.userId].account) {
-          this.store.dispatch(this.userActions.loadOtherUserExtendedInfo(this.userId));
-        }
-      } else {
-        if (this.userDict && !this.userDict[this.userId]) {
-          this.store.dispatch(this.userActions.loadOtherUserProfile(this.userId));
-        }
+        this.store.dispatch(this.userActions.loadOtherUserProfile(this.userId));
         this.cd.markForCheck();
       }
     }
-  }
 }
