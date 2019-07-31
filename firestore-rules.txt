@@ -22,7 +22,6 @@ service cloud.firestore {
 		}
    
    match /users/{userId} {
-    allow read,write : if true;
      // get stat of played game with other user
       match /game_played_with/{otherUserId} {
           allow read: if isUserAuthenticated(userId);        
