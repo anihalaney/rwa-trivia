@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import * as cloneDeep from 'lodash.clonedeep';
 import { combineLatest, Observable, Subject } from 'rxjs';
-import { flatMap, map, skipWhile, switchMap } from 'rxjs/operators';
+import { flatMap, map, skipWhile, switchMap, take } from 'rxjs/operators';
 import { Utils } from 'shared-library/core/services';
 import { UserActions } from 'shared-library/core/store';
 import { Account, Category, profileSettingsConstants, User, Invitation } from 'shared-library/shared/model';
@@ -56,8 +56,6 @@ export class ProfileSettings {
     subscriptions = [];
     account: Account;
     userId = '';
-    userDict$: Observable<{ [key: string]: User }>;
-    userDict: { [key: string]: User } = {};
     userProfileImageUrl = '';
     userType = UserType.OtherUserProfile;
     isEnableEditProfile = false;
@@ -97,7 +95,8 @@ export class ProfileSettings {
                         return this.initializeUserProfile();
                     } else {
                         this.userType = UserType.loggedInOtherUserProfile;
-                        return this.initializeOtherUserProfile(user);
+                        this.loggedInUser = user ? user : null;
+                        return this.initializeOtherUserProfile();
                     }
                 })
             ).subscribe());
@@ -126,7 +125,7 @@ export class ProfileSettings {
 
     initializeUserProfile() {
         return combineLatest(
-           [this.store.select(appState.coreState).pipe(select(s => s.account)),
+            [this.store.select(appState.coreState).pipe(select(s => s.account)),
             this.store.select(getCategories),
             this.store.select(categoryDictionary),
             this.initializeSocialSetting()]
@@ -155,39 +154,34 @@ export class ProfileSettings {
         }));
     }
 
-    initializeOtherUserProfile(user) {
+    initializeOtherUserProfile() {
+        this.store.dispatch(this.userAction.loadOtherUserExtendedInfo(this.userId));
         return this.store.select(appState.coreState).pipe(
             select(s => s.userDict),
-            skipWhile(userDict => !userDict),
+            skipWhile(userDict => !userDict || !userDict[this.userId] || !userDict[this.userId].account),
+            take(1),
             map(userDict => {
-                this.userDict = userDict;
-                if (user && !this.loggedInUser) {
-                    this.loggedInUser = user;
-                    this.store.dispatch(this.userAction.loadOtherUserExtendedInfo(this.userId));
-                } else if (!this.userDict[this.userId] || !this.userDict[this.userId].account) {
-                    this.store.dispatch(this.userAction.loadOtherUserExtendedInfo(this.userId));
-                } else {
-                    this.user = this.userDict[this.userId];
-                    this.createForm(this.user);
-                    this.account = this.user.account;
-                    this.gamePlayedAgainst = this.user.gamePlayed;
-                    if (this.gamePlayedAgainst && this.loggedInUser && this.loggedInUser.userId && this.userType === 1) {
-                        this.gamePlayedChangeSubject.next(true);
-                    }
-                    this.userProfileImageUrl = this.getImageUrl(this.user);
-                    this.profileImage.image = this.userProfileImageUrl;
-                    this.toggleLoader(false);
+                this.user = userDict[this.userId];
+                this.createForm(this.user);
+                this.account = this.user.account;
+                this.gamePlayedAgainst = this.user.gamePlayed;
+                if (this.gamePlayedAgainst && this.loggedInUser && this.loggedInUser.userId && this.userType === 1) {
+                    this.gamePlayedChangeSubject.next(true);
                 }
+                this.userProfileImageUrl = this.getImageUrl(this.user);
+                this.profileImage.image = this.userProfileImageUrl;
+                this.toggleLoader(false);
+
             }),
             flatMap(() => this.store.select(appState.coreState).pipe(select(s => s.userFriendInvitations),
-            skipWhile(userInvitations => !(userInvitations)),
-            map(userInvitations => {
-                this.userInvitations = userInvitations;
-                if (this.user && this.user.email && !this.userInvitations[this.user.email] && this.loggedInUser) {
-                    this.store.dispatch(this.userAction.loadUserInvitationsInfo(
-                        this.loggedInUser.userId, this.user.email, this.user.userId));
-                }
-            }),
+                skipWhile(userInvitations => !(userInvitations)),
+                map(userInvitations => {
+                    this.userInvitations = userInvitations;
+                    if (this.user && this.user.email && !this.userInvitations[this.user.email] && this.loggedInUser) {
+                        this.store.dispatch(this.userAction.loadUserInvitationsInfo(
+                            this.loggedInUser.userId, this.user.email, this.user.userId));
+                    }
+                }),
             )),
             flatMap(() => this.initializeSocialSetting()),
             map(() => this.cd.markForCheck()),
