@@ -174,14 +174,6 @@ export class Dashboard implements OnDestroy {
                         || game.GameStatus === GameStatus.WAITING_FOR_RANDOM_PLAYER_INVITATION_ACCEPTANCE) {
                         this.waitingForOpponentCount++;
                     }
-                    playerIds.map(playerId => {
-                        if (playerId !== this.user.userId) {
-                            if (this.userDict[playerId] === undefined) {
-                                // this.store.dispatch(this.userActions.loadOtherUserProfile(playerId));
-                            }
-
-                        }
-                    });
                 });
                 this.showGames = true;
             }
@@ -200,7 +192,7 @@ export class Dashboard implements OnDestroy {
                 } else if (Number(iGame.gameOptions.opponentType) === OpponentType.Random) {
                     this.randomPlayerCount++;
                 }
-                this.store.dispatch(this.userActions.loadOtherUserProfile(iGame.playerIds[0]));
+                // this.store.dispatch(this.userActions.loadOtherUserProfile(iGame.playerIds[0]));
             });
         }));
         this.gameInviteSliceStartIndex = 0;
@@ -210,7 +202,7 @@ export class Dashboard implements OnDestroy {
             if (invitations.length > 0) {
                 this.friendInvitations = invitations;
                 invitations.map(invitation => {
-                    this.store.dispatch(this.userActions.loadOtherUserProfile(invitation.created_uid));
+                    // this.store.dispatch(this.userActions.loadOtherUserProfile(invitation.created_uid));
                 });
             }
         }));

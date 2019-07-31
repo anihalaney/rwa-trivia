@@ -47,12 +47,6 @@ export class RecentGameCardComponent implements OnInit, OnChanges, OnDestroy {
 
         if (this.game) {
             this.otherUserId = this.getOpponentId(this.game);
-            if (this.otherUserId !== undefined) {
-                if (this.userDict[this.otherUserId] === undefined) {
-                    // this.store.dispatch(this.userActions.loadOtherUserProfile(this.otherUserId));
-                    this.cd.markForCheck();
-                }
-            }
             this.userProfileImageUrl = this.getImageUrl(this.user);
         }
     }
@@ -62,15 +56,6 @@ export class RecentGameCardComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     ngOnChanges() {
-        // if (this.game) {
-        //     this.otherUserId = this.getOpponentId(this.game);
-        //     if (this.otherUserId !== undefined) {
-        //         if (this.userDict[this.otherUserId] === undefined) {
-        //             this.store.dispatch(this.userActions.loadOtherUserProfile(this.otherUserId));
-        //         }
-        //     }
-        //     this.userProfileImageUrl = this.getImageUrl(this.user);
-        // }
     }
 
     getImageUrl(user: User) {

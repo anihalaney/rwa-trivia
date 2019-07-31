@@ -38,11 +38,11 @@
       <img [stlOpenUserProfile]="{userId: user.userId, redirectTo: loggedInUserId === user.userId ? 'userProfile': 'otherUserProfile'}"
         [src]="getImageUrl(user,44,40)" alt="User Profile Image" />
     </div>
-    <div class="col-xs-8 ellipsis">
-      <label *ngIf="user?.displayName" class="dark" title="{{user?.displayName}}">{{user?.displayName}}</label>
+    <div class="col-xs-8">
+      <div *ngIf="user?.displayName" class="dark ellipsis" title="{{user?.displayName}}">{{user?.displayName}}</div>
       <div *ngIf="user?.location" class="light ellipsis" title="{{user?.location}}">{{user?.location}}</div>
       <div *ngIf="!user?.location" class="light ellipsis" title="unknown">unknown</div>
-      <!-- <label for="" *ngIf="user?.isFriend && loggedInUserId">IS Friend</label> -->
+      <div for="" *ngIf="user?.isFriend && loggedInUserId">{{ (user?.isFriend) ? user?.displayName : '' }} is your friend</div>
     </div>
   </div>
 </ng-container>

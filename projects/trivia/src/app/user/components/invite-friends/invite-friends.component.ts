@@ -46,7 +46,6 @@ export class InviteFriendsComponent extends InviteFriends implements OnInit, OnD
         this.uFriends = [];
 
         uFriends.map(friend => {
-          this.store.dispatch(this.userActions.loadOtherUserProfile(uFriends.userId));
           this.uFriends.push(friend);
         });
         this.dataSource = new MatTableDataSource<any>(uFriends);

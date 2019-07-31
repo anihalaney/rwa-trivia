@@ -280,9 +280,6 @@ export class GameDialog {
       this.calculateMaxTime();
       this.timer = this.MAX_TIME_IN_SECONDS;
       this.currentQuestion.answers = this.utils.changeAnswerOrder(this.currentQuestion.answers);
-      if (!this.userDict[this.currentQuestion.created_uid]) {
-        this.store.dispatch(this.userActions.loadOtherUserProfile(this.currentQuestion.created_uid));
-      }
       this.categoryName = question.categoryIds.map(category => {
         return this.categoryDictionary[category].categoryName;
       }).join(',');
