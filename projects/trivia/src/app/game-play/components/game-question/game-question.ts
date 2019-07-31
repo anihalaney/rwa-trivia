@@ -22,6 +22,7 @@ export class GameQuestion {
   @Input() userDict: { [key: string]: User };
   @Input() MAX_TIME_IN_SECONDS: number;
   @Input() applicationSettings: ApplicationSettings;
+  @Input() user: User;
 
   answeredIndex: number;
   correctAnswerIndex: number;

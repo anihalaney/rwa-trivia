@@ -14,7 +14,7 @@ export abstract class DbService {
     public CreateDocWithoutDocID(collectionName: string, document: any): any {
     }
 
-    public setDoc(collectionName: string, docId: any, document: any): any {
+    public setDoc(collectionName: string, docId: any, document: any, timeStamp?: {createdOn?: boolean, updatedOn?: boolean}): any {
 
     }
 
@@ -41,6 +41,10 @@ export abstract class DbService {
     }
 
     public upload(filePath: string, imageBlob: any): any {
+
+    }
+
+    public deleteDoc(collectionName: string, docId: any): any {
 
     }
 }

@@ -504,7 +504,6 @@ export class GameDialog {
 
     this.store.dispatch(new gameplayactions.ResetCurrentGame());
     this.utils.unsubscribe([this.timerSub, this.questionSub]);
-
   }
 
 }

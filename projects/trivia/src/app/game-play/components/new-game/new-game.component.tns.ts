@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import { RouterExtensions } from 'nativescript-angular/router';
 import { TokenModel } from 'nativescript-ui-autocomplete';
 import { RadAutoCompleteTextViewComponent } from 'nativescript-ui-autocomplete/angular';

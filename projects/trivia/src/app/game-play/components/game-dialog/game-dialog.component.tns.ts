@@ -66,7 +66,6 @@ export class GameDialogComponent extends GameDialog implements OnDestroy {
     this.cd.markForCheck();
   }
 
-
   ngOnDestroy() {
     applicationOff(resumeEvent, this.resumeCallBack);
     applicationOff(suspendEvent, this.suspendCallBack);

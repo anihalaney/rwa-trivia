@@ -69,6 +69,7 @@ export class QuestionService {
         }
     }
 
+
     /**
      * getAllUnpublished Questions
      * return questions
@@ -85,7 +86,7 @@ export class QuestionService {
     static async uploadImage(image: String, imageName: number): Promise<any> {
 
         let filePath =
-            `questions`;
+        `questions`;
         const imageBase64 = image.replace(/^data:image\/\w+;base64,/, '');
         let bufferStream = new Buffer(imageBase64, GeneralConstants.BASE64);
         try {
@@ -144,4 +145,5 @@ export class QuestionService {
         }
 
     }
+
 }

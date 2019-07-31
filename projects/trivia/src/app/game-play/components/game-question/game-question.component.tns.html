@@ -81,6 +81,9 @@
                     <GridLayout margin="0 15" rows="auto" columns="auto" *ngIf="question" style=" horizontal-align:right;" class="Roboto-Medium">
                              <author  [isGamePlay]="true" [userDict]="userDict" [userId]="question.created_uid"></author>
                     </GridLayout>
+                    <GridLayout margin="0 15" rows="auto" columns="auto" *ngIf="question && showContinueBtn" style="horizontal-align:center;" class="Roboto-Medium">
+                            <user-reaction *ngIf="user && question" [user]='user' [question]='question'></user-reaction>
+                   </GridLayout>
                 </StackLayout>
             </CardView>
         </StackLayout>

@@ -56,7 +56,7 @@ const commandList = {
                 "description": 'project Name e.g. trivia',
                 "type": 'string',
                 "choices": projects,
-                "default" : 'trivia',
+                "default": 'trivia',
                 "alias": ['P', 'p']
             },
             "productVariant": {
@@ -64,7 +64,7 @@ const commandList = {
                 "description": 'configuration project name defined in angular.json e.g. trivia',
                 "type": 'string',
                 "choices": productVariants,
-                "default" : 'trivia',
+                "default": 'trivia',
                 "alias": ['PV', 'pv']
             },
             "env": {
@@ -72,7 +72,7 @@ const commandList = {
                 "description": 'project environment e.g. production',
                 "type": 'string',
                 "choices": env,
-                "default" : 'dev',
+                "default": 'dev',
                 "alias": 'e'
             }
         },
@@ -132,8 +132,12 @@ const commandList = {
         },
         "builder": args => {
             const env = args.argv.env;
-            const project = args.argv.projectName;
-            args.argv.setConfig = env === 'production' ? `npm run firebase -P ${project} functions:config:set environment.production=true` : '';
+            const project = args.argv.productVariant;
+            args.options(
+                {
+                    'setConfig': { 'default': env === 'production' ? `npm run firebase -P ${project} functions:config:set environment.production=true` : '' }
+                }
+            );
             replaceVariableInIndex(['trivia', 'trivia-admin'], args.argv.productVariant);
         }
     },
@@ -147,7 +151,7 @@ const commandList = {
                 "description": 'project Name e.g. trivia',
                 "type": 'string',
                 "choices": productVariants,
-                "default" : 'trivia',
+                "default": 'trivia',
                 "alias": ['PV', 'pv']
             },
             "packageName": {
@@ -155,7 +159,7 @@ const commandList = {
                 "description": 'project package name defined in firebase e.g. io.bitwiser.trivia.dev',
                 "type": 'string',
                 "choices": packageNames,
-                "default" : 'io.bitwiser.trivia.dev',
+                "default": 'io.bitwiser.trivia.dev',
                 "alias": ['pk', 'PK']
             },
             "platform": {
@@ -163,13 +167,13 @@ const commandList = {
                 "description": 'Mobile platform e.g. android',
                 "type": 'string',
                 "choices": platForms,
-                "default" : 'android',
+                "default": 'android',
                 "alias": ['plt', 'PLT']
             },
             "environment": {
                 "demand": false,
                 "coerce": args => args === 'production' ? '--env.prod --env.aot --env.uglify' : '',
-                "default" : 'dev',
+                "default": 'dev',
                 "alias": ['E', 'e']
             },
             "forDevice": {
@@ -196,8 +200,7 @@ const commandList = {
         "preCommand" : async (argv) => await updateAppVersion(argv, false)
     },
     "release-mobile": {
-        "command": `rm -rf platforms/platformName &&
-                        tns buildCmd platformName --bundle 
+        "command": `tns buildCmd platformName --bundle 
                         environment
                         --env.aot --env.uglify 
                         forDevice
@@ -353,7 +356,7 @@ function buildCommands() {
                     await commandList[cmd].preCommand(argv);
                 }
                 executeCommand(executableCmd);
-            });            
+            });
     }
 
     argv = argv.help()
@@ -365,13 +368,13 @@ function buildCommands() {
 }
 
 
-function checkCommands (yargs, argv, numRequired) {
-  console.log(argv);
-  if (argv._.length < numRequired) {
-    yargs.showHelp()
-  } else {
-    // check for unknown command
-  }
+function checkCommands(yargs, argv, numRequired) {
+    console.log(argv);
+    if (argv._.length < numRequired) {
+        yargs.showHelp()
+    } else {
+        // check for unknown command
+    }
 }
 
 function replaceVariableInIndex(projectList, productVarient){
@@ -431,7 +434,7 @@ function executeCommand(executableCmd) {
         executableCmd = executableCmd.replace(/(\r\n|\n|\r)/gm, ""); //remove new line
         console.log(`Executing command ${executableCmd}`);
         execSync(executableCmd, { stdio: 'inherit' });
-    } catch (error) {     
+    } catch (error) {
     }
 }
 

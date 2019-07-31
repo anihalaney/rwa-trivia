@@ -1,7 +1,4 @@
-import {
-  AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component,
-  ElementRef, OnDestroy, QueryList, ViewChild, ViewChildren, ViewContainerRef
-} from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, ElementRef, OnDestroy, QueryList, ViewChild, ViewChildren, ViewContainerRef, Component } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
@@ -271,7 +268,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
   saveProfileImage() {
     this.getUserFromFormValue(false, '');
     this.assignImageValues();
-    this.saveUser(this.user, (this.user.location !== this.userCopyForReset.location) ? true : false);
+    this.saveUser(this.user,  (this.user.location !== this.userCopyForReset.location) ? true : false);
   }
 
   assignImageValues(): void {

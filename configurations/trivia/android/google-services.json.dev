@@ -15,27 +15,27 @@
       },
       "oauth_client": [
         {
-          "client_id": "701588063269-29ef2u9a0ts4fgoq9puskbfgkf5ue7m6.apps.googleusercontent.com",
+          "client_id": "701588063269-kvckg71llm20h663svbevc94cfndml2f.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "io.bitwiser.trivia.dev",
-            "certificate_hash": "c81dbd8f77929fbbf7b3f3a254850947e56a2acc"
+            "certificate_hash": "243ff572bae034f604023b6754c510493832f910"
           }
         },
         {
-          "client_id": "701588063269-vf2q8ugkra3esbubo9fidjj65to0u8a9.apps.googleusercontent.com",
+          "client_id": "701588063269-bc43lc56mc41dfavr9bjgfs7s1mfve8a.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "io.bitwiser.trivia.dev",
-            "certificate_hash": "e516ee50de3b910b39582c0eac82f4f9419acaf8"
+            "certificate_hash": "a1a06f09885c9749c9dc273613b42f76da8e370e"
           }
         },
         {
-          "client_id": "701588063269-vv7nd46mifda0d22tcuc9pb9mk272sho.apps.googleusercontent.com",
+          "client_id": "701588063269-lfj9vbac1ddm7gmpc7t10dmab89hs99o.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "io.bitwiser.trivia.dev",
-            "certificate_hash": "667eecf6a00817899604907a77e97e0119691520"
+            "certificate_hash": "627191e1bf6d6560732497e6541db23079857e61"
           }
         },
         {
@@ -47,11 +47,27 @@
           }
         },
         {
-          "client_id": "701588063269-lfj9vbac1ddm7gmpc7t10dmab89hs99o.apps.googleusercontent.com",
+          "client_id": "701588063269-29ef2u9a0ts4fgoq9puskbfgkf5ue7m6.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "io.bitwiser.trivia.dev",
-            "certificate_hash": "627191e1bf6d6560732497e6541db23079857e61"
+            "certificate_hash": "c81dbd8f77929fbbf7b3f3a254850947e56a2acc"
+          }
+        },
+        {
+          "client_id": "701588063269-vv7nd46mifda0d22tcuc9pb9mk272sho.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.bitwiser.trivia.dev",
+            "certificate_hash": "667eecf6a00817899604907a77e97e0119691520"
+          }
+        },
+        {
+          "client_id": "701588063269-vf2q8ugkra3esbubo9fidjj65to0u8a9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.bitwiser.trivia.dev",
+            "certificate_hash": "e516ee50de3b910b39582c0eac82f4f9419acaf8"
           }
         },
         {
@@ -65,11 +81,7 @@
         }
       ],
       "services": {
-        "analytics_service": {
-          "status": 1
-        },
         "appinvite_service": {
-          "status": 2,
           "other_platform_oauth_client": [
             {
               "client_id": "701588063269-mbsga0baongr0s1libf77c6qh43ch0pk.apps.googleusercontent.com",
@@ -83,9 +95,6 @@
               }
             }
           ]
-        },
-        "ads_service": {
-          "status": 2
         }
       }
     }

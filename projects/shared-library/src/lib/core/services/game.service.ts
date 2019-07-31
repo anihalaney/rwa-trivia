@@ -282,4 +282,29 @@ export class GameService {
     };
     return this.http.put<any>(url, payload);
   }
+
+  userReaction(questionId: string, userId: string, status: string) {
+      const collection = `questions/${questionId}/reactions`;
+      return this.dbService.getDoc(collection, userId).get().then(data => {
+        const reaction = data.data();
+          if (reaction) {
+            if (status !== reaction.status) {
+             return this.dbService.setDoc(collection, userId, { status: status }, {updatedOn: true});
+            } else {
+             return this.dbService.deleteDoc(collection, userId);
+            }
+          } else {
+            return this.dbService.setDoc(collection, userId , { status: status }, {createdOn: true, updatedOn: true});
+          }
+      });
+  }
+
+  getUserReaction(questionId: string, userId: string) {
+    return this.dbService.valueChanges(`questions/${questionId}/reactions`, userId );
+  }
+
+  getQuestion(questionId: string) {
+    return this.dbService.valueChanges(`questions`, questionId );
+  }
+
 }

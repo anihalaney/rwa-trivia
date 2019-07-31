@@ -24,7 +24,7 @@ export const CONFIG: IConfig = {
   'termsAndConditionsUrl': 'https://bitwiser-edu.io/terms-and-conditions',
   'privacyUrl': 'https://bitwiser-edu.io/terms-and-conditions',
   'ua_id': 'UA-122807814-1'
-  };
+};
 
 export const projectMeta = {
   projectName: 'bitwiser-edu',
