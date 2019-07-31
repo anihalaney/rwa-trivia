@@ -245,7 +245,6 @@ const commandList = {
                 "demand": true,
                 "description": 'versionCode for android/ios build ',
                 "type": 'string',
-                "default": '28.0',
                 "alias": ['V', 'v']
             },
             "versionName": {
@@ -256,7 +255,7 @@ const commandList = {
                 "alias": ['VN', 'vn']
             },
             "token": {
-                "demand": false,
+                "demand": true,
                 "description": 'token from schedular token ',
                 "type": 'string',
                 "alias": ['T', 't']
