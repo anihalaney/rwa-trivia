@@ -53,6 +53,7 @@ export class UserEffects {
         .pipe(map((action: ActionWithPayload<string>) => action.payload),
             distinct(),
             mergeMap((userId: string) => this.svc.loadOtherUserProfileWithExtendedInfo(userId)),
+            mergeMap((user: User) => this.svc.getUserStatus(user)),
             map((user: User) => this.userActions.loadOtherUserProfileWithExtendedInfoSuccess(user)));
 
     @Effect()
