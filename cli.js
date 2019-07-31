@@ -251,7 +251,6 @@ const commandList = {
                 "demand": false,
                 "description": 'versionName for android build CFBundleShortVersionString for ios ',
                 "type": 'string',
-                "default": '1.0',
                 "alias": ['VN', 'vn']
             },
             "token": {
