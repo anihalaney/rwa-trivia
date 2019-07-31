@@ -10,6 +10,4 @@ export interface IConfig {
   ua_id: string;
   termsAndConditionsUrl: string;
   privacyUrl: string;
-  addressByLatLongURL: string;
-  addressSuggestionsURL: string;
 }
