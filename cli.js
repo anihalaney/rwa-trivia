@@ -248,7 +248,7 @@ const commandList = {
                 "alias": ['V', 'v']
             },
             "versionName": {
-                "demand": false,
+                "demand": true,
                 "description": 'versionName for android build CFBundleShortVersionString for ios ',
                 "type": 'string',
                 "alias": ['VN', 'vn']
