@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import { RouterExtensions } from 'nativescript-angular/router';
 import { TokenModel } from 'nativescript-ui-autocomplete';
 import { RadAutoCompleteTextViewComponent } from 'nativescript-ui-autocomplete/angular';
@@ -36,6 +36,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
   // it delay complex UI show Router navigation can finish first to have smooth transition
   renderView = false;
   challengerUserId: string;
+  modeAvailable: boolean;
   @ViewChild('autocomplete') autocomplete: RadAutoCompleteTextViewComponent;
   @ViewChild('friendListView') listViewComponent: RadListViewComponent;
 
@@ -52,6 +53,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     private ngZone: NgZone) {
     super(store, utils, gameActions, userActions, windowRef, cd, route, router);
     this.initDataItems();
+    this.modeAvailable = false;
   }
   ngOnInit() {
 
@@ -63,6 +65,16 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
           this.gameOptions.opponentType = 1;
           this.gameOptions.isChallenge = true;
           this.friendUserId = data.userid;
+        }
+        if (data && data.mode) {
+          console.log('mode::', data.mode);
+          this.modeAvailable = true;
+          if (data.mode === 'Single') {
+            this.gameOptions.playerMode = 0;
+          } else {
+            this.gameOptions.playerMode = 1;
+            this.gameOptions.opponentType = 0;
+          }
         }
       }));
 

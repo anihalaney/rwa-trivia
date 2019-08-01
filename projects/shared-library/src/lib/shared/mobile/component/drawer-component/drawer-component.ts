@@ -160,6 +160,11 @@ export class DrawerComponent implements OnInit, OnDestroy {
         this.closeDrawer();
     }
 
+    login() {
+        this.routerExtension.navigate(['/login']);
+        this.closeDrawer();
+    }
+
     logout() {
         this.logOut = true;
         this.setLogoutFirebaseAnalyticsParameter(this.user);

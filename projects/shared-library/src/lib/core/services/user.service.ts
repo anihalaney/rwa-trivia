@@ -3,7 +3,8 @@ import { Injectable } from '@angular/core';
 import { combineLatest, Observable, of, from } from 'rxjs';
 import { map, mergeMap, catchError } from 'rxjs/operators';
 import {
-    friendInvitationConstants, Friends, Game, GameOperations, GameStatus, Invitation, QueryParam, QueryParams, User, RoutesConstants
+    friendInvitationConstants, Friends, Game, GameOperations, GameStatus, Invitation, QueryParam, QueryParams, User, RoutesConstants,
+     Question
 } from './../../../lib/shared/model';
 import { CONFIG } from './../../environments/environment';
 import { DbService } from './../db-service';

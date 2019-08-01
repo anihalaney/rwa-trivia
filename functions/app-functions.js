@@ -1,5 +1,6 @@
 exports.v1 = require('./server/functions/app').app;
 exports.onFirestoreQuestionWrite = require('./server/functions/db/firebase.functions').onQuestionWrite;
+exports.onFirestoreReactionWrite = require('./server/functions/db/firebase.functions').onReactionWrite
 exports.onFirestoreInvitationWrite = require('./server/functions/db/firebase.functions').onInvitationWrite;
 exports.onFirestoreGameCreate = require('./server/functions/db/firebase.functions').onGameCreate;
 exports.onFirestoreGameUpdate = require('./server/functions/db/firebase.functions').onGameUpdate;

@@ -20,7 +20,8 @@ import { PushNotification } from '../utils/push-notifications';
 import { UserContributionStat } from '../utils/user-contribution-stat';
 import admin from './firebase.client';
 import { UserService } from '../services/user.service';
-import { UserStatusService } from '../services/user-status.service';
+import { QuestionService } from '../services/question.service';
+import { Utils } from '../utils/utils';
 const mailConfig = JSON.parse(readFileSync(resolve(__dirname, '../../../config/mail.config.json'), 'utf8'));
 
 export class FirebaseFunctions {
@@ -71,6 +72,45 @@ export class FirebaseFunctions {
         }
     }
 
+
+    static async doReactionWriteOperation(change: any, context: any): Promise<boolean> {
+        try {
+            if (context.params.reactions === 'reactions') {
+                const afterData = change.after.exists ? change.after.data() : null;
+                const beforeData = change.before.exists ? change.before.data() : null;
+                const question: Question = await QuestionService.getQuestionById(context.params.questionId);
+                // for update
+                if (beforeData && afterData) {
+                    if (beforeData.status != afterData.status) {
+                        question.reactionsCount[afterData.status] = question.reactionsCount
+                        && question.reactionsCount[afterData.status] ? Utils.changeFieldValue(1) : 1; // increase current status
+                        question.reactionsCount[beforeData.status] = question.reactionsCount &&
+                        question.reactionsCount[beforeData.status] ? Utils.changeFieldValue(-1) : 0; // decrease before status
+                    } else {
+                        return true;
+                    }
+                } else if (!beforeData && afterData) {
+                // for create
+                        question.reactionsCount[afterData.status] = question.reactionsCount
+                        && question.reactionsCount[afterData.status] ? Utils.changeFieldValue(1) : 1; // increase current status
+                } else if (beforeData && !afterData) {
+                // delete
+                        question.reactionsCount[beforeData.status] = question.reactionsCount &&
+                        question.reactionsCount[beforeData.status] ? Utils.changeFieldValue(-1) : 0; // decrease current status
+                } else {
+                    return true;
+                }
+                const newquestion = {...question};
+               await QuestionService.updateQuestion('questions', newquestion);
+              return true;
+            } else {
+                return true;
+            }
+        } catch (error) {
+            console.error('Error :', error);
+            throw error;
+        }
+    }
     static async doInvitationWriteOperation(change: any, context: any): Promise<boolean> {
         try {
             const beforeEventData = change.before.data();
@@ -298,6 +338,9 @@ export class FirebaseFunctions {
 
 exports.onQuestionWrite = functions.firestore.document('/questions/{questionId}')
     .onWrite(async (change, context) => await FirebaseFunctions.doQuestionWriteOperation(change, context));
+
+exports.onReactionWrite = functions.firestore.document('/questions/{questionId}/{reactions}/{userId}')
+    .onWrite(async (snap, context) => await FirebaseFunctions.doReactionWriteOperation(snap, context));
 
 exports.onInvitationWrite = functions.firestore.document('/invitations/{invitationId}')
     .onWrite(async (change, context) => await FirebaseFunctions.doInvitationWriteOperation(change, context));
