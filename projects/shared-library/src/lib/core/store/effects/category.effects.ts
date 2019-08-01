@@ -13,11 +13,7 @@ export class CategoryEffects {
     @Effect()
     // handle location update
     loadRouteCategories$ = this.actions$
-        .pipe(ofType(ROUTER_NAVIGATION))
-        .pipe(
-            map((action: any): RouterStateUrl => action.payload.routerState),
-            filter((routerState: RouterStateUrl) =>
-                routerState.url.toLowerCase().startsWith('/')))
+        .pipe(ofType(CategoryActions.LOAD_CATEGORIES))
         .pipe(
             switchMap(() => {
                 return this.svc.getCategories()

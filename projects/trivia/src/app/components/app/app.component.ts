@@ -8,7 +8,7 @@ import { filter, skip, take } from 'rxjs/operators';
 import { AuthenticationProvider } from 'shared-library/core/auth';
 import { Utils, WindowRef } from 'shared-library/core/services';
 import { coreState } from 'shared-library/core/store';
-import { ApplicationSettingsActions, UserActions } from 'shared-library/core/store/actions';
+import { ApplicationSettingsActions, UserActions,  } from 'shared-library/core/store/actions';
 import { User } from 'shared-library/shared/model';
 import * as gamePlayActions from '../../game-play/store/actions';
 import { AppState, appState } from '../../store';

@@ -1,9 +1,10 @@
 import { ActivatedRouteSnapshot, RouterStateSnapshot, Params } from '@angular/router';
 
 import * as fromRouter from '@ngrx/router-store';
-import { ActionReducerMap, createFeatureSelector } from '@ngrx/store';
+import { ActionReducerMap, createFeatureSelector, ActionReducer, Action, MetaReducer } from '@ngrx/store';
 import { RouterStateSerializer } from '@ngrx/router-store/src/serializer';
 import { RouterStateUrl } from 'shared-library/shared/model';
+import { UserActions } from 'shared-library/core/store/actions';
 
 export interface State {
   routerReducer: fromRouter.RouterReducerState<RouterStateUrl>
@@ -35,3 +36,14 @@ export class CustomSerializer implements fromRouter.RouterStateSerializer<Router
 }
 
 export const rootState = (state: State) => state;
+
+
+export function clearState(reducer: ActionReducer<any>): ActionReducer<any> {
+  return function (state: any, action: Action): any {
+    if (action.type === UserActions.LOGOFF) {
+      state = undefined;
+    }
+    return reducer(state, action);
+  };
+}
+export const metaReducers: MetaReducer<any>[] = [clearState];

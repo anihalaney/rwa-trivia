@@ -97,14 +97,15 @@ export class Dashboard implements OnDestroy {
                         }
                     }));
 
-                if (this.user) {
-                    this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings))
-                        .subscribe(appSettings => {
-                            if (appSettings) {
-                                this.applicationSettings = appSettings[0];
-                                if (this.applicationSettings) {
-                                    this.subscriptions.push(store.select(appState.coreState).pipe(select(s => s.account))
-                                        .subscribe(account => {
+                // if (this.user) {
+                this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings))
+                    .subscribe(appSettings => {
+                        if (appSettings) {
+                            this.applicationSettings = appSettings[0];
+                            if (this.applicationSettings) {
+                                this.subscriptions.push(store.select(appState.coreState).pipe(select(s => s.account))
+                                    .subscribe(account => {
+                                        if (this.user) {
                                             this.account = account;
                                             this.cd.markForCheck();
                                             if (this.account && !this.account.enable) {
@@ -121,18 +122,19 @@ export class Dashboard implements OnDestroy {
                                                 this.timerSub.unsubscribe();
                                             }
                                             this.gameLives();
-                                        }));
-                                    if (!this.applicationSettings.lives.enable) {
-                                        this.gamePlayBtnDisabled = false;
-                                        if (this.timerSub) {
-                                            this.timeoutLive = '';
-                                            this.timerSub.unsubscribe();
                                         }
+                                    }));
+                                if (this.applicationSettings && !this.applicationSettings.lives.enable) {
+                                    this.gamePlayBtnDisabled = false;
+                                    if (this.timerSub) {
+                                        this.timeoutLive = '';
+                                        this.timerSub.unsubscribe();
                                     }
                                 }
                             }
-                        }));
-                }
+                        }
+                    }));
+                // }
             });
             this.store.dispatch(this.gameActions.getActiveGames(user));
             this.store.dispatch(this.userActions.loadGameInvites(user));
@@ -252,48 +254,49 @@ export class Dashboard implements OnDestroy {
     }
 
     gameLives() {
+        if (this.applicationSettings) {
 
-        const maxMiliSecond = this.utils.convertMilliSIntoMinutes(this.applicationSettings.lives.lives_after_add_millisecond) - 1;
-        if (this.account) {
-            if (this.account.lives <= this.applicationSettings.lives.max_lives) {
-                this.timerSub = timer(1000, 1000).subscribe(t => {
-                    this.serverCreatedTime += 1000;
-                    const diff = this.utils.getTimeDifference(this.account.lastLiveUpdate, this.serverCreatedTime);
-                    const minute = Math.floor(diff % (CalenderConstants.HOURS_CALCULATIONS) / (CalenderConstants.MINUTE_CALCULATIONS));
-                    const second = Math.floor(diff / 1000) % 60;
-                    const timeStamp = this.serverCreatedTime;
+            const maxMiliSecond = this.utils.convertMilliSIntoMinutes(this.applicationSettings.lives.lives_after_add_millisecond) - 1;
+            if (this.account) {
+                if (this.account.lives <= this.applicationSettings.lives.max_lives) {
+                    this.timerSub = timer(1000, 1000).subscribe(t => {
+                        this.serverCreatedTime += 1000;
+                        const diff = this.utils.getTimeDifference(this.account.lastLiveUpdate, this.serverCreatedTime);
+                        const minute = Math.floor(diff % (CalenderConstants.HOURS_CALCULATIONS) / (CalenderConstants.MINUTE_CALCULATIONS));
+                        const second = Math.floor(diff / 1000) % 60;
+                        const timeStamp = this.serverCreatedTime;
 
-                    if (minute > 0) {
-                        this.remainingMinutes = (this.utils.convertIntoDoubleDigit(maxMiliSecond - minute));
-                    } else {
-                        this.remainingMinutes = (this.utils.convertIntoDoubleDigit(maxMiliSecond));
-                    }
-                    if (second > 0) {
-                        this.remaningSeconds = (this.utils.convertIntoDoubleDigit(59 - second));
-                    } else {
-                        this.remaningSeconds = (this.utils.convertIntoDoubleDigit(59 - second));
-                    }
-
-                    if (timeStamp >= this.account.nextLiveUpdate) {
-                        this.timerSub.unsubscribe();
-                        // this.timeoutLive = '(' + String(this.account.lives) + ')';
-                        this.cd.markForCheck();
-                        if (this.user) {
-                            this.store.dispatch(this.userActions.addUserLives(this.user.userId));
+                        if (minute > 0) {
+                            this.remainingMinutes = (this.utils.convertIntoDoubleDigit(maxMiliSecond - minute));
+                        } else {
+                            this.remainingMinutes = (this.utils.convertIntoDoubleDigit(maxMiliSecond));
                         }
-                    } else {
-                        let timeOut = '';
-                        if (this.account.lives !== this.applicationSettings.lives.max_lives) {
-                            timeOut = (this.remainingMinutes) + ':' + (this.remaningSeconds);
+                        if (second > 0) {
+                            this.remaningSeconds = (this.utils.convertIntoDoubleDigit(59 - second));
+                        } else {
+                            this.remaningSeconds = (this.utils.convertIntoDoubleDigit(59 - second));
                         }
-                        this.timeoutLive = timeOut;
-                        this.cd.markForCheck();
-                    }
-                });
-                this.subscriptions.push(this.timerSub);
+
+                        if (timeStamp >= this.account.nextLiveUpdate) {
+                            this.timerSub.unsubscribe();
+                            // this.timeoutLive = '(' + String(this.account.lives) + ')';
+                            this.cd.markForCheck();
+                            if (this.user) {
+                                this.store.dispatch(this.userActions.addUserLives(this.user.userId));
+                            }
+                        } else {
+                            let timeOut = '';
+                            if (this.account.lives !== this.applicationSettings.lives.max_lives) {
+                                timeOut = (this.remainingMinutes) + ':' + (this.remaningSeconds);
+                            }
+                            this.timeoutLive = timeOut;
+                            this.cd.markForCheck();
+                        }
+                    });
+                    this.subscriptions.push(this.timerSub);
+                }
             }
         }
-
     }
 
     ngOnDestroy(): void {
@@ -301,45 +304,45 @@ export class Dashboard implements OnDestroy {
     }
 
     get gameStart() {
-        if (this.user && this.account && this.account.lives === 0 && this.applicationSettings.lives.enable) {
+        if (this.user && this.account && this.account.lives === 0 && this.applicationSettings && this.applicationSettings.lives.enable) {
             this.startGame = this.NEW_GAME_IN;
         } else {
             this.startGame = this.START_A_NEW_GAME;
         }
         // tslint:disable-next-line:max-line-length
-        const startString = this.startGame + ((this.user && this.applicationSettings.lives.enable && this.timeoutLive) ? '   |   ' + this.timeoutLive : '');
+        const startString = this.startGame + ((this.user && this.applicationSettings && this.applicationSettings.lives.enable && this.timeoutLive) ? '   |   ' + this.timeoutLive : '');
         this.cd.markForCheck();
         return startString;
     }
 
     get singlePlayer() {
         let gameName = '';
-        if (this.user && this.account && this.account.lives === 0 && this.applicationSettings.lives.enable) {
+        if (this.user && this.account && this.account.lives === 0 && this.applicationSettings && this.applicationSettings.lives.enable) {
             gameName = this.NEW_GAME_IN;
         } else {
             gameName = this.SINGLE_PLAYER;
         }
         // tslint:disable-next-line:max-line-length
-        gameName = gameName + ((this.user && this.applicationSettings.lives.enable && this.timeoutLive) ? '   |   ' + this.timeoutLive : '');
+        gameName = gameName + ((this.user && this.applicationSettings && this.applicationSettings.lives.enable && this.timeoutLive) ? '   |   ' + this.timeoutLive : '');
         this.cd.markForCheck();
         return gameName;
     }
 
     get twoPlayer() {
         let gameName = '';
-        if (this.user && this.account && this.account.lives === 0 && this.applicationSettings.lives.enable) {
+        if (this.user && this.account && this.account.lives === 0 && this.applicationSettings && this.applicationSettings.lives.enable) {
             gameName = this.NEW_GAME_IN;
         } else {
             gameName = this.TWO_PLAYER;
         }
         // tslint:disable-next-line:max-line-length
-        gameName = gameName + ((this.user && this.applicationSettings.lives.enable && this.timeoutLive) ? '   |   ' + this.timeoutLive : '');
+        gameName = gameName + ((this.user && this.applicationSettings && this.applicationSettings.lives.enable && this.timeoutLive) ? '   |   ' + this.timeoutLive : '');
         this.cd.markForCheck();
         return gameName;
     }
 
     get isLivesEnable(): Boolean {
-        const isEnable = (this.user && this.account && this.applicationSettings.lives.enable) ? true : false;
+        const isEnable = (this.user && this.account && this.applicationSettings && this.applicationSettings.lives.enable) ? true : false;
         return isEnable;
     }
 }

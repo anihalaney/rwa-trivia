@@ -14,7 +14,7 @@ import { coreState } from 'shared-library/core/store';
 import { ApplicationSettings } from 'shared-library/shared/model';
 import { on as applicationOn, resumeEvent, ApplicationEventData } from 'tns-core-modules/application';
 import { FirebaseAuthService } from 'shared-library/core/auth/firebase-auth.service';
-import { ApplicationSettingsActions } from 'shared-library/core/store/actions';
+import { ApplicationSettingsActions, CategoryActions } from 'shared-library/core/store/actions';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import * as util from 'tns-core-modules/utils/utils';
 import { alert } from 'tns-core-modules/ui/dialogs/dialogs';
@@ -41,11 +41,10 @@ export class AppComponent implements OnInit, OnDestroy {
     private routerExtension: RouterExtensions,
     private firebaseAuthService: FirebaseAuthService,
     private applicationSettingsAction: ApplicationSettingsActions,
+    private categoryActions: CategoryActions,
     private utils: Utils,
     private cd: ChangeDetectorRef,
     private router: Router) {
-
-
 
     this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.newGameId), filter(g => g !== '')).subscribe(gameObj => {
       this.routerExtension.navigate(['/game-play', gameObj['gameId']]);
@@ -138,6 +137,11 @@ export class AppComponent implements OnInit, OnDestroy {
 
     }));
 
+    this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
+      this.store.dispatch(this.applicationSettingsAction.loadApplicationSettings());
+      this.store.dispatch(this.categoryActions.loadCategories());
+    }));
+
   }
 
   async checkForceUpdate() {
@@ -156,7 +160,7 @@ export class AppComponent implements OnInit, OnDestroy {
         if (appSettings && appSettings.length > 0) {
 
           this.applicationSettings = appSettings[0];
-            // console.log('appSettings', this.applicationSettings.crashlytics);
+          // console.log('appSettings', this.applicationSettings.crashlytics);
           if (isAndroid && version && this.applicationSettings.android_version
             && this.applicationSettings.android_version > version) {
             this.displayForceUpdateDialog(projectMeta.playStoreUrl);

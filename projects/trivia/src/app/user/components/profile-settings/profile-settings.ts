@@ -107,14 +107,17 @@ export class ProfileSettings {
         return this.store.select(appState.coreState)
             .pipe(select(s => s.applicationSettings),
                 map(appSettings => {
-                    this.applicationSettings = { ...appSettings[0] };
-                    this.socialProfileObj = [...appSettings[0].social_profile];
-                    this.socialProfileSettings = appSettings[0].social_profile
-                        .filter(profile =>
-                            this.user &&
-                            this.user[profile.social_name]
-                            && this.user[profile.social_name] !== '');
-                    this.enableSocialProfile = this.socialProfileSettings.filter(profile => profile.enable).length;
+                    if (appSettings[0]) {
+                        this.applicationSettings = { ...appSettings[0] };
+                        this.socialProfileObj = [...appSettings[0].social_profile];
+                        this.socialProfileSettings = appSettings[0].social_profile
+                            .filter(profile =>
+                                this.user &&
+                                this.user[profile.social_name]
+                                && this.user[profile.social_name] !== '');
+                        this.enableSocialProfile = this.socialProfileSettings.filter(profile => profile.enable).length;
+                    }
+
                 }));
     }
 
