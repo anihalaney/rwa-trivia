@@ -1,20 +1,18 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material';
-import { Router, ActivatedRoute } from '@angular/router';
-import { select, Store } from '@ngrx/store';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Store } from '@ngrx/store';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { SwiperConfigInterface, SwiperDirective } from 'ngx-swiper-wrapper';
 import { Observable } from 'rxjs';
-import { map, take, flatMap, skipWhile } from 'rxjs/operators';
+import { flatMap, map } from 'rxjs/operators';
 import { Utils, WindowRef } from 'shared-library/core/services';
 import { GameActions, UserActions } from 'shared-library/core/store/actions';
-import {
-  Category, GameMode, GameOptions, OpponentType, PlayerMode, FirebaseAnalyticsKeyConstants,
-  FirebaseAnalyticsEventConstants, GameConstants
-} from 'shared-library/shared/model';
-import { AppState, appState } from '../../../store';
+import { Category, GameMode, GameOptions } from 'shared-library/shared/model';
+import { AppState } from '../../../store';
 import { NewGame } from './new-game';
-import { SwiperDirective, SwiperConfigInterface } from 'ngx-swiper-wrapper';
+
 @Component({
   selector: 'new-game',
   templateUrl: './new-game.component.html',
@@ -29,7 +27,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
   tags: string[];
   subscriptions = [];
   selectedTags: string[];
-  selectedCategories = [];
+
 
   newGameForm: FormGroup;
   gameOptions: GameOptions;
@@ -67,56 +65,6 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     public snackBar: MatSnackBar,
     public cd: ChangeDetectorRef) {
     super(store, utils, gameActions, userActions, windowRef, cd, route, router);
-
-    this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.gameCreateStatus)).subscribe(gameCreateStatus => {
-      if (gameCreateStatus) {
-        this.redirectToDashboard(gameCreateStatus);
-      }
-      this.cd.markForCheck();
-    }));
-
-    this.store.select(appState.coreState).pipe(select(s => s.applicationSettings), take(1),
-      map(appSettings => {
-        if (appSettings) {
-          this.applicationSettings = appSettings[0];
-          if (this.applicationSettings && this.applicationSettings.lives.enable) {
-            return appSettings;
-          }
-        }
-      }),
-      flatMap(() => this.store.select(appState.coreState).pipe(select(s => s.account),
-        skipWhile(account => !account), take(1), map(account => this.life = account.lives)))).subscribe(data => {
-          if (this.applicationSettings) {
-            this.selectedCategories = [];
-            let filteredCategories = [];
-            if (this.applicationSettings && this.applicationSettings.game_play_categories) {
-              filteredCategories = this.categories.filter((category) => {
-                if (this.applicationSettings.game_play_categories.indexOf(Number(category.id)) > -1) {
-                  return category;
-                }
-              });
-            } else {
-              filteredCategories = this.categories;
-            }
-
-            this.cd.markForCheck();
-
-
-            const sortedCategories = [...filteredCategories.filter(c => c.requiredForGamePlay),
-            ...filteredCategories.filter(c => !c.requiredForGamePlay)];
-
-            this.sortedCategories = sortedCategories;
-
-            sortedCategories.map(category => {
-              category.isCategorySelected = this.isCategorySelected(category.id, category.requiredForGamePlay);
-              if (this.isCategorySelected(category.id, category.requiredForGamePlay)) {
-                this.selectedCategories.push(category.id);
-              }
-            });
-            this.cd.markForCheck();
-            // this.cd.detectChanges();
-          }
-        });
   }
 
   ngOnInit() {
@@ -259,15 +207,5 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
   ngOnDestroy() {
   }
 
-  isCategorySelected(categoryId: number, requiredForGamePlay: boolean) {
-    if (requiredForGamePlay) {
-      return true;
-    }
-    if (this.user.categoryIds && this.user.categoryIds.length > 0) {
-      return this.user.categoryIds.includes(categoryId);
-    } else if (this.user.lastGamePlayOption && this.user.lastGamePlayOption.categoryIds.length > 0) {
-      return this.user.lastGamePlayOption.categoryIds.includes(categoryId);
-    }
-    return true;
-  }
+
 }

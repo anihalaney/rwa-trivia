@@ -80,9 +80,9 @@
                             <div class="col-md-8">
                                 <div class="row">
                                     <ng-container >
-                                        <div class="checkbox-group" *ngFor="let category of sortedCategories; let i=index">
+                                        <div class="checkbox-group" *ngFor="let category of filteredCategories; let i=index">
                                             <mat-checkbox [disableRipple]="true" [value]="category.id" [disabled]="category.requiredForGamePlay"
-                                                [checked]="category.isCategorySelected" (change)="selectCategory($event,category.id)">
+                                                [checked]="category.isSelected" (change)="selectCategory($event,category.id)">
                                                 {{category.categoryName}}
                                             </mat-checkbox>
                                         </div>
