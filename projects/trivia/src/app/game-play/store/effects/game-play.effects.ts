@@ -58,7 +58,9 @@ export class GamePlayEffects {
           return true;
         } else if ((routerState.url.toLowerCase().startsWith('/game-play/') ||
           routerState.url.toLowerCase().startsWith('/game-play/challenge')) && (routerState['root'] &&
-            !routerState['url'].toLowerCase().startsWith('/game-play/challenge'))) {
+            !routerState['url'].toLowerCase().startsWith('/game-play/challenge')) &&
+          (routerState['root'] &&
+            !routerState['url'].toLowerCase().startsWith('/game-play/game-option'))) {
           return true;
         } else {
           return false;
