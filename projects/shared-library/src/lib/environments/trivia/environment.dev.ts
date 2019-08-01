@@ -16,8 +16,7 @@ export const CONFIG: IConfig = {
     storageBucket: 'rwa-trivia-dev-e57fc.appspot.com',
     messagingSenderId: '701588063269'
   },
-  // 'functionsUrl': `https://rwa-trivia-dev-e57fc.firebaseapp.com/${appConstants.API_VERSION}`,
-  'functionsUrl': 'http://192.168.0.100:5000/rwa-trivia-dev-e57fc/us-central1/app',
+  'functionsUrl': `https://rwa-trivia-dev-e57fc.firebaseapp.com/${appConstants.API_VERSION}`,
   'editorUrl': 'https://rwa-trivia-dev-e57fc.firebaseapp.com/trivia-editor',
   'termsAndConditionsUrl': 'https://rwa-trivia-dev-e57fc.firebaseapp.com/terms-and-conditions',
   'privacyUrl': 'https://rwa-trivia-dev-e57fc.firebaseapp.com/terms-and-conditions',
@@ -25,11 +24,11 @@ export const CONFIG: IConfig = {
 };
 
 
-  export const projectMeta = {
-    projectName: 'rwa-trivia',
-    projectDisplayName: 'Trivia',
-    title: 'bitwiser.io: get wiser - bit by bit',
-    playStoreUrl: 'https://play.google.com/store/apps/details?id=io.bitwiser.trivia',
-    appStoreUrl: 'https://itunes.apple.com/us/app/bitwiser-trivia/id1447244501?mt=8',
-    blogUrl: 'https://bitwiser.io'
-  };
+export const projectMeta = {
+  projectName: 'rwa-trivia',
+  projectDisplayName: 'Trivia',
+  title: 'bitwiser.io: get wiser - bit by bit',
+  playStoreUrl: 'https://play.google.com/store/apps/details?id=io.bitwiser.trivia',
+  appStoreUrl: 'https://itunes.apple.com/us/app/bitwiser-trivia/id1447244501?mt=8',
+  blogUrl: 'https://bitwiser.io'
+};

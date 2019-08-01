@@ -19,7 +19,6 @@ export class CategoryEffects {
                 return this.svc.getCategories()
                     .pipe(
                         map((categories: Category[]) => {
-
                             return this.categoryActions.loadCategoriesSuccess(categories);
                         })
                     );
