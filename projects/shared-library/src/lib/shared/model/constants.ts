@@ -117,13 +117,10 @@ export enum CollectionConstants {
     STATS_SYSTEM = 'system',
     ACHIEVEMENTS = 'achievements',
     ACHIEVEMENT_RULES = 'achievement_rules',
-<<<<<<< HEAD
     USER_STATUS = 'user_status',
     INFO = '.info',
-    CONNECTED = 'connected'
-=======
+    CONNECTED = 'connected',
     REACTIONS = 'reactions'
->>>>>>> c1c44c3efb9019a756d39f7ab57e283af95fa2b9
 }
 
 export enum UserConstants {
