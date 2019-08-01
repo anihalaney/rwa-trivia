@@ -27,6 +27,8 @@ import {registerElement} from "nativescript-angular/element-registry";
 import { Carousel, CarouselItem } from 'nativescript-carousel';
 import { ModalDialogOptions, ModalDialogService } from 'nativescript-angular/modal-dialog';
 import { WelcomeScreenComponent } from '../../../../../shared-library/src/lib/shared/mobile/component';
+import * as appSettingsStorage from 'tns-core-modules/application-settings';
+
 registerElement('Carousel', () => Carousel);
 registerElement('CarouselItem', () => CarouselItem);
 
@@ -37,7 +39,6 @@ registerElement('CarouselItem', () => CarouselItem);
 
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class AppComponent implements OnInit, OnDestroy {
-  showModal = true;
   subscriptions = [];
   applicationSettings: ApplicationSettings;
 
@@ -73,7 +74,6 @@ export class AppComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
 
-    this.showWelcomeScreen();
     this.checkForceUpdate();
     firebase.init({
       onMessageReceivedCallback: (message) => {
@@ -149,7 +149,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   async showWelcomeScreen() {
-    if (this.showModal) {
+    if (!appSettingsStorage.getBoolean('isWelcomeScreenSeen', false)) {
         const options: ModalDialogOptions = {
             viewContainerRef: this._vcRef,
             context: {},
@@ -160,8 +160,8 @@ export class AppComponent implements OnInit, OnDestroy {
               .then((result: string) => {
                 this.cd.markForCheck();
         });
+        appSettingsStorage.setBoolean('isWelcomeScreenSeen', true);
       }
-      this.showModal = false;
 
   }
 
@@ -182,6 +182,9 @@ export class AppComponent implements OnInit, OnDestroy {
 
           this.applicationSettings = appSettings[0];
           //   console.log('appSettings', this.applicationSettings.crashlytics);
+          if (this.applicationSettings.show_welcome_screen) {
+            this.showWelcomeScreen();
+          }
           if (isAndroid && version && this.applicationSettings.android_version
             && this.applicationSettings.android_version > version) {
             this.displayForceUpdateDialog(projectMeta.playStoreUrl);
