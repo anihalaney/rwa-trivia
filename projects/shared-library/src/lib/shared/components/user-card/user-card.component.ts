@@ -47,7 +47,6 @@ export class UserCardComponent implements OnInit, OnDestroy, OnChanges {
           const isMatch = JSON.stringify(this.user).toLowerCase() === JSON.stringify(this.userDict[this.userId]).toLowerCase();
           if (!isMatch) {
             this.user = this.userDict[this.userId];
-            this.userChange.emit(this.user);
             this.cd.markForCheck();
           }
         }
