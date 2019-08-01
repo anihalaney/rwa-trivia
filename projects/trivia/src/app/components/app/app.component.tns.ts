@@ -1,4 +1,4 @@
-import { Component, OnInit, NgZone, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, NgZone, OnDestroy, ChangeDetectorRef, ViewContainerRef } from '@angular/core';
 import * as firebase from 'nativescript-plugin-firebase';
 import { Store, select } from '@ngrx/store';
 import { filter } from 'rxjs/operators';
@@ -23,6 +23,12 @@ import * as appversion from 'nativescript-appversion';
 import { Utils } from 'shared-library/core/services';
 import { NavigationEnd, Router } from '@angular/router';
 import { FirebaseScreenNameConstants } from '../../../../../shared-library/src/lib/shared/model';
+import {registerElement} from "nativescript-angular/element-registry";
+import { Carousel, CarouselItem } from 'nativescript-carousel';
+import { ModalDialogOptions, ModalDialogService } from 'nativescript-angular/modal-dialog';
+import { WelcomeScreenComponent } from '../../../../../shared-library/src/lib/shared/mobile/component';
+registerElement('Carousel', () => Carousel);
+registerElement('CarouselItem', () => CarouselItem);
 
 @Component({
   selector: 'app-root',
@@ -31,7 +37,7 @@ import { FirebaseScreenNameConstants } from '../../../../../shared-library/src/l
 
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class AppComponent implements OnInit, OnDestroy {
-
+  showModal = true;
   subscriptions = [];
   applicationSettings: ApplicationSettings;
 
@@ -43,7 +49,9 @@ export class AppComponent implements OnInit, OnDestroy {
     private applicationSettingsAction: ApplicationSettingsActions,
     private utils: Utils,
     private cd: ChangeDetectorRef,
-    private router: Router) {
+    private router: Router,
+    private _modalService: ModalDialogService,
+    private _vcRef: ViewContainerRef) {
 
 
 
@@ -65,8 +73,8 @@ export class AppComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
 
+    this.showWelcomeScreen();
     this.checkForceUpdate();
-
     firebase.init({
       onMessageReceivedCallback: (message) => {
         console.log('message', message);
@@ -137,6 +145,23 @@ export class AppComponent implements OnInit, OnDestroy {
       }
 
     }));
+
+  }
+
+  async showWelcomeScreen() {
+    if (this.showModal) {
+        const options: ModalDialogOptions = {
+            viewContainerRef: this._vcRef,
+            context: {},
+            fullscreen: true
+        };
+
+        this._modalService.showModal(WelcomeScreenComponent, options)
+              .then((result: string) => {
+                this.cd.markForCheck();
+        });
+      }
+      this.showModal = false;
 
   }
 

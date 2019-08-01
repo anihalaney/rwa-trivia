@@ -16,7 +16,8 @@ import { registerElement } from 'nativescript-angular/element-registry';
 import { RouterModule } from '@angular/router';
 import { RecentGameCardComponent, RecentGamesComponent, PrivacyPolicyComponent, AchievementsComponent } from './components';
 import { UserFeedbackComponent } from './components/index.tns';
-
+import { WelcomeScreenComponent } from '../../../shared-library/src/lib/shared/mobile/component';
+import { ModalDialogService } from 'nativescript-angular/modal-dialog';
 // import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 export function firebaseFactory() {
   return TNSFirebase;
@@ -34,7 +35,8 @@ registerElement('Fab', () => require('nativescript-floatingactionbutton').Fab);
     RecentGamesComponent,
     PrivacyPolicyComponent,
     AchievementsComponent,
-    UserFeedbackComponent
+    UserFeedbackComponent,
+    WelcomeScreenComponent
   ],
   imports: [
     CoreModule,
@@ -54,6 +56,10 @@ registerElement('Fab', () => require('nativescript-floatingactionbutton').Fab);
       provide: PlatformFirebaseToken,
       useFactory: firebaseFactory
     },
+    ModalDialogService
+  ],
+  entryComponents: [
+     WelcomeScreenComponent
   ],
   bootstrap: [AppComponent],
   schemas: [NO_ERRORS_SCHEMA]
