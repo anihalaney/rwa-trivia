@@ -64,8 +64,11 @@
         </div>
       </div>
       <div class="popupbottom">
-        <div class="col-md-10 col-xs-10 question-tag question-tag-space">
+        <div class="col-md-8 col-xs-8 question-tag question-tag-space">
           Tags : {{question.tags?.toString()}}
+        </div>
+        <div class="col-md-2 col-xs-2">
+          <user-reaction *ngIf="user && question && showContinueBtn" [user]='user' [question]='question'></user-reaction>
         </div>
         <div class="col-md-2 col-xs-2 continue-btn-div">
           <button mat-button *ngIf="showContinueBtn" (click)="continueClicked.emit($event)" class="startgame continue-btn">Continue</button>

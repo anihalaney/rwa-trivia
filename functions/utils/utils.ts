@@ -68,6 +68,10 @@ export class Utils {
         return firebase.firestore.FieldValue.increment(value);
     }
 
+    static getTimeStamp(): any {
+        return firebase.firestore.FieldValue.serverTimestamp();
+    }
+
     static getConfig(): any {
         let config = {};
         try {

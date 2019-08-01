@@ -25,6 +25,7 @@ class QuestionRoutes {
         this.questionRoutes.post(`/${RoutesConstants.NEXT}/:${RoutesConstants.GAME_ID}`,
             AuthMiddleware.authorizedOnly, QuestionController.getNextQuestion);
 
+
         //  '/:start/:size'
         this.questionRoutes.post(`/:${RoutesConstants.START}/:${RoutesConstants.SIZE}`,
             AuthMiddleware.adminOnly, QuestionController.getQuestions);

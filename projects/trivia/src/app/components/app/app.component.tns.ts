@@ -47,8 +47,10 @@ export class AppComponent implements OnInit, OnDestroy {
     private router: Router) {
 
     this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.newGameId), filter(g => g !== '')).subscribe(gameObj => {
+      console.log('gameObj', gameObj);
       this.routerExtension.navigate(['/game-play', gameObj['gameId']]);
       this.store.dispatch(new gamePlayActions.ResetCurrentQuestion());
+      this.cd.markForCheck();
     }));
 
     this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe(status => {

@@ -34,7 +34,7 @@
                 <!-- <GridLayout row="1" col="0" [style.marginTop]="isLivesEnable ? '10' : '0'" iosOverflowSafeArea="false">
                     <Label stlRippleEffect [text]="gameStart" android:paddingTop="18"
                         [ngClass]="{'btn-red':!gamePlayBtnDisabled, 'disabled-btn':gamePlayBtnDisabled , 'margin-r-25' :  isLivesEnable }"
-                        class="Roboto-Medium text-center" height="70" (rippleTap)="startNewGame()" fontSize="22"
+                        class="Roboto-Medium text-center" height="70" (rippleTap)="startNewGame('')" fontSize="22"
                         textWrap="true" marginTop="20"></Label>
                     <AbsoluteLayout horizontalAlignment="right" marginRight="10"
                         *ngIf="user && account && isLivesEnable" iosOverflowSafeArea="false">

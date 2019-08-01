@@ -65,8 +65,8 @@ export class GameDialog {
     this.genQuestionComponent = questionComponent;
   }
 
-  constructor(public store: Store<GamePlayState>, public userActions: UserActions, public utils: Utils,
-    public cd: ChangeDetectorRef, public router: Router) {
+  constructor(public store: Store<GamePlayState>, public userActions: UserActions, public utils: Utils, public cd: ChangeDetectorRef
+    , public router: Router) {
 
     this.subscriptions.push(this.store.select(appState.coreState).pipe(take(1)).subscribe(s => this.user = s.user));
     this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
