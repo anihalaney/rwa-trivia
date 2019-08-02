@@ -106,7 +106,7 @@
 
 <ng-container *ngIf="user && userCardType.USER_WEB_IMAGE_NAME_STATUS_HORIZONTAL === type">
   <div class="row">
-    <div class="col-md-2  col-sm-3 col-xs-12 user-img">
+    <div class="col-md-2  col-sm-3 col-xs-12 user-img friend-invite">
       <img [stlOpenUserProfile]="{userId: user.userId, redirectTo: 'otherUserProfile'}" [src]="getImageUrl(user,44,40)"
         alt="User Profile Picture" />
       <span *ngIf="user?.online" class="online-dot">

@@ -107,6 +107,11 @@
   .user-img {
     text-align: center;
   }
+  .friend-invite .online-dot {
+    right: 80px !important;
+    bottom: 7px !important;
+  }
+
   // .{ text-align: center;}
 }
 
@@ -159,4 +164,10 @@
 .innerli .online-dot {
   right: 2px;
   bottom: 2px;
+}
+
+
+.friend-invite .online-dot {
+  right: 50px;
+  bottom: 5px;
 }

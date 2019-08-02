@@ -19,6 +19,7 @@ export class AuthorComponent implements OnChanges {
     newUserid = '';
     constructor(private cd: ChangeDetectorRef) {
     }
+
     ngOnChanges() {
         this.cd.markForCheck();
     }
