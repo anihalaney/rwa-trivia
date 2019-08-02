@@ -10,6 +10,8 @@ import {
     OpponentType, PlayerMode, User
 } from 'shared-library/shared/model';
 import { AppState, appState } from '../../../store';
+import { applicationSettings, account } from 'shared-library/core/store';
+import { switchMap, map } from 'rxjs/operators';
 
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class Dashboard implements OnDestroy {
@@ -98,42 +100,102 @@ export class Dashboard implements OnDestroy {
                     }));
 
                 // if (this.user) {
-                this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings))
-                    .subscribe(appSettings => {
+
+                // this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings), map(user => {
+                //     if (user) {
+                //     //   this.loggedInUserId = user.userId;
+                //     }
+                //   }))
+                //     .pipe(switchMap(() => {
+                //       return this.store.select(dashboardState).pipe(select(s => s.scoreBoard));
+                //     }))
+                //     .subscribe((lbsStat) => {
+                //     }
+
+
+                this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings),
+                    map(appSettings => {
+                        console.log('aplciaotn setting', appSettings);
                         if (appSettings) {
                             this.applicationSettings = appSettings[0];
-                            if (this.applicationSettings) {
-                                this.subscriptions.push(store.select(appState.coreState).pipe(select(s => s.account))
-                                    .subscribe(account => {
-                                        if (this.user) {
-                                            this.account = account;
-                                            this.cd.markForCheck();
-                                            if (this.account && !this.account.enable) {
-                                                this.timeoutLive = '';
-                                                if (this.account && this.account.lives === 0 && this.isLivesEnable) {
-                                                    this.gamePlayBtnDisabled = true;
-                                                } else {
-                                                    this.gamePlayBtnDisabled = false;
-                                                }
-                                            } else {
-                                                this.gamePlayBtnDisabled = false;
-                                            }
-                                            if (this.timerSub) {
-                                                this.timerSub.unsubscribe();
-                                            }
-                                            this.gameLives();
-                                        }
-                                    }));
-                                if (this.applicationSettings && !this.applicationSettings.lives.enable) {
-                                    this.gamePlayBtnDisabled = false;
-                                    if (this.timerSub) {
-                                        this.timeoutLive = '';
-                                        this.timerSub.unsubscribe();
-                                    }
-                                }
+                        }
+                    }))
+                    .pipe(switchMap(() => {
+                        // return this.store.select(dashboardState).pipe(select(s => s.scoreBoard));
+                        return this.store.select(appState.coreState).pipe(select(s => s.account));
+                    }))
+                    .subscribe(account => {
+                        console.log(this.applicationSettings);
+                        console.log('res', account);
+                        console.log('response', this.user);
+
+                        if (this.user) {
+
+                        }
+                        this.account = account;
+                        this.cd.markForCheck();
+                        if (this.account && !this.account.enable) {
+                            this.timeoutLive = '';
+                            if (this.account && this.account.lives === 0 && this.isLivesEnable) {
+                                this.gamePlayBtnDisabled = true;
+                            } else {
+                                this.gamePlayBtnDisabled = false;
+                            }
+                        } else {
+                            this.gamePlayBtnDisabled = false;
+                        }
+                        if (this.timerSub) {
+                            this.timerSub.unsubscribe();
+                        }
+                        this.gameLives();
+
+                        if (this.applicationSettings && !this.applicationSettings.lives.enable) {
+                            this.gamePlayBtnDisabled = false;
+                            if (this.timerSub) {
+                                this.timeoutLive = '';
+                                this.timerSub.unsubscribe();
                             }
                         }
+
                     }));
+
+
+                // this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings))
+                //     .subscribe(appSettings => {
+                //         if (appSettings) {
+                //             this.applicationSettings = appSettings[0];
+                //             if (this.applicationSettings) {
+                //                 this.subscriptions.push(store.select(appState.coreState).pipe(select(s => s.account))
+                //                     .subscribe(account => {
+                //                         if (this.user) {
+                //                             this.account = account;
+                //                             this.cd.markForCheck();
+                //                             if (this.account && !this.account.enable) {
+                //                                 this.timeoutLive = '';
+                //                                 if (this.account && this.account.lives === 0 && this.isLivesEnable) {
+                //                                     this.gamePlayBtnDisabled = true;
+                //                                 } else {
+                //                                     this.gamePlayBtnDisabled = false;
+                //                                 }
+                //                             } else {
+                //                                 this.gamePlayBtnDisabled = false;
+                //                             }
+                //                             if (this.timerSub) {
+                //                                 this.timerSub.unsubscribe();
+                //                             }
+                //                             this.gameLives();
+                //                         }
+                //                     }));
+                //                 if (this.applicationSettings && !this.applicationSettings.lives.enable) {
+                //                     this.gamePlayBtnDisabled = false;
+                //                     if (this.timerSub) {
+                //                         this.timeoutLive = '';
+                //                         this.timerSub.unsubscribe();
+                //                     }
+                //                 }
+                //             }
+                //         }
+                //     }));
                 // }
             });
             this.store.dispatch(this.gameActions.getActiveGames(user));
@@ -194,7 +256,6 @@ export class Dashboard implements OnDestroy {
                 } else if (Number(iGame.gameOptions.opponentType) === OpponentType.Random) {
                     this.randomPlayerCount++;
                 }
-                // this.store.dispatch(this.userActions.loadOtherUserProfile(iGame.playerIds[0]));
             });
         }));
         this.gameInviteSliceStartIndex = 0;

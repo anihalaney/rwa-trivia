@@ -1,5 +1,5 @@
-import { Component, Input, OnChanges, OnDestroy, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
-import { Observable, Subscription } from 'rxjs';
+import { Component, Input, OnDestroy, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
+import { Observable } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { User, Game, Category, PlayerMode, GameStatus, userCardType } from 'shared-library/shared/model';
 import { Utils } from 'shared-library/core/services';
@@ -15,7 +15,7 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 })
 
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
-export class RecentGameCardComponent implements OnInit, OnChanges, OnDestroy {
+export class RecentGameCardComponent implements OnInit, OnDestroy {
     @Input() game: Game;
     // @Input() userDict: { [key: string]: User };
     @Input() user: User;
@@ -52,9 +52,6 @@ export class RecentGameCardComponent implements OnInit, OnChanges, OnDestroy {
 
     getOpponentId(game) {
         return game.playerIds.filter(userId => userId !== this.user.userId)[0];
-    }
-
-    ngOnChanges() {
     }
 
     ngOnDestroy() {

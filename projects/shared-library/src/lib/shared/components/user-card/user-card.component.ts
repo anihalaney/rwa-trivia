@@ -6,6 +6,7 @@ import { Store, select } from '@ngrx/store';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { UserActions } from '../../../core/store/actions';
 import { Observable } from 'rxjs';
+import * as lodash from 'lodash';
 @Component({
   selector: 'app-user-card',
   templateUrl: './user-card.component.html',
@@ -44,21 +45,22 @@ export class UserCardComponent implements OnInit, OnDestroy, OnChanges {
       this.userDict = userDict;
       if (this.user) {
         if (userDict[this.userId] && this.user) {
-          const isMatch = JSON.stringify(this.user).toLowerCase() === JSON.stringify(this.userDict[this.userId]).toLowerCase();
+          const isMatch = lodash.isEqual(this.user, this.userDict[this.userId]);
           if (!isMatch) {
-            this.user = this.userDict[this.userId];
+            this.setUser();
             this.cd.markForCheck();
           }
         }
       } else {
-        this.user = this.userDict[this.userId];
+        this.setUser();
+        this.cd.markForCheck();
       }
     }));
     this.subscriptions.push(this.store.select(coreState)
       .pipe(select(s => s.user)).subscribe(user => {
         this.loggedInUserId = (user) ? user.userId : '';
         this.loadUserInfo();
-
+        this.setUser();
         this.cd.markForCheck();
       }));
   }
@@ -77,13 +79,20 @@ export class UserCardComponent implements OnInit, OnDestroy, OnChanges {
 
   ngOnChanges() {
     this.loadUserInfo();
+    if (this.userDict && this.userDict[this.userId]) {
+      this.user = this.userDict[this.userId];
+    }
     this.cd.markForCheck();
   }
 
   loadUserInfo() {
     if (this.userId) {
-        this.store.dispatch(this.userActions.loadOtherUserProfile(this.userId));
-        this.cd.markForCheck();
-      }
+      this.store.dispatch(this.userActions.loadOtherUserProfile(this.userId));
+      this.cd.markForCheck();
     }
+  }
+
+  setUser() {
+    this.user = this.userDict[this.userId];
+  }
 }

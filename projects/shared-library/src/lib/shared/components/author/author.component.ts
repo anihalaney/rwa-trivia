@@ -11,7 +11,6 @@ import { userCardType } from './../../model';
 })
 
 export class AuthorComponent implements OnChanges {
-
     @Input() userId;
     @Input() isGamePlay;
     userCardType = userCardType;
@@ -20,6 +19,7 @@ export class AuthorComponent implements OnChanges {
     }
 
     ngOnChanges() {
-        this.cd.markForCheck();
+        console.log('this user', this.userId);
+            this.cd.markForCheck();
     }
 }
