@@ -57,6 +57,7 @@ export class UserService {
                         return value;
                     } else {
                         value = {};
+                        value['userId'] = friendList[index];
                         value.created_uid = friendList[index];
                         return value;
                     }

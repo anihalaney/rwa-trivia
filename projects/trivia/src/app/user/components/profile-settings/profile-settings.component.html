@@ -225,12 +225,9 @@
                             <div class="col-sm-9">
                               <div class="tags">
                                 <div data-tags-input-name="tag" id="tagBox" class="tagging">
-                                  <mat-chip-list>
-                                    <mat-basic-chip *ngFor="let tag of autoTags" class="tag">
-                                      {{tag}}
-                                    </mat-basic-chip>
+                                  <mat-chip-list>           
                                     <mat-basic-chip *ngFor="let tag of enteredTags" class="tag">
-                                      {{tag}}
+                                        {{tag}}
                                       <span *ngIf="isEnableEditProfile" (click)="removeEnteredTag(tag)" class="remove-tag">x</span>
                                     </mat-basic-chip>
                                   </mat-chip-list>
