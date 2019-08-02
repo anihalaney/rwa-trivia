@@ -47,7 +47,6 @@ export class RecentGameCardComponent implements OnInit, OnChanges, OnDestroy {
 
         if (this.game) {
             this.otherUserId = this.getOpponentId(this.game);
-            this.userProfileImageUrl = this.getImageUrl(this.user);
         }
     }
 
@@ -58,11 +57,6 @@ export class RecentGameCardComponent implements OnInit, OnChanges, OnDestroy {
     ngOnChanges() {
     }
 
-    getImageUrl(user: User) {
-        return this.utils.getImageUrl(user, 44, 40, '44X40');
-    }
-
     ngOnDestroy() {
-        // this.cd.detach();
     }
 }

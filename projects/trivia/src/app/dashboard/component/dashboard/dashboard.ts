@@ -203,9 +203,6 @@ export class Dashboard implements OnDestroy {
         this.subscriptions.push(store.select(appState.coreState).pipe(select(s => s.friendInvitations)).subscribe(invitations => {
             if (invitations.length > 0) {
                 this.friendInvitations = invitations;
-                invitations.map(invitation => {
-                    // this.store.dispatch(this.userActions.loadOtherUserProfile(invitation.created_uid));
-                });
             }
         }));
 

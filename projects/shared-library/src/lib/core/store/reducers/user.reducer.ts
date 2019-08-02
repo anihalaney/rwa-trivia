@@ -21,8 +21,6 @@ export function userDict(state: { [key: string]: User } = {}, action: ActionWith
         users[action.payload.userId] = { ...action.payload };
       }
       return users;
-    case UserActions.LOGOFF:
-      return {};
     default:
       return state;
   }
@@ -37,8 +35,6 @@ export function userFriendInvitations(state: { [key: string]: Invitation } = {},
         invitations[action.payload.email] = { ...action.payload };
       }
       return invitations;
-    case UserActions.LOGOFF:
-      return {};
     default:
       return state;
   }
@@ -61,8 +57,6 @@ export function invitationToken(state: any = 'NONE', action: ActionWithPayload<s
   switch (action.type) {
     case UserActions.STORE_INVITATION_TOKEN:
       return action.payload;
-    case UserActions.LOGOFF:
-      return null;
     default:
       return state;
   }
@@ -72,8 +66,6 @@ export function gameInvites(state: any = [], action: ActionWithPayload<Game[]>):
   switch (action.type) {
     case UserActions.LOAD_GAME_INVITES_SUCCESS:
       return action.payload;
-    case UserActions.LOGOFF:
-      return [];
     default:
       return state;
   }
@@ -84,8 +76,6 @@ export function userFriends(state: any = null, action: ActionWithPayload<Friends
   switch (action.type) {
     case UserActions.LOAD_USER_FRIENDS_SUCCESS:
       return action.payload;
-    case UserActions.LOGOFF:
-      return null;
     default:
       return state;
   }
@@ -95,8 +85,6 @@ export function friendInvitations(state: any = [], action: ActionWithPayload<Inv
   switch (action.type) {
     case UserActions.LOAD_FRIEND_INVITATION_SUCCESS:
       return action.payload;
-    case UserActions.LOGOFF:
-      return [];
     default:
       return state;
   }
