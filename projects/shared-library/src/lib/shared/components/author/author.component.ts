@@ -12,7 +12,6 @@ import { userCardType } from './../../model';
 
 export class AuthorComponent implements OnChanges {
 
-    @Input() userDict: { [key: string]: User };
     @Input() userId;
     @Input() isGamePlay;
     userCardType = userCardType;

@@ -29,7 +29,7 @@
         </StackLayout>
         <StackLayout iosOverflowSafeArea="false" orientation="vertical" *ngIf="question" margin="10"
             iosOverflowSafeArea="false">
-            <author [userDict]="userDict" [isGamePlay]= false [userId]="question.created_uid"></author>
+            <author [isGamePlay]= false [userId]="question.created_uid"></author>
             <Button class="Roboto-Regular" backgroundColor="#8ac541" color="white" margin="20" (rippleTap)="getNextQuestion()"
                 *ngIf="answeredText!==''" width="100%" text="Try Another" fontSize="17" padding="15" stlRippleEffect
                 stlBackgroundColor="#8ac541"></Button>
