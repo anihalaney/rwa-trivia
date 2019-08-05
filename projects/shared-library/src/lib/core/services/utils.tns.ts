@@ -1,12 +1,14 @@
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { Feedback, FeedbackPosition, FeedbackType } from 'nativescript-feedback';
 import * as firebase from 'nativescript-plugin-firebase';
+import { Observable, of } from 'rxjs';
 import {
-  Parameter, User, FirebaseAnalyticsKeyConstants, FirebaseAnalyticsEventConstants, GameOptions,
-  PlayerMode, GameConstant, OpponentType, GameMode, Game, GeneralConstants
+  FirebaseAnalyticsEventConstants, FirebaseAnalyticsKeyConstants,
+  Game, GameConstant, GameMode, GameOptions, GeneralConstants, OpponentType, Parameter, PlayerMode, User
 } from '../../shared/model';
-import { of, Observable } from 'rxjs';
 import { UtilsCore } from './utilsCore';
+
+
 @Injectable()
 export class Utils extends UtilsCore {
 

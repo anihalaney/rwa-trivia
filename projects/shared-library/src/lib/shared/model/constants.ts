@@ -114,6 +114,7 @@ export enum CollectionConstants {
     STATS_SYSTEM = 'system',
     ACHIEVEMENTS = 'achievements',
     ACHIEVEMENT_RULES = 'achievement_rules',
+    REACTIONS = 'reactions'
 }
 
 export enum UserConstants {
@@ -371,6 +372,7 @@ export enum RoutesConstants {
     LOCATION = 'location',
     LAT_LONG = 'latLong',
     ADDRESS_SUGGESTION = 'addressSuggestion',
+    UPDATE_APP_VERSION = 'updateAppVersion'
 }
 
 export enum TermsAndPrivacyUrlConstant {
@@ -434,11 +436,6 @@ export enum FirebaseScreenNameConstants {
     QUESTION_ADD_UPDATE = 'Question Add Update',
     LOGIN = 'Login',
     USER_FEEDBACK = 'User Feedback'
-}
-
-export enum GoogleLocationAPI {
-    GOOGLE_AUTOCOMPLETE = 'https://maps.googleapis.com/maps/api/place/autocomplete/json',
-    GOOGLE_GEOCODE = 'https://maps.googleapis.com/maps/api/geocode/json'
 }
 
 export enum AnalyticsEventConstants {

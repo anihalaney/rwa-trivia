@@ -30,6 +30,7 @@ export class Question {
   questionObject?: any;
   isRichEditor?: boolean = false;
   maxTime?: number;
+  reactionsCount?: { [key: string]: number };
 
 
 
@@ -54,6 +55,7 @@ export class Question {
     question.createdOn = db.createdOn ? db.createdOn : new Date();
     question.totalQALength = this.countQALength(db);
     question.maxTime = db.maxTime ? db.maxTime : 0;
+    question.reactionsCount  = db.reactionsCount ? db.reactionsCount : {};
 
     db.answers = db.answers.map(answer => {
       answer.isRichEditor = answer.isRichEditor ? answer.isRichEditor : false;
@@ -79,6 +81,7 @@ export class Question {
     question.renderedQuestion = source.renderedQuestion;
     question.isRichEditor = (source.isRichEditor) ? source.isRichEditor : false;
     question.questionObject = (source.questionObject) ? source.questionObject : '' ;
+    question.reactionsCount = (source.reactionsCount) ? source.reactionsCount : {} ;
 
     question.totalQALength = this.countQALength(source);
     return question;
