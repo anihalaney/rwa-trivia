@@ -4,13 +4,14 @@ import { combineLatest, Observable, of, from } from 'rxjs';
 import { map, mergeMap, catchError } from 'rxjs/operators';
 import {
     friendInvitationConstants, Friends, Game, GameOperations, GameStatus, Invitation, QueryParam, QueryParams, User, RoutesConstants,
-     Question
+    Question
 } from './../../../lib/shared/model';
 import { CONFIG } from './../../environments/environment';
 import { DbService } from './../db-service';
 
 import { Country } from 'shared-library/shared/mobile/component/countryList/model/country.model';
 import { Utils } from './utils';
+import { stat } from 'fs';
 
 @Injectable()
 export class UserService {

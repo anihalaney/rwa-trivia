@@ -10,9 +10,9 @@ export class PushNotification {
 
     static async sendNotificationToDevices(userId: string, title: string, body: string, data: any): Promise<any> {
         try {
-            //  console.log('next PlayerId ----------------->', userId);
+
             const dbUser: User = await UserService.getUserById(userId);
-            //  console.log('next dbUser----------------->', dbUser);
+
             const notificationPromises = [];
             if (dbUser.androidPushTokens && dbUser.androidPushTokens.length > 0) {
                 for (const androidPushToken of dbUser.androidPushTokens) {

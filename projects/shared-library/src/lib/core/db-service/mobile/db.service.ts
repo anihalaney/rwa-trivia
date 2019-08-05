@@ -27,11 +27,11 @@ export class TNSDbService extends DbService {
     }
 
     public setDoc(collectionName: string, docId: any, document: any, timeStamp = null) {
-        if (timeStamp.createdOn) {
-            document = {...document, createdOn: firebaseApp.firestore().FieldValue().serverTimestamp()};
+        if (timeStamp !== null && timeStamp && timeStamp.createdOn) {
+            document = { ...document, createdOn: firebaseApp.firestore().FieldValue().serverTimestamp() };
         }
-        if (timeStamp.updatedOn) {
-            document = {...document, updatedOn: firebaseApp.firestore().FieldValue().serverTimestamp()};
+        if (timeStamp !== null && timeStamp && timeStamp.updatedOn) {
+            document = { ...document, updatedOn: firebaseApp.firestore().FieldValue().serverTimestamp() };
         }
         const userCollection = firebaseApp.firestore().collection(collectionName);
         return userCollection.doc(docId).set(document, { merge: true });

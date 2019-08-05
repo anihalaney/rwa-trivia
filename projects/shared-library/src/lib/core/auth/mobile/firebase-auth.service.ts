@@ -109,20 +109,27 @@ export class TNSFirebaseAuthService implements FirebaseAuthService {
     }
 
     public updateOnConnect(user: User) {
+        // .info/connected is the in built collection of real time db
+        // it won't able to see by firebase console user
         firebaseApp.database().ref(`${CollectionConstants.INFO}/${CollectionConstants.CONNECTED}`)
-            .once('value')
-            .then(connected => {
-                console.log('connected', connected);
-                const status = connected.key === UserStatusConstants.CONNECTED ? UserStatusConstants.ONLINE : UserStatusConstants.OFFLINE;
-                this.updateOnDisconnect();
-                this.updateTokenStatus(user.userId, status);
+            .on('value', (snapshot) => {
+                if (!snapshot.val()) {
+                    // Instead of simply returning, we'll also set Firestore's state
+                    // to 'offline'. This ensures that our Firestore cache is aware
+                    // of the switch to 'offline.'
+                    this.updateTokenStatus(user.userId, UserStatusConstants.OFFLINE);
+                    return;
+                }
+                this.updateOnDisconnect(user);
             });
     }
 
-    private updateOnDisconnect() {
+    private updateOnDisconnect(user: User) {
         firebaseApp.database().ref(`${CollectionConstants.USERS}/${this.pushToken}`)
             .onDisconnect()
-            .update({ status: UserStatusConstants.OFFLINE });
+            .update({ status: UserStatusConstants.OFFLINE }).then(() => {
+                this.updateTokenStatus(user.userId, UserStatusConstants.ONLINE);
+            });
     }
 
     public updateTokenStatus(userId: string, status: string) {
