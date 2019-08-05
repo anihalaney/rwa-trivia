@@ -39,7 +39,6 @@ export class UserCardComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   ngOnInit() {
-
     this.userDict$ = this.store.select(coreState).pipe(select(s => s.userDict));
     this.subscriptions.push(this.userDict$.subscribe(userDict => {
       this.userDict = userDict;
@@ -93,6 +92,9 @@ export class UserCardComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   setUser() {
-    this.user = this.userDict[this.userId];
+    if (this.userDict[this.userId]) {
+      this.user = this.userDict[this.userId];
+      this.cd.markForCheck();
+    }
   }
 }

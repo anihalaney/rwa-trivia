@@ -10,8 +10,7 @@ import {
     OpponentType, PlayerMode, User
 } from 'shared-library/shared/model';
 import { AppState, appState } from '../../../store';
-import { applicationSettings, account } from 'shared-library/core/store';
-import { switchMap, map } from 'rxjs/operators';
+import { map, flatMap } from 'rxjs/operators';
 
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class Dashboard implements OnDestroy {
@@ -79,129 +78,68 @@ export class Dashboard implements OnDestroy {
         this.serverCreatedTime = this.utils.getUTCTimeStamp();
         this.activeGames$ = store.select(appState.coreState).pipe(select(s => s.activeGames));
         this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
-        this.subscriptions.push(store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
-            this.ngZone.run(() => {
-                this.user = user;
-                this.cd.markForCheck();
-                if (!this.user && this.timerSub) {
-                    this.timerSub.unsubscribe();
-                }
-                if (this.user === null) {
-                    this.timeoutLive = '';
+
+
+        this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.user),
+            map(user => {
+                this.ngZone.run(() => {
+                    this.user = user;
                     this.cd.markForCheck();
+                    if (!this.user && this.timerSub) {
+                        this.timerSub.unsubscribe();
+                    }
+                    if (this.user === null) {
+                        this.timeoutLive = '';
+                        this.cd.markForCheck();
+                        this.gamePlayBtnDisabled = false;
+                    }
+                });
+            }),
+            flatMap(() => this.store.select(appState.coreState).pipe(select(s => s.questionOfTheDay),
+                map(questionOfTheDay => {
+                    if (questionOfTheDay) {
+                        this.serverCreatedTime = questionOfTheDay.serverTimeQCreated;
+                    }
+                }))),
+            flatMap(() => this.store.select(appState.coreState).pipe(select(s => s.applicationSettings),
+                map(appSettings => {
+                    if (appSettings) {
+                        this.applicationSettings = appSettings[0];
+                    }
+                }))),
+            flatMap(() => this.store.select(appState.coreState).pipe(select(s => s.account)))
+        ).subscribe(userAccount => {
+            if (this.user) {
+                this.account = userAccount;
+                this.cd.markForCheck();
+                if (this.account && !this.account.enable) {
+                    this.timeoutLive = '';
+                    if (this.account && this.account.lives === 0 && this.isLivesEnable) {
+                        this.gamePlayBtnDisabled = true;
+                    } else {
+                        this.gamePlayBtnDisabled = false;
+                    }
+                } else {
                     this.gamePlayBtnDisabled = false;
                 }
+                if (this.timerSub) {
+                    this.timerSub.unsubscribe();
+                }
+                this.gameLives();
+            }
 
-                this.subscriptions.push(this.store.select(appState.coreState)
-                    .pipe(select(s => s.questionOfTheDay)).subscribe(questionOfTheDay => {
-                        if (questionOfTheDay) {
-                            this.serverCreatedTime = questionOfTheDay.serverTimeQCreated;
-                        }
-                    }));
-
-                // if (this.user) {
-
-                // this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings), map(user => {
-                //     if (user) {
-                //     //   this.loggedInUserId = user.userId;
-                //     }
-                //   }))
-                //     .pipe(switchMap(() => {
-                //       return this.store.select(dashboardState).pipe(select(s => s.scoreBoard));
-                //     }))
-                //     .subscribe((lbsStat) => {
-                //     }
-
-
-                this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings),
-                    map(appSettings => {
-                        console.log('aplciaotn setting', appSettings);
-                        if (appSettings) {
-                            this.applicationSettings = appSettings[0];
-                        }
-                    }))
-                    .pipe(switchMap(() => {
-                        // return this.store.select(dashboardState).pipe(select(s => s.scoreBoard));
-                        return this.store.select(appState.coreState).pipe(select(s => s.account));
-                    }))
-                    .subscribe(account => {
-                        console.log(this.applicationSettings);
-                        console.log('res', account);
-                        console.log('response', this.user);
-
-                        if (this.user) {
-
-                        }
-                        this.account = account;
-                        this.cd.markForCheck();
-                        if (this.account && !this.account.enable) {
-                            this.timeoutLive = '';
-                            if (this.account && this.account.lives === 0 && this.isLivesEnable) {
-                                this.gamePlayBtnDisabled = true;
-                            } else {
-                                this.gamePlayBtnDisabled = false;
-                            }
-                        } else {
-                            this.gamePlayBtnDisabled = false;
-                        }
-                        if (this.timerSub) {
-                            this.timerSub.unsubscribe();
-                        }
-                        this.gameLives();
-
-                        if (this.applicationSettings && !this.applicationSettings.lives.enable) {
-                            this.gamePlayBtnDisabled = false;
-                            if (this.timerSub) {
-                                this.timeoutLive = '';
-                                this.timerSub.unsubscribe();
-                            }
-                        }
-
-                    }));
-
-
-                // this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings))
-                //     .subscribe(appSettings => {
-                //         if (appSettings) {
-                //             this.applicationSettings = appSettings[0];
-                //             if (this.applicationSettings) {
-                //                 this.subscriptions.push(store.select(appState.coreState).pipe(select(s => s.account))
-                //                     .subscribe(account => {
-                //                         if (this.user) {
-                //                             this.account = account;
-                //                             this.cd.markForCheck();
-                //                             if (this.account && !this.account.enable) {
-                //                                 this.timeoutLive = '';
-                //                                 if (this.account && this.account.lives === 0 && this.isLivesEnable) {
-                //                                     this.gamePlayBtnDisabled = true;
-                //                                 } else {
-                //                                     this.gamePlayBtnDisabled = false;
-                //                                 }
-                //                             } else {
-                //                                 this.gamePlayBtnDisabled = false;
-                //                             }
-                //                             if (this.timerSub) {
-                //                                 this.timerSub.unsubscribe();
-                //                             }
-                //                             this.gameLives();
-                //                         }
-                //                     }));
-                //                 if (this.applicationSettings && !this.applicationSettings.lives.enable) {
-                //                     this.gamePlayBtnDisabled = false;
-                //                     if (this.timerSub) {
-                //                         this.timeoutLive = '';
-                //                         this.timerSub.unsubscribe();
-                //                     }
-                //                 }
-                //             }
-                //         }
-                //     }));
-                // }
-            });
-            this.store.dispatch(this.gameActions.getActiveGames(user));
-            this.store.dispatch(this.userActions.loadGameInvites(user));
+            if (this.applicationSettings && !this.applicationSettings.lives.enable) {
+                this.gamePlayBtnDisabled = false;
+                if (this.timerSub) {
+                    this.timeoutLive = '';
+                    this.timerSub.unsubscribe();
+                }
+            }
+            this.store.dispatch(this.gameActions.getActiveGames(this.user));
+            this.store.dispatch(this.userActions.loadGameInvites(this.user));
             this.showNewsCard = this.user && this.user.isSubscribed ? false : true;
-        }));
+        })
+        );
 
         this.subscriptions.push(this.userDict$.subscribe(userDict => this.userDict = userDict));
         this.subscriptions.push(this.activeGames$.subscribe(games => {

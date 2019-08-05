@@ -1,5 +1,4 @@
-import { Component, Input, ChangeDetectionStrategy, OnChanges, ChangeDetectorRef } from '@angular/core';
-import { User } from '../../model';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { userCardType } from './../../model';
 
 
@@ -10,16 +9,11 @@ import { userCardType } from './../../model';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class AuthorComponent implements OnChanges {
+export class AuthorComponent {
     @Input() userId;
     @Input() isGamePlay;
     userCardType = userCardType;
     newUserid = '';
-    constructor(private cd: ChangeDetectorRef) {
-    }
-
-    ngOnChanges() {
-        console.log('this user', this.userId);
-            this.cd.markForCheck();
+    constructor() {
     }
 }
