@@ -15,7 +15,6 @@ import { Page } from 'tns-core-modules/ui/page/page';
 import { AppState } from '../../../store';
 import { NewGame } from './new-game';
 
-
 @Component({
   selector: 'new-game',
   templateUrl: './new-game.component.html',
@@ -68,7 +67,6 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
           this.friendUserId = data.userid;
         }
         if (data && data.mode) {
-          console.log('mode::', data.mode);
           this.modeAvailable = true;
           if (data.mode === 'Single') {
             this.gameOptions.playerMode = 0;
