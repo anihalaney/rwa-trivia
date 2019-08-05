@@ -1,6 +1,5 @@
-import {Injectable} from '@angular/core';
-import {Action} from '@ngrx/store';
-import {ActionWithPayload} from './action-with-payload';
+import { Injectable } from '@angular/core';
+import { ActionWithPayload } from './action-with-payload';
 
 @Injectable()
 export class TagActions {
@@ -18,6 +17,23 @@ export class TagActions {
     return {
       type: TagActions.LOAD_TAGS_SUCCESS,
       payload: tags
+    };
+  }
+
+  static LOAD_TOP_TAGS = 'LOAD_TOP_TAGS';
+  loadTopTags(): ActionWithPayload<any[]> {
+    return {
+      type: TagActions.LOAD_TOP_TAGS,
+      payload: null
+    };
+  }
+
+
+  static LOAD_TOP_TAGS_SUCEESS = 'LOAD_TOP_TAGS_SUCEESS';
+  loadTopTagsSuccess(categories: any[]): ActionWithPayload<any[]> {
+    return {
+      type: TagActions.LOAD_TOP_TAGS_SUCEESS,
+      payload: categories
     };
   }
 

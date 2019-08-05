@@ -2,9 +2,11 @@ import { GeneralConstants, interceptorConstants } from '../../projects/shared-li
 import { GeneralService } from '../services/general.service';
 import { Utils } from '../utils/utils';
 import { AppSettings } from '../services/app-settings.service';
+import { ESUtils } from '../utils/ESUtils';
 
 export class GeneralController {
-
+    private static QUESTIONS_INDEX = 'questions';
+    private static criteria = { "categoryIds": [], "tags": [], "status": '', "searchInput": '', "sortOrder": '' };
     /**
      * helloOperation
      * return status
@@ -45,14 +47,36 @@ export class GeneralController {
         GeneralService.testES(res);
     }
 
-        /**
-     * getTestQuestion
-     * return status
-     */
+    /**
+ * getTestQuestion
+ * return status
+ */
     static async updateAppVersion(req, res): Promise<any> {
         try {
             Utils.sendResponse(res, interceptorConstants.SUCCESS,
                 await AppSettings.Instance.updateAppVersion(req.body.versionCode, req.body.platform));
+        } catch (error) {
+            Utils.sendError(res, error);
+        }
+    }
+
+    /**
+* getCategory
+* return category and tags
+*/
+    static async getTopCategories(req, res) {
+        try {
+            const requestResponse = await ESUtils.getTopCategories(GeneralController.QUESTIONS_INDEX, 0, 10, GeneralController.criteria);
+            Utils.sendResponse(res, interceptorConstants.SUCCESS, requestResponse);
+        } catch (error) {
+            Utils.sendError(res, error);
+        }
+    }
+
+    static async getTopTags(req, res) {
+        try {
+            const requestResponse = await ESUtils.getTopTags(GeneralController.QUESTIONS_INDEX, 0, 10, GeneralController.criteria);
+            Utils.sendResponse(res, interceptorConstants.SUCCESS, requestResponse);
         } catch (error) {
             Utils.sendError(res, error);
         }
