@@ -13,29 +13,28 @@ service cloud.firestore {
   function isUserAuthenticated(userId) {
     return isAuthenticated() && request.auth.uid == userId;
   }
-  
-  
+
+
   match /databases/{database}/documents {
 
-		match /{document=**} {
+   match /{document=**} {
 		allow read, write: if isAdmin();
 		}
-
-     match /users/{userId} {
-
-        // get stat of played game with other user
-        match /game_played_with/{otherUserId} {
+   
+   match /users/{userId} {
+     // get stat of played game with other user
+      match /game_played_with/{otherUserId} {
           allow read: if isUserAuthenticated(userId);        
-        }
+      }
 
-        // only allow creating user document when no roles specified
-        // only allow updating user document when roles are not altered
-        // updating of user happen via API and rules have no effect on API    
+      // only allow creating user document when no roles specified
+      // only allow updating user document when roles are not altered
+      // updating of user happen via API and rules have no effect on API 
 
-          allow read: if isUserAuthenticated(userId); 
-          allow create: if isUserAuthenticated(userId) && !request.resource.data.keys().hasAny(['roles']);         
-    			allow update: if isUserAuthenticated(userId) && 
-          (!request.resource.data.keys().hasAny(['roles']) || (resource.data.roles == request.resource.data.roles));
+       allow read: if isUserAuthenticated(userId); 
+       allow create: if isUserAuthenticated(userId) && !request.resource.data.keys().hasAny(['roles']);         
+    	 allow update: if isUserAuthenticated(userId) && 
+       (!request.resource.data.keys().hasAny(['roles']) || (resource.data.roles == request.resource.data.roles));
     }
     
     match /categories {
@@ -43,7 +42,7 @@ service cloud.firestore {
         allow read;
       }
     }
-
+    
     match /lists {
       match /{document=**} {
         allow read;
@@ -52,7 +51,16 @@ service cloud.firestore {
     
     match /questions {
       match /{document=**} {
-        allow read: if isUserAuthenticated(resource.data.created_uid);
+          allow read: if isUserAuthenticated(resource.data.created_uid);
+      }
+  
+      match /{questionId} {
+          allow get: if isUserAuthenticated(request.auth.uid);
+          match /reactions {
+              match /{userId} {
+                    allow get, create, update, delete: if isUserAuthenticated(userId); 
+              }      
+        }
       }
     }
     
@@ -83,7 +91,7 @@ service cloud.firestore {
      // resource == null ensure when document does not exist it returns 
      // does not throw permission denied error
          allow create: if request.resource.data.size() < 3 && request.resource.data.keys().hasAny(['email', 'userId']);
-         allow get: if resource.data.email.lower() == email.lower() || resource == null;         
+         allow get: if resource.data.email.lower() == email.lower() || resource == null;       
       }
       
 
@@ -93,12 +101,15 @@ service cloud.firestore {
        // allow read, update: if request.auth.token.phone_number;
         allow read, update: if (resource.data.email == request.auth.token.phone_number)
         || (resource.data.email == request.auth.token.email);
-      	}           
-    } 
+        
+        allow read: if (resource.data.created_uid == request.auth.uid)
+        || (resource.data.email == request.auth.token.email);
+      }
+    }   
     
-       match /leader_board_stats {
+     match /leader_board_stats {
         match /{document=**} {
-           allow read,get:  if true; 
+           allow read:  if true; 
        }
     }
     
@@ -126,13 +137,13 @@ service cloud.firestore {
     
     match /blogs {    
       match /{document=**} {
-        allow read,get: if true;  
+        allow read: if true;  
       }      
     }
-
+    
     match /application_settings {    
       match /{document=**} {
-        allow read,get:  if true; 
+        allow read:  if true; 
       }      
     }
     
@@ -140,9 +151,15 @@ service cloud.firestore {
       //only allow login user to read and get it
       // logged in user does not have rights to modify this document
       // document can only be modified by API , triggers
-        allow read,get:  if isUserAuthenticated(userId);          
+      allow read:  if isUserAuthenticated(userId);          
     }
-
+    
+    match /feedback {
+      match /{document=**} {
+        allow create: if true;
+      }
+    }
+    
     match /countries {
       match /{document=**} {
         allow read;

@@ -332,7 +332,7 @@ export class GameDialog {
   calculateMaxTime(): void {
     if (this.currentQuestion.isRichEditor && this.currentQuestion.maxTime) {
       this.MAX_TIME_IN_SECONDS = this.currentQuestion.maxTime;
-    } else {
+    } else if (this.applicationSettings) {
       this.applicationSettings.game_play_timer_loader_ranges.forEach((timerLoader) => {
         if (this.currentQuestion.totalQALength > timerLoader.start && this.currentQuestion.totalQALength <= timerLoader.end) {
           this.MAX_TIME_IN_SECONDS = timerLoader.seconds;

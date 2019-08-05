@@ -61,13 +61,13 @@
       </div>
     </div>
   </div>
-
+  
   <game-question *ngIf="currentQuestion && !showLoader && !showBadge && !showWinBadge && !showContinueScreen" [categoryName]="categoryName"
     [question]="currentQuestion" [questionIndex]="questionIndex" [timer]="timer" [MAX_TIME_IN_SECONDS]="MAX_TIME_IN_SECONDS"
     [continueNext]="continueNext" [correctCount]="correctAnswerCount" [noOfQuestions]="questionIndex" [showContinueBtn]="showContinueBtn"
     [otherPlayer]="otherPlayer" (answerClicked)="answerClicked($event)" (okClick)="okClick($event)" (continueClicked)="continueClicked($event)"
     (viewQuestionClicked)="viewQuestionClicked($event)" [userDict]="userDict" [questionRound]="game.round" [totalRound]="totalRound"
-    [turnFlag]="turnFlag" [threeConsecutiveAnswer]="threeConsecutiveAnswer" [applicationSettings]="applicationSettings">
+    [turnFlag]="turnFlag" [threeConsecutiveAnswer]="threeConsecutiveAnswer" [applicationSettings]="applicationSettings" [user]="user">
   </game-question>
 
   <game-question-continue *ngIf="false" class="overlay" [categoryName]="categoryName" [question]="currentQuestion"

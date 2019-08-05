@@ -1,0 +1,19 @@
+.reaction-div{
+    display: flex;
+    flex-direction: column;
+    width: 24px;
+    height: 24px;
+    span{
+        font-size: 14px;
+        font-weight: bold;
+        padding-top: 3px;
+        color: #868686;
+    }
+}
+
+.reaction-div-container{
+    display: flex;
+}
+.m-r-12{
+    margin-right: 12px
+}
