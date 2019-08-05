@@ -67,3 +67,4 @@ export class DeviceToken {
   token: string;
   online: boolean;
 }
+
