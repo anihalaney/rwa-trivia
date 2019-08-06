@@ -174,7 +174,7 @@
                 </StackLayout>
 
                 <StackLayout row="7" col="0" iosOverflowSafeArea="false">
-                    <question [userDict]="userDict"></question>
+                    <question [user]="user" [userDict]="userDict"></question>
                 </StackLayout>
 
                 <StackLayout *ngIf="user && user!==null" row="8" col="0" class="submit-question"

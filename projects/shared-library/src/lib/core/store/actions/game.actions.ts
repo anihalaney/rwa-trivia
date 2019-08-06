@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Action } from '@ngrx/store';
 import { ActionWithPayload } from './action-with-payload';
 import { Observable } from 'rxjs';
-import { User, Game } from '../../../shared/model';
+import { User, Game, Question } from '../../../shared/model';
 
 @Injectable()
 export class GameActions {
@@ -43,6 +43,57 @@ export class GameActions {
     return {
       type: GameActions.CREATE_NEW_GAME_ERROR,
       payload: error
+    };
+  }
+
+
+  static GET_USER_REACTION = '[GamePlay] GetUserReaction';
+  GetUserReaction(payload: {questionId: string, userId: string}): ActionWithPayload<{questionId: string, userId: string}> {
+    return {
+      type: GameActions.GET_USER_REACTION,
+      payload: payload
+    };
+  }
+
+  static GET_USER_REACTION_SUCCESS = '[GamePlay] GetUserReactionSuccess';
+  GetUserReactionSuccess(status: {status: string}): ActionWithPayload<{status: string}> {
+    return {
+      type: GameActions.GET_USER_REACTION_SUCCESS,
+      payload: status
+    };
+  }
+
+  static GET_QUESTION_SUCCESS = '[GamePlay] GetQuestionSuccess';
+  GetQuestionSuccess(question: Question): ActionWithPayload<Question> {
+    return {
+      type: GameActions.GET_QUESTION_SUCCESS,
+      payload: question
+    };
+  }
+
+
+  static GET_QUESTION = '[GamePlay] GetQuestion';
+  GetQuestion(questionId: string): ActionWithPayload<string> {
+    return {
+      type: GameActions.GET_QUESTION,
+      payload: questionId
+    };
+  }
+
+  static USER_REACTION = '[GamePlay] UserReaction';
+  UserReaction( payload: { questionId: string, userId: string, status: string } ):
+  ActionWithPayload<{ questionId: string, userId: string, status: string }> {
+    return {
+      type: GameActions.USER_REACTION,
+      payload: payload
+    };
+  }
+
+  static UPADTE_USER_REACTION_SUCCESS = '[GamePlay] UpdateUserReactionSuccess';
+  UpdateUserReactionSuccess(): ActionWithPayload<null> {
+    return {
+      type: GameActions.UPADTE_USER_REACTION_SUCCESS,
+      payload: null
     };
   }
 
