@@ -251,15 +251,14 @@ export class ESUtils {
     }
   }
 
-  static async getTopCategories(index: string, start: number, size: number, criteria: SearchCriteria): Promise<any> {
+  static async getTopCategories(index: string): Promise<any> {
     const client: ElasticSearch.Client = ESUtils.getElasticSearchClient();
     index = ESUtils.getIndex(index);
     const appSetting = await AppSettings.Instance.getAppSettings();
     const body = {
       'aggregations': {
         'category_counts': {
-          'terms': { 'field': 'categoryIds',
-                    "size" : appSetting.category_count_limit }
+          'terms': { 'field': 'categoryIds', "size" : appSetting.category_count_limit }
         }
       }
     };
@@ -267,8 +266,6 @@ export class ESUtils {
     try {
       const response = await client.search({
         'index': index,
-        'from': start,
-        'size': size,
         'body': body
       });
 
@@ -280,7 +277,7 @@ export class ESUtils {
     }
   }
 
-  static async getTopTags(index: string, start: number, size: number, criteria: SearchCriteria): Promise<any> {
+  static async getTopTags(index: string): Promise<any> {
     const client: ElasticSearch.Client = ESUtils.getElasticSearchClient();
     index = ESUtils.getIndex(index);
     const appSetting = await AppSettings.Instance.getAppSettings();
@@ -295,8 +292,6 @@ export class ESUtils {
     try {
       const response = await client.search({
         'index': index,
-        'from': start,
-        'size': size,
         'body': body
       });
 

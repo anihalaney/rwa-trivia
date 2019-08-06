@@ -30,10 +30,10 @@ export class TagActions {
 
 
   static LOAD_TOP_TAGS_SUCEESS = 'LOAD_TOP_TAGS_SUCEESS';
-  loadTopTagsSuccess(categories: any[]): ActionWithPayload<any[]> {
+  loadTopTagsSuccess(tags: any[]): ActionWithPayload<any[]> {
     return {
       type: TagActions.LOAD_TOP_TAGS_SUCEESS,
-      payload: categories
+      payload: tags
     };
   }
 

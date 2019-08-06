@@ -295,9 +295,9 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
         this.subscriptions.push(this.store.select(coreState).pipe(
           map(s => s.loginRedirectUrl), take(1)).subscribe(url => {
             const redirectUrl = url ? url : '/dashboard';
-            if(this.mode === 0 || this.mode === 1){
+            if (this.mode === 0 || this.mode === 1) {
               this.utils.showMessage('success', 'You have been successfully logged in');
-              if (!user.isCategorySet && this.applicationSettings.show_category_screen) {
+              if (!user.isCategorySet && this.applicationSettings.show_category_screen && user.categoryIds.lenght > 0 && user.tags.length > 0) {
                 this.routerExtension.navigate(['select-category-tag'], { clearHistory: true })
               } else {
                 this.routerExtension.navigate([redirectUrl], { clearHistory: true });

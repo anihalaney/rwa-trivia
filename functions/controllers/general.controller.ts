@@ -6,7 +6,6 @@ import { ESUtils } from '../utils/ESUtils';
 
 export class GeneralController {
     private static QUESTIONS_INDEX = 'questions';
-    private static criteria = { "categoryIds": [], "tags": [], "status": '', "searchInput": '', "sortOrder": '' };
     /**
      * helloOperation
      * return status
@@ -66,7 +65,7 @@ export class GeneralController {
 */
     static async getTopCategories(req, res) {
         try {
-            const requestResponse = await ESUtils.getTopCategories(GeneralController.QUESTIONS_INDEX, 0, 10, GeneralController.criteria);
+            const requestResponse = await ESUtils.getTopCategories(GeneralController.QUESTIONS_INDEX);
             Utils.sendResponse(res, interceptorConstants.SUCCESS, requestResponse);
         } catch (error) {
             Utils.sendError(res, error);
@@ -75,7 +74,7 @@ export class GeneralController {
 
     static async getTopTags(req, res) {
         try {
-            const requestResponse = await ESUtils.getTopTags(GeneralController.QUESTIONS_INDEX, 0, 10, GeneralController.criteria);
+            const requestResponse = await ESUtils.getTopTags(GeneralController.QUESTIONS_INDEX);
             Utils.sendResponse(res, interceptorConstants.SUCCESS, requestResponse);
         } catch (error) {
             Utils.sendError(res, error);
