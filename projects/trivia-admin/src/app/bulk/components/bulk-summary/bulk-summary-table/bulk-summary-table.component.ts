@@ -34,8 +34,8 @@ export class BulkSummaryTableComponent implements OnInit, OnChanges, OnDestroy {
 
   @Input() bulkSummaryDetailPath: String;
   @Input() showSummaryTable: boolean;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
   @Output() showBulkUploadBtn = new EventEmitter<String>();
   @Input() isArchiveBtnClicked: boolean;
   @Input() toggleValue: boolean;

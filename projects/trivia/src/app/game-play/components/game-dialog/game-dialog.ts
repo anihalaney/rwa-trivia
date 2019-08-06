@@ -61,7 +61,7 @@ export class GameDialog {
 
   private genQuestionComponent: GameQuestionComponent;
 
-  @ViewChild(GameQuestionComponent) set questionComponent(questionComponent: GameQuestionComponent) {
+  @ViewChild(GameQuestionComponent, { static: false }) set questionComponent(questionComponent: GameQuestionComponent) {
     this.genQuestionComponent = questionComponent;
   }
 

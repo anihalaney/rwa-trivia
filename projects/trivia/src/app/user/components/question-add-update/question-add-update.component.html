@@ -92,20 +92,13 @@
                   [imageUrl]="quillImageUrl" [controlName]="'answerText'">
                 </ng-quill-tex>
               </div>
+ 
 
-
-              <p *ngIf="(i%2 === 0) " [ngClass]=" 
-                 (!answers.controls[i].controls.answerText.valid
-                 && answers.controls[i].controls.answerText.errors 
-                 &&  answers.controls[i].controls.answerText.errors.maxlength) ? 'show-answer-text' : 'hide-answer-text'"
-                class="error">
-                {{this.applicationSettings.answer_max_length}} characters are allowed</p>
-              <p *ngIf="(i%2 !== 0) " [ngClass]=" 
-                 (!answers.controls[i].controls.answerText.valid
-                 && answers.controls[i].controls.answerText.errors 
-                 &&  answers.controls[i].controls.answerText.errors.maxlength) ? 'show-answer-text' : 'hide-answer-text'"
-                class="error">
-                {{this.applicationSettings.answer_max_length}} characters are allowed</p>
+              <p [ngClass]="(!answer.controls.answerText.valid
+              && answer.controls.answerText.errors 
+              &&  answer.controls.answerText.errors.maxlength) ? 'show-answer-text' : 'hide-answer-text'"
+             class="error">
+             {{applicationSettings.answer_max_length}} characters are allowed</p>
             </div>
           </ng-container>
           <div class="error" *ngIf="!answers.valid && answers.touched">
@@ -180,7 +173,7 @@
           <mat-form-field class="full-width">
             <mat-checkbox mdPrefix formControlName="correct"></mat-checkbox>
             <input matInput [placeholder]="'Answer ' + (i+1)" formControlName="answerText" aria-label="answerText" />
-            <mat-hint align="end" *ngIf="answers.controls[i].controls.answerText.errors && !answers.controls[i].controls.answerText.pristine"
+            <mat-hint align="end"
               class="error">Answer required</mat-hint>
           </mat-form-field>
         </div>

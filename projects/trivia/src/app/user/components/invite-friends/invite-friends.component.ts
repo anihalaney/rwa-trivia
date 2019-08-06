@@ -29,7 +29,7 @@ export class InviteFriendsComponent extends InviteFriends implements OnInit, OnD
   subscriptions = [];
   defaultAvatar = 'assets/images/default-avatar.png';
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
   constructor(public dialog: MatDialog,
     public store: Store<AppState>,
