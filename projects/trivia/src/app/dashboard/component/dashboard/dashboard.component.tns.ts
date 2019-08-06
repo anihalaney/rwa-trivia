@@ -71,8 +71,7 @@ export class DashboardComponent extends Dashboard implements OnInit, OnDestroy {
         this.routerExtension.navigate(['/game-play/game-options', mode], { clearHistory: true });
       }
     } else {
-      console.log('mode::', mode);
-      this.routerExtension.navigate(['/game-play/game-options', mode], { clearHistory: true });
+      this.routerExtension.navigate(['/game-play/game-options', mode]);
     }
 
   }

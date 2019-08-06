@@ -195,8 +195,8 @@ const commandList = {
                 "default": '1.0',
                 "alias": ['VN', 'vn']
             },
-        },       
-        "builder": args => args.argv.platform === 'ios' && args.argv.env && args.argv.environment.search('--env.prod') >= 0 ? args.argv.forDevice = ' --for-device' : args.argv.forDevice = '',
+        },
+        "builder": args => args.argv.platform === 'ios'  && args.argv.environment.search('--env.prod') >= 0 ? args.argv.forDevice = ' --for-device' : args.argv.forDevice = '',
         "preCommand" : async (argv) => await updateAppVersion(argv, false)
     },
     "release-mobile": {
@@ -245,18 +245,16 @@ const commandList = {
                 "demand": true,
                 "description": 'versionCode for android/ios build ',
                 "type": 'string',
-                "default": '28.0',
                 "alias": ['V', 'v']
             },
             "versionName": {
-                "demand": false,
+                "demand": true,
                 "description": 'versionName for android build CFBundleShortVersionString for ios ',
                 "type": 'string',
-                "default": '1.0',
                 "alias": ['VN', 'vn']
             },
             "token": {
-                "demand": false,
+                "demand": true,
                 "description": 'token from schedular token ',
                 "type": 'string',
                 "alias": ['T', 't']
@@ -307,7 +305,7 @@ const commandList = {
                 args.argv.androidRelease = ` --key-store-path certificates/${productVariant}/${platformName}/bitwiser.keystore
                     --key-store-password ${keyStorePassword}
                     --key-store-alias ${keyStoreAlias} 
-                    --key-store-alias-password ${keyStoreAliasPassword} 
+                    --key-store-alias-password ${keyStoreAliasPassword}
                     --copy-to ${productVariant}.apk`;
             } else {
                 args.options({ 'buildCmd': { 'default': 'prepare' }, 'forDevice': { 'default': '--for-device' } });

@@ -438,6 +438,11 @@ export enum FirebaseScreenNameConstants {
     USER_FEEDBACK = 'User Feedback'
 }
 
+export enum GoogleLocationAPI {
+    GOOGLE_AUTOCOMPLETE = 'https://maps.googleapis.com/maps/api/place/autocomplete/json',
+    GOOGLE_GEOCODE = 'https://maps.googleapis.com/maps/api/geocode/json'
+}
+
 export enum AnalyticsEventConstants {
     EVENT = 'event',
 }
