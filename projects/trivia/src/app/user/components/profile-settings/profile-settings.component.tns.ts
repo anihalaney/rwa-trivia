@@ -60,8 +60,8 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
   private locations: ObservableArray<TokenModel>;
   private isLocationEnalbed: boolean;
 
-  @ViewChild('autocomplete') autocomplete: RadAutoCompleteTextViewComponent;
-  @ViewChild('acLocation') acLocation: RadAutoCompleteTextViewComponent;
+  @ViewChild('autocomplete', { static: false }) autocomplete: RadAutoCompleteTextViewComponent;
+  @ViewChild('acLocation', { static: false }) acLocation: RadAutoCompleteTextViewComponent;
 
   constructor(public fb: FormBuilder,
     public store: Store<AppState>,

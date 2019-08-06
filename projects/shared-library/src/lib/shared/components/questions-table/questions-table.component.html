@@ -82,8 +82,8 @@
               <div class="textleft ">
                 <div class="question-text ">Category :</div>
                 <div class="answer-text">
-                 <span *ngFor="let id of row.categoryIds">
-                    {{categoriesObs[id]?.categoryName}}
+                 <span *ngFor="let id of row?.categoryIds">
+                    {{categoriesObs && categoriesObs[id] && categoriesObs[id]?.categoryName ? categoriesObs[id]?.categoryName : ''}}
                   </span>
                 </div>
               </div>
@@ -148,7 +148,7 @@
                 <div>
                   <span *ngFor="let error of row.validationErrorMessages;let last = last;">
                     - {{error}}
-                    <label *ngIf="last!=error && $index > 0">,</label>
+                    <label *ngIf="last!=error">,</label>
                   </span>
                 </div>
               </div>
@@ -201,7 +201,7 @@
         </div>
       </div>
       <div class="row edit-form-div" *ngIf="editQuestion !== null && row === editQuestion">
-        <app-question-form [editQuestion]="editQuestion" [tagsDictionary]="tagsDictionary" [tagsObs] ="tagsObs" [categoriesObs]="categoriesObs"
+        <app-question-form [editQuestion]="editQuestion" [tagsDictionary]="tagDictionary" [tagsObs] ="tagsObs" [categoriesObs]="categoriesObs"
           (updateStatus)=nullifyQuestion($event) (updateUnpublishedQuestions)="updateQuestionData($event)" [quillConfig]="quillConfig" [applicationSettings]="applicationSettings"></app-question-form>
       </div>
 

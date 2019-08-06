@@ -27,7 +27,7 @@ import { of } from 'rxjs';
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnInit, OnDestroy {
 
-  @ViewChild('cropper') cropper: ImageCropperComponent;
+  @ViewChild('cropper', { static: false }) cropper: ImageCropperComponent;
   dialogRef;
 
   get tagsArray(): FormArray {

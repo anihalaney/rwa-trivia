@@ -4,6 +4,7 @@ platforms/
 hooks/
 projects/trivia/src/**/*.js
 ng-quill-tex-0.0.1.tgz
+.migration_backup/
 
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 

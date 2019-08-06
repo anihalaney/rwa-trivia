@@ -37,7 +37,7 @@ import { NgQuillTexModule } from 'ng-quill-tex';
       maxAge: 20
     }),
 
-    StoreRouterConnectingModule,
+    StoreRouterConnectingModule.forRoot(),
 
     //rwa modules
     CoreModule,

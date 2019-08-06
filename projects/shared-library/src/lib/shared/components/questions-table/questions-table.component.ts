@@ -46,7 +46,7 @@ export class QuestionsTableComponent implements OnInit, OnChanges, AfterViewInit
   @Output() updateBulkUploadedRejectQuestionStatus = new EventEmitter<Question>();
 
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
 
 
   requestFormGroup: FormGroup;
