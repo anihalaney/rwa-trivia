@@ -3,7 +3,7 @@ import { take, switchMap, map, flatMap, skipWhile } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 import * as gameplayactions from '../../store/actions';
 import { GameActions, UserActions } from 'shared-library/core/store/actions/index';
-import { Category, GameOptions, User, ApplicationSettings, PlayerMode, OpponentType } from 'shared-library/shared/model';
+import { Category, GameOptions, User, ApplicationSettings, PlayerMode, OpponentType, userCardType } from 'shared-library/shared/model';
 import { Utils, WindowRef } from 'shared-library/core/services';
 import { AppState, appState } from '../../../store';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
@@ -34,6 +34,7 @@ export class NewGame implements OnDestroy {
   life: number;
   gameErrorMsg: String = 'Sorry, don\'t have enough life.';
   loaderStatus = false;
+  userCardType = userCardType;
   filteredCategories: Category[];
   selectedCategories: number[];
 
@@ -115,10 +116,7 @@ export class NewGame implements OnDestroy {
       if (uFriends) {
         this.uFriends = [];
         uFriends.map(friend => {
-          this.uFriends = [...this.uFriends, friend.userId];
-          if (this.userDict && !this.userDict[friend.userId]) {
-            this.store.dispatch(this.userActions.loadOtherUserProfile(friend.userId));
-          }
+          this.uFriends = [...this.uFriends, ...friend.userId];
         });
         this.noFriendsStatus = false;
       } else {
@@ -189,11 +187,14 @@ export class NewGame implements OnDestroy {
 
   startNewGame(gameOptions: GameOptions) {
     let user: User;
-    this.subscriptions.push(this.store.select(appState.coreState).pipe(take(1)).subscribe(s => user = s.user)); // logged in user
-    if (this.gameOptions.playerMode === PlayerMode.Opponent) {
-      gameOptions.friendId = this.friendUserId;
-    }
-    this.store.dispatch(new gameplayactions.CreateNewGame({ gameOptions: gameOptions, user: user }));
+    this.subscriptions.push(this.store.select(appState.coreState).pipe(take(1)).subscribe(s => {
+      user = s.user;
+      if (this.gameOptions.playerMode === PlayerMode.Opponent) {
+        gameOptions.friendId = this.friendUserId;
+      }
+      this.store.dispatch(new gameplayactions.CreateNewGame({ gameOptions: gameOptions, user: user }));
+    })); // logged in user
+
   }
 
   getImageUrl(user: User) {
@@ -221,6 +222,7 @@ export class NewGame implements OnDestroy {
   }
 
   selectFriendId(friendId: string) {
+    // console.log('event fired', friendId);
     this.friendUserId = friendId;
     this.errMsg = undefined;
   }

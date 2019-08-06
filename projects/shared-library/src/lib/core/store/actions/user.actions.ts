@@ -74,14 +74,6 @@ export class UserActions {
     };
   }
 
-  static LOAD_OTHER_USER_FRIEND_EXTEDED_INFO = 'LOAD_OTHER_USER_FRIEND_EXTEDED_INFO';
-  loadOtherUserFriendExtendedInfo(userId: string): ActionWithPayload<string> {
-    return {
-      type: UserActions.LOAD_OTHER_USER_FRIEND_EXTEDED_INFO,
-      payload: userId
-    };
-  }
-
   static LOAD_USER_INVITATIONS_INFO = 'LOAD_USER_INVITATIONS_INFO';
   loadUserInvitationsInfo(userId: string, invitedUserEmail: string, invitedUserId: string ): ActionWithPayload<{}> {
     return {

@@ -1,7 +1,1 @@
-<GridLayout rows="auto" columns="*,auto,auto"  marginTop="10">
-        <Label row="0" col="0" text="Author : " textWrap="true" horizontalAlignment="right" verticalAlignment="center" ></Label>
-        <Label row="0" col="1" verticalAlignment="center" text="{{userDict[userId]?.displayName}}" textWrap="true" style="font-weight:400;"></Label>
-        <Image *ngIf="isGamePlay" row="0" col="2" src="{{userProfileImageUrl}}" color="#FFFFFF" stretch="aspectFill" height="33" width="33" marginLeft="10" marginRight="10"  verticalAlignment="center" borderRadius="50" ></Image>
-        <Image *ngIf="!isGamePlay" [stlOpenUserProfile]="{userId: userId, redirectTo: 'otherUserProfile'}" row="0" col="2" src="{{userProfileImageUrl}}" color="#FFFFFF" stretch="aspectFill" height="33" width="33" marginLeft="10" marginRight="10"  verticalAlignment="center" borderRadius="50" ></Image>
-</GridLayout>
-
+<app-user-card  [isGamePlay]="isGamePlay" [userId]="userId" [type]="userCardType.USER_NAME_IMAGE_HORIZONTAL"></app-user-card>

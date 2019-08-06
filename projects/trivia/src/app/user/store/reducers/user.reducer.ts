@@ -1,6 +1,6 @@
 import { Question, User } from 'shared-library/shared/model';
 import { UserActions, UserActionTypes } from '../actions';
-
+import { UserActions as UAction } from 'shared-library/core/store';
 // Load User Published Question by userId
 export function userPublishedQuestions(state: any = [], action: UserActions): Question[] {
     switch (action.type) {

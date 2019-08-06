@@ -17,12 +17,12 @@
                         class="sideLabel" stlRippleEffect stlBackgroundColor="#10347f" stlBackgroundColorAfter="#10347f" (rippleTap)="dashboard()"></Label>
                     <Label row="2" *ngIf="authProvider.isAuthenticated"  colSpan="2" text="Recently Completed Games"
                         [class.active-menu]="activeMenu === 'Recently Completed Games'" [ngStyle]="{'background-color': (activeMenu === 'Recently Completed Games') ? '#10347f' : '#13284F' }" class="sideLabel sideStackLayout" stlRippleEffect stlBackgroundColor="#10347f"  stlBackgroundColorAfter="#10347f" (rippleTap)="recentGame()"></Label>
-                    <GridLayout row="3" (tap)="showSelectCategory = !showSelectCategory" rows="*" column="*, auto" row="3"
+                    <GridLayout row="3" (tap)="leaderBoard('General')" rows="*" column="*, auto" row="3"
                         colSpan="2" [class.active-menu]="activeMenu === 'Category Leaderboard'" stlRippleEffect stlBackgroundColor="#10347f"  >
                         <Label row="0" col="0" text="Category Leaderboard" class="sideLabel sideStackLayout"></Label>
-                        <Label row="0" col="1" class="fa expand-options" color="#fff" horizontalAlignment="right"
+                        <!-- <Label row="0" col="1" class="fa expand-options" color="#fff" horizontalAlignment="right"
                             verticalAlignment="center"  text="{{ showSelectCategory ? '&#xf067;' : '&#xf068;' }}"
-                            paddingRight="15"></Label>
+                            paddingRight="15"></Label> -->
                     </GridLayout>
                     <StackLayout row="4" colSpan="2" visibility="{{ !showSelectCategory ? 'visible' : 'collapsed' }}">
                         <StackLayout *ngFor="let category of categories" orientation="horizontal" paddingLeft="10" (tap)="leaderBoard(category.categoryName)"

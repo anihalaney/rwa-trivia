@@ -8,6 +8,7 @@ import { AuthorComponent } from './author/author.component';
 import { RenderQuestionComponent } from './render-question/render-question.component';
 import { RenderAnswerComponent } from './render-answer/render-answer.component';
 import { CropImageDialogComponent } from './crop-image-dialog/crop-image-dialog.component';
+import { UserCardComponent } from './user-card/user-card.component';
 export {
     QuestionsSearchComponent,
     QuestionsTableComponent,
@@ -17,7 +18,8 @@ export {
     AuthorComponent,
     RenderQuestionComponent,
     RenderAnswerComponent,
-    CropImageDialogComponent
+    CropImageDialogComponent,
+    UserCardComponent
 };
 
 export default [
@@ -29,5 +31,6 @@ export default [
     AuthorComponent,
     RenderQuestionComponent,
     RenderAnswerComponent,
-    CropImageDialogComponent
+    CropImageDialogComponent,
+    UserCardComponent
 ];
