@@ -297,7 +297,7 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
             const redirectUrl = url ? url : '/dashboard';
             if (this.mode === 0 || this.mode === 1) {
               this.utils.showMessage('success', 'You have been successfully logged in');
-              if (!user.isCategorySet && this.applicationSettings.show_category_screen && user.categoryIds.lenght > 0 && user.tags.length > 0) {
+              if (!user.isCategorySet && this.applicationSettings.show_category_screen && !user.categoryIds && !user.tags) {
                 this.routerExtension.navigate(['select-category-tag'], { clearHistory: true })
               } else {
                 this.routerExtension.navigate([redirectUrl], { clearHistory: true });
