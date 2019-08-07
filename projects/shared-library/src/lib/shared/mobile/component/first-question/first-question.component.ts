@@ -1,25 +1,27 @@
-import { Component, Input, Output, EventEmitter, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, OnInit } from '@angular/core';
 import { Question, Answer, User, ApplicationSettings } from 'shared-library/shared/model';
-import { AppState, appState, categoryDictionary } from '../../../store';
+import { AppState, appState, categoryDictionary } from '../../../../../../../trivia/src/app/store';
 import { Store, select } from '@ngrx/store';
 import { QuestionActions } from 'shared-library/core/store/actions';
 import { Utils } from 'shared-library/core/services';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { Observable } from 'rxjs';
+import { RouterExtensions } from 'nativescript-angular/router';
+import { map, flatMap } from 'rxjs/operators';
 
 @Component({
-  selector: 'question',
-  templateUrl: './question.component.html',
-  styleUrls: ['./question.component.scss'],
+  selector: 'first-question',
+  templateUrl: './first-question.component.html',
+  styleUrls: ['./first-question.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
-export class QuestionComponent implements OnDestroy {
-
+export class FirstQuestionComponent implements OnInit, OnDestroy {
   question: Question;
   categoryName: string;
 
-  @Input() userDict: { [key: string]: User };
+  userDict: { [key: string]: User };
 
   @Output() answerClicked = new EventEmitter<number>();
   @Output() continueClicked = new EventEmitter();
@@ -30,10 +32,19 @@ export class QuestionComponent implements OnDestroy {
   categoryDictionary: any;
   subscriptions = [];
   applicationSettings: ApplicationSettings;
+  userDict$: Observable<{ [key: string]: User }>;
 
-  constructor(private store: Store<AppState>, private questionAction: QuestionActions, private utils: Utils,
-    private cd: ChangeDetectorRef) {
+  constructor(
+    private store: Store<AppState>,
+    private questionAction: QuestionActions,
+    private utils: Utils,
+    private cd: ChangeDetectorRef,
+    public routerExtension: RouterExtensions) {
 
+  }
+
+  ngOnInit() {
+    this.store.dispatch(this.questionAction.getQuestionOfTheDay());
     this.answeredText = '';
     this.correctAnswerText = '';
     this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings))
@@ -43,15 +54,17 @@ export class QuestionComponent implements OnDestroy {
           this.cd.markForCheck();
         }
       }));
-    this.subscriptions.push(this.store.select(categoryDictionary).subscribe(categories => {
+
+    this.store.select(categoryDictionary).pipe(map(categories => {
       this.categoryDictionary = categories;
-      this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.questionOfTheDay)).subscribe(questionOfTheDay => {
-        if (questionOfTheDay) {
-          this.question = questionOfTheDay;
+    }),
+      flatMap(() => this.store.select(appState.coreState).pipe(select(s => s.questionOfTheDay)))).subscribe((question: Question) => {
+        if (question) {
+          this.question = question;
           this.cd.markForCheck();
-          this.question.answers = utils.changeAnswerOrder(questionOfTheDay.answers);
+          this.question.answers = this.utils.changeAnswerOrder(question.answers);
           if (this.question.answers) {
-            this.question.answers.forEach((item, index) => {
+            this.question.answers.forEach((item) => {
               if (item.correct === true) {
                 this.correctAnswerText = item.answerText;
               }
@@ -68,10 +81,10 @@ export class QuestionComponent implements OnDestroy {
           }
           this.cd.markForCheck();
         }
-      }));
-      this.cd.markForCheck();
-    }));
+      });
 
+    this.userDict$ = this.store.select(appState.coreState).pipe(select(s => s.userDict));
+    this.subscriptions.push(this.userDict$.subscribe(userDict => this.userDict = userDict));
 
   }
 
@@ -85,21 +98,18 @@ export class QuestionComponent implements OnDestroy {
     }
   }
 
-  getNextQuestion() {
-    this.answeredText = '';
-    this.correctAnswerText = '';
-    this.doPlay = true;
-    this.store.dispatch(this.questionAction.getQuestionOfTheDay());
-
-  }
-
   rippleTap(answer) {
     this.answerButtonClicked(answer);
   }
 
   selectedAnswer(answeredText) {
     this.answeredText = answeredText;
+    // this.correctAnswerText
     this.cd.markForCheck();
+  }
+
+  goToDashboard(nextStep) {
+    this.routerExtension.navigate(['/dashboard']);
   }
 
   ngOnDestroy(): void {
@@ -107,3 +117,4 @@ export class QuestionComponent implements OnDestroy {
   }
 
 }
+

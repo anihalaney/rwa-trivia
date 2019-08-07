@@ -61,6 +61,10 @@ export class DashboardComponent extends Dashboard implements OnInit, OnDestroy {
     ));
   }
 
+  open() {
+    this.routerExtension.navigate(['first-question']);
+  }
+
   startNewGame(mode: string) {
     console.log('mode::', mode);
     if (this.applicationSettings && this.applicationSettings.lives.enable) {

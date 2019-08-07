@@ -2,6 +2,8 @@
 <StackLayout class="mobile" backgroundColor="#f1f2f2" *ngIf="renderView">
     <ScrollView>
         <StackLayout>
+            <Button text="first-Question" (tap)="open()"></Button>
+            
             <DockLayout margin="15 10 0 10" *ngIf="user && applicationSettings?.tokens?.enable"
                 iosOverflowSafeArea="false">
                 <DockLayout dock="left" *ngIf="account && user" backgroundColor="#3b5998" class="points-container"

@@ -4,6 +4,7 @@ import { RecentGamesComponent } from './../components/recent-games/recent-games.
 import { PrivacyPolicyComponent } from './../components/privacy-policy/privacy-policy.component';
 import { AchievementsComponent } from '../components';
 import { UserFeedbackComponent } from 'shared-library/shared/mobile/component/user-feedback/user-feedback.component';
+import { FirstQuestionComponent } from 'shared-library/shared/mobile/component/first-question/first-question.component';
 
 export const routes: Routes = [
 
@@ -44,5 +45,10 @@ export const routes: Routes = [
         path: 'achievements',
         component: AchievementsComponent,
         canActivate: [AuthGuard]
-    }
+    },
+    {
+        path: 'first-question',
+        component: FirstQuestionComponent,
+        // canActivate: [AuthGuard]
+    },
 ];
