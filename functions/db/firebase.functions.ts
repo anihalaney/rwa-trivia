@@ -5,7 +5,7 @@ import { resolve } from 'path';
 import {
     friendInvitationConstants, Game, Invitation, LeaderBoardUsers,
     OpponentType, PlayerMode, pushNotificationRouteConstants, Question,
-    QuestionStatus, SystemStatConstants, TriggerConstants, UserStatConstants, UserStatus, User
+    QuestionStatus, SystemStatConstants, TriggerConstants, UserStatConstants, UserStatus, User, UserStatusConstants
 } from '../../projects/shared-library/src/lib/shared/model';
 import { AccountService } from '../services/account.service';
 import { AppSettings } from '../services/app-settings.service';
@@ -22,6 +22,7 @@ import admin from './firebase.client';
 import { UserService } from '../services/user.service';
 import { QuestionService } from '../services/question.service';
 import { Utils } from '../utils/utils';
+import { UserStatusService } from '../services/user-status.service';
 const mailConfig = JSON.parse(readFileSync(resolve(__dirname, '../../../config/mail.config.json'), 'utf8'));
 
 export class FirebaseFunctions {
@@ -83,26 +84,26 @@ export class FirebaseFunctions {
                 if (beforeData && afterData) {
                     if (beforeData.status != afterData.status) {
                         question.reactionsCount[afterData.status] = question.reactionsCount
-                        && question.reactionsCount[afterData.status] ? Utils.changeFieldValue(1) : 1; // increase current status
+                            && question.reactionsCount[afterData.status] ? Utils.changeFieldValue(1) : 1; // increase current status
                         question.reactionsCount[beforeData.status] = question.reactionsCount &&
-                        question.reactionsCount[beforeData.status] ? Utils.changeFieldValue(-1) : 0; // decrease before status
+                            question.reactionsCount[beforeData.status] ? Utils.changeFieldValue(-1) : 0; // decrease before status
                     } else {
                         return true;
                     }
                 } else if (!beforeData && afterData) {
-                // for create
-                        question.reactionsCount[afterData.status] = question.reactionsCount
+                    // for create
+                    question.reactionsCount[afterData.status] = question.reactionsCount
                         && question.reactionsCount[afterData.status] ? Utils.changeFieldValue(1) : 1; // increase current status
                 } else if (beforeData && !afterData) {
-                // delete
-                        question.reactionsCount[beforeData.status] = question.reactionsCount &&
+                    // delete
+                    question.reactionsCount[beforeData.status] = question.reactionsCount &&
                         question.reactionsCount[beforeData.status] ? Utils.changeFieldValue(-1) : 0; // decrease current status
                 } else {
                     return true;
                 }
-                const newquestion = {...question};
-               await QuestionService.updateQuestion('questions', newquestion);
-              return true;
+                const newquestion = { ...question };
+                await QuestionService.updateQuestion('questions', newquestion);
+                return true;
             } else {
                 return true;
             }
@@ -281,37 +282,6 @@ export class FirebaseFunctions {
 
             const onlineStatus = (userDataStatus.status === 'online') ? true : false;
 
-            // get firestore db object
-            const user: User = await UserService.getUserById(userDataStatus.userId);
-
-            if (userDataStatus.device === TriggerConstants.ANDROID) {
-                const deviceTokenIndex = user.androidPushTokens
-                    .findIndex(
-                        (androidPushToken) =>
-                            (androidPushToken === token ||
-                                (androidPushToken && androidPushToken.token && androidPushToken.token === token)));
-                if (deviceTokenIndex !== -1) {
-                    user.androidPushTokens[deviceTokenIndex].online = onlineStatus;
-                }
-            } else {
-                const deviceTokenIndex = user.iosPushTokens
-                    .findIndex((iosPushToken) =>
-                        (iosPushToken === token ||
-                            (iosPushToken && iosPushToken.token && iosPushToken.token === token)));
-                if (deviceTokenIndex !== -1) {
-                    user.iosPushTokens[deviceTokenIndex].online = onlineStatus;
-                }
-            }
-            console.log('user', user);
-            await UserService.updateUser({ ...user });
-
-            const androidOnlineDeviceIndex = user.androidPushTokens.findIndex((androidPushToken) =>
-                androidPushToken.token && androidPushToken.online);
-            const iosOnlineDeviceIndex = user.iosPushTokens.findIndex((iosPushToken) =>
-                iosPushToken.token && iosPushToken.online);
-
-            console.log('androidOnlineDeviceIndex', androidOnlineDeviceIndex);
-            console.log('iosOnlineDeviceIndex', iosOnlineDeviceIndex);
 
             // get firestore db object
             let userStatus: UserStatus = await UserStatusService.getUserStatusById(userDataStatus.userId);
@@ -321,8 +291,46 @@ export class FirebaseFunctions {
                 userStatus.userId = userDataStatus.userId;
             }
 
-            // update the status
-            userStatus.online = (androidOnlineDeviceIndex !== -1 || iosOnlineDeviceIndex !== -1) ? true : false;
+            // get firestore db object
+            const user: User = await UserService.getUserById(userDataStatus.userId);
+
+            if (userDataStatus.device !== TriggerConstants.WEB) {
+
+                // get firestore db object
+                const realTimeUserStatus = await UserService.getUserById(userDataStatus.userId);
+                userDataStatus.status = realTimeUserStatus.status;
+
+                if (userDataStatus.device === TriggerConstants.ANDROID) {
+                    const deviceTokenIndex = user.androidPushTokens
+                        .findIndex(
+                            (androidPushToken) =>
+                                (androidPushToken === token ||
+                                    (androidPushToken && androidPushToken.token && androidPushToken.token === token)));
+                    if (deviceTokenIndex !== -1) {
+                        user.androidPushTokens[deviceTokenIndex].online = onlineStatus;
+                    }
+                } else {
+                    const deviceTokenIndex = user.iosPushTokens
+                        .findIndex((iosPushToken) =>
+                            (iosPushToken === token ||
+                                (iosPushToken && iosPushToken.token && iosPushToken.token === token)));
+                    if (deviceTokenIndex !== -1) {
+                        user.iosPushTokens[deviceTokenIndex].online = onlineStatus;
+                    }
+                }
+                console.log('user', user);
+                await UserService.updateUser({ ...user });
+
+            }
+
+            const androidOnlineDeviceIndex = user.androidPushTokens.findIndex((androidPushToken) =>
+                androidPushToken.token && androidPushToken.online);
+            const iosOnlineDeviceIndex = user.iosPushTokens.findIndex((iosPushToken) =>
+                iosPushToken.token && iosPushToken.online);
+
+            userStatus.online = (androidOnlineDeviceIndex !== -1 || iosOnlineDeviceIndex !== -1
+                || userDataStatus.status === UserStatusConstants.ONLINE) ? true : false;
+
             userStatus.lastUpdated = new Date().getTime();
             console.log('userStatus', userStatus);
 

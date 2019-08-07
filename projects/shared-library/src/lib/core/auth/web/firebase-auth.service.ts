@@ -15,7 +15,7 @@ import { AngularFireDatabase } from '@angular/fire/database';
 export class WebFirebaseAuthService implements FirebaseAuthService {
 
     dialogRef: MatDialogRef<LoginComponent>;
-    private pushToken: string;
+    private user: User;
 
     constructor(protected afAuth: AngularFireAuth,
         public router: Router,
@@ -45,6 +45,7 @@ export class WebFirebaseAuthService implements FirebaseAuthService {
 
     public signOut() {
         this.afAuth.auth.signOut();
+        this.updateTokenStatus(this.user.userId, UserStatusConstants.OFFLINE);
         this.router.navigate(['dashboard']);
         this.windowsRef.nativeWindow.location.reload();
     }
@@ -95,26 +96,27 @@ export class WebFirebaseAuthService implements FirebaseAuthService {
     }
 
     public updatePushToken(token: string) {
-        this.pushToken = token;
+
     }
 
     public updateOnConnect(user: User) {
+        this.user = user;
         this.db.object(`${CollectionConstants.INFO}/${CollectionConstants.CONNECTED}`)
             .valueChanges().subscribe(connected => {
                 const status = connected ? UserStatusConstants.ONLINE : UserStatusConstants.OFFLINE;
-                this.updateOnDisconnect();
-                this.updateTokenStatus(user.userId, status);
+                this.updateTokenStatus(user.userId, UserStatusConstants.ONLINE);
+                this.updateOnDisconnect(user.userId);
             });
     }
 
-    private updateOnDisconnect() {
-        this.db.database.ref(`${CollectionConstants.USERS}/${this.pushToken}`)
+    private updateOnDisconnect(userId: string) {
+        this.db.database.ref(`${CollectionConstants.USERS}/${userId}`)
             .onDisconnect()
             .update({ status: UserStatusConstants.OFFLINE });
     }
 
     public updateTokenStatus(userId: string, status: string) {
-        this.db.object(`/${CollectionConstants.USERS}/${this.pushToken}`)
+        this.db.object(`/${CollectionConstants.USERS}/${userId}`)
             .set({ status, userId, device: TriggerConstants.WEB });
     }
 }

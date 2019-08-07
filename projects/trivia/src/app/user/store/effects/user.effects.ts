@@ -85,18 +85,6 @@ export class UserEffects {
             ));
 
 
-    // Update User Status
-    @Effect()
-    updateUserStatus$ = this.actions$
-        .pipe(ofType(UserActionTypes.UPDATE_USER_STATUS))
-        .pipe(
-            switchMap((action: userActions.UpdateUserStatus) => {
-                this.userService.updateUserStatus(action.payload);
-                return empty();
-            })
-        );
-
-
     constructor(
         private actions$: Actions,
         private questionService: QuestionService,
