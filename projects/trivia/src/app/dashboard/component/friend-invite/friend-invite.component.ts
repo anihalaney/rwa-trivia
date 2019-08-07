@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
-import { User, Invitation, friendInvitationConstants } from 'shared-library/shared/model';
+import { User, Invitation, friendInvitationConstants, userCardType } from 'shared-library/shared/model';
 import { Utils } from 'shared-library/core/services';
 import { Store } from '@ngrx/store';
 import { UserActions } from 'shared-library/core/store/actions';
@@ -13,10 +13,10 @@ import { AppState } from '../../../store';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FriendInviteComponent implements OnInit {
-  @Input() userDict: { [key: string]: User } = {};
   @Input() invitation: Invitation;
   invitations: Invitation[];
   @Input() user: User;
+  userCardType = userCardType;
 
   constructor(private store: Store<AppState>,
     private utils: Utils,
@@ -25,10 +25,6 @@ export class FriendInviteComponent implements OnInit {
   }
 
   ngOnInit() {
-  }
-
-  getImageUrl(user: User) {
-    return this.utils.getImageUrl(user, 44, 40, '44X40');
   }
 
   acceptFriendInvitation(): void {

@@ -63,3 +63,7 @@ img{ border-radius: 50%;vertical-align: middle; max-height: 40px; }
 {
   float:right;
 }
+
+.friend-list-table-cell app-user-card{
+  width: -webkit-fill-available;
+}
