@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { map, filter, switchMap, exhaustMap } from 'rxjs/operators';
 import { Effect, Actions, ofType } from '@ngrx/effects';
-import { CategoryActions } from '../actions';
+import { CategoryActions, ActionWithPayload } from '../actions';
 import { Category, RouterStateUrl } from '../../../shared/model';
 import { CategoryService } from '../../services';
 import { ROUTER_NAVIGATION } from '@ngrx/router-store';
@@ -23,6 +23,15 @@ export class CategoryEffects {
                         })
                     );
             })
+        );
+
+    @Effect()
+    getActiveGames$ = this.actions$
+        .pipe(ofType(CategoryActions.LOAD_TOP_CATEGORIES))
+        .pipe(
+            map((action: ActionWithPayload<any[]>) => action.payload),
+            switchMap((payload:any) => this.svc.getTopCategories()),
+            map((categories: any[]) => this.categoryActions.loadTopCategoriesSuccess(categories))
         );
 
     constructor(
