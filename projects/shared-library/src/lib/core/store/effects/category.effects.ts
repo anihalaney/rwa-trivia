@@ -26,11 +26,10 @@ export class CategoryEffects {
         );
 
     @Effect()
-    getActiveGames$ = this.actions$
+    getTopCategories$ = this.actions$
         .pipe(ofType(CategoryActions.LOAD_TOP_CATEGORIES))
         .pipe(
-            map((action: ActionWithPayload<any[]>) => action.payload),
-            switchMap((payload:any) => this.svc.getTopCategories()),
+            switchMap(() => this.svc.getTopCategories()),
             map((categories: any[]) => this.categoryActions.loadTopCategoriesSuccess(categories))
         );
 

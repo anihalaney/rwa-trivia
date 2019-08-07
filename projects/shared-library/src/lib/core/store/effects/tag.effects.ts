@@ -27,14 +27,12 @@ export class TagEffects {
                     )));
 
     @Effect()
-    getActiveGames$ = this.actions$
+    getTopTags$ = this.actions$
         .pipe(ofType(TagActions.LOAD_TOP_TAGS))
         .pipe(
-            map((action: ActionWithPayload<any[]>) => action.payload),
-            switchMap((payload: any) => this.svc.getTopTags()),
+            switchMap(() => this.svc.getTopTags()),
             map((tags: any[]) => this.tagActions.loadTopTagsSuccess(tags))
         );
-
     constructor(
         private actions$: Actions,
         private tagActions: TagActions,
