@@ -179,7 +179,7 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
     if (!this.loginForm.valid) {
       return;
     }
-     this.loader = true;
+    this.loader = true;
     this.removeMessage();
     let user;
     try {
@@ -293,19 +293,25 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
           map(s => s.loginRedirectUrl), take(1)).subscribe(url => {
             const redirectUrl = url ? url : '/dashboard';
             if (this.mode === 0 || this.mode === 1) {
-              this.utils.showMessage('success', 'You have been successfully logged in');
               if (!user.isCategorySet && this.applicationSettings.show_category_screen && !user.categoryIds && !user.tags) {
-                this.routerExtension.navigate(['select-category-tag'], { clearHistory: true });
+                this.naviateTo('select-category-tag');
               } else {
-                this.routerExtension.navigate([redirectUrl], { clearHistory: true });
+                this.naviateTo(redirectUrl);
               }
+            } else {
+              this.naviateTo(redirectUrl);
             }
+
             this.cd.markForCheck();
           }));
       }
       ));
   }
 
+  naviateTo(redirectUrl) {
+    this.utils.showMessage('success', 'You have been successfully logged in');
+    this.routerExtension.navigate([redirectUrl], { clearHistory: true });
+  }
 
 
 
