@@ -11,10 +11,9 @@ import { Utils, WindowRef } from 'shared-library/core/services';
 import { GameActions, UserActions } from 'shared-library/core/store/actions';
 import { Category, PlayerMode } from 'shared-library/shared/model';
 import { ObservableArray } from 'tns-core-modules/data/observable-array';
-import { Page } from 'tns-core-modules/ui/page/page';
-import { AppState } from '../../../store';
+import { Page, isIOS } from 'tns-core-modules/ui/page/page';
+import { AppState, appState } from '../../../store';
 import { NewGame } from './new-game';
-
 @Component({
   selector: 'new-game',
   templateUrl: './new-game.component.html',
@@ -36,10 +35,9 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
   // it delay complex UI show Router navigation can finish first to have smooth transition
   renderView = false;
   challengerUserId: string;
+  @ViewChild('autocomplete', { static: false }) autocomplete: RadAutoCompleteTextViewComponent;
+  @ViewChild('friendListView', { static: false }) listViewComponent: RadListViewComponent;
   modeAvailable: boolean;
-  @ViewChild('autocomplete') autocomplete: RadAutoCompleteTextViewComponent;
-  @ViewChild('friendListView') listViewComponent: RadListViewComponent;
-
   constructor(public store: Store<AppState>,
     public gameActions: GameActions,
     public utils: Utils,
@@ -56,6 +54,19 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     this.modeAvailable = false;
   }
   ngOnInit() {
+
+
+    this.userDict$ = this.store.select(appState.coreState).pipe(select(s => s.userDict));
+    this.subscriptions.push(this.userDict$.subscribe(userDict => {
+      this.userDict = userDict;
+      // Here listview is refresh in ios because it is not able to render user details.
+      // https://github.com/NativeScript/nativescript-ui-feedback/issues/753
+      if (this.listViewComponent) {
+        if (isIOS) {
+          this.listViewComponent.listView.refresh();
+        }
+      }
+    }));
 
     this.subscriptions.push(
       this.route.params.subscribe(data => {
@@ -174,7 +185,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     this.customTag = args.text;
   }
 
-  selectFriendId(friendId: string) {
+  selectFriendIdApp(friendId: string) {
     this.friendUserId = friendId;
     this.listViewComponent.listView.refresh();
   }

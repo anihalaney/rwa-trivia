@@ -1,5 +1,4 @@
 
-import { QuestionsComponent } from './questions/questions.component';
 import { QuestionsSearchComponent } from './questions-search/questions-search.component';
 import { QuestionsTableComponent } from './questions-table/questions-table.component';
 import { QuestionFormComponent } from './question-form/question-form.component';
@@ -10,8 +9,8 @@ import { RenderQuestionComponent } from './render-question/render-question.compo
 import { RenderAnswerComponent } from './render-answer/render-answer.component';
 import { CropImageDialogComponent } from './crop-image-dialog/crop-image-dialog.component';
 import { UserReactionComponent } from './user-reaction/user-reaction.component';
+import { UserCardComponent } from './user-card/user-card.component';
 export {
-    QuestionsComponent,
     QuestionsSearchComponent,
     QuestionsTableComponent,
     QuestionFormComponent,
@@ -21,11 +20,11 @@ export {
     RenderQuestionComponent,
     RenderAnswerComponent,
     CropImageDialogComponent,
-    UserReactionComponent
+    UserReactionComponent,
+    UserCardComponent
 };
 
 export default [
-    QuestionsComponent,
     QuestionsSearchComponent,
     QuestionsTableComponent,
     QuestionFormComponent,
@@ -35,5 +34,6 @@ export default [
     RenderQuestionComponent,
     RenderAnswerComponent,
     CropImageDialogComponent,
-    UserReactionComponent
+    UserReactionComponent,
+    UserCardComponent
 ];

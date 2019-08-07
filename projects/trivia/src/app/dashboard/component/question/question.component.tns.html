@@ -34,7 +34,7 @@
                     <user-reaction *ngIf="answeredText!==''" [user]='user' [question]='question'></user-reaction>
                 </GridLayout>
                 <GridLayout row="0" col="1" >
-                    <author [userDict]="userDict" [userId]="question.created_uid"></author>
+                    <author [isGamePlay]= false [userId]="question.created_uid"></author>
                 </GridLayout>
             </GridLayout>
             <Button class="Roboto-Regular" backgroundColor="#8ac541" color="white" margin="20" (rippleTap)="getNextQuestion()"

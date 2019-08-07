@@ -8,7 +8,6 @@ import {
 import { Observable, of } from 'rxjs';
 import { UtilsCore } from './utilsCore';
 
-
 @Injectable()
 export class Utils extends UtilsCore {
 

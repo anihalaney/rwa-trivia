@@ -11,15 +11,14 @@ import { SafeHtmlPipe } from './pipe/safe-html.pipe';
 import { ImageCropperModule } from 'ngx-img-cropper';
 
 import {
-  QuestionsComponent, QuestionsSearchComponent, QuestionsTableComponent,
+  QuestionsSearchComponent, QuestionsTableComponent,
   QuestionFormComponent, RejectedQuestionContentComponent, SocialPaletteComponent, AuthorComponent, RenderQuestionComponent,
-  RenderAnswerComponent, CropImageDialogComponent, UserReactionComponent
+  RenderAnswerComponent, CropImageDialogComponent, UserCardComponent, UserReactionComponent
 } from './components';
 import { ShowHintWhenFocusOutDirective, OpenUserProfileDirective } from './directive';
 import { NgQuillTexModule } from 'ng-quill-tex';
 @NgModule({
   declarations: [
-    QuestionsComponent,
     QuestionsSearchComponent,
     QuestionsTableComponent,
     QuestionFormComponent,
@@ -32,7 +31,8 @@ import { NgQuillTexModule } from 'ng-quill-tex';
     RenderQuestionComponent,
     RenderAnswerComponent,
     CropImageDialogComponent,
-    UserReactionComponent
+    UserReactionComponent,
+    UserCardComponent
   ],
   imports: [
     CommonModule,
@@ -54,12 +54,12 @@ import { NgQuillTexModule } from 'ng-quill-tex';
     NgQuillTexModule,
     ImageCropperModule
   ],
-  exports: [QuestionsComponent, QuestionsSearchComponent, QuestionsTableComponent, RenderAnswerComponent, CropImageDialogComponent,
+  exports: [QuestionsSearchComponent, QuestionsTableComponent, RenderAnswerComponent, CropImageDialogComponent,
     CommonModule, HttpClientModule, ReactiveFormsModule,
     FlexLayoutModule, QuestionFormComponent,
     SharedMaterialModule, CdkTableModule, RejectedQuestionContentComponent,
     HttpClientModule, ShareButtonModule, SocialPaletteComponent, AuthorComponent, ShowHintWhenFocusOutDirective,
-    OpenUserProfileDirective , SafeHtmlPipe, RenderQuestionComponent, UserReactionComponent
+    OpenUserProfileDirective, SafeHtmlPipe, RenderQuestionComponent, UserCardComponent, UserReactionComponent
   ],
   entryComponents: [CropImageDialogComponent]
 })

@@ -17,7 +17,6 @@ import {
 } from './components';
 
 import { DropDownModule } from 'nativescript-drop-down/angular';
-
 @NgModule({
   declarations: [
     ProfileSettingsComponent,

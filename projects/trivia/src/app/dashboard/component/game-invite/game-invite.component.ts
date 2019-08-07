@@ -1,9 +1,9 @@
 import { Component, Input, OnChanges, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
-import { Observable, Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 import {
   User, Game, Category, GameStatus,
-  GameInviteConstants, CalenderConstants
+  GameInviteConstants, CalenderConstants, userCardType
 } from 'shared-library/shared/model';
 import { AppState,  categoryDictionary } from '../../../store';
 import { Utils } from 'shared-library/core/services';
@@ -20,7 +20,6 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class GameInviteComponent implements OnChanges, OnDestroy {
 
-  @Input() userDict: { [key: string]: User } = {};
   @Input() game: Game;
   categoryDict$: Observable<{ [key: number]: Category }>;
   categoryDict: { [key: number]: Category };
@@ -28,6 +27,7 @@ export class GameInviteComponent implements OnChanges, OnDestroy {
   gameStatus;
   remainingDays: number;
   subscriptions = [];
+  userCardType = userCardType;
 
 
   constructor(private store: Store<AppState>, private utils: Utils, private userActions: UserActions) {
@@ -49,10 +49,6 @@ export class GameInviteComponent implements OnChanges, OnDestroy {
     this.store.dispatch(this.userActions.rejectGameInvitation(this.game.gameId));
   }
 
-
-  getImageUrl(user: User) {
-    return this.utils.getImageUrl(user, 44, 40, '44X40');
-  }
 
   ngOnDestroy() {
   }

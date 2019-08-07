@@ -47,11 +47,7 @@
                                                           <div >
                                                                 <input type="radio" id="friend-{{i}}" name="withfriends" (change)="selectFriendId(friendId)">
                                                                 <label for="friend-{{i}}">
-                                                                    <span class="labelimg">
-                                                                        <img [src]="getImageUrl(userDict[friendId])" alt="User Profile Image" />
-                                                                    </span>
-                                                                    <span class="dark">{{userDict[friendId]?.displayName ? userDict[friendId]?.displayName : ' '}}</span>
-                                                                    <span class="light pt-5">{{userDict[friendId]?.location}}</span>
+                                                                    <app-user-card [userId]="friendId" [type]="userCardType.USER_WEB_IMAGE_70X60_NAME_LOCATION" > </app-user-card>
                                                                 </label>
                                                           </div>
                                                         </div>

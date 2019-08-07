@@ -33,7 +33,7 @@
           <user-reaction *ngIf="question && answeredText!==''" [user]='user' [question]='question'></user-reaction>
         </div>
         <div class="col-sm-5 col-xs-6 alignment">
-          <author [userDict]="userDict" [userId]="question.created_uid"></author>
+          <author [isGamePlay]= false [userId]="question.created_uid"></author>
         </div>
       </div>
       <div class="col-xs-12">

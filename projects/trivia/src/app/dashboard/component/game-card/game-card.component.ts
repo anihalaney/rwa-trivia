@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, OnChanges, OnDestroy, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { Observable, Subscription, timer } from 'rxjs';
 import { Store, select } from '@ngrx/store';
-import { User, Game, Category, PlayerMode, GameStatus, CalenderConstants } from 'shared-library/shared/model';
+import { User, Game, Category, PlayerMode, GameStatus, CalenderConstants, userCardType } from 'shared-library/shared/model';
 import { Utils } from 'shared-library/core/services';
 import { AppState, appState, categoryDictionary } from '../../../store';
 import { take } from 'rxjs/operators';
@@ -39,8 +39,8 @@ export class GameCardComponent implements OnInit, OnChanges, OnDestroy {
   defaultAvatar = 'assets/images/default-avatar-small.png';
   userDict$: Observable<{ [key: string]: User }>;
   subscriptions = [];
+  userCardType = userCardType;
   constructor(public store: Store<AppState>, public utils: Utils, private cd: ChangeDetectorRef) {
-
     this.gameStatus = GameStatus;
     this.user$ = this.store.select(appState.coreState).pipe(select(s => s.user));
     this.subscriptions.push(this.user$.subscribe(user => {
@@ -69,6 +69,8 @@ export class GameCardComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnInit() {
+  
+    this.totalRound = (Number(this.game.gameOptions.playerMode) === PlayerMode.Single) ? 8 : 16;
     this.subscriptions.push(this.store.select(appState.coreState).pipe(take(1)).subscribe(s => {
       this.user = s.user;
       this.myTurn = this.game.nextTurnPlayerId === this.user.userId;

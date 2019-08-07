@@ -30,7 +30,9 @@ export class UserController {
             Utils.sendResponse(res, interceptorConstants.BAD_REQUEST, ResponseMessagesConstants.USER_ID_NOT_FOUND);
         }
         try {
-            Utils.sendResponse(res, interceptorConstants.SUCCESS, await UserService.getUserProfile(userId));
+            const loggedInUser = req && req.user && req.user.uid ? req.user.uid : '';
+            Utils.sendResponse(res, interceptorConstants.SUCCESS,
+                await UserService.getUserProfile(userId, loggedInUser ));
         } catch (error) {
             Utils.sendError(res, error);
         }
@@ -160,8 +162,9 @@ export class UserController {
         }
         try {
             const extendedInfo = true;
+            const loggedInUser = req && req.user && req.user.uid ? req.user.uid : '';
             Utils.sendResponse(res, interceptorConstants.SUCCESS,
-                await UserService.getUserProfile(userId, extendedInfo, req && req.user && req.user.uid ? req.user.uid : ''));
+                await UserService.getUserProfile(userId, loggedInUser, extendedInfo));
         } catch (error) {
             Utils.sendError(res, error);
         }
