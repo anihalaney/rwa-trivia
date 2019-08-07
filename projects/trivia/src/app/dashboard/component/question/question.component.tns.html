@@ -34,6 +34,8 @@
                 *ngIf="answeredText!==''" width="100%" text="Try Another" fontSize="17" padding="15" stlRippleEffect
                 stlBackgroundColor="#8ac541"></Button>
         </StackLayout>
+
+        <app-question-card [question]="question"> </app-question-card>
     </StackLayout>
 
 </CardView>

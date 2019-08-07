@@ -5,7 +5,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import {
-  ActionBarComponent, DrawerComponent, CountryListComponent, QuestionsTableComponent
+  ActionBarComponent, DrawerComponent, CountryListComponent, QuestionsTableComponent, QuestionCardComponent
 } from './mobile/component';
 import { NativeScriptCommonModule } from 'nativescript-angular/common';
 import { GameFilterPipe } from './pipe/game-filter.pipe';
@@ -31,6 +31,7 @@ import { SafeHtmlPipe } from './pipe/safe-html.pipe';
     RenderAnswerComponent,
     RenderQuestionComponent,
     CountryListComponent,
+    QuestionCardComponent,
     SafeHtmlPipe
   ],
   imports: [
@@ -69,7 +70,8 @@ import { SafeHtmlPipe } from './pipe/safe-html.pipe';
     OpenUserProfileDirective,
     RippleEffectDirective,
     RenderAnswerComponent,
-    RenderQuestionComponent
+    RenderQuestionComponent,
+    QuestionCardComponent
   ],
   schemas: [NO_ERRORS_SCHEMA],
   entryComponents: [
