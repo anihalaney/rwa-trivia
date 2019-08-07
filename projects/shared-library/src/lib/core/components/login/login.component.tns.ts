@@ -7,7 +7,6 @@ import { Store } from '@ngrx/store';
 import * as application from 'application';
 import { ModalDialogOptions, ModalDialogService } from 'nativescript-angular/modal-dialog';
 import { RouterExtensions } from 'nativescript-angular/router';
-import { LoadingIndicator } from 'nativescript-loading-indicator';
 import { setString } from 'nativescript-plugin-firebase/crashlytics/crashlytics';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { Subject } from 'rxjs';
@@ -36,15 +35,14 @@ import {
 export class LoginComponent extends Login implements OnInit, OnDestroy {
   @ViewChildren('textField') textField: QueryList<ElementRef>;
   title: string;
-  loader = new LoadingIndicator();
-  loaderOptionsCommon = { android: { color: '#3B5998' }, ios: { color: '#4B9ED6' }, message: 'Loading' };
+  loader = false;
   message = {
     show: false,
     type: '',
     text: ''
   };
   subscriptions = [];
-  @ViewChild('phoneNumber') phoneNumber: NgModel;
+  @ViewChild('phoneNumber', { static: false }) phoneNumber: NgModel;
   isCountryListOpened = false;
   isCountryCodeError;
   input: any;
@@ -181,7 +179,7 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
     if (!this.loginForm.valid) {
       return;
     }
-    this.loader.show(this.loaderOptionsCommon);
+     this.loader = true;
     this.removeMessage();
     let user;
     try {
@@ -217,7 +215,7 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
           user = await this.firebaseAuthService.sendPasswordResetEmail(this.loginForm.value.email);
           this.notificationMsg = `email sent to ${this.loginForm.value.email}`;
           this.showMessage('success', this.notificationMsg);
-          this.loader.hide();
+          this.loader = false;
           this.errorStatus = false;
           this.notificationLogs.push(this.loginForm.get('email').value);
           this.store.dispatch(this.uiStateActions.saveResetPasswordNotificationLogs([this.loginForm.get('email').value]));
@@ -225,7 +223,7 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
       }
 
     } catch (error) {
-      this.loader.hide();
+      this.loader = false;
       switch (this.mode) {
         case 0:
           const singInError = error.message.split(':');
@@ -255,7 +253,7 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
   async googleLogin() {
     this.removeMessage();
     if (isAndroid) {
-      this.loader.show(this.loaderOptionsCommon);
+      this.loader = true;
     }
     try {
       const result = await this.firebaseAuthService.googleLogin();
@@ -263,7 +261,7 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
         this.redirectTo();
       }
     } catch (error) {
-      this.loader.hide();
+      this.loader = false;
       this.showMessage('error', error);
       this.cd.markForCheck();
     }
@@ -274,12 +272,12 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
     try {
       this.removeMessage();
       if (isAndroid) {
-        this.loader.show(this.loaderOptionsCommon);
+        this.loader = true;
       }
       const result = await this.firebaseAuthService.facebookLogin();
       this.redirectTo();
     } catch (error) {
-      this.loader.hide();
+      this.loader = false;
       this.showMessage('error', error);
       this.cd.markForCheck();
     }
@@ -291,7 +289,7 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
       filter(u => (u != null && u.userId !== '')),
       take(1)).subscribe((user) => {
 
-        this.loader.hide();
+        this.loader = false;
 
         this.subscriptions.push(this.store.select(coreState).pipe(
           map(s => s.loginRedirectUrl), take(1)).subscribe(url => {

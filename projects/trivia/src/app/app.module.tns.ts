@@ -5,7 +5,7 @@ import { AppComponent } from './../app/components/app/app.component';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreRouterConnectingModule } from '@ngrx/router-store';
-import { reducers } from './store';
+import { reducers, metaReducers } from './store';
 import { CoreModule } from 'shared-library/core/core.module';
 import { SharedModule } from 'shared-library/shared/shared.module';
 import { HttpClientModule } from '@angular/common/http';
@@ -17,7 +17,6 @@ import { RouterModule } from '@angular/router';
 import { RecentGameCardComponent, RecentGamesComponent, PrivacyPolicyComponent, AchievementsComponent } from './components';
 import { UserFeedbackComponent } from './components/index.tns';
 
-// import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 export function firebaseFactory() {
   return TNSFirebase;
 }
@@ -41,7 +40,7 @@ registerElement('Fab', () => require('nativescript-floatingactionbutton').Fab);
     NativeScriptModule,
     AppRoutingModule,
     EffectsModule.forRoot([]),
-    StoreModule.forRoot(reducers),
+    StoreModule.forRoot(reducers, { metaReducers }),
     StoreRouterConnectingModule.forRoot(),
     HttpClientModule,
     SharedModule,

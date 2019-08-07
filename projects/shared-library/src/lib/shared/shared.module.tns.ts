@@ -14,7 +14,7 @@ import { SearchCountryFilterPipe } from './pipe/search-country-filter.pipe';
 import { TNSCheckBoxModule } from 'nativescript-checkbox/angular';
 import { NativeScriptUIAutoCompleteTextViewModule } from 'nativescript-ui-autocomplete/angular';
 import { NativeScriptUIListViewModule } from 'nativescript-ui-listview/angular';
-import { RenderQuestionComponent, AuthorComponent,  RenderAnswerComponent} from './components';
+import { RenderQuestionComponent, AuthorComponent, RenderAnswerComponent, UserCardComponent } from './components';
 import { ShowHintWhenFocusOutDirective, OpenUserProfileDirective, RippleEffectDirective } from './directive';
 import { PhoneNumberValidationProvider } from './mobile/component/countryList/phone-number-validation.provider';
 import { SafeHtmlPipe } from './pipe/safe-html.pipe';
@@ -24,8 +24,13 @@ import { SafeHtmlPipe } from './pipe/safe-html.pipe';
     DrawerComponent,
     QuestionsTableComponent,
     AuthorComponent,
+    RenderAnswerComponent,
+    RenderQuestionComponent,
+    CountryListComponent,
+    UserCardComponent,
     GameFilterPipe,
     SearchCountryFilterPipe,
+    SafeHtmlPipe,
     ShowHintWhenFocusOutDirective,
     OpenUserProfileDirective,
     RippleEffectDirective,
@@ -72,7 +77,8 @@ import { SafeHtmlPipe } from './pipe/safe-html.pipe';
     RippleEffectDirective,
     RenderAnswerComponent,
     RenderQuestionComponent,
-    SelectCategoryTagComponent
+    SelectCategoryTagComponent,
+    UserCardComponent
   ],
   schemas: [NO_ERRORS_SCHEMA],
   entryComponents: [

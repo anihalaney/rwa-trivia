@@ -79,7 +79,7 @@
     <ul class="invitationlist">
 
       <li *ngFor="let game of gameInvites| slice:gameInviteSliceStartIndex:gameInviteSliceLastIndex">
-        <game-invite [userDict]="userDict" [game]="game"></game-invite>
+        <game-invite [game]="game"></game-invite>
       </li>
     </ul>
 
@@ -98,7 +98,7 @@
     </div>
     <ul class="invitationlist">
       <li *ngFor="let invitation of friendInvitations | slice:friendInviteSliceStartIndex:friendInviteSliceLastIndex">
-        <app-friend-invite [userDict]="userDict" [invitation]="invitation" [user]="user"></app-friend-invite>
+        <app-friend-invite [invitation]="invitation" [user]="user"></app-friend-invite>
       </li>
     </ul>
 

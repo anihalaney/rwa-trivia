@@ -62,15 +62,16 @@ export class DashboardComponent extends Dashboard implements OnInit, OnDestroy {
   }
 
   startNewGame(mode: string) {
-    console.log('mode::', mode);
+
     if (this.applicationSettings && this.applicationSettings.lives.enable) {
-      if (this.account.lives > 0) {
+      if (this.account && this.account.lives > 0) {
         console.log('mode::', mode);
+        this.routerExtension.navigate(['/game-play/game-options', mode], { clearHistory: true });
+      } else if (!this.account) {
         this.routerExtension.navigate(['/game-play/game-options', mode], { clearHistory: true });
       }
     } else {
-      console.log('mode::', mode);
-      this.routerExtension.navigate(['/game-play/game-options', mode], { clearHistory: true });
+      this.routerExtension.navigate(['/game-play/game-options', mode]);
     }
 
   }

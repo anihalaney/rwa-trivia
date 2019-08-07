@@ -1,16 +1,17 @@
-import { ChangeDetectorRef, OnDestroy } from '@angular/core';
+import { ChangeDetectorRef, OnDestroy, NgZone } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { Observable } from 'rxjs';
 import { Utils } from 'shared-library/core/services';
-import { AppState, appState, categoryDictionary } from '../../../store';
+import { AppState, appState, categoryDictionary, getCategories } from '../../../store';
 import { dashboardState } from '../../store';
 import * as leaderBoardActions from '../../store/actions';
 import { UserActions } from 'shared-library/core/store/actions';
 import {
-  Category, LeaderBoardConstants, LeaderBoardUser, LeaderBoardStats, User
+  Category, LeaderBoardConstants, LeaderBoardUser, LeaderBoardStats, User, userCardType
 } from 'shared-library/shared/model';
+import { switchMap, map } from 'rxjs/operators';
 
 
 
@@ -37,26 +38,23 @@ export class Leaderboard implements OnDestroy {
   category: string;
   subscriptions = [];
   loggedInUserId: string;
+  categoryDictList: Category[] = [];
+  public selectedCatList = [];
+  user: User;
+  userCardType = userCardType;
 
   constructor(protected store: Store<AppState>,
     protected userActions: UserActions,
     protected utils: Utils,
     protected route: ActivatedRoute,
-    protected cd: ChangeDetectorRef) {
+    protected cd: ChangeDetectorRef,
+    protected ngZone: NgZone,
+  ) {
 
     this.route.params.subscribe((params) => {
       this.category = params['category'];
     });
-
-    this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
-        if (user && user.userId) {
-            this.loggedInUserId = user.userId;
-        }
-    }));
-    // if (isPlatformBrowser(this.platformId)) {
-    this.store.dispatch(new leaderBoardActions.LoadLeaderBoard());
-    // }
-    this.maxLeaderBoardDisplay = 10;
+    this.loggedInUserId = '';
 
     this.userDict$ = this.store.select(appState.coreState).pipe(select(s => s.userDict));
     this.subscriptions.push(this.userDict$.subscribe(userDict => {
@@ -64,44 +62,57 @@ export class Leaderboard implements OnDestroy {
       this.cd.markForCheck();
     }));
 
+    this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
+
+      if (user && user.userId) {
+        this.loggedInUserId = user.userId;
+      }
+
+    }));
+    this.store.dispatch(new leaderBoardActions.LoadLeaderBoard());
+    this.maxLeaderBoardDisplay = 10;
     this.categoryDict$ = this.store.select(categoryDictionary);
+
+    this.subscriptions.push(this.store.select(getCategories).subscribe(categoryDictList => {
+      this.categoryDictList = categoryDictList;
+      this.cd.markForCheck();
+    }));
+
 
     this.subscriptions.push(this.categoryDict$.subscribe(categoryDict => {
       this.categoryDict = categoryDict;
       this.cd.markForCheck();
     }));
 
-    this.subscriptions.push(this.store.select(dashboardState).pipe(select(s => s.scoreBoard)).subscribe(lbsStat => {
-      if (lbsStat) {
+    this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.user), map(user => {
+      if (user && user.userId) {
+        this.loggedInUserId = user.userId;
+      }
+    }))
+      .pipe(switchMap(() => {
+        return this.store.select(dashboardState).pipe(select(s => s.scoreBoard));
+      }))
+      .subscribe((lbsStat) => {
+        if (lbsStat) {
+          this.leaderBoardStatDictArray = lbsStat;
+          this.leaderBoardCat = this.leaderBoardStatDictArray.map(leaderBoard => leaderBoard.id);
 
-        this.leaderBoardStatDictArray = lbsStat;
-        this.leaderBoardCat = this.leaderBoardStatDictArray.map(leaderBoard => leaderBoard.id);
-
-        this.leaderBoardStatDictArray.filter((leaderBoardStatDict) => {
-          this.leaderBoardStatDict[leaderBoardStatDict.id] = leaderBoardStatDict.users;
-        });
-
-        if (this.leaderBoardCat && this.leaderBoardCat.length > 0) {
-          this.leaderBoardCat.map((cat) => {
-            if (Array.isArray(this.leaderBoardStatDict[cat])) {
-              this.leaderBoardStatDict[cat].map((user: LeaderBoardUser) => {
-                const userId = user.userId;
-                if (this.userDict && !this.userDict[userId]) {
-                  this.store.dispatch(this.userActions.loadOtherUserProfile(userId));
-                }
-              });
-            }
+          this.leaderBoardStatDictArray.filter((leaderBoardStatDict) => {
+            this.leaderBoardStatDict[leaderBoardStatDict.id] = leaderBoardStatDict.users;
           });
-          if (this.lbsSliceStartIndex === -1) {
-            this.lbsSliceStartIndex = Math.floor((Math.random() * (this.leaderBoardCat.length - 3)) + 1);
-            this.lbsSliceLastIndex = this.lbsSliceStartIndex + 3;
-            this.lbsUsersSliceStartIndex = 0;
-            this.lbsUsersSliceLastIndex = 3;
+
+          if (this.leaderBoardCat && this.leaderBoardCat.length > 0) {
+            if (this.lbsSliceStartIndex === -1) {
+              this.lbsSliceStartIndex = Math.floor((Math.random() * (this.leaderBoardCat.length - 3)) + 1);
+              this.lbsSliceLastIndex = this.lbsSliceStartIndex + 3;
+              this.lbsUsersSliceStartIndex = 0;
+              this.lbsUsersSliceLastIndex = 3;
+            }
+            this.selectedCatList = this.leaderBoardStatDict[1];
+            this.cd.markForCheck();
           }
         }
-      }
-      this.cd.markForCheck();
-    }));
+      }));
 
   }
 

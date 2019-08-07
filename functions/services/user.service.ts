@@ -105,7 +105,7 @@ export class UserService {
      * getUserProfile
      * return user
     */
-    static async getUserProfile(userId: string, extendedInfo = false, loginUserId = ''): Promise<any> {
+    static async getUserProfile(userId: string, loggedInUserId = '', extendedInfo = false): Promise<any> {
         try {
             const dbUser: User = await UserService.getUserById(userId);
             const user = new User();
@@ -139,15 +139,17 @@ export class UserService {
                 user.account.losses = (account && account.losses) ? account.losses : 0;
                 user.account.gamePlayed = (account && account.gamePlayed) ? account.gamePlayed : 0;
 
-                if (loginUserId && loginUserId !== '') {
-                    gamePlayed = await UserService.getOtherUserGameStatById(loginUserId, userId);
-                    const friendList = await FriendService.getFriendByInvitee(loginUserId);
-                    if (friendList && friendList.myFriends) {
-                        const friend = friendList.myFriends.filter(element => element[userId] ? true : false);
-                        isFriend = friend[0] ? true : false;
-                    }
+                if (loggedInUserId && loggedInUserId !== '') {
+                    gamePlayed = await UserService.getOtherUserGameStatById(loggedInUserId, userId);
                 }
 
+            }
+            if (loggedInUserId && loggedInUserId !== '') {
+                const friendList = await FriendService.getFriendByInvitee(loggedInUserId);
+                if (friendList && friendList.myFriends) {
+                    const friend = friendList.myFriends.filter(element => element[userId] ? true : false);
+                    isFriend = friend[0] ? true : false;
+                }
             }
             return { ...user, gamePlayed, 'isFriend': isFriend };
         } catch (error) {

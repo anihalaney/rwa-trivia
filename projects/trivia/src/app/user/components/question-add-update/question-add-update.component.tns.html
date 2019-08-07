@@ -95,7 +95,6 @@
                                             textWrap="true" text="Answer required !"></Label>
                                         <Label *ngIf="answers.controls[i].controls.answerText.errors.maxlength " class="error"
                                             textWrap="true" text="{{this.applicationSettings.answer_max_length}}  characters are allowed !"></Label>
-
                                     </StackLayout>
                                 </StackLayout>
                                 <StackLayout row="1" col="1" *ngIf="answers.controls[i].controls.isRichEditor.value" >

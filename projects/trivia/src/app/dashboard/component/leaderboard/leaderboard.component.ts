@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, NgZone } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Utils } from 'shared-library/core/services';
@@ -20,7 +20,8 @@ export class LeaderboardComponent extends Leaderboard {
     protected  userActions: UserActions,
     protected  utils: Utils,
     protected  route: ActivatedRoute,
-    protected  cd: ChangeDetectorRef) {
-    super(store, userActions, utils, route, cd);
+    protected  cd: ChangeDetectorRef,
+    protected ngZone: NgZone) {
+    super(store, userActions, utils, route, cd, ngZone);
   }
 }

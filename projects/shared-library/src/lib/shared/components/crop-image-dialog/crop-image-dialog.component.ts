@@ -29,7 +29,7 @@ export class CropImageDialogComponent implements OnInit, OnDestroy {
   errorMsg = '';
   maxImageSize: number;
 
-  @ViewChild('cropper') cropper: ImageCropperComponent;
+  @ViewChild('cropper', { static: false }) cropper: ImageCropperComponent;
 
   constructor(@Inject(MAT_DIALOG_DATA) private data: any,
     public cd: ChangeDetectorRef) {

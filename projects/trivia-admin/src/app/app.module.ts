@@ -19,7 +19,7 @@ import {
 } from './components';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from 'shared-library/environments/environment';
-
+import {APP_BASE_HREF} from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -38,7 +38,7 @@ import { environment } from 'shared-library/environments/environment';
       maxAge: 20
     }),
 
-    StoreRouterConnectingModule,
+    StoreRouterConnectingModule.forRoot(),
 
     //rwa modules
     CoreModule,
@@ -51,7 +51,8 @@ import { environment } from 'shared-library/environments/environment';
     ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [
-    { provide: RouterStateSerializer, useClass: CustomSerializer }
+    { provide: RouterStateSerializer, useClass: CustomSerializer },
+    { provide: APP_BASE_HREF, useValue: '/'}
   ],
   bootstrap: [AppComponent]
 })
