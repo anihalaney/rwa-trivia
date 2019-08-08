@@ -1,0 +1,138 @@
+<!-- USER_CARD_TYPE_ONE -->
+<div class="textcenter clearfix innerli" *ngIf="user && userCardType.USER_WEB_IMAGE_NAME_LOCATION_VERTICAL === type">
+  <div class="yourimg">
+    <img
+      [stlOpenUserProfile]="{userId: user.userId, redirectTo: loggedInUserId === user.userId ? 'userProfile': 'otherUserProfile'}"
+      [src]="getImageUrl(user,70,60)" alt="User Profile Image">
+    <span *ngIf="user?.online" class="online-dot">
+    </span>
+  </div>
+  <div class="clear"></div>
+  <div class="dark ellipsis" title="{{user.displayName}}">
+    {{ (loggedInUserId === user.userId) ? 'You' : user?.displayName}}</div>
+  <div class="light ellipsis div-location" title="{{user?.location}}">{{user?.location}}</div>
+</div>
+
+<!-- USER_CARD_TYPE_TWO -->
+<div class="textcenter clearfix innerli" *ngIf="user && userCardType.USER_WEB_IMAGE_NAME_VERTICAL === type">
+  <div class="yourimg">
+    <img [src]="getImageUrl(user,70,60)" alt="User Profile Image" />
+    <span *ngIf="user?.online" class="online-dot">
+    </span>
+  </div>
+  <label href="#" id="you" class="dark text-style ">{{user.displayName}}</label>
+</div>
+<!-- USER_CARD_TYPE_THREE -->
+<div class="auther" *ngIf="user && userCardType.USER_WEB_NAME_IMAGE_HORIZONTAL === type">
+  <label class="text-alignment">Author :</label>
+  <label class="alignment-left text-alignment truncate" title="{{user?.displayName}}">{{user?.displayName}}</label>
+  <img *ngIf="isGamePlay" [src]="getImageUrl(user,44,40)" alt="User Profile Image" />
+  <img *ngIf="!isGamePlay" [stlOpenUserProfile]="{userId: user.userId, redirectTo: 'otherUserProfile'}"
+    [src]="getImageUrl(user,44,40)" alt="User Profile Image" />
+  <span *ngIf="user?.online" class="online-dot">
+  </span>
+</div>
+<!-- USER_CARD_TYPE_FOUR -->
+<div class="recent-completed" *ngIf="user && userCardType.USER_WEB_IMAGE_NAME_RECENT_GAME_VERTICAL === type">
+  <div class="yourimg">
+    <img
+      [stlOpenUserProfile]="{userId: user.userId, redirectTo: loggedInUserId === user.userId ? 'userProfile': 'otherUserProfile'}"
+      [src]="getImageUrl(user,44,40)" alt="User Profile Image" />
+    <span *ngIf="user?.online" class="online-dot">
+    </span>
+  </div>
+  <p class="light">{{ (loggedInUserId === user.userId) ? 'You' : user?.displayName}} </p>
+</div>
+
+<ng-container *ngIf="user && userCardType.USER_WEB_IMAGE_NAME_LOCATION_HORIZONTAL === type">
+  <div class="recent-completed row">
+    <div class="col-xs-4 yourimg">
+      <img
+        [stlOpenUserProfile]="{userId: user.userId, redirectTo: loggedInUserId === user.userId ? 'userProfile': 'otherUserProfile'}"
+        [src]="getImageUrl(user,44,40)" alt="User Profile Image" />
+      <span *ngIf="user?.online" class="online-dot">
+      </span>
+    </div>
+    <div class="col-xs-8">
+      <div *ngIf="user?.displayName" class="dark ellipsis" title="{{user?.displayName}}">{{user?.displayName}}</div>
+      <div *ngIf="user?.location" class="light ellipsis" title="{{user?.location}}">{{user?.location}}</div>
+      <div *ngIf="!user?.location" class="light ellipsis" title="unknown">unknown</div>
+      <div for="" *ngIf="user?.isFriend && loggedInUserId">{{ (user?.isFriend) ? user?.displayName : '' }} is your
+        friend</div>
+    </div>
+  </div>
+</ng-container>
+
+<ng-container *ngIf="user && userCardType.USER_WEB_IMAGE_40X40_NAME_HORIZONTAL === type">
+  <div class="profile" style="position: relative">
+    <img [stlOpenUserProfile]="{userId: user.userId, redirectTo: 'otherUserProfile'}" [src]="getImageUrl(user,44,40)"
+      alt="User Profile Image" />
+    <span *ngIf="user?.online" class="online-dot">
+    </span>
+  </div>
+  <div class="friend-list display-name">
+    <label *ngIf="user?.displayName" title="{{user?.displayName}}">{{user?.displayName}}</label>
+  </div>
+</ng-container>
+
+<div class="textcenter clearfix innerli" *ngIf="user && userCardType.USER_WEB_IMAGE_70X60_NAME_LOCATION === type">
+  <div class="yourimg">
+    <img [src]="getImageUrl(user,70,60)" alt="User Profile Image">
+    <span *ngIf="user?.online" class="online-dot">
+    </span>
+  </div>
+  <div class="clear"></div>
+  <div class="dark" title="{{user.displayName}}">{{user.displayName}}</div>
+  <div class="light pt-6">{{user?.location}}</div>
+</div>
+
+<div class="textcenter clearfix innerli" *ngIf="user && userCardType.USER_WEB_IMAGE_70X60_IMAGE_VERTICAL === type">
+  <div class="yourimg">
+    <img
+      [stlOpenUserProfile]="{userId: user.userId, redirectTo: loggedInUserId === user.userId ? 'userProfile': 'otherUserProfile'}"
+      [src]="getImageUrl(user,70,60)" alt="User Profile Image" />
+    <span *ngIf="user?.online" class="online-dot">
+    </span>
+  </div>
+  <label href="#" id="you" class="dark text-style ">
+    <ng-container *ngIf="loggedInUserId === user.userId ;else otherUser">
+      You
+    </ng-container>
+    <ng-template #otherUser>
+      {{user.displayName}}
+    </ng-template>
+  </label>
+</div>
+
+<ng-container *ngIf="user && userCardType.USER_WEB_IMAGE_NAME_STATUS_HORIZONTAL === type">
+  <div class="row">
+    <div class="col-md-2  col-sm-3 col-xs-12 user-img friend-invite">
+      <img [stlOpenUserProfile]="{userId: user.userId, redirectTo: 'otherUserProfile'}" [src]="getImageUrl(user,44,40)"
+        alt="User Profile Picture" />
+      <span *ngIf="user?.online" class="online-dot">
+      </span>
+    </div>
+    <div class="col-md-10 col-sm-9  col-xs-12 text-align">
+      <div class="dark ellipsis col-xs-12" title="{{user?.displayName}}">{{user?.displayName}}</div>
+      <div class="light col-xs-12">{{invitation.status}}</div>
+    </div>
+  </div>
+</ng-container>
+
+
+<ng-container *ngIf="user && userCardType.USER_WEB_IMAGE_NAME_STATUS_LOCATION_HORIZONTAL === type">
+  <div class="row">
+    <div class="col-md-4  col-sm-4 col-xs-12 user-img">
+      <img [stlOpenUserProfile]="{userId: user.userId, redirectTo: 'otherUserProfile'}" [src]="getImageUrl(user,44,40)"
+        alt="User Profile Picture" />
+      <span *ngIf="user?.online" class="online-dot">
+      </span>
+    </div>
+    <div class="col-md-4 col-sm-4  col-xs-12 text-align">
+      <div class="dark ellipsis" title="{{user?.displayName}}">{{user?.displayName}}</div>
+      <div class="light">{{gameStatus}}</div>
+    </div>
+    <div class="col-md-4 col-sm-4 col-xs-12 clinton ellipsis text-align" title="{{user?.location}}">{{user?.location}}
+    </div>
+  </div>
+</ng-container>

@@ -1,13 +1,10 @@
-import { Observable } from 'rxjs';
-import { Action } from '@ngrx/store';
 import { ActionWithPayload, UserActions } from '../actions';
 import { User, Game, Friends, Invitation } from '../../../shared/model';
 import { Country } from 'shared-library/shared/mobile/component/countryList/model/country.model';
 
+
 export function user(state: any = null, action: ActionWithPayload<User>): User {
   switch (action.type) {
-    case UserActions.LOGOFF:
-      return null;
     case UserActions.ADD_USER_WITH_ROLES:
       return action.payload;
     default:

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnDestroy, ChangeDetectorRef, ChangeDetectionStrategy, Output, EventEmitter, OnChanges } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, ChangeDetectorRef, ChangeDetectionStrategy, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { Question } from './../../../model/question';
 import { select, Store } from '@ngrx/store';
@@ -13,7 +13,7 @@ import { ApplicationSettings, Answer, User } from 'shared-library/shared/model';
 })
 
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
-export class QuestionCardComponent implements OnInit, OnDestroy {
+export class QuestionCardComponent implements OnInit, OnDestroy, OnChanges {
 
 
   @Input() question: Question;
@@ -25,7 +25,6 @@ export class QuestionCardComponent implements OnInit, OnDestroy {
   @Input() correctAnswerText: string;
   @Input() doPlay: boolean
   @Output() answerClicked = new EventEmitter<number>();
-  @Input() userDict: { [key: string]: User };
   @Output() selectedAnswer = new EventEmitter<string>();
   constructor(private store: Store<CoreState>, private cd: ChangeDetectorRef) { }
 
@@ -65,5 +64,12 @@ export class QuestionCardComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
   }
+
+  ngOnChanges(changes: SimpleChanges) {
+  if(changes.question){
+    this.doPlay = true;
+  }
+  
+}
 
 }

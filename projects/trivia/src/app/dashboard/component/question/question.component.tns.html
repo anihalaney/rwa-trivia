@@ -4,7 +4,7 @@
         iosOverflowSafeArea="false">
         <Label text="Question of the day!" color="#000" fontSize="20" class="text-center" textWrap="true"></Label>
         <app-question-card [question]="question" [categoryName]="categoryName" [answeredText]="answeredText"
-            [doPlay]="doPlay" [correctAnswerText]="correctAnswerText" [userDict]="userDict" (selectedAnswer)="selectedAnswer($event)"></app-question-card>
+            [doPlay]="doPlay" [correctAnswerText]="correctAnswerText" (selectedAnswer)="selectedAnswer($event)"></app-question-card>
 
         <StackLayout iosOverflowSafeArea="false" orientation="vertical" *ngIf="question" margin="10"
             iosOverflowSafeArea="false">

@@ -52,10 +52,11 @@ const string3 = `
 //Crashlytics 3 END
 `;
 
-module.exports = function ($logger, $projectData, hookArgs) {
-  const platform = hookArgs.platform.toLowerCase();
-  return new Promise(function (resolve, reject) {
-    const isNativeProjectPrepared = !hookArgs.nativePrepare || !hookArgs.nativePrepare.skipNativePrepare;
+module.exports = function($logger, $projectData, hookArgs) {
+  const platformFromHookArgs = hookArgs && (hookArgs.platform || (hookArgs.prepareData && hookArgs.prepareData.platform));
+  const platform = (platformFromHookArgs  || '').toLowerCase();
+  return new Promise(function(resolve, reject) {
+    const isNativeProjectPrepared = hookArgs.prepareData ? (!hookArgs.prepareData.nativePrepare || !hookArgs.prepareData.nativePrepare.skipNativePrepare) : (!hookArgs.nativePrepare || !hookArgs.nativePrepare.skipNativePrepare);
     if (isNativeProjectPrepared) {
       try {
         if (platform === 'ios') {
@@ -67,10 +68,13 @@ module.exports = function ($logger, $projectData, hookArgs) {
           if (fs.existsSync(xcodeProjectPath)) {
             var xcodeProject = xcode.project(xcodeProjectPath);
             xcodeProject.parseSync();
+
+            // Xcode 10 requires 'inputPaths' set, see https://firebase.google.com/docs/crashlytics/get-started
             var options = {
               shellPath: '/bin/sh', shellScript: '"${PODS_ROOT}/Fabric/run"',
               inputPaths: ['"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)"']
             };
+
             xcodeProject.addBuildPhase(
               [], 'PBXShellScriptBuildPhase', 'Configure Crashlytics', undefined, options
             ).buildPhase;

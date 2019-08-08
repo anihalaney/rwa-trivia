@@ -2,7 +2,7 @@ import { ViewChild } from "@angular/core";
 import { RadSideDrawerComponent } from "nativescript-ui-sidedrawer/angular";
 
 export class DrawerPage {
-    @ViewChild(RadSideDrawerComponent) protected drawerComponent: RadSideDrawerComponent;
+    @ViewChild(RadSideDrawerComponent, { static: false }) protected drawerComponent: RadSideDrawerComponent;
 
     openDrawer() {
         if (this.drawerComponent && this.drawerComponent.sideDrawer) {

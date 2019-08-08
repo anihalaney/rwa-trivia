@@ -1,7 +1,9 @@
 <ns-action-bar title="Dashboard" class="Roboto-Regular" hideHomeIcon="true" showAdd="true"></ns-action-bar>
 <StackLayout class="mobile" backgroundColor="#f1f2f2" *ngIf="renderView">
     <ScrollView>
-        <StackLayout>            
+        <StackLayout>       
+            <Button text="first-question" (tap)="open()"></Button>
+                 
             <DockLayout margin="15 10 0 10" *ngIf="user && applicationSettings?.tokens?.enable"
                 iosOverflowSafeArea="false">
                 <DockLayout dock="left" *ngIf="account && user" backgroundColor="#3b5998" class="points-container"
@@ -143,10 +145,10 @@
                         class="gameplay" backgroundColor="white" iosOverflowSafeArea="false">
                         <StackLayout *ngIf="gameInvites" iosOverflowSafeArea="false">
                             <Label text="Invitation to play games" orientation="horizontal" horizontalAlignment="center"
-                                padding="10" textWrap="true" class="title Roboto-Medium">
+                                padding="10" textWrap="true" class="title-black Roboto-Medium" color="black">
                             </Label>
                             <StackLayout *ngFor="let game of gameInvites" iosOverflowSafeArea="false">
-                                <game-invite [userDict]="userDict" [game]="game"></game-invite>
+                                <game-invite [game]="game" ></game-invite>
                             </StackLayout>
                         </StackLayout>
                     </CardView>
@@ -158,13 +160,12 @@
                         class="gameplay" backgroundColor="white" iosOverflowSafeArea="false">
                         <StackLayout *ngIf="friendInvitations" iosOverflowSafeArea="false">
                             <Label text="Friend Invitations" orientation="horizontal" horizontalAlignment="center"
-                                padding="10" textWrap="true" class="title Roboto-Medium">
+                                padding="10" textWrap="true" class="title-black Roboto-Medium">
                             </Label>
                             <StackLayout
                                 *ngFor="let invitation of friendInvitations | slice:friendInviteSliceStartIndex:friendInviteSliceLastIndex"
                                 iosOverflowSafeArea="false">
-                                <app-friend-invite [userDict]="userDict" [invitation]="invitation" [user]="user">
-                                </app-friend-invite>
+                                <app-friend-invite [invitation]="invitation" [user]="user" ></app-friend-invite>
                             </StackLayout>
                             <Button text="View more" backgroundColor="#8ac541" color="#ffffff" margin="10"
                                 (tap)="displayMoreFriendInvites()"
