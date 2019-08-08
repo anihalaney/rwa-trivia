@@ -344,14 +344,15 @@ export class AccountService {
     }
 
     /**
-     * getAccountById
+     * updateBits
      * return account
      */
-    static async updateBits(id: string): Promise<any> {
+    static async updateBits(userId: string): Promise<any> {
         try {
-            const accountData = await AccountService.getAccountById(id);
-            const bits = 50;
-            accountData.bits = accountData.bits ? Utils.changeFieldValue(bits) : bits;
+            const appSetting = await AppSettings.Instance.getAppSettings();
+            const bits = appSetting.first_question_bits;
+            const accountData = await AccountService.getAccountById(userId);
+            accountData.bits = accountData.bits ? Utils.changeFieldValue(bits) : accountData.bits;
             await AccountService.updateAccountData(accountData);
         } catch (error) {
             return Utils.throwError(error);

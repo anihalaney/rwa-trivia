@@ -18,6 +18,7 @@ export class ApplicationSettings {
     game_play_max_time: number[];
     default_names: Array<string>;
     user_display_name_value: number;
+    first_question_bits: number;
 }
 
 export class TimerLoader {

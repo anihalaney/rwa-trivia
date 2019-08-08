@@ -167,3 +167,13 @@ export function addressSuggestions(state: any = null, action: ActionWithPayload<
       return null;
   }
 }
+
+export function firstQuestionBits(state: any = null, action: ActionWithPayload<string>): string {
+  switch (action.type) {
+    case UserActions.SET_FIRST_QUESTION_BITS_SUCCESS:
+      return action.payload;
+    default:
+      return null;
+  }
+}
+
