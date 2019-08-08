@@ -263,6 +263,7 @@ export enum ResponseMessagesConstants {
     DISPLAY_ORDER_NOT_FOUND = 'Display order not found',
     ACHIEVEMENT_RULES_ADDED_SUCCESSFULLY = 'Achievement rules added successfully',
     DISPLAY_NAME_NOT_FOUND = 'displayName is not added in request',
+    BITES_ADDED = 'Bites added successfully !!',
 }
 
 export enum FriendConstants {
@@ -372,7 +373,8 @@ export enum RoutesConstants {
     LOCATION = 'location',
     LAT_LONG = 'latLong',
     ADDRESS_SUGGESTION = 'addressSuggestion',
-    UPDATE_APP_VERSION = 'updateAppVersion'
+    UPDATE_APP_VERSION = 'updateAppVersion',
+    ADD_BITES_FIRST_QUESTION = 'add-bits-first-question'
 }
 
 export enum TermsAndPrivacyUrlConstant {

@@ -343,4 +343,19 @@ export class AccountService {
         }
     }
 
+    /**
+     * getAccountById
+     * return account
+     */
+    static async updateBits(id: string): Promise<any> {
+        try {
+            const accountData = await AccountService.getAccountById(id);
+            const bits = 50;
+            accountData.bits = accountData.bits ? Utils.changeFieldValue(bits) : bits;
+            await AccountService.updateAccountData(accountData);
+        } catch (error) {
+            return Utils.throwError(error);
+        }
+    }
+
 }
