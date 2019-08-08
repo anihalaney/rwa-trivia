@@ -83,10 +83,10 @@ export class UserActions {
   }
 
   static LOAD_USER_INVITATIONS_INFO = 'LOAD_USER_INVITATIONS_INFO';
-  loadUserInvitationsInfo(userId: string, invitedUserEmail: string, invitedUserId: string ): ActionWithPayload<{}> {
+  loadUserInvitationsInfo(userId: string, invitedUserEmail: string, invitedUserId: string): ActionWithPayload<{}> {
     return {
       type: UserActions.LOAD_USER_INVITATIONS_INFO,
-      payload: {userId, invitedUserEmail, invitedUserId}
+      payload: { userId, invitedUserEmail, invitedUserId }
     };
   }
 
@@ -319,6 +319,22 @@ export class UserActions {
     return {
       type: UserActions.LOAD_ADDRESS_SUGGESTIONS_SUCCESS,
       payload: suggestions
+    };
+  }
+
+  static SET_FIRST_QUESTION_BITS = 'SET_FIRST_QUESTION_BITS';
+  setFirstQuestionBits(userId: string): ActionWithPayload<string> {
+    return {
+      type: UserActions.SET_FIRST_QUESTION_BITS,
+      payload: userId
+    };
+  }
+
+  static SET_FIRST_QUESTION_BITS_SUCCESS = 'SET_FIRST_QUESTION_BITS_SUCCESS';
+  setFirstQuestionBitsSuccess(msg: string): ActionWithPayload<string> {
+    return {
+      type: UserActions.SET_FIRST_QUESTION_BITS_SUCCESS,
+      payload: msg
     };
   }
 

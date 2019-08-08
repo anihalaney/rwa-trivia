@@ -232,4 +232,9 @@ export class UserService {
         const url = `${CONFIG.functionsUrl}/${this.RC.USER}/${this.RC.ADDRESS_SUGGESTION}/${address}`;
         return this.http.get<any>(url);
     }
+
+    firstQuestionSetBits(userId: string): Observable<any> {
+        const url = `${CONFIG.functionsUrl}/user/add-bits-first-question`;
+        return this.http.get<any>(url);
+    }
 }

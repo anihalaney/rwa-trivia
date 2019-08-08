@@ -22,6 +22,38 @@ export class QuestionActions {
     };
   }
 
+  static GET_QUESTION_OF_THE_DAY_ERROR = 'GET_QUESTION_OF_THE_DAY_ERROR';
+  getQuestionOfTheDayError(errorObj: any): ActionWithPayload<any> {
+    return {
+      type: QuestionActions.GET_QUESTION_OF_THE_DAY_ERROR,
+      payload: errorObj
+    };
+  }
+
+  static GET_FIRST_QUESTION = 'GET_FIRST_QUESTION';
+  getFirstQuestion(): ActionWithPayload<null> {
+    return {
+      type: QuestionActions.GET_FIRST_QUESTION,
+      payload: null
+    };
+  }
+
+  static GET_FIRST_QUESTION_SUCCESS = 'GET_FIRST_QUESTION_SUCCESS';
+  getFirstQuestionSuccess(question: Question): ActionWithPayload<Question> {
+    return {
+      type: QuestionActions.GET_FIRST_QUESTION_SUCCESS,
+      payload: question
+    };
+  }
+
+  static GET_FIRST_QUESTION_ERROR = 'GET_FIRST_QUESTION_ERROR';
+  getFirstQuestionError(errorObj: any): ActionWithPayload<any> {
+    return {
+      type: QuestionActions.GET_FIRST_QUESTION_ERROR,
+      payload: errorObj
+    };
+  }
+
   static ADD_QUESTION_SUCCESS = 'ADD_QUESTION_SUCCESS';
   addQuestionSuccess(): ActionWithPayload<null> {
     return {
@@ -38,13 +70,6 @@ export class QuestionActions {
     };
   }
 
-  static GET_QUESTION_OF_THE_DAY_ERROR = 'GET_QUESTION_OF_THE_DAY_ERROR';
-  getQuestionOfTheDayError(errorObj: any): ActionWithPayload<any> {
-    return {
-      type: QuestionActions.GET_QUESTION_OF_THE_DAY_ERROR,
-      payload: errorObj
-    };
-  }
 
   static UPDATE_QUESTION = 'UPDATE_QUESTION';
   updateQuestion(question: Question): ActionWithPayload<Question> {

@@ -16,7 +16,7 @@ export const CONFIG: IConfig = {
     storageBucket: 'rwa-trivia-dev-e57fc.appspot.com',
     messagingSenderId: '701588063269'
   },
-  'functionsUrl': `https://rwa-trivia-dev-e57fc.firebaseapp.com/${appConstants.API_VERSION}`,
+  'functionsUrl': `http://192.168.0.108:5000/rwa-trivia-dev-e57fc/us-central1/app/${appConstants.API_VERSION}`,
   'editorUrl': 'https://rwa-trivia-dev-e57fc.firebaseapp.com/trivia-editor',
   'hightlighJsURL': 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/highlight.min.js',
   'hightlighCSSURL': 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/a11y-light.min.css',
