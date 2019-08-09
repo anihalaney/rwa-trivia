@@ -3,7 +3,7 @@ import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { Utils } from 'shared-library/core/services';
 import { UserActions } from 'shared-library/core/store/actions';
-import { Game, PlayerMode, User } from 'shared-library/shared/model';
+import { Game, PlayerMode, User, userCardType } from 'shared-library/shared/model';
 import { AppState, appState } from '../../../store';
 
 export class GameContinue implements OnInit {
@@ -21,6 +21,7 @@ export class GameContinue implements OnInit {
   userDict$: Observable<{ [key: string]: User }>;
   playerUserName = '';
   subscriptions = [];
+  userCardType = userCardType;
 
   constructor(
     public store: Store<AppState>,
@@ -49,11 +50,6 @@ export class GameContinue implements OnInit {
       this.otherUserInfo = this.userDict[this.otherUserId];
     }
   }
-
-  getImageUrl(user: User) {
-    return this.utils.getImageUrl(user, 44, 40, '44X40');
-  }
-
 
   destroy() {
     this.user$ = undefined;

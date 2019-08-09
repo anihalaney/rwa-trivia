@@ -1,5 +1,4 @@
 
-import { QuestionsComponent } from './questions/questions.component';
 import { QuestionsSearchComponent } from './questions-search/questions-search.component';
 import { QuestionsTableComponent } from './questions-table/questions-table.component';
 import { QuestionFormComponent } from './question-form/question-form.component';
@@ -9,8 +8,8 @@ import { AuthorComponent } from './author/author.component';
 import { RenderQuestionComponent } from './render-question/render-question.component';
 import { RenderAnswerComponent } from './render-answer/render-answer.component';
 import { CropImageDialogComponent } from './crop-image-dialog/crop-image-dialog.component';
+import { UserCardComponent } from './user-card/user-card.component';
 export {
-    QuestionsComponent,
     QuestionsSearchComponent,
     QuestionsTableComponent,
     QuestionFormComponent,
@@ -19,11 +18,11 @@ export {
     AuthorComponent,
     RenderQuestionComponent,
     RenderAnswerComponent,
-    CropImageDialogComponent
+    CropImageDialogComponent,
+    UserCardComponent
 };
 
 export default [
-    QuestionsComponent,
     QuestionsSearchComponent,
     QuestionsTableComponent,
     QuestionFormComponent,
@@ -32,5 +31,6 @@ export default [
     AuthorComponent,
     RenderQuestionComponent,
     RenderAnswerComponent,
-    CropImageDialogComponent
+    CropImageDialogComponent,
+    UserCardComponent
 ];

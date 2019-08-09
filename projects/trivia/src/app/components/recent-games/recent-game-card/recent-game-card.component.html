@@ -9,8 +9,7 @@
             <div *ngIf="game.gameOptions.playerMode == PlayerMode.Opponent">
                 <div class="success result" *ngIf="game.winnerPlayerId && game.winnerPlayerId === user.userId">Won</div>
                 <div class="label result" *ngIf="game.winnerPlayerId && game.winnerPlayerId !== user.userId">Lost</div>
-                <div class="success result"
-                    *ngIf="game.round < 16 && !game.winnerPlayerId && game.GameStatus !== GameStatus.REJECTED && game.GameStatus !== GameStatus.INVITATION_TIMEOUT && game.GameStatus !== GameStatus.TIME_EXPIRED">
+                <div class="success result" *ngIf="game.round < 16 && !game.winnerPlayerId && game.GameStatus !== GameStatus.REJECTED && game.GameStatus !== GameStatus.INVITATION_TIMEOUT && game.GameStatus !== GameStatus.TIME_EXPIRED">
                     Tie</div>
                 <div class="label result" *ngIf="!game.winnerPlayerId && game.GameStatus === GameStatus.REJECTED">
                     Rejected</div>
@@ -23,50 +22,36 @@
             </div>
 
         </div>
-        
+
         <div class="dark">{{categoryDict[game.gameOptions.categoryIds[0]]?.categoryName.charAt(0).toUpperCase() +
             categoryDict[game.gameOptions.categoryIds[0]]?.categoryName.slice(1)}}</div>
         <div class="col-xs-12 no-padding card-bottom-spacing" *ngIf="game.gameOptions.playerMode==PlayerMode.Opponent">
             <div class="col-xs-6 no-padding" *ngIf="game.winnerPlayerId === user.userId">
-                <div class="yourimg">
-                    <img  [stlOpenUserProfile]="{userId: user.userId, redirectTo: 'userProfile'}" [src]="userProfileImageUrl" alt="User Profile Image" />
-                </div>
-                <p class="light">Your</p>
+                <app-user-card [userId]="game.winnerPlayerId" [type]="userCardType.USER_WEB_IMAGE_NAME_RECENT_GAME_VERTICAL"> </app-user-card>
                 <p class="light">Score {{game.stats[game.winnerPlayerId]?.score}}</p>
             </div>
-            <div class="col-xs-6 no-padding "
-                [ngClass]="game.winnerPlayerId !== user.userId?'card-border-right':'card-border-left'">
-                <div class="yourimg">
-                    <img  [stlOpenUserProfile]="{userId: getOpponentId(game), redirectTo: 'otherUserProfile'}" [src]="getImageUrl(userDict[this.otherUserId])" alt="Other User Profile Image" />
-                </div>
-                <p class="light ellipsis user-name-text"  title="{{userDict[getOpponentId(game)]?.displayName}}">
-                    {{userDict[getOpponentId(game)]?.displayName}}</p>
-                <p class="light">Score {{game.stats[getOpponentId(game)]?.score}}</p>
+            <div class="col-xs-6 no-padding " [ngClass]="game.winnerPlayerId !== user.userId?'card-border-right':'card-border-left'">
+                <app-user-card [userId]="otherUserId" [type]="userCardType.USER_WEB_IMAGE_NAME_RECENT_GAME_VERTICAL"> </app-user-card>
+                <p class="light">Score {{game.stats[otherUserId]?.score}}</p>
             </div>
             <div class="col-xs-6 card-left-border no-padding" *ngIf="game.winnerPlayerId !== user.userId">
-                <div class="yourimg">
-                    <img [stlOpenUserProfile]="{userId: user.userId, redirectTo: 'userProfile'}" [src]="userProfileImageUrl" alt="User Profile Image" />
-                </div>
-                <p class="light">Your</p>
+                <app-user-card [userId]="user.userId" [type]="userCardType.USER_WEB_IMAGE_NAME_RECENT_GAME_VERTICAL"> </app-user-card>
                 <p class="light">Score {{game.stats[user.userId]?.score}}</p>
             </div>
             <div class="col-xs-12 pt-10">
-                <p class="light" *ngIf="game.winnerPlayerId === user.userId && game.GameStatus === GameStatus.TIME_EXPIRED">    
+                <p class="light" *ngIf="game.winnerPlayerId === user.userId && game.GameStatus === GameStatus.TIME_EXPIRED">
                     Your opponent did not answer in time.
                 </p>
-                 <p class="light" *ngIf="game.winnerPlayerId !== user.userId && game.GameStatus === GameStatus.TIME_EXPIRED">    
+                <p class="light" *ngIf="game.winnerPlayerId !== user.userId && game.GameStatus === GameStatus.TIME_EXPIRED">
                     You did not answer in time.
                 </p>
             </div>
         </div>
 
         <div class="col-xs-12 no-padding card-bottom-spacing" *ngIf="game.gameOptions.playerMode==PlayerMode.Single">
-            <div class="yourimg">
-                <img [stlOpenUserProfile]="{userId: user.userId, redirectTo: 'userProfile'}" [src]="userProfileImageUrl" alt="User Profile Image" />
-            </div>
-            <p class="light ellipsis user-disp-text" title="{{user?.displayName}}">{{user?.displayName}}</p>
-            <p class="light">Score {{game.stats[user.userId].score}} / {{game.round}}</p>           
-            <p class="light" *ngIf="game.GameStatus === GameStatus.TIME_EXPIRED">    
+            <app-user-card [userId]="user.userId" [type]="userCardType.USER_WEB_IMAGE_NAME_RECENT_GAME_VERTICAL"> </app-user-card>
+            <p class="light">Score {{game?.stats[user?.userId]?.score}} / {{game?.round}}</p>
+            <p class="light" *ngIf="game.GameStatus === GameStatus.TIME_EXPIRED">
                 You did not answer in time.
             </p>
         </div>

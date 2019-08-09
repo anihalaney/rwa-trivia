@@ -1,7 +1,0 @@
-android {  
-  // other stuff here
-
-  project.ext {
-    googlePlayServicesVersion = "16.+"
-  }
-}

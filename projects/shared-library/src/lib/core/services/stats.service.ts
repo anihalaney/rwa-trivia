@@ -10,6 +10,7 @@ export class StatsService {
     constructor(private dbService: DbService) { }
 
     loadLeaderBoardStat(): Observable<any[]> {
+
         return this.dbService.valueChanges(CollectionConstants.LEADER_BOARD_STATS);
     }
 

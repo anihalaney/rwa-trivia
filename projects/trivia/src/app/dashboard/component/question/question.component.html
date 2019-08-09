@@ -30,7 +30,7 @@
           <span>{{question.tags?.toString()}}</span>
         </div>
         <div class="col-sm-6 col-xs-12 alignment">
-          <author [userDict]="userDict" [userId]="question.created_uid"></author>
+          <author [isGamePlay]= false [userId]="question.created_uid"></author>
         </div>
       </div>
       <div class="col-xs-12">

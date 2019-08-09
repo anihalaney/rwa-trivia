@@ -62,17 +62,6 @@ mat-card {
     font-family: 'hindmedium';
     font-size: 16px;
   }
-  .vs:after
-  { 
-    content: "Vs"; 
-    position: absolute; 
-    right: -10px; 
-    top: 84px; 
-    font-size: 18px; 
-    font-family: 'hindmedium';
-    height:25px; 
-    color:#000;
-  }
   .mat-expansion-panel:not([class*=mat-elevation-z]) {
      box-shadow:none;
   }
@@ -132,25 +121,8 @@ mat-card {
     .yourimg-spacing{
       margin-top: 44px;
     }
-    .vs:after {
-      margin-top: 102px;
-      width: 103%;
-    }
   }
   
-  @media (max-width: 568px){
-    .vs:after {
-      margin-top: 98px;
-      width: 103%;
-    }
-  }
-  
-  @media (max-width: 460px){
-    .vs:after {
-      margin-top: 94px;
-      width: 103%;
-    }
-  }
 
   .round-value{
       color: #000;
@@ -176,4 +148,14 @@ mat-card {
   font-weight: bold;
   color: #3b5998;
   cursor: pointer;
+}
+
+.vs{
+  position: absolute;
+  right: 0;
+  top: 35px;
+  font-size: 18px; 
+  font-family: 'hindmedium';
+  height:25px; 
+  color:#000;
 }

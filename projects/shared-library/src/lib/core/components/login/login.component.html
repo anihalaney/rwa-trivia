@@ -6,7 +6,7 @@
     <button class="flex-item" mat-raised-button mat-dialog-close color="primary" (click)="fbLogin()">facebook</button>
     <button class="flex-item" mat-raised-button mat-dialog-close color="primary" (click)="twitterLogin()">Twitter</button>
     <button class="flex-item" mat-raised-button mat-dialog-close color="primary" (click)="githubLogin()">Github</button>
-    <button class="flex-item" mat-raised-button mat-dialog-close color="primary" (click)="passwordLogin()">Email/Password</button>
+    <!-- <button class="flex-item" mat-raised-button mat-dialog-close color="primary" (click)="passwordLogin()">Email/Password</button> -->
   </mat-dialog-actions>
 
   <mat-dialog-actions>
@@ -53,10 +53,10 @@
               <input [stlShowHintWhenFocusOut]="{hintRef: confPasswordHint, controlRef:loginForm.controls.confirmPassword, removeClass: 'error'}"  type="password" matInput placeholder="Confirm Password *" class="required" formControlName="confirmPassword"
                 aria-label="confirm-password">
               <mat-hint #confPasswordHint
-                class="error" [align]="end">
+                class="error" align="end">
                 Confirm Password must be atleast 6 characters
               </mat-hint>
-              <mat-hint class="error" [align]="end" *ngIf="loginForm.controls.password.valid && loginForm.controls.confirmPassword.valid && loginForm.hasError('passwordmismatch')">
+              <mat-hint class="error" align="end" *ngIf="loginForm.controls.password.valid && loginForm.controls.confirmPassword.valid && loginForm.hasError('passwordmismatch')">
                   Must match Password
              </mat-hint>
             </mat-form-field>
