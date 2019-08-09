@@ -88,7 +88,7 @@
     "nativescript-social-share": "^1.5.1",
     "nativescript-theme-core": "^2.0.2",
     "nativescript-ui-autocomplete": "5.0.0",
-    "nativescript-ui-listview": "7.0.0",
+    "nativescript-ui-listview": "7.0.1",
     "nativescript-ui-sidedrawer": "7.0.0",
     "nativescript-webview-interface": "^1.4.3",
     "ng-quill-tex": "file:ng-quill-tex-0.0.1.tgz",

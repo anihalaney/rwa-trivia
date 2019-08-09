@@ -151,19 +151,21 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   async showWelcomeScreen() {
-    if (!appSettingsStorage.getBoolean('isWelcomeScreenSeen', false)) {
-        const options: ModalDialogOptions = {
-            viewContainerRef: this._vcRef,
-            context: {},
-            fullscreen: true
-        };
+    try {
+      if (!appSettingsStorage.getBoolean('isWelcomeScreenSeen', false)) {
+          const options: ModalDialogOptions = {
+              viewContainerRef: this._vcRef,
+              context: {},
+              fullscreen: true
+          };
 
-        this._modalService.showModal(WelcomeScreenComponent, options)
-              .then((result: string) => {
-                this.cd.markForCheck();
-        });
-        appSettingsStorage.setBoolean('isWelcomeScreenSeen', true);
-      }
+         const result = await this._modalService.showModal(WelcomeScreenComponent, options)
+         this.cd.markForCheck();
+          appSettingsStorage.setBoolean('isWelcomeScreenSeen', true);
+        }
+    } catch ( error ) {
+        console.error(error);
+    }
 
   }
 
