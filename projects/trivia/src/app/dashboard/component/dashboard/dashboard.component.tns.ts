@@ -108,6 +108,10 @@ export class DashboardComponent extends Dashboard implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.page.off('loaded');
   }
+
+  reDirect() {
+    this.routerExtension.navigate(['select-category-tag']);
+  }
 }
 
 
