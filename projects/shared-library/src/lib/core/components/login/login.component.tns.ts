@@ -179,7 +179,7 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
     if (!this.loginForm.valid) {
       return;
     }
-     this.loader = true;
+    this.loader = true;
     this.removeMessage();
     let user;
     try {
@@ -288,20 +288,33 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
       map(s => s.user),
       filter(u => (u != null && u.userId !== '')),
       take(1)).subscribe((user) => {
-
         this.loader = false;
-
         this.subscriptions.push(this.store.select(coreState).pipe(
           map(s => s.loginRedirectUrl), take(1)).subscribe(url => {
             const redirectUrl = url ? url : '/dashboard';
-            this.utils.showMessage('success', 'You have been successfully logged in');
-            this.routerExtension.navigate([redirectUrl], { clearHistory: true });
+            if (this.mode === 0 || this.mode === 1) {
+              if (!user.isCategorySet && this.applicationSettings.show_category_screen && !user.categoryIds && !user.tags) {
+                this.navigateTo('select-category-tag', this.mode);
+              } else {
+                this.navigateTo(redirectUrl, this.mode);
+              }
+            } else {
+              this.navigateTo(redirectUrl, this.mode);
+            }
             this.cd.markForCheck();
           }));
       }
       ));
   }
 
+  navigateTo(redirectUrl, mode) {
+    if (mode === 0) {
+      this.utils.showMessage('success', 'You have been successfully logged in');
+    } else {
+      this.utils.showMessage('success', 'You have been successfully signed up');
+    }
+    this.routerExtension.navigate([redirectUrl], { clearHistory: true });
+  }
 
 
 

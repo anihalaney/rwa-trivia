@@ -1,0 +1,48 @@
+<ns-action-bar title="Choose your desired topics" class="Roboto-Regular" showAdd="true"></ns-action-bar>
+<ScrollView>
+  <StackLayout class="profile-settings Roboto-Regular">
+    <StackLayout>
+      <Label padding="15"
+        text="Select atleast five topics of your choice, this will help us show contents based on your topics"
+        textWrap="true"></Label>
+
+      <Label padding="15" class="font-weight-bold" text="Popular topics" textWrap="true"></Label>
+      <CardView margin="5 10" backgroundColor="white" ios:shadowRadius="3">
+        <StackLayout>
+          <RadListView [items]="categories" [height]="(60 * categories.length)" (itemTap)="selectTopic($event)">
+            <ng-template tkListItemTemplate let-item="item">
+              <GridLayout rows="*" columns="*,auto" padding="10" borderBottomWidth="1" borderBottomColor="#e5e5e5"
+                height="60">
+                <Label [text]="item.categoryName" fontSize="18" row="0" col="0" textWrap="true" padding="8"
+                  class="label"></Label>
+                <Image row="0" col="2" src="~/assets/images/check.png" height="25" width="25" marginLeft="10"
+                  marginRight="5" visibility="{{(item.requiredForGamePlay) ? 'visible' : 'collapsed'}}"></Image>
+              </GridLayout>
+            </ng-template>
+          </RadListView>
+        </StackLayout>
+      </CardView>
+      <Label padding="15" class="font-weight-bold" text="Popular tags" textWrap="true"></Label>
+      <CardView margin="5 10" backgroundColor="white" ios:shadowRadius="3">
+        <StackLayout>
+          <RadListView [items]="tags" [height]="(60 * tags.length)" (itemTap)="selectTags($event)">
+            <ng-template tkListItemTemplate let-item="item">
+              <GridLayout rows="*" columns="*,auto" padding="10" borderBottomWidth="1" borderBottomColor="#e5e5e5"
+                height="60">
+                <Label [text]="item.key" fontSize="18" row="0" col="0" textWrap="true" padding="8"
+                  class="label"></Label>
+                <Image row="0" col="2" src="~/assets/images/check.png" height="25" width="25" marginLeft="10"
+                  marginRight="5" visibility="{{(item.requiredForGamePlay) ? 'visible' : 'collapsed'}}"></Image>
+              </GridLayout>
+            </ng-template>
+          </RadListView>
+        </StackLayout>
+      </CardView>
+
+      <StackLayout background="#e2e2e2" padding="15">
+        <Button horizontalAlignment="right" (tap)="continueToFirstQuestion()" width="30%" text="Continue" backgroundColor="#588af3" color="#fff" borderRadius="5" ios:padding="15"></Button>
+      </StackLayout>
+
+    </StackLayout>
+  </StackLayout>
+</ScrollView>

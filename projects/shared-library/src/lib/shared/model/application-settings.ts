@@ -19,6 +19,9 @@ export class ApplicationSettings {
     default_names: Array<string>;
     user_display_name_value: number;
     first_question_bits: number;
+    show_category_screen?: boolean;
+    category_count_limit?: number;
+    tag_count_limit?: number;
 }
 
 export class TimerLoader {
