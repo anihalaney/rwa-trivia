@@ -295,7 +295,7 @@ export class UserService {
    * add default number of lives into account
    * return ref
    */
-    static async setUserDisplayName(user: any): Promise<any> {
+    static async setUserDetails(user: any): Promise<any> {
         try {
 
             const appSetting = await AppSettings.Instance.loadAppSettings();
@@ -308,7 +308,7 @@ export class UserService {
             }
 
             user['displayName'] = displayName;
-
+            user['isCategorySet'] = false;
             await UserService.updateUser({ ...user });
 
             AppSettings.Instance.updateUserDisplayNameValue(appSetting.user_display_name_value + 1);
