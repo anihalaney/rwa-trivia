@@ -182,7 +182,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnInit,
     this.userForm.updateValueAndValidity();
   }
 
-  setBulkUploadRequest(checkStatus: boolean): void {
+  setBulkUploadRequest(): void {
     const userForm = this.userForm.value;
     if (!userForm.name || !userForm.displayName || !userForm.location || !userForm.profilePicture) {
       this.setNotificationMsg('Please add name, display name, location and profile picture for bulk upload request', true, 100);

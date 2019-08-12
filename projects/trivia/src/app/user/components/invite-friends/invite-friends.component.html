@@ -5,16 +5,11 @@
   </div>
 </div>
 <div class="mat-elevation-z8">
-  <mat-table #table [dataSource]="dataSource" matSort class="friend-list-table">
+<mat-table #table [dataSource]="dataSource" matSort class="friend-list-table">
     <ng-container cdkColumnDef="friends">
       <mat-header-cell *cdkHeaderCellDef>Friends</mat-header-cell>
       <mat-cell class="col-chkbox friend-list-table-cell" *cdkCellDef="let row">
-        <div class="profile">
-          <img [stlOpenUserProfile]="{userId: row.userId, redirectTo: 'otherUserProfile'}" [src]="getImageUrl(userDict[row.userId])" alt="User Profile Image" />
-        </div>
-        <div class="display-name">
-          <label *ngIf="userDict[row.userId]?.displayName" title="{{userDict[row.userId]?.displayName}}">{{userDict[row.userId]?.displayName}}</label>
-        </div>
+        <app-user-card [userId]="row.userId" [type]="userCardType.USER_WEB_IMAGE_40X40_NAME_HORIZONTAL" > </app-user-card>
       </mat-cell>
     </ng-container>
 
@@ -30,8 +25,8 @@
     <ng-container cdkColumnDef="won">
       <mat-header-cell *cdkHeaderCellDef>Won</mat-header-cell>
       <mat-cell class="col-chkbox friend-list-table-cell success" *cdkCellDef="let row">
-        <label *ngIf="row?.wins">{{row?.wins}} </label>
-        <label *ngIf="!row?.wins">0 </label>
+        <label *ngIf="row?.wins">{{row?.wins}}</label>
+        <label *ngIf="!row?.wins">0</label>
 
       </mat-cell>
     </ng-container>

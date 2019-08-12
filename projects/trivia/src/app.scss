@@ -255,3 +255,48 @@ refer to http://docs.nativescript.org/ui/theme.
 Button{
   border-radius: 0;
 }
+
+.game-continue {
+  .username{
+    font-size:18; 
+    margin: 18 0 0 0; 
+    color: #000;
+    text-align: center;
+    font-weight: bold;
+  }
+  .image-container{
+    height: 90;
+    width:90;
+
+    .user-image {
+      height: 90;
+      width:90;
+    }  
+
+  }
+}
+
+.recent-game {
+  .username{
+    padding-top:3;
+    color:#000;
+    font-size: 17;
+  }
+  .image-container{
+    height: 65;
+    width:65;
+
+    .user-image {
+      height: 64;
+      width:64;
+    }  
+
+  }
+}
+
+.their-turn, .waiting-opponent {
+  .tagging{
+    color: #fe4f20;
+    padding:2 0 2 0;
+  }
+}

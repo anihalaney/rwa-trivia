@@ -1,4 +1,4 @@
-<StackLayout class="Roboto-Regular" horizontalAlignment="center"
+<StackLayout class="Roboto-Regular recent-game" horizontalAlignment="center"
     *ngIf="game.gameOptions?.playerMode == PlayerMode.Single">
     <Label text="WON" textWrap="true" class="label-success Roboto-Bold"
         *ngIf="game.winnerPlayerId && game.winnerPlayerId === user.userId" horizontalAlignment="center"></Label>
@@ -7,9 +7,7 @@
     <Label text="{{categoryDict[game.gameOptions?.categoryIds[0]]?.categoryName?.charAt(0)?.toUpperCase() +
         categoryDict[game.gameOptions?.categoryIds[0]]?.categoryName?.slice(1)}}" textWrap="true"
         class="label-category" horizontalAlignment="center"></Label>
-    <Image  [stlOpenUserProfile]="{userId: user.userId, redirectTo: 'userProfile'}" *ngIf="user" src="{{getImageUrl(user)}}" backgroundColor="gray" stretch="aspectFill" height="64" width="64"
-        marginLeft="2" verticalAlignment="center" borderRadius="50" horizontalAlignment="center"></Image>
-    <Label text="You" textWrap="true" class="user-name" horizontalAlignment="center"></Label>
+    <app-user-card [userId]="user.userId" [type]="userCardType.USER_IMAGE_NAME_VERTICAL"> </app-user-card>
     <Label text="Score {{game.stats[user.userId].score}} / {{game.round}}" class="label-score" textWrap="true"
         horizontalAlignment="center"></Label>
     <Label text="You did not answer in time." textWrap="true" class="label-score"
@@ -17,10 +15,8 @@
 </StackLayout>
 
 <GridLayout rows="auto" columns="*,auto,*" *ngIf="game.gameOptions.playerMode == PlayerMode.Opponent" padding="15">
-    <StackLayout row="0" col="0" class="Roboto-Regular">
-        <Image  [stlOpenUserProfile]="{userId: user.userId, redirectTo: 'userProfile'}" *ngIf="user" src="{{getImageUrl(user)}}" backgroundColor="gray" stretch="aspectFill" height="64"
-            width="64" marginLeft="2" borderRadius="50" horizontalAlignment="center"></Image>
-        <Label text="You" textWrap="true" class="user-name" horizontalAlignment="center"></Label>
+    <StackLayout row="0" col="0" class="Roboto-Regular recent-game">
+        <app-user-card [userId]="user.userId" [type]="userCardType.USER_IMAGE_NAME_VERTICAL"> </app-user-card>
         <Label text="Score {{game.stats[user.userId]?.score}}" textWrap="true" class="label-score"
             horizontalAlignment="center"></Label>
     </StackLayout>
@@ -50,12 +46,8 @@
             class="border-left" height="50">
         </StackLayout>
     </StackLayout>
-    <StackLayout row="0" col="2" class="Roboto-Regular">
-        <Image [stlOpenUserProfile]="{userId: this.otherUserId, redirectTo: 'otherUserProfile'}" *ngIf="user" src="{{getImageUrl(userDict[this.otherUserId])}}" backgroundColor="gray"
-            stretch="aspectFill" height="64" width="64" marginLeft="2" borderRadius="50" horizontalAlignment="center">
-        </Image>
-        <Label text="{{userDict[getOpponentId(game)]?.displayName}}" textWrap="true" class="user-name"
-            horizontalAlignment="center"></Label>
+    <StackLayout row="0" col="2" class="Roboto-Regular recent-game">
+        <app-user-card [userId]="getOpponentId(game)" [type]="userCardType.USER_IMAGE_NAME_VERTICAL"> </app-user-card>
         <Label text="Score {{game.stats[getOpponentId(game)]?.score}}" textWrap="true" class="label-score"
             horizontalAlignment="center"></Label>
     </StackLayout>
