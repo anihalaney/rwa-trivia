@@ -95,7 +95,7 @@ export class FirstQuestionComponent implements OnInit, OnDestroy {
     }));
     this.setFirstQuestionBitsObs = this.store.select(coreState).pipe(select(s => s.firstQuestionBits));
     this.subscriptions.push(this.setFirstQuestionBitsObs.pipe(filter((result) => result !== null)).subscribe(setBits => {
-      this.routerExtension.navigate(['/dashboard']);
+      this.routerExtension.navigate(['/user/my/app-invite-friends-dialog', { showSkip: true }]);
       this.cd.markForCheck();
     }));
   }
@@ -123,7 +123,7 @@ export class FirstQuestionComponent implements OnInit, OnDestroy {
     if (nextStep === 'continue' && this.correctAnswerText === this.answeredText) {
       this.store.dispatch(this.userAction.setFirstQuestionBits(this.user.userId));
     } else {
-      this.routerExtension.navigate(['/dashboard']);
+      this.routerExtension.navigate(['/user/my/app-invite-friends-dialog', { showSkip: true }]);
     }
   }
 

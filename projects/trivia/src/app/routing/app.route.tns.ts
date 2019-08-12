@@ -49,6 +49,6 @@ export const routes: Routes = [
     {
         path: 'first-question',
         component: FirstQuestionComponent,
-        // canActivate: [AuthGuard]
+        canActivate: [AuthGuard]
     },
 ];

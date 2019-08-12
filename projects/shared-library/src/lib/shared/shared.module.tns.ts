@@ -13,7 +13,7 @@ import { SearchCountryFilterPipe } from './pipe/search-country-filter.pipe';
 import { TNSCheckBoxModule } from 'nativescript-checkbox/angular';
 import { NativeScriptUIAutoCompleteTextViewModule } from 'nativescript-ui-autocomplete/angular';
 import { NativeScriptUIListViewModule } from 'nativescript-ui-listview/angular';
-import { RenderQuestionComponent, AuthorComponent, RenderAnswerComponent, UserCardComponent } from './components';
+import { RenderQuestionComponent, AuthorComponent, RenderAnswerComponent, UserCardComponent, InviteMailFriendsComponent } from './components';
 import { ShowHintWhenFocusOutDirective, OpenUserProfileDirective, RippleEffectDirective } from './directive';
 import { PhoneNumberValidationProvider } from './mobile/component/countryList/phone-number-validation.provider';
 import { SafeHtmlPipe } from './pipe/safe-html.pipe';
@@ -38,11 +38,11 @@ import { SafeHtmlPipe } from './pipe/safe-html.pipe';
     CountryListComponent,
     QuestionCardComponent,
     FirstQuestionComponent,
-    SafeHtmlPipe
+    SafeHtmlPipe,
+    InviteMailFriendsComponent
   ],
   imports: [
     CommonModule,
-
     // http client
     HttpClientModule,
     // Forms
@@ -56,7 +56,7 @@ import { SafeHtmlPipe } from './pipe/safe-html.pipe';
     TNSCheckBoxModule,
     NativeScriptUIAutoCompleteTextViewModule,
     NativeScriptUIListViewModule,
-  ],
+    ],
   exports: [
     CommonModule,
     HttpClientModule,
@@ -80,7 +80,8 @@ import { SafeHtmlPipe } from './pipe/safe-html.pipe';
     RenderQuestionComponent,
     QuestionCardComponent,
     FirstQuestionComponent,
-    UserCardComponent
+    UserCardComponent,
+    InviteMailFriendsComponent
   ],
   schemas: [NO_ERRORS_SCHEMA],
   entryComponents: [
