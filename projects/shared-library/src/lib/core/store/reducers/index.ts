@@ -3,11 +3,11 @@ import { User, Category, Question, Game, Friends, Invitation, Account } from 'sh
 import {
   user, authInitialized, invitationToken, userDict,
   gameInvites, userFriends, friendInvitations, userProfileSaveStatus, feedback, account, getGameResult, countries,
-  addressUsingLongLat, addressSuggestions, userFriendInvitations
+  addressUsingLongLat, addressSuggestions, userFriendInvitations, firstQuestionBits
 } from './user.reducer';
 import { categories, topCategories } from './categories.reducer';
 import { tags, topTags } from './tags.reducer';
-import { questionOfTheDay, questionSaveStatus, updateQuestion } from './questions.reducer';
+import { questionOfTheDay, questionSaveStatus, updateQuestion, firstQuestion } from './questions.reducer';
 import { loginRedirectUrl, resetPasswordLogs } from './ui-state.reducer';
 import { activeGames, newGameId, gameCreateStatus } from './game.reducer';
 import { applicationSettings } from './application-settings.reducer';
@@ -51,6 +51,8 @@ export interface CoreState {
   userFriendInvitations: { [key: string]: Invitation };
   getTopCategories: any;
   getTopTags: any;
+  firstQuestionBits: any;
+  firstQuestion: Question;
 }
 
 export const reducer: ActionReducerMap<CoreState> = {
@@ -81,7 +83,9 @@ export const reducer: ActionReducerMap<CoreState> = {
   addressSuggestions: addressSuggestions,
   userFriendInvitations: userFriendInvitations,
   getTopCategories: topCategories,
-  getTopTags: topTags
+  getTopTags: topTags,
+  firstQuestionBits: firstQuestionBits,
+  firstQuestion: firstQuestion
 };
 
 // Features

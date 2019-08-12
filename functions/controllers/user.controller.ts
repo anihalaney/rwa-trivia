@@ -233,7 +233,7 @@ export class UserController {
     }
 
     static async addBitesFirstQuestion(req, res) {
-        const userId = req.body.userId;
+        const userId = req.user.uid;
 
         if (!userId) {
             Utils.sendResponse(res, interceptorConstants.FORBIDDEN, ResponseMessagesConstants.USER_ID_NOT_FOUND);

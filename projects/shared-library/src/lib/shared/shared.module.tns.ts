@@ -39,7 +39,7 @@ import { SafeHtmlPipe } from './pipe/safe-html.pipe';
     CountryListComponent,
     QuestionCardComponent,
     FirstQuestionComponent,
-    SelectCategoryTagComponent,
+    SelectCategoryTagComponent
   ],
   imports: [
     CommonModule,

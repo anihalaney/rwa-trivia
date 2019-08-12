@@ -13,6 +13,10 @@ class UserRoutes {
     constructor() {
         this.userRoutes = express.Router();
 
+         //  '/add-bits-first-question'
+         this.userRoutes.get(`/${RoutesConstants.ADD_BITES_FIRST_QUESTION}`,
+         AuthMiddleware.authorizedOnly, UserController.addBitesFirstQuestion);
+         
         //  '/:userId'
         this.userRoutes.get(`/:${this.UID}`,
             UserController.getUserById);
@@ -47,9 +51,7 @@ class UserRoutes {
         this.userRoutes.get(`/${RoutesConstants.ADDRESS_BY_LAT_LANG}/:${RoutesConstants.LAT_LONG}`,
             AuthMiddleware.authorizedOnly, UserController.addressByLatLang);
 
-        //  '/add-bits-first-question'
-        this.userRoutes.post(`/${RoutesConstants.ADD_BITES_FIRST_QUESTION}`,
-            AuthMiddleware.authorizedOnly, UserController.addBitesFirstQuestion);
+       
 
 
     }

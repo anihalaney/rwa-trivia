@@ -21,6 +21,7 @@ export class ApplicationSettings {
     show_category_screen?: boolean;
     category_count_limit?: number;
     tag_count_limit?: number;
+    first_question_bits: number;
 }
 
 export class TimerLoader {
