@@ -5,7 +5,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import {
-  ActionBarComponent, DrawerComponent, CountryListComponent, QuestionsTableComponent
+  ActionBarComponent, DrawerComponent, CountryListComponent, QuestionsTableComponent,
+  SelectCategoryTagComponent
 } from './mobile/component';
 import { NativeScriptCommonModule } from 'nativescript-angular/common';
 import { GameFilterPipe } from './pipe/game-filter.pipe';
@@ -33,6 +34,11 @@ import { SafeHtmlPipe } from './pipe/safe-html.pipe';
     ShowHintWhenFocusOutDirective,
     OpenUserProfileDirective,
     RippleEffectDirective,
+    RenderAnswerComponent,
+    RenderQuestionComponent,
+    CountryListComponent,
+    SelectCategoryTagComponent,
+    SafeHtmlPipe,
   ],
   imports: [
     CommonModule,
@@ -71,6 +77,7 @@ import { SafeHtmlPipe } from './pipe/safe-html.pipe';
     RippleEffectDirective,
     RenderAnswerComponent,
     RenderQuestionComponent,
+    SelectCategoryTagComponent,
     UserCardComponent
   ],
   schemas: [NO_ERRORS_SCHEMA],
