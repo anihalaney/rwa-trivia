@@ -14,7 +14,7 @@ import { QuestionComponent } from './component/question/question.component';
 import { FriendInviteComponent } from './component/friend-invite/friend-invite.component';
 import { GameInviteComponent } from './component/game-invite/game-invite.component';
 import { NativeScriptRouterModule } from 'nativescript-angular/router';
-
+import { DropDownModule } from "nativescript-drop-down/angular";
 
 @NgModule({
     declarations: [
@@ -34,6 +34,7 @@ import { NativeScriptRouterModule } from 'nativescript-angular/router';
         SharedModule,
         StoreModule.forFeature('dashboard', reducer),
         EffectsModule.forFeature(effects),
+        DropDownModule
     ],
     providers: [],
     exports: [],

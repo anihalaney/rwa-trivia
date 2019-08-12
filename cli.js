@@ -195,9 +195,9 @@ const commandList = {
                 "default": '1.0',
                 "alias": ['VN', 'vn']
             },
-        },       
-        "builder": args => args.argv.platform === 'ios' && args.argv.env && args.argv.environment.search('--env.prod') >= 0 ? args.argv.forDevice = ' --for-device' : args.argv.forDevice = '',
-        "preCommand" : async (argv) => await updateAppVersion(argv, false)
+        },
+        "builder": args => args.argv.platform === 'ios'  && args.argv.environment.search('--env.prod') >= 0 ? args.argv.forDevice = ' --for-device' : args.argv.forDevice = '',
+        "preCommand" : async (argv) => { await updateAppVersion(argv, false); await updatePackageJson(argv); }
     },
     "release-mobile": {
         "command": `tns buildCmd platformName --bundle 
@@ -245,18 +245,16 @@ const commandList = {
                 "demand": true,
                 "description": 'versionCode for android/ios build ',
                 "type": 'string',
-                "default": '28.0',
                 "alias": ['V', 'v']
             },
             "versionName": {
-                "demand": false,
+                "demand": true,
                 "description": 'versionName for android build CFBundleShortVersionString for ios ',
                 "type": 'string',
-                "default": '1.0',
                 "alias": ['VN', 'vn']
             },
             "token": {
-                "demand": false,
+                "demand": true,
                 "description": 'token from schedular token ',
                 "type": 'string',
                 "alias": ['T', 't']
@@ -307,14 +305,14 @@ const commandList = {
                 args.argv.androidRelease = ` --key-store-path certificates/${productVariant}/${platformName}/bitwiser.keystore
                     --key-store-password ${keyStorePassword}
                     --key-store-alias ${keyStoreAlias} 
-                    --key-store-alias-password ${keyStoreAliasPassword} 
+                    --key-store-alias-password ${keyStoreAliasPassword}
                     --copy-to ${productVariant}.apk`;
             } else {
                 args.options({ 'buildCmd': { 'default': 'prepare' }, 'forDevice': { 'default': '--for-device' } });
                 args.argv.androidRelease = '';
             }
         },
-        "preCommand" : async (argv) => await updateAppVersion(argv, true)
+        "preCommand" : async (argv) => { await updateAppVersion(argv, true); await updatePackageJson(argv); }
     },
     "run-schedular": {
         "command": "npx rimraf scheduler/server  & tsc --project scheduler && node scheduler/server/run-scheduler.js env",
@@ -396,12 +394,13 @@ async function updateAppVersion(argv, isRelease){
         const platform = argv.plt;
         const environment = argv.environment.search('--env.prod') >= 0 ? 'production': 'staging'; 
         const filepath = platform === 'android' ? 
-        `./App_Resources/Android/AndroidManifest.xml` : `./configurations/${argv.productVariant}/ios/info.plist.${environment === 'production' ? 'prod' : 'dev'}`;
+        `./App_Resources/Android/src/main/AndroidManifest.xml` : `./configurations/${argv.productVariant}/ios/info.plist.${environment === 'production' ? 'prod' : 'dev'}`;
         let buffer = fs.readFileSync(filepath, {encoding:'utf-8', flag:'r'});
-        const compiled = template(buffer);
+        let compiled = template(buffer);
         buffer = compiled({'versionCode' : argv.versionCode, 'versionName' : argv.versionName, 'EXECUTABLE_NAME': '${EXECUTABLE_NAME}'});
-        var options = {encoding:'utf-8', flag:'w'};
-        fs.writeFileSync(filepath, buffer, options);
+        let options = {encoding:'utf-8', flag:'w'};
+        fs.writeFileSync(filepath, buffer, options);        
+
         const config = getConfig(argv.productVariant);
         if (isRelease) {
             await axios({
@@ -419,6 +418,17 @@ async function updateAppVersion(argv, isRelease){
     } catch(error) {
         console.log(error, 'error');
     }
+
+}
+
+function updatePackageJson(argv){
+
+        // update package.json
+        let buffer = fs.readFileSync('package.json', {encoding:'utf-8', flag:'r'});
+        const compiled = template(buffer);
+        buffer = compiled({'packageName' : argv.packageName});
+        let options = {encoding:'utf-8', flag:'w'};
+        fs.writeFileSync('package.json', buffer, options);
 
 }
 

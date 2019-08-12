@@ -28,8 +28,15 @@ class GeneralRoutes {
 
         //  'updateAppVersion'
         this.generalRoutes.post(`/${RoutesConstants.UPDATE_APP_VERSION}`,
-        AuthMiddleware.authTokenOnly, GeneralController.updateAppVersion);
+            AuthMiddleware.authTokenOnly, GeneralController.updateAppVersion);
 
+        // `/getTopCategories` 
+        this.generalRoutes.get(`/${RoutesConstants.TOP_CATEGORIES_COUNT}`,
+            AuthMiddleware.authorizedOnly, GeneralController.getTopCategories);
+
+        // `/getTopTags` 
+        this.generalRoutes.get(`/${RoutesConstants.TOP_TAGS_COUNT}`,
+            AuthMiddleware.authorizedOnly, GeneralController.getTopTags);
     }
 }
 

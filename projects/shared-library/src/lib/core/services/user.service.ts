@@ -55,10 +55,11 @@ export class UserService {
             .pipe(map((values) => {
                 return values.map((value, index) => {
                     if (value) {
-                        value['userId'] = friendList[index];
+                        value.userId = friendList[index];
                         return value;
                     } else {
                         value = {};
+                        value.userId = friendList[index];
                         value.created_uid = friendList[index];
                         return value;
                     }

@@ -4,7 +4,7 @@ import { RecentGamesComponent } from './../components/recent-games/recent-games.
 import { PrivacyPolicyComponent } from './../components/privacy-policy/privacy-policy.component';
 import { AchievementsComponent } from '../components';
 import { UserFeedbackComponent } from 'shared-library/shared/mobile/component/user-feedback/user-feedback.component';
-
+import { SelectCategoryTagComponent } from 'shared-library/shared/mobile/component/select-category-tag/select-category-tag.component'
 export const routes: Routes = [
 
     { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
@@ -44,5 +44,8 @@ export const routes: Routes = [
         path: 'achievements',
         component: AchievementsComponent,
         canActivate: [AuthGuard]
+    }, {
+        path: 'select-category-tag',
+        component: SelectCategoryTagComponent,
     }
 ];

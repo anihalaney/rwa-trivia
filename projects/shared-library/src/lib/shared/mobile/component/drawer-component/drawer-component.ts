@@ -28,7 +28,7 @@ import { projectMeta } from 'shared-library/environments/environment';
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class DrawerComponent implements OnInit, OnDestroy {
 
-    @ViewChild('ScrollList') scrollList: ElementRef;
+    @ViewChild('ScrollList', { static: false }) scrollList: ElementRef;
     @Output() output = new EventEmitter();
     photoUrl = `~/assets/icons/${projectMeta.projectName}/icon-192x192.png`;
     currentState;

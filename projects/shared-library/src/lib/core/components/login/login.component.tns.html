@@ -127,7 +127,12 @@
 
       </GridLayout>
     </StackLayout>
-
-
+    
+    <StackLayout *ngIf="loader" verticalAlignment="center" horizontalAlignment="center" >
+        <AbsoluteLayout verticalAlignment="center" horizontalAlignment="center">
+            <ActivityIndicator  color="white" ios:width="200" ios:height="200" android:width="50" android:height="50" busy="true" class="activity-indicator"></ActivityIndicator>
+        </AbsoluteLayout>
+      </StackLayout>
   </GridLayout>
+
 </ScrollView>

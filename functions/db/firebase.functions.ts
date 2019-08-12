@@ -191,7 +191,7 @@ export class FirebaseFunctions {
 
                 await StatsService.updateSystemStats('total_users');
 
-                await UserService.setUserDisplayName(data);
+                await UserService.setUserDetails(data);
 
                 const appSetting = await AppSettings.Instance.getAppSettings();
                 if (appSetting.lives.enable) {

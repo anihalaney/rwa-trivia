@@ -8,8 +8,8 @@ import { filter, skip, take } from 'rxjs/operators';
 import { AuthenticationProvider } from 'shared-library/core/auth';
 import { Utils, WindowRef } from 'shared-library/core/services';
 import { coreState } from 'shared-library/core/store';
-import { ApplicationSettingsActions, UserActions } from 'shared-library/core/store/actions';
 import { User, UserStatus } from 'shared-library/shared/model';
+import { ApplicationSettingsActions, UserActions, CategoryActions } from 'shared-library/core/store/actions';
 import * as gamePlayActions from '../../game-play/store/actions';
 import { AppState, appState } from '../../store';
 import { interval, Subscription } from 'rxjs';
@@ -28,7 +28,7 @@ export class AppComponent implements OnInit, OnDestroy {
   theme = '';
   intervalSubscription: Subscription;
 
-  @ViewChild('cookieLaw')
+  @ViewChild('cookieLaw', { static: true })
   private cookieLawEl: CookieLawComponent;
 
   constructor(private renderer: Renderer2,
@@ -39,9 +39,10 @@ export class AppComponent implements OnInit, OnDestroy {
     private windowRef: WindowRef,
     private userAction: UserActions,
     private applicationSettingsAction: ApplicationSettingsActions,
-    private utils: Utils) {
+    private categoryActions: CategoryActions) {
 
     this.store.dispatch(this.applicationSettingsAction.loadApplicationSettings());
+    this.store.dispatch(this.categoryActions.loadCategories());
 
     this.subscriptions.push(store.select(appState.coreState).pipe(select(s => s.user), skip(1)).subscribe(user => {
       this.user = user;

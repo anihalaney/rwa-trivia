@@ -5,7 +5,7 @@ import { User, RouterStateUrl, Game, Friends, Invitation, Account } from '../../
 import { UserService, GameService, Utils } from '../../services';
 import { switchMap, map, distinct, mergeMap, filter, take, debounceTime, distinctUntilChanged, catchError } from 'rxjs/operators';
 import { empty, of } from 'rxjs';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { coreState, CoreState } from '../reducers';
 import { ROUTER_NAVIGATION } from '@ngrx/router-store';
 
@@ -41,7 +41,7 @@ export class UserEffects {
     loadOtherUserProfile$ = this.actions$
         .pipe(ofType(UserActions.LOAD_OTHER_USER_PROFILE))
         .pipe(map((action: ActionWithPayload<string>) => action.payload),
-            distinct(),
+            distinct(null, this.store.select(coreState).pipe(select(s => s.user))),
             mergeMap((userId: string) => this.svc.loadOtherUserProfile(userId)),
             mergeMap((user: User) => this.svc.getUserStatus(user)),
             map((user: User) => this.userActions.loadOtherUserProfileSuccess(user)));
@@ -51,7 +51,7 @@ export class UserEffects {
     loadOtherUserExtendedInfo$ = this.actions$
         .pipe(ofType(UserActions.LOAD_OTHER_USER_EXTEDED_INFO))
         .pipe(map((action: ActionWithPayload<string>) => action.payload),
-            distinct(),
+            distinct(null, this.store.select(coreState).pipe(select(s => s.user))),
             mergeMap((userId: string) => this.svc.loadOtherUserProfileWithExtendedInfo(userId)),
             mergeMap((user: User) => this.svc.getUserStatus(user)),
             map((user: User) => this.userActions.loadOtherUserProfileWithExtendedInfoSuccess(user)));
@@ -64,16 +64,6 @@ export class UserEffects {
             distinct(),
             mergeMap((data: any) => this.svc.loadUserInvitationsInfo(data.userId, data.invitedUserEmail, data.invitedUserId)),
             map((invitation: Invitation) => this.userActions.loadUserInvitationsInfoSuccess(invitation)));
-
-    // get info if the other user is friend or not
-    @Effect()
-    loadOtherUserFriendExtendedInfo$ = this.actions$
-        .pipe(ofType(UserActions.LOAD_OTHER_USER_FRIEND_EXTEDED_INFO))
-        .pipe(map((action: ActionWithPayload<string>) => action.payload),
-            mergeMap((userId: string) => this.svc.loadOtherUserProfileWithExtendedInfo(userId)),
-            mergeMap((user: User) => this.svc.getUserStatus(user)),
-            map((user: User) => this.userActions.loadOtherUserProfileWithExtendedInfoSuccess(user)));
-
 
     // Update User
     @Effect()
