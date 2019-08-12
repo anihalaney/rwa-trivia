@@ -49,7 +49,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     navigation: true,
     pagination: false
   };
-  @ViewChild(SwiperDirective) directiveRef?: SwiperDirective;
+  @ViewChild(SwiperDirective, { static: false }) directiveRef?: SwiperDirective;
 
   get categoriesFA(): FormArray {
     return this.newGameForm.get('categoriesFA') as FormArray;

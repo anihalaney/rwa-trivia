@@ -125,11 +125,11 @@ var copyPlist = function (copyPlistOpts) {
 
         if (fs.existsSync(sourceGooglePlistProd) && fs.existsSync(sourceGooglePlistDev)) {
             if (copyPlistOpts.isProdEnv) { // use prod version
-                copyPlistOpts.logger.out("nativescript-plugin-firebase: copy " + sourceGooglePlistProd + " to " + destinationGooglePlist + ".");
+                copyPlistOpts.logger.info("nativescript-plugin-firebase: copy " + sourceGooglePlistProd + " to " + destinationGooglePlist + ".");
                 fs.writeFileSync(destinationGooglePlist, fs.readFileSync(sourceGooglePlistProd));
                 return true;
             } else { // use dev version
-                copyPlistOpts.logger.out("nativescript-plugin-firebase: copy " + sourceGooglePlistDev + " to " + destinationGooglePlist + ".");
+                copyPlistOpts.logger.info("nativescript-plugin-firebase: copy " + sourceGooglePlistDev + " to " + destinationGooglePlist + ".");
                 fs.writeFileSync(destinationGooglePlist, fs.readFileSync(sourceGooglePlistDev));
                 return true;
             }
@@ -156,11 +156,11 @@ var copyInfoPlist = function (copyPlistOpts) {
         // if we have both dev/prod versions, we copy (or overwrite) Info.plist in destination dir
         if (fs.existsSync(sourceInfoPlistProd) && fs.existsSync(sourceInfoPlistDev)) {
             if (copyPlistOpts.isProdEnv) { // use prod version
-                copyPlistOpts.logger.out("nativescript-plugin-firebase: copy " + sourceInfoPlistProd + " to " + destinationInfoPlist + ".");
+                copyPlistOpts.logger.info("nativescript-plugin-firebase: copy " + sourceInfoPlistProd + " to " + destinationInfoPlist + ".");
                 fs.writeFileSync(destinationInfoPlist, fs.readFileSync(sourceInfoPlistProd));
                 return true;
             } else { // use dev version
-                copyPlistOpts.logger.out("nativescript-plugin-firebase: copy " + sourceInfoPlistDev + " to " + destinationInfoPlist + ".");
+                copyPlistOpts.logger.info("nativescript-plugin-firebase: copy " + sourceInfoPlistDev + " to " + destinationInfoPlist + ".");
                 fs.writeFileSync(destinationInfoPlist, fs.readFileSync(sourceInfoPlistDev));
                 return true;
             }
@@ -178,8 +178,8 @@ var copyInfoPlist = function (copyPlistOpts) {
 var copyResourceFile = function (options) {
 
     // Replace FILENAME.xml files with dev and prod environment
-    var destinationXml = path.join(options.appResourcesDirPath, "Android", "values", options.originalFileName);
-    var destinationXmlAlt = path.join(options.appResourcesDirPath, "Android", "values", options.originalFileName);
+    var destinationXml = path.join(options.appResourcesDirPath,  "Android", "src", "main" , "res" , "values", options.originalFileName);
+    var destinationXmlAlt = path.join(options.appResourcesDirPath,  "Android", "src", "main" , "res" , "values", options.originalFileName);
     var sourceXml = path.join(options.projectDir, "configurations", "android", options.originalFileName);
     var sourceXmlProd = path.join(options.projectDir, "configurations", options.projectName, "android", options.prodFileName);
     var sourceXmlDev = path.join(options.projectDir, "configurations", options.projectName, "android", options.devFileName);
@@ -192,16 +192,16 @@ var copyResourceFile = function (options) {
 
     // copy correct version to destination
     if (fs.existsSync(sourceXml) && fs.existsSync(path.dirname(destinationXml))) {
-        options.logger.out("Copy " + sourceXml + " to " + destinationXml + ".");
+        options.logger.info("Copy " + sourceXml + " to " + destinationXml + ".");
         fs.writeFileSync(destinationXml, fs.readFileSync(sourceXml));
         facebookFileExist = true;
     } else if (fs.existsSync(sourceXml) && fs.existsSync(path.dirname(destinationXmlAlt))) {
         // NativeScript < 4 doesn't have the 'app' folder
-        options.logger.out("Copy " + sourceXml + " to " + destinationXmlAlt + ".");
+        options.logger.info("Copy " + sourceXml + " to " + destinationXmlAlt + ".");
         fs.writeFileSync(destinationXmlAlt, fs.readFileSync(sourceXml));
         facebookFileExist = true;
     } else {
-        options.logger.warn(`Unable to copy ${originalFileName}.`);
+        options.logger.warn(`Unable to copy ${options.originalFileName}.`);
         facebookFileExist = false;
     }
 }

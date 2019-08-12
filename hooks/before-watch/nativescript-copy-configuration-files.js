@@ -4,13 +4,16 @@ module.exports = function ($logger, $projectData, hookArgs) {
     return new Promise(function (resolve, reject) {
 
         /* Decide whether to prepare for dev or prod environment */
-
+        var env = (hookArgs.platformSpecificData || hookArgs.prepareData).env;
         //   var isReleaseBuild = (hookArgs.appFilesUpdaterOptions && hookArgs.appFilesUpdaterOptions.release) ? true : false;
+
+        const platformFromHookArgs = hookArgs && (hookArgs.platform || (hookArgs.prepareData && hookArgs.prepareData.platform));
+        const platform = (platformFromHookArgs  || '').toLowerCase();
         var validProdEnvs = ['prod', 'production'];
         var isProdEnv = false; // building with --env.prod or --env.production flag
 
-        if (hookArgs.config.env) {
-            Object.keys(hookArgs.config.env).forEach((key) => {
+        if (env) {
+            Object.keys(env).forEach((key) => {
                 if (validProdEnvs.indexOf(key) > -1) { isProdEnv = true; }
             });
         }
@@ -19,10 +22,10 @@ module.exports = function ($logger, $projectData, hookArgs) {
 
         /* Handle preparing of Android xml files */
 
-        if (hookArgs.config.platforms[0].toLowerCase() === 'android') {
+        if (platform === 'android') {
             nativeScriptConfig.copyAndroidConfig($projectData.appResourcesDirectoryPath,  // appResourcesDirPath
                 $projectData.projectDir, // projectDir
-                hookArgs.config.env.project, // projectName
+                env.project, // projectName
                 buildType, //buildType
                 $logger);
             resolve();
@@ -30,10 +33,10 @@ module.exports = function ($logger, $projectData, hookArgs) {
 
             nativeScriptConfig.copyIosConfig($projectData.appResourcesDirectoryPath,  // appResourcesDirPath
                 $projectData.projectDir, // projectDir
-                hookArgs.config.env.project, // projectName
+                env.project, // projectName
                 buildType, //buildType
                 $logger,
-                hookArgs.config.platforms[0].toLowerCase(),
+                platform,
                 $projectData.platformsDir, // platformsDir
                 isProdEnv);
             resolve();

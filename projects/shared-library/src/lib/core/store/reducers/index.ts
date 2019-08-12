@@ -5,8 +5,8 @@ import {
   gameInvites, userFriends, friendInvitations, userProfileSaveStatus, feedback, account, getGameResult, countries,
   addressUsingLongLat, addressSuggestions, userFriendInvitations
 } from './user.reducer';
-import { categories } from './categories.reducer';
-import { tags } from './tags.reducer';
+import { categories, topCategories } from './categories.reducer';
+import { tags, topTags } from './tags.reducer';
 import { questionOfTheDay, questionSaveStatus, updateQuestion } from './questions.reducer';
 import { loginRedirectUrl, resetPasswordLogs } from './ui-state.reducer';
 import { activeGames, newGameId, gameCreateStatus } from './game.reducer';
@@ -49,6 +49,8 @@ export interface CoreState {
   addressUsingLongLat: any;
   addressSuggestions: any;
   userFriendInvitations: { [key: string]: Invitation };
+  getTopCategories: any;
+  getTopTags: any;
 }
 
 export const reducer: ActionReducerMap<CoreState> = {
@@ -77,7 +79,9 @@ export const reducer: ActionReducerMap<CoreState> = {
   countries: countries,
   addressUsingLongLat: addressUsingLongLat,
   addressSuggestions: addressSuggestions,
-  userFriendInvitations: userFriendInvitations
+  userFriendInvitations: userFriendInvitations,
+  getTopCategories: topCategories,
+  getTopTags: topTags
 };
 
 // Features

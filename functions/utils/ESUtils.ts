@@ -3,6 +3,7 @@ import { readFileSync } from 'fs';
 import { resolve } from 'path';
 import { Question, SearchCriteria, SearchResults } from '../../projects/shared-library/src/lib/shared/model';
 import { Utils } from './utils';
+import { AppSettings } from './../services/app-settings.service';
 
 const elasticSearchConfig = JSON.parse(readFileSync(resolve(__dirname, '../../../config/elasticsearch.config.json'), 'utf8'));
 
@@ -243,6 +244,58 @@ export class ESUtils {
       });
 
       return response;
+
+    } catch (error) {
+      console.error('Error : ', error);
+      throw error;
+    }
+  }
+
+  static async getTopCategories(index: string): Promise<any> {
+    const client: ElasticSearch.Client = ESUtils.getElasticSearchClient();
+    index = ESUtils.getIndex(index);
+    const appSetting = await AppSettings.Instance.getAppSettings();
+    const body = {
+      'aggregations': {
+        'category_counts': {
+          'terms': { 'field': 'categoryIds', "size" : appSetting.category_count_limit }
+        }
+      }
+    };
+
+    try {
+      const response = await client.search({
+        'index': index,
+        'body': body
+      });
+
+      return response.aggregations.category_counts.buckets;
+
+    } catch (error) {
+      console.error('Error : ', error);
+      throw error;
+    }
+  }
+
+  static async getTopTags(index: string): Promise<any> {
+    const client: ElasticSearch.Client = ESUtils.getElasticSearchClient();
+    index = ESUtils.getIndex(index);
+    const appSetting = await AppSettings.Instance.getAppSettings();
+    const body = {
+      'aggs': {
+        'tag_counts': {
+          'terms': { 'field': 'tags', "size" : appSetting.tag_count_limit }
+        }
+      }
+    };
+
+    try {
+      const response = await client.search({
+        'index': index,
+        'body': body
+      });
+
+      return response.aggregations.tag_counts.buckets;
 
     } catch (error) {
       console.error('Error : ', error);

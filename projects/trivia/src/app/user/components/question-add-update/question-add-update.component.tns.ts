@@ -75,9 +75,9 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
 
   @Input() editQuestion: Question;
   @Output() hideQuestion = new EventEmitter<boolean>();
-  @ViewChild('autocomplete') autocomplete: RadAutoCompleteTextViewComponent;
+  @ViewChild('autocomplete', { static: false }) autocomplete: RadAutoCompleteTextViewComponent;
   @ViewChildren('textField') textField: QueryList<ElementRef>;
-  @ViewChild('questionWebView') questionWebView: ElementRef;
+  @ViewChild('questionWebView', { static: false }) questionWebView: ElementRef;
 
   @ViewChildren('webView') webView: QueryList<ElementRef>;
 

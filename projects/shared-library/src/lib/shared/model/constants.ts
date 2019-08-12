@@ -374,7 +374,9 @@ export enum RoutesConstants {
     LAT_LONG = 'latLong',
     ADDRESS_SUGGESTION = 'addressSuggestion',
     UPDATE_APP_VERSION = 'updateAppVersion',
-    ADD_BITES_FIRST_QUESTION = 'add-bits-first-question'
+    ADD_BITES_FIRST_QUESTION = 'add-bits-first-question',
+    TOP_CATEGORIES_COUNT = 'getTopCategories',
+    TOP_TAGS_COUNT = 'getTopTags',
 }
 
 export enum TermsAndPrivacyUrlConstant {
@@ -440,12 +442,27 @@ export enum FirebaseScreenNameConstants {
     USER_FEEDBACK = 'User Feedback'
 }
 
-export enum GoogleLocationAPI {
-    GOOGLE_AUTOCOMPLETE = 'https://maps.googleapis.com/maps/api/place/autocomplete/json',
-    GOOGLE_GEOCODE = 'https://maps.googleapis.com/maps/api/geocode/json'
-}
-
 export enum AnalyticsEventConstants {
     EVENT = 'event',
 }
 
+export enum userCardType {
+    USER_WEB_IMAGE_NAME_LOCATION_HORIZONTAL,
+    USER_WEB_IMAGE_40X40_NAME_HORIZONTAL,
+    USER_WEB_IMAGE_70X60_NAME_LOCATION,
+    USER_WEB_IMAGE_70X60_IMAGE_VERTICAL,
+    USER_WEB_IMAGE_NAME_STATUS_HORIZONTAL,
+    USER_WEB_NAME_IMAGE_HORIZONTAL,
+    USER_WEB_IMAGE_NAME_STATUS_LOCATION_HORIZONTAL,
+    USER_WEB_IMAGE_NAME_LOCATION_VERTICAL,
+    USER_WEB_IMAGE_NAME_VERTICAL,
+    USER_WEB_IMAGE_NAME_RECENT_GAME_VERTICAL,
+    USER_IMAGE_NAME_VERTICAL_NO_REDIRECT,
+    USER_IMAGE_NAME_WITH_SCORE,
+    USER_IMAGE_NAME_HORIZONTAL,
+    USER_IMAGE_NAME_LOCATION_HORIZONTAL,
+    USER_NAME_IMAGE_HORIZONTAL,
+    USER_IMAGE_NAME_VERTICAL,
+    USER_IMAGE_NAME_CATEGORY_HORIZONTAL
+
+}
