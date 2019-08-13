@@ -1,46 +1,12 @@
 {
   "rules": {
-    ".read": "auth != null  && root.child('users/' + auth.uid + '/roles/admin').val() == true",
-    ".write": "auth != null  && root.child('users/' + auth.uid + '/roles/admin').val() == true",
-    
-    "categories": { ".read": true } ,
-    "tagList": { ".read": true } ,
-    "users": {
-      "$uid": {
-      	".read": "auth != null && $uid == auth.uid",
-        "roles": { ".write": false },
-        "questions": { ".write": "auth != null && $uid == auth.uid" },
-        "games": { ".write": "auth != null && $uid == auth.uid" }
-      }
-    },
-    "games": { 
-      "$game_id": { 
-        ".read": "auth != null && (data.child('playerIds').child('0').val() == auth.uid || 
-        													 data.child('playerIds').child('1').val() == auth.uid)",
-        ".validate": "newData.child('playerIds').child('0').val() === auth.uid",
-        ".write": "auth != null && ((data.exists() && data.child('gameOver').val() != true &&
-                                     (data.child('playerIds').child('0').val() == auth.uid || 
-        													    data.child('playerIds').child('1').val() == auth.uid))
-                                    ||
-                                    (!data.exists() && 
-                                     newData.child('playerIds').child('0').val() == auth.uid))"
-      }
-    },
-    "questions": {
-      "published": { ".read": true },
-
-      "unpublished": { 
-        "$question_id": {
-      	  ".read": "auth != null && data.child('created_uid').val() == auth.uid",
-          ".validate": "newData.child('created_uid').val() === auth.uid",
-          ".write": "auth != null && ((data.exists() && 
-                                      data.child('created_uid').val() == auth.uid &&
-        													    data.child('status').val() != 2)
-                                          ||
-                                      (!data.exists() && 
-                                       newData.child('created_uid').val() == auth.uid))"
-      }
+    ".read": "auth != null",
+    ".write": "auth != null",
+    "users":{
+      "$token_id":{      
+          ".read": "auth.uid!== null",
+         ".write": "newData.child('userId').val() === auth.uid"      
+        }
      }
-    }  
   }
 }
