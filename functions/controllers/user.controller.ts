@@ -239,13 +239,9 @@ export class UserController {
             Utils.sendResponse(res, interceptorConstants.FORBIDDEN, ResponseMessagesConstants.USER_ID_NOT_FOUND);
         }
 
-        if (req.user.user_id !== userId) {
-            Utils.sendResponse(res, interceptorConstants.FORBIDDEN, ResponseMessagesConstants.UNAUTHORIZED);
-        }
-
         try {
             await AccountService.updateBits(userId);
-            Utils.sendResponse(res, interceptorConstants.SUCCESS, { 'status': ResponseMessagesConstants.BITES_ADDED });
+            Utils.sendResponse(res, interceptorConstants.SUCCESS, { 'status': ResponseMessagesConstants.BITS_ADDED });
 
         } catch (error) {
             Utils.sendError(res, error);

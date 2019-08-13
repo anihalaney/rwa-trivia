@@ -352,7 +352,10 @@ export class AccountService {
             const appSetting = await AppSettings.Instance.getAppSettings();
             const bits = appSetting.first_question_bits;
             const accountData = await AccountService.getAccountById(userId);
-            accountData.bits = accountData.bits ? Utils.changeFieldValue(bits) : bits;
+            if (!accountData.firstQuestionBitsAdded) {
+                accountData.bits = accountData.bits ? Utils.changeFieldValue(bits) : bits;
+                accountData.firstQuestionBitsAdded = true;
+            }
             await AccountService.updateAccountData(accountData);
         } catch (error) {
             return Utils.throwError(error);
