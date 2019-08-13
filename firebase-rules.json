@@ -1,10 +1,10 @@
 {
   "rules": {
-    ".read": "auth != null",
-    ".write": "auth != null",
+    ".read": "auth !== null",
+    ".write": "auth !== null",
     "users":{
       "$token_id":{      
-          ".read": "auth.uid!== null",
+         ".read": "auth.uid !== null && data.child('userId').val() === auth.uid",
          ".write": "newData.child('userId').val() === auth.uid"      
         }
      }
