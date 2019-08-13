@@ -9,7 +9,8 @@ import { categories, topCategories } from './categories.reducer';
 import { tags, topTags } from './tags.reducer';
 import { questionOfTheDay, questionSaveStatus, updateQuestion } from './questions.reducer';
 import { loginRedirectUrl, resetPasswordLogs } from './ui-state.reducer';
-import { activeGames, newGameId, gameCreateStatus } from './game.reducer';
+import { activeGames, newGameId, gameCreateStatus, updateUserReactionStatus, getUserReactionStatus,
+  getQuestionSuccess } from './game.reducer';
 import { applicationSettings } from './application-settings.reducer';
 import { Country } from 'shared-library/shared/mobile/component/countryList/model/country.model';
 
@@ -49,6 +50,9 @@ export interface CoreState {
   addressUsingLongLat: any;
   addressSuggestions: any;
   userFriendInvitations: { [key: string]: Invitation };
+  updateUserReactionStatus: any;
+  getUserReactionStatus: any;
+  getQuestionSuccess: any;
   getTopCategories: any;
   getTopTags: any;
 }
@@ -80,6 +84,9 @@ export const reducer: ActionReducerMap<CoreState> = {
   addressUsingLongLat: addressUsingLongLat,
   addressSuggestions: addressSuggestions,
   userFriendInvitations: userFriendInvitations,
+  updateUserReactionStatus: updateUserReactionStatus,
+  getUserReactionStatus: getUserReactionStatus,
+  getQuestionSuccess: getQuestionSuccess,
   getTopCategories: topCategories,
   getTopTags: topTags
 };

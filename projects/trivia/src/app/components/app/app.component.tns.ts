@@ -1,4 +1,4 @@
-import { Component, OnInit, NgZone, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, NgZone, OnDestroy, ChangeDetectorRef, ViewContainerRef } from '@angular/core';
 import * as firebase from 'nativescript-plugin-firebase';
 import { Store, select } from '@ngrx/store';
 import { filter } from 'rxjs/operators';
@@ -23,6 +23,14 @@ import * as appversion from 'nativescript-appversion';
 import { Utils } from 'shared-library/core/services';
 import { NavigationEnd, Router } from '@angular/router';
 import { FirebaseScreenNameConstants } from '../../../../../shared-library/src/lib/shared/model';
+import {registerElement} from "nativescript-angular/element-registry";
+import { Carousel, CarouselItem } from 'nativescript-carousel';
+import { ModalDialogOptions, ModalDialogService } from 'nativescript-angular/modal-dialog';
+import { WelcomeScreenComponent } from '../../../../../shared-library/src/lib/shared/mobile/component';
+import * as appSettingsStorage from 'tns-core-modules/application-settings';
+
+registerElement('Carousel', () => Carousel);
+registerElement('CarouselItem', () => CarouselItem);
 
 @Component({
   selector: 'app-root',
@@ -31,7 +39,6 @@ import { FirebaseScreenNameConstants } from '../../../../../shared-library/src/l
 
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class AppComponent implements OnInit, OnDestroy {
-
   subscriptions = [];
   applicationSettings: ApplicationSettings;
 
@@ -44,7 +51,9 @@ export class AppComponent implements OnInit, OnDestroy {
     private categoryActions: CategoryActions,
     private utils: Utils,
     private cd: ChangeDetectorRef,
-    private router: Router) {
+    private router: Router,
+    private _modalService: ModalDialogService,
+    private _vcRef: ViewContainerRef) {
 
     this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.newGameId), filter(g => g !== '')).subscribe(gameObj => {
       console.log('gameObj', gameObj);
@@ -67,7 +76,6 @@ export class AppComponent implements OnInit, OnDestroy {
   ngOnInit() {
 
     this.checkForceUpdate();
-
     firebase.init({
       onMessageReceivedCallback: (message) => {
         console.log('message', message);
@@ -146,6 +154,25 @@ export class AppComponent implements OnInit, OnDestroy {
 
   }
 
+  async showWelcomeScreen() {
+    try {
+      if (!appSettingsStorage.getBoolean('isWelcomeScreenSeen', false)) {
+          const options: ModalDialogOptions = {
+              viewContainerRef: this._vcRef,
+              context: {},
+              fullscreen: true
+          };
+
+         const result = await this._modalService.showModal(WelcomeScreenComponent, options)
+         this.cd.markForCheck();
+          appSettingsStorage.setBoolean('isWelcomeScreenSeen', true);
+        }
+    } catch ( error ) {
+        console.error(error);
+    }
+
+  }
+
   async checkForceUpdate() {
 
     let version;
@@ -162,13 +189,16 @@ export class AppComponent implements OnInit, OnDestroy {
         if (appSettings && appSettings.length > 0) {
 
           this.applicationSettings = appSettings[0];
-          // console.log('appSettings', this.applicationSettings.crashlytics);
+          //   console.log('appSettings', this.applicationSettings.crashlytics);
           if (isAndroid && version && this.applicationSettings.android_version
             && this.applicationSettings.android_version > version) {
             this.displayForceUpdateDialog(projectMeta.playStoreUrl);
           } else if (!isAndroid && version && this.applicationSettings.ios_version
             && this.applicationSettings.ios_version > version) {
             this.displayForceUpdateDialog(projectMeta.appStoreUrl);
+          }
+          if (this.applicationSettings.show_welcome_screen) {
+            this.showWelcomeScreen();
           }
 
         }
