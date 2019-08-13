@@ -19,6 +19,8 @@ export class QuestionComponent implements OnDestroy {
   question: Question;
   categoryName: string;
 
+  @Input() user: User;
+
   @Output() answerClicked = new EventEmitter<number>();
   @Output() continueClicked = new EventEmitter();
 

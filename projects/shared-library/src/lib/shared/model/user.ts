@@ -34,6 +34,7 @@ export class User {
   achievements: string[];
   gamePlayed: Array<{ [key: string]: FriendsMetadata }>;
   online?: boolean;
+  isCategorySet?: boolean;
 
   constructor(authState?: firebase.User & { name: string }) {
     if (authState) {

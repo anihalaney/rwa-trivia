@@ -1,0 +1,44 @@
+
+<StackLayout>
+<GridLayout  height="85%">
+   <Carousel debug="false" height= "100%" width="100%" color="#202020" pageChanged="myChangeEvent" pageTapped="mySelectedEvent" indicatorOffset="0, -30"
+        indicatorColor="#000000" finite="true" bounce="false" indicatorColorUnselected="#DCDCDC"  showIndicator="true" verticalAlignment="top" android:indicatorAnimation="WORM">
+        
+        <CarouselItem id="slide1"   verticalAlignment="middle">
+            <StackLayout class="input-field" iosOverflowSafeArea="false">
+                <AbsoluteLayout iosOverflowSafeArea="false" horizontalAlignment="center">
+                    <Image  borderRadius="55"  backgroundColor="#DCDCDC" stretch="aspectFill" top="50"
+                    height="110" width="110" ></Image>
+                </AbsoluteLayout>
+            </StackLayout>
+            <Label width="70%" text="challenge yourself, sharpen your saw" fontSize="40"  textAlignment="center"  textWrap="true" horizontalAlignment="center" margin="30"></Label>
+        </CarouselItem>
+
+        <CarouselItem id="slide2" verticalAlignment="middle">
+            <StackLayout class="input-field" iosOverflowSafeArea="false">
+                <AbsoluteLayout iosOverflowSafeArea="false" horizontalAlignment="center">
+                    <Image  borderRadius="55"  backgroundColor="#DCDCDC" stretch="aspectFill" top="50"
+                    height="110" width="110" ></Image>
+                </AbsoluteLayout>
+            </StackLayout>
+            <Label width="70%" text="get ready for daily challage" fontSize="40"  textAlignment="center"  textWrap="true" horizontalAlignment="center" margin="30"></Label>
+        </CarouselItem>
+
+        <CarouselItem id="slide3" verticalAlignment="middle">
+            <StackLayout class="input-field" iosOverflowSafeArea="false">
+                <AbsoluteLayout iosOverflowSafeArea="false" horizontalAlignment="center">
+                    <Image  borderRadius="55"  backgroundColor="#DCDCDC" stretch="aspectFill" top="50"
+                    height="110" width="110" ></Image>
+                </AbsoluteLayout>
+            </StackLayout>
+            <Label width="70%" text="challenge yourself, sharpen your saw" fontSize="40"  textAlignment="center"  textWrap="true" horizontalAlignment="center" margin="30"></Label>
+        </CarouselItem>
+    </Carousel>
+</GridLayout>
+
+<GridLayout  height="15%">
+    <Button color="#202020" height="60%" text="Get Started" borderColor="#000000" borderWidth="1" backgroundColor="#DCDCDC" width="50%" verticalAlignment="middle" (rippleTap)="closeModel()"
+    class="text-center login-button initial-button-label Roboto-Bold"
+    stlRippleEffect></Button>
+</GridLayout>
+</StackLayout>

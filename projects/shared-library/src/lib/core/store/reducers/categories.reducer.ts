@@ -21,3 +21,11 @@ export const getCategoryDictionary = (state: Category[]) => {
   }, {});
 };
 
+export function topCategories(state: any = [], action: ActionWithPayload<any[]>): any[] {
+  switch (action.type) {
+    case CategoryActions.LOAD_TOP_CATEGORIES_SUCEESS:
+      return action.payload;
+    default:
+      return state;
+  }
+}

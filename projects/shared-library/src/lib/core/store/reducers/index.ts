@@ -5,11 +5,12 @@ import {
   gameInvites, userFriends, friendInvitations, userProfileSaveStatus, feedback, account, getGameResult, countries,
   addressUsingLongLat, addressSuggestions, userFriendInvitations, firstQuestionBits
 } from './user.reducer';
-import { categories } from './categories.reducer';
-import { tags } from './tags.reducer';
+import { categories, topCategories } from './categories.reducer';
+import { tags, topTags } from './tags.reducer';
 import { questionOfTheDay, questionSaveStatus, updateQuestion, firstQuestion } from './questions.reducer';
 import { loginRedirectUrl, resetPasswordLogs } from './ui-state.reducer';
-import { activeGames, newGameId, gameCreateStatus } from './game.reducer';
+import { activeGames, newGameId, gameCreateStatus, updateUserReactionStatus, getUserReactionStatus,
+  getQuestionSuccess } from './game.reducer';
 import { applicationSettings } from './application-settings.reducer';
 import { Country } from 'shared-library/shared/mobile/component/countryList/model/country.model';
 
@@ -51,6 +52,11 @@ export interface CoreState {
   userFriendInvitations: { [key: string]: Invitation };
   firstQuestionBits: any;
   firstQuestion: Question;
+  updateUserReactionStatus: any;
+  getUserReactionStatus: any;
+  getQuestionSuccess: any;
+  getTopCategories: any;
+  getTopTags: any;
 }
 
 export const reducer: ActionReducerMap<CoreState> = {
@@ -81,7 +87,12 @@ export const reducer: ActionReducerMap<CoreState> = {
   addressSuggestions: addressSuggestions,
   userFriendInvitations: userFriendInvitations,
   firstQuestionBits: firstQuestionBits,
-  firstQuestion: firstQuestion
+  firstQuestion: firstQuestion,
+  updateUserReactionStatus: updateUserReactionStatus,
+  getUserReactionStatus: getUserReactionStatus,
+  getQuestionSuccess: getQuestionSuccess,
+  getTopCategories: topCategories,
+  getTopTags: topTags
 };
 
 // Features

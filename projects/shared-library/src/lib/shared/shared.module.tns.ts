@@ -5,7 +5,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import {
-  ActionBarComponent, DrawerComponent, CountryListComponent, QuestionsTableComponent, QuestionCardComponent, FirstQuestionComponent
+  ActionBarComponent, DrawerComponent, CountryListComponent, QuestionsTableComponent, QuestionCardComponent, FirstQuestionComponent, SelectCategoryTagComponent
 } from './mobile/component';
 import { NativeScriptCommonModule } from 'nativescript-angular/common';
 import { GameFilterPipe } from './pipe/game-filter.pipe';
@@ -13,7 +13,7 @@ import { SearchCountryFilterPipe } from './pipe/search-country-filter.pipe';
 import { TNSCheckBoxModule } from 'nativescript-checkbox/angular';
 import { NativeScriptUIAutoCompleteTextViewModule } from 'nativescript-ui-autocomplete/angular';
 import { NativeScriptUIListViewModule } from 'nativescript-ui-listview/angular';
-import { RenderQuestionComponent, AuthorComponent, RenderAnswerComponent, UserCardComponent } from './components';
+import { RenderQuestionComponent, AuthorComponent, RenderAnswerComponent, UserCardComponent, UserReactionComponent } from './components';
 import { ShowHintWhenFocusOutDirective, OpenUserProfileDirective, RippleEffectDirective } from './directive';
 import { PhoneNumberValidationProvider } from './mobile/component/countryList/phone-number-validation.provider';
 import { SafeHtmlPipe } from './pipe/safe-html.pipe';
@@ -33,12 +33,10 @@ import { SafeHtmlPipe } from './pipe/safe-html.pipe';
     ShowHintWhenFocusOutDirective,
     OpenUserProfileDirective,
     RippleEffectDirective,
-    RenderAnswerComponent,
-    RenderQuestionComponent,
-    CountryListComponent,
     QuestionCardComponent,
     FirstQuestionComponent,
-    SafeHtmlPipe
+    UserReactionComponent,
+    SelectCategoryTagComponent
   ],
   imports: [
     CommonModule,
@@ -80,6 +78,8 @@ import { SafeHtmlPipe } from './pipe/safe-html.pipe';
     RenderQuestionComponent,
     QuestionCardComponent,
     FirstQuestionComponent,
+    UserReactionComponent,
+    SelectCategoryTagComponent,
     UserCardComponent
   ],
   schemas: [NO_ERRORS_SCHEMA],

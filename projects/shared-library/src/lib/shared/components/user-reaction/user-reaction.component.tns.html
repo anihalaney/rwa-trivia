@@ -1,11 +1,11 @@
 <StackLayout>
     <GridLayout rows="*" columns="auto,auto" marginRight="5" paddingTop="10">
             <GridLayout row="0" col="0" rows="*,*" columns="*" marginRight="5"  paddingTop="10">
-                <Image stlRippleEffect (rippleTap)="userReaction('like')"  row="0" col="0" class="text-center" margin="10 0 10 0" width="32" [src]="userReactionStatus?.status === 'like' ?  '~/assets/images/like.png' : '~/assets/images/like-default.png'"></Image>
+                <Image stlRippleEffect (rippleTap)="userReaction('like')"  row="0" col="0" class="text-center" margin="10 0 10 0" width="32" [src]="user && userReactionStatus?.status === 'like' ?  '~/assets/images/like.png' : '~/assets/images/like-default.png'"></Image>
                 <Label row="1" col="0" [text]="question?.reactionsCount?.like ? question?.reactionsCount?.like : 0" horizontalAlignment="center" textWrap="true" color="#868686"></Label>
             </GridLayout>
             <GridLayout row="0" col="1" rows="*,*" columns="*" marginRight="5" paddingTop="10">
-                <Image stlRippleEffect (rippleTap)="userReaction('dislike')" row="0" col="0" class="text-center" margin="10 0 10 0" width="32" [src]=" userReactionStatus?.status === 'dislike' ? '~/assets/images/dislike.png' : '~/assets/images/dislike-default.png'"></Image>
+                <Image stlRippleEffect (rippleTap)="userReaction('dislike')" row="0" col="0" class="text-center" margin="10 0 10 0" width="32" [src]="user &&  userReactionStatus?.status === 'dislike' ? '~/assets/images/dislike.png' : '~/assets/images/dislike-default.png'"></Image>
                 <Label row="1" col="0" [text]="question?.reactionsCount?.dislike ? question?.reactionsCount?.dislike : 0" horizontalAlignment="center" textWrap="true"  color="#868686"></Label>
             </GridLayout>
     </GridLayout>

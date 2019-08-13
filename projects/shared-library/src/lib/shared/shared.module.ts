@@ -13,7 +13,7 @@ import { ImageCropperModule } from 'ngx-img-cropper';
 import {
   QuestionsSearchComponent, QuestionsTableComponent,
   QuestionFormComponent, RejectedQuestionContentComponent, SocialPaletteComponent, AuthorComponent, RenderQuestionComponent,
-  RenderAnswerComponent, CropImageDialogComponent, UserCardComponent
+  RenderAnswerComponent, CropImageDialogComponent, UserCardComponent, UserReactionComponent
 } from './components';
 import { ShowHintWhenFocusOutDirective, OpenUserProfileDirective } from './directive';
 import { NgQuillTexModule } from 'ng-quill-tex';
@@ -31,6 +31,7 @@ import { NgQuillTexModule } from 'ng-quill-tex';
     RenderQuestionComponent,
     RenderAnswerComponent,
     CropImageDialogComponent,
+    UserReactionComponent,
     UserCardComponent
   ],
   imports: [
@@ -58,7 +59,7 @@ import { NgQuillTexModule } from 'ng-quill-tex';
     FlexLayoutModule, QuestionFormComponent,
     SharedMaterialModule, CdkTableModule, RejectedQuestionContentComponent,
     HttpClientModule, ShareButtonModule, SocialPaletteComponent, AuthorComponent, ShowHintWhenFocusOutDirective,
-    OpenUserProfileDirective, SafeHtmlPipe, RenderQuestionComponent, UserCardComponent
+    OpenUserProfileDirective, SafeHtmlPipe, RenderQuestionComponent, UserCardComponent, UserReactionComponent
   ],
   entryComponents: [CropImageDialogComponent]
 })

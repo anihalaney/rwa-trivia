@@ -374,7 +374,9 @@ export enum RoutesConstants {
     LAT_LONG = 'latLong',
     ADDRESS_SUGGESTION = 'addressSuggestion',
     UPDATE_APP_VERSION = 'updateAppVersion',
-    ADD_BITES_FIRST_QUESTION = 'add-bits-first-question'
+    ADD_BITES_FIRST_QUESTION = 'add-bits-first-question',
+    TOP_CATEGORIES_COUNT = 'getTopCategories',
+    TOP_TAGS_COUNT = 'getTopTags',
 }
 
 export enum TermsAndPrivacyUrlConstant {
