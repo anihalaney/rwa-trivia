@@ -22,6 +22,9 @@ export class ApplicationSettings {
     show_category_screen?: boolean;
     category_count_limit?: number;
     tag_count_limit?: number;
+    game_question_bits?: number;
+    invite_bits_enabled?: boolean;
+    invite_bits?: number;
 }
 
 export class TimerLoader {
