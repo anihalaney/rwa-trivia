@@ -3,6 +3,7 @@
 import { AuthorComponent } from './author/author.component';
 import { RenderQuestionComponent } from './render-question/render-question.component';
 import { RenderAnswerComponent } from './render-answer/render-answer.component';
+import { UserReactionComponent } from './user-reaction/user-reaction.component';
 import { UserCardComponent } from './user-card/user-card.component';
 import { InviteMailFriendsComponent } from './invite-mail-friends/invite-mail-friends.component';
 export {
@@ -10,7 +11,8 @@ export {
     RenderQuestionComponent,
     RenderAnswerComponent,
     UserCardComponent,
-    InviteMailFriendsComponent
+    InviteMailFriendsComponent,
+    UserReactionComponent,
 };
 
 export default [
@@ -18,5 +20,6 @@ export default [
     RenderQuestionComponent,
     RenderAnswerComponent,
     UserCardComponent,
-    InviteMailFriendsComponent
+    InviteMailFriendsComponent,
+    UserReactionComponent,
 ];

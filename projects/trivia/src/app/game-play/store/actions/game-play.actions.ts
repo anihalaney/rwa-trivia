@@ -20,12 +20,6 @@ export enum GamePlayActionTypes {
   SAVE_REPORT_QUESTION = '[GamePlay] SaveReportQuestion',
   SAVE_REPORT_QUESTION_SUCCESS = '[GamePlay] SaveReportQuestionSuccess',
   UPDATE_GAME_ROUND = '[GamePlay] UpdateGameRound',
-  USER_REACTION = '[GamePlay] UserReaction',
-  UPADTE_USER_REACTION_SUCCESS = '[GamePlay] UpdateUserReactionSuccess',
-  GET_USER_REACTION = '[GamePlay] GetUserReaction',
-  GET_USER_REACTION_SUCCESS = '[GamePlay] GetUserReactionSuccess',
-  GET_QUESTION = '[GamePlay] GetQuestion',
-  GET_QUESTION_SUCCESS = '[GamePlay] GetQuestionSuccess'
 }
 
 export class CreateNewGame implements Action {
@@ -55,22 +49,6 @@ export class GetNextQuestion implements Action {
 
 export class GetNextQuestionSuccess implements Action {
   readonly type = GamePlayActionTypes.GET_NEXT_QUESTION_SUCCESS;
-  constructor(public payload: Question) { } // question
-}
-
-
-export class GetUserReaction implements Action {
-  readonly type = GamePlayActionTypes.GET_USER_REACTION;
-  constructor(public payload: {questionId: string, userId: string}) { } // get User Reaction
-}
-
-export class GetUserReactionSuccess implements Action {
-  readonly type = GamePlayActionTypes.GET_USER_REACTION_SUCCESS;
-  constructor(public payload: {status: string}) { } // question
-}
-
-export class GetQuestionSuccess implements Action {
-  readonly type = GamePlayActionTypes.GET_QUESTION_SUCCESS;
   constructor(public payload: Question) { } // question
 }
 
@@ -122,20 +100,8 @@ export class UpdateGameRound implements Action {
   constructor(public payload: string) { }
 }
 
-export class UserReaction implements Action {
-  readonly type = GamePlayActionTypes.USER_REACTION;
-  constructor(public payload: { questionId: string, userId: string, status: string }) {}
-}
 
-export class GetQuestion implements Action {
-  readonly type = GamePlayActionTypes.GET_QUESTION;
-  constructor(public payload: string ) {}
-}
 
-export class UpdateUserReactionSuccess implements Action {
-  readonly type = GamePlayActionTypes.UPADTE_USER_REACTION_SUCCESS;
-  payload = null;
-}
 
 export type GamePlayActions
   = CreateNewGame
@@ -152,10 +118,4 @@ export type GamePlayActions
   | GetUsersAnsweredQuestionSuccess
   | SaveReportQuestion
   | SaveReportQuestionSuccess
-  | UpdateGameRound
-  | UserReaction
-  | UpdateUserReactionSuccess
-  | GetUserReaction
-  | GetUserReactionSuccess
-  | GetQuestion
-  | GetQuestionSuccess;
+  | UpdateGameRound;
