@@ -11,7 +11,7 @@
             <GridLayout #formDir="ngForm" [formGroup]="invitationForm" margin="30 10 10 10" rows="auto"
                 columns="*,auto">
                 <TextField #textField row="0" col="0" formControlName="email" class="email-textfield Roboto-Regular"
-                    hint="Email address"></TextField>
+                    hint="Email address" returnKeyType="done"></TextField>
                 <label row="0" col="1" (tap)="onSubscribe()" class="send-invite-button Hind-Bold" text="Send Invite"
                     stlRippleEffect></label>
             </GridLayout>
@@ -23,14 +23,6 @@
                     <Label class="error-msg" [text]="invalidEmailList" textWrap="true"></Label>
                 </StackLayout>
                 <Label class="success-msg" [text]="showSuccessMsg" textWrap="true" *ngIf="showSuccessMsg"></Label>
-            </StackLayout>
-
-
-            <StackLayout *ngIf="showSkipBtn" orientation="vertical"
-                margin="0 10 10 10" iosOverflowSafeArea="false">
-                <Button (tap)="goToDashboard()" class="Roboto-Regular" backgroundColor="#8ac541" color="white" margin="20" width="100%"
-                    text="skip" fontSize="17" padding="15" stlRippleEffect stlBackgroundColor="#8ac541">
-                </Button>
             </StackLayout>
         </StackLayout>
     </StackLayout>

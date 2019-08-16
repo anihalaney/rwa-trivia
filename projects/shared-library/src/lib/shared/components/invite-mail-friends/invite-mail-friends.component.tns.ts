@@ -6,7 +6,6 @@ import { Store } from '@ngrx/store';
 import { CoreState, UserActions } from 'shared-library/core/store';
 import { Utils } from 'shared-library/core/services';
 import { InviteMailFriends } from './invite-mail-friends';
-import { RouterExtensions } from 'nativescript-angular/router';
 
 @Component({
     selector: 'app-invite-mail-friends',
@@ -18,11 +17,7 @@ import { RouterExtensions } from 'nativescript-angular/router';
 export class InviteMailFriendsComponent extends InviteMailFriends {
 
     constructor(fb: FormBuilder, store: Store<CoreState>, userAction: UserActions, cd: ChangeDetectorRef,
-        utils: Utils, private router: RouterExtensions) {
+        utils: Utils) {
         super(fb, store, userAction, cd, utils);
-    }
-
-    goToDashboard() {
-        this.router.navigate(['/dashboard'], { clearHistory: true });
     }
 }

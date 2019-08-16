@@ -1,9 +1,9 @@
 import {
-    Component, OnInit, Input, ChangeDetectionStrategy, ChangeDetectorRef, OnDestroy, ViewChildren, QueryList, ElementRef
+    Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, OnDestroy, ViewChildren, QueryList, ElementRef
   } from '@angular/core';
   import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   import { Store, select } from '@ngrx/store';
-  import { User, FirebaseScreenNameConstants } from 'shared-library/shared/model';
+  import { User } from 'shared-library/shared/model';
   import { coreState, CoreState, UserActions } from 'shared-library/core/store';
   import { Utils } from 'shared-library/core/services';
   import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
@@ -19,7 +19,6 @@ import {
   
   @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
   export class InviteMailFriends implements OnInit, OnDestroy {
-    @Input() showSkipBtn: boolean;
     user: User;
     invitationForm: FormGroup;
     showErrorMsg = false;
@@ -114,7 +113,7 @@ import {
           if (el.nativeElement && el.nativeElement.android) {
             el.nativeElement.android.clearFocus();
           }
-          return el.nativeElement.dismissSoftInput();
+          // return el.nativeElement.dismissSoftInput();
         });
     }
   }
