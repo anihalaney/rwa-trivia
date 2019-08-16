@@ -12,7 +12,7 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { Subject } from 'rxjs';
 import { filter, map, take } from 'rxjs/operators';
 import { android, AndroidActivityBackPressedEventData, AndroidApplication, } from 'tns-core-modules/application';
-import { isAndroid } from 'tns-core-modules/platform';
+import { isAndroid, isIOS } from 'tns-core-modules/platform';
 import { Page } from 'tns-core-modules/ui/page';
 import { CountryListComponent } from '../../../shared/mobile/component/countryList/countryList.component';
 import { PhoneNumberValidationProvider } from '../../../shared/mobile/component/countryList/phone-number-validation.provider';
@@ -20,9 +20,6 @@ import { CoreState, coreState, UIStateActions } from '../../store';
 import { FirebaseAuthService } from './../../auth/firebase-auth.service';
 import { Login } from './login';
 import { Utils } from '../../services';
-import {
-  Parameter, User, FirebaseAnalyticsKeyConstants, FirebaseAnalyticsEventConstants, FirebaseScreenNameConstants
-} from '../../../shared/model';
 
 @Component({
   selector: 'login',
@@ -351,9 +348,10 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
       .map((el) => {
         if (isAndroid) {
           el.nativeElement.android.clearFocus();
+          el.nativeElement.dismissSoftInput();
         }
-        return el.nativeElement.dismissSoftInput();
       });
   }
+
 }
 
