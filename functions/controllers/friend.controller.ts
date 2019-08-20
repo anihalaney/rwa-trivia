@@ -18,7 +18,11 @@ export class FriendController {
 
         try {
             const makeFriends: MakeFriends = new MakeFriends(token, userId, email);
+            const appSetting = await AppSettings.Instance.getAppSettings();
             const invitee = await makeFriends.validateToken();
+            if (appSetting.invite_bits_enabled) {
+                await AccountService.updateBits(userId, appSetting.invite_bits);
+            }
             Utils.sendResponse(res, interceptorConstants.SUCCESS, { created_uid: invitee });
         } catch (error) {
             Utils.sendError(res, error);
@@ -40,23 +44,15 @@ export class FriendController {
         if ((inviteeUserId || emails) && userId) {
             const makeFriends: MakeFriends = new MakeFriends(undefined, userId, undefined);
             try {
-                const appSetting = await AppSettings.Instance.getAppSettings();
                 if (inviteeUserId) {
                     const user: User = await makeFriends.getUser(inviteeUserId);
                     if (inviteeUserId && user) {
                         emails = [user.email];
                         const status: any = await makeFriends.createInvitations(emails);
-                      
-                        if (appSetting.invite_bits_enabled) {
-                            await AccountService.updateBits(userId, appSetting.invite_bits);
-                        }
                         Utils.sendResponse(res, interceptorConstants.SUCCESS, { messages: status.join(FriendConstants.BR_HTML) });
                     }
                 } else {
                     const status: any = await makeFriends.createInvitations(emails);
-                    if (appSetting.invite_bits_enabled) {
-                        await AccountService.updateBits(userId, appSetting.invite_bits);
-                    }
                     Utils.sendResponse(res, interceptorConstants.SUCCESS, { messages: status.join(FriendConstants.BR_HTML) });
                 }
             } catch (error) {
