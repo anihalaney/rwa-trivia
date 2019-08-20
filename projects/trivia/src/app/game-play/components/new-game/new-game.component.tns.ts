@@ -74,8 +74,14 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
           this.challengerUserId = data.userid;
           this.gameOptions.playerMode = 1;
           this.gameOptions.opponentType = 1;
-          this.gameOptions.isChallenge = true;
+          if (this.router.url.indexOf('challenge') > 0 ) {
+            this.gameOptions.isChallenge = true;
+          }
           this.friendUserId = data.userid;
+        }
+        if (this.router.url.indexOf('play-game-with-random-user') >= 0) {
+          this.gameOptions.playerMode = 1;
+          this.gameOptions.opponentType = 0;
         }
         if (data && data.mode) {
           this.modeAvailable = true;

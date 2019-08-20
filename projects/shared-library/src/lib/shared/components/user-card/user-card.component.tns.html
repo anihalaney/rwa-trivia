@@ -143,3 +143,20 @@
   </GridLayout>
 
 </ng-container>
+
+
+<ng-container *ngIf="user && userCardType.USER_IMAGE_WITH_ONLINE_STATUS === type">
+  <GridLayout rows="*" columns="*">
+    <StackLayout row="0" col="0" marginLeft="10" verticalAlignment="center" marginRight="10" borderRadius="50"
+      borderColor="#3b5998" borderWidth="1" paddingTop="2" paddingLeft="2" paddingRight="2" class="image-container"
+      height="57" width="57">
+      <Image *ngIf="user" [src]="getImageUrl(user, 44, 40)" backgroundColor="gray" stretch="aspectFill" height="55"
+        width="55" marginLeft="1" marginRight="1" verticalAlignment="center" borderRadius="50"
+        horizontalAlignment="center">
+      </Image>
+    </StackLayout>
+    <AbsoluteLayout *ngIf="user?.online" horizontalAlignment="center">
+      <Label height="15" top="40" left="40" width="15" borderRadius="22" backgroundColor="#71b02f"></Label>
+    </AbsoluteLayout>
+  </GridLayout>
+</ng-container>

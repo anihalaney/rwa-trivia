@@ -37,6 +37,7 @@ export class NewGame implements OnDestroy {
   userCardType = userCardType;
   filteredCategories: Category[];
   selectedCategories: number[];
+  routeType = '';
 
   constructor(
     public store: Store<AppState>,
@@ -55,7 +56,9 @@ export class NewGame implements OnDestroy {
     this.subscriptions.push(this.categoriesObs.subscribe(categories => { this.categories = categories; this.cd.markForCheck(); }));
     this.subscriptions.push(this.tagsObs.subscribe(tags => this.tags = tags));
     let challengerUserId = '';
-
+    this.routeType = this.router.url.indexOf('challenge') >= 0 ? 'challenge' :
+    (this.router.url.indexOf('play-game-with-friend') >= 0 ? 'play-game-with-friend' :
+     this.router.url.indexOf('play-game-with-random-user') >= 0 ? 'play-game-with-random-user' : '' );
     this.subscriptions.push(this.route.params.pipe(map(data => challengerUserId = data.userid),
       switchMap(() => this.store.select(appState.coreState).pipe(select(s => s.user)))).subscribe(user => {
         if (user) {
@@ -65,7 +68,7 @@ export class NewGame implements OnDestroy {
           } else if (this.user.lastGamePlayOption && this.user.lastGamePlayOption.tags.length > 0) {
             this.selectedTags = this.user.lastGamePlayOption.tags;
           }
-          if (!challengerUserId) {
+          if (!challengerUserId || (challengerUserId && this.routeType !== 'challenge')) {
             this.store.dispatch(this.userActions.loadUserFriends(user.userId));
           }
         }
@@ -116,7 +119,11 @@ export class NewGame implements OnDestroy {
       if (uFriends) {
         this.uFriends = [];
         uFriends.map(friend => {
-          this.uFriends = [...this.uFriends, ...friend.userId];
+          if (challengerUserId === friend.userId) {
+            this.uFriends = [friend.userId, ...this.uFriends];
+          } else {
+            this.uFriends = [...this.uFriends, friend.userId];
+          }
         });
         this.noFriendsStatus = false;
       } else {
@@ -189,7 +196,7 @@ export class NewGame implements OnDestroy {
     let user: User;
     this.subscriptions.push(this.store.select(appState.coreState).pipe(take(1)).subscribe(s => {
       user = s.user;
-      if (this.gameOptions.playerMode === PlayerMode.Opponent) {
+      if (Number(gameOptions.playerMode) === PlayerMode.Opponent && Number(gameOptions.opponentType) === OpponentType.Friend) {
         gameOptions.friendId = this.friendUserId;
       }
       this.store.dispatch(new gameplayactions.CreateNewGame({ gameOptions: gameOptions, user: user }));
