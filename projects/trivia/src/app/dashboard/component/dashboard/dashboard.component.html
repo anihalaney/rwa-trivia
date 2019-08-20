@@ -33,7 +33,7 @@
           </button>
         </div>
         <div class="multi-player-btn-container">
-          <button [disabled]="gamePlayBtnDisabled" (click)="startNewGame('Two')" class="startgame"> Two Player </button>
+          <button [disabled]="gamePlayBtnDisabled" (click)="startNewGame('Two')" class="startgame"> Multi Player </button>
         </div>
       </div>
       <div *ngIf="user && applicationSettings?.lives?.enable && timeoutLive">
