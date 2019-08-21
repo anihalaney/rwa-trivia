@@ -3,7 +3,6 @@ import { RouterModule  } from '@angular/router';
 
 import { routes } from './app.route';
 
-
 @NgModule({
   imports: [
     // Router

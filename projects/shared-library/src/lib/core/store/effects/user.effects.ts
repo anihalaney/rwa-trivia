@@ -253,6 +253,17 @@ export class UserEffects {
                 ))
         );
 
+    @Effect()
+    // check display Name
+    checkDisplayName$ = this.actions$
+        .pipe(ofType(UserActions.CHECK_DISPLAY_NAME))
+        .pipe(
+            switchMap((action: ActionWithPayload<string>) =>
+                this.svc.checkDisplayName(action.payload).pipe(
+                    map((result: any) => this.userActions.checkDisplayNameSuccess(result))
+                )
+            ));
+
     constructor(
         private actions$: Actions,
         private userActions: UserActions,

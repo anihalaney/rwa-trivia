@@ -37,8 +37,10 @@
                 [disabled]="loginForm.invalid" class="text-center login-button initial-button-label Roboto-Bold"
                 stlRippleEffect></Button>
             </StackLayout>
+            <!-- Login Form -->
             <StackLayout [formGroup]="loginForm">
               <TextField visibility="collapsed" formControlName="mode"></TextField>
+              <!-- E-mail -->
               <StackLayout *ngIf="signInMethod === 'email'" [ngClass]="{'forgotScreen':mode === 2}">
                 <Label *ngIf="mode === 2" text="Forgot your password?" class="text-center Roboto-Regular" color="black"
                   ios:fontSize="25" android:fontSize="22" textWrap="true"></Label>
@@ -57,6 +59,7 @@
                     text="&#xf0e0;" color="gray" textWrap="true"></Label>
                 </GridLayout>
                 <Label #emailHint text="Invalid Email!" marginTop="10" textWrap="true" class="text-center error"></Label>
+                <!-- Password -->
                 <GridLayout *ngIf="mode !== 2" rows="auto,auto" columns="*,auto" class="initial-button" marginTop="20"
                   borderRadius="10">
                   <TextField #textField row="0" [stlShowHintWhenFocusOut]="{hintRef: passwordHint, controlRef:loginForm.controls.password}"
@@ -68,8 +71,8 @@
                   <Label row="1" col="0" #passwordHint text="Password must be atleast 6 characters" marginTop="10"
                     textWrap="true" class="text-center error"></Label>
                 </GridLayout>
-
-
+                
+                <!-- Confirm Password -->
                 <GridLayout *ngIf="mode === 1" rows="auto,auto" columns="*,auto" class="initial-button" marginTop="20"
                   borderRadius="10">
                   <TextField #textField [stlShowHintWhenFocusOut]="{hintRef: confPasswordHint, controlRef:loginForm.controls.confirmPassword}"

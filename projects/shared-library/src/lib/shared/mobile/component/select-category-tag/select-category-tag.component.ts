@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { RouterExtensions } from 'nativescript-angular/router';
 import { UserActions, CategoryActions, TagActions } from 'shared-library/core/store';
 import { select, Store } from '@ngrx/store';
@@ -14,7 +14,7 @@ import { Observable } from 'rxjs';
   styleUrls: ['./select-category-tag.component.scss']
 })
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
-export class SelectCategoryTagComponent implements OnInit {
+export class SelectCategoryTagComponent implements OnInit, OnDestroy {
   user: User;
   subscriptions = [];
   categoriesObs: Observable<Category[]>;
@@ -51,7 +51,7 @@ export class SelectCategoryTagComponent implements OnInit {
       });
       categoryData.map((category: any) => {
         category.requiredForGamePlay = false;
-      })
+      });
       this.categories = categoryData;
     }));
 
@@ -61,7 +61,7 @@ export class SelectCategoryTagComponent implements OnInit {
       this.topTags = topTags;
       this.topTags.map((tag: any) => {
         tag.requiredForGamePlay = false;
-      })
+      });
       this.tags = this.topTags;
     }));
 
@@ -87,8 +87,8 @@ export class SelectCategoryTagComponent implements OnInit {
     const tags = [];
     const selectedTopics = this.categories.filter((selectedCategory) => selectedCategory.requiredForGamePlay);
     selectedTopics.map((categories) => {
-      categoryIds.push(categories.id)
-    })
+      categoryIds.push(categories.id);
+    });
     const selectedTags = this.tags.filter((selectedTags) => selectedTags.requiredForGamePlay);
     selectedTags.map((tag) => {
       tags.push(tag.key);

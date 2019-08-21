@@ -50,7 +50,6 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnInit,
     public router: Router) {
 
     super(fb, store, userAction, utils, cd, route, router);
-
     // if (this.userType === 0) {
     this.setCropperSettings();
     this.setNotificationMsg('', false, 0);
@@ -242,7 +241,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnInit,
     this.checkDisplayName(this.userForm.get('displayName').value);
 
 
-    this.checkUserSubscriptions = this.store.select(userState).pipe(select(s => s.checkDisplayName)).subscribe(status => {
+    this.checkUserSubscriptions = this.store.select(coreState).pipe(select(s => s.checkDisplayName)).subscribe(status => {
 
       this.isValidDisplayName = status;
 

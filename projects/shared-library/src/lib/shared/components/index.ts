@@ -10,6 +10,8 @@ import { RenderAnswerComponent } from './render-answer/render-answer.component';
 import { CropImageDialogComponent } from './crop-image-dialog/crop-image-dialog.component';
 import { UserReactionComponent } from './user-reaction/user-reaction.component';
 import { UserCardComponent } from './user-card/user-card.component';
+import { SignupExtraInfoComponent } from './signup-extra-info/signup-extra-info.component';
+import { CheckDisplayNameComponent } from './check-display-name/check-display-name.component';
 export {
     QuestionsSearchComponent,
     QuestionsTableComponent,
@@ -21,7 +23,9 @@ export {
     RenderAnswerComponent,
     CropImageDialogComponent,
     UserReactionComponent,
-    UserCardComponent
+    UserCardComponent,
+    SignupExtraInfoComponent,
+    CheckDisplayNameComponent
 };
 
 export default [
@@ -35,5 +39,7 @@ export default [
     RenderAnswerComponent,
     CropImageDialogComponent,
     UserReactionComponent,
-    UserCardComponent
+    UserCardComponent,
+    SignupExtraInfoComponent,
+    CheckDisplayNameComponent
 ];

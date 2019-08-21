@@ -294,7 +294,7 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
             const redirectUrl = url ? url : '/dashboard';
             if (this.mode === 0 || this.mode === 1) {
               if (!user.isCategorySet && this.applicationSettings.show_category_screen && !user.categoryIds && !user.tags) {
-                this.naviateTo('select-category-tag');
+                this.naviateTo('signup-extra-info');
               } else {
                 this.naviateTo(redirectUrl);
               }
