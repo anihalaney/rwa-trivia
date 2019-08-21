@@ -1,16 +1,19 @@
 const path = require('path');
 const webpack = require('webpack');
 
-
-
 module.exports = {
-  entry: { server: './server.ts' },
-  resolve: { extensions: ['.js', '.ts'] },
   mode: 'none',
+  entry: { server: './server.ts' },
+  externals: [],
   target: 'node',
-  externals: [/(node_modules|main(\\|\/)..*(\\|\/).js)/],
+  resolve: { extensions: ['.js', '.ts'] },
+  optimization: {
+    minimize: false
+  },
   output: {
     path: path.join(__dirname, `functions/server/functions`),
+    library: 'app',
+    libraryTarget: 'umd',
     filename: '[name].js'
   },
   // This is required to solve SDK_VERSION issue 
@@ -21,8 +24,9 @@ module.exports = {
     }
   },
   module: {
+    noParse: /polyfills-.*\.js/,
     rules: [
-      { test: /\.ts$/, loader: 'ts-loader', exclude: /^(?!.*\.spec\.ts$).*\.ts$/  },
+      { test: /\.ts$/, loader: 'ts-loader', exclude: /^(?!.*\.spec\.ts$).*\.ts$/ },
       {
         test: /(\\|\/)@angular(\\|\/)core(\\|\/).+\.js$/,
         parser: { system: true }
@@ -40,5 +44,7 @@ module.exports = {
       path.join(__dirname, 'src'),
       {}
     )
+
+
   ]
 };

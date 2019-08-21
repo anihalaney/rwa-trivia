@@ -1,13 +1,12 @@
-import { Injectable, PLATFORM_ID, APP_ID, Inject } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { Observable, defer, throwError, from, of } from 'rxjs';
-import { share, take, tap, mapTo, map, filter } from 'rxjs/operators';
-import { CoreState, coreState } from '../store';
-import { User, FirebaseAnalyticsKeyConstants, FirebaseAnalyticsEventConstants } from '../../shared/model';
-import { UserActions, UIStateActions } from '../store/actions';
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
+import { APP_ID, Inject, Injectable, PLATFORM_ID } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { defer, from, Observable, of, throwError } from 'rxjs';
+import { filter, map, mapTo, share, take, tap } from 'rxjs/operators';
+import { User } from '../../shared/model';
+import { CoreState, coreState } from '../store';
+import { UIStateActions, UserActions } from '../store/actions';
 import { FirebaseAuthService } from './firebase-auth.service';
-import { WindowRef } from '../services';
 
 @Injectable()
 export class AuthenticationProvider {

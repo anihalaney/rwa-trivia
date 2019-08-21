@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, Renderer2, ViewChild, Inject, PLATFORM_ID } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
 import { NavigationEnd, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
@@ -8,10 +8,11 @@ import { filter, skip, take } from 'rxjs/operators';
 import { AuthenticationProvider } from 'shared-library/core/auth';
 import { Utils, WindowRef } from 'shared-library/core/services';
 import { coreState } from 'shared-library/core/store';
-import { ApplicationSettingsActions, UserActions, CategoryActions,  } from 'shared-library/core/store/actions';
+import { ApplicationSettingsActions, UserActions, CategoryActions, } from 'shared-library/core/store/actions';
 import { User } from 'shared-library/shared/model';
 import * as gamePlayActions from '../../game-play/store/actions';
 import { AppState, appState } from '../../store';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-root',
@@ -34,6 +35,7 @@ export class AppComponent implements OnInit, OnDestroy {
     private store: Store<AppState>,
     public router: Router,
     public snackBar: MatSnackBar,
+    @Inject(PLATFORM_ID) private platformId: Object,
     private windowRef: WindowRef,
     private userAction: UserActions,
     private applicationSettingsAction: ApplicationSettingsActions,
@@ -82,7 +84,7 @@ export class AppComponent implements OnInit, OnDestroy {
       if (!(evt instanceof NavigationEnd)) {
         return;
       }
-      if (this.windowRef && this.windowRef.nativeWindow) {
+      if (isPlatformBrowser(this.platformId) && this.windowRef && this.windowRef.nativeWindow) {
         this.windowRef.addNavigationsInAnalytics(evt);
         this.windowRef.scrollDown();
       }
@@ -103,13 +105,16 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   toggleTheme() {
-    if (this.theme === '') {
-      this.theme = 'dark';
-      this.renderer.addClass(document.body, this.theme);
-    } else {
-      this.renderer.removeClass(document.body, this.theme);
-      this.theme = '';
+    if (isPlatformBrowser(this.platformId)) {
+      if (this.theme === '') {
+        this.theme = 'dark';
+        this.renderer.addClass(document.body, this.theme);
+      } else {
+        this.renderer.removeClass(document.body, this.theme);
+        this.theme = '';
+      }
     }
+
   }
   cookiesAccepted() {
     this.cookieLawEl.dismiss();

@@ -24,4 +24,8 @@ export class LeaderboardComponent extends Leaderboard {
     protected ngZone: NgZone) {
     super(store, userActions, utils, route, cd, ngZone);
   }
+
+  trackByFn(index, item) {
+    return index; // or item.id
+  }
 }

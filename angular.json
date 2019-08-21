@@ -4,20 +4,24 @@
   "newProjectRoot": "projects",
   "projects": {
     "trivia": {
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        }
+      },
       "root": "projects/trivia",
       "sourceRoot": "projects/trivia/src",
-      "projectType": "application",
       "prefix": "app",
-      "schematics": {},
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist",
+            "outputPath": "functions/dist/browser",
             "index": "projects/trivia/src/index.html",
             "main": "projects/trivia/src/main.ts",
-            "tsConfig": "projects/trivia/tsconfig.app.json",
             "polyfills": "projects/trivia/src/polyfills.ts",
+            "tsConfig": "projects/trivia/tsconfig.app.json",
             "assets": [
               "projects/trivia/src/assets",
               "projects/trivia/src/favicon.ico",
@@ -65,7 +69,6 @@
                   "with": "projects/shared-library/src/lib/environments/trivia/environment.dev.ts"
                 }
               ],
-              "serviceWorker": true,
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
@@ -74,7 +77,9 @@
               "aot": true,
               "extractLicenses": true,
               "vendorChunk": false,
-              "buildOptimizer": true
+              "buildOptimizer": true,
+              "serviceWorker": true,
+              "ngswConfigPath": "ngsw-config.json"
             },
             "trivia-production": {
               "fileReplacements": [
@@ -86,7 +91,6 @@
               "scripts": [
                 "projects/trivia/src/scripts/google-analytics.js"
               ],
-              "serviceWorker": true,
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
@@ -95,7 +99,9 @@
               "aot": true,
               "extractLicenses": true,
               "vendorChunk": false,
-              "buildOptimizer": true
+              "buildOptimizer": true,
+              "serviceWorker": true,
+              "ngswConfigPath": "ngsw-config.json"
             },
             "bitwiser-edu-dev": {
               "fileReplacements": [
@@ -104,7 +110,7 @@
                   "with": "projects/shared-library/src/lib/environments/bitwiser-edu/environment.dev.ts"
                 }
               ],
-              "serviceWorker": true
+              "serviceWorker": false
             },
             "bitwiser-edu-staging": {
               "fileReplacements": [
@@ -113,7 +119,6 @@
                   "with": "projects/shared-library/src/lib/environments/bitwiser-edu/environment.dev.ts"
                 }
               ],
-              "serviceWorker": true,
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
@@ -122,7 +127,9 @@
               "aot": true,
               "extractLicenses": true,
               "vendorChunk": false,
-              "buildOptimizer": true
+              "buildOptimizer": true,
+              "serviceWorker": true,
+              "ngswConfigPath": "ngsw-config.json"
             },
             "bitwiser-edu-production": {
               "fileReplacements": [
@@ -134,7 +141,6 @@
               "scripts": [
                 "projects/trivia/src/scripts/google-analytics.js"
               ],
-              "serviceWorker": true,
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
@@ -143,7 +149,9 @@
               "aot": true,
               "extractLicenses": true,
               "vendorChunk": false,
-              "buildOptimizer": true
+              "buildOptimizer": true,
+              "serviceWorker": true,
+              "ngswConfigPath": "ngsw-config.json"
             }
           }
         },
@@ -267,7 +275,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/admin",
+            "outputPath": "functions/dist/browser/admin",
             "baseHref": "/admin",
             "deployUrl": "/admin/",
             "index": "projects/trivia-admin/src/index.html",
@@ -536,7 +544,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/trivia-editor",
+            "outputPath": "functions/dist/browser/trivia-editor",
             "baseHref": "/trivia-editor",
             "deployUrl": "/trivia-editor/",
             "index": "projects/trivia-editor/src/index.html",

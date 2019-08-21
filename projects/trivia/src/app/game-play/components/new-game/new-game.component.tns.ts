@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit, ViewChild, Inject, PLATFORM_ID } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { RouterExtensions } from 'nativescript-angular/router';
@@ -14,6 +14,7 @@ import { ObservableArray } from 'tns-core-modules/data/observable-array';
 import { Page, isIOS } from 'tns-core-modules/ui/page/page';
 import { AppState, appState } from '../../../store';
 import { NewGame } from './new-game';
+
 @Component({
   selector: 'new-game',
   templateUrl: './new-game.component.html',
@@ -48,8 +49,9 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     public cd: ChangeDetectorRef,
     private page: Page,
     public windowRef: WindowRef,
+    @Inject(PLATFORM_ID) public platformId: Object,
     private ngZone: NgZone) {
-    super(store, utils, gameActions, userActions, windowRef, cd, route, router);
+    super(store, utils, gameActions, userActions, windowRef, platformId, cd, route, router);
     this.initDataItems();
     this.modeAvailable = false;
   }
