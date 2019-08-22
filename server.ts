@@ -3,10 +3,11 @@ import 'zone.js/dist/zone-node';
 import * as express from 'express';
 import * as domino from 'domino';
 import * as compression from 'compression';
+import { XMLHttpRequest } from 'xmlhttprequest';
 import { join } from 'path';
 
 
-const win = domino.createWindow('') ;
+const win = domino.createWindow('');
 
 
 global['window'] = win;
@@ -15,7 +16,7 @@ global['window']['Promise'] = Promise;
 global['document'] = win.document;
 global['Node'] = win['Node'];
 global['navigator'] = win.navigator;
-global['XMLHttpRequest'] = require('xmlhttprequest').XMLHttpRequest;
+global['XMLHttpRequest'] = XMLHttpRequest;
 
 
 const app = express();
