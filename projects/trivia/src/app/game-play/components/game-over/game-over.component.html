@@ -84,6 +84,15 @@
         <span class="win-text">It's a Draw</span>
       </div>
     </div>
+    <div class="col-xs-12" class="bits-n-bityes-container">
+        <span>You have earned</span>
+    </div>
+    <div class="col-xs-12" class="bits-n-bityes-container">
+        <img src="/assets/images/bits-bytes.png"/>
+        <span>Earned {{applicationSettings?.tokens?.enable === true && applicationSettings?.tokens?.earn_bits * game.stats[user.userId].score}} bits</span>
+        <img class="m-l-28"src="/assets/images/bits-bytes.png"/>
+        <span>Earned {{applicationSettings?.tokens?.enable === true && applicationSettings?.tokens?.earn_bytes *  (game.stats[user.userId].score >=5 ? 1 : 0 ) }} bytes</span>
+    </div>
 
   </mat-card-content>
   <mat-card-content class="textcenter">
