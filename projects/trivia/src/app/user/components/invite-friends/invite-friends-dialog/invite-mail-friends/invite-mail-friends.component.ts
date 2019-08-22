@@ -8,8 +8,10 @@ import { AppState, appState } from '../../../../../store';
 import { coreState, UserActions } from 'shared-library/core/store';
 import { Utils } from 'shared-library/core/services';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { isAndroid, isIOS } from 'tns-core-modules/ui/page/page';
 
 const EMAIL_REGEXP = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+declare var IQKeyboardManager: any;
 
 @Component({
   selector: 'app-invite-mail-friends',
@@ -31,12 +33,16 @@ export class InviteMailFriendsComponent implements OnInit, OnDestroy {
   emailCheck: Boolean = false;
   @ViewChildren('textField') textField: QueryList<ElementRef>;
   subscriptions = [];
+  iqKeyboard: any;
 
 
   constructor(private fb: FormBuilder, private store: Store<AppState>, private userAction: UserActions, private cd: ChangeDetectorRef,
     private utils: Utils) {
 
-
+    if (isIOS) {
+        this.iqKeyboard = IQKeyboardManager.sharedManager();
+        this.iqKeyboard.shouldResignOnTouchOutside = true;
+    }
     this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
       this.user = user;
       if (user) {
@@ -114,14 +120,14 @@ export class InviteMailFriendsComponent implements OnInit, OnDestroy {
   }
 
   hideKeyboard() {
-    this.textField
-      .toArray()
-      .map((el) => {
-        if (el.nativeElement && el.nativeElement.android) {
-          el.nativeElement.android.clearFocus();
-        }
-        return el.nativeElement.dismissSoftInput();
-      });
+    if (isAndroid) {
+      this.textField
+        .toArray()
+        .map((el) => {
+            el.nativeElement.android.clearFocus();
+            return el.nativeElement.dismissSoftInput();
+        });
+    }
   }
 }
 

@@ -12,7 +12,7 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { Subject } from 'rxjs';
 import { filter, map, take } from 'rxjs/operators';
 import { android, AndroidActivityBackPressedEventData, AndroidApplication, } from 'tns-core-modules/application';
-import { isAndroid } from 'tns-core-modules/platform';
+import { isAndroid, isIOS } from 'tns-core-modules/platform';
 import { Page } from 'tns-core-modules/ui/page';
 import { CountryListComponent } from '../../../shared/mobile/component/countryList/countryList.component';
 import { PhoneNumberValidationProvider } from '../../../shared/mobile/component/countryList/phone-number-validation.provider';
@@ -23,6 +23,7 @@ import { Utils } from '../../services';
 import {
   Parameter, User, FirebaseAnalyticsKeyConstants, FirebaseAnalyticsEventConstants, FirebaseScreenNameConstants
 } from '../../../shared/model';
+declare var IQKeyboardManager: any;
 
 @Component({
   selector: 'login',
@@ -33,6 +34,7 @@ import {
 
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class LoginComponent extends Login implements OnInit, OnDestroy {
+  iqKeyboard: any;
   @ViewChildren('textField') textField: QueryList<ElementRef>;
   title: string;
   loader = false;
@@ -72,6 +74,10 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
       phoneNumber: '',
       country: 'us',
     };
+    if (isIOS) {
+      this.iqKeyboard = IQKeyboardManager.sharedManager();
+      this.iqKeyboard.shouldResignOnTouchOutside = true;
+    }
   }
 
 
@@ -343,14 +349,14 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
   }
 
   hideKeyboard() {
-    this.textField
+    if (isAndroid) {
+      this.textField
       .toArray()
       .map((el) => {
-        if (isAndroid) {
           el.nativeElement.android.clearFocus();
-        }
-        return el.nativeElement.dismissSoftInput();
-      });
+          return el.nativeElement.dismissSoftInput();
+        });
+    }
   }
 }
 
