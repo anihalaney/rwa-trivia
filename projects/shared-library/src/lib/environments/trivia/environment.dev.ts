@@ -17,7 +17,7 @@ export const CONFIG: IConfig = {
     messagingSenderId: '701588063269'
   },
   'functionsUrl': `https://rwa-trivia-dev-e57fc.firebaseapp.com/${appConstants.API_VERSION}`,
-  'editorUrl': 'https://rwa-trivia-dev-e57fc.firebaseapp.com/trivia-editor',
+  'editorUrl': 'https://rwa-trivia-dev-e57fc.firebaseapp.com/editor',
   'termsAndConditionsUrl': 'https://rwa-trivia-dev-e57fc.firebaseapp.com/terms-and-conditions',
   'privacyUrl': 'https://rwa-trivia-dev-e57fc.firebaseapp.com/privacy-policy',
   'ua_id': 'UA-122807814-1'

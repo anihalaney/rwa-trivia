@@ -275,7 +275,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "functions/dist/browser/admin",
+            "outputPath": "dist/admin",
             "baseHref": "/admin",
             "deployUrl": "/admin/",
             "index": "projects/trivia-admin/src/index.html",
@@ -544,9 +544,9 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "functions/dist/browser/trivia-editor",
-            "baseHref": "/trivia-editor",
-            "deployUrl": "/trivia-editor/",
+            "outputPath": "dist/editor",
+            "baseHref": "/editor",
+            "deployUrl": "/editor/",
             "index": "projects/trivia-editor/src/index.html",
             "main": "projects/trivia-editor/src/main.ts",
             "polyfills": "projects/trivia-editor/src/polyfills.ts",

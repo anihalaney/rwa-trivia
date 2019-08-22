@@ -1,19 +1,19 @@
 // These are important and needed before anything else
 import 'zone.js/dist/zone-node';
 import * as express from 'express';
+import * as domino from 'domino';
+import * as compression from 'compression';
 import { join } from 'path';
 
 
-const domino = require('domino');
-const compression = require('compression');
-const win = domino.createWindow('');
+const win = domino.createWindow('') ;
 
 
 global['window'] = win;
 global['window']['JSON'] = JSON;
 global['window']['Promise'] = Promise;
 global['document'] = win.document;
-global['Node'] = win.Node;
+global['Node'] = win['Node'];
 global['navigator'] = win.navigator;
 global['XMLHttpRequest'] = require('xmlhttprequest').XMLHttpRequest;
 
