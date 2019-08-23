@@ -62,6 +62,8 @@ export class DrawerComponent implements OnInit, OnDestroy {
                     this.activeMenu = 'Recently Completed Games';
                 } else if (nav.includes('/user/my/profile')) {
                     this.activeMenu = 'Profile';
+                } else if (nav.includes('/user/my/game-profile')) {
+                    this.activeMenu = 'Game Profile';
                 } else if (nav === '/user/my/questions') {
                     this.activeMenu = 'My Questions';
                 } else if (nav === '/user/my/invite-friends') {
@@ -196,6 +198,11 @@ export class DrawerComponent implements OnInit, OnDestroy {
 
     navigateToProfileSettings() {
         this.routerExtension.navigate(['/user/my/profile', this.user.userId]);
+        this.closeDrawer();
+    }
+
+    navigateToGameProfile() {
+        this.routerExtension.navigate(['/user/my/game-profile', this.user.userId]);
         this.closeDrawer();
     }
 

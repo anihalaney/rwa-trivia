@@ -13,7 +13,8 @@ import {
   InviteFriendsDialogComponent,
   InviteMailFriendsComponent,
   LocationResetDialogComponent,
-  PreviewQuestionDialogComponent
+  PreviewQuestionDialogComponent,
+  GameProfileComponent
 } from './components';
 
 import { DropDownModule } from 'nativescript-drop-down/angular';
@@ -27,7 +28,8 @@ import { DropDownModule } from 'nativescript-drop-down/angular';
     InviteFriendsDialogComponent,
     InviteMailFriendsComponent,
     LocationResetDialogComponent,
-    PreviewQuestionDialogComponent
+    PreviewQuestionDialogComponent,
+    GameProfileComponent
   ],
   imports: [
     // rwa modules
@@ -49,7 +51,8 @@ import { DropDownModule } from 'nativescript-drop-down/angular';
     QuestionAddUpdateComponent,
     MyQuestionsComponent,
     InviteFriendsComponent,
-    LocationResetDialogComponent
+    LocationResetDialogComponent,
+    GameProfileComponent
   ],
   entryComponents: [
     LocationResetDialogComponent,
