@@ -25,6 +25,7 @@ export class ApplicationSettings {
     game_question_bits?: number;
     invite_bits_enabled?: boolean;
     invite_bits?: number;
+    first_question_bits?: number;
 }
 
 export class TimerLoader {
