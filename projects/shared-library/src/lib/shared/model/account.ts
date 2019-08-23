@@ -9,6 +9,7 @@ export class AccountBase {
     bits?: number;
     bytes?: number;
     isFirstGame?: boolean;
+    firstQuestionBitsAdded?: number;
 }
 
 export class Account extends AccountBase {
