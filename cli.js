@@ -24,21 +24,17 @@ const platForms = ['android', 'ios'];
 
 
 
-const buildSsr = `ng build trivia  --configuration=productVariant-env && 
+const buildApps = `ng build trivia  --configuration=productVariant-env && 
                 ng build trivia-admin  --configuration=productVariant-env && 
                 ng build trivia-editor --configuration=productVariant-env && 
                 ng run trivia:server`;
-const compileFunctions = `npx rimraf functions/server && tsc --project functions`;
-const deployFunctionsCommand = ` ${buildSsr} && 
+const compileFunctions = `npx rimraf functions/server && npx tsc --project functions`;
+const buildSSRServer = `npx webpack --config webpack.server.config.js`;
+const deployFunctionsCommand = ` ${buildApps} && 
                     ${compileFunctions} &&                     
-                    npx webpack --config webpack.server.config.js &&                   
+                    ${buildSSRServer} &&                   
                     setConfig                    
-                    npx rimraf functions/index.js && 
-                    npx cp functions/app-functions.js functions/index.js && 
                     firebase deploy -P productVariant-env --only functions &&                         
-                    npx rimraf functions/index.js && 
-                    npx cp functions/ssr-functions.js functions/index.js && 
-                    firebase deploy -P productVariant-env --only functions:ssr && 
                     firebase deploy -P productVariant-env --only hosting`;
 
 const commandList = {
@@ -78,8 +74,8 @@ const commandList = {
     },
     "run-functions":
     {
-        "command": `npx rimraf functions/server & 
-                        tsc --project functions  && firebase serve -P productVariant-environment  --only functions`,
+        "command": `${buildApps} && ${compileFunctions} && ${buildSSRServer} 
+        && firebase serve -P productVariant-env  --only functions`,
         "description": "deploy firebase functions local",
         "options": {
             "productVariant": {
@@ -90,7 +86,7 @@ const commandList = {
                 "default": 'trivia',
                 "alias": ['PV', 'pv']
             },
-            "environment": {
+            "env": {
                 "demand": true,
                 "description": 'environment e.g. dev',
                 "type": 'string',
