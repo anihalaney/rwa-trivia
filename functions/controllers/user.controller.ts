@@ -7,11 +7,13 @@ import {
     ResponseMessagesConstants,
     UserConstants,
     HeaderConstants,
-    User
+    User,
+    Account
 } from '../../projects/shared-library/src/lib/shared/model';
 import { Utils } from '../utils/utils';
 import { AccountService } from '../services/account.service';
 import { externalUrl } from '../../projects/shared-library/src/lib/environments/external-url';
+import { AppSettings } from './../services/app-settings.service';
 
 
 import * as requestPromise from 'request-promise';
@@ -32,7 +34,7 @@ export class UserController {
         try {
             const loggedInUser = req && req.user && req.user.uid ? req.user.uid : '';
             Utils.sendResponse(res, interceptorConstants.SUCCESS,
-                await UserService.getUserProfile(userId, loggedInUser ));
+                await UserService.getUserProfile(userId, loggedInUser));
         } catch (error) {
             Utils.sendError(res, error);
         }
@@ -232,20 +234,22 @@ export class UserController {
         }
     }
 
-    static async addBitesFirstQuestion(req, res) {
+    static async addBitsFirstQuestion(req, res) {
         const userId = req.user.uid;
 
         if (!userId) {
             Utils.sendResponse(res, interceptorConstants.FORBIDDEN, ResponseMessagesConstants.USER_ID_NOT_FOUND);
         }
 
-        if (req.user.user_id !== userId) {
-            Utils.sendResponse(res, interceptorConstants.FORBIDDEN, ResponseMessagesConstants.UNAUTHORIZED);
-        }
-
         try {
-            await AccountService.updateBits(userId);
-            Utils.sendResponse(res, interceptorConstants.SUCCESS, { 'status': ResponseMessagesConstants.BITES_ADDED });
+            const account: Account = await AccountService.getAccountById(userId);
+            const appSetting = await AppSettings.Instance.getAppSettings();
+            const bits = appSetting.first_question_bits;
+            if (!account.firstQuestionBitsAdded) {
+                await AccountService.updateBits(userId, bits);
+            }
+
+            Utils.sendResponse(res, interceptorConstants.SUCCESS, { 'status': ResponseMessagesConstants.BITS_ADDED });
 
         } catch (error) {
             Utils.sendError(res, error);

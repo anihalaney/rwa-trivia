@@ -50,13 +50,13 @@ export interface CoreState {
   addressUsingLongLat: any;
   addressSuggestions: any;
   userFriendInvitations: { [key: string]: Invitation };
+  firstQuestionBits: any;
+  firstQuestion: Question;
   updateUserReactionStatus: any;
   getUserReactionStatus: any;
   getQuestionSuccess: any;
   getTopCategories: any;
   getTopTags: any;
-  firstQuestionBits: any;
-  firstQuestion: Question;
 }
 
 export const reducer: ActionReducerMap<CoreState> = {
@@ -86,13 +86,13 @@ export const reducer: ActionReducerMap<CoreState> = {
   addressUsingLongLat: addressUsingLongLat,
   addressSuggestions: addressSuggestions,
   userFriendInvitations: userFriendInvitations,
+  firstQuestionBits: firstQuestionBits,
+  firstQuestion: firstQuestion,
   updateUserReactionStatus: updateUserReactionStatus,
   getUserReactionStatus: getUserReactionStatus,
   getQuestionSuccess: getQuestionSuccess,
   getTopCategories: topCategories,
-  getTopTags: topTags,
-  firstQuestionBits: firstQuestionBits,
-  firstQuestion: firstQuestion
+  getTopTags: topTags
 };
 
 // Features

@@ -14,9 +14,9 @@ class UserRoutes {
         this.userRoutes = express.Router();
 
          //  '/add-bits-first-question'
-         this.userRoutes.get(`/${RoutesConstants.ADD_BITES_FIRST_QUESTION}`,
-         AuthMiddleware.authorizedOnly, UserController.addBitesFirstQuestion);
-         
+         this.userRoutes.get(`/${RoutesConstants.ADD_BITS_FIRST_QUESTION}`,
+         AuthMiddleware.authorizedOnly, UserController.addBitsFirstQuestion);
+
         //  '/:userId'
         this.userRoutes.get(`/:${this.UID}`,
             UserController.getUserById);
