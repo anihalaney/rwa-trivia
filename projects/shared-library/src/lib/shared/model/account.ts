@@ -8,6 +8,7 @@ export class AccountBase {
     id?: string;
     bits?: number;
     bytes?: number;
+    isFirstGame?: boolean;
     firstQuestionBitsAdded?: number;
 }
 
