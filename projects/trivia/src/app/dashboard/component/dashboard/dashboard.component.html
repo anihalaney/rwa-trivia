@@ -3,20 +3,24 @@
     <div class="pageheading col-md-6 col-xs-12">
       <span class="hidden-xs pull-left">Dashboard</span>
 
-      <div *ngIf="applicationSettings?.tokens?.enable && user && account" class="points pull-left m-l-20"> 
-       <div class="p-t-10"> Bits  </div>
-        <label class="points-count" [ngClass]="{'points-count-f-12': account.bits > 9999 }"> {{account.bits || 0 }}</label>
-       </div>
-   
-       <div *ngIf="applicationSettings?.tokens?.enable && user && account" class="points bytes pull-left m-l-20"> 
-          <div class="p-t-10"> Bytes  </div>
-           <label class="points-count" [ngClass]="{'points-count-f-12': account.bytes > 9999 }" > {{account?.bytes || 0}}</label>
+      <div *ngIf="applicationSettings?.tokens?.enable && user && account" class="points pull-left m-l-20">
+        <div class="p-t-10"> Bits </div>
+        <label class="points-count" [ngClass]="{'points-count-f-12': account.bits > 9999 }">
+          {{account.bits || 0 }}</label>
+      </div>
+
+      <div *ngIf="applicationSettings?.tokens?.enable && user && account" class="points bytes pull-left m-l-20">
+        <div class="p-t-10"> Bytes </div>
+        <label class="points-count" [ngClass]="{'points-count-f-12': account.bytes > 9999 }">
+          {{account?.bytes || 0}}</label>
       </div>
 
     </div>
     <div class="col-md-6 col-xs-12 align-right">
-      <button [disabled] = "gamePlayBtnDisabled" [ngClass]="{'min-startgame': timeoutLive && isLivesEnable}" class="startgame" [routerLink]="['/game-play']"> {{ gameStart }} </button>
-      <div class="lives" *ngIf="user && account && account.lives >=0 && isLivesEnable" > <span class="lives-text">{{account.lives}}</span> </div>
+      <button [disabled]="gamePlayBtnDisabled" [ngClass]="{'min-startgame': timeoutLive && isLivesEnable}"
+        class="startgame" [routerLink]="['/game-play']"> {{ gameStart }} </button>
+      <div class="lives" *ngIf="user && account && account.lives >=0 && isLivesEnable"> <span
+          class="lives-text">{{account.lives}}</span> </div>
     </div>
   </div>
 
@@ -35,7 +39,8 @@
 
       </div>
       <ul class="row" *ngIf="showGames">
-        <li *ngFor="let game of activeGames | slice:gameSliceStartIndex:gameSliceLastIndex" class="col-lg-3 col-md-4 col-sm-12 col-xs-12 ">
+        <li *ngFor="let game of activeGames | slice:gameSliceStartIndex:gameSliceLastIndex"
+          class="col-lg-3 col-md-4 col-sm-12 col-xs-12 ">
           <game-card [game]="game"></game-card>
         </li>
         <ng-container *ngIf="activeGames.length > 0">
@@ -48,7 +53,8 @@
       </ul>
     </div>
 
-    <div class="col-sm-12 col-xs-12 view-all-btn" *ngIf="showGames && activeGames.length!=gameSliceLastIndex && activeGames.length > 8 ">
+    <div class="col-sm-12 col-xs-12 view-all-btn"
+      *ngIf="showGames && activeGames.length!=gameSliceLastIndex && activeGames.length > 8 ">
       <a class="viewall" (click)="displayMoreGames()">view more</a>
     </div>
 
@@ -83,7 +89,8 @@
       </li>
     </ul>
 
-    <div class="col-sm-12 col-xs-12 view-all-btn" *ngIf="gameInvites && gameInvites.length > 3 && gameInvites.length!=gameInviteSliceLastIndex">
+    <div class="col-sm-12 col-xs-12 view-all-btn"
+      *ngIf="gameInvites && gameInvites.length > 3 && gameInvites.length!=gameInviteSliceLastIndex">
       <a class="viewall" (click)="displayMoreGameInvites()">view more</a>
     </div>
   </section>
@@ -102,7 +109,8 @@
       </li>
     </ul>
 
-    <div class="col-sm-12 col-xs-12 view-all-btn" *ngIf="friendInvitations && friendInvitations.length > 3 && friendInvitations.length!=friendInviteSliceLastIndex">
+    <div class="col-sm-12 col-xs-12 view-all-btn"
+      *ngIf="friendInvitations && friendInvitations.length > 3 && friendInvitations.length!=friendInviteSliceLastIndex">
       <a class="viewall" (click)="displayMoreFriendInvites()">view more</a>
     </div>
 
@@ -112,7 +120,7 @@
   <div class="row">
     <!-- Question of the day -->
     <div [ngClass]="showNewsCard?'col-lg-7 col-md-12 col-sm-12':'col-lg-12 col-md-12 col-sm-12' ">
-      <question  [user]="user" [userDict]="userDict"></question>
+      <question [user]="user"></question>
     </div>
     <!-- Question of the day end -->
 

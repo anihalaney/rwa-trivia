@@ -82,7 +82,7 @@ export class SelectCategoryTagComponent implements OnInit {
     this.tags = [... this.tags];
   }
 
-  continueToDashboard() {
+  continueToFirstQuestion() {
     const categoryIds = [];
     const tags = [];
     const selectedTopics = this.categories.filter((selectedCategory) => selectedCategory.requiredForGamePlay);
@@ -97,7 +97,7 @@ export class SelectCategoryTagComponent implements OnInit {
     this.user.tags = tags;
     this.user.isCategorySet = true;
     this.store.dispatch(this.userAction.addUserProfile(this.user, false));
-    this.routerExtension.navigate(['/dashboard'], { clearHistory: true });
+    this.routerExtension.navigate(['/first-question'], { clearHistory: true });
   }
 
   ngOnDestroy() {

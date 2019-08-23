@@ -18,11 +18,11 @@ export class ApplicationSettings {
     game_play_max_time: number[];
     default_names: Array<string>;
     user_display_name_value: number;
+    first_question_bits?: number;
     show_welcome_screen: boolean;
     show_category_screen?: boolean;
     category_count_limit?: number;
     tag_count_limit?: number;
-    first_question_bits?: number;
     invite_bits?: number;
     invite_bits_enabled?: boolean;
 }
