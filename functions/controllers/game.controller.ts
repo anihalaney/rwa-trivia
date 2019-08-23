@@ -36,6 +36,11 @@ export class GameController {
             if (appSetting.lives.enable) {
                 // Get Account Info
                 const account: Account = await AccountService.getAccountById(userId);
+                if (!account.isFirstGame) {
+                    const updateBits = await AccountService.updateBits(userId, appSetting.game_question_bits);
+                    account.isFirstGame = true;
+                    await AccountService.updateAccountData(account);
+                }
                 // if lives is less then or equal to 0 then send with error
                 if (account.lives <= 0) {
                     Utils.sendResponse(res, interceptorConstants.FORBIDDEN, ResponseMessagesConstants.NOT_ENOUGH_LIFE);

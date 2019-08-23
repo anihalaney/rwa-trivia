@@ -253,6 +253,16 @@ export class UserEffects {
                 ))
         );
 
+    @Effect()
+    setFirstQuestionBits = this.actions$
+        .pipe(ofType(UserActions.SET_FIRST_QUESTION_BITS))
+        .pipe(
+            switchMap((action: ActionWithPayload<any>) =>
+                this.svc.firstQuestionSetBits(action.payload).pipe(
+                    map((result: any) => this.userActions.setFirstQuestionBitsSuccess(result))
+                ))
+        );
+
     constructor(
         private actions$: Actions,
         private userActions: UserActions,
