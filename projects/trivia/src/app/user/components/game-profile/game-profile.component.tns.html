@@ -15,7 +15,7 @@
                 <StackLayout row="1" colSpan="2" *ngIf="socialProfileSettings && socialProfileSettings.length > 0"
                     orientation="horizontal" horizontalAlignment="center">
                     <FlexboxLayout *ngFor="let profile of socialProfileSettings">
-                        <Label *ngIf="profile.enable" [order]="profile.position" text="{{getIcon(profile.icon)}}"
+                        <Label *ngIf="profile?.enable" [order]="profile?.position" text="{{getIcon(profile?.icon)}}"
                             fontSize="22" margin="0 5 0 5" class="fa" class="fa"
                             (tap)="openLink(profile?.socialUrl)"></Label>
                     </FlexboxLayout>
@@ -39,7 +39,6 @@
             </FlexboxLayout>
 
             <FlexboxLayout flexWrap="wrap" margin="0 10 20 10" horizontalAlignment="center">
-                <!-- Use flexWrapBefore to control explicit line wrapping -->
 
                 <StackLayout orientation="horizontal" horizontalAlignment="center" class="stats-box border"
                     margin="0 10 10 0">

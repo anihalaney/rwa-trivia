@@ -34,7 +34,6 @@ export class GameProfile {
         public userAction: UserActions,
         public cd: ChangeDetectorRef
     ) {
-        console.log(String.fromCharCode(0xf041));
         this.subscriptions.push(
             this.route.params.pipe(
                 skipWhile(params => !params.userid),
@@ -47,12 +46,12 @@ export class GameProfile {
                     } else {
                         this.userType = UserType.loggedInOtherUserProfile;
                     }
-                    return this.initializeUserProfile();
+                    return this.initializeProfile();
                 })
             ).subscribe());
     }
 
-    initializeUserProfile() {
+    initializeProfile() {
         this.store.dispatch(this.userAction.loadOtherUserExtendedInfo(this.userId));
         return this.store.select(appState.coreState).pipe(
             select(s => s.userDict),
