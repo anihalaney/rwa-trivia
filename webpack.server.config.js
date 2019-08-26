@@ -11,7 +11,7 @@ module.exports = {
     minimize: false
   },
   output: {
-    path: path.join(__dirname, `functions/server/functions`),
+    path: path.join(__dirname, `functions/dist`),
     library: 'app',
     libraryTarget: 'umd',
     filename: '[name].js'

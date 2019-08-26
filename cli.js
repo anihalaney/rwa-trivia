@@ -36,7 +36,7 @@ const deployFunctionsCommand = ` ${buildApps} &&
                     setConfig                    
                     firebase deploy -P productVariant-env --only functions &&                         
                     firebase deploy -P productVariant-env --only hosting`;
-
+                  
 const commandList = {
     "run-web":
     {
@@ -74,8 +74,8 @@ const commandList = {
     },
     "run-functions":
     {
-        "command": `${buildApps} && ${compileFunctions} && ${buildSSRServer} 
-        && firebase serve -P productVariant-env  --only functions`,
+        "command": `buildApps ${compileFunctions} && buildSSRServer 
+        firebase serve -P productVariant-env  --only functions`,
         "description": "deploy firebase functions local",
         "options": {
             "productVariant": {
@@ -93,7 +93,40 @@ const commandList = {
                 "choices": env,
                 "default": 'dev',
                 "alias": ['E', 'e']
+            },
+            "buildApps": {
+                "demand": false,
+                "hidden": true,
+                "type": 'string'
+            },
+            "buildSSRServer": {
+                "demand": false,
+                "hidden": true,
+                "type": 'string'
+            },
+            "buildSSR": {
+                "demand": true,
+                "default": false,
+                "type": 'boolean',
+                "description": 'build SSR Functions e.g. true',
+                "alias": ['S', 's']
             }
+        }, 
+        "builder": args => {
+            const buildSSR = args.argv.buildSSR;
+            let buildAppstemp = buildApps;
+            if (buildSSR){    
+                buildAppstemp = buildAppstemp.replace(new RegExp(escapeRegExp('productVariant'), 'g'), args.argv.productVariant );
+                buildAppstemp = buildAppstemp.replace(new RegExp(escapeRegExp('env'), 'g'), args.argv.env );
+            }
+
+            args.options(
+                {
+                    'buildApps': { 'default': buildSSR  ? `${buildAppstemp} &&` : '' },
+                    'buildSSRServer': { 'default': buildSSR ? `${buildSSRServer} &&` : '' }
+                }
+            );
+            replaceVariableInIndex(['trivia', 'trivia-admin'], args.argv.productVariant);
         }
     },
     "deploy-functions":
