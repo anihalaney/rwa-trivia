@@ -2,7 +2,6 @@ import { Component, Output, EventEmitter, OnDestroy, ChangeDetectionStrategy, Ch
 import { Question, Answer, User, ApplicationSettings } from 'shared-library/shared/model';
 import { AppState, appState, categoryDictionary } from '../../../../../../../trivia/src/app/store';
 import { Store, select } from '@ngrx/store';
-import { QuestionActions } from 'shared-library/core/store/actions';
 import { Utils } from 'shared-library/core/services';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { Observable } from 'rxjs';
@@ -39,8 +38,7 @@ export class FirstQuestionComponent implements OnInit, OnDestroy {
   userDict$: Observable<{ [key: string]: User }>;
 
   constructor(
-    private store: Store<AppState>,
-    private questionAction: QuestionActions,
+    private store: Store<AppState>, 
     private utils: Utils,
     private cd: ChangeDetectorRef,
     public routerExtension: RouterExtensions,
@@ -60,7 +58,7 @@ export class FirstQuestionComponent implements OnInit, OnDestroy {
         }
       }));
 
-    this.store.select(categoryDictionary).pipe(map(categories => {
+    this.subscriptions.push(this.store.select(categoryDictionary).pipe(map(categories => {
       this.categoryDictionary = categories;
     }),
       flatMap(() => this.store.select(appState.coreState).pipe(select(s => s.firstQuestion)))).subscribe((question: Question) => {
@@ -86,7 +84,7 @@ export class FirstQuestionComponent implements OnInit, OnDestroy {
           }
           this.cd.markForCheck();
         }
-      });
+      }));
 
     this.userDict$ = this.store.select(appState.coreState).pipe(select(s => s.userDict));
     this.subscriptions.push(this.userDict$.subscribe(userDict => this.userDict = userDict));

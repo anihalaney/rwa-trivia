@@ -344,13 +344,11 @@ export class AccountService {
     }
 
     /**
-     * updateBits
-     * return account
-     */
-    static async updateBits(userId: string): Promise<any> {
+   * updateBits
+   * return account
+   */
+    static async updateBits(userId: string, bits: number): Promise<any> {
         try {
-            const appSetting = await AppSettings.Instance.getAppSettings();
-            const bits = appSetting.first_question_bits;
             const accountData = await AccountService.getAccountById(userId);
             accountData.bits = accountData.bits ? Utils.changeFieldValue(bits) : bits;
             await AccountService.updateAccountData(accountData);

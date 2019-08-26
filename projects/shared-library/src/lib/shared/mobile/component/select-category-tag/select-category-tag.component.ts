@@ -62,7 +62,7 @@ export class SelectCategoryTagComponent implements OnInit {
       this.topTags = topTags;
       this.topTags.map((tag: any) => {
         tag.requiredForGamePlay = false;
-      })
+      });
       this.tags = this.topTags;
     }));
 
@@ -76,7 +76,6 @@ export class SelectCategoryTagComponent implements OnInit {
     categories.requiredForGamePlay = !categories.requiredForGamePlay;
     this.categories = [... this.categories];
     this.selectedCategories = this.returnSelectedTagsOrCategories(this.categories).length;
-    this.categories.every((s) => s.requiredForGamePlay)
   }
 
   selectTags(args) {
@@ -90,8 +89,8 @@ export class SelectCategoryTagComponent implements OnInit {
     const tags = [];
     const selectedTopics = this.returnSelectedTagsOrCategories(this.categories);
     selectedTopics.map((categories) => {
-      categoryIds.push(categories.id)
-    })
+      categoryIds.push(categories.id);
+    });
     const selectedTags = this.returnSelectedTagsOrCategories(this.tags);
     selectedTags.map((tag) => {
       tags.push(tag.key);
@@ -104,7 +103,7 @@ export class SelectCategoryTagComponent implements OnInit {
   }
 
   returnSelectedTagsOrCategories(type) {
-    return type.filter((s) => s.requiredForGamePlay)
+    return type.filter((s) => s.requiredForGamePlay);
   }
 
   ngOnDestroy() {
