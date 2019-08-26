@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import { User, Question } from 'shared-library/shared/model';
+import { User, Question, UserStatus } from 'shared-library/shared/model';
 
 export enum UserActionTypes {
 
@@ -59,6 +59,8 @@ export class CheckDisplayNameSuccess implements Action {
     readonly type = UserActionTypes.CHECK_DISPLAY_NAME_SUCCESS;
     constructor(public payload: boolean) { } // game
 }
+
+
 
 export type UserActions
     = LoadUserPublishedQuestions

@@ -5,7 +5,7 @@ import * as app from 'tns-core-modules/application';
 import * as firebase from 'nativescript-plugin-firebase';
 import { isAndroid } from 'tns-core-modules/platform';
 import { Store, select } from '@ngrx/store';
-import { User, ApplicationSettings, Parameter } from './../../../../shared/model';
+import { User, ApplicationSettings, Parameter, DeviceToken, TriggerConstants, DrawerConstants } from './../../../../shared/model';
 import { UserActions } from '../../../../core/store/actions';
 import { CoreState, coreState } from '../../../../core/store';
 import { AuthenticationProvider } from './../../../../core/auth/authentication.provider';
@@ -83,6 +83,20 @@ export class DrawerComponent implements OnInit, OnDestroy {
                 this.applicationSettings = appSettings[0];
             }
         }));
+
+        this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.userUpdateStatus)).subscribe(status => {
+            if (status !== null) {
+                switch (status) {
+                    case DrawerConstants.UPDATE_TOKEN_STATUS:
+                        this.authProvider.updateUserConnection();
+                        break;
+                    case DrawerConstants.LOGOUT:
+                        this.resetValues();
+                        break;
+                }
+            }
+        }));
+
         this.subscriptions.push(this.categoriesObs);
     }
     ngOnInit() {
@@ -93,29 +107,40 @@ export class DrawerComponent implements OnInit, OnDestroy {
                 if (!this.pushToken) {
                     firebase.getCurrentPushToken().then((token) => {
                         this.pushToken = token;
+                        this.authProvider.updateDevicePushToken(token);
+                        const deviceToken: DeviceToken = new DeviceToken();
+                        deviceToken.token = token;
+                        deviceToken.online = true;
                         if (isAndroid) {
                             user.androidPushTokens = (user.androidPushTokens) ? user.androidPushTokens : [];
-                            if (user.androidPushTokens.indexOf(token) === -1) {
+                            if (user.androidPushTokens
+                                .findIndex((androidPushToken) =>
+                                    (androidPushToken === token ||
+                                        (androidPushToken && androidPushToken.token && androidPushToken.token === token))) === -1) {
                                 console.log('Android token', token);
-                                user.androidPushTokens.push(token);
-                                this.updateUser(user);
+                                user.androidPushTokens.push(deviceToken);
+                                this.updateUser(user, DrawerConstants.UPDATE_TOKEN_STATUS);
+                            } else {
+                                this.authProvider.updateUserConnection();
                             }
+
                         } else {
                             user.iosPushTokens = (user.iosPushTokens) ? user.iosPushTokens : [];
-                            if (user.iosPushTokens.indexOf(token) === -1) {
+                            if (user.iosPushTokens
+                                .findIndex((iosPushToken) =>
+                                    (iosPushToken === token ||
+                                        (iosPushToken && iosPushToken.token && iosPushToken.token === token))) === -1) {
                                 console.log('ios token', token);
-                                user.iosPushTokens.push(token);
-                                this.updateUser(user);
+                                user.iosPushTokens.push(deviceToken);
+                                this.updateUser(user, DrawerConstants.UPDATE_TOKEN_STATUS);
+                            } else {
+                                this.authProvider.updateUserConnection();
                             }
+
                         }
                         this.user = user;
                     });
                 }
-            } else if (this.logOut) {
-                /* We have used Timout because authprovide.logout() gives permission_denied error without timeout */
-                setTimeout(() => {
-                    this.resetValues();
-                }, 2000);
             }
         }));
     }
@@ -143,19 +168,31 @@ export class DrawerComponent implements OnInit, OnDestroy {
     logout() {
         this.logOut = true;
         this.setLogoutFirebaseAnalyticsParameter(this.user);
-        if (isAndroid && this.user.androidPushTokens && this.user.androidPushTokens.indexOf(this.pushToken) > -1) {
-            this.user.androidPushTokens.splice(this.user.androidPushTokens.indexOf(this.pushToken), 1);
-            this.updateUser(this.user);
-        } else if (this.user.iosPushTokens && this.user.iosPushTokens.indexOf(this.pushToken) > -1) {
-            this.user.iosPushTokens.splice(this.user.iosPushTokens.indexOf(this.pushToken), 1);
-            this.updateUser(this.user);
+        if (isAndroid && this.user.androidPushTokens) {
+            const index = this.user.androidPushTokens
+                .findIndex((androidPushToken) =>
+                    (androidPushToken === this.pushToken ||
+                        (androidPushToken && androidPushToken.token && androidPushToken.token === this.pushToken)));
+            if (index > -1) {
+                this.user.androidPushTokens.splice(index, 1);
+                this.updateUser(this.user, DrawerConstants.LOGOUT);
+            } else {
+                this.resetValues();
+            }
+        } else if (this.user.iosPushTokens) {
+            const index = this.user.iosPushTokens
+                .findIndex((iosPushToken) =>
+                    (iosPushToken === this.pushToken ||
+                        (iosPushToken && iosPushToken.token && iosPushToken.token === this.pushToken)));
+            if (index > -1) {
+                this.user.iosPushTokens.splice(index, 1);
+                this.updateUser(this.user, DrawerConstants.LOGOUT);
+            } else {
+                this.resetValues();
+            }
         } else {
             this.resetValues();
         }
-
-        this.activeMenu = 'Home';
-        this.closeDrawer();
-        this.routerExtension.navigate(['/dashboard'], { clearHistory: true });
     }
 
     setLogoutFirebaseAnalyticsParameter(user: User) {
@@ -180,13 +217,22 @@ export class DrawerComponent implements OnInit, OnDestroy {
     }
 
     resetValues() {
-        this.logOut = false;
-        this.pushToken = undefined;
+
         this.authProvider.logout();
+        /* We have used Timeout because authprovide.logout() nullify object after some time */
+        setTimeout(() => {
+            this.logOut = false;
+            this.pushToken = undefined;
+            this.activeMenu = 'Home';
+            this.closeDrawer();
+            this.store.dispatch(this.userActions.loginSuccess(null));
+            this.routerExtension.navigate(['/dashboard'], { clearHistory: true });
+        }, 2000);
+
     }
 
-    updateUser(user: User) {
-        this.store.dispatch(this.userActions.updateUser(user));
+    updateUser(user: User, status: string) {
+        this.store.dispatch(this.userActions.updateUser(user, status));
     }
 
     recentGame() {
