@@ -7,11 +7,13 @@ import {
     ResponseMessagesConstants,
     UserConstants,
     HeaderConstants,
-    User
+    User,
+    Account
 } from '../../projects/shared-library/src/lib/shared/model';
 import { Utils } from '../utils/utils';
 import { AccountService } from '../services/account.service';
 import { externalUrl } from '../../projects/shared-library/src/lib/environments/external-url';
+import { AppSettings } from './../services/app-settings.service';
 
 
 import * as requestPromise from 'request-promise';
@@ -32,7 +34,7 @@ export class UserController {
         try {
             const loggedInUser = req && req.user && req.user.uid ? req.user.uid : '';
             Utils.sendResponse(res, interceptorConstants.SUCCESS,
-                await UserService.getUserProfile(userId, loggedInUser ));
+                await UserService.getUserProfile(userId, loggedInUser));
         } catch (error) {
             Utils.sendError(res, error);
         }
@@ -227,6 +229,28 @@ export class UserController {
         try {
             const requestResponse = await requestPromise(options);
             Utils.sendResponse(res, interceptorConstants.SUCCESS, requestResponse);
+        } catch (error) {
+            Utils.sendError(res, error);
+        }
+    }
+
+    static async addBitsFirstQuestion(req, res) {
+        const userId = req.user.uid;
+
+        if (!userId) {
+            Utils.sendResponse(res, interceptorConstants.FORBIDDEN, ResponseMessagesConstants.USER_ID_NOT_FOUND);
+        }
+
+        try {
+            const account: Account = await AccountService.getAccountById(userId);
+            const appSetting = await AppSettings.Instance.getAppSettings();
+            const bits = appSetting.first_question_bits;
+            if (!account.firstQuestionBitsAdded) {
+                await AccountService.updateBits(userId, bits);
+            }
+
+            Utils.sendResponse(res, interceptorConstants.SUCCESS, { 'status': ResponseMessagesConstants.BITS_ADDED });
+
         } catch (error) {
             Utils.sendError(res, error);
         }

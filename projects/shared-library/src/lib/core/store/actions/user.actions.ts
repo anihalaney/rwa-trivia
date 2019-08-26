@@ -322,4 +322,20 @@ export class UserActions {
     };
   }
 
+  static SET_FIRST_QUESTION_BITS = 'SET_FIRST_QUESTION_BITS';
+  setFirstQuestionBits(userId: string): ActionWithPayload<string> {
+    return {
+      type: UserActions.SET_FIRST_QUESTION_BITS,
+      payload: userId
+    };
+  }
+
+  static SET_FIRST_QUESTION_BITS_SUCCESS = 'SET_FIRST_QUESTION_BITS_SUCCESS';
+  setFirstQuestionBitsSuccess(msg: string): ActionWithPayload<string> {
+    return {
+      type: UserActions.SET_FIRST_QUESTION_BITS_SUCCESS,
+      payload: msg
+    };
+  }
+
 }

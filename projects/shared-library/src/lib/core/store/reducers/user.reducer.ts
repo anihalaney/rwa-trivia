@@ -175,3 +175,12 @@ export function userUpdateStatus(state: any = null, action: ActionWithPayload<st
       return state;
   }
 }
+export function firstQuestionBits(state: any = null, action: ActionWithPayload<string>): string {
+  switch (action.type) {
+    case UserActions.SET_FIRST_QUESTION_BITS_SUCCESS:
+      return action.payload;
+    default:
+      return null;
+  }
+}
+

@@ -248,4 +248,9 @@ export class UserService {
     updateUserStatus(userStatus: UserStatus) {
         this.dbService.updateDoc('user_status', userStatus.userId, userStatus);
     }
+
+    firstQuestionSetBits(userId: string): Observable<any> {
+        const url = `${CONFIG.functionsUrl}/user/add-bits-first-question`;
+        return this.http.get<any>(url);
+    }
 }

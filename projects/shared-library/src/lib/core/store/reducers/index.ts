@@ -3,14 +3,16 @@ import { User, Category, Question, Game, Friends, Invitation, Account } from 'sh
 import {
   user, authInitialized, invitationToken, userDict,
   gameInvites, userFriends, friendInvitations, userProfileSaveStatus, feedback, account, getGameResult, countries,
-  addressUsingLongLat, addressSuggestions, userFriendInvitations, userUpdateStatus
+  addressUsingLongLat, addressSuggestions, userFriendInvitations, userUpdateStatus, firstQuestionBits
 } from './user.reducer';
 import { categories, topCategories } from './categories.reducer';
 import { tags, topTags } from './tags.reducer';
-import { questionOfTheDay, questionSaveStatus, updateQuestion } from './questions.reducer';
+import { questionOfTheDay, questionSaveStatus, updateQuestion, firstQuestion } from './questions.reducer';
 import { loginRedirectUrl, resetPasswordLogs } from './ui-state.reducer';
-import { activeGames, newGameId, gameCreateStatus, updateUserReactionStatus, getUserReactionStatus,
-  getQuestionSuccess } from './game.reducer';
+import {
+  activeGames, newGameId, gameCreateStatus, updateUserReactionStatus, getUserReactionStatus,
+  getQuestionSuccess
+} from './game.reducer';
 import { applicationSettings } from './application-settings.reducer';
 import { Country } from 'shared-library/shared/mobile/component/countryList/model/country.model';
 
@@ -51,6 +53,8 @@ export interface CoreState {
   addressSuggestions: any;
   userFriendInvitations: { [key: string]: Invitation };
   userUpdateStatus: string;
+  firstQuestionBits: any;
+  firstQuestion: Question;
   updateUserReactionStatus: any;
   getUserReactionStatus: any;
   getQuestionSuccess: any;
@@ -86,6 +90,8 @@ export const reducer: ActionReducerMap<CoreState> = {
   addressSuggestions: addressSuggestions,
   userFriendInvitations: userFriendInvitations,
   userUpdateStatus: userUpdateStatus,
+  firstQuestionBits: firstQuestionBits,
+  firstQuestion: firstQuestion,
   updateUserReactionStatus: updateUserReactionStatus,
   getUserReactionStatus: getUserReactionStatus,
   getQuestionSuccess: getQuestionSuccess,
