@@ -23,6 +23,7 @@ export function firebaseFactory() {
   return TNSFirebase;
 }
 
+registerElement('PreviousNextView', () => require('nativescript-iqkeyboardmanager').PreviousNextView);
 
 // registerElement('CardView', () => CardView);
 registerElement('CardView', () => require('nativescript-cardview').CardView);
