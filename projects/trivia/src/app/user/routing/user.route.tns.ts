@@ -4,7 +4,8 @@ import {
     ProfileSettingsComponent,
     QuestionAddUpdateComponent,
     MyQuestionsComponent,
-    InviteFriendsComponent
+    InviteFriendsComponent,
+    GameProfileComponent
 } from '../components';
 import { InviteFriendsDialogComponent } from '../components/invite-friends/invite-friends-dialog/invite-friends-dialog.component';
 
@@ -14,32 +15,42 @@ export const userRoutes: Routes = [
         component: ProfileSettingsComponent
     },
     {
+        path: 'game-profile/:userid',
+        component: GameProfileComponent
+    },
+    {
         path: 'my',
         children: [
-        {
-            path: 'profile/:userid',
-            component: ProfileSettingsComponent
-        },
-        {
-            path: 'questions',
-            component: MyQuestionsComponent,
-            canActivate: [AuthGuard],
-            resolve: { 'categories': CategoriesResolver, 'tags': TagsResolver }
-        },
-        {
-            path: 'invite-friends',
-            component: InviteFriendsComponent,
-            canActivate: [AuthGuard]
-        },
-        {
-            path: 'questions/add',
-            component: QuestionAddUpdateComponent,
-            canActivate: [AuthGuard]
-        },
-        {
-            path: 'app-invite-friends-dialog',
-            component: InviteFriendsDialogComponent,
-            canActivate: [AuthGuard]
-        },
-    ]}
+            {
+                path: 'profile/:userid',
+                component: ProfileSettingsComponent
+            },
+            {
+                path: 'questions',
+                component: MyQuestionsComponent,
+                canActivate: [AuthGuard],
+                resolve: { 'categories': CategoriesResolver, 'tags': TagsResolver }
+            },
+            {
+                path: 'invite-friends',
+                component: InviteFriendsComponent,
+                canActivate: [AuthGuard]
+            },
+            {
+                path: 'questions/add',
+                component: QuestionAddUpdateComponent,
+                canActivate: [AuthGuard]
+            },
+            {
+                path: 'app-invite-friends-dialog',
+                component: InviteFriendsDialogComponent,
+                canActivate: [AuthGuard]
+            },
+            {
+                path: 'game-profile/:userid',
+                component: GameProfileComponent,
+                canActivate: [AuthGuard]
+            }
+        ]
+    }
 ];
