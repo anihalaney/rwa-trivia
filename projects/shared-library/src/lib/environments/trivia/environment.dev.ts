@@ -19,7 +19,7 @@ export const CONFIG: IConfig = {
   'functionsUrl': `https://rwa-trivia-dev-e57fc.firebaseapp.com/${appConstants.API_VERSION}`,
   'editorUrl': 'https://rwa-trivia-dev-e57fc.firebaseapp.com/trivia-editor',
   'termsAndConditionsUrl': 'https://rwa-trivia-dev-e57fc.firebaseapp.com/terms-and-conditions',
-  'privacyUrl': 'https://rwa-trivia-dev-e57fc.firebaseapp.com/terms-and-conditions',
+  'privacyUrl': 'https://rwa-trivia-dev-e57fc.firebaseapp.com/privacy-policy',
   'ua_id': 'UA-122807814-1'
 };
 

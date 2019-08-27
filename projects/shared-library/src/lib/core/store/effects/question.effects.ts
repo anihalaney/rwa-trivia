@@ -52,6 +52,22 @@ export class QuestionEffects {
             )
         );
 
+
+    // Load first question for specific route
+    @Effect()
+    // handle location update
+    loadFirstQuestion$ = this.actions$
+        .pipe(ofType(ROUTER_NAVIGATION))
+        .pipe(
+            map((action: any): RouterStateUrl => action.payload.routerState),
+            filter((routerState: RouterStateUrl) =>
+                routerState.url.toLowerCase().startsWith('/first-question')))
+        .pipe(
+            switchMap(() => this.svc.getQuestionOfTheDay(true)
+                .pipe(
+                    map((question: Question) => this.questionActions.getFirstQuestionSuccess(question))
+                    , catchError(err => of(this.questionActions.getFirstQuestionError(err))))));
+
     constructor(
         private actions$: Actions,
         private questionActions: QuestionActions,

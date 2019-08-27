@@ -15,7 +15,10 @@ export enum UserStatConstants {
 export enum TriggerConstants {
     invitationTxt = 'Please accept invitation to play Trivia Game',
     invitationMailSubject = 'bitwiser.io: Friend Request',
-    fromUser = 'support@trivia.com'
+    fromUser = 'support@trivia.com',
+    ANDROID = 'android',
+    IOS = 'ios',
+    WEB = 'web'
 }
 
 export enum UserControllerConstants {
@@ -114,6 +117,9 @@ export enum CollectionConstants {
     STATS_SYSTEM = 'system',
     ACHIEVEMENTS = 'achievements',
     ACHIEVEMENT_RULES = 'achievement_rules',
+    USER_STATUS = 'user_status',
+    INFO = '.info',
+    CONNECTED = 'connected',
     REACTIONS = 'reactions'
 }
 
@@ -263,6 +269,7 @@ export enum ResponseMessagesConstants {
     DISPLAY_ORDER_NOT_FOUND = 'Display order not found',
     ACHIEVEMENT_RULES_ADDED_SUCCESSFULLY = 'Achievement rules added successfully',
     DISPLAY_NAME_NOT_FOUND = 'displayName is not added in request',
+    BITS_ADDED = 'Bits added successfully !!',
 }
 
 export enum FriendConstants {
@@ -373,6 +380,7 @@ export enum RoutesConstants {
     LAT_LONG = 'latLong',
     ADDRESS_SUGGESTION = 'addressSuggestion',
     UPDATE_APP_VERSION = 'updateAppVersion',
+    ADD_BITS_FIRST_QUESTION = 'add-bits-first-question',
     TOP_CATEGORIES_COUNT = 'getTopCategories',
     TOP_TAGS_COUNT = 'getTopTags',
 }
@@ -440,9 +448,26 @@ export enum FirebaseScreenNameConstants {
     USER_FEEDBACK = 'User Feedback'
 }
 
+export enum GoogleLocationAPI {
+    GOOGLE_AUTOCOMPLETE = 'https://maps.googleapis.com/maps/api/place/autocomplete/json',
+    GOOGLE_GEOCODE = 'https://maps.googleapis.com/maps/api/geocode/json'
+}
+
 export enum AnalyticsEventConstants {
     EVENT = 'event',
 }
+
+export enum UserStatusConstants {
+    ONLINE = 'online',
+    OFFLINE = 'offline',
+    CONNECTED = 'connected'
+}
+
+export enum DrawerConstants {
+    UPDATE_TOKEN_STATUS = 'update token status',
+    LOGOUT = 'logout'
+}
+
 
 export enum userCardType {
     USER_WEB_IMAGE_NAME_LOCATION_HORIZONTAL,

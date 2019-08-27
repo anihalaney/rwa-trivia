@@ -14,6 +14,7 @@ import { ObservableArray } from 'tns-core-modules/data/observable-array';
 import { Page, isIOS } from 'tns-core-modules/ui/page/page';
 import { AppState, appState } from '../../../store';
 import { NewGame } from './new-game';
+
 @Component({
   selector: 'new-game',
   templateUrl: './new-game.component.html',

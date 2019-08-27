@@ -27,8 +27,8 @@ export class User {
   croppedImageUrl: any;
   originalImageUrl: any;
   imageType: string;
-  androidPushTokens?: string[];
-  iosPushTokens?: string[];
+  androidPushTokens?: Array<any>;
+  iosPushTokens?: Array<any>;
   lastGamePlayOption?: GameOptions;
   account?: Account;
   achievements: string[];
@@ -63,3 +63,9 @@ export class UserStats {
     this.leaderBoardStats = {};
   }
 }
+
+export class DeviceToken {
+  token: string;
+  online: boolean;
+}
+

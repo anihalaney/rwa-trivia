@@ -164,3 +164,23 @@ export function addressSuggestions(state: any = null, action: ActionWithPayload<
       return null;
   }
 }
+
+
+// set update user status
+export function userUpdateStatus(state: any = null, action: ActionWithPayload<string>): string {
+  switch (action.type) {
+    case UserActions.UPDATE_USER_SUCCESS:
+      return action.payload;
+    default:
+      return state;
+  }
+}
+export function firstQuestionBits(state: any = null, action: ActionWithPayload<string>): string {
+  switch (action.type) {
+    case UserActions.SET_FIRST_QUESTION_BITS_SUCCESS:
+      return action.payload;
+    default:
+      return null;
+  }
+}
+
