@@ -3,8 +3,8 @@ import { User, Invitation, friendInvitationConstants, userCardType } from 'share
 import { Utils } from 'shared-library/core/services';
 import { Store } from '@ngrx/store';
 import { UserActions } from 'shared-library/core/store/actions';
-import { AppState } from '../../../store';
-
+// import { AppState } from '../../../store';
+import { CoreState, coreState } from './../../../core/store';
 
 @Component({
   selector: 'app-friend-invite',
@@ -18,7 +18,7 @@ export class FriendInviteComponent implements OnInit {
   @Input() user: User;
   userCardType = userCardType;
 
-  constructor(private store: Store<AppState>,
+  constructor(private store: Store<CoreState>,
     private utils: Utils,
     private userActions: UserActions,
     private cd: ChangeDetectorRef) {
@@ -37,6 +37,10 @@ export class FriendInviteComponent implements OnInit {
     if (!this.cd['destroyed']) {
       this.cd.detectChanges();
     }
+  }
+
+  otherInfo() {
+    return { invitationStatus: this.invitation.status, notificationText: 'sent you a Friend Request' };
   }
 
 }

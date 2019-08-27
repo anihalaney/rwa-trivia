@@ -6,6 +6,7 @@ import { AchievementsComponent } from '../components';
 import { UserFeedbackComponent } from 'shared-library/shared/mobile/component/user-feedback/user-feedback.component';
 import { FirstQuestionComponent } from 'shared-library/shared/mobile/component/first-question/first-question.component';
 import { SelectCategoryTagComponent } from 'shared-library/shared/mobile/component/select-category-tag/select-category-tag.component';
+import { NotificationComponent } from 'shared-library/shared/mobile/component/notification/notification.component';
 
 export const routes: Routes = [
 
@@ -55,6 +56,11 @@ export const routes: Routes = [
     {
         path: 'select-category-tag',
         component: SelectCategoryTagComponent,
+        canActivate: [AuthGuard]
+    },
+    {
+        path: 'notification',
+        component: NotificationComponent,
         canActivate: [AuthGuard]
     }
 ];

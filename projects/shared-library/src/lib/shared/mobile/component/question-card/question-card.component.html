@@ -28,6 +28,13 @@
   </StackLayout>
 
   <StackLayout *ngIf="question" orientation="vertical" margin="10" iosOverflowSafeArea="false">
-    <author [userId]="question?.created_uid"></author>
+    <GridLayout rows="auto" columns="*,*">
+      <GridLayout row="0" col="0">
+        <user-reaction *ngIf="answeredText!==''" [user]='user' [question]='question'></user-reaction>
+      </GridLayout>
+      <GridLayout row="0" col="1">
+        <author [isGamePlay]=false [userId]="question.created_uid"></author>
+      </GridLayout>
+    </GridLayout>
   </StackLayout>
 </StackLayout>

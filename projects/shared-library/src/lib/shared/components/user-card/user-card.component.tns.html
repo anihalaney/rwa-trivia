@@ -122,7 +122,7 @@
 </ng-container>
 
 <ng-container *ngIf="user && userCardType.USER_IMAGE_NAME_CATEGORY_HORIZONTAL === type">
-  <GridLayout rows="auto,auto,auto" columns="auto,*" padding="5" iosOverflowSafeArea="false">
+  <GridLayout rows="auto,auto,auto" columns="auto,*" padding="0 5 0 5" iosOverflowSafeArea="false">
     <StackLayout row="0" col="0" marginLeft="10" rowSpan="3" verticalAlignment="center" marginRight="10"
       borderRadius="50" borderColor="#3b5998" borderWidth="1" paddingTop="2" paddingLeft="2" paddingRight="2"
       class="image-container" height="44" width=44>
@@ -133,13 +133,18 @@
     <AbsoluteLayout *ngIf="user?.online" row="0" col="0" rowSpan="3" verticalAlignment="center">
       <Label height="15" top="35" left="38" width="15" borderRadius="22" backgroundColor="#71b02f"></Label>
     </AbsoluteLayout>
-    <Label row="0" col="1" text="{{user?.displayName}}" textWrap="true" class="sub-title"></Label>
-    <Label row="1" col="1" *ngIf="otherInfo?.category" text="{{otherInfo?.category}}" fontSize="12"></Label>
+    <Label row="1" col="1" text=" " textWrap="true" fontSize="16ˇ">
+      <FormattedString>
+        <span text="{{user?.displayName}}" color="#6d8bca"></span>
+        <span text=" {{otherInfo?.notificationText}}"></span>
+      </FormattedString>
+    </Label>
+    <!-- <Label row="1" col="1" *ngIf="otherInfo?.category" text="{{otherInfo?.category}}" fontSize="12"></Label>
     <Label row="1" col="1" *ngIf="otherInfo?.invitationStatus" text="{{otherInfo?.invitationStatus}}"
       fontSize="12"></Label>
     <Label row="2" col="1" *ngIf="otherInfo?.remainingDays"
       text="{{otherInfo?.remainingDays}} days left to accept invitation" marginBottom="11" horizontalAlignment="left"
-      textWrap="true" color="#fe4f20" fontSize="12"></Label>
+      textWrap="true" color="#fe4f20" fontSize="12"></Label> -->
   </GridLayout>
 
 </ng-container>

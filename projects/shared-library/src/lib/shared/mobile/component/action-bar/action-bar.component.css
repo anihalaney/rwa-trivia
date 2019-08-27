@@ -1,28 +1,34 @@
-.action-bar{
-    background-color: #3e5b95;
-    color: white;
-    font-size: 15;
-   
+.action-bar {
+  background-color: #3e5b95;
+  color: white;
+  font-size: 15;
 }
 
-.action-title{
-    padding: 9 16 9 0;
-    height: 56;
+.action-title {
+  padding: 9 16 9 0;
+  height: 56;
 }
 .action-bar-button {
-    font-size: 25;
-    line-height: 22;
-    text-align: center;
+  font-size: 25;
+  line-height: 22;
+  text-align: center;
 }
 
-.action-text-title{
-    margin: 0 0 0 31;
-    font-size:20;     
+.action-text-title {
+  margin: 0 0 0 31;
+  font-size: 20;
 }
-.action-text-save{
-    font-size:14;
-    line-height: 11;
-    font-weight: bold;
-    height: 16;
-    
+.action-text-save {
+  font-size: 14;
+  line-height: 11;
+  font-weight: bold;
+  height: 16;
+}
+
+.index-0 {
+  z-index: 0;
+}
+
+.index-1 {
+  z-index: 1;
 }

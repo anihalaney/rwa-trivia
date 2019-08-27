@@ -83,7 +83,7 @@ const commandList = {
     "run-functions":
     {
         "command": `npx rimraf functions/server & 
-                        tsc --project functions  && firebase serve -P productVariant-environment  --only functions`,
+                        tsc --project functions  && firebase serve -P productVariant-environment  --only functions --host=192.168.0.108`,
         "description": "deploy firebase functions local",
         "options": {
             "productVariant": {
@@ -143,7 +143,7 @@ const commandList = {
     },
     "run-mobile":
     {
-        "command": "tns run platform  --bundle environment forDevice --env.package_name=packageName --env.project=productVariant ",
+        "command": "tns debug platform  --bundle environment forDevice --env.package_name=packageName --env.project=productVariant --no-hmr",
         "description": "run android/ios app in staging/production environment",
         "options": {
             "productVariant": {

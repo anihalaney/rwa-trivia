@@ -22,6 +22,7 @@ export class ActionBarComponent implements OnDestroy {
     @Input() title;
     @Input() hideMenu;
     @Input() hideHomeIcon;
+    @Input() isNotification;
     @Output() open: EventEmitter<any> = new EventEmitter<any>();
 
 
@@ -43,6 +44,12 @@ export class ActionBarComponent implements OnDestroy {
 
     goToDashboard() {
         this.routerExtensions.navigate(['/dashboard'], { clearHistory: true });
+    }
+
+    gotToNotification() {
+        if (this.isNotification) {
+            this.routerExtensions.navigate(['/notification']);
+        }
     }
 
     ngOnDestroy() {
