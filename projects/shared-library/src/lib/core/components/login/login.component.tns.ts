@@ -20,9 +20,6 @@ import { CoreState, coreState, UIStateActions } from '../../store';
 import { FirebaseAuthService } from './../../auth/firebase-auth.service';
 import { Login } from './login';
 import { Utils } from '../../services';
-import {
-  Parameter, User, FirebaseAnalyticsKeyConstants, FirebaseAnalyticsEventConstants, FirebaseScreenNameConstants
-} from '../../../shared/model';
 
 @Component({
   selector: 'login',
@@ -299,22 +296,25 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
             const redirectUrl = url ? url : '/dashboard';
             if (this.mode === 0 || this.mode === 1) {
               if (!user.isCategorySet && this.applicationSettings.show_category_screen && !user.categoryIds && !user.tags) {
-                this.naviateTo('select-category-tag');
+                this.navigateTo('select-category-tag', this.mode);
               } else {
-                this.naviateTo(redirectUrl);
+                this.navigateTo(redirectUrl, this.mode);
               }
             } else {
-              this.naviateTo(redirectUrl);
+              this.navigateTo(redirectUrl, this.mode);
             }
-
             this.cd.markForCheck();
           }));
       }
       ));
   }
 
-  naviateTo(redirectUrl) {
-    this.utils.showMessage('success', 'You have been successfully logged in');
+  navigateTo(redirectUrl, mode) {
+    if (mode === 0) {
+      this.utils.showMessage('success', 'You have been successfully logged in');
+    } else {
+      this.utils.showMessage('success', 'You have been successfully signed up');
+    }
     this.routerExtension.navigate([redirectUrl], { clearHistory: true });
   }
 
@@ -357,5 +357,6 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
         });
     }
   }
+
 }
 
