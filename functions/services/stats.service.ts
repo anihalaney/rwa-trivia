@@ -1,5 +1,5 @@
 import {
-    CollectionConstants, Game, Question, SystemStatConstants, SystemStats, User
+    CollectionConstants, Game, Question, SystemStatConstants, SystemStats, User, GamePlayedWith
 } from '../../projects/shared-library/src/lib/shared/model';
 import admin from '../db/firebase.client';
 import { Utils } from '../utils/utils';
@@ -90,6 +90,33 @@ export class StatsService {
 
             return await StatsService.setSystemStats(CollectionConstants.STATS_SYSTEM, { ...systemStatObj });
 
+        } catch (error) {
+            return Utils.throwError(error);
+        }
+    }
+
+
+    static async updateUserPlayedGameStats(userId: string, otherUserId: string, userType: string): Promise<any> {
+        try {
+            let userGameStat: GamePlayedWith = await UserService.getOtherUserGameStatById(userId, otherUserId);
+            let gamePlayedWith = new GamePlayedWith();
+            if (userType === 'current_user') {
+                if ( userGameStat ) {
+                    gamePlayedWith = userGameStat;
+                } else {
+                    gamePlayedWith.created_uid = otherUserId;
+                }
+                gamePlayedWith.date = Utils.getUTCTimeStamp();
+            } else if (userType === 'other_user' && !userGameStat) {
+                gamePlayedWith.date = 0;
+                gamePlayedWith.created_uid = otherUserId;
+            } else {
+                return;
+            }
+            console.log(userType, gamePlayedWith);
+            userGameStat = { ...gamePlayedWith };
+            console.log('why here should not be');
+            return await UserService.setGameStat({ ...userGameStat }, userId, otherUserId);
         } catch (error) {
             return Utils.throwError(error);
         }

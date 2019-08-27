@@ -28,7 +28,7 @@ export class GamePlayedWithStats {
             if (userGameStat) {
                 gamePlayedWith = userGameStat;
             } else {
-                gamePlayedWith.date = new Date().getUTCDate();
+                gamePlayedWith.date = Utils.getUTCTimeStamp();
                 gamePlayedWith.created_uid = otherUserId;
             }
                 gamePlayedWith.gamePlayed = (gamePlayedWith.gamePlayed) ? Utils.changeFieldValue(1) : 1;

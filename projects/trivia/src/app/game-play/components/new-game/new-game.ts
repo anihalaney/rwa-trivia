@@ -116,7 +116,7 @@ export class NewGame implements OnDestroy {
       if (uFriends) {
         this.uFriends = [];
         uFriends.map(friend => {
-          this.uFriends = [...this.uFriends, ...friend.userId];
+          this.uFriends = [...this.uFriends, friend.userId];
         });
         this.noFriendsStatus = false;
       } else {
@@ -189,7 +189,7 @@ export class NewGame implements OnDestroy {
     let user: User;
     this.subscriptions.push(this.store.select(appState.coreState).pipe(take(1)).subscribe(s => {
       user = s.user;
-      if (this.gameOptions.playerMode === PlayerMode.Opponent) {
+      if (gameOptions.playerMode == 1) {
         gameOptions.friendId = this.friendUserId;
       }
       this.store.dispatch(new gameplayactions.CreateNewGame({ gameOptions: gameOptions, user: user }));
