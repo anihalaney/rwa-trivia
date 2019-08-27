@@ -11,7 +11,6 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { isAndroid, isIOS } from 'tns-core-modules/ui/page/page';
 
 const EMAIL_REGEXP = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-declare var IQKeyboardManager: any;
 
 @Component({
   selector: 'app-invite-mail-friends',
@@ -33,7 +32,7 @@ export class InviteMailFriendsComponent implements OnInit, OnDestroy {
   emailCheck: Boolean = false;
   @ViewChildren('textField') textField: QueryList<ElementRef>;
   subscriptions = [];
-  iqKeyboard: any;
+  iqKeyboard: IQKeyboardManager;
 
 
   constructor(private fb: FormBuilder, private store: Store<AppState>, private userAction: UserActions, private cd: ChangeDetectorRef,

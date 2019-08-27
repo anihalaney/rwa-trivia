@@ -25,7 +25,6 @@ import { AppState } from '../../../store';
 import { userState } from '../../store';
 import { LocationResetDialogComponent } from './location-reset-dialog/location-reset-dialog.component';
 import { ProfileSettings } from './profile-settings';
-declare var IQKeyboardManager: any;
 
 @Component({
   selector: 'profile-settings',
@@ -60,7 +59,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
   tabsTitles: Array<string>;
   private locations: ObservableArray<TokenModel>;
   private isLocationEnalbed: boolean;
-  iqKeyboard: any;
+  iqKeyboard: IQKeyboardManager;
 
   @ViewChild('autocomplete', { static: false }) autocomplete: RadAutoCompleteTextViewComponent;
   @ViewChild('acLocation', { static: false }) acLocation: RadAutoCompleteTextViewComponent;

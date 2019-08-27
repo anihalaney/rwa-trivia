@@ -23,7 +23,6 @@ import { Utils } from '../../services';
 import {
   Parameter, User, FirebaseAnalyticsKeyConstants, FirebaseAnalyticsEventConstants, FirebaseScreenNameConstants
 } from '../../../shared/model';
-declare var IQKeyboardManager: any;
 
 @Component({
   selector: 'login',
@@ -34,7 +33,7 @@ declare var IQKeyboardManager: any;
 
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class LoginComponent extends Login implements OnInit, OnDestroy {
-  iqKeyboard: any;
+  iqKeyboard: IQKeyboardManager;
   @ViewChildren('textField') textField: QueryList<ElementRef>;
   title: string;
   loader = false;
