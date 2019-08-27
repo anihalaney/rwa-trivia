@@ -7,17 +7,22 @@ import { Router } from '@angular/router';
 import { MatDialog, MatDialogRef } from '@angular/material';
 import { LoginComponent } from './../../components/login/login.component';
 import { WindowRef } from './../../services/windowref.service';
+import { User, UserStatusConstants, CollectionConstants, TriggerConstants } from 'shared-library/shared/model';
+import { AngularFireDatabase } from '@angular/fire/database';
 
 
 @Injectable()
 export class WebFirebaseAuthService implements FirebaseAuthService {
 
     dialogRef: MatDialogRef<LoginComponent>;
+    private user: User;
+
     constructor(protected afAuth: AngularFireAuth,
         public router: Router,
         protected afStore: AngularFirestore,
         public dialog: MatDialog,
-        private windowsRef: WindowRef) { }
+        private windowsRef: WindowRef,
+        private db: AngularFireDatabase) { }
 
     authState(): any {
         return this.afAuth.authState;
@@ -40,6 +45,7 @@ export class WebFirebaseAuthService implements FirebaseAuthService {
 
     public signOut() {
         this.afAuth.auth.signOut();
+        this.updateTokenStatus(this.user.userId, UserStatusConstants.OFFLINE);
         this.router.navigate(['dashboard']);
         this.windowsRef.nativeWindow.location.reload();
     }
@@ -87,5 +93,30 @@ export class WebFirebaseAuthService implements FirebaseAuthService {
 
     public resumeState(user) {
 
+    }
+
+    public updatePushToken(token: string) {
+
+    }
+
+    public updateOnConnect(user: User) {
+        this.user = user;
+        this.db.object(`${CollectionConstants.INFO}/${CollectionConstants.CONNECTED}`)
+            .valueChanges().subscribe(connected => {
+                const status = connected ? UserStatusConstants.ONLINE : UserStatusConstants.OFFLINE;
+                this.updateTokenStatus(user.userId, UserStatusConstants.ONLINE);
+                this.updateOnDisconnect(user.userId);
+            });
+    }
+
+    private updateOnDisconnect(userId: string) {
+        this.db.database.ref(`${CollectionConstants.USERS}/${userId}`)
+            .onDisconnect()
+            .update({ status: UserStatusConstants.OFFLINE });
+    }
+
+    public updateTokenStatus(userId: string, status: string) {
+        this.db.object(`/${CollectionConstants.USERS}/${userId}`)
+            .set({ status, userId, device: TriggerConstants.WEB });
     }
 }

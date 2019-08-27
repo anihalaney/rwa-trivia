@@ -1,4 +1,3 @@
-
 var nativeScriptConfig = require("./../../custom-hooks/nativescript-copy-configuration-files");
 module.exports = function ($logger, $projectData, hookArgs) {
     return new Promise(function (resolve, reject) {

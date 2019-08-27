@@ -204,6 +204,26 @@ ul li:last-child{ border-bottom: 0 }
 .friends{
   background-color: #61d461;
 }
+
+.bits-n-bityes-container{
+  display: flex;
+  justify-content: center;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  img{
+    height: 32px;
+  }
+  span{
+    margin-left: 5px;
+    line-height: 32px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+}
+
+.m-l-28{
+  margin-left: 28px;
+}
 @media (max-width: 768px){
   .yourimg-spacing{
     margin-top:   44px;

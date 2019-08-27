@@ -12,7 +12,7 @@
       "version": "6.0.1"
     }
   },
-  "scripts": {
+  "scripts": {    
     "ng": "ng",
     "api": "json-server --watch src/db.json",
     "lint": "tslint \"src/**/*.ts\" --project src/tsconfig.json --type-check && tslint \"e2e/**/*.ts\" --project e2e/tsconfig.json --type-check",
@@ -146,7 +146,7 @@
     "tsickle": "0.36.0",
     "tslib": "^1.9.3",
     "tslint": "5.18.0",
-    "typescript": "~3.4.5",
+    "typescript": "3.4.5",
     "xmlhttprequest": "^1.8.0",
     "yargs": "^13.2.4"
   },

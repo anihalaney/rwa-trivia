@@ -24,3 +24,4 @@ export * from './achievement-rule';
 export * from './achievement';
 export * from './leaderboard';
 export * from './parameter';
+export * from './user-status';

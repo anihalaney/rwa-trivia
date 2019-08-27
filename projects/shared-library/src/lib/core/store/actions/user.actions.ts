@@ -8,7 +8,7 @@ import { Country } from 'shared-library/shared/mobile/component/countryList/mode
 export class UserActions {
 
   static LOGOFF = 'LOGOFF';
-  logoff(): ActionWithPayload<null> {
+  logoff(): ActionWithPayload<any> {
     return {
       type: UserActions.LOGOFF,
       payload: null
@@ -75,10 +75,10 @@ export class UserActions {
   }
 
   static LOAD_USER_INVITATIONS_INFO = 'LOAD_USER_INVITATIONS_INFO';
-  loadUserInvitationsInfo(userId: string, invitedUserEmail: string, invitedUserId: string ): ActionWithPayload<{}> {
+  loadUserInvitationsInfo(userId: string, invitedUserEmail: string, invitedUserId: string): ActionWithPayload<{}> {
     return {
       type: UserActions.LOAD_USER_INVITATIONS_INFO,
-      payload: {userId, invitedUserEmail, invitedUserId}
+      payload: { userId, invitedUserEmail, invitedUserId }
     };
   }
 
@@ -99,10 +99,18 @@ export class UserActions {
   }
 
   static UPDATE_USER = 'UPDATE_USER';
-  updateUser(user: User): ActionWithPayload<User> {
+  updateUser(user: User, status: any): ActionWithPayload<any> {
     return {
       type: UserActions.UPDATE_USER,
-      payload: user
+      payload: { user, status }
+    };
+  }
+
+  static UPDATE_USER_SUCCESS = 'UPDATE_USER_SUCCESS';
+  updateUserSuccess(status: string): ActionWithPayload<string> {
+    return {
+      type: UserActions.UPDATE_USER_SUCCESS,
+      payload: status
     };
   }
 
@@ -311,6 +319,22 @@ export class UserActions {
     return {
       type: UserActions.LOAD_ADDRESS_SUGGESTIONS_SUCCESS,
       payload: suggestions
+    };
+  }
+
+  static SET_FIRST_QUESTION_BITS = 'SET_FIRST_QUESTION_BITS';
+  setFirstQuestionBits(userId: string): ActionWithPayload<string> {
+    return {
+      type: UserActions.SET_FIRST_QUESTION_BITS,
+      payload: userId
+    };
+  }
+
+  static SET_FIRST_QUESTION_BITS_SUCCESS = 'SET_FIRST_QUESTION_BITS_SUCCESS';
+  setFirstQuestionBitsSuccess(msg: string): ActionWithPayload<string> {
+    return {
+      type: UserActions.SET_FIRST_QUESTION_BITS_SUCCESS,
+      payload: msg
     };
   }
 
