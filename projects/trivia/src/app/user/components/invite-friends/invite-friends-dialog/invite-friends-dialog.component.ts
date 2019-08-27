@@ -6,6 +6,7 @@ import { Utils } from 'shared-library/core/services';
 import { AppState, appState } from '../../../../store';
 import { Subscription } from 'rxjs';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-invite-friends-dialog',
@@ -16,18 +17,20 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class InviteFriendsDialogComponent implements OnInit, OnDestroy {
-
   user: User;
   navLinks = [];
   ref: any;
   subscriptions = [];
-
-  constructor(private store: Store<AppState>, private renderer: Renderer2, private utils: Utils) {
+  showSkipBtn: boolean;
+  constructor(private store: Store<AppState>, private renderer: Renderer2, private utils: Utils, private route: ActivatedRoute) {
     this.subscriptions.push(this.store.select(appState.coreState).pipe(take(1)).subscribe(s => this.user = s.user));
   }
 
   ngOnInit() {
-
+    this.route.params.subscribe((params) => {
+      const boolValue = (params.showSkip === 'true' ? true : false);
+      this.showSkipBtn = boolValue;
+    });
   }
 
   closeModel() {

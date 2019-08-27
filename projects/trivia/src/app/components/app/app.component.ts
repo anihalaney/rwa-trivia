@@ -8,10 +8,11 @@ import { filter, skip, take } from 'rxjs/operators';
 import { AuthenticationProvider } from 'shared-library/core/auth';
 import { Utils, WindowRef } from 'shared-library/core/services';
 import { coreState } from 'shared-library/core/store';
-import { ApplicationSettingsActions, UserActions, CategoryActions, } from 'shared-library/core/store/actions';
-import { User } from 'shared-library/shared/model';
+import { User, UserStatus } from 'shared-library/shared/model';
+import { ApplicationSettingsActions, UserActions, CategoryActions } from 'shared-library/core/store/actions';
 import * as gamePlayActions from '../../game-play/store/actions';
 import { AppState, appState } from '../../store';
+import { interval, Subscription } from 'rxjs';
 import { isPlatformBrowser } from '@angular/common';
 
 @Component({
@@ -26,6 +27,7 @@ export class AppComponent implements OnInit, OnDestroy {
   user: User;
   subscriptions = [];
   theme = '';
+  intervalSubscription: Subscription;
 
   @ViewChild('cookieLaw', { static: true })
   private cookieLawEl: CookieLawComponent;
@@ -58,8 +60,23 @@ export class AppComponent implements OnInit, OnDestroy {
           this.router.navigate([url]);
         }
 
+        this.intervalSubscription = interval(1000 * 60 * 1)
+          .subscribe(val => {
+            const userStatus: UserStatus = new UserStatus();
+            userStatus.userId = this.user.userId;
+            userStatus.online = true;
+            userStatus.lastUpdated = new Date().getTime();
+            this.authService.updateUserConnection();
+            return val;
+          });
+        this.authService.updateUserConnection();
+        this.subscriptions.push(this.intervalSubscription);
+
       } else {
-        // if user logs out then redirect to home page
+        // user logs out then redirect to home page
+        if (this.intervalSubscription) {
+          this.intervalSubscription.unsubscribe();
+        }
         this.router.navigate(['/']);
       }
     }));

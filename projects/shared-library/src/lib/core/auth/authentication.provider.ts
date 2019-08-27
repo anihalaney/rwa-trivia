@@ -1,9 +1,10 @@
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { APP_ID, Inject, Injectable, PLATFORM_ID } from '@angular/core';
+import { AngularFireDatabase } from '@angular/fire/database';
 import { Store } from '@ngrx/store';
 import { defer, from, Observable, of, throwError } from 'rxjs';
 import { filter, map, mapTo, share, take, tap } from 'rxjs/operators';
-import { User } from '../../shared/model';
+import { User, UserStatusConstants } from '../../shared/model';
 import { CoreState, coreState } from '../store';
 import { UIStateActions, UserActions } from '../store/actions';
 import { FirebaseAuthService } from './firebase-auth.service';
@@ -13,6 +14,7 @@ export class AuthenticationProvider {
 
   refreshTokenObserver: Observable<any>;
   user: User;
+  pushToken: string;
 
   constructor(private store: Store<CoreState>,
     private userActions: UserActions,
@@ -27,6 +29,7 @@ export class AuthenticationProvider {
           this.user = new User(afUser);
           this.user.idToken = token;
           this.store.dispatch(this.userActions.loginSuccess(this.user));
+
         });
       } else {
         // user not logged in
@@ -40,6 +43,14 @@ export class AuthenticationProvider {
     }).pipe(share());
 
 
+  }
+
+  updateDevicePushToken(token: string) {
+    this.firebaseAuthService.updatePushToken(token);
+  }
+
+  updateUserConnection() {
+    this.firebaseAuthService.updateOnConnect(this.user);
   }
 
   ensureLogin(url?: string): Observable<boolean> {

@@ -27,7 +27,7 @@ export class TNSDbService extends DbService {
     }
 
     public setDoc(collectionName: string, docId: any, document: any, timeStamp = null) {
-        if (timeStamp) {
+        if (timeStamp !== null && timeStamp) {
             if (timeStamp.createdOn) {
                 document = { ...document, createdOn: firebaseApp.firestore().FieldValue().serverTimestamp() };
             }

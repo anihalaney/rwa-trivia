@@ -1,0 +1,33 @@
+<StackLayout class="gameplay">
+  <StackLayout margin="10">
+    <render-question [question]="question"></render-question>
+  </StackLayout>
+
+  <StackLayout *ngIf="question" orientation="horizontal" margin="5 10 5 10" iosOverflowSafeArea="false">
+    <Label text="Categories:" marginRight="5" color="#1B1C1C" fontSize="15" fontWeight="500" textWrap="true"></Label>
+    <Label text="{{categoryName}}" class="Roboto-Regular" fontSize="15" textWrap="true" color="#1b1c1c"></Label>
+  </StackLayout>
+
+  <StackLayout *ngIf="question" orientation="horizontal" margin="10" iosOverflowSafeArea="false">
+    <Label text="Tags:" marginRight="5" color="#1B1C1C" fontSize="15" fontWeight="500" textWrap="true"></Label>
+    <Label text="{{question.tags?.toString()}}" class="Roboto-Regular" color="#1B1C1C" fontSize="15"
+      textWrap="true"></Label>
+  </StackLayout>
+  <StackLayout *ngIf="question" iosOverflowSafeArea="false">
+    <StackLayout iosOverflowSafeArea="false" class="question-answered Hind-Medium" margin="10"
+      *ngFor="let answer of question.answers" [class.players-answer]="answeredText === answer.answerText"
+      [class.wrong]="answeredText === answer.answerText && correctAnswerText !== answer.answerText"
+      [class.right]="answeredText !== '' && correctAnswerText === answer.answerText" [isUserInteractionEnabled]="doPlay"
+      stlRippleEffect (rippleTap)="rippleTap(answer)">
+
+      <render-answer [answer]="answer" [isGameAnswer]="true"
+        [isWrong]="answeredText === answer.answerText && correctAnswerText !== answer.answerText"
+        [isRight]="(answeredText != '') && (correctAnswerText == answer.answerText)" [doPlay]="doPlay"
+        [isUserInteractionEnabled]="doPlay"></render-answer>
+    </StackLayout>
+  </StackLayout>
+
+  <StackLayout *ngIf="question" orientation="vertical" margin="10" iosOverflowSafeArea="false">
+    <author [isGamePlay]= false [userId]="question?.created_uid"></author>
+  </StackLayout>
+</StackLayout>

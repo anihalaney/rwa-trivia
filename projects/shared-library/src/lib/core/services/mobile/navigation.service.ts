@@ -17,7 +17,6 @@ export class NavigationService {
   }
 
   back() {
-    console.log(this.router.url);
     if (this.router.url === '/user/my/invite-friends' ||
       this.router.url === '/user/my/questions' ||
       this.router.url === '/recent-game' ||
@@ -33,7 +32,7 @@ export class NavigationService {
     } else if (
       this.router.url.includes('/user/profile/') ||
       this.router.url === '/user/my/questions/add' ||
-      this.router.url === '/user/my/app-invite-friends-dialog') {
+      this.router.url.includes('app-invite-friends-dialog')) {
       this.routerExtensions.back();
     }
   }
