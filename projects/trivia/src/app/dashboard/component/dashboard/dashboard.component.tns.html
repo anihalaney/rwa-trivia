@@ -43,22 +43,35 @@
                     </AbsoluteLayout>
                 </GridLayout> -->
 
-                <GridLayout row="1" col="0" [style.marginTop]="isLivesEnable ? '10' : '0'" iosOverflowSafeArea="false">
-                    <GridLayout rows="*" columns="*,*" class="game-buttons">
-                        <StackLayout col="0" verticalAlignment="middle">
-                            <Button [text]="singlePlayer" class="g-btn g-btn-extra btn-1" stlRippleEffect
-                                textWrap="true" (rippleTap)="startNewGame('Single')"></Button>
+                <GridLayout row="1" col="0" rows="*,*,*" columns="*"  [style.marginTop]="isLivesEnable ? '10' : '0'" iosOverflowSafeArea="false">
+                    <GridLayout marginRight="10" *ngIf="user && account && account.lives >=0 && isLivesEnable" row="0" rows="*" columns="auto,auto" class="lives-card" horizontalAlignment="right">
+                        <StackLayout col="0" col="0" verticalAlignment="middle">
+                            <Image row="0" col="0" src="~/assets/images/life.png" stretch="aspectFill" height="24" width="24"
+                            verticalAlignment="center" marginRight="8" borderRadius="50"></Image>
                         </StackLayout>
                         <StackLayout col="1" verticalAlignment="middle">
-                            <Button [text]="twoPlayer" class="g-btn g-btn-extra btn-2" stlRippleEffect textWrap="true"
+                            <Label text="{{ (account?.lives / 10 < 1) && (account?.lives / 10 > 0)  ? '0' : '' }}{{account?.lives}}" textWrap="true"></Label>
+                        </StackLayout>
+                    </GridLayout>
+                    <GridLayout row="1"  col="0" rows="*" columns="*,*" class="game-buttons">
+                        <StackLayout col="0" verticalAlignment="middle">
+                            <Button text="Single Player" class="g-btn g-btn-extra btn-1" stlRippleEffect textWrap="true"
+                                (rippleTap)="startNewGame('Single')"></Button>
+                        </StackLayout>
+                        <StackLayout col="1" verticalAlignment="middle">
+                            <Button text="Multi Player" class="g-btn g-btn-extra btn-2" stlRippleEffect textWrap="true"
                                 (rippleTap)="startNewGame('Two')"></Button>
                         </StackLayout>
                     </GridLayout>
-                    <AbsoluteLayout horizontalAlignment="right" top="150" *ngIf="user && account && isLivesEnable"
-                        iosOverflowSafeArea="false">
-                        <Label text="{{account?.lives}}" android:paddingTop="10" textAlignment="center"
-                            class="lives-count"></Label>
-                    </AbsoluteLayout>
+                    <GridLayout *ngIf="user && applicationSettings?.lives?.enable && timeoutLive"  row="2"  col="0">
+                            <GridLayout rows="*,*"  columns="auto,auto" margin="10" horizontalAlignment="left">
+                                <Image row="0" col="0" src="~/assets/images/clock.png" stretch="aspectFill" height="20" width="20"
+                                verticalAlignment="center" marginRight="8" borderRadius="50"></Image>
+                                <Label fontSize="18"  color="#7c7c7c" fontWeight="500" row="0" col="1" text="Life will be credited in " textAlignment="left"></Label>
+                                <Label fontSize="18"  fontWeight="600" row="1" col="0" color="black" fontSize="20" colSpan="2" marginTop="5" text="{{timeoutLive}} minutes" textAlignment="left"></Label>
+                            </GridLayout>
+                    </GridLayout>
+                   
                 </GridLayout>
 
 
