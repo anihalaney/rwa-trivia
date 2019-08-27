@@ -4,7 +4,7 @@ import { IConfig } from 'shared-library/environments/iconfig';
 import { appConstants } from 'shared-library/shared/model';
 
 export const environment = {
-  production: false
+  production: true
 };
 
 export const CONFIG: IConfig = {
