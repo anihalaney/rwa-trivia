@@ -83,7 +83,7 @@ const commandList = {
     "run-functions":
     {
         "command": `npx rimraf functions/server & 
-                        tsc --project functions  && firebase serve -P productVariant-environment  --only functions`,
+                        tsc --project functions  && firebase serve -P productVariant-environment  --only functions --host=192.168.0.108`,
         "description": "deploy firebase functions local",
         "options": {
             "productVariant": {
