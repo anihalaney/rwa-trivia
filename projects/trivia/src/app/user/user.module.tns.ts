@@ -11,7 +11,6 @@ import {
   InviteFriendsComponent,
   QuestionAddUpdateComponent,
   InviteFriendsDialogComponent,
-  InviteMailFriendsComponent,
   LocationResetDialogComponent,
   PreviewQuestionDialogComponent
 } from './components';
@@ -25,7 +24,6 @@ import { DropDownModule } from 'nativescript-drop-down/angular';
     InviteFriendsComponent,
     QuestionAddUpdateComponent,
     InviteFriendsDialogComponent,
-    InviteMailFriendsComponent,
     LocationResetDialogComponent,
     PreviewQuestionDialogComponent
   ],
