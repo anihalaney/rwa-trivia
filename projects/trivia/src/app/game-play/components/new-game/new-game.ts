@@ -116,7 +116,7 @@ export class NewGame implements OnDestroy {
       if (uFriends) {
         this.uFriends = [];
         uFriends.map(friend => {
-          this.uFriends = [...this.uFriends, ...friend.userId];
+          this.uFriends = [...this.uFriends, friend.userId];
         });
         this.noFriendsStatus = false;
       } else {

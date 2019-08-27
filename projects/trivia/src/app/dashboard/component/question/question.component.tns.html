@@ -4,21 +4,14 @@
         iosOverflowSafeArea="false">
         <Label text="Question of the day!" color="#000" fontSize="20" class="text-center" textWrap="true"></Label>
         <app-question-card [question]="question" [categoryName]="categoryName" [answeredText]="answeredText"
-            [doPlay]="doPlay" [correctAnswerText]="correctAnswerText" (selectedAnswer)="selectedAnswer($event)"></app-question-card>
+            [doPlay]="doPlay" [correctAnswerText]="correctAnswerText" (selectedAnswer)="selectedAnswer($event)" [user]="user">
+        </app-question-card>
 
         <StackLayout iosOverflowSafeArea="false" orientation="vertical" *ngIf="question" margin="10"
             iosOverflowSafeArea="false">
-            <GridLayout rows="auto" columns="*,*">
-                <GridLayout class="reaction-container" row="0" col="0" marginLeft="10">
-                    <user-reaction *ngIf="answeredText!==''" [user]='user' [question]='question'></user-reaction>
-                </GridLayout>
-                <GridLayout row="0" col="1" >
-                    <author [isGamePlay]= false [userId]="question.created_uid"></author>
-                </GridLayout>
-            </GridLayout>
-            <Button class="Roboto-Regular" backgroundColor="#8ac541" color="white" margin="20" (rippleTap)="getNextQuestion()"
-                *ngIf="answeredText!==''" width="100%" text="Try Another" fontSize="17" padding="15" stlRippleEffect
-                stlBackgroundColor="#8ac541"></Button>
+            <Button class="Roboto-Regular" backgroundColor="#8ac541" color="white" margin="20"
+                (rippleTap)="getNextQuestion()" *ngIf="answeredText!==''" width="100%" text="Try Another" fontSize="17"
+                padding="15" stlRippleEffect stlBackgroundColor="#8ac541"></Button>
         </StackLayout>
 
     </StackLayout>

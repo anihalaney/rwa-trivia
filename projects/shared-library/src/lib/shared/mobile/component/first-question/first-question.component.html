@@ -12,7 +12,7 @@
                     </StackLayout>
                     <app-question-card [question]="question" [categoryName]="categoryName" [answeredText]="answeredText"
                         [doPlay]="doPlay" [correctAnswerText]="correctAnswerText" [userDict]="userDict"
-                        (selectedAnswer)="selectedAnswer($event)">
+                        (selectedAnswer)="selectedAnswer($event)" [user]="user">
                     </app-question-card>
                     <StackLayout orientation="vertical" margin="10" iosOverflowSafeArea="false">
                         <Button class="Roboto-Regular" backgroundColor="#8ac541" color="white" margin="20"
