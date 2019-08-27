@@ -143,7 +143,7 @@ const commandList = {
     },
     "run-mobile":
     {
-        "command": "tns run platform  --bundle environment forDevice --env.package_name=packageName --env.project=productVariant ",
+        "command": "tns run platform  --bundle environment forDevice --env.package_name=packageName --env.project=productVariant",
         "description": "run android/ios app in staging/production environment",
         "options": {
             "productVariant": {
