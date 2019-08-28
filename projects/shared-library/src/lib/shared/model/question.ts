@@ -31,6 +31,9 @@ export class Question {
   isRichEditor?: boolean = false;
   maxTime?: number;
   reactionsCount?: { [key: string]: number };
+  appeared: number;
+  correct: number;
+  wrong: number;
 
 
 
@@ -56,7 +59,9 @@ export class Question {
     question.totalQALength = this.countQALength(db);
     question.maxTime = db.maxTime ? db.maxTime : 0;
     question.reactionsCount  = db.reactionsCount ? db.reactionsCount : {};
-
+    question.appeared = db.appeared ? db.appeared : 0;
+    question.correct = db.correct ? db.correct : 0;
+    question.wrong = db.wrong ? db.wrong : 0;
     db.answers = db.answers.map(answer => {
       answer.isRichEditor = answer.isRichEditor ? answer.isRichEditor : false;
       return answer;
@@ -82,6 +87,9 @@ export class Question {
     question.isRichEditor = (source.isRichEditor) ? source.isRichEditor : false;
     question.questionObject = (source.questionObject) ? source.questionObject : '' ;
     question.reactionsCount = (source.reactionsCount) ? source.reactionsCount : {} ;
+    question.appeared = source.appeared ? source.appeared : 0;
+    question.correct = source.correct ? source.correct : 0;
+    question.wrong = source.wrong ? source.wrong : 0;
 
     question.totalQALength = this.countQALength(source);
     return question;

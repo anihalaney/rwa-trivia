@@ -122,4 +122,21 @@ export class StatsService {
         }
     }
 
+
+    static async updateQuestionStats(questionId: string, type: string, update?: boolean): Promise<any> {
+        try {
+            let question: Question = await QuestionService.getQuestionById(questionId);
+            if (type === 'CREATED') {
+                question.appeared = question.appeared ? Utils.changeFieldValue(1) : 1;
+            } else if (type === 'UPDATED' && update) {
+                question.correct = question.correct ? Utils.changeFieldValue(1) : 1;
+            } else if (type === 'UPDATED' && !update) {
+                question.wrong = question.wrong ? Utils.changeFieldValue(1) : 1;
+            }
+            return await QuestionService.updateQuestion('questions', { ...question } );
+        } catch (error) {
+            return Utils.throwError(error);
+        }
+    }
+
 }

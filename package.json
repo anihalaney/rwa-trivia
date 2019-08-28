@@ -54,6 +54,7 @@
     "@ngx-share/button": "^7.1.2",
     "@ngx-share/buttons": "^7.1.2",
     "@ngx-share/core": "^7.1.2",
+    "@nstudio/nativescript-checkbox": "^1.0.0",
     "angular2-cookie-law": "^7.0.1",
     "axios": "^0.19.0",
     "dom-to-image": "^2.6.0",
