@@ -4,6 +4,7 @@
     <GridLayout *ngIf="mode === 2" #background class="background"></GridLayout>
 
     <StackLayout (tap)="hideKeyboard()" class="mobile">
+        <PreviousNextView>
       <GridLayout rows="auto,*">
         <StackLayout row="0" [ngClass]="{'background': this.mode !== 2 }">
           <StackLayout [ngClass]="{'phone-login-layout': signInMethod === 'phone'}" #initialContainer
@@ -126,7 +127,7 @@
               </PreviousNextView>
             </StackLayout>
 
-          </StackLayout>
+              </StackLayout>
 
         </StackLayout>
         <StackLayout *ngIf="mode !== 2" row="1" verticalAlignment="bottom" backgroundColor="white">
@@ -148,7 +149,8 @@
           </StackLayout>
         </StackLayout>
 
-      </GridLayout>
+          </GridLayout>
+        </PreviousNextView>
     </StackLayout>
 
     <StackLayout *ngIf="loader" verticalAlignment="center" horizontalAlignment="center">

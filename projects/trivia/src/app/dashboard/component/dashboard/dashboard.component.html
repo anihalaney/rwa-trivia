@@ -1,26 +1,55 @@
 <div class="pageinner">
   <div class="row">
-    <div class="pageheading col-md-6 col-xs-12">
+    <div class="pageheading col-md-6 col-xs-12 col-md-12">
       <span class="hidden-xs pull-left">Dashboard</span>
 
-      <div *ngIf="applicationSettings?.tokens?.enable && user && account" class="points pull-left m-l-20">
+      <div *ngIf="applicationSettings?.tokens?.enable && user && account" style="display: inline-block;"
+        class="points pull-left m-l-20">
         <div class="p-t-10"> Bits </div>
         <label class="points-count" [ngClass]="{'points-count-f-12': account.bits > 9999 }">
           {{account.bits || 0 }}</label>
       </div>
 
-      <div *ngIf="applicationSettings?.tokens?.enable && user && account" class="points bytes pull-left m-l-20">
+      <div *ngIf="applicationSettings?.tokens?.enable && user && account" style="display: inline-block;"
+        class="points bytes pull-left m-l-20">
         <div class="p-t-10"> Bytes </div>
         <label class="points-count" [ngClass]="{'points-count-f-12': account.bytes > 9999 }">
           {{account?.bytes || 0}}</label>
       </div>
 
     </div>
-    <div class="col-md-6 col-xs-12 align-right">
-      <button [disabled]="gamePlayBtnDisabled" [ngClass]="{'min-startgame': timeoutLive && isLivesEnable}"
-        class="startgame" [routerLink]="['/game-play']"> {{ gameStart }} </button>
-      <div class="lives" *ngIf="user && account && account.lives >=0 && isLivesEnable"> <span
-          class="lives-text">{{account.lives}}</span> </div>
+
+    <!-- <div class="lives" *ngIf="user && account && account.lives >=0 && isLivesEnable" > <span class="lives-text">{{account.lives}}</span> </div> -->
+    <div class="col-md-6 col-xs-12 col-md-12 align-right play-game-div-container">
+      <div *ngIf="user && account && account.lives >=0 && isLivesEnable" class="flex-div">
+        <img class="img-24" src="assets/images/life.png" alt="" />
+        <div  class="lives-text lives-div">
+          <span> {{ (account.lives / 10 < 1) && (account.lives / 10 > 0)  ? '0' : '' }}{{account.lives}} </span>
+        </div>
+      </div>
+      <div class="flex-div play-game-btn-container">
+        <div class="single-player-btn-container">
+          <button [disabled]="gamePlayBtnDisabled" (click)="startNewGame('Single')" class="startgame"> Single Player
+          </button>
+        </div>
+        <div class="multi-player-btn-container">
+          <button [disabled]="gamePlayBtnDisabled" (click)="startNewGame('Two')" class="startgame"> Multi Player </button>
+        </div>
+      </div>
+      <div *ngIf="user && applicationSettings?.lives?.enable && timeoutLive">
+        <div class="flex-div">
+          <img class="img-20" src="assets/images/clock.png" alt="" />
+          <div class="lives-text lives-sub-text">
+            <span>Life will be credited in</span>
+          </div>
+        </div>
+        <div class="flex-div">
+          <div class="lives-text lives-timer">
+            <span>{{timeoutLive}} minutes</span>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 
@@ -127,7 +156,7 @@
   <div class="row">
     <!-- Question of the day -->
     <div [ngClass]="showNewsCard?'col-lg-7 col-md-12 col-sm-12':'col-lg-12 col-md-12 col-sm-12' ">
-      <question [user]="user"></question>
+      <question [user]="user" [userDict]="userDict"></question>
     </div>
     <!-- Question of the day end -->
 

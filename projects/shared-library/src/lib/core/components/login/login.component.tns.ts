@@ -30,6 +30,7 @@ import { Utils } from '../../services';
 
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class LoginComponent extends Login implements OnInit, OnDestroy {
+  iqKeyboard: IQKeyboardManager;
   @ViewChildren('textField') textField: QueryList<ElementRef>;
   title: string;
   loader = false;
@@ -69,6 +70,10 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
       phoneNumber: '',
       country: 'us',
     };
+    if (isIOS) {
+      this.iqKeyboard = IQKeyboardManager.sharedManager();
+      this.iqKeyboard.shouldResignOnTouchOutside = true;
+    }
   }
 
 
@@ -343,14 +348,14 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
   }
 
   hideKeyboard() {
-    this.textField
+    if (isAndroid) {
+      this.textField
       .toArray()
       .map((el) => {
-        if (isAndroid) {
           el.nativeElement.android.clearFocus();
-          el.nativeElement.dismissSoftInput();
-        }
-      });
+          return el.nativeElement.dismissSoftInput();
+        });
+    }
   }
 
 }

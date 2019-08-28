@@ -56,6 +56,7 @@ export class GamePlayEffects {
           !routerState.url.toLowerCase().startsWith('/game-play/challenge') &&
           !routerState.url.toLowerCase().startsWith('/game-play/play-game-with-random-user') &&
           !routerState.url.toLowerCase().startsWith('/game-play/play-game-with-friend') &&
+          !routerState['url'].toLowerCase().startsWith('/game-play/game-option') &&
           routerState.params) {
           return true;
         } else if ((routerState.url.toLowerCase().startsWith('/game-play/') ||

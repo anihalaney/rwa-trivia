@@ -7,10 +7,9 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { Observable } from 'rxjs';
 import { Utils } from 'shared-library/core/services';
 import { Category, FirebaseScreenNameConstants, Game, Question, QuestionMetadata, ReportQuestion, User } from 'shared-library/shared/model';
-import { isAndroid } from 'tns-core-modules/ui/page/page';
+import { isAndroid, isIOS } from 'tns-core-modules/ui/page/page';
 import { AppState, categoryDictionary } from '../../../store';
 import * as gameplayactions from '../../store/actions';
-
 @Component({
     selector: 'report-game',
     templateUrl: './report-game.component.html',
@@ -20,7 +19,7 @@ import * as gameplayactions from '../../store/actions';
 
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class ReportGameComponent implements OnInit, OnDestroy {
-
+    iqKeyboard: IQKeyboardManager;
     question: Question;
     reportQuestion: ReportQuestion;
     user: User;
@@ -40,6 +39,10 @@ export class ReportGameComponent implements OnInit, OnDestroy {
 
     constructor(private store: Store<AppState>, private params: ModalDialogParams, public utils: Utils,
         private cd: ChangeDetectorRef) {
+        if (isIOS) {
+            this.iqKeyboard = IQKeyboardManager.sharedManager();
+            this.iqKeyboard.shouldResignOnTouchOutside = true;
+        }
         this.categoryDict$ = store.select(categoryDictionary);
         this.subscriptions.push(this.categoryDict$.subscribe(categoryDict => {
             this.categoryDict = categoryDict;
@@ -61,7 +64,7 @@ export class ReportGameComponent implements OnInit, OnDestroy {
             new ReportOption('Other')
         ];
 
-
+        
     }
 
     ngOnInit() {
@@ -138,14 +141,14 @@ export class ReportGameComponent implements OnInit, OnDestroy {
     }
 
     hideKeyboard() {
-        this.textField
-            .toArray()
-            .map((el) => {
-                if (isAndroid) {
-                    el.nativeElement.android.clearFocus();
-                }
-                return el.nativeElement.dismissSoftInput();
-            });
+        if (isAndroid) {
+            this.textField
+                .toArray()
+                .map((el) => {
+                        el.nativeElement.android.clearFocus();
+                        return el.nativeElement.dismissSoftInput();
+                    });
+        }
     }
 
 }
