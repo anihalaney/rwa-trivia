@@ -83,6 +83,11 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
           isChallengeControl.setValue(this.challengerUserId ? true : false);
           if (this.challengerUserId) {
             opponentTypeControl.setValue('1');
+          } else if (params.mode && params.mode === 'Two') {
+            playerModeControl.setValue('1');
+            opponentTypeControl.setValue('0');
+          } else if (params.mode && params.mode === 'Single') {
+            playerModeControl.setValue('0');
           }
 
           if (this.challengerUserId) {

@@ -17,7 +17,7 @@ import { profileSettingsConstants } from 'shared-library/shared/model';
 import { ObservableArray } from 'tns-core-modules/data/observable-array';
 import { ImageAsset } from 'tns-core-modules/image-asset';
 import { fromAsset, ImageSource } from 'tns-core-modules/image-source';
-import { isAndroid } from 'tns-core-modules/platform';
+import { isAndroid, isIOS } from 'tns-core-modules/platform';
 import * as dialogs from 'tns-core-modules/ui/dialogs';
 import { SegmentedBar, SegmentedBarItem } from 'tns-core-modules/ui/segmented-bar';
 import * as utils from 'tns-core-modules/utils/utils';
@@ -43,7 +43,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
   customTag: string;
   private tagItems: ObservableArray<TokenModel>;
   SOCIAL_LABEL = 'CONNECT YOUR SOCIAL ACCOUNT';
-  @ViewChildren('textField') textField: QueryList<ElementRef>;
+  @ViewChildren('textField', { read:  false }) textField: QueryList<ElementRef>;
 
   subscriptions = [];
   isValidDisplayName: boolean = null;
@@ -59,6 +59,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
   tabsTitles: Array<string>;
   private locations: ObservableArray<TokenModel>;
   private isLocationEnalbed: boolean;
+  iqKeyboard: IQKeyboardManager;
 
   @ViewChild('autocomplete', { static: false }) autocomplete: RadAutoCompleteTextViewComponent;
   @ViewChild('acLocation', { static: false }) acLocation: RadAutoCompleteTextViewComponent;
@@ -76,7 +77,10 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
     this.initDataItems();
     requestPermissions();
 
-
+    if (isIOS) {
+      this.iqKeyboard = IQKeyboardManager.sharedManager();
+      this.iqKeyboard.shouldResignOnTouchOutside = true;
+    }
     this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe(status => {
       if (status === 'SUCCESS') {
         this.uUtils.showMessage('success', 'Profile is saved successfully');
@@ -372,14 +376,14 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
 
 
   hideKeyboard() {
-    this.textField
-      .toArray()
-      .map((el) => {
-        if (isAndroid) {
-          el.nativeElement.android.clearFocus();
-        }
-        return el.nativeElement.dismissSoftInput();
-      });
+    if (isAndroid) {
+      this.textField
+        .toArray()
+        .map((el) => {
+            el.nativeElement.android.clearFocus();
+            return el.nativeElement.dismissSoftInput();
+          });
+    }
   }
 
   openUrl(url, id) {

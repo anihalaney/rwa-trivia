@@ -15,7 +15,10 @@ export enum UserStatConstants {
 export enum TriggerConstants {
     invitationTxt = 'Please accept invitation to play Trivia Game',
     invitationMailSubject = 'bitwiser.io: Friend Request',
-    fromUser = 'support@trivia.com'
+    fromUser = 'support@trivia.com',
+    ANDROID = 'android',
+    IOS = 'ios',
+    WEB = 'web'
 }
 
 export enum UserControllerConstants {
@@ -114,6 +117,9 @@ export enum CollectionConstants {
     STATS_SYSTEM = 'system',
     ACHIEVEMENTS = 'achievements',
     ACHIEVEMENT_RULES = 'achievement_rules',
+    USER_STATUS = 'user_status',
+    INFO = '.info',
+    CONNECTED = 'connected',
     REACTIONS = 'reactions'
 }
 
@@ -442,9 +448,26 @@ export enum FirebaseScreenNameConstants {
     USER_FEEDBACK = 'User Feedback'
 }
 
+export enum GoogleLocationAPI {
+    GOOGLE_AUTOCOMPLETE = 'https://maps.googleapis.com/maps/api/place/autocomplete/json',
+    GOOGLE_GEOCODE = 'https://maps.googleapis.com/maps/api/geocode/json'
+}
+
 export enum AnalyticsEventConstants {
     EVENT = 'event',
 }
+
+export enum UserStatusConstants {
+    ONLINE = 'online',
+    OFFLINE = 'offline',
+    CONNECTED = 'connected'
+}
+
+export enum DrawerConstants {
+    UPDATE_TOKEN_STATUS = 'update token status',
+    LOGOUT = 'logout'
+}
+
 
 export enum userCardType {
     USER_WEB_IMAGE_NAME_LOCATION_HORIZONTAL,
@@ -463,6 +486,7 @@ export enum userCardType {
     USER_IMAGE_NAME_LOCATION_HORIZONTAL,
     USER_NAME_IMAGE_HORIZONTAL,
     USER_IMAGE_NAME_VERTICAL,
-    USER_IMAGE_NAME_CATEGORY_HORIZONTAL
+    USER_IMAGE_NAME_CATEGORY_HORIZONTAL,
+    USER_IMAGE_NAME_GAME_PROFILE_HORIZONTAL
 
 }

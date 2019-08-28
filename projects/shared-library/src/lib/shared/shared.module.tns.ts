@@ -5,8 +5,14 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import {
-  ActionBarComponent, DrawerComponent, CountryListComponent, QuestionsTableComponent, QuestionCardComponent, FirstQuestionComponent,
-  SelectCategoryTagComponent, NotificationComponent
+  ActionBarComponent,
+  DrawerComponent,
+  CountryListComponent,
+  QuestionsTableComponent,
+  QuestionCardComponent,
+  FirstQuestionComponent,
+  SelectCategoryTagComponent,
+  NotificationComponent
 } from './mobile/component';
 import { NativeScriptCommonModule } from 'nativescript-angular/common';
 import { GameFilterPipe } from './pipe/game-filter.pipe';
@@ -16,7 +22,7 @@ import { NativeScriptUIAutoCompleteTextViewModule } from 'nativescript-ui-autoco
 import { NativeScriptUIListViewModule } from 'nativescript-ui-listview/angular';
 import {
   RenderQuestionComponent, AuthorComponent, RenderAnswerComponent, UserCardComponent, UserReactionComponent,
-  FriendInviteComponent, GameInviteComponent
+  FriendInviteComponent, GameInviteComponent, InviteMailFriendsComponent
 } from './components';
 import { ShowHintWhenFocusOutDirective, OpenUserProfileDirective, RippleEffectDirective } from './directive';
 import { PhoneNumberValidationProvider } from './mobile/component/countryList/phone-number-validation.provider';
@@ -39,15 +45,15 @@ import { SafeHtmlPipe } from './pipe/safe-html.pipe';
     RippleEffectDirective,
     QuestionCardComponent,
     FirstQuestionComponent,
-    UserReactionComponent,
+    InviteMailFriendsComponent,
     SelectCategoryTagComponent,
+    UserReactionComponent,
     NotificationComponent,
     FriendInviteComponent,
     GameInviteComponent
   ],
   imports: [
     CommonModule,
-
     // http client
     HttpClientModule,
     // Forms
@@ -85,9 +91,10 @@ import { SafeHtmlPipe } from './pipe/safe-html.pipe';
     RenderQuestionComponent,
     QuestionCardComponent,
     FirstQuestionComponent,
+    UserCardComponent,
+    InviteMailFriendsComponent,
     UserReactionComponent,
     SelectCategoryTagComponent,
-    UserCardComponent,
     NotificationComponent,
     FriendInviteComponent,
     GameInviteComponent

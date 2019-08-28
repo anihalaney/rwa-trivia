@@ -27,16 +27,18 @@ export class User {
   croppedImageUrl: any;
   originalImageUrl: any;
   imageType: string;
-  androidPushTokens?: string[];
-  iosPushTokens?: string[];
+  androidPushTokens?: Array<any>;
+  iosPushTokens?: Array<any>;
   lastGamePlayOption?: GameOptions;
   account?: Account;
   achievements: string[];
   gamePlayed: Array<{ [key: string]: FriendsMetadata }>;
   online?: boolean;
   isCategorySet?: boolean;
+  totalFriends?: number;
 
   constructor(authState?: firebase.User & { name: string }) {
+    this.totalFriends = 0;
     if (authState) {
       this.authState = authState;
       this.userId = authState.uid;
@@ -63,3 +65,9 @@ export class UserStats {
     this.leaderBoardStats = {};
   }
 }
+
+export class DeviceToken {
+  token: string;
+  online: boolean;
+}
+

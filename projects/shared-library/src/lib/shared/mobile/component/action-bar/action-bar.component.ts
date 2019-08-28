@@ -24,6 +24,7 @@ export class ActionBarComponent implements OnDestroy {
     @Input() title;
     @Input() hideMenu;
     @Input() hideHomeIcon;
+    @Input() showSkipBtn;
     @Output() open: EventEmitter<any> = new EventEmitter<any>();
 
 
