@@ -173,8 +173,6 @@ export class FirebaseFunctions {
                         await GamePlayedWithStats.calculateUserGamePlayedState(game);
                     }
                 }
-                console.log(afterEventData, 'afterEventData');
-                console.log(beforeEventData, 'beforeEventData');
                 // update timestamp in user last played game with
                 if (afterEventData.playerQnAs  && afterEventData.playerQnAs &&
                     afterEventData.playerQnAs.length > 0 &&
@@ -185,7 +183,8 @@ export class FirebaseFunctions {
                     ( !(beforeEventData && beforeEventData.playerQnAs) || // allow when user is the first to answer the question
                             (afterEventData.playerIds &&  beforeEventData && beforeEventData.playerIds &&
                                  beforeEventData.playerIds.length !== afterEventData.playerIds.length &&
-                                  afterEventData.gameOptions.opponentType == '0') ||  // allow if the game is with random player and the random user has been selected
+                                  afterEventData.gameOptions.opponentType == '0') ||
+                                  // allow if the game is with random player and the random user has been selected
                         (  beforeEventData.playerQnAs &&
                             (afterEventData.playerQnAs.length !== beforeEventData.playerQnAs.length ||
                           ( afterEventData.playerQnAs.length === beforeEventData.playerQnAs.length &&
@@ -197,11 +196,6 @@ export class FirebaseFunctions {
                         if ( lastAnsweredStat && lastAnsweredStat.playerId) {
                             const otherUserId = afterEventData.playerId_0 !== lastAnsweredStat.playerId ?
                                                 afterEventData.playerId_0 : afterEventData.playerId_1;
-                                                console.log('all conditions fullfilled');
-
-
-                                                console.log(otherUserId, 'otherUserId');
-                                                console.log(lastAnsweredStat.playerId, 'lastAnsweredStat.playerId');
                             await StatsService.updateUserPlayedGameStats(lastAnsweredStat.playerId, otherUserId, 'current_user');
                             await StatsService.updateUserPlayedGameStats(otherUserId, lastAnsweredStat.playerId, 'other_user');
                         }

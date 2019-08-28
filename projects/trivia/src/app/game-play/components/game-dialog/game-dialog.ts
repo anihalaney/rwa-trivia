@@ -84,7 +84,6 @@ export class GameDialog {
     this.subscriptions.push(
       this.gameObs.subscribe(game => {
         this.game = game;
-        console.log(JSON.stringify(this.game), 'game');
         this.threeConsecutiveAnswer = false;
         if (game !== null && game.playerQnAs.length === 3) {
           let consecutiveCount = 0;
