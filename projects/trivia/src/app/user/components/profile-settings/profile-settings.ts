@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import * as cloneDeep from 'lodash.clonedeep';
 import { combineLatest, Observable, Subject } from 'rxjs';
-import { flatMap, map, skipWhile, switchMap, take } from 'rxjs/operators';
+import { flatMap, map, skipWhile, switchMap, take, filter } from 'rxjs/operators';
 import { Utils } from 'shared-library/core/services';
 import { UserActions } from 'shared-library/core/store';
 import { Account, Category, profileSettingsConstants, User, Invitation } from 'shared-library/shared/model';
@@ -87,7 +87,7 @@ export class ProfileSettings {
             this.route.params.pipe(
                 skipWhile(params => !params.userid),
                 map(params => this.userId = params.userid),
-                flatMap(() => this.store.select(appState.coreState).pipe(select(s => s.user))),
+                flatMap(() => this.store.select(appState.coreState).pipe(select(s => s.user), filter(u => u !== null))),
                 switchMap(user => {
                     if (user && user.userId === this.userId) {
                         this.user = user;
@@ -137,7 +137,7 @@ export class ProfileSettings {
             this.categories = values[1] || [];
             this.categoryDict = values[2] || {};
 
-            this.userCopyForReset = cloneDeep(this.user);
+            this.userCopyForReset = {...this.user};
             this.createForm(this.user);
 
             if (this.user.profilePictureUrl) {
