@@ -1,14 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Invitation, Category, userCardType, User } from 'shared-library/shared/model';
 import { Store, select } from '@ngrx/store';
 import { CoreState, coreState, categoryDictionary } from './../../../../core/store';
 import { Observable, combineLatest } from 'rxjs';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+
 @Component({
   selector: 'app-notification',
   templateUrl: './notification.component.html',
   styleUrls: ['./notification.component.scss']
 })
-export class NotificationComponent implements OnInit {
+
+@AutoUnsubscribe({ 'arrayName': 'subscriptions' })
+export class NotificationComponent implements OnInit, OnDestroy {
+
   user: User;
   friendInvitations: Invitation[] = [];
   subscriptions = [];
@@ -32,6 +37,9 @@ export class NotificationComponent implements OnInit {
   }
 
   ngOnInit() {
+  }
+
+  ngOnDestroy(): void {
   }
 
 }
