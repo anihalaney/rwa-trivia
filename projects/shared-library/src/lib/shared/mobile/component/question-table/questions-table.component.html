@@ -43,7 +43,7 @@
                                 padding="2" width="220" color="#616161"></Label>
                         </GridLayout>
                     </StackLayout>
-                    <StackLayout>
+                    <StackLayout *ngIf="getDisplayStatus(question.status)==='APPROVED'">
                         <GridLayout rows="*,*,*,*" columns="*,*,*" marginTop="5">
                                 <Label row="0" col="0" text="Appeared" textWrap="true" class="label Roboto-Medium text-center"
                                     fontWeight="bold"></Label>
