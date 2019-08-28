@@ -5,7 +5,12 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import {
-  ActionBarComponent, DrawerComponent, CountryListComponent, QuestionsTableComponent,
+  ActionBarComponent,
+  DrawerComponent,
+  CountryListComponent,
+  QuestionsTableComponent,
+  QuestionCardComponent,
+  FirstQuestionComponent,
   SelectCategoryTagComponent
 } from './mobile/component';
 import { NativeScriptCommonModule } from 'nativescript-angular/common';
@@ -14,8 +19,11 @@ import { SearchCountryFilterPipe } from './pipe/search-country-filter.pipe';
 import { TNSCheckBoxModule } from 'nativescript-checkbox/angular';
 import { NativeScriptUIAutoCompleteTextViewModule } from 'nativescript-ui-autocomplete/angular';
 import { NativeScriptUIListViewModule } from 'nativescript-ui-listview/angular';
-import { RenderQuestionComponent, AuthorComponent, RenderAnswerComponent,
-  UserCardComponent, UserReactionComponent, SignupExtraInfoComponent, CheckDisplayNameComponent } from './components';
+import {
+  RenderQuestionComponent, AuthorComponent, RenderAnswerComponent,
+  UserCardComponent, UserReactionComponent, SignupExtraInfoComponent,
+  CheckDisplayNameComponent, InviteMailFriendsComponent
+} from './components';
 import { ShowHintWhenFocusOutDirective, OpenUserProfileDirective, RippleEffectDirective } from './directive';
 import { PhoneNumberValidationProvider } from './mobile/component/countryList/phone-number-validation.provider';
 import { SafeHtmlPipe } from './pipe/safe-html.pipe';
@@ -35,6 +43,10 @@ import { SafeHtmlPipe } from './pipe/safe-html.pipe';
     ShowHintWhenFocusOutDirective,
     OpenUserProfileDirective,
     RippleEffectDirective,
+    QuestionCardComponent,
+    FirstQuestionComponent,
+    InviteMailFriendsComponent,
+    SelectCategoryTagComponent,
     UserReactionComponent,
     SelectCategoryTagComponent,
     SignupExtraInfoComponent,
@@ -42,7 +54,6 @@ import { SafeHtmlPipe } from './pipe/safe-html.pipe';
   ],
   imports: [
     CommonModule,
-
     // http client
     HttpClientModule,
     // Forms
@@ -57,7 +68,8 @@ import { SafeHtmlPipe } from './pipe/safe-html.pipe';
     NativeScriptUIListViewModule,
   ],
   exports: [
-    CommonModule, HttpClientModule,
+    CommonModule,
+    HttpClientModule,
     NativeScriptFormsModule,
     ReactiveFormsModule,
     TNSCheckBoxModule,
@@ -76,6 +88,10 @@ import { SafeHtmlPipe } from './pipe/safe-html.pipe';
     RippleEffectDirective,
     RenderAnswerComponent,
     RenderQuestionComponent,
+    QuestionCardComponent,
+    FirstQuestionComponent,
+    UserCardComponent,
+    InviteMailFriendsComponent,
     UserReactionComponent,
     SelectCategoryTagComponent,
     UserCardComponent,

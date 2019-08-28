@@ -1,46 +1,23 @@
-<CardView class="cardStyle" margin="10" android:elevation="20" ios:elevation="40" radius="5" class="gameplay"
+<CardView class="cardStyle gameplay" margin="10" android:elevation="20" ios:elevation="40" radius="5"
     backgroundColor="white" iosOverflowSafeArea="false">
     <StackLayout class="cardStyle Roboto-Medium" backgroundColor="#ffffff" height="100%" width="100%" margin="15"
         iosOverflowSafeArea="false">
         <Label text="Question of the day!" color="#000" fontSize="20" class="text-center" textWrap="true"></Label>
-        <StackLayout margin="10">
-            <render-question [question]="question"></render-question>
-        </StackLayout>
+        <app-question-card [question]="question" [categoryName]="categoryName" [answeredText]="answeredText"
+            [doPlay]="doPlay" [correctAnswerText]="correctAnswerText" (selectedAnswer)="selectedAnswer($event)"></app-question-card>
 
-
-        <StackLayout orientation="horizontal" margin="5 10 5 10" *ngIf="question" iosOverflowSafeArea="false">
-            <Label text="Categories:" marginRight="5" color="#1B1C1C" fontSize="15" fontWeight="500" textWrap="true"></Label>
-            <Label text="{{categoryName}}" class="Roboto-Regular" fontSize="15" textWrap="true" color="#1b1c1c"></Label>
-        </StackLayout>
-
-        <StackLayout orientation="horizontal" margin="10" *ngIf="question" iosOverflowSafeArea="false">
-            <Label text="Tags:" marginRight="5" color="#1B1C1C" fontSize="15" fontWeight="500" textWrap="true"></Label>
-            <Label text="{{question.tags?.toString()}}" class="Roboto-Regular" color="#1B1C1C" fontSize="15" textWrap="true"></Label>
-        </StackLayout>
-        <StackLayout *ngIf="question" iosOverflowSafeArea="false">
-            <StackLayout iosOverflowSafeArea="false" class="question-answered Hind-Medium" margin="10" *ngFor="let answer of question.answers"
-                [class.players-answer]="answeredText === answer.answerText" [class.wrong]="answeredText === answer.answerText && correctAnswerText !== answer.answerText"
-                [class.right]="answeredText !== '' && correctAnswerText === answer.answerText"
-                [isUserInteractionEnabled]="doPlay" stlRippleEffect (rippleTap)="rippleTap(answer)">
-                <render-answer [answer]="answer" [isGameAnswer]="true" [isWrong]="answeredText === answer.answerText && correctAnswerText !== answer.answerText"
-                    [isRight]="(answeredText != '') && (correctAnswerText == answer.answerText)" [doPlay]="doPlay"
-                    [isUserInteractionEnabled]="doPlay"></render-answer>
-            </StackLayout>
-        </StackLayout>
         <StackLayout iosOverflowSafeArea="false" orientation="vertical" *ngIf="question" margin="10"
             iosOverflowSafeArea="false">
             <GridLayout rows="auto" columns="*,*">
                 <GridLayout class="reaction-container" row="0" col="0" marginLeft="10">
                     <user-reaction *ngIf="answeredText!==''" [user]='user' [question]='question'></user-reaction>
                 </GridLayout>
-                <GridLayout row="0" col="1" >
-                    <author [isGamePlay]= false [userId]="question.created_uid"></author>
-                </GridLayout>
             </GridLayout>
             <Button class="Roboto-Regular" backgroundColor="#8ac541" color="white" margin="20" (rippleTap)="getNextQuestion()"
                 *ngIf="answeredText!==''" width="100%" text="Try Another" fontSize="17" padding="15" stlRippleEffect
                 stlBackgroundColor="#8ac541"></Button>
         </StackLayout>
+
     </StackLayout>
 
 </CardView>

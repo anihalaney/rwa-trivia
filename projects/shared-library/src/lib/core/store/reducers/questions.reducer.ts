@@ -12,6 +12,17 @@ export function questionOfTheDay(state: any = null, action: ActionWithPayload<an
   }
 }
 
+export function firstQuestion(state: any = null, action: ActionWithPayload<any>): any {
+  switch (action.type) {
+    case QuestionActions.GET_FIRST_QUESTION_SUCCESS:
+      return action.payload;
+    case QuestionActions.GET_FIRST_QUESTION_ERROR:
+      return action.payload;
+    default:
+      return state;
+  }
+}
+
 export function questionSaveStatus(state: any = 'NONE', action: ActionWithPayload<string>): string {
   switch (action.type) {
     case QuestionActions.ADD_QUESTION_SUCCESS:

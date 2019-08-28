@@ -89,7 +89,14 @@ export class UserActions {
   static CHECK_DISPLAY_NAME = 'CHECK_DISPLAY_NAME';
 
   static CHECK_DISPLAY_NAME_SUCCESS = 'CHECK_DISPLAY_NAME_SUCCESS';
-  logoff(): ActionWithPayload<null> {
+
+  static UPDATE_USER_SUCCESS = 'UPDATE_USER_SUCCESS';
+
+  static SET_FIRST_QUESTION_BITS = 'SET_FIRST_QUESTION_BITS';
+
+  static SET_FIRST_QUESTION_BITS_SUCCESS = 'SET_FIRST_QUESTION_BITS_SUCCESS';
+
+  logoff(): ActionWithPayload<any> {
     return {
       type: UserActions.LOGOFF,
       payload: null
@@ -155,10 +162,16 @@ export class UserActions {
       payload: user
     };
   }
-  updateUser(user: User): ActionWithPayload<User> {
+  updateUser(user: User, status: any): ActionWithPayload<any> {
     return {
       type: UserActions.UPDATE_USER,
-      payload: user
+      payload: { user, status }
+    };
+  }
+  updateUserSuccess(status: string): ActionWithPayload<string> {
+    return {
+      type: UserActions.UPDATE_USER_SUCCESS,
+      payload: status
     };
   }
   loadGameInvites(user: User): ActionWithPayload<User> {
@@ -329,6 +342,18 @@ export class UserActions {
     return {
       type: UserActions.CHECK_DISPLAY_NAME_SUCCESS,
       payload: result
+    };
+  }
+  setFirstQuestionBits(userId: string): ActionWithPayload<string> {
+    return {
+      type: UserActions.SET_FIRST_QUESTION_BITS,
+      payload: userId
+    };
+  }
+  setFirstQuestionBitsSuccess(msg: string): ActionWithPayload<string> {
+    return {
+      type: UserActions.SET_FIRST_QUESTION_BITS_SUCCESS,
+      payload: msg
     };
   }
 

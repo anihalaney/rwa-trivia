@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import { User, Question } from 'shared-library/shared/model';
+import { User, Question, UserStatus } from 'shared-library/shared/model';
 
 export enum UserActionTypes {
 

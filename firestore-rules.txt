@@ -165,6 +165,13 @@ service cloud.firestore {
         allow read;
       }
     }
+
+    match /user_status/{userId} {    
+      // only allow login user to read and get it
+      // logged in user does not have rights to modify this document
+      // document can only be modified by API , triggers
+      allow get:  if isUserAuthenticated(userId);          
+    }
     
   }
 }
