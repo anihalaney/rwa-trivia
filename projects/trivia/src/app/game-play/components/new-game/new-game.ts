@@ -189,7 +189,7 @@ export class NewGame implements OnDestroy {
     let user: User;
     this.subscriptions.push(this.store.select(appState.coreState).pipe(take(1)).subscribe(s => {
       user = s.user;
-      if (gameOptions.playerMode == 1) {
+      if (this.gameOptions.playerMode === PlayerMode.Opponent) {
         gameOptions.friendId = this.friendUserId;
       }
       this.store.dispatch(new gameplayactions.CreateNewGame({ gameOptions: gameOptions, user: user }));

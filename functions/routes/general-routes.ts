@@ -38,9 +38,6 @@ class GeneralRoutes {
         this.generalRoutes.get(`/${RoutesConstants.TOP_TAGS_COUNT}`,
             AuthMiddleware.authorizedOnly, GeneralController.getTopTags);
 
-        // `/getTopTags` 
-        this.generalRoutes.post(`/updateStat`,
-        AuthMiddleware.authTokenOnly, GeneralController.updateStat);
     }
 }
 

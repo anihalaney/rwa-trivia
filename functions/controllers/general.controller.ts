@@ -3,7 +3,6 @@ import { GeneralService } from '../services/general.service';
 import { Utils } from '../utils/utils';
 import { AppSettings } from '../services/app-settings.service';
 import { ESUtils } from '../utils/ESUtils';
-import { StatsService } from '../services/stats.service';
 
 export class GeneralController {
     private static QUESTIONS_INDEX = 'questions';
@@ -81,7 +80,6 @@ export class GeneralController {
             Utils.sendError(res, error);
         }
     }
-
 
 
 }

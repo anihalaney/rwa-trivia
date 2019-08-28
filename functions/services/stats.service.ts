@@ -113,9 +113,7 @@ export class StatsService {
             } else {
                 return;
             }
-            console.log(userType, gamePlayedWith);
             userGameStat = { ...gamePlayedWith };
-            console.log('why here should not be');
             return await UserService.setGameStat({ ...userGameStat }, userId, otherUserId);
         } catch (error) {
             return Utils.throwError(error);
