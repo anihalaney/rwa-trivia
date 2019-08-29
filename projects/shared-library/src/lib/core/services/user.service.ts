@@ -1,16 +1,18 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { combineLatest, Observable, of } from 'rxjs';
+import { combineLatest, Observable, of, from } from 'rxjs';
 import { map, mergeMap, catchError } from 'rxjs/operators';
 import {
     friendInvitationConstants, Friends, Game, GameOperations, GameStatus, Invitation, QueryParam, QueryParams, User, RoutesConstants,
-     Question
+    Question,
+    UserStatus
 } from './../../../lib/shared/model';
 import { CONFIG } from './../../environments/environment';
 import { DbService } from './../db-service';
 
 import { Country } from 'shared-library/shared/mobile/component/countryList/model/country.model';
 import { Utils } from './utils';
+
 
 @Injectable()
 export class UserService {
@@ -101,26 +103,26 @@ export class UserService {
         return this.http.get<User>(url);
     }
 
-    loadUserInvitationsInfo(userId: string , invitedUserEmail: string, invitedUserId: string): Observable<Invitation> {
+    loadUserInvitationsInfo(userId: string, invitedUserEmail: string, invitedUserId: string): Observable<Invitation> {
         const queryParams = {
             condition: [
-            { name: 'created_uid', comparator: '==', value: userId },
-            { name: 'email', comparator: '==',  value: invitedUserEmail}
+                { name: 'created_uid', comparator: '==', value: userId },
+                { name: 'email', comparator: '==', value: invitedUserEmail }
             ],
             limit: 1
         };
         return combineLatest(this.dbService.valueChanges('invitations', '', queryParams), this.dbService.valueChanges('friends', userId))
-        .pipe(
-            map(values => {
-                if (values[1] &&  values[1].myFriends && values[1].myFriends.some((friend => friend[invitedUserId]))) {
-                    return  {'email': invitedUserEmail, 'created_uid': null, 'status': 'approved'};
-                } else if (values[0].length > 0) {
-                    return values[0][0];
-                } else {
-                    return {'email': invitedUserEmail, 'created_uid': null, 'status': 'add'};
-                }
-            })
-        );
+            .pipe(
+                map(values => {
+                    if (values[1] && values[1].myFriends && values[1].myFriends.some((friend => friend[invitedUserId]))) {
+                        return { 'email': invitedUserEmail, 'created_uid': null, 'status': 'approved' };
+                    } else if (values[0].length > 0) {
+                        return values[0][0];
+                    } else {
+                        return { 'email': invitedUserEmail, 'created_uid': null, 'status': 'add' };
+                    }
+                })
+            );
 
     }
 
@@ -209,9 +211,9 @@ export class UserService {
             });
     }
 
-    updateUser(user: User) {
+    updateUser(user: User): Observable<any> {
         const dbUser = Object.assign({}, user);
-        this.dbService.setDoc('users', dbUser.userId, dbUser);
+        return from(this.dbService.setDoc('users', dbUser.userId, dbUser));
     }
 
     addUserLives(userId: string) {
@@ -232,6 +234,19 @@ export class UserService {
     getAddressSuggestions(address) {
         const url = `${CONFIG.functionsUrl}/${this.RC.USER}/${this.RC.ADDRESS_SUGGESTION}/${address}`;
         return this.http.get<any>(url);
+    }
+
+    getUserStatus(user: User): Observable<User> {
+
+        return this.dbService.valueChanges('user_status', user.userId)
+            .pipe(map(u => {
+                user.online = (u) ? u.online : false;
+                return user;
+            }));
+    }
+
+    updateUserStatus(userStatus: UserStatus) {
+        this.dbService.updateDoc('user_status', userStatus.userId, userStatus);
     }
 
     firstQuestionSetBits(userId: string): Observable<any> {

@@ -10,6 +10,7 @@ import { RenderAnswerComponent } from './render-answer/render-answer.component';
 import { CropImageDialogComponent } from './crop-image-dialog/crop-image-dialog.component';
 import { UserReactionComponent } from './user-reaction/user-reaction.component';
 import { UserCardComponent } from './user-card/user-card.component';
+import { InviteMailFriendsComponent } from './invite-mail-friends/invite-mail-friends.component';
 export {
     QuestionsSearchComponent,
     QuestionsTableComponent,
@@ -20,8 +21,9 @@ export {
     RenderQuestionComponent,
     RenderAnswerComponent,
     CropImageDialogComponent,
+    UserCardComponent,
+    InviteMailFriendsComponent,
     UserReactionComponent,
-    UserCardComponent
 };
 
 export default [
@@ -34,6 +36,7 @@ export default [
     RenderQuestionComponent,
     RenderAnswerComponent,
     CropImageDialogComponent,
+    UserCardComponent,
+    InviteMailFriendsComponent,
     UserReactionComponent,
-    UserCardComponent
 ];
