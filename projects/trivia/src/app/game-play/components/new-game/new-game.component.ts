@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild, PLATFORM_ID, Inject } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -58,13 +58,14 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     public store: Store<AppState>,
     public gameActions: GameActions,
     public windowRef: WindowRef,
+    @Inject(PLATFORM_ID) public platformId: Object,
     public router: Router,
     public route: ActivatedRoute,
     public userActions: UserActions,
     public utils: Utils,
     public snackBar: MatSnackBar,
     public cd: ChangeDetectorRef) {
-    super(store, utils, gameActions, userActions, windowRef, cd, route, router);
+    super(store, utils, gameActions, userActions, windowRef, platformId, cd, route, router);
   }
 
   ngOnInit() {

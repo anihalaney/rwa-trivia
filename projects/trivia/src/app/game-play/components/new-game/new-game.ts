@@ -7,8 +7,9 @@ import { Category, GameOptions, User, ApplicationSettings, PlayerMode, OpponentT
 import { Utils, WindowRef } from 'shared-library/core/services';
 import { AppState, appState } from '../../../store';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
-import { OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { OnDestroy, ChangeDetectorRef, PLATFORM_ID, Inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { isPlatformBrowser } from '@angular/common';
 
 
 
@@ -45,6 +46,7 @@ export class NewGame implements OnDestroy {
     public gameActions: GameActions,
     public userActions: UserActions,
     public windowRef: WindowRef,
+    @Inject(PLATFORM_ID) public platformId: Object,
     public cd: ChangeDetectorRef,
     public route: ActivatedRoute,
     public router: Router) {
@@ -172,7 +174,7 @@ export class NewGame implements OnDestroy {
           this.utils.showMessage('error', this.errMsg);
         } else {
           this.loaderStatus = false;
-          if (this.windowRef && this.windowRef.nativeWindow && this.windowRef.nativeWindow.scrollTo) {
+          if (isPlatformBrowser(this.platformId) && this.windowRef && this.windowRef.nativeWindow && this.windowRef.nativeWindow.scrollTo) {
             this.windowRef.nativeWindow.scrollTo(0, 0);
           }
         }
