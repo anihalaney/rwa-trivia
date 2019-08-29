@@ -47,4 +47,8 @@ export abstract class DbService {
     public deleteDoc(collectionName: string, docId: any): any {
 
     }
+
+    public IncrementValue(collectionName: string, docId: any, document: any, fieldName: string, value: number): any {
+
+    }
 }

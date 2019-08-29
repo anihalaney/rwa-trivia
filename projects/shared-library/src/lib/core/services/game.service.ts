@@ -307,4 +307,15 @@ export class GameService {
     return this.dbService.valueChanges(`questions`, questionId );
   }
 
+  updateQuestionStat(questionId: string, type: string) {
+    return this.dbService.getDoc('questions', questionId).get().then(data => {
+      const question = data.data();
+      if (question) {
+          const field = type === 'CREATE' ? 'appeared' : ( type === 'CORRECT' ? 'correct' : 'wrong' );
+           return this.dbService.IncrementValue('questions', questionId, question, field, 1);
+        } else {
+          return of();
+        }
+    });
+  }
 }

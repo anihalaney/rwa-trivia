@@ -10,7 +10,7 @@ import { tags, topTags } from './tags.reducer';
 import { questionOfTheDay, questionSaveStatus, updateQuestion, firstQuestion } from './questions.reducer';
 import { loginRedirectUrl, resetPasswordLogs } from './ui-state.reducer';
 import { activeGames, newGameId, gameCreateStatus, updateUserReactionStatus, getUserReactionStatus,
-  getQuestionSuccess } from './game.reducer';
+  getQuestionSuccess, updateQuestionStatSuccess } from './game.reducer';
 import { applicationSettings } from './application-settings.reducer';
 import { Country } from 'shared-library/shared/mobile/component/countryList/model/country.model';
 
@@ -57,6 +57,7 @@ export interface CoreState {
   getQuestionSuccess: any;
   getTopCategories: any;
   getTopTags: any;
+  updateQuestionStatSuccess: any;
 }
 
 export const reducer: ActionReducerMap<CoreState> = {
@@ -92,7 +93,8 @@ export const reducer: ActionReducerMap<CoreState> = {
   getUserReactionStatus: getUserReactionStatus,
   getQuestionSuccess: getQuestionSuccess,
   getTopCategories: topCategories,
-  getTopTags: topTags
+  getTopTags: topTags,
+  updateQuestionStatSuccess: updateQuestionStatSuccess
 };
 
 // Features
