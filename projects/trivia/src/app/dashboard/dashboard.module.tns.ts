@@ -15,7 +15,7 @@ import { FriendInviteComponent } from './component/friend-invite/friend-invite.c
 import { GameInviteComponent } from './component/game-invite/game-invite.component';
 import { NativeScriptRouterModule } from 'nativescript-angular/router';
 import { DropDownModule } from "nativescript-drop-down/angular";
-
+import { InviteToPlayComponent } from './component/invite-to-play/invite-to-play.component';
 @NgModule({
     declarations: [
         DashboardComponent,
@@ -26,7 +26,8 @@ import { DropDownModule } from "nativescript-drop-down/angular";
         LeaderboardComponent,
         RealtimeStatsComponent,
         FriendInviteComponent,
-        GameInviteComponent
+        GameInviteComponent,
+        InviteToPlayComponent
     ],
     imports: [
         DashboardRoutingModule,

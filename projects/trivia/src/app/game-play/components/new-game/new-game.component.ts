@@ -78,9 +78,9 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
       this.route.params.pipe(
         map(params => {
           this.challengerUserId = params.userid;
-          playerModeControl.setValue(this.challengerUserId ? '1' : '0');
+          playerModeControl.setValue((this.challengerUserId || this.router.url.indexOf('play-game-with-random-user') >= 0 ) ? '1' : '0');
           const isChallengeControl = this.newGameForm.get('isChallenge');
-          isChallengeControl.setValue(this.challengerUserId ? true : false);
+          isChallengeControl.setValue(this.challengerUserId && this.router.url.indexOf('challenge') >= 0  ? true : false);
           if (this.challengerUserId) {
             opponentTypeControl.setValue('1');
           } else if (params.mode && params.mode === 'Two') {
@@ -88,6 +88,10 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
             opponentTypeControl.setValue('0');
           } else if (params.mode && params.mode === 'Single') {
             playerModeControl.setValue('0');
+          }
+
+          if (this.router.url.indexOf('play-game-with-random-user') >= 0) {
+            opponentTypeControl.setValue('0');
           }
 
           if (this.challengerUserId) {
@@ -158,7 +162,8 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
       gameMode: [gameOptions.gameMode, Validators.required],
       tagControl: '',
       tagsArray: tagsFA,
-      isChallenge: gameOptions.isChallenge
+      isChallenge: gameOptions.isChallenge,
+      friendUserId: ''
     } //, {validator: questionFormValidator}
     );
     return form;
@@ -168,6 +173,8 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
   selectFriendId(friendId: string) {
     this.friendUserId = friendId;
     this.errMsg = undefined;
+    const friendUserIdControl = this.newGameForm.get('friendUserId');
+    friendUserIdControl.setValue(friendId);
   }
 
   selectCategory(event: any, categoryId: number): void {
