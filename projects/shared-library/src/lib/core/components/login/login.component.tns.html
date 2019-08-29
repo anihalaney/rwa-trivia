@@ -4,33 +4,39 @@
     <GridLayout *ngIf="mode === 2" #background class="background"></GridLayout>
 
     <StackLayout (tap)="hideKeyboard()" class="mobile">
+        <PreviousNextView>
       <GridLayout rows="auto,*">
         <StackLayout row="0" [ngClass]="{'background': this.mode !== 2 }">
-          <StackLayout [ngClass]="{'phone-login-layout': signInMethod === 'phone'}" #initialContainer class="initial-container">
+          <StackLayout [ngClass]="{'phone-login-layout': signInMethod === 'phone'}" #initialContainer
+            class="initial-container">
             <Label text="bit wiser" fontSize="40" class="initial-label Varela-Round-Regular"></Label>
-            <Label *ngIf="message.show" class="message-label" textWrap="true" [ngClass]="{'text-primary': message.type === 'success', 'text-danger': message.type === 'error'}"
+            <Label *ngIf="message.show" class="message-label" textWrap="true"
+              [ngClass]="{'text-primary': message.type === 'success', 'text-danger': message.type === 'error'}"
               [text]="message.text"></Label>
             <StackLayout *ngIf="signInMethod === 'phone'">
               <StackLayout row="2" colSpan="2" class="input-field">
                 <GridLayout rows="auto" columns="110,10,*" class="initial-button">
-                  <GridLayout (tap)="onSelectCountry()" row="0" col="0" rows="auto" columns="auto,*" class="list-group-item"
-                    class="input-border-field Roboto-Regular" ios:borderColor="#f7f8fa" ios:borderWidth="1"
-                    backgroundColor="#f7f8fa" padding="17 15 15 15">
+                  <GridLayout (tap)="onSelectCountry()" row="0" col="0" rows="auto" columns="auto,*"
+                    class="list-group-item" class="input-border-field Roboto-Regular" ios:borderColor="#f7f8fa"
+                    ios:borderWidth="1" backgroundColor="#f7f8fa" padding="17 15 15 15">
                     <Image col="0" col="0" src="~/assets/flags/{{input.country}}.png" height="18" backgroundColor="gray"
                       width="29" class="img-rounded"></Image>
                     <Label row="0" col="1" text="{{input.countryCode}}" class="p-l-10" textWrap="true"></Label>
                   </GridLayout>
                   <Label text="" row="0" col="1" class="label-style p-b-5"></Label>
-                  <TextField hint="Phone number" class="input-border-field Roboto-Regular" ios:borderColor="#f7f8fa"
+                  <TextField #textField  hint="Phone number" class="input-border-field Roboto-Regular" ios:borderColor="#f7f8fa"
                     ios:borderWidth="1" backgroundColor="#f7f8fa" padding="17 15 15 15" #phoneNumber="ngModel"
-                    [(ngModel)]="input.phoneNumber" keyboardType="number" [ngClass]="{'input-error': (phoneNumber.dirty && phoneNumber.errors) }"
-                    row="0" col="2" maxlength="10" required phoneNumber></TextField>
+                    [(ngModel)]="input.phoneNumber" keyboardType="number"
+                    [ngClass]="{'input-error': (phoneNumber.dirty && phoneNumber.errors) }" row="0" col="2"
+                    maxlength="10" required phoneNumber></TextField>
                 </GridLayout>
-                <Label *ngIf="isCountryCodeError" marginTop="6" textWrap="true" class="text-center error" text="Country code is required"></Label>
-                <Label marginTop="6" textWrap="true" class="text-center error" *ngIf="phoneNumber.dirty && phoneNumber.errors && phoneNumber.errors.required"
+                <Label *ngIf="isCountryCodeError" marginTop="6" textWrap="true" class="text-center error"
+                  text="Country code is required"></Label>
+                <Label marginTop="6" textWrap="true" class="text-center error"
+                  *ngIf="phoneNumber.dirty && phoneNumber.errors && phoneNumber.errors.required"
                   text="Phone number is required"></Label>
-                <Label marginTop="6" textWrap="true" class="text-center error" *ngIf="phoneNumber.errors && !phoneNumber.errors.required"
-                  text="Invalid Phone number"></Label>
+                <Label marginTop="6" textWrap="true" class="text-center error"
+                  *ngIf="phoneNumber.errors && !phoneNumber.errors.required" text="Invalid Phone number"></Label>
               </StackLayout>
 
               <Button text="VERIFY" width="50%" marginTop="30" marginBottom="20" (rippleTap)="signInWithPhone()"
@@ -39,100 +45,120 @@
             </StackLayout>
             <StackLayout [formGroup]="loginForm">
               <TextField visibility="collapsed" formControlName="mode"></TextField>
-              <StackLayout *ngIf="signInMethod === 'email'" [ngClass]="{'forgotScreen':mode === 2}">
-                <Label *ngIf="mode === 2" text="Forgot your password?" class="text-center Roboto-Regular" color="black"
-                  ios:fontSize="25" android:fontSize="22" textWrap="true"></Label>
-                <Label *ngIf="mode === 2" text="Enter your email below to receive your password reset instructions."
-                  marginTop="10" marginBottom="30" color="black" class="text-center Roboto-Regular" textWrap="true"></Label>
-                <GridLayout rows="auto" columns="*,auto" class="initial-button">
-                  <TextField #textField [stlShowHintWhenFocusOut]="{hintRef: emailHint, controlRef:loginForm.controls.email}"
-                    row="0" col="0" hint="Email" formControlName="email" class="border-field Roboto-Regular"
-                    ios:borderColor="#f7f8fa" ios:borderWidth="1" backgroundColor="#f7f8fa" padding="17 15 15 15"></TextField>
-
-                  <Label *ngIf="mode !== 2" row="0" col="1" android:paddingTop="20" paddingRight="15" fontSize="21"
-                    class="fa text-icon-field" ios:borderColor="#f7f8fa" ios:borderWidth="1" backgroundColor="#f7f8fa"
-                    text="&#xf2bd;" color="gray" textWrap="true"></Label>
-                  <Label *ngIf="mode === 2" row="0" col="1" android:paddingTop="20" paddingRight="15" fontSize="21"
-                    class="fa text-icon-field" ios:borderColor="#f7f8fa" ios:borderWidth="1" backgroundColor="#f7f8fa"
-                    text="&#xf0e0;" color="gray" textWrap="true"></Label>
-                </GridLayout>
-                <Label #emailHint text="Invalid Email!" marginTop="10" textWrap="true" class="text-center error"></Label>
-                <GridLayout *ngIf="mode !== 2" rows="auto,auto" columns="*,auto" class="initial-button" marginTop="20"
-                  borderRadius="10">
-                  <TextField #textField row="0" [stlShowHintWhenFocusOut]="{hintRef: passwordHint, controlRef:loginForm.controls.password}"
-                    col="0" formControlName="password" secure="true" hint="Password" class="border-field Roboto-Regular"
-                    ios:borderColor="#f7f8fa" ios:borderWidth="1" backgroundColor="#f7f8fa" padding="17 15 15 15"></TextField>
-                  <Label row="0" col="1" android:paddingTop="20" paddingRight="18" fontSize="21" class="fa text-icon-field"
-                    ios:borderColor="#f7f8fa" ios:borderWidth="1" text="&#xf023;" backgroundColor="#f7f8fa" color="gray"
+              <PreviousNextView>
+                <StackLayout *ngIf="signInMethod === 'email'" [ngClass]="{'forgotScreen':mode === 2}">
+                  <Label *ngIf="mode === 2" text="Forgot your password?" class="text-center Roboto-Regular"
+                    color="black" ios:fontSize="25" android:fontSize="22" textWrap="true"></Label>
+                  <Label *ngIf="mode === 2" text="Enter your email below to receive your password reset instructions."
+                    marginTop="10" marginBottom="30" color="black" class="text-center Roboto-Regular"
                     textWrap="true"></Label>
-                  <Label row="1" col="0" #passwordHint text="Password must be atleast 6 characters" marginTop="10"
-                    textWrap="true" class="text-center error"></Label>
-                </GridLayout>
+                  <GridLayout rows="auto" columns="*,auto" class="initial-button">
+                    <TextField #textField [stlShowHintWhenFocusOut]="{hintRef: emailHint, controlRef:loginForm.controls.email}"
+                      row="0" col="0" hint="Email" formControlName="email" class="border-field Roboto-Regular"
+                      ios:borderColor="#f7f8fa" ios:borderWidth="1" backgroundColor="#f7f8fa" padding="17 15 15 15"
+                      returnKeyType="next"></TextField>
+
+                    <Label *ngIf="mode !== 2" row="0" col="1" android:paddingTop="20" paddingRight="15" fontSize="21"
+                      class="fa text-icon-field" ios:borderColor="#f7f8fa" ios:borderWidth="1" backgroundColor="#f7f8fa"
+                      text="&#xf2bd;" color="gray" textWrap="true"></Label>
+                    <Label *ngIf="mode === 2" row="0" col="1" android:paddingTop="20" paddingRight="15" fontSize="21"
+                      class="fa text-icon-field" ios:borderColor="#f7f8fa" ios:borderWidth="1" backgroundColor="#f7f8fa"
+                      text="&#xf0e0;" color="gray" textWrap="true"></Label>
+                  </GridLayout>
+                  <Label #emailHint text="Invalid Email!" marginTop="10" textWrap="true"
+                    class="text-center error"></Label>
+                  <GridLayout *ngIf="mode !== 2" rows="auto,auto" columns="*,auto" class="initial-button" marginTop="20"
+                    borderRadius="10">
+                    <TextField row="0" #textField
+                      [stlShowHintWhenFocusOut]="{hintRef: passwordHint, controlRef:loginForm.controls.password}"
+                      col="0" formControlName="password" secure="true" hint="Password"
+                      class="border-field Roboto-Regular" ios:borderColor="#f7f8fa" ios:borderWidth="1"
+                      backgroundColor="#f7f8fa" padding="17 15 15 15" returnKeyType="done"></TextField>
+                    <Label row="0" col="1" android:paddingTop="20" paddingRight="18" fontSize="21"
+                      class="fa text-icon-field" ios:borderColor="#f7f8fa" ios:borderWidth="1" text="&#xf023;"
+                      backgroundColor="#f7f8fa" color="gray" textWrap="true"></Label>
+                    <Label row="1" col="0" #passwordHint text="Password must be atleast 6 characters" marginTop="10"
+                      textWrap="true" class="text-center error"></Label>
+                  </GridLayout>
 
 
-                <GridLayout *ngIf="mode === 1" rows="auto,auto" columns="*,auto" class="initial-button" marginTop="20"
-                  borderRadius="10">
-                  <TextField #textField [stlShowHintWhenFocusOut]="{hintRef: confPasswordHint, controlRef:loginForm.controls.confirmPassword}"
-                    col="0" hint="Confirm Password" formControlName="confirmPassword" secure="true" class="border-field Roboto-Regular"
-                    ios:borderColor="#f7f8fa" ios:borderWidth="1" backgroundColor="#f7f8fa" padding="17 15 15 15"></TextField>
-                  <Label col="1" android:paddingTop="20" paddingRight="18" fontSize="21" class="fa text-icon-field"
-                    ios:borderColor="#f7f8fa" ios:borderWidth="1" text="&#xf023;" color="gray" backgroundColor="#f7f8fa"
-                    textWrap="true"></Label>
-                  <Label row="1" col="0" #confPasswordHint marginTop="10" text="Confirm Password must be atleast 6 characters"
-                    textWrap="true" class="error"></Label>
-                  <Label row="1" col="0" *ngIf="(loginForm.controls.password.valid && loginForm.controls.confirmPassword.valid && loginForm.hasError('passwordmismatch'))"
-                    marginTop="10" text="Must match Password" textWrap="true" class="text-center error"></Label>
-                </GridLayout>
-                <StackLayout [ngSwitch]="mode">
-                  <StackLayout *ngSwitchCase="0">
-                    <Button text="Login" width="50%" marginTop="30" (tap)="onSubmit()" [disabled]="loginForm.invalid"
-                      class="text-center login-button initial-button-label Roboto-Bold" stlRippleEffect></Button>
-                    <StackLayout>
-                      <Label text="Forgot your password?" (tap)="changeMode(2)" marginTop="25" class="text-center initial-label Roboto-Regular"
-                        textWrap="true"></Label>
-                      <Label text="New Signup" textWrap="true" (tap)="changeMode(1)" class="text-center initial-label Roboto-Regular"></Label>
+                  <GridLayout *ngIf="mode === 1" rows="auto,auto" columns="*,auto" class="initial-button" marginTop="20"
+                    borderRadius="10">
+                    <TextField #textField 
+                      [stlShowHintWhenFocusOut]="{hintRef: confPasswordHint, controlRef:loginForm.controls.confirmPassword}"
+                      col="0" hint="Confirm Password" formControlName="confirmPassword" secure="true"
+                      class="border-field Roboto-Regular" ios:borderColor="#f7f8fa" ios:borderWidth="1"
+                      backgroundColor="#f7f8fa" padding="17 15 15 15"></TextField>
+                    <Label col="1" android:paddingTop="20" paddingRight="18" fontSize="21" class="fa text-icon-field"
+                      ios:borderColor="#f7f8fa" ios:borderWidth="1" text="&#xf023;" color="gray"
+                      backgroundColor="#f7f8fa" textWrap="true"></Label>
+                    <Label row="1" col="0" #confPasswordHint marginTop="10"
+                      text="Confirm Password must be atleast 6 characters" textWrap="true" class="error"></Label>
+                    <Label row="1" col="0"
+                      *ngIf="(loginForm.controls.password.valid && loginForm.controls.confirmPassword.valid && loginForm.hasError('passwordmismatch'))"
+                      marginTop="10" text="Must match Password" textWrap="true" class="text-center error"></Label>
+                  </GridLayout>
+                  <StackLayout [ngSwitch]="mode">
+                    <StackLayout *ngSwitchCase="0">
+                      <Button text="Login" width="50%" marginTop="30" (tap)="onSubmit()" [disabled]="loginForm.invalid"
+                        class="text-center login-button initial-button-label Roboto-Bold" stlRippleEffect></Button>
+                      <StackLayout>
+                        <Label text="Forgot your password?" (tap)="changeMode(2)" marginTop="25"
+                          class="text-center initial-label Roboto-Regular" textWrap="true"></Label>
+                        <Label text="New Signup" textWrap="true" (tap)="changeMode(1)"
+                          class="text-center initial-label Roboto-Regular"></Label>
+                      </StackLayout>
+                    </StackLayout>
+                    <StackLayout *ngSwitchCase="1">
+                      <Button text="Sign Up" width="50%" marginTop="30" (tap)="onSubmit()"
+                        [disabled]="loginForm.invalid" class="text-center login-button initial-button-label"
+                        stlRippleEffect></Button>
+                      <Label text="Already have an account? Login" textWrap="true" marginTop="15" (tap)="changeMode(0)"
+                        class="text-center initial-label"></Label>
+                    </StackLayout>
+                    <StackLayout *ngSwitchCase="2">
+                      <Button text="Send Password" width="70%" marginTop="20" (tap)="onSubmit()"
+                        class="text-center login-button initial-button-label Roboto-Bold" stlRippleEffect></Button>
+                      <Label text="No. I remember it now!" marginTop="30" textWrap="true" (tap)="changeMode(0)"
+                        color="black" class="text-center initial-label"></Label>
                     </StackLayout>
                   </StackLayout>
-                  <StackLayout *ngSwitchCase="1">
-                    <Button text="Sign Up" width="50%" marginTop="30" (tap)="onSubmit()" [disabled]="loginForm.invalid"
-                      class="text-center login-button initial-button-label" stlRippleEffect></Button>
-                    <Label text="Already have an account? Login" textWrap="true" marginTop="15" (tap)="changeMode(0)"
-                      class="text-center initial-label"></Label>
-                  </StackLayout>
-                  <StackLayout *ngSwitchCase="2">
-                    <Button text="Send Password" width="70%" marginTop="20" (tap)="onSubmit()" class="text-center login-button initial-button-label Roboto-Bold"
-                      stlRippleEffect></Button>
-                    <Label text="No. I remember it now!" marginTop="30" textWrap="true" (tap)="changeMode(0)" color="black"
-                      class="text-center initial-label"></Label>
-                  </StackLayout>
                 </StackLayout>
-              </StackLayout>
+              </PreviousNextView>
             </StackLayout>
 
-          </StackLayout>
+              </StackLayout>
 
         </StackLayout>
         <StackLayout *ngIf="mode !== 2" row="1" verticalAlignment="bottom" backgroundColor="white">
           <StackLayout horizontalAlignment="center">
-            <Label class="text-center Roboto-Medium" margin="10 0 10 0" color="gray" text="Sign Up with social account"></Label>
-            <Image (tap)="fbLogin()" class="text-center" margin="10 0 10 0" width="60%" src="~/assets/images/faceboockbtn.png"></Image>
-            <Image *ngIf="twitter" class="text-center" margin="10 0 10 0" width="70%" src="~/assets/images/twitbtn.png"></Image>
-            <Image (tap)="googleLogin()" class="text-center" margin="10 0 10 0" width="60%" src="~/assets/images/gpulsebtn.png"></Image>
-            <Image (tap)="emailSignIn()" *ngIf="applicationSettings && applicationSettings.phone_authentication && signInMethod === 'phone'"
+            <Label class="text-center Roboto-Medium" margin="10 0 10 0" color="gray"
+              text="Sign Up with social account"></Label>
+            <Image (tap)="fbLogin()" class="text-center" margin="10 0 10 0" width="60%"
+              src="~/assets/images/faceboockbtn.png"></Image>
+            <Image *ngIf="twitter" class="text-center" margin="10 0 10 0" width="70%" src="~/assets/images/twitbtn.png">
+            </Image>
+            <Image (tap)="googleLogin()" class="text-center" margin="10 0 10 0" width="60%"
+              src="~/assets/images/gpulsebtn.png"></Image>
+            <Image (tap)="emailSignIn()"
+              *ngIf="applicationSettings && applicationSettings.phone_authentication && signInMethod === 'phone'"
               class="text-center" margin="10 0 10 0" width="60%" src="~/assets/images/sign-email.png"></Image>
-            <Image (tap)="phoneSignIn()" *ngIf="applicationSettings && applicationSettings.phone_authentication && signInMethod === 'email'"
+            <Image (tap)="phoneSignIn()"
+              *ngIf="applicationSettings && applicationSettings.phone_authentication && signInMethod === 'email'"
               class="text-center" margin="10 0 10 0" width="60%" src="~/assets/images/sign-phone.png"></Image>
           </StackLayout>
         </StackLayout>
 
-      </GridLayout>
+          </GridLayout>
+        </PreviousNextView>
     </StackLayout>
-    
-    <StackLayout *ngIf="loader" verticalAlignment="center" horizontalAlignment="center" >
-        <AbsoluteLayout verticalAlignment="center" horizontalAlignment="center">
-            <ActivityIndicator  color="white" ios:width="200" ios:height="200" android:width="50" android:height="50" busy="true" class="activity-indicator"></ActivityIndicator>
-        </AbsoluteLayout>
-      </StackLayout>
+
+    <StackLayout *ngIf="loader" verticalAlignment="center" horizontalAlignment="center">
+      <AbsoluteLayout verticalAlignment="center" horizontalAlignment="center">
+        <ActivityIndicator color="white" ios:width="200" ios:height="200" android:width="50" android:height="50"
+          busy="true" class="activity-indicator"></ActivityIndicator>
+      </AbsoluteLayout>
+    </StackLayout>
   </GridLayout>
 
 </ScrollView>

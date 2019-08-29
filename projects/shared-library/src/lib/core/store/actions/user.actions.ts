@@ -8,7 +8,7 @@ import { Country } from 'shared-library/shared/mobile/component/countryList/mode
 export class UserActions {
 
   static LOGOFF = 'LOGOFF';
-  logoff(): ActionWithPayload<null> {
+  logoff(): ActionWithPayload<any> {
     return {
       type: UserActions.LOGOFF,
       payload: null
@@ -99,10 +99,18 @@ export class UserActions {
   }
 
   static UPDATE_USER = 'UPDATE_USER';
-  updateUser(user: User): ActionWithPayload<User> {
+  updateUser(user: User, status: any): ActionWithPayload<any> {
     return {
       type: UserActions.UPDATE_USER,
-      payload: user
+      payload: { user, status }
+    };
+  }
+
+  static UPDATE_USER_SUCCESS = 'UPDATE_USER_SUCCESS';
+  updateUserSuccess(status: string): ActionWithPayload<string> {
+    return {
+      type: UserActions.UPDATE_USER_SUCCESS,
+      payload: status
     };
   }
 

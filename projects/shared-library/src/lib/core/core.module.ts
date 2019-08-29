@@ -36,6 +36,7 @@ import { DbService } from './db-service';
 import { WebDbService } from './db-service/web/db.service';
 import { FirebaseAuthService } from './auth/firebase-auth.service';
 import { WebFirebaseAuthService } from './auth/web/firebase-auth.service';
+import { AngularFireDatabaseModule } from '@angular/fire/database';
 
 export const firebaseConfig: FirebaseAppConfig = CONFIG.firebaseConfig;
 
@@ -53,6 +54,7 @@ export const firebaseConfig: FirebaseAppConfig = CONFIG.firebaseConfig;
     AngularFirestoreModule,
     AngularFireAuthModule,
     AngularFireStorageModule,
+    AngularFireDatabaseModule,
 
     //store
     StoreModule.forFeature('core', reducer),

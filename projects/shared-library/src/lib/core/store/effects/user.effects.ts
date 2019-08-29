@@ -3,8 +3,8 @@ import { Effect, Actions, ofType } from '@ngrx/effects';
 import { ActionWithPayload, UserActions } from '../actions';
 import { User, RouterStateUrl, Game, Friends, Invitation, Account } from '../../../shared/model';
 import { UserService, GameService, Utils } from '../../services';
-import { switchMap, map, distinct, mergeMap, filter, take, debounceTime, distinctUntilChanged } from 'rxjs/operators';
-import { empty } from 'rxjs';
+import { switchMap, map, distinct, mergeMap, filter, take, debounceTime, distinctUntilChanged, catchError } from 'rxjs/operators';
+import { empty, of } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { coreState, CoreState } from '../reducers';
 import { ROUTER_NAVIGATION } from '@ngrx/router-store';
@@ -19,8 +19,13 @@ export class UserEffects {
         .pipe(map((action: ActionWithPayload<User>) => action.payload),
             switchMap((user: User) => this.svc.loadUserProfile(user)),
             mergeMap((user: User) => this.utils.setLoginFirebaseAnalyticsParameter(user)),
-            map((user: User) => this.userActions.addUserWithRoles(user)));
-
+            map((user: User) => this.userActions.addUserWithRoles(user)),
+            catchError((error) => {
+                console.log(error);
+                this.userActions.logoff();
+                return empty();
+            })
+        );
 
     // Load users based on url
     @Effect()
@@ -38,6 +43,7 @@ export class UserEffects {
         .pipe(map((action: ActionWithPayload<string>) => action.payload),
             distinct(null, this.store.select(coreState).pipe(select(s => s.user))),
             mergeMap((userId: string) => this.svc.loadOtherUserProfile(userId)),
+            mergeMap((user: User) => this.svc.getUserStatus(user)),
             map((user: User) => this.userActions.loadOtherUserProfileSuccess(user)));
 
     @Effect()
@@ -47,6 +53,7 @@ export class UserEffects {
         .pipe(map((action: ActionWithPayload<string>) => action.payload),
             distinct(null, this.store.select(coreState).pipe(select(s => s.user))),
             mergeMap((userId: string) => this.svc.loadOtherUserProfileWithExtendedInfo(userId)),
+            mergeMap((user: User) => this.svc.getUserStatus(user)),
             map((user: User) => this.userActions.loadOtherUserProfileWithExtendedInfoSuccess(user)));
 
     @Effect()
@@ -63,10 +70,10 @@ export class UserEffects {
     UpdateUser$ = this.actions$
         .pipe(ofType(UserActions.UPDATE_USER))
         .pipe(
-            switchMap((action: ActionWithPayload<User>) => {
-                this.svc.updateUser(action.payload);
-                return empty();
-            }
+            switchMap((action: ActionWithPayload<any>) =>
+                this.svc.updateUser(action.payload.user).pipe(
+                    map((status: any) => this.userActions.updateUserSuccess(action.payload.status))
+                )
             )
         );
 
