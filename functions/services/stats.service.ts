@@ -137,4 +137,61 @@ export class StatsService {
         }
     }
 
+    static async calculateQuestionStat(beforeEventData, afterEventData) {
+        // update timestamp in user last played game with
+        if (afterEventData.playerQnAs  &&
+            afterEventData.playerQnAs.length > 0 &&
+            afterEventData.playerQnAs[afterEventData.playerQnAs.length - 1] &&
+            afterEventData.playerQnAs[afterEventData.playerQnAs.length - 1].questionId
+            ) {
+                // update appeared question statistics
+                if (afterEventData.playerQnAs.length !==
+                    beforeEventData.playerQnAs.length
+                    ) {
+                    await StatsService.updateQuestionStats(
+                        afterEventData.playerQnAs[afterEventData.playerQnAs.length - 1].questionId, 'CREATED');
+                } else if (beforeEventData.playerQnAs.length > 0 &&
+                    afterEventData.playerQnAs.length === beforeEventData.playerQnAs.length &&
+                    beforeEventData.playerQnAs[afterEventData.playerQnAs.length - 1].answerCorrect !==
+                    afterEventData.playerQnAs[afterEventData.playerQnAs.length - 1].answerCorrect &&
+                    typeof afterEventData.playerQnAs[afterEventData.playerQnAs.length - 1].answerCorrect === 'boolean'
+                    ) { // update anwered statistics
+                        await StatsService.updateQuestionStats(
+                            afterEventData.playerQnAs[afterEventData.playerQnAs.length - 1].questionId,
+                            'UPDATED',
+                            afterEventData.playerQnAs[afterEventData.playerQnAs.length - 1].answerCorrect);
+                }
+
+                // update timestamp in user last played game with
+                if ((typeof afterEventData.playerQnAs[afterEventData.playerQnAs.length - 1].answerCorrect === 'boolean') &&
+                    afterEventData.gameOptions && afterEventData.gameOptions.playerMode == '1' &&
+                    ( afterEventData.gameOptions.opponentType == '0' || afterEventData.gameOptions.opponentType == '1' ) &&
+                    afterEventData.playerIds && afterEventData.playerIds.length >= 2 &&
+                    ( ( beforeEventData.playerIds &&
+                                beforeEventData.playerIds.length !== afterEventData.playerIds.length &&
+                                afterEventData.gameOptions.opponentType == '0') ||
+                                // allow if the game is with random player and the random user has been selected
+                        (beforeEventData.playerQnAs &&
+                            (afterEventData.playerQnAs.length !== beforeEventData.playerQnAs.length ||
+                                (afterEventData.playerQnAs.length === beforeEventData.playerQnAs.length &&
+                            typeof beforeEventData.playerQnAs[afterEventData.playerQnAs.length - 1].answerCorrect === 'undefined'
+                                )
+                            )
+                        )
+                        // allow if any of the player has answered the question
+                    )
+                ) {
+                        const lastAnsweredStat = afterEventData.playerQnAs[(afterEventData.playerQnAs.length - 1)];
+                    if ( lastAnsweredStat && lastAnsweredStat.playerId) {
+                            const otherUserId = afterEventData.playerId_0 !== lastAnsweredStat.playerId ?
+                            afterEventData.playerId_0 : afterEventData.playerId_1;
+
+                            await StatsService.updateUserPlayedGameStats(lastAnsweredStat.playerId, otherUserId, 'current_user');
+                            await StatsService.updateUserPlayedGameStats(otherUserId, lastAnsweredStat.playerId, 'other_user');
+                    }
+
+                }
+        }
+    }
+
 }
