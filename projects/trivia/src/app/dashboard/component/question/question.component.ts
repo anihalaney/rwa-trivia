@@ -52,7 +52,7 @@ export class QuestionComponent implements OnDestroy {
         if (questionOfTheDay) {
           this.question = questionOfTheDay;
           this.cd.markForCheck();
-          this.store.dispatch(this.gameActions.UpdateQuestionStat(this.question.id, 'CREATE'));
+          this.store.dispatch(this.gameActions.UpdateQuestionStat(this.question.id, 'CREATED'));
           this.question.answers = utils.changeAnswerOrder(questionOfTheDay.answers);
           if (this.question.answers) {
             this.question.answers.forEach((item, index) => {

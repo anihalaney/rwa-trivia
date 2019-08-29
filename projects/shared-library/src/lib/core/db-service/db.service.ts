@@ -48,7 +48,4 @@ export abstract class DbService {
 
     }
 
-    public IncrementValue(collectionName: string, docId: any, document: any, fieldName: string, value: number): any {
-
-    }
 }

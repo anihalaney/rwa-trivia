@@ -114,8 +114,4 @@ export class WebDbService extends DbService {
         return this._afStore.firestore.collection(collectionName).doc(docId).delete();
     }
 
-    public IncrementValue(collectionName: string, docId: any, document: any, fieldName: string, value: number) {
-        document[fieldName] = document[fieldName] ? firebase.firestore.FieldValue.increment(value) : 1;
-        return this.updateDoc(collectionName, docId, document);
-    }
 }

@@ -46,10 +46,9 @@ export class GameEffects {
             .pipe(ofType(GameActions.UPDATE_QUESTION_STAT))
             .pipe(
               switchMap((action: ActionWithPayload<{questionId: string, type: string}>) =>
-                this.svc.updateQuestionStat(action.payload.questionId, action.payload.type).then( ref => {
-                  return this.gameActions.UpdateQuestionStatSuccess();
-                })
-              )
+              this.svc.updateQuestionStat(action.payload.questionId, action.payload.type).pipe(
+                map(() => this.gameActions.UpdateQuestionStatSuccess())
+              ))
             );
 
     constructor(

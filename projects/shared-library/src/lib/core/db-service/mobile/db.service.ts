@@ -116,8 +116,4 @@ export class TNSDbService extends DbService {
         return collectionRef.doc(docId).delete();
     }
 
-    public IncrementValue(collectionName: string, docId: any, document: any, fieldName: string, value: number) {
-        document[fieldName] = document[fieldName] ? firebaseApp.firestore().FieldValue().increment(value) : 1;
-        return this.updateDoc(collectionName, docId, document);
-    }
 }

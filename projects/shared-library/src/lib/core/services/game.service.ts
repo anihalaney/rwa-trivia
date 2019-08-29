@@ -308,14 +308,8 @@ export class GameService {
   }
 
   updateQuestionStat(questionId: string, type: string) {
-    return this.dbService.getDoc('questions', questionId).get().then(data => {
-      const question = data.data();
-      if (question) {
-          const field = type === 'CREATE' ? 'appeared' : ( type === 'CORRECT' ? 'correct' : 'wrong' );
-           return this.dbService.IncrementValue('questions', questionId, question, field, 1);
-        } else {
-          return of();
-        }
-    });
+    const url = `${CONFIG.functionsUrl}/question/question-stat-update/`;
+    return this.http.post<Question>(url,
+      {questionId: questionId, type: type === 'CREATED' ? type : 'UPDATED', update: type === 'CORRECT' ? true : false });
   }
 }
