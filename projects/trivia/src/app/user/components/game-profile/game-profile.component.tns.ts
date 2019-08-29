@@ -6,6 +6,7 @@ import { AppState } from '../../../store';
 import { Router, ActivatedRoute } from '@angular/router';
 import { UserActions } from 'shared-library/core/store';
 import * as utils from 'tns-core-modules/utils/utils';
+import { Utils } from 'shared-library/core/services';
 
 @Component({
     selector: 'game-profile',
@@ -21,8 +22,10 @@ export class GameProfileComponent extends GameProfile implements OnDestroy {
         public router: Router,
         public store: Store<AppState>,
         public userAction: UserActions,
-        public cd: ChangeDetectorRef) {
-        super(route, router, store, userAction, cd);
+        public cd: ChangeDetectorRef,
+        public _utils: Utils
+    ) {
+        super(route, router, store, userAction, cd, _utils);
     }
 
     ngOnDestroy() {
