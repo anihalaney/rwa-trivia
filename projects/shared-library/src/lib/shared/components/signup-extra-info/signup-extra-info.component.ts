@@ -47,9 +47,9 @@ export class SignupExtraInfoComponent implements OnInit, OnDestroy {
       this.user = user;
       this.userForm.patchValue(
         {
-          email: this.user.email,
-          phoneNumber: this.user.phoneNumber,
-          displayName: this.user.displayName
+          email: this.user.email || '',
+          phoneNumber: this.user.phoneNumber || '',
+          displayName: this.user.displayName || ''
         }
       );
       this.emailEditable = (!this.user.email) ? true : false;
@@ -67,15 +67,15 @@ export class SignupExtraInfoComponent implements OnInit, OnDestroy {
       return;
     } else {
       const data = this.userForm.value;
-      this.user.phoneNumber = data.phoneNumber;
-      this.user.email = data.email;
-      this.user.displayName = data.displayName;
       this.checkDisplayName(data.displayName);
       this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.checkDisplayName)).subscribe(status => {
         if (this.router.url === '/signup-extra-info') {
           this.isValidDisplayName = status;
           if (this.isValidDisplayName !== null) {
             if (this.isValidDisplayName) {
+              this.user.phoneNumber = data.phoneNumber;
+              this.user.email = data.email;
+              this.user.displayName = data.displayName;
               this.store.dispatch(this.userAction.addUserProfile(this.user, false));
               this.router.navigate(['select-category-tag']);
               this.cd.markForCheck();
