@@ -42,6 +42,15 @@ export class GameEffects {
         );
 
         @Effect()
+        getActiveGames$ = this.actions$
+            .pipe(ofType(GameActions.GET_ACTIVE_GAMES))
+            .pipe(
+                map((action: ActionWithPayload<User>) => action.payload),
+                switchMap((payload: User) => this.svc.getActiveGames(payload)),
+                map((games: Game[]) => this.gameActions.getActiveGamesSuccess(games))
+            );
+
+        @Effect()
         UpdateQuestionStat$ = this.actions$
             .pipe(ofType(GameActions.UPDATE_QUESTION_STAT))
             .pipe(
