@@ -40,7 +40,20 @@ export class WebFirebaseAuthService implements FirebaseAuthService {
     }
 
     public refreshToken(forceRefresh: boolean) {
-        return firebase.auth().currentUser.getIdToken(forceRefresh);
+        return this.getFirebaseUser().getIdToken(forceRefresh);
+    }
+
+    public async updatePassword(password: string): Promise<any> {
+        try {
+            return await this.getFirebaseUser().updatePassword(password);
+        } catch (error) {
+            console.log('error---->', error);
+            throw error;
+        }
+    }
+
+    private getFirebaseUser() {
+        return firebase.auth().currentUser;
     }
 
     public signOut() {

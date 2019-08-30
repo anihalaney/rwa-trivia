@@ -25,6 +25,7 @@ import { AppState } from '../../../store';
 import { userState } from '../../store';
 import { LocationResetDialogComponent } from './location-reset-dialog/location-reset-dialog.component';
 import { ProfileSettings } from './profile-settings';
+import { AuthenticationProvider } from 'shared-library/core/auth';
 
 @Component({
   selector: 'profile-settings',
@@ -71,8 +72,10 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
     public route: ActivatedRoute,
     public router: Router,
     private modal: ModalDialogService,
-    private vcRef: ViewContainerRef) {
-    super(fb, store, userAction, uUtils, cd, route, router);
+    private vcRef: ViewContainerRef,
+    public authenticationProvider: AuthenticationProvider) {
+
+    super(fb, store, userAction, uUtils, cd, route, router, authenticationProvider);
     this.initDataItems();
     requestPermissions();
 
@@ -268,7 +271,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
   saveProfileImage() {
     this.getUserFromFormValue(false, '');
     this.assignImageValues();
-    this.saveUser(this.user,  (this.user.location !== this.userCopyForReset.location) ? true : false);
+    this.saveUser(this.user, (this.user.location !== this.userCopyForReset.location) ? true : false);
   }
 
   assignImageValues(): void {

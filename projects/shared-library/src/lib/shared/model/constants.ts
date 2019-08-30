@@ -138,6 +138,15 @@ export enum UserConstants {
     ORIGINAL = 'original',
 }
 
+export enum AuthProviderConstants {
+    GOOGLE = 'google.com',
+    FACEBOOK = 'facebook.com',
+    PASSWORD = 'password',
+    PHONE = 'phone'
+}
+
+
+
 export enum GeneralConstants {
     LESS_THAN_OR_EQUAL = '<=',
     CREATED_UID = 'created_uid',

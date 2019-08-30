@@ -26,7 +26,7 @@ export class TNSFirebaseAuthService implements FirebaseAuthService {
     }
 
     public createUserWithEmailAndPassword(email, password) {
-        return firebaseApp.auth().createUserWithEmailAndPassword(email, password);
+        return this.firebaseAuth().createUserWithEmailAndPassword(email, password);
     }
 
     public showLogin() {
@@ -47,7 +47,7 @@ export class TNSFirebaseAuthService implements FirebaseAuthService {
     public signOut() {
         this.updateTokenStatus(this.user.uid, UserStatusConstants.OFFLINE);
         this.updatePushToken(undefined);
-        firebaseApp.auth().signOut();
+        this.firebaseAuth().signOut();
     }
 
     public firebaseAuth() {
@@ -61,8 +61,17 @@ export class TNSFirebaseAuthService implements FirebaseAuthService {
         return token.token;
     }
 
+    public async updatePassword(password: string): Promise<any> {
+        try {
+            return await this.firebaseAuth().updatePassword(password);
+        } catch (error) {
+            console.log('error---->', error);
+            throw error;
+        }
+    }
+
     public signInWithEmailAndPassword(email: string, password: string) {
-        return firebaseApp.auth().signInWithEmailAndPassword(email, password);
+        return this.firebaseAuth().signInWithEmailAndPassword(email, password);
     }
 
     public sendEmailVerification(user) {

@@ -14,6 +14,7 @@ import { ProfileSettings } from './profile-settings';
 import { MatDialogRef, MatDialog } from '@angular/material';
 import { LocationResetDialogComponent } from './location-reset-dialog/location-reset-dialog.component';
 import { filter } from 'rxjs/operators';
+import { AuthenticationProvider } from 'shared-library/core/auth';
 
 @Component({
   selector: 'profile-settings',
@@ -37,7 +38,6 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnInit,
   isValidDisplayName: boolean = null;
   locationTerm$ = new Subject<string>();
   locations = [];
-  // protected captains = ['James T. Kirk', 'Benjamin Sisko', 'Jean-Luc Picard', 'Spock', 'Jonathan Archer', 'Hikaru Sulu', 'Christopher Pike', 'Rachel Garrett' ];
 
   constructor(public fb: FormBuilder,
     public store: Store<AppState>,
@@ -47,9 +47,10 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnInit,
     public utils: Utils,
     public dialog: MatDialog,
     public route: ActivatedRoute,
-    public router: Router) {
+    public router: Router,
+    public authenticationProvider: AuthenticationProvider) {
 
-    super(fb, store, userAction, utils, cd, route, router);
+    super(fb, store, userAction, utils, cd, route, router, authenticationProvider);
 
     // if (this.userType === 0) {
     this.setCropperSettings();
