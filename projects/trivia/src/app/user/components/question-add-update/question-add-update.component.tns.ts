@@ -31,7 +31,7 @@ import { SelectedIndexChangedEventData } from 'nativescript-drop-down';
 import { ModalDialogService } from 'nativescript-angular/directives/dialogs';
 import { PreviewQuestionDialogComponent } from './preview-question-dialog/preview-question-dialog.component';
 import { CONFIG } from 'shared-library/environments/environment';
-
+declare var IQKeyboardManager;
 @Component({
   selector: 'app-question-add-update',
   templateUrl: './question-add-update.component.html',
@@ -41,7 +41,7 @@ import { CONFIG } from 'shared-library/environments/environment';
 
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnDestroy, OnChanges, AfterViewInit, OnInit {
-  iqKeyboard: IQKeyboardManager;
+  iqKeyboard: any;
   showSelectCategory = false;
   showSelectTag = false;
   dataItem;

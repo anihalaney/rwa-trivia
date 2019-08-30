@@ -10,6 +10,7 @@ import { Category, FirebaseScreenNameConstants, Game, Question, QuestionMetadata
 import { isAndroid, isIOS } from 'tns-core-modules/ui/page/page';
 import { AppState, categoryDictionary } from '../../../store';
 import * as gameplayactions from '../../store/actions';
+declare var IQKeyboardManager;
 @Component({
     selector: 'report-game',
     templateUrl: './report-game.component.html',
@@ -19,7 +20,7 @@ import * as gameplayactions from '../../store/actions';
 
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class ReportGameComponent implements OnInit, OnDestroy {
-    iqKeyboard: IQKeyboardManager;
+    iqKeyboard: any;
     question: Question;
     reportQuestion: ReportQuestion;
     user: User;

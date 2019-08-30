@@ -8,6 +8,7 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { isAndroid, isIOS } from 'tns-core-modules/platform';
 import { Utils } from 'shared-library/core/services';
 import { FirebaseScreenNameConstants } from 'shared-library/shared/model';
+declare var IQKeyboardManager;
 @Component({
   selector: 'user-feedback',
   templateUrl: './user-feedback.component.html',
@@ -17,7 +18,7 @@ import { FirebaseScreenNameConstants } from 'shared-library/shared/model';
 
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class UserFeedbackComponent implements OnDestroy {
-  iqKeyboard: IQKeyboardManager;
+  iqKeyboard: any;
   subscriptions = [];
   feedbackForm: FormGroup;
   user: any;
