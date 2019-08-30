@@ -1,5 +1,29 @@
 {
   "index": "/index.html",
+  "dataGroups": [
+    {
+      "name": "admin",
+      "urls": [
+        "/admin"
+      ],
+      "cacheConfig": {
+        "maxSize": 0,
+        "maxAge": "0u",
+        "strategy": "freshness"
+      }
+    },
+    {
+      "name": "editor",
+      "urls": [
+        "/editor"
+      ],
+      "cacheConfig": {
+        "maxSize": 0,
+        "maxAge": "0u",
+        "strategy": "freshness"
+      }
+    }
+  ],
   "assetGroups": [
     {
       "name": "app",

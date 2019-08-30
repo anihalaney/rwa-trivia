@@ -1,8 +1,9 @@
-import { Component, Input, OnInit, SimpleChanges, OnChanges } from "@angular/core";
+import { Component, Input, OnInit, SimpleChanges, OnChanges, Inject, PLATFORM_ID } from '@angular/core';
 import { Answer } from "shared-library/shared/model";
 import { LoadEventData } from 'tns-core-modules/ui/web-view';
 import { isAndroid, isIOS } from 'tns-core-modules/platform';
 import { externalUrl } from './../../../environments/external-url';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
     selector: 'render-answer',
@@ -20,20 +21,30 @@ export class RenderAnswerComponent implements OnInit, OnChanges {
     @Input() doPlay;
 
     currentAnswer: Answer;
-    scriptToGetHeight = `<script> var body = document.body, html = document.documentElement;
-    var height = Math.max(body.scrollHeight, body.offsetHeight,
-    html.clientHeight, html.scrollHeight, html.offsetHeight);
-    document.location.href += "#" + height;
-    </script><style>pre.ql-syntax { background-color: #23241f;overflow: visible;}</style>`;
-    // tslint:disable-next-line:max-line-length
-    htmlStartTag = `<html><head><body style="font-size:12px; ${this.isGameAnswer ? 'font-weight: bold !important;' : ''} padding-top:10px;vertical-align: middle;text-align:left;"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">   <script src="${externalUrl.hightlighJs}"></script>`;
-    // tslint:disable-next-line:max-line-length
-    htmlEndTag = `</body><link rel="stylesheet" href="${externalUrl.katexCSS}" crossorigin="anonymous"><link rel="stylesheet" href="${externalUrl.hightlighCSS}" crossorigin="anonymous"></html>`;
+    scriptToGetHeight: string;
+    htmlStartTag: string;
+    htmlEndTag: string;
     answerHeight = 0;
     isAndroid = isAndroid;
 
+    constructor(@Inject(PLATFORM_ID) private platformId: Object) {
+
+    }
+
     ngOnInit(): void {
-        // Created new local answer object because here I am modifing answer object
+        if (isPlatformBrowser(this.platformId)) {
+            this.scriptToGetHeight = `<script> var body = document.body, html = document.documentElement;
+            var height = Math.max(body.scrollHeight, body.offsetHeight,
+            html.clientHeight, html.scrollHeight, html.offsetHeight);
+            document.location.href += "#" + height;
+            </script><style>pre.ql-syntax { background-color: #23241f;overflow: visible;}</style>`;
+            // tslint:disable-next-line:max-line-length
+            this.htmlStartTag = `<html><head><body style="font-size:12px; ${this.isGameAnswer ? 'font-weight: bold !important;' : ''} padding-top:10px;vertical-align: middle;text-align:left;"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">   <script src="${externalUrl.hightlighJs}"></script>`;
+            // tslint:disable-next-line:max-line-length
+            this.htmlEndTag = `</body><link rel="stylesheet" href="${externalUrl.katexCSS}" crossorigin="anonymous"><link rel="stylesheet" href="${externalUrl.hightlighCSS}" crossorigin="anonymous"></html>`;
+            // Created new local answer object because here I am modifing answer object
+        }
+
         if (this.answer) {
             this.currentAnswer = { ...this.answer };
         }

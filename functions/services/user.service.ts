@@ -41,16 +41,16 @@ export class UserService {
      * getOtherUserByIdWithGameStat
      * return userGameStatwith other user
     */
-   static async getOtherUserGameStatById(userId: string, otherUserId): Promise<any> {
-    try {
-        const userData = await UserService.fireStoreClient
-            .doc(`/${CollectionConstants.USERS}/${userId}/game_played_with/${otherUserId}`)
-            .get();
-        return userData.data();
-    } catch (error) {
-        return Utils.throwError(error);
+    static async getOtherUserGameStatById(userId: string, otherUserId): Promise<any> {
+        try {
+            const userData = await UserService.fireStoreClient
+                .doc(`/${CollectionConstants.USERS}/${userId}/game_played_with/${otherUserId}`)
+                .get();
+            return userData.data();
+        } catch (error) {
+            return Utils.throwError(error);
+        }
     }
-   }
 
     /**
      * setUser Game stat with other user
@@ -59,8 +59,8 @@ export class UserService {
     static async setGameStat(gameStat: any, userId, otherUserId: any): Promise<any> {
         try {
             return await UserService.fireStoreClient
-            .doc(`/${CollectionConstants.USERS}/${userId}/game_played_with/${otherUserId}`)
-            .set(gameStat, { merge: true });
+                .doc(`/${CollectionConstants.USERS}/${userId}/game_played_with/${otherUserId}`)
+                .set(gameStat, { merge: true });
         } catch (error) {
             return Utils.throwError(error);
         }
@@ -133,20 +133,28 @@ export class UserService {
                 const account = await AccountService.getAccountById(userId);
                 user.account.avgAnsTime = (account && account.avgAnsTime) ? account.avgAnsTime : 0;
                 user.account.badges = (account && account.badges) ? account.badges : 0;
+                user.account.bits = (account && account.bits) ? account.bits : 0;
+                user.account.bytes = (account && account.bytes) ? account.bytes : 0;
                 user.account.categories = (account && account.categories) ? account.categories : 0;
                 user.account.contribution = (account && account.contribution) ? account.contribution : 0;
                 user.account.wins = (account && account.wins) ? account.wins : 0;
                 user.account.losses = (account && account.losses) ? account.losses : 0;
                 user.account.gamePlayed = (account && account.gamePlayed) ? account.gamePlayed : 0;
-
+                const friendList = await FriendService.getFriendByInvitee(userId);
+                user.totalFriends = (friendList && friendList.myFriends) ? friendList.myFriends.length : 0;
                 if (loggedInUserId && loggedInUserId !== '') {
                     gamePlayed = await UserService.getOtherUserGameStatById(loggedInUserId, userId);
+
                 }
 
             }
             if (loggedInUserId && loggedInUserId !== '') {
                 const friendList = await FriendService.getFriendByInvitee(loggedInUserId);
+
                 if (friendList && friendList.myFriends) {
+                    if (loggedInUserId === userId) {
+                        user.totalFriends = friendList.myFriends.length;
+                    }
                     const friend = friendList.myFriends.filter(element => element[userId] ? true : false);
                     isFriend = friend[0] ? true : false;
                 }
@@ -331,24 +339,24 @@ export class UserService {
             for (const doc of friendsData.docs) {
                 const friends = doc.data();
                 const userId = doc.id;
-                    const updateUser = {...friends};
-                    for (const [index, friendMetaDataMap] of friends.myFriends.entries()) {
-                        for (const friendUserId of Object.keys(friendMetaDataMap)) {
-                            promises.push(UserService.setGameStat({ ...friendMetaDataMap[friendUserId] }, userId, friendUserId));
-                            if (updateUser.myFriends[index] && updateUser.myFriends[index][friendUserId] &&
-                                friendMetaDataMap[friendUserId] && friendMetaDataMap[friendUserId].created_uid) {
+                const updateUser = { ...friends };
+                for (const [index, friendMetaDataMap] of friends.myFriends.entries()) {
+                    for (const friendUserId of Object.keys(friendMetaDataMap)) {
+                        promises.push(UserService.setGameStat({ ...friendMetaDataMap[friendUserId] }, userId, friendUserId));
+                        if (updateUser.myFriends[index] && updateUser.myFriends[index][friendUserId] &&
+                            friendMetaDataMap[friendUserId] && friendMetaDataMap[friendUserId].created_uid) {
 
-                                updateUser.myFriends[index][friendUserId] = {
-                                    'created_uid': friendMetaDataMap[friendUserId].created_uid,
-                                    'date' : friendMetaDataMap[friendUserId].date ?
+                            updateUser.myFriends[index][friendUserId] = {
+                                'created_uid': friendMetaDataMap[friendUserId].created_uid,
+                                'date': friendMetaDataMap[friendUserId].date ?
                                     friendMetaDataMap[friendUserId].date : new Date().getUTCDate()
-                                };
-                            }
+                            };
                         }
                     }
-                    promises.push(FriendService.setFriend(updateUser, userId));
+                }
+                promises.push(FriendService.setFriend(updateUser, userId));
             }
-           return await Promise.all(promises);
+            return await Promise.all(promises);
         } catch (error) {
             return Utils.throwError(error);
         }

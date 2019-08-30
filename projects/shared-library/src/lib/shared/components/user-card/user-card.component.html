@@ -136,3 +136,13 @@
     </div>
   </div>
 </ng-container>
+
+<!-- USER_CARD_TYPE_ONE -->
+<div class="textcenter clearfix innerli" style="width: 100px;" *ngIf="user && userCardType.USER_WEB_IMAGE_WITH_ONLINE_STATUS === type">
+  <div class="yourimg">
+    <img [src]="getImageUrl(user,70,60)" alt="User Profile Image">
+    <span *ngIf="user?.online" class="online-dot">
+    </span>
+  </div>
+  <div class="clear"></div>
+</div>
