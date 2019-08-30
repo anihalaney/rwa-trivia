@@ -7,7 +7,7 @@ import { CoreState, UserActions } from 'shared-library/core/store';
 import { Utils } from 'shared-library/core/services';
 import { InviteMailFriends } from './invite-mail-friends';
 import { isAndroid, isIOS } from 'tns-core-modules/ui/page';
-
+declare var IQKeyboardManager;
 @Component({
     selector: 'app-invite-mail-friends',
     templateUrl: './invite-mail-friends.component.html',
@@ -16,7 +16,7 @@ import { isAndroid, isIOS } from 'tns-core-modules/ui/page';
 })
 
 export class InviteMailFriendsComponent extends InviteMailFriends {
-    iqKeyboard: IQKeyboardManager;
+    iqKeyboard: any;
     constructor(fb: FormBuilder, store: Store<CoreState>, userAction: UserActions, cd: ChangeDetectorRef,
         utils: Utils) {
         super(fb, store, userAction, cd, utils);

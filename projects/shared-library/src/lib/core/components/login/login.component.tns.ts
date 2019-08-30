@@ -20,7 +20,7 @@ import { CoreState, coreState, UIStateActions } from '../../store';
 import { FirebaseAuthService } from './../../auth/firebase-auth.service';
 import { Login } from './login';
 import { Utils } from '../../services';
-
+declare var IQKeyboardManager;
 @Component({
   selector: 'login',
   templateUrl: './login.component.html',
@@ -30,7 +30,7 @@ import { Utils } from '../../services';
 
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class LoginComponent extends Login implements OnInit, OnDestroy {
-  iqKeyboard: IQKeyboardManager;
+  iqKeyboard: any;
   @ViewChildren('textField') textField: QueryList<ElementRef>;
   title: string;
   loader = false;

@@ -12,10 +12,9 @@
       </span>
       <span *ngIf="showErrorMsg" class="label row col-sm-12"> {{errorMsg}} </span>
       <span *ngIf="showErrorMsg" class="label row col-sm-12">{{invalidEmailList}}</span>
-      <span *ngIf="showSuccessMsg" class="success row" [innerHtml]="showSuccessMsg"></span>
+      <span *ngIf="showSuccessMsg" class="success row col-sm-12" [innerHtml]="showSuccessMsg"></span>
     </form>
   </div>
-  <div *ngIf="applicationSettings?.invite_bits_enabled && applicationSettings?.invite_bits > 0" class="addBits">
-    Earn + {{applicationSettings?.invite_bits}} bits
+  <div class="mail-option-div">
   </div>
 </div>

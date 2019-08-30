@@ -1,12 +1,13 @@
 
 import * as admin from 'firebase-admin';
+import * as functions from 'firebase-functions';
 
 class FirebaseClient {
 
     public admin: any;
 
     constructor() {
-        this.admin = admin.initializeApp();
+        this.admin = admin.initializeApp(functions.config().firebase);
     }
 }
 

@@ -16,9 +16,6 @@
                     <label row="0" col="1" (tap)="onSubscribe()" class="send-invite-button Hind-Bold" text="Send Invite"
                         stlRippleEffect></label>
                 </GridLayout>
-                <Label margin="0 10 0 10"
-                    *ngIf="applicationSettings?.invite_bits_enabled && applicationSettings?.invite_bits > 0"
-                    text="Earn + {{applicationSettings?.invite_bits}} bits" textWrap="true"></Label>
                 <StackLayout marginTop="10" marginBottom="20">
                     <Label class="error-msg" text="Email is required!" textWrap="true"
                         *ngIf="invitationForm.controls.email.invalid && emailCheck"></Label>
@@ -26,7 +23,6 @@
                         <Label class="error-msg" [text]="errorMsg" textWrap="true"></Label>
                         <Label class="error-msg" [text]="invalidEmailList" textWrap="true"></Label>
                     </StackLayout>
-                    <Label class="success-msg" [text]="showSuccessMsg" textWrap="true" *ngIf="showSuccessMsg"></Label>
                 </StackLayout>
             </StackLayout>
         </PreviousNextView>
