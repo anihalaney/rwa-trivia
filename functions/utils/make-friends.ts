@@ -105,6 +105,7 @@ export class MakeFriends {
             invitationNewObj.created_uid = this.userId;
             invitationNewObj.email = email;
             invitationNewObj.status = friendInvitationConstants.PENDING;
+            invitationNewObj.createdAt = Utils.getUTCTimeStamp();
             if (invitations.length <= 0) {
                 return this.createInvitation({ ...invitationNewObj });
             } else {

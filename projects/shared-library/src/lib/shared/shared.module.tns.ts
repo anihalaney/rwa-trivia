@@ -11,7 +11,8 @@ import {
   QuestionsTableComponent,
   QuestionCardComponent,
   FirstQuestionComponent,
-  SelectCategoryTagComponent
+  SelectCategoryTagComponent,
+  NotificationComponent
 } from './mobile/component';
 import { NativeScriptCommonModule } from 'nativescript-angular/common';
 import { GameFilterPipe } from './pipe/game-filter.pipe';
@@ -22,7 +23,7 @@ import { NativeScriptUIListViewModule } from 'nativescript-ui-listview/angular';
 import {
   RenderQuestionComponent, AuthorComponent, RenderAnswerComponent,
   UserCardComponent, UserReactionComponent, SignupExtraInfoComponent,
-  CheckDisplayNameComponent, InviteMailFriendsComponent
+  CheckDisplayNameComponent, FriendInviteComponent, GameInviteComponent, InviteMailFriendsComponent
 } from './components';
 import { ShowHintWhenFocusOutDirective, OpenUserProfileDirective, RippleEffectDirective } from './directive';
 import { PhoneNumberValidationProvider } from './mobile/component/countryList/phone-number-validation.provider';
@@ -49,7 +50,10 @@ import { SafeHtmlPipe } from './pipe/safe-html.pipe';
     SelectCategoryTagComponent,
     UserReactionComponent,
     SignupExtraInfoComponent,
-    CheckDisplayNameComponent
+    CheckDisplayNameComponent,
+    NotificationComponent,
+    FriendInviteComponent,
+    GameInviteComponent
   ],
   imports: [
     CommonModule,
@@ -94,7 +98,10 @@ import { SafeHtmlPipe } from './pipe/safe-html.pipe';
     UserReactionComponent,
     SelectCategoryTagComponent,
     SignupExtraInfoComponent,
-    CheckDisplayNameComponent
+    CheckDisplayNameComponent,
+    NotificationComponent,
+    FriendInviteComponent,
+    GameInviteComponent
   ],
   schemas: [NO_ERRORS_SCHEMA],
   entryComponents: [
