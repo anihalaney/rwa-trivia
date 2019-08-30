@@ -10,13 +10,6 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
 const EMAIL_REGEXP = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-@Component({
-  selector: 'app-invite-mail-friends',
-  templateUrl: './invite-mail-friends.component.html',
-  styleUrls: ['./invite-mail-friends.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
-})
-
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class InviteMailFriends implements OnInit, OnDestroy {
   user: User;
@@ -107,19 +100,5 @@ export class InviteMailFriends implements OnInit, OnDestroy {
       }
     }
   }
-
-  ngOnDestroy(): void {
-  }
-
-  hideKeyboard() {
-    this.textField
-      .toArray()
-      .map((el) => {
-        if (el.nativeElement && el.nativeElement.android) {
-          el.nativeElement.android.clearFocus();
-        }
-        // return el.nativeElement.dismissSoftInput();
-      });
-  }
+  ngOnDestroy(): void { }
 }
-
