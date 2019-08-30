@@ -17,7 +17,7 @@ import {
 import { NativeScriptCommonModule } from 'nativescript-angular/common';
 import { GameFilterPipe } from './pipe/game-filter.pipe';
 import { SearchCountryFilterPipe } from './pipe/search-country-filter.pipe';
-import { TNSCheckBoxModule } from 'nativescript-checkbox/angular';
+import { TNSCheckBoxModule } from '@nstudio/nativescript-checkbox/angular';
 import { NativeScriptUIAutoCompleteTextViewModule } from 'nativescript-ui-autocomplete/angular';
 import { NativeScriptUIListViewModule } from 'nativescript-ui-listview/angular';
 import {

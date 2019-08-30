@@ -35,7 +35,7 @@ export class User {
   gamePlayed: Array<{ [key: string]: FriendsMetadata }>;
   online?: boolean;
   isCategorySet?: boolean;
-  isFriend?: any;
+  isFriend?: boolean;
   phoneNumber?: string;
   totalFriends?: number;
 

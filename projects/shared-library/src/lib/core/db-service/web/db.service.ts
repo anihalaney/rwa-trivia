@@ -113,4 +113,5 @@ export class WebDbService extends DbService {
     public deleteDoc(collectionName: string, docId: any): any {
         return this._afStore.firestore.collection(collectionName).doc(docId).delete();
     }
+
 }

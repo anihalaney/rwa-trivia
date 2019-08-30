@@ -8,6 +8,7 @@ import { GameMechanics } from '../utils/game-mechanics';
 import { Utils } from '../utils/utils';
 import { QuestionService } from '../services/question.service';
 import { GameService } from '../services/game.service';
+import { StatsService } from '../services/stats.service';
 
 
 export class QuestionController {
@@ -191,6 +192,21 @@ export class QuestionController {
             }
         } else {
             Utils.sendResponse(res, interceptorConstants.BAD_REQUEST, ResponseMessagesConstants.BAD_REQUEST);
+        }
+    }
+
+    /**
+     * update question state
+     * return status
+     */
+    static async updateQuestionStat(req, res) {
+        try {
+            const questionId = req.body.questionId;
+            const type = req.body.type;
+            const update = req.body.update;
+            Utils.sendResponse(res, interceptorConstants.SUCCESS, await  StatsService.updateQuestionStats(questionId, type , update));
+        } catch (error) {
+            Utils.sendError(res, error);
         }
     }
 

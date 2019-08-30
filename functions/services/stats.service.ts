@@ -120,35 +120,78 @@ export class StatsService {
         }
     }
 
+
+    static async updateQuestionStats(questionId: string, type: string, update?: boolean): Promise<any> {
+        try {
+            let question: Question = await QuestionService.getQuestionById(questionId);
+            if (type === 'CREATED') {
+                question.appeared = question.appeared ? Utils.changeFieldValue(1) : 1;
+            } else if (type === 'UPDATED' && update) {
+                question.correct = question.correct ? Utils.changeFieldValue(1) : 1;
+            } else if (type === 'UPDATED' && !update) {
+                question.wrong = question.wrong ? Utils.changeFieldValue(1) : 1;
+            }
+            return await QuestionService.updateQuestion('questions', { ...question } );
+        } catch (error) {
+            return Utils.throwError(error);
+        }
+    }
+
     static async calculateQuestionStat(beforeEventData, afterEventData) {
         // update timestamp in user last played game with
-        if (afterEventData.playerQnAs  && afterEventData.playerQnAs &&
+        if (afterEventData.playerQnAs  &&
             afterEventData.playerQnAs.length > 0 &&
             afterEventData.playerQnAs[afterEventData.playerQnAs.length - 1] &&
-            (typeof afterEventData.playerQnAs[afterEventData.playerQnAs.length - 1].answerCorrect === 'boolean') &&
-            afterEventData.gameOptions && afterEventData.gameOptions.playerMode == '1' &&
-            ( afterEventData.gameOptions.opponentType == '0' || afterEventData.gameOptions.opponentType == '1' ) &&
-            ( !(beforeEventData && beforeEventData.playerQnAs) || // allow when user is the first to answer the question
-                    (afterEventData.playerIds &&  beforeEventData && beforeEventData.playerIds &&
-                            beforeEventData.playerIds.length !== afterEventData.playerIds.length &&
-                            afterEventData.gameOptions.opponentType == '0') ||
-                            // allow if the game is with random player and the random user has been selected
-                (  beforeEventData.playerQnAs &&
-                    (afterEventData.playerQnAs.length !== beforeEventData.playerQnAs.length ||
-                    ( afterEventData.playerQnAs.length === beforeEventData.playerQnAs.length &&
-                    typeof beforeEventData.playerQnAs[afterEventData.playerQnAs.length - 1].answerCorrect === 'undefined' )))
-                    // allow if any of the player has answered the question
-            ) &&
-            afterEventData.playerIds && afterEventData.playerIds.length >= 2
+            afterEventData.playerQnAs[afterEventData.playerQnAs.length - 1].questionId
             ) {
-                const lastAnsweredStat = afterEventData.playerQnAs[(afterEventData.playerQnAs.length - 1)];
-                if ( lastAnsweredStat && lastAnsweredStat.playerId) {
-                    const otherUserId = afterEventData.playerId_0 !== lastAnsweredStat.playerId ?
-                                        afterEventData.playerId_0 : afterEventData.playerId_1;
-                    await StatsService.updateUserPlayedGameStats(lastAnsweredStat.playerId, otherUserId, 'current_user');
-                    await StatsService.updateUserPlayedGameStats(otherUserId, lastAnsweredStat.playerId, 'other_user');
+                // update appeared question statistics
+                if (afterEventData.playerQnAs.length !==
+                    beforeEventData.playerQnAs.length
+                    ) {
+                    await StatsService.updateQuestionStats(
+                        afterEventData.playerQnAs[afterEventData.playerQnAs.length - 1].questionId, 'CREATED');
+                } else if (beforeEventData.playerQnAs.length > 0 &&
+                    afterEventData.playerQnAs.length === beforeEventData.playerQnAs.length &&
+                    beforeEventData.playerQnAs[afterEventData.playerQnAs.length - 1].answerCorrect !==
+                    afterEventData.playerQnAs[afterEventData.playerQnAs.length - 1].answerCorrect &&
+                    typeof afterEventData.playerQnAs[afterEventData.playerQnAs.length - 1].answerCorrect === 'boolean'
+                    ) { // update anwered statistics
+                        await StatsService.updateQuestionStats(
+                            afterEventData.playerQnAs[afterEventData.playerQnAs.length - 1].questionId,
+                            'UPDATED',
+                            afterEventData.playerQnAs[afterEventData.playerQnAs.length - 1].answerCorrect);
                 }
-            }
+
+                // update timestamp in user last played game with
+                if ((typeof afterEventData.playerQnAs[afterEventData.playerQnAs.length - 1].answerCorrect === 'boolean') &&
+                    afterEventData.gameOptions && afterEventData.gameOptions.playerMode == '1' &&
+                    ( afterEventData.gameOptions.opponentType == '0' || afterEventData.gameOptions.opponentType == '1' ) &&
+                    afterEventData.playerIds && afterEventData.playerIds.length >= 2 &&
+                    ( ( beforeEventData.playerIds &&
+                                beforeEventData.playerIds.length !== afterEventData.playerIds.length &&
+                                afterEventData.gameOptions.opponentType == '0') ||
+                                // allow if the game is with random player and the random user has been selected
+                        (beforeEventData.playerQnAs &&
+                            (afterEventData.playerQnAs.length !== beforeEventData.playerQnAs.length ||
+                                (afterEventData.playerQnAs.length === beforeEventData.playerQnAs.length &&
+                            typeof beforeEventData.playerQnAs[afterEventData.playerQnAs.length - 1].answerCorrect === 'undefined'
+                                )
+                            )
+                        )
+                        // allow if any of the player has answered the question
+                    )
+                ) {
+                        const lastAnsweredStat = afterEventData.playerQnAs[(afterEventData.playerQnAs.length - 1)];
+                    if ( lastAnsweredStat && lastAnsweredStat.playerId) {
+                            const otherUserId = afterEventData.playerId_0 !== lastAnsweredStat.playerId ?
+                            afterEventData.playerId_0 : afterEventData.playerId_1;
+
+                            await StatsService.updateUserPlayedGameStats(lastAnsweredStat.playerId, otherUserId, 'current_user');
+                            await StatsService.updateUserPlayedGameStats(otherUserId, lastAnsweredStat.playerId, 'other_user');
+                    }
+
+                }
+        }
     }
 
 }

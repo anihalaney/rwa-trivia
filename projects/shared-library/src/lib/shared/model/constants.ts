@@ -383,6 +383,7 @@ export enum RoutesConstants {
     ADD_BITS_FIRST_QUESTION = 'add-bits-first-question',
     TOP_CATEGORIES_COUNT = 'getTopCategories',
     TOP_TAGS_COUNT = 'getTopTags',
+    GAME_DASH_STAT_DASH_UPDATE = 'question-stat-update'
 }
 
 export enum TermsAndPrivacyUrlConstant {
