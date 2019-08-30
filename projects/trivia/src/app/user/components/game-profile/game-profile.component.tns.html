@@ -1,4 +1,4 @@
-<ns-action-bar title="Game Profile" class="Roboto-Regular" showAdd="true"></ns-action-bar>
+<ns-action-bar title="Game Profile" class="Roboto-Regular"></ns-action-bar>
 <StackLayout backgroundColor="#f1f2f2" *ngIf="user">
     <ScrollView>
         <StackLayout>
@@ -10,8 +10,6 @@
                     <Label [visibility]="userType === 0 ? 'visible' : 'collapsed'" text="&#xf044;" fontSize="22"
                         padding="3" class="fa" [nsRouterLink]="['/user/my/profile', user?.userId]"></Label>
                 </StackLayout>
-                <StackLayout orientation="horizontal">
-                </StackLayout>
                 <StackLayout row="1" colSpan="2" *ngIf="socialProfileSettings && socialProfileSettings.length > 0"
                     orientation="horizontal" horizontalAlignment="center">
                     <FlexboxLayout *ngFor="let profile of socialProfileSettings">
@@ -21,7 +19,6 @@
                     </FlexboxLayout>
                 </StackLayout>
             </GridLayout>
-
             <FlexboxLayout justifyContent="space-between" class="border" margin="20" padding="10">
                 <StackLayout orientation="horizontal">
                     <StackLayout margin="0 10 0 10">
@@ -33,8 +30,35 @@
                         <Label [text]="account?.bytes || 0" class="bold-text" textWrap="true"></Label>
                     </StackLayout>
                 </StackLayout>
-                <StackLayout verticalAlignment="center">
-                    <Label text="&#xf05a;" fontSize="22" color="lightgray" padding="3" class="fa"></Label>
+                <StackLayout orientation="vertical">
+                    <!-- <Label text="&#xf05a;" fontSize="22" color="lightgray" padding="3" class="fa"></Label> -->
+
+                    <StackLayout verticalAlignment="center" class="profile" iosOverflowSafeArea="false">
+                        <StackLayout stlRippleEffect (rippleTap)="sendFriendRequest()" horizontalAlignment="right"
+                            *ngIf="loggedInUser?.userId && userInvitations[user?.email]?.status === 'add'">
+                            <Image checked="true" horizontalAlignment="center"
+                                src="~/assets/images/send-friend-request.png" height="50" width="50" marginRight="5">
+                            </Image>
+                            <Label horizontalAlignment="center" class="send-friend-request-span" margin="-10 0 0 0"
+                                text="Add Friend"></Label>
+                        </StackLayout>
+                        <StackLayout horizontalAlignment="right"
+                            *ngIf="loggedInUser?.userId && userInvitations[user?.email]?.status === 'pending'">
+                            <Image checked="true" horizontalAlignment="center"
+                                src="~/assets/images/send-friend-request.png" height="50" width="50" marginRight="5">
+                            </Image>
+                            <Label horizontalAlignment="center" class="send-friend-request-span" margin="-10 0 0 0"
+                                text="Friend Request Sent"></Label>
+                        </StackLayout>
+                        <StackLayout horizontalAlignment="right"
+                            *ngIf="loggedInUser?.userId  && userInvitations[user?.email]?.status === 'approved'">
+                            <Image checked="true" horizontalAlignment="center"
+                                src="~/assets/images/friends.png" height="50" width="50" marginRight="5"></Image>
+                            <Label horizontalAlignment="center" class="is-friend-span" margin="-10 0 0 0"
+                                text="Friends"></Label>
+                        </StackLayout>
+                    </StackLayout>
+
                 </StackLayout>
             </FlexboxLayout>
 
