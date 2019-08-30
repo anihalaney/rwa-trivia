@@ -179,7 +179,8 @@ export class ProfileSettings {
                 skipWhile(userInvitations => !(userInvitations)),
                 map(userInvitations => {
                     this.userInvitations = userInvitations;
-                    if (this.user && this.user.email && !this.userInvitations[this.user.email] && this.loggedInUser) {
+                    if (this.user && this.userInvitations && this.user.email &&
+                        !this.userInvitations[this.user.email] && this.loggedInUser) {
                         this.store.dispatch(this.userAction.loadUserInvitationsInfo(
                             this.loggedInUser.userId, this.user.email, this.user.userId));
                     }
