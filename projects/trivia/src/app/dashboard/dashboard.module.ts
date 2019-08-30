@@ -14,7 +14,7 @@ import { RealtimeStatsComponent } from './component/realtime-stats/realtime-stat
 import { QuestionComponent } from './component/question/question.component';
 import { FriendInviteComponent } from './component/friend-invite/friend-invite.component';
 import { GameInviteComponent } from './component/game-invite/game-invite.component';
-
+import { InviteToPlayComponent } from './component/invite-to-play/invite-to-play.component';
 @NgModule({
   declarations: [
     DashboardComponent,
@@ -25,7 +25,8 @@ import { GameInviteComponent } from './component/game-invite/game-invite.compone
     LeaderboardComponent,
     RealtimeStatsComponent,
     FriendInviteComponent,
-    GameInviteComponent
+    GameInviteComponent,
+    InviteToPlayComponent
   ],
   imports: [
     DashboardRoutingModule,

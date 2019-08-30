@@ -1,15 +1,13 @@
-import { Component, OnInit, OnDestroy, Renderer2, ViewChild, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
-import { MatDialog, MatDialogRef } from '@angular/material';
-import { InviteFriendsDialogComponent } from './invite-friends-dialog/invite-friends-dialog.component';
-import { User } from 'shared-library/shared/model';
-import { Utils } from 'shared-library/core/services';
-import { AppState, appState } from '../../../store';
-import { Store, select } from '@ngrx/store';
-import { MatPaginator, MatTableDataSource } from '@angular/material';
-import { Observable, Subscription } from 'rxjs';
-import { UserActions } from 'shared-library/core/store/actions';
-import { InviteFriends } from './invite-friends';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, Renderer2, ViewChild, PLATFORM_ID, Inject } from '@angular/core';
+import { MatDialog, MatDialogRef, MatPaginator, MatTableDataSource } from '@angular/material';
+import { select, Store } from '@ngrx/store';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { Utils } from 'shared-library/core/services';
+import { UserActions } from 'shared-library/core/store/actions';
+import { AppState, appState } from '../../../store';
+import { InviteFriends } from './invite-friends';
+import { InviteFriendsDialogComponent } from './invite-friends-dialog/invite-friends-dialog.component';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-invite-friends',
@@ -36,6 +34,7 @@ export class InviteFriendsComponent extends InviteFriends implements OnInit, OnD
     public renderer: Renderer2,
     public userActions: UserActions,
     public utils: Utils,
+    @Inject(PLATFORM_ID) private platformId: Object,
     public cd: ChangeDetectorRef) {
     super(store, userActions, utils, cd);
   }
@@ -67,13 +66,15 @@ export class InviteFriendsComponent extends InviteFriends implements OnInit, OnD
       disableClose: false
     });
     this.dialogRef.componentInstance.ref = this.dialogRef;
+    if (isPlatformBrowser(this.platformId)) {
+      this.subscriptions.push(this.dialogRef.afterOpen().subscribe(x => {
+        this.renderer.addClass(document.body, 'dialog-open');
+      }));
+      this.subscriptions.push(this.dialogRef.afterClosed().subscribe(x => {
+        this.renderer.removeClass(document.body, 'dialog-open');
+      }));
+    }
 
-    this.subscriptions.push(this.dialogRef.afterOpen().subscribe(x => {
-      this.renderer.addClass(document.body, 'dialog-open');
-    }));
-    this.subscriptions.push(this.dialogRef.afterClosed().subscribe(x => {
-      this.renderer.removeClass(document.body, 'dialog-open');
-    }));
   }
 
   ngOnDestroy() {

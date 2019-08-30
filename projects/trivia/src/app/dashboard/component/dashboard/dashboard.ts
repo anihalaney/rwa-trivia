@@ -67,7 +67,8 @@ export class Dashboard implements OnDestroy {
     constructor(public store: Store<AppState>,
         private questionActions: QuestionActions,
         private gameActions: GameActions,
-        private userActions: UserActions, private windowRef: WindowRef,
+        private userActions: UserActions,
+        private windowRef: WindowRef,
         @Inject(PLATFORM_ID) private platformId: Object,
         ngZone: NgZone,
         utils: Utils,
@@ -299,43 +300,6 @@ export class Dashboard implements OnDestroy {
 
     }
 
-    get gameStart() {
-        if (this.user && this.account && this.account.lives === 0 && this.applicationSettings && this.applicationSettings.lives.enable) {
-            this.startGame = this.NEW_GAME_IN;
-        } else {
-            this.startGame = this.START_A_NEW_GAME;
-        }
-        // tslint:disable-next-line:max-line-length
-        const startString = this.startGame + ((this.user && this.applicationSettings && this.applicationSettings.lives.enable && this.timeoutLive) ? '   |   ' + this.timeoutLive : '');
-        this.cd.markForCheck();
-        return startString;
-    }
-
-    get singlePlayer() {
-        let gameName = '';
-        if (this.user && this.account && this.account.lives === 0 && this.applicationSettings && this.applicationSettings.lives.enable) {
-            gameName = this.NEW_GAME_IN;
-        } else {
-            gameName = this.SINGLE_PLAYER;
-        }
-        // tslint:disable-next-line:max-line-length
-        gameName = gameName + ((this.user && this.applicationSettings && this.applicationSettings.lives.enable && this.timeoutLive) ? '   |   ' + this.timeoutLive : '');
-        this.cd.markForCheck();
-        return gameName;
-    }
-
-    get twoPlayer() {
-        let gameName = '';
-        if (this.user && this.account && this.account.lives === 0 && this.applicationSettings && this.applicationSettings.lives.enable) {
-            gameName = this.NEW_GAME_IN;
-        } else {
-            gameName = this.TWO_PLAYER;
-        }
-        // tslint:disable-next-line:max-line-length
-        gameName = gameName + ((this.user && this.applicationSettings && this.applicationSettings.lives.enable && this.timeoutLive) ? '   |   ' + this.timeoutLive : '');
-        this.cd.markForCheck();
-        return gameName;
-    }
 
     get isLivesEnable(): Boolean {
         const isEnable = (this.user && this.account && this.applicationSettings && this.applicationSettings.lives.enable) ? true : false;

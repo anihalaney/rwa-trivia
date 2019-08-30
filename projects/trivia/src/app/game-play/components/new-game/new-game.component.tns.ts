@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit, ViewChild, Inject, PLATFORM_ID } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { RouterExtensions } from 'nativescript-angular/router';
@@ -49,8 +49,9 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     public cd: ChangeDetectorRef,
     private page: Page,
     public windowRef: WindowRef,
+    @Inject(PLATFORM_ID) public platformId: Object,
     private ngZone: NgZone) {
-    super(store, utils, gameActions, userActions, windowRef, cd, route, router);
+    super(store, utils, gameActions, userActions, windowRef, platformId, cd, route, router);
     this.initDataItems();
     this.modeAvailable = false;
   }
@@ -75,8 +76,14 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
           this.challengerUserId = data.userid;
           this.gameOptions.playerMode = 1;
           this.gameOptions.opponentType = 1;
-          this.gameOptions.isChallenge = true;
+          if (this.router.url.indexOf('challenge') > 0 ) {
+            this.gameOptions.isChallenge = true;
+          }
           this.friendUserId = data.userid;
+        }
+        if (this.router.url.indexOf('play-game-with-random-user') >= 0) {
+          this.gameOptions.playerMode = 1;
+          this.gameOptions.opponentType = 0;
         }
         if (data && data.mode) {
           this.modeAvailable = true;
@@ -193,7 +200,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
 
   navigateToInvite() {
     this.ngOnDestroy();
-    this.router.navigate(['/user/my/app-invite-friends-dialog']);
+    this.router.navigate(['/user/my/app-invite-friends-dialog', { showSkip: false }]);
   }
 
   redirectToDashboard(msg) {

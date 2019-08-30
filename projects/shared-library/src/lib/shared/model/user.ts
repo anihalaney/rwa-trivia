@@ -36,8 +36,11 @@ export class User {
   online?: boolean;
   isCategorySet?: boolean;
   phoneNo?: string;
+  isFriend?: any;
+  totalFriends?: number;
 
   constructor(authState?: firebase.User & { name: string }) {
+    this.totalFriends = 0;
     if (authState) {
       this.authState = authState;
       this.userId = authState.uid;

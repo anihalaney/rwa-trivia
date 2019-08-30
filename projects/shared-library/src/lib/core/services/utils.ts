@@ -6,6 +6,7 @@ import { Observable, of } from 'rxjs';
 // tslint:disable-next-line:max-line-length
 import { GameOptions, Game, User, FirebaseAnalyticsKeyConstants, FirebaseAnalyticsEventConstants, OpponentType, GameConstants, GameMode, PlayerMode, GeneralConstants } from 'shared-library/shared/model';
 import { WindowRef } from './windowref.service';
+import { isPlatformBrowser } from '@angular/common';
 
 @Injectable()
 export class Utils extends UtilsCore {
@@ -26,7 +27,7 @@ export class Utils extends UtilsCore {
   }
 
   setLoginFirebaseAnalyticsParameter(user: User): Observable<User> {
-    if (this.windowRef.isDataLayerAvailable()) {
+    if (isPlatformBrowser(this.platformId) && this.windowRef.isDataLayerAvailable()) {
       this.windowRef.addAnalyticsParameters(FirebaseAnalyticsKeyConstants.USER_ID, user.userId);
       this.windowRef.pushAnalyticsEvents(FirebaseAnalyticsEventConstants.USER_LOGIN);
     }
@@ -34,7 +35,7 @@ export class Utils extends UtilsCore {
   }
 
   setNewGameFirebaseAnalyticsParameter(gameOptions: GameOptions, userId: string, gameId: string): Observable<string> {
-    if (this.windowRef.isDataLayerAvailable()) {
+    if (isPlatformBrowser(this.platformId) && this.windowRef.isDataLayerAvailable()) {
       this.windowRef.addAnalyticsParameters(FirebaseAnalyticsKeyConstants.USER_ID, userId);
       this.windowRef.addAnalyticsParameters(FirebaseAnalyticsKeyConstants.OPPONENT_TYPE,
         gameOptions.opponentType === OpponentType.Random ? GameConstants.RANDOM : GameConstants.FRIEND);
@@ -48,7 +49,7 @@ export class Utils extends UtilsCore {
   }
 
   setEndGameFirebaseAnalyticsParameter(game: Game, userId: string, otherUserId: string): Observable<string> {
-    if (this.windowRef.isDataLayerAvailable()) {
+    if (isPlatformBrowser(this.platformId) && this.windowRef.isDataLayerAvailable()) {
       this.windowRef.addAnalyticsParameters(FirebaseAnalyticsKeyConstants.GAME_ID, game.gameId);
       this.windowRef.addAnalyticsParameters(FirebaseAnalyticsKeyConstants.USER_ID, userId);
       this.windowRef.addAnalyticsParameters(FirebaseAnalyticsKeyConstants.PLAYER_MODE,
@@ -89,7 +90,7 @@ export class Utils extends UtilsCore {
   }
 
   setUserLocationFirebaseAnalyticsParameter(user: User, isLocationChanged: boolean): Observable<string> {
-    if (this.windowRef.isDataLayerAvailable() && isLocationChanged) {
+    if (isPlatformBrowser(this.platformId) && this.windowRef.isDataLayerAvailable() && isLocationChanged) {
       this.windowRef.addAnalyticsParameters(FirebaseAnalyticsKeyConstants.USER_ID, user.userId);
       this.windowRef.addAnalyticsParameters(FirebaseAnalyticsKeyConstants.LOCATION, user.location);
       this.windowRef.pushAnalyticsEvents(FirebaseAnalyticsEventConstants.USER_LOCATION);

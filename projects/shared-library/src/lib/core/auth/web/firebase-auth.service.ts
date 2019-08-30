@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { FirebaseAuthService } from './../firebase-auth.service';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { MatDialog, MatDialogRef } from '@angular/material';
 import { LoginComponent } from './../../components/login/login.component';
 import { WindowRef } from './../../services/windowref.service';
+import { isPlatformBrowser } from '@angular/common';
 import { User, UserStatusConstants, CollectionConstants, TriggerConstants } from 'shared-library/shared/model';
 import { AngularFireDatabase } from '@angular/fire/database';
 
@@ -21,6 +22,7 @@ export class WebFirebaseAuthService implements FirebaseAuthService {
         public router: Router,
         protected afStore: AngularFirestore,
         public dialog: MatDialog,
+        @Inject(PLATFORM_ID) private platformId: Object,
         private windowsRef: WindowRef,
         private db: AngularFireDatabase) { }
 
@@ -60,7 +62,9 @@ export class WebFirebaseAuthService implements FirebaseAuthService {
         this.afAuth.auth.signOut();
         this.updateTokenStatus(this.user.userId, UserStatusConstants.OFFLINE);
         this.router.navigate(['dashboard']);
-        this.windowsRef.nativeWindow.location.reload();
+        if (isPlatformBrowser(this.platformId)) {
+            this.windowsRef.nativeWindow.location.reload();
+        }
     }
 
     public showLogin() {
