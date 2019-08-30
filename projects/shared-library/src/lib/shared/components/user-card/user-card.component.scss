@@ -22,13 +22,16 @@
   font-size: 16px;
 }
 
-.auther img {
-  border-radius: 50%;
-  max-width: 30px;
-  margin-left: 2%;
-  border: 1px solid;
-  padding: 2px;
-  vertical-align: middle;
+.auther {
+  display: flex;
+  & img {
+    border-radius: 50%;
+    max-width: 30px;
+    margin-left: 2%;
+    border: 1px solid;
+    padding: 2px;
+    vertical-align: middle;
+  }
 }
 .alignment-left {
   margin-left: 1%;
@@ -157,7 +160,6 @@
 .auther .online-dot {
   height: 10px;
   width: 10px;
-  right: 14px;
   bottom: 1px;
 }
 
@@ -165,7 +167,6 @@
   right: 2px;
   bottom: 2px;
 }
-
 
 .friend-invite .online-dot {
   right: 50px;
