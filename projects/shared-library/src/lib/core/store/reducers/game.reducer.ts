@@ -64,3 +64,10 @@ export function getQuestionSuccess(state: any = null, action: ActionWithPayload<
   }
 }
 
+export function updateQuestionStatSuccess(state: any = null, action: any): any {
+  switch (action.type) {
+    case GameActions.UPDATE_QUESTION_STAT_SUCCESS:
+      return action.payload;
+  }
+}
+
