@@ -26,6 +26,7 @@ export class GameQuestion {
 
   answeredIndex: number;
   correctAnswerIndex: number;
+  answeredText: string;
   userCardType = userCardType;
   // applicationSettings: ApplicationSettings;
 
@@ -39,6 +40,7 @@ export class GameQuestion {
       if (this.answeredIndex >= 0 || this.continueNext) {
         return;
       }
+      this.answeredText = answer.answerText;
       this.doPlay = false;
       this.answeredIndex = index;
       this.answerClicked.emit(index);
