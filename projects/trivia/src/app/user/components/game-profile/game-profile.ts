@@ -2,7 +2,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { skipWhile, map, flatMap, switchMap, take } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 import { AppState, appState } from '../../../store';
-import { User, userCardType, Account } from 'shared-library/shared/model';
+import { User, userCardType, Account, Invitation } from 'shared-library/shared/model';
 import { Observable, Subject } from 'rxjs';
 import { UserActions } from 'shared-library/core/store';
 import { ChangeDetectorRef } from '@angular/core';
@@ -33,6 +33,8 @@ export class GameProfile {
     subscriptions = [];
     loggedInUserAccount: Account;
     gamePlayedAgainst: any;
+    userInvitations: { [key: string]: Invitation };
+
     constructor(
         public route: ActivatedRoute,
         public router: Router,
@@ -85,7 +87,18 @@ export class GameProfile {
                     });
                 }
             }),
-            flatMap(() => this.initializeSocialSetting())
+            flatMap(() => this.store.select(appState.coreState).pipe(select(s => s.userFriendInvitations),
+                skipWhile(userInvitations => !(userInvitations)),
+                map(userInvitations => {
+                    this.userInvitations = userInvitations;
+                    if (this.user && this.user.email && !this.userInvitations[this.user.email] && this.loggedInUser) {
+                        this.store.dispatch(this.userAction.loadUserInvitationsInfo(
+                            this.loggedInUser.userId, this.user.email, this.user.userId));
+                    }
+                }),
+            )),
+            flatMap(() => this.initializeSocialSetting()),
+            map(() => this.cd.markForCheck()),
         );
     }
 
@@ -132,5 +145,11 @@ export class GameProfile {
         const isEnable = (this.loggedInUser && this.loggedInUserAccount && this.loggedInUserAccount.lives > 0 &&
             this.applicationSettings.lives.enable) || (!this.applicationSettings.lives.enable) ? true : false;
         return isEnable;
+    }
+
+    sendFriendRequest() {
+        const inviteeUserId = this.user.userId;
+        this.store.dispatch(this.userAction.addUserInvitation(
+            { userId: this.loggedInUser.userId, inviteeUserId: inviteeUserId }));
     }
 }

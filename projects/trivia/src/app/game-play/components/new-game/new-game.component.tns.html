@@ -16,7 +16,7 @@
                     fontSize="17">
 
                     <StackLayout stlRippleEffect orientation="horizontal" [class.selected-player]="gameOptions.playerMode === 0" [ngStyle]="{'background-color': (gameOptions.playerMode === 0) ? '#89C24F' : '#ffffff' }"
-                        [class.player-type]="gameOptions.playerMode !== 0" (rippleTap)="gameOptions.playerMode = 0;gameOptions.opponentType=''"
+                        [class.player-type]="gameOptions.playerMode !== 0" (rippleTap)="gameOptions.playerMode = 0;gameOptions.opponentType=null"
                         width="50%" height="60" [isUserInteractionEnabled] = "gameOptions.playerMode !== 0">
                         <Image *ngIf="gameOptions.playerMode !== 0" src="~/assets/images/single_player.png" height="30"
                             width="30" marginLeft="10" verticalAlignment="center" marginRight="5"></Image>
