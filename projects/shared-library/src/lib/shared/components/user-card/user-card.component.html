@@ -31,7 +31,7 @@
     <img *ngIf="isGamePlay" [src]="getImageUrl(user,44,40)" alt="User Profile Image" />
     <img *ngIf="!isGamePlay" [stlOpenUserProfile]="{userId: user.userId, redirectTo: 'otherUserProfile'}"
       [src]="getImageUrl(user,44,40)" alt="User Profile Image" />
-    <span class="online-dot">
+    <span *ngIf="user?.online" class="online-dot">
     </span>
   </div>
   <!-- </div> -->
