@@ -1,4 +1,7 @@
-import { Component, Input, OnInit, OnDestroy, Renderer2, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import {
+  Component, Input, OnInit, OnDestroy, Renderer2, ChangeDetectionStrategy,
+  ChangeDetectorRef, Inject, PLATFORM_ID
+} from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
@@ -9,7 +12,7 @@ import { User } from 'shared-library/shared/model';
 import { AppState, appState } from '../../../store';
 import * as gameplayactions from '../../store/actions';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
-
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'game',
@@ -31,6 +34,7 @@ export class GameComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private renderer: Renderer2,
+    @Inject(PLATFORM_ID) private platformId: Object,
     private cd: ChangeDetectorRef) {
 
     this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
@@ -54,14 +58,16 @@ export class GameComponent implements OnInit, OnDestroy {
       disableClose: true,
       data: { 'user': this.user, 'userDict': this.userDict }
     });
+    if (isPlatformBrowser(this.platformId)) {
+      this.subscriptions.push(this.dialogRef.afterOpen().subscribe(x => {
+        this.cd.detectChanges();
+        this.renderer.addClass(document.body, 'dialog-open');
+      }));
+      this.dialogRef.afterClosed().subscribe(x => {
+        this.renderer.removeClass(document.body, 'dialog-open');
+      });
+    }
 
-    this.subscriptions.push(this.dialogRef.afterOpen().subscribe(x => {
-      this.cd.detectChanges();
-      this.renderer.addClass(document.body, 'dialog-open');
-    }));
-    this.dialogRef.afterClosed().subscribe(x => {
-      this.renderer.removeClass(document.body, 'dialog-open');
-    });
   }
   ngOnDestroy() {
 
