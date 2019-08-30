@@ -3,7 +3,7 @@ import { User, Category, Question, Game, Friends, Invitation, Account } from 'sh
 import {
   user, authInitialized, invitationToken, userDict,
   gameInvites, userFriends, friendInvitations, userProfileSaveStatus, feedback, account, getGameResult, countries,
-  addressUsingLongLat, addressSuggestions, userFriendInvitations, userUpdateStatus, firstQuestionBits
+  addressUsingLongLat, addressSuggestions, userFriendInvitations, userUpdateStatus, firstQuestionBits, checkDisplayName
 } from './user.reducer';
 import { categories, topCategories } from './categories.reducer';
 import { tags, topTags } from './tags.reducer';
@@ -60,6 +60,7 @@ export interface CoreState {
   getQuestionSuccess: any;
   getTopCategories: any;
   getTopTags: any;
+  checkDisplayName: boolean;
 }
 
 export const reducer: ActionReducerMap<CoreState> = {
@@ -96,7 +97,8 @@ export const reducer: ActionReducerMap<CoreState> = {
   getUserReactionStatus: getUserReactionStatus,
   getQuestionSuccess: getQuestionSuccess,
   getTopCategories: topCategories,
-  getTopTags: topTags
+  getTopTags: topTags,
+  checkDisplayName: checkDisplayName
 };
 
 // Features

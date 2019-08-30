@@ -10,8 +10,6 @@ export enum UserActionTypes {
     ADD_QUESTION = '[User] AddQuestions',
     ADD_QUESTION_SUCCESS = '[User] AddQuestionsSuccess',
     UPDATE_USER_SUCCESS = '[User] UpdateUserSuccess',
-    CHECK_DISPLAY_NAME = '[User] CheckDisplayName',
-    CHECK_DISPLAY_NAME_SUCCESS = '[User] CheckDisplayNameSuccess'
 }
 
 // Load User Published Question by userId
@@ -50,24 +48,10 @@ export class UpdateUserSuccess implements Action {
     constructor(public payload: User) { }
 }
 
-export class CheckDisplayName implements Action {
-    readonly type = UserActionTypes.CHECK_DISPLAY_NAME;
-    constructor(public payload: string) { } // game
-}
-
-export class CheckDisplayNameSuccess implements Action {
-    readonly type = UserActionTypes.CHECK_DISPLAY_NAME_SUCCESS;
-    constructor(public payload: boolean) { } // game
-}
-
-
-
 export type UserActions
     = LoadUserPublishedQuestions
     | LoadUserPublishedQuestionsSuccess
     | LoadUserUnpublishedQuestions
     | LoadUserUnpublishedQuestionsSuccess
     | AddQuestion
-    | UpdateUserSuccess
-    | CheckDisplayName
-    | CheckDisplayNameSuccess;
+    | UpdateUserSuccess;

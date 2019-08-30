@@ -9,7 +9,6 @@ import { Utils } from 'shared-library/core/services';
 import { UserActions } from 'shared-library/core/store';
 import { Account, Category, profileSettingsConstants, User, Invitation } from 'shared-library/shared/model';
 import { AppState, appState, categoryDictionary, getCategories, getTags } from '../../../store';
-import * as userActions from '../../store/actions';
 
 export enum UserType {
     userProfile,
@@ -389,7 +388,7 @@ export class ProfileSettings {
             { userId: this.loggedInUser.userId, inviteeUserId: inviteeUserId }));
     }
     checkDisplayName(displayName: string) {
-        this.store.dispatch(new userActions.CheckDisplayName(displayName));
+        this.store.dispatch(this.userAction.checkDisplayName(displayName));
     }
 
     getCityAndCountryName(location) {
