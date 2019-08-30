@@ -12,7 +12,7 @@
                 <label>{{errMsg}}</label>
             </div>
             <div class="optionbox">
-                <div class="row" *ngIf="!challengerUserId">
+                <div class="row" *ngIf="!challengerUserId || (challengerUserId && routeType !== 'challenge')">
                     <div class="col-sm-3">
                         <h2>Select
                             <span>Player Mode</span>
@@ -45,7 +45,7 @@
                                                       <div class="swiper-wrapper">
                                                         <div *ngFor="let friendId of uFriends; let i=index" class="swiper-slide">
                                                           <div >
-                                                                <input type="radio" id="friend-{{i}}" name="withfriends" (change)="selectFriendId(friendId)">
+                                                                <input formControlName="friendUserId" type="radio" id="friend-{{i}}" [value]="friendId" (change)="selectFriendId(friendId)">
                                                                 <label for="friend-{{i}}">
                                                                     <app-user-card [userId]="friendId" [type]="userCardType.USER_WEB_IMAGE_70X60_NAME_LOCATION" > </app-user-card>
                                                                 </label>

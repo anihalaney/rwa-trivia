@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, Inject, PLATFORM_ID } from '@angular/core';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { MatSnackBar, MatTableDataSource } from '@angular/material';
 import { ActivatedRoute, Params, Router } from '@angular/router';
@@ -11,6 +11,7 @@ import { AppState, appState, categoryDictionary } from '../../../../store';
 import { bulkState } from '../../../store';
 import * as bulkActions from '../../../store/actions';
 import { coreState, QuestionActions } from 'shared-library/core/store';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-bulk-summary-questions',
@@ -51,6 +52,7 @@ export class BulkSummaryQuestionComponent implements OnInit, OnDestroy {
     private router: Router,
     public cd: ChangeDetectorRef,
     private questionActions: QuestionActions,
+    @Inject(PLATFORM_ID) private platformId: Object,
     private utils: Utils) {
 
 
@@ -64,7 +66,7 @@ export class BulkSummaryQuestionComponent implements OnInit, OnDestroy {
     }));
 
     this.subscriptions.push(this.store.select(bulkState).pipe(select(s => s.bulkUploadFileUrl)).subscribe((url) => {
-      if (url) {
+      if (isPlatformBrowser(this.platformId) && url) {
         const link = document.createElement('a');
         document.body.appendChild(link);
         link.href = url;

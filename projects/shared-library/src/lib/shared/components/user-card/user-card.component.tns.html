@@ -43,6 +43,27 @@
   </GridLayout>
 </ng-container>
 
+<ng-container *ngIf="userCardType.USER_IMAGE_NAME_GAME_PROFILE_HORIZONTAL === type">
+  <GridLayout rows="*" columns="auto,*">
+    <StackLayout row="0" col="0" verticalAlignment="center" borderRadius="50" borderColor="#3b5998" borderWidth="1"
+      paddingTop="2" paddingLeft="2" paddingRight="2" class="image-container" height="57" width="57">
+      <Image
+        [stlOpenUserProfile]="{userId: user?.userId, redirectTo: loggedInUserId === user?.userId ? 'userProfile': 'otherUserProfile'}"
+        [src]="getImageUrl(user,44,40)" backgroundColor="gray" stretch="aspectFill" stretch="aspectFill" height="55"
+        width="55" marginLeft="10" verticalAlignment="center" marginRight="10" borderRadius="50"></Image>
+    </StackLayout>
+
+    <FlexboxLayout flexDirection="column" horizontalAlignment="center" justifyContent="space-around" row="0" col="1" class="padding-10">
+      <Label *ngIf="user?.displayName" [text]="user?.displayName" fontSize="16" class="text-black"
+        textWrap="true"></Label>
+      <Label *ngIf="!user?.displayName" [text]="unknown" class="text-black" fontSize="16" textWrap="true"></Label>
+      <Label *ngIf="user?.location" text="&#xf041; {{user?.location}}" class="text-gray fa" fontSize="14"
+        textWrap="true"></Label>
+      <Label *ngIf="!user?.location" text="&#xf041; unknown" class="text-gray fa" fontSize="14" textWrap="true"></Label>
+    </FlexboxLayout>
+  </GridLayout>
+</ng-container>
+
 <GridLayout rows="*" columns="60, *" *ngIf="user && userCardType.USER_IMAGE_NAME_HORIZONTAL === type">
   <Image row="0" col="0" [stlOpenUserProfile]="{userId: user.userId, redirectTo: 'otherUserProfile'}"
     [src]="getImageUrl(user,44,40)" stretch="aspectFill" height="40" width="40" marginLeft="10"
@@ -117,7 +138,6 @@
       <Label *ngIf="user?.online" height="10" top="23" left="33" width="10" borderRadius="22"
         backgroundColor="#71b02f"></Label>
     </AbsoluteLayout>
-
   </GridLayout>
 </ng-container>
 
@@ -142,4 +162,21 @@
       textWrap="true" color="#fe4f20" fontSize="12"></Label>
   </GridLayout>
 
+</ng-container>
+
+
+<ng-container *ngIf="user && userCardType.USER_IMAGE_WITH_ONLINE_STATUS === type">
+  <GridLayout rows="*" columns="*">
+    <StackLayout row="0" col="0" marginLeft="10" verticalAlignment="center" marginRight="10" borderRadius="50"
+      borderColor="#3b5998" borderWidth="1" paddingTop="2" paddingLeft="2" paddingRight="2" class="image-container"
+      height="57" width="57">
+      <Image *ngIf="user" [src]="getImageUrl(user, 44, 40)" backgroundColor="gray" stretch="aspectFill" height="55"
+        width="55" marginLeft="1" marginRight="1" verticalAlignment="center" borderRadius="50"
+        horizontalAlignment="center">
+      </Image>
+    </StackLayout>
+    <AbsoluteLayout *ngIf="user?.online" horizontalAlignment="center">
+      <Label height="15" top="40" left="40" width="15" borderRadius="22" backgroundColor="#71b02f"></Label>
+    </AbsoluteLayout>
+  </GridLayout>
 </ng-container>

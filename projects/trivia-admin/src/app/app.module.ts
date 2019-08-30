@@ -48,7 +48,7 @@ import {APP_BASE_HREF} from '@angular/common';
 
     BrowserModule.withServerTransition({ appId: 'trivia-admin' }),
     //BrowserTransferStateModule,
-    ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production })
+    // ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [
     { provide: RouterStateSerializer, useClass: CustomSerializer },

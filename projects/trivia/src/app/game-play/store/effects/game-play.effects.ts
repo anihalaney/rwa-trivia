@@ -54,11 +54,18 @@ export class GamePlayEffects {
       filter((routerState: RouterStateUrl) => {
         if (routerState.url.toLowerCase().startsWith('/game-play/') &&
           !routerState.url.toLowerCase().startsWith('/game-play/challenge') &&
+          !routerState.url.toLowerCase().startsWith('/game-play/play-game-with-random-user') &&
+          !routerState.url.toLowerCase().startsWith('/game-play/play-game-with-friend') &&
+          !routerState['url'].toLowerCase().startsWith('/game-play/game-option') &&
           routerState.params) {
           return true;
         } else if ((routerState.url.toLowerCase().startsWith('/game-play/') ||
-          routerState.url.toLowerCase().startsWith('/game-play/challenge')) && (routerState['root'] &&
-            !routerState['url'].toLowerCase().startsWith('/game-play/challenge')) &&
+          routerState.url.toLowerCase().startsWith('/game-play/challenge') ||
+          routerState.url.toLowerCase().startsWith('/game-play/play-game-with-random-user') ||
+          routerState.url.toLowerCase().startsWith('/game-play/play-game-with-friend')) && (routerState['root'] &&
+            !routerState.url.toLowerCase().startsWith('/game-play/challenge') &&
+            !routerState.url.toLowerCase().startsWith('/game-play/play-game-with-random-user') &&
+            !routerState.url.toLowerCase().startsWith('/game-play/play-game-with-friend')) &&
           (routerState['root'] &&
             !routerState['url'].toLowerCase().startsWith('/game-play/game-option'))) {
           return true;

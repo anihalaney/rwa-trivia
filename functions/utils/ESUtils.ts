@@ -308,7 +308,7 @@ export class ESUtils {
       const client: ElasticSearch.Client = ESUtils.getElasticSearchClient();
       index = ESUtils.getIndex(index);
 
-      const body: Elasticsearch.SearchResponse<any> = await client.search({
+      const body: ElasticSearch.SearchResponse<any> = await client.search({
         'index': index,
         'size': size,
         'body': {
@@ -344,7 +344,7 @@ export class ESUtils {
     }
 
     try {
-      const body: Elasticsearch.SearchResponse<any> = await client.search({
+      const body: ElasticSearch.SearchResponse<any> = await client.search({
         'index': index,
         'size': size,
         'body': {
