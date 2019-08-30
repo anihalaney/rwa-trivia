@@ -30,8 +30,7 @@ const buildApps = `ng build trivia  --configuration=productVariant-env &&
                 ng run trivia:server`;
 const compileFunctions = `npx rimraf functions/server && npx tsc --project functions`;
 const buildSSRServer = `npx webpack --config webpack.server.config.js`;
-const deployFunctionsCommand = ` ${buildApps} && 
-                    ${compileFunctions} &&                     
+const deployFunctionsCommand = `${compileFunctions} &&                     
                     ${buildSSRServer} &&                   
                     setConfig
                     npx rimraf functions/index.js && 

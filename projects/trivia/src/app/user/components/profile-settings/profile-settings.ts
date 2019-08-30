@@ -136,7 +136,7 @@ export class ProfileSettings {
             this.categories = values[1] || [];
             this.categoryDict = values[2] || {};
 
-            this.userCopyForReset = cloneDeep(this.user);
+            this.userCopyForReset = this.user; // cloneDeep(this.user);
             this.createForm(this.user);
 
             if (this.user.profilePictureUrl) {
@@ -313,7 +313,7 @@ export class ProfileSettings {
     }
 
     resetUserProfile() {
-        this.user = cloneDeep(this.userCopyForReset);
+        this.user = this.userCopyForReset; // cloneDeep(this.userCopyForReset);
         this.createForm(this.user);
         this.filteredTags$ = this.userForm.get('tags').valueChanges
             .pipe(map(val => val.length > 0 ? this.filter(val) : []));
