@@ -7,7 +7,7 @@ import {
   import { coreState, CoreState, UserActions } from 'shared-library/core/store';
   import { Utils } from 'shared-library/core/services';
   import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
-  
+
   const EMAIL_REGEXP = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   
   @Component({
@@ -104,17 +104,6 @@ import {
     }
   
     ngOnDestroy(): void {
-    }
-  
-    hideKeyboard() {
-      this.textField
-        .toArray()
-        .map((el) => {
-          if (el.nativeElement && el.nativeElement.android) {
-            el.nativeElement.android.clearFocus();
-          }
-          // return el.nativeElement.dismissSoftInput();
-        });
     }
   }
   
