@@ -47,7 +47,7 @@
                                                 <div *ngFor="let friendId of uFriends; let i=index"
                                                     class="swiper-slide">
                                                     <div>
-                                                        <input type="radio" id="friend-{{i}}" name="withfriends"
+                                                        <input formControlName="friendUserId" type="radio" id="friend-{{i}}" [value]="friendId"
                                                             (change)="selectFriendId(friendId)">
                                                         <label for="friend-{{i}}">
 

@@ -6,6 +6,7 @@
 
 <StackLayout *ngIf="!loaderBusy">
     <ScrollView>
+        <PreviousNextView>
         <StackLayout (tap)="hideKeyboard()" class="new-game Roboto-Regular" backgroundColor="#f1f2f2" [formGroup]="questionForm">
 
             <GridLayout iosOverflowSafeArea="false" rows="auto,auto" columns="auto,*" padding="10" marginTop="5">
@@ -171,5 +172,6 @@
                     stlRippleEffect marginLeft="5"></Button>
             </GridLayout>
         </StackLayout>
+        </PreviousNextView>
     </ScrollView>
 </StackLayout>

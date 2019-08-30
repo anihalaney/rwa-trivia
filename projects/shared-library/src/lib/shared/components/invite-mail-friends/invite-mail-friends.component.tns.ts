@@ -6,6 +6,7 @@ import { Store } from '@ngrx/store';
 import { CoreState, UserActions } from 'shared-library/core/store';
 import { Utils } from 'shared-library/core/services';
 import { InviteMailFriends } from './invite-mail-friends';
+import { isAndroid, isIOS } from 'tns-core-modules/ui/page';
 
 @Component({
     selector: 'app-invite-mail-friends',
@@ -15,9 +16,27 @@ import { InviteMailFriends } from './invite-mail-friends';
 })
 
 export class InviteMailFriendsComponent extends InviteMailFriends {
-
+    iqKeyboard: IQKeyboardManager;
     constructor(fb: FormBuilder, store: Store<CoreState>, userAction: UserActions, cd: ChangeDetectorRef,
         utils: Utils) {
         super(fb, store, userAction, cd, utils);
+
+        if (isIOS) {
+            this.iqKeyboard = IQKeyboardManager.sharedManager();
+            this.iqKeyboard.shouldResignOnTouchOutside = true;
+          }
     }
+
+    hideKeyboard() {
+        if (isAndroid) {
+          this.textField
+            .toArray()
+            .map((el) => {
+              if (el.nativeElement) {
+                el.nativeElement.android.clearFocus();
+                return el.nativeElement.dismissSoftInput();
+              }
+            });
+        }
+      }
 }
