@@ -2,7 +2,7 @@
 <StackLayout *ngIf="renderView">
     <ScrollView>
         <StackLayout class="new-game Roboto-Regular" backgroundColor="#f1f2f2">
-            <GridLayout rows="auto,auto" columns="auto,*" padding="10 10 5 10">
+            <GridLayout  *ngIf="!challengerUserId || (challengerUserId && routeType !== 'challenge')" rows="auto,auto" columns="auto,*" padding="10 10 5 10">
                 <Label row="0" col="0" text="Select Player Mode" textWrap="true" class="main-label" fontSize="18"
                     color="#616161"></Label>
                 <Label row="0" col="1" class="fa expand-options" horizontalAlignment="right"
@@ -10,7 +10,7 @@
                     borderColor="#A9A9A9" (tap)="showSelectPlayer = !showSelectPlayer" background="#fff"></Label>
             </GridLayout>
 
-            <CardView margin="10" android:elevation="20" ios:elevation="40" radius="1" width="95%" margin="15 0 15 0"
+            <CardView  *ngIf="!challengerUserId || (challengerUserId && routeType !== 'challenge')" margin="10" android:elevation="20" ios:elevation="40" radius="1" width="95%" margin="15 0 15 0"
                 visibility="{{ !showSelectPlayer ? 'visible' : 'collapsed' }}">
                 <StackLayout orientation="horizontal" horizontalAlignment="center" backgroundColor="white"
                     fontSize="17">
@@ -43,7 +43,7 @@
             </CardView>
 
             <CardView margin="10 0" android:elevation="20" ios:elevation="40" radius="1"
-                visibility="{{ showSelectPlayer ? 'visible' : 'collapsed' }}" backgroundColor="white">
+                visibility="{{ showSelectPlayer && (!challengerUserId || (challengerUserId && routeType !== 'challenge')) ? 'visible' : 'collapsed' }}" backgroundColor="white">
                 <StackLayout orientation="horizontal" horizontalAlignment="center" padding="10 0 10 10"
                     class="player-type">
                     <StackLayout orientation="horizontal" width="50%">
@@ -67,7 +67,7 @@
                 </StackLayout>
             </CardView>
 
-            <CardView visibility="{{ !showSelectPlayer ? 'visible' : 'collapsed' }}"
+            <CardView visibility="{{ !showSelectPlayer && (!challengerUserId || (challengerUserId &&  routeType !== 'challenge'))? 'visible' : 'collapsed' }}"
                 *ngIf="gameOptions.playerMode === 1" margin="15 0 15 0" backgroundColor="white">
                 <StackLayout class="label">
                     <GridLayout rows="auto,auto" columns="auto,*,auto" (tap)="gameOptions.opponentType=0;"
@@ -99,18 +99,14 @@
 
                         <StackLayout row="2" col="0" colSpan="3" *ngIf="gameOptions.opponentType == 1"
                             paddingBottom="0">
-                            <RadListView #friendListView [items]="dataItem" ios:height="130">
+                            <RadListView #friendListView [items]="uFriends" ios:height="130">
                                 <ng-template let-item="item">
-                                    <StackLayout paddingTop="10" (tap)="selectFriendId(item)">
-                                        <Image [src]="getImageUrl(userDict[item])" backgroundColor="gray"
-                                            stretch="aspectFill" height="64" width="64" marginLeft="10"
-                                            verticalAlignment="center" marginRight="10" borderRadius="50"></Image>
-                                        <Label class="nameLabel" text="{{userDict[item]?.displayName}}"
-                                            horizontalAlignment="center" textWrap="true"></Label>
-                                        <Image visibility="{{ (item === friendUserId) ? 'visible' : 'collapsed'}}"
-                                            src="~/assets/images/check.png" height="30" width="30" marginLeft="10"
-                                            verticalAlignment="center" marginRight="5"></Image>
-                                    </StackLayout>
+                                    <GridLayout paddingTop="10" rows="auto,*" columns="*" (tap)="selectFriendIdApp(item)">                   
+                                        <app-user-card  row="0" col="0" horizontalAlignment="center" [userId]="item" [type]="userCardType.USER_IMAGE_NAME_VERTICAL_NO_REDIRECT" > </app-user-card>
+                                        <Image row="1" col="0" visibility="{{ (item === friendUserId) ? 'visible' : 'collapsed'}}"
+                                        src="~/assets/images/check.png" height="30" width="30" marginLeft="10"
+                                        verticalAlignment="center" marginRight="5"  horizontalAlignment="center"></Image>
+                                    </GridLayout>
                                 </ng-template>
                                 <ListViewLinearLayout tkListViewLayout scrollDirection="Horizontal">
                                 </ListViewLinearLayout>

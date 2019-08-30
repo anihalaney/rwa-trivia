@@ -1,6 +1,8 @@
 import { interceptorConstants, ResponseMessagesConstants, GeneralConstants } from '../../projects/shared-library/src/lib/shared/model';
 import * as functions from 'firebase-functions';
 import * as firebase from 'firebase-admin';
+import { readFileSync } from 'fs';
+import { resolve } from 'path';
 
 export class Utils {
 
@@ -36,15 +38,11 @@ export class Utils {
 
     static sendError(res: any, error: any): void {
         console.error(GeneralConstants.Error_Message, error);
-        Utils.sendResponse(res, interceptorConstants.INTERNAL_ERROR, ResponseMessagesConstants.INTERNAL_SERVER_ERROR);
+        return Utils.sendResponse(res, interceptorConstants.INTERNAL_ERROR, ResponseMessagesConstants.INTERNAL_SERVER_ERROR);
     }
 
     static getFireStorageBucket(admin: any): any {
-        if (Utils.isEnvironmentProduction()) {
-            return admin.storage().bucket(GeneralConstants.BIT_WISER_PROD_STORAGE_BUCKET_NAME);
-        } else {
-            return admin.storage().bucket(GeneralConstants.BIT_WISER_DEV_STORAGE_BUCKET_NAME);
-        }
+        return admin.storage().bucket(Utils.getConfig().storagebucket);
     }
 
     static isEnvironmentProduction(): boolean {
@@ -59,25 +57,38 @@ export class Utils {
         // firebase -P production functions:config:set environment.production=true
         // After setting config variable do not forget to deploy functions
         // to see set environments firebase -P production functions:config:get
-        let prefix = 'dev:';
-        if (Utils.isEnvironmentProduction()) {
-            prefix = '';
-        }
-        return prefix;
+        return Utils.getConfig().esPrefix;
     }
 
     static getWebsiteUrl(): string {
-        let websiteUrl = `https://`;
-        if (Utils.isEnvironmentProduction()) {
-            websiteUrl += 'bitwiser.io';
-        } else {
-            websiteUrl += 'rwa-trivia-dev-e57fc.firebaseapp.com';
-        }
-        return websiteUrl;
+        return Utils.getConfig().websiteUrl;
     }
 
     static changeFieldValue(value): any {
         return firebase.firestore.FieldValue.increment(value);
     }
+
+    static getTimeStamp(): any {
+        return firebase.firestore.FieldValue.serverTimestamp();
+    }
+
+    static getConfig(): any {
+        let config = {};
+        try {
+            config = JSON.parse(readFileSync(resolve(__dirname, `../../../configs/${process.env.GCLOUD_PROJECT}.json`), 'utf8'));
+        } catch (e) {
+            console.error('No config found for project');
+        }
+        return config;
+    }
+
+    static getApiKey(): any {
+        return Utils.getConfig().apiKey;
+    }
+
+    static getFeedUrl(): any {
+        return Utils.getConfig().feedUrl;
+    }
+
 
 }

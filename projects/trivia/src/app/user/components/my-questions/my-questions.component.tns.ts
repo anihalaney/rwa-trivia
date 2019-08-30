@@ -1,4 +1,4 @@
-import { Component, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnDestroy, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { RouterExtensions } from 'nativescript-angular/router';
@@ -8,12 +8,14 @@ import { AppState, appState } from '../../../store';
 import { MyQuestions } from './my-questions';
 import { Page } from 'tns-core-modules/ui/page';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
-
+import { FirebaseScreenNameConstants } from 'shared-library/shared/model';
+import { Utils } from 'shared-library/core/services';
 
 @Component({
   selector: 'my-questions',
   templateUrl: './my-questions.component.html',
-  styleUrls: ['./my-questions.component.css']
+  styleUrls: ['./my-questions.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
@@ -29,9 +31,12 @@ export class MyQuestionsComponent extends MyQuestions implements OnDestroy {
 
   constructor(public store: Store<AppState>,
     public questionActions: QuestionActions,
-    private routerExtension: RouterExtensions,
-    private page: Page, private cd: ChangeDetectorRef) {
-    super(store, questionActions);
+    public routerExtension: RouterExtensions,
+    public page: Page,
+    public cd: ChangeDetectorRef,
+    private utils: Utils
+  ) {
+    super(store, questionActions, cd);
     this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
     this.subscriptions.push(this.userDict$.subscribe(userDict => {
       this.userDict = userDict;

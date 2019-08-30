@@ -1,0 +1,7 @@
+{
+    "storagebucket":"rwa-trivia-dev-e57fc.appspot.com",
+    "websiteUrl": "https://rwa-trivia-dev-e57fc.firebaseapp.com",
+    "esPrefix":"dev:",
+    "apiKey": "AIzaSyDSyR5Nqa5NVkuSZX1mSMHKEkrr6y1o-wU",
+    "feedURL":  "https://blog.realworldfullstack.io/feed"
+}

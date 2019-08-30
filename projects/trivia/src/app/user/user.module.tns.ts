@@ -11,9 +11,12 @@ import {
   InviteFriendsComponent,
   QuestionAddUpdateComponent,
   InviteFriendsDialogComponent,
-  InviteMailFriendsComponent
+  LocationResetDialogComponent,
+  PreviewQuestionDialogComponent,
+  GameProfileComponent
 } from './components';
 
+import { DropDownModule } from 'nativescript-drop-down/angular';
 @NgModule({
   declarations: [
     ProfileSettingsComponent,
@@ -22,13 +25,16 @@ import {
     InviteFriendsComponent,
     QuestionAddUpdateComponent,
     InviteFriendsDialogComponent,
-    InviteMailFriendsComponent
+    LocationResetDialogComponent,
+    PreviewQuestionDialogComponent,
+    GameProfileComponent
   ],
   imports: [
     // rwa modules
     SharedModule,
     NativeScriptRouterModule,
     UserRoutingModule,
+    DropDownModule,
 
     //ngrx feature store
     StoreModule.forFeature('user', reducer),
@@ -36,14 +42,19 @@ import {
     //ngrx effects
     EffectsModule.forFeature(effects)
 
-
   ],
   providers: [],
   exports: [
     ProfileSettingsComponent,
     QuestionAddUpdateComponent,
     MyQuestionsComponent,
-    InviteFriendsComponent
+    InviteFriendsComponent,
+    LocationResetDialogComponent,
+    GameProfileComponent
+  ],
+  entryComponents: [
+    LocationResetDialogComponent,
+    PreviewQuestionDialogComponent
   ],
   schemas: [NO_ERRORS_SCHEMA]
 })

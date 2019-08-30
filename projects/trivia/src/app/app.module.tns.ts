@@ -5,7 +5,7 @@ import { AppComponent } from './../app/components/app/app.component';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreRouterConnectingModule } from '@ngrx/router-store';
-import { reducers } from './store';
+import { reducers, metaReducers } from './store';
 import { CoreModule } from 'shared-library/core/core.module';
 import { SharedModule } from 'shared-library/shared/shared.module';
 import { HttpClientModule } from '@angular/common/http';
@@ -16,12 +16,14 @@ import { registerElement } from 'nativescript-angular/element-registry';
 import { RouterModule } from '@angular/router';
 import { RecentGameCardComponent, RecentGamesComponent, PrivacyPolicyComponent, AchievementsComponent } from './components';
 import { UserFeedbackComponent } from './components/index.tns';
-
+import { WelcomeScreenComponent } from '../../../shared-library/src/lib/shared/mobile/component';
+import { ModalDialogService } from 'nativescript-angular/modal-dialog';
 // import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 export function firebaseFactory() {
   return TNSFirebase;
 }
 
+registerElement('PreviousNextView', () => require('nativescript-iqkeyboardmanager').PreviousNextView);
 
 // registerElement('CardView', () => CardView);
 registerElement('CardView', () => require('nativescript-cardview').CardView);
@@ -34,14 +36,15 @@ registerElement('Fab', () => require('nativescript-floatingactionbutton').Fab);
     RecentGamesComponent,
     PrivacyPolicyComponent,
     AchievementsComponent,
-    UserFeedbackComponent
+    UserFeedbackComponent,
+    WelcomeScreenComponent
   ],
   imports: [
     CoreModule,
     NativeScriptModule,
     AppRoutingModule,
     EffectsModule.forRoot([]),
-    StoreModule.forRoot(reducers),
+    StoreModule.forRoot(reducers, { metaReducers }),
     StoreRouterConnectingModule.forRoot(),
     HttpClientModule,
     SharedModule,
@@ -54,6 +57,10 @@ registerElement('Fab', () => require('nativescript-floatingactionbutton').Fab);
       provide: PlatformFirebaseToken,
       useFactory: firebaseFactory
     },
+    ModalDialogService
+  ],
+  entryComponents: [
+     WelcomeScreenComponent
   ],
   bootstrap: [AppComponent],
   schemas: [NO_ERRORS_SCHEMA]

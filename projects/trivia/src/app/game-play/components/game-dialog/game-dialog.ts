@@ -12,7 +12,7 @@ import { appState, categoryDictionary } from '../../../store';
 import { gamePlayState, GamePlayState } from '../../store';
 import * as gameplayactions from '../../store/actions';
 import { GameQuestionComponent } from '../game-question/game-question.component';
-
+import { Router } from '@angular/router';
 
 export class GameDialog {
   actionBarStatus: String = 'Play Game';
@@ -61,11 +61,12 @@ export class GameDialog {
 
   private genQuestionComponent: GameQuestionComponent;
 
-  @ViewChild(GameQuestionComponent) set questionComponent(questionComponent: GameQuestionComponent) {
+  @ViewChild(GameQuestionComponent, { static: false }) set questionComponent(questionComponent: GameQuestionComponent) {
     this.genQuestionComponent = questionComponent;
   }
 
-  constructor(public store: Store<GamePlayState>, public userActions: UserActions, public utils: Utils, public cd: ChangeDetectorRef) {
+  constructor(public store: Store<GamePlayState>, public userActions: UserActions, public utils: Utils, public cd: ChangeDetectorRef
+    , public router: Router) {
 
     this.subscriptions.push(this.store.select(appState.coreState).pipe(take(1)).subscribe(s => this.user = s.user));
     this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
@@ -272,12 +273,14 @@ export class GameDialog {
       }
       this.originalAnswers = Object.assign({}, question.answers);
       this.currentQuestion = question;
+      this.currentQuestion.answers.forEach((ans, index) => {
+        ans.renderedAnswer = ans.answerText;
+      });
+
       this.calculateMaxTime();
       this.timer = this.MAX_TIME_IN_SECONDS;
       this.currentQuestion.answers = this.utils.changeAnswerOrder(this.currentQuestion.answers);
-      if (!this.userDict[this.currentQuestion.created_uid]) {
-        this.store.dispatch(this.userActions.loadOtherUserProfile(this.currentQuestion.created_uid));
-      }
+
       this.categoryName = question.categoryIds.map(category => {
         return this.categoryDictionary[category].categoryName;
       }).join(',');
@@ -325,12 +328,15 @@ export class GameDialog {
   }
 
   calculateMaxTime(): void {
-    this.applicationSettings.game_play_timer_loader_ranges.forEach((timerLoader) => {
-      if (this.currentQuestion.totalQALength > timerLoader.start && this.currentQuestion.totalQALength <= timerLoader.end) {
-        this.MAX_TIME_IN_SECONDS = timerLoader.seconds;
-      }
-    });
-
+    if (this.currentQuestion.isRichEditor && this.currentQuestion.maxTime) {
+      this.MAX_TIME_IN_SECONDS = this.currentQuestion.maxTime;
+    } else if (this.applicationSettings) {
+      this.applicationSettings.game_play_timer_loader_ranges.forEach((timerLoader) => {
+        if (this.currentQuestion.totalQALength > timerLoader.start && this.currentQuestion.totalQALength <= timerLoader.end) {
+          this.MAX_TIME_IN_SECONDS = timerLoader.seconds;
+        }
+      });
+    }
   }
 
   getNextQuestion() {
@@ -379,7 +385,8 @@ export class GameDialog {
     this.isGameLoaded = false;
     this.gameOver = true;
     this.showWinBadge = false;
-    this.store.dispatch(new gameplayactions.SetGameOver(this.game.gameId));
+    // tslint:disable-next-line:max-line-length
+    this.store.dispatch(new gameplayactions.SetGameOver({ playedGame: this.game, userId: this.user.userId, otherUserId: this.otherPlayerUserId }));
   }
 
   afterAnswer(userAnswerId?: number) {
@@ -433,6 +440,27 @@ export class GameDialog {
     this.cd.markForCheck();
   }
 
+  continueGame() {
+    this.currentQuestion = undefined;
+    this.originalAnswers = undefined;
+    if (this.turnFlag) {
+      this.continueNext = false;
+      this.store.dispatch(new gameplayactions.ResetCurrentGame());
+      this.store.dispatch(new gameplayactions.ResetCurrentQuestion());
+      this.store.dispatch(new gameplayactions.UpdateGameRound(this.game.gameId));
+      this.router.navigate(['/dashboard']);
+    } else {
+      this.questionAnswered = false;
+      this.showContinueBtn = false;
+      this.continueNext = false;
+      this.store.dispatch(new gameplayactions.ResetCurrentQuestion());
+      this.checkGameOver();
+      if (!this.gameOver) {
+        this.getLoader(false);
+      }
+    }
+  }
+
   destroy() {
     this.user = undefined;
     this.gameObs = undefined;
@@ -471,6 +499,8 @@ export class GameDialog {
     this.applicationSettings = undefined;
 
     this.genQuestionComponent = undefined;
-  }
 
+    this.store.dispatch(new gameplayactions.ResetCurrentGame());
+    this.utils.unsubscribe([this.timerSub, this.questionSub]);
+  }
 }

@@ -1,7 +1,7 @@
 import {
-    Component, OnInit, OnDestroy, ViewChild, ElementRef, AfterViewInit,
-    SimpleChanges, OnChanges, ChangeDetectionStrategy, ChangeDetectorRef
-  } from '@angular/core';
+  Component, OnInit, OnDestroy, ViewChild, ElementRef, AfterViewInit,
+  SimpleChanges, OnChanges, ChangeDetectionStrategy, ChangeDetectorRef
+} from '@angular/core';
 import { GameQuestion } from './game-question';
 @Component({
   selector: 'game-question',
@@ -11,15 +11,17 @@ import { GameQuestion } from './game-question';
 })
 export class GameQuestionComponent extends GameQuestion implements OnInit, OnDestroy, AfterViewInit, OnChanges {
 
-  @ViewChild('overlay') overlay: ElementRef;
-  @ViewChild('loader') loader: ElementRef;
+  @ViewChild('overlay', { static: false }) overlay: ElementRef;
+  @ViewChild('loader', { static: true }) loader: ElementRef;
   alpha = 0;
   setTimeOutLimit = 0;
+
   constructor(private cd: ChangeDetectorRef) {
     super();
   }
 
   ngOnInit() {
+    this.cd.markForCheck();
   }
 
   ngOnDestroy() {

@@ -1,37 +1,37 @@
 // These are important and needed before anything else
 import 'zone.js/dist/zone-node';
-import 'reflect-metadata';
-
-import { enableProdMode } from '@angular/core';
-import { ngExpressEngine } from '@nguniversal/express-engine';
-import { provideModuleMap } from '@nguniversal/module-map-ngfactory-loader';
-import { resolve } from 'path';
 import * as express from 'express';
+import * as domino from 'domino';
+import * as compression from 'compression';
+import { XMLHttpRequest } from 'xmlhttprequest';
+import { join } from 'path';
 
-const domino = require('domino');
-const compression = require('compression');
+
 const win = domino.createWindow('');
-const app = express();
 
-const path = require('path');
-let index;
 
 global['window'] = win;
+global['window']['JSON'] = JSON;
+global['window']['Promise'] = Promise;
 global['document'] = win.document;
-global['XMLHttpRequest'] = require('xmlhttprequest').XMLHttpRequest;
+global['Node'] = win['Node'];
+global['navigator'] = win.navigator;
+global['XMLHttpRequest'] = XMLHttpRequest;
+
+
+const app = express();
 
 // console.log(process.cwd());
-const DIST_FOLDER = resolve(process.cwd(), './dist');
+const DIST_FOLDER = join(process.cwd(), './dist/browser');
 // console.log(DIST_FOLDER);
 
 
 const {
   AppServerModuleNgFactory,
-  LAZY_MODULE_MAP
+  LAZY_MODULE_MAP,
+  ngExpressEngine,
+  provideModuleMap
 } = require(`./functions/dist/server/main`);
-
-enableProdMode();
-
 
 // Set the engine
 app.engine(
@@ -45,25 +45,15 @@ app.engine(
 app.set('view engine', 'html');
 app.set('views', DIST_FOLDER);
 app.use(compression());
+
+app.get('*.*', express.static(DIST_FOLDER, {
+  maxAge: '1y'
+}));
+
 // Point all routes to Universal
 app.get('*', (req, res) => {
-  // console.log('ssr url---->', req.url);
-  res.setHeader('Cache-Control', 'public, max-age=21600, s-maxage=21600');
-
-  if (req.url.includes('index.html')) {
-
-    index = (!index) ? require('fs')
-      .readFileSync(resolve(process.cwd(), './dist/index.html'), 'utf8')
-      .toString() : index;
-    // console.log('cached html---->', index);
-    res.send(index);
-  } else {
-    res.render('index', { req }, (err, html) => {
-      res.send(html);
-    });
-  }
-
+  res.render('index', { req });
 });
 
-exports.app = app;
+export default app;
 

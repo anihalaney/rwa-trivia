@@ -47,23 +47,28 @@
 
     <ng-container>
       <div class="row secondbg">
-        <h2>{{questionIndex}}. {{question.questionText}}</h2>
+        <h2>
+          <render-question [question]="question" [questionIndex]="questionIndex"></render-question> 
+        </h2>
         <ul>
           <li *ngFor="let answer of question.answers; let i=index" (click)="answerButtonClicked(answer, i)"
             [class.question-answered]="answeredIndex >= 0 || continueNext" [class.players-answer]="answeredIndex === i"
             [class.wrong]="answeredIndex === i && correctAnswerIndex !== i" [class.right]=" correctAnswerIndex === i">
-            {{answer.answerText}}
+              <render-answer [answer]="answer"></render-answer>
           </li>
         </ul>
         <div class=" col-sm-12 col-xs-12">
           <div class=" col-sm-12 col-xs-12 alignment authorPadding">
-            <author [isGamePlay]="true" [userDict]="userDict" [userId]="question.created_uid"></author>
+            <author [isGamePlay]="true" [userId]="question.created_uid"></author>
           </div>
         </div>
       </div>
       <div class="popupbottom">
-        <div class="col-md-10 col-xs-10 question-tag question-tag-space">
+        <div class="col-md-8 col-xs-8 question-tag question-tag-space">
           Tags : {{question.tags?.toString()}}
+        </div>
+        <div class="col-md-2 col-xs-2">
+          <user-reaction *ngIf="user && question && showContinueBtn" [user]='user' [question]='question'></user-reaction>
         </div>
         <div class="col-md-2 col-xs-2 continue-btn-div">
           <button mat-button *ngIf="showContinueBtn" (click)="continueClicked.emit($event)" class="startgame continue-btn">Continue</button>

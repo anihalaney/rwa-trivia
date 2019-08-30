@@ -14,7 +14,7 @@ export class GameService {
   }
 
   createNewGame(gameOptions: GameOptions, user: User): Observable<string> {
-    const url: string = CONFIG.functionsUrl + '/app/game';
+    const url = `${CONFIG.functionsUrl}/game`;
     const payload = { gameOptions: gameOptions, userId: user.userId };
     return this.http.post<string>(url, payload);
   }
@@ -123,13 +123,13 @@ export class GameService {
   }
 
   getNextQuestion(game: Game): Observable<Question> {
-    const url: string = CONFIG.functionsUrl + '/app/question/next/';
+    const url = `${CONFIG.functionsUrl}/question/next/`;
     return this.http.post<Question>(url + game.gameId, {});
   }
 
 
   addPlayerQnAToGame(gameId: string, playerQnA: PlayerQnA): Observable<any> {
-    const url = `${CONFIG.functionsUrl}/app/game/${gameId}`;
+    const url = `${CONFIG.functionsUrl}/game/${gameId}`;
     const payload = {
       playerQnA: playerQnA,
       operation: GameOperations.CALCULATE_SCORE
@@ -139,21 +139,21 @@ export class GameService {
 
 
   setGameOver(gameId: string) {
-    return this.http.put(`${CONFIG.functionsUrl}/app/game/${gameId}`,
+    return this.http.put(`${CONFIG.functionsUrl}/game/${gameId}`,
       {
         operation: GameOperations.GAME_OVER
       });
   }
 
   updateGameRound(gameId: string) {
-    return this.http.put(`${CONFIG.functionsUrl}/app/game/${gameId}`,
+    return this.http.put(`${CONFIG.functionsUrl}/game/${gameId}`,
       {
         operation: GameOperations.UPDATE_ROUND
       });
   }
 
   rejectGameInvitation(gameId: string) {
-    return this.http.put(`${CONFIG.functionsUrl}/app/game/${gameId}`,
+    return this.http.put(`${CONFIG.functionsUrl}/game/${gameId}`,
       {
         operation: GameOperations.REJECT_GAME
       });
@@ -227,16 +227,16 @@ export class GameService {
   }
 
 
-  checkUserQuestion(playerQnA: PlayerQnA): Observable<any> {
+  checkUserQuestion(playerQnA: PlayerQnA): Observable<Question> {
 
-    return this.http.post(`${CONFIG.functionsUrl}/app/question/${playerQnA.questionId}`,
+    return this.http.post<Question>(`${CONFIG.functionsUrl}/question/${playerQnA.questionId}`,
       {
         playerQnA: playerQnA
       });
   }
 
   getUsersAnsweredQuestion(userId: string, game: Game): Observable<Question[]> {
-    const observables = [];
+    const observables: Observable<Question>[] = [];
 
     for (const playerQnA of game.playerQnAs) {
       if (playerQnA.playerId === userId) {
@@ -275,11 +275,41 @@ export class GameService {
     let playerQnA = new PlayerQnA();
     playerQnA = game.playerQnAs.filter(info => info.questionId === Object.keys(report.questions)[0])[0];
     playerQnA.isReported = true;
-    const url = `${CONFIG.functionsUrl}/app/game/${game.gameId}`;
+    const url = `${CONFIG.functionsUrl}/game/${game.gameId}`;
     const payload = {
       playerQnA: playerQnA,
       operation: GameOperations.REPORT_STATUS
     };
     return this.http.put<any>(url, payload);
+  }
+
+  userReaction(questionId: string, userId: string, status: string) {
+      const collection = `questions/${questionId}/reactions`;
+      return this.dbService.getDoc(collection, userId).get().then(data => {
+        const reaction = data.data();
+          if (reaction) {
+            if (status !== reaction.status) {
+             return this.dbService.setDoc(collection, userId, { status: status }, {updatedOn: true});
+            } else {
+             return this.dbService.deleteDoc(collection, userId);
+            }
+          } else {
+            return this.dbService.setDoc(collection, userId , { status: status }, {createdOn: true, updatedOn: true});
+          }
+      });
+  }
+
+  getUserReaction(questionId: string, userId: string) {
+    return this.dbService.valueChanges(`questions/${questionId}/reactions`, userId );
+  }
+
+  getQuestion(questionId: string) {
+    return this.dbService.valueChanges(`questions`, questionId );
+  }
+
+  updateQuestionStat(questionId: string, type: string) {
+    const url = `${CONFIG.functionsUrl}/question/question-stat-update/`;
+    return this.http.post<Question>(url,
+      {questionId: questionId, type: type === 'CREATED' ? type : 'UPDATED', update: type === 'CORRECT' ? true : false });
   }
 }

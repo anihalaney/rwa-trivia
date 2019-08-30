@@ -1,6 +1,6 @@
 import {
   Component, Input, ViewChild, OnChanges, Output, EventEmitter,
-  OnInit, SimpleChanges, ChangeDetectionStrategy, OnDestroy
+  OnInit, SimpleChanges, ChangeDetectionStrategy, OnDestroy, Inject, PLATFORM_ID
 } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { map, take } from 'rxjs/operators';
@@ -15,6 +15,7 @@ import * as bulkActions from '../../../store/actions';
 import { Router } from '@angular/router';
 import { Utils } from 'shared-library/core/services';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'bulk-summary-table',
@@ -40,8 +41,8 @@ export class BulkSummaryTableComponent implements OnInit, OnChanges, OnDestroy {
 
   @Input() bulkSummaryDetailPath: String;
   @Input() showSummaryTable: boolean;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
   @Output() showBulkUploadBtn = new EventEmitter<String>();
   @Input() isArchiveBtnClicked: boolean;
   @Input() toggleValue: boolean;
@@ -50,6 +51,7 @@ export class BulkSummaryTableComponent implements OnInit, OnChanges, OnDestroy {
   constructor(
     private store: Store<AppState>,
     private storage: AngularFireStorage, private router: Router,
+    @Inject(PLATFORM_ID) private platformId: Object,
     private utils: Utils) {
     this.categoryDictObs = store.select(categoryDictionary);
 
@@ -60,7 +62,7 @@ export class BulkSummaryTableComponent implements OnInit, OnChanges, OnDestroy {
     }));
 
     this.subscriptions.push(this.store.select(bulkState).pipe(select(s => s.bulkUploadFileUrl)).subscribe((url) => {
-      if (url) {
+      if (isPlatformBrowser(this.platformId) && url) {
         const link = document.createElement('a');
         document.body.appendChild(link);
         link.href = url;

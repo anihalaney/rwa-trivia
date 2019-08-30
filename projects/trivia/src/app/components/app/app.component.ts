@@ -1,18 +1,19 @@
-import { Component, OnInit, OnDestroy, Renderer2, ViewChild } from '@angular/core';
-import { Router, NavigationEnd } from '@angular/router';
-import { Store, select } from '@ngrx/store';
+import { Component, OnDestroy, OnInit, Renderer2, ViewChild, Inject, PLATFORM_ID } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
-import { Subscription } from 'rxjs';
-import { skip, take, filter } from 'rxjs/operators';
-import { User } from 'shared-library/shared/model';
+import { NavigationEnd, Router } from '@angular/router';
+import { select, Store } from '@ngrx/store';
+import { CookieLawComponent } from 'angular2-cookie-law';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { filter, skip, take } from 'rxjs/operators';
 import { AuthenticationProvider } from 'shared-library/core/auth';
 import { Utils, WindowRef } from 'shared-library/core/services';
-import { AppState, appState } from '../../store';
-import * as gamePlayActions from '../../game-play/store/actions';
-import { UserActions, ApplicationSettingsActions } from 'shared-library/core/store/actions';
 import { coreState } from 'shared-library/core/store';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
-import { CookieLawComponent } from 'angular2-cookie-law';
+import { User, UserStatus } from 'shared-library/shared/model';
+import { ApplicationSettingsActions, UserActions, CategoryActions } from 'shared-library/core/store/actions';
+import * as gamePlayActions from '../../game-play/store/actions';
+import { AppState, appState } from '../../store';
+import { interval, Subscription } from 'rxjs';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-root',
@@ -26,8 +27,9 @@ export class AppComponent implements OnInit, OnDestroy {
   user: User;
   subscriptions = [];
   theme = '';
+  intervalSubscription: Subscription;
 
-  @ViewChild('cookieLaw')
+  @ViewChild('cookieLaw', { static: true })
   private cookieLawEl: CookieLawComponent;
 
   constructor(private renderer: Renderer2,
@@ -35,12 +37,14 @@ export class AppComponent implements OnInit, OnDestroy {
     private store: Store<AppState>,
     public router: Router,
     public snackBar: MatSnackBar,
+    @Inject(PLATFORM_ID) private platformId: Object,
     private windowRef: WindowRef,
     private userAction: UserActions,
     private applicationSettingsAction: ApplicationSettingsActions,
-    private utils: Utils) {
+    private categoryActions: CategoryActions) {
 
     this.store.dispatch(this.applicationSettingsAction.loadApplicationSettings());
+    this.store.dispatch(this.categoryActions.loadCategories());
 
     this.subscriptions.push(store.select(appState.coreState).pipe(select(s => s.user), skip(1)).subscribe(user => {
       this.user = user;
@@ -56,16 +60,32 @@ export class AppComponent implements OnInit, OnDestroy {
           this.router.navigate([url]);
         }
 
+        this.intervalSubscription = interval(1000 * 60 * 1)
+          .subscribe(val => {
+            const userStatus: UserStatus = new UserStatus();
+            userStatus.userId = this.user.userId;
+            userStatus.online = true;
+            userStatus.lastUpdated = new Date().getTime();
+            this.authService.updateUserConnection();
+            return val;
+          });
+        this.authService.updateUserConnection();
+        this.subscriptions.push(this.intervalSubscription);
+
       } else {
-        // if user logs out then redirect to home page
+        // user logs out then redirect to home page
+        if (this.intervalSubscription) {
+          this.intervalSubscription.unsubscribe();
+        }
         this.router.navigate(['/']);
       }
     }));
 
-    this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.newGameId), filter(g => g !== '')).subscribe(gameObj => {
-      this.router.navigate(['/game-play', gameObj['gameId']]);
-      this.store.dispatch(new gamePlayActions.ResetCurrentQuestion());
-    }));
+    this.subscriptions.push(this.store.select(appState.coreState)
+      .pipe(select(s => s.newGameId), filter(g => g !== '')).subscribe(gameObj => {
+        this.router.navigate(['/game-play', gameObj['gameId']]);
+        this.store.dispatch(new gamePlayActions.ResetCurrentQuestion());
+      }));
 
     this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe(status => {
       if (status === 'MAKE FRIEND SUCCESS') {
@@ -81,14 +101,9 @@ export class AppComponent implements OnInit, OnDestroy {
       if (!(evt instanceof NavigationEnd)) {
         return;
       }
-      if (this.windowRef && this.windowRef.nativeWindow) {
-        if (this.windowRef.nativeWindow.ga) {
-          this.windowRef.nativeWindow.ga('set', 'page', evt.urlAfterRedirects);
-          this.windowRef.nativeWindow.ga('send', 'pageview');
-        }
-        if (this.windowRef.nativeWindow.scrollTo) {
-          this.windowRef.nativeWindow.scrollTo(0, 0);
-        }
+      if (isPlatformBrowser(this.platformId) && this.windowRef && this.windowRef.nativeWindow) {
+        this.windowRef.addNavigationsInAnalytics(evt);
+        this.windowRef.scrollDown();
       }
     }));
   }
@@ -107,13 +122,16 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   toggleTheme() {
-    if (this.theme === '') {
-      this.theme = 'dark';
-      this.renderer.addClass(document.body, this.theme);
-    } else {
-      this.renderer.removeClass(document.body, this.theme);
-      this.theme = '';
+    if (isPlatformBrowser(this.platformId)) {
+      if (this.theme === '') {
+        this.theme = 'dark';
+        this.renderer.addClass(document.body, this.theme);
+      } else {
+        this.renderer.removeClass(document.body, this.theme);
+        this.theme = '';
+      }
     }
+
   }
   cookiesAccepted() {
     this.cookieLawEl.dismiss();

@@ -3,7 +3,7 @@
 .T-tagging{ font-size: 14px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0px;word-break: break-all;height: 40px;}
 .innerli .yourimg{ width: 94%; max-width: 70px; border-radius: 50%; height: auto; /*box-shadow: 0 3px 7px rgba(0,0,0,0.25);*/ margin-bottom: 16px; border:1px solid; padding: 2px}
 .yourimg img{ display: block; width: 70px; height: 60px; border-radius: 50% }
-.vs:after{ content: "Vs"; position: absolute; right: -10px; top: 25px; font-size: 18px; font-family: 'hindmedium';height:25px; }
+.vs {position: absolute;top: 24px;font-size: 18px;font-family: hindmedium;height: 25px;right: -9px;color: #7c7c7c;background: #FFF;}
 .light{font-family: 'hindmedium';}
 .owl-item .col-md-3{ width: 100% }
 

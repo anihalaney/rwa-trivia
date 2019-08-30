@@ -1,11 +1,11 @@
 import { Component, EventEmitter, OnInit, Output, ViewContainerRef, OnDestroy, ElementRef, ViewChild } from '@angular/core';
 import { RouterExtensions } from 'nativescript-angular/router';
 import { RadSideDrawer } from 'nativescript-ui-sidedrawer';
-import * as app from 'application';
+import * as app from 'tns-core-modules/application';
 import * as firebase from 'nativescript-plugin-firebase';
 import { isAndroid } from 'tns-core-modules/platform';
 import { Store, select } from '@ngrx/store';
-import { User, ApplicationSettings } from './../../../../shared/model';
+import { User, ApplicationSettings, Parameter, DeviceToken, TriggerConstants, DrawerConstants } from './../../../../shared/model';
 import { UserActions } from '../../../../core/store/actions';
 import { CoreState, coreState } from '../../../../core/store';
 import { AuthenticationProvider } from './../../../../core/auth/authentication.provider';
@@ -15,6 +15,7 @@ import { Category } from './../../../model';
 import { Router, NavigationEnd, NavigationStart } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { projectMeta } from 'shared-library/environments/environment';
 
 @Component({
     moduleId: module.id,
@@ -27,9 +28,9 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class DrawerComponent implements OnInit, OnDestroy {
 
-    @ViewChild('ScrollList') scrollList: ElementRef;
+    @ViewChild('ScrollList', { static: false }) scrollList: ElementRef;
     @Output() output = new EventEmitter();
-    photoUrl = '~/assets/icons/icon-192x192.png';
+    photoUrl = `~/assets/icons/${projectMeta.projectName}/icon-192x192.png`;
     currentState;
     user: User;
     categoriesObs: Observable<Category[]>;
@@ -61,14 +62,15 @@ export class DrawerComponent implements OnInit, OnDestroy {
                     this.activeMenu = 'Recently Completed Games';
                 } else if (nav.includes('/user/my/profile')) {
                     this.activeMenu = 'Profile';
+                } else if (nav.includes('/user/my/game-profile')) {
+                    this.activeMenu = 'Game Profile';
                 } else if (nav === '/user/my/questions') {
                     this.activeMenu = 'My Questions';
                 } else if (nav === '/user/my/invite-friends') {
                     this.activeMenu = 'Friend List';
-                }  else if (nav === '/privacy-policy' || nav === '/terms-and-conditions' || nav === '/user-feedback') {
+                } else if (nav === '/privacy-policy' || nav === '/terms-and-conditions' || nav === '/user-feedback') {
                     this.activeMenu = 'Help';
-                }
-                else if (nav === '/achievements') {
+                } else if (nav === '/achievements') {
                     this.activeMenu = 'achievements';
                 }
 
@@ -80,9 +82,23 @@ export class DrawerComponent implements OnInit, OnDestroy {
         });
         this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
             if (appSettings) {
-              this.applicationSettings = appSettings[0];
+                this.applicationSettings = appSettings[0];
             }
-          }));
+        }));
+
+        this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.userUpdateStatus)).subscribe(status => {
+            if (status !== null) {
+                switch (status) {
+                    case DrawerConstants.UPDATE_TOKEN_STATUS:
+                        this.authProvider.updateUserConnection();
+                        break;
+                    case DrawerConstants.LOGOUT:
+                        this.resetValues();
+                        break;
+                }
+            }
+        }));
+
         this.subscriptions.push(this.categoriesObs);
     }
     ngOnInit() {
@@ -93,29 +109,40 @@ export class DrawerComponent implements OnInit, OnDestroy {
                 if (!this.pushToken) {
                     firebase.getCurrentPushToken().then((token) => {
                         this.pushToken = token;
+                        this.authProvider.updateDevicePushToken(token);
+                        const deviceToken: DeviceToken = new DeviceToken();
+                        deviceToken.token = token;
+                        deviceToken.online = true;
                         if (isAndroid) {
                             user.androidPushTokens = (user.androidPushTokens) ? user.androidPushTokens : [];
-                            if (user.androidPushTokens.indexOf(token) === -1) {
+                            if (user.androidPushTokens
+                                .findIndex((androidPushToken) =>
+                                    (androidPushToken === token ||
+                                        (androidPushToken && androidPushToken.token && androidPushToken.token === token))) === -1) {
                                 console.log('Android token', token);
-                                user.androidPushTokens.push(token);
-                                this.updateUser(user);
+                                user.androidPushTokens.push(deviceToken);
+                                this.updateUser(user, DrawerConstants.UPDATE_TOKEN_STATUS);
+                            } else {
+                                this.authProvider.updateUserConnection();
                             }
+
                         } else {
                             user.iosPushTokens = (user.iosPushTokens) ? user.iosPushTokens : [];
-                            if (user.iosPushTokens.indexOf(token) === -1) {
+                            if (user.iosPushTokens
+                                .findIndex((iosPushToken) =>
+                                    (iosPushToken === token ||
+                                        (iosPushToken && iosPushToken.token && iosPushToken.token === token))) === -1) {
                                 console.log('ios token', token);
-                                user.iosPushTokens.push(token);
-                                this.updateUser(user);
+                                user.iosPushTokens.push(deviceToken);
+                                this.updateUser(user, DrawerConstants.UPDATE_TOKEN_STATUS);
+                            } else {
+                                this.authProvider.updateUserConnection();
                             }
+
                         }
                         this.user = user;
                     });
                 }
-            } else if (this.logOut) {
-                /* We have used Timout because authprovide.logout() gives permission_denied error without timeout */
-                setTimeout(() => {
-                    this.resetValues();
-                }, 2000);
             }
         }));
     }
@@ -142,29 +169,72 @@ export class DrawerComponent implements OnInit, OnDestroy {
 
     logout() {
         this.logOut = true;
-        if (isAndroid && this.user.androidPushTokens && this.user.androidPushTokens.indexOf(this.pushToken) > -1) {
-            this.user.androidPushTokens.splice(this.user.androidPushTokens.indexOf(this.pushToken), 1);
-            this.updateUser(this.user);
-        } else if (this.user.iosPushTokens && this.user.iosPushTokens.indexOf(this.pushToken) > -1) {
-            this.user.iosPushTokens.splice(this.user.iosPushTokens.indexOf(this.pushToken), 1);
-            this.updateUser(this.user);
+        this.setLogoutFirebaseAnalyticsParameter(this.user);
+        if (isAndroid && this.user.androidPushTokens) {
+            const index = this.user.androidPushTokens
+                .findIndex((androidPushToken) =>
+                    (androidPushToken === this.pushToken ||
+                        (androidPushToken && androidPushToken.token && androidPushToken.token === this.pushToken)));
+            if (index > -1) {
+                this.user.androidPushTokens.splice(index, 1);
+                this.updateUser(this.user, DrawerConstants.LOGOUT);
+            } else {
+                this.resetValues();
+            }
+        } else if (this.user.iosPushTokens) {
+            const index = this.user.iosPushTokens
+                .findIndex((iosPushToken) =>
+                    (iosPushToken === this.pushToken ||
+                        (iosPushToken && iosPushToken.token && iosPushToken.token === this.pushToken)));
+            if (index > -1) {
+                this.user.iosPushTokens.splice(index, 1);
+                this.updateUser(this.user, DrawerConstants.LOGOUT);
+            } else {
+                this.resetValues();
+            }
         } else {
             this.resetValues();
         }
+    }
 
-        this.activeMenu = 'Home';
-        this.closeDrawer();
-        this.routerExtension.navigate(['/dashboard'], { clearHistory: true });
+    setLogoutFirebaseAnalyticsParameter(user: User) {
+
+        const analyticsParameter: Parameter[] = [];
+
+        const userId: Parameter = {
+            key: 'userId',
+            value: user.userId
+        };
+        analyticsParameter.push(userId);
+
+        console.log('analyticsParameter ==> ', analyticsParameter);
+
+        firebase.analytics.logEvent({
+            key: 'user_logout',
+            parameters: analyticsParameter
+        }).then(() => {
+            console.log('user_logout event slogged');
+        });
+
     }
 
     resetValues() {
-        this.logOut = false;
-        this.pushToken = undefined;
+
         this.authProvider.logout();
+        /* We have used Timeout because authprovide.logout() nullify object after some time */
+        setTimeout(() => {
+            this.logOut = false;
+            this.pushToken = undefined;
+            this.activeMenu = 'Home';
+            this.closeDrawer();
+            this.store.dispatch(this.userActions.loginSuccess(null));
+            this.routerExtension.navigate(['/dashboard'], { clearHistory: true });
+        }, 2000);
+
     }
 
-    updateUser(user: User) {
-        this.store.dispatch(this.userActions.updateUser(user));
+    updateUser(user: User, status: string) {
+        this.store.dispatch(this.userActions.updateUser(user, status));
     }
 
     recentGame() {
@@ -174,6 +244,11 @@ export class DrawerComponent implements OnInit, OnDestroy {
 
     navigateToProfileSettings() {
         this.routerExtension.navigate(['/user/my/profile', this.user.userId]);
+        this.closeDrawer();
+    }
+
+    navigateToGameProfile() {
+        this.routerExtension.navigate(['/user/my/game-profile', this.user.userId]);
         this.closeDrawer();
     }
 

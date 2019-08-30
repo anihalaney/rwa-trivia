@@ -34,36 +34,71 @@
 
       <!-- Enter Your Question -->
       <div class="enterquestion secondbg">
+        <div class="optionbox" style="margin-bottom:20px;" *ngIf="applicationSettings.enabled_rich_editor">
+          <label><span class="label-richtext">Rich Editor:</span></label>
+          <mat-checkbox mdPrefix formControlName="isRichEditor"></mat-checkbox>
+        </div>
+
         <div class="optionbox">
           <h2><span>Enter Your Question:</span></h2>
-          <textarea class="qinput" placeholder="Enter Your Question" formControlName="questionText" class="required"
-            aria-label="question-area"></textarea>
+
+          <textarea *ngIf="!questionForm.value.isRichEditor" class="qinput" placeholder="Enter Your Question"
+            formControlName="questionText" class="required" aria-label="question-area"></textarea>
+
+          <ng-quill-tex *ngIf="questionForm.value.isRichEditor" [modules]="quillConfig" (textChanged)="onTextChanged($event)"
+            (fileUploaded)="fileUploaded($event)" [imageUrl]="quillImageUrl" [group]="questionForm" [controlName]="'questionText'">
+          </ng-quill-tex>
+
           <div *ngIf="!questionForm.controls.questionText.valid && questionForm.controls.questionText.touched && questionForm.controls.questionText.errors">
             <p *ngIf="questionForm.controls.questionText.errors.required" class="error">Question is required!</p>
-            <p *ngIf="questionForm.controls.questionText.errors.maxlength" class="error">{{this.applicationSettings.question_max_length}} characters are allowed</p>
+            <!-- <p *ngIf="questionForm.controls.questionText.errors.maxlength" class="error">{{this.applicationSettings.question_max_length}} characters are allowed</p> -->
           </div>
 
+          <div class="form-group" *ngIf="questionForm.value.isRichEditor" style="margin-top:15px;">
+            <h2><span>Select a Max time:</span></h2>
+            <div class="formfield">
+              <select placeholder="Select Max time" class="required" formControlName="maxTime">
+                <option value="">
+                  Select a Max time
+                </option>
+                <option *ngFor="let maxTime of applicationSettings.game_play_max_time" [value]="maxTime">
+                  {{maxTime}}
+                </option>
+              </select>
+              <p *ngIf="questionForm.controls.maxTime.errors && !questionForm.controls.maxTime.pristine" class="error">
+                Select a max time
+              </p>
+            </div>
+          </div>
 
           <h3>Answers</h3>
           <ng-container formArrayName="answers">
             <div *ngFor="let answer of answers.controls; let i=index" [formGroupName]="i" class="formfield">
+              <div class="optionbox col-md-12" style="margin-bottom:20px;" *ngIf="applicationSettings.enabled_rich_editor">
+                <label><span class="label-richtext">Rich Editor:</span></label>
+                <input type="checkbox" formControlName="isRichEditor">
+              </div>
+
+
               <label>
                 <input type="checkbox" formControlName="correct">
               </label>
-              <input [placeholder]="'Enter Option ' + (i+1)" formControlName="answerText" type="text" class="required"
-                aria-label="answer-text">
-              <p *ngIf="(i%2 === 0) " [ngClass]=" 
-                 (!answers.controls[i].controls.answerText.valid
-                 && answers.controls[i].controls.answerText.errors 
-                 &&  answers.controls[i].controls.answerText.errors.maxlength) ? 'show-answer-text' : 'hide-answer-text'"
-                class="error left-question">
-                {{this.applicationSettings.answer_max_length}} characters are allowed</p>
-              <p *ngIf="(i%2 !== 0) " [ngClass]=" 
-                 (!answers.controls[i].controls.answerText.valid
-                 && answers.controls[i].controls.answerText.errors 
-                 &&  answers.controls[i].controls.answerText.errors.maxlength) ? 'show-answer-text' : 'hide-answer-text'"
-                class="error right-question">
-                {{this.applicationSettings.answer_max_length}} characters are allowed</p>
+
+              <input *ngIf="!answer.value.isRichEditor" [placeholder]="'Enter Option ' + (i+1)" formControlName="answerText"
+                type="text" class="required" aria-label="answer-text">
+
+              <div class="mathseditor" *ngIf="answer.value.isRichEditor">
+                <ng-quill-tex [modules]="quillConfig" (textChanged)="onAnswerChanged($event,i)" (fileUploaded)="fileUploaded($event)"
+                  [imageUrl]="quillImageUrl" [controlName]="'answerText'">
+                </ng-quill-tex>
+              </div>
+ 
+
+              <p [ngClass]="(!answer.controls.answerText.valid
+              && answer.controls.answerText.errors 
+              &&  answer.controls.answerText.errors.maxlength) ? 'show-answer-text' : 'hide-answer-text'"
+             class="error">
+             {{applicationSettings.answer_max_length}} characters are allowed</p>
             </div>
           </ng-container>
           <div class="error" *ngIf="!answers.valid && answers.touched">
@@ -98,7 +133,9 @@
               </div>
             </div>
           </div>
-          <div class="btnbox">
+
+          <div class="btnbox" layout-padding>
+            <button class="btn startg" type="submit" (click)="preview()" [disabled]="!questionForm.valid">PREVIEW</button>
             <button class="btn startg" type="submit" (click)="submit()" [disabled]="!questionForm.valid">SUBMIT</button>
           </div>
         </div>
@@ -136,7 +173,7 @@
           <mat-form-field class="full-width">
             <mat-checkbox mdPrefix formControlName="correct"></mat-checkbox>
             <input matInput [placeholder]="'Answer ' + (i+1)" formControlName="answerText" aria-label="answerText" />
-            <mat-hint align="end" *ngIf="answers.controls[i].controls.answerText.errors && !answers.controls[i].controls.answerText.pristine"
+            <mat-hint align="end"
               class="error">Answer required</mat-hint>
           </mat-form-field>
         </div>

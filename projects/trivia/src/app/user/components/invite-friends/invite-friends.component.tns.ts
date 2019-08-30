@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, OnInit, NgZone, OnDestroy } from '@angular/core';
+import { Component, OnInit, NgZone, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { Utils } from 'shared-library/core/services';
 import { AppState } from '../../../store';
 import { Store } from '@ngrx/store';
@@ -6,6 +6,7 @@ import { UserActions } from 'shared-library/core/store/actions';
 import { InviteFriends } from './invite-friends';
 import { RouterExtensions } from 'nativescript-angular/router';
 import { Page } from 'tns-core-modules/ui/page/page';
+import { FirebaseScreenNameConstants } from 'shared-library/shared/model';
 
 @Component({
   selector: 'app-invite-friends',
@@ -19,8 +20,8 @@ export class InviteFriendsComponent extends InviteFriends implements OnInit, OnD
   renderView = false;
 
   constructor(public store: Store<AppState>, public userActions: UserActions, public utils: Utils,
-    private routerExtension: RouterExtensions, private page: Page, private ngZone: NgZone) {
-    super(store, userActions, utils);
+    private routerExtension: RouterExtensions, private page: Page, private ngZone: NgZone, public cd: ChangeDetectorRef) {
+    super(store, userActions, utils, cd);
   }
 
   ngOnInit() {
@@ -28,7 +29,7 @@ export class InviteFriendsComponent extends InviteFriends implements OnInit, OnD
     this.page.on('loaded', () => this.ngZone.run(() => this.renderView = true));
   }
   navigateToInvite() {
-    this.routerExtension.navigate(['user/my/app-invite-friends-dialog']);
+    this.routerExtension.navigate(['/user/my/app-invite-friends-dialog', { showSkip: false }]);
   }
   ngOnDestroy() {
     this.page.off('loaded');

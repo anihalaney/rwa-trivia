@@ -1,12 +1,15 @@
 import { ESUtils } from '../utils/ESUtils';
 import {
     SearchCriteria, Game, PlayerQnA, Question,
-    PlayerMode, QuestionStatus, interceptorConstants, ResponseMessagesConstants, CollectionConstants, QuestionsConstants
+    PlayerMode, QuestionStatus, interceptorConstants, ResponseMessagesConstants, CollectionConstants, QuestionsConstants,
+    HeaderConstants
 } from '../../projects/shared-library/src/lib/shared/model';
 import { GameMechanics } from '../utils/game-mechanics';
 import { Utils } from '../utils/utils';
 import { QuestionService } from '../services/question.service';
 import { GameService } from '../services/game.service';
+import { StatsService } from '../services/stats.service';
+
 
 export class QuestionController {
 
@@ -52,14 +55,12 @@ export class QuestionController {
             const userId = req.user.uid;
             const gameId = req.params.gameId;
             const g = await GameService.getGameById(gameId);
-
             if (!g) {
                 // game not found
                 Utils.sendResponse(res, interceptorConstants.FORBIDDEN, ResponseMessagesConstants.GAME_NOT_FOUND);
             }
 
             const game: Game = g;
-            // console.log(game);
 
             if (game.playerIds.indexOf(userId) < 0) {
                 // user not part of this game
@@ -160,6 +161,50 @@ export class QuestionController {
             }
             await Promise.all(questionUpdatePromises);
             Utils.sendResponse(res, interceptorConstants.SUCCESS, ResponseMessagesConstants.UNPUBLISHED_STATUS_CHANGED);
+        } catch (error) {
+            Utils.sendError(res, error);
+        }
+    }
+
+    static async uploadQuestionImage(req, res): Promise<any> {
+        const questionImage = req.body.image;
+        if (questionImage) {
+            const imageName = new Date().getTime();
+            await QuestionService.uploadImage(questionImage, imageName);
+            // QuestionService.generateQuesitonImage(imageName);
+            Utils.sendResponse(res, interceptorConstants.SUCCESS, { name: imageName });
+        } else {
+            Utils.sendResponse(res, interceptorConstants.SUCCESS, ResponseMessagesConstants.UNPUBLISHED_STATUS_CHANGED);
+        }
+    }
+
+    static async getQuestionImage(req, res): Promise<any> {
+        const imageName = req.params.imageName;
+        if (imageName) {
+            try {
+                const stream = await QuestionService.generateQuesitonImage(imageName);
+                res.setHeader(HeaderConstants.CONTENT_DASH_DISPOSITION,
+                    HeaderConstants.ATTACHMENT_QUESTION_IMAGE_PNG);
+                res.setHeader(HeaderConstants.CONTENT_DASH_TYPE, HeaderConstants.IMAGE_FORWARD_SLASH_JPEG);
+                Utils.sendResponse(res, interceptorConstants.SUCCESS, stream);
+            } catch (error) {
+                Utils.sendError(res, error);
+            }
+        } else {
+            Utils.sendResponse(res, interceptorConstants.BAD_REQUEST, ResponseMessagesConstants.BAD_REQUEST);
+        }
+    }
+
+    /**
+     * update question state
+     * return status
+     */
+    static async updateQuestionStat(req, res) {
+        try {
+            const questionId = req.body.questionId;
+            const type = req.body.type;
+            const update = req.body.update;
+            Utils.sendResponse(res, interceptorConstants.SUCCESS, await  StatsService.updateQuestionStats(questionId, type , update));
         } catch (error) {
             Utils.sendError(res, error);
         }

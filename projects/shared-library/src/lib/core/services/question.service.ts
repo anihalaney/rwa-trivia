@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable, of, combineLatest } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { CONFIG } from '../../environments/environment';
@@ -11,7 +11,6 @@ import { Store } from '@ngrx/store';
 import { CoreState } from '../store';
 import { QuestionActions } from '../store/actions';
 import { DbService } from './../db-service';
-
 @Injectable()
 export class QuestionService {
 
@@ -24,13 +23,13 @@ export class QuestionService {
 
   // Elasticsearch
   getQuestionOfTheDay(isNextQuestion: boolean): Observable<Question> {
-    let url: string = CONFIG.functionsUrl + '/app/question/day';
+    let url = `${CONFIG.functionsUrl}/question/day`;
     url = (isNextQuestion) ? `${url}/next` : `${url}/current`;
     return this.http.get<Question>(url);
   }
 
   getQuestions(startRow: number, pageSize: number, criteria: SearchCriteria): Observable<SearchResults> {
-    const url: string = CONFIG.functionsUrl + '/app/question/';
+    const url = `${CONFIG.functionsUrl}/question/`;
 
     return this.http.post<SearchResults>(url + startRow + '/' + pageSize, criteria);
   }
@@ -178,4 +177,16 @@ export class QuestionService {
       );
     });
   }
+
+  saveQuestionImage(image: any, fileName) {
+    const url = `${CONFIG.functionsUrl}/question/uploadQuestionImage`;
+    return this.http.post<any>(url, { image: image });
+
+  }
+
+
+  getQuestionDownloadUrl(image: string) {
+    return this.dbService.getFireStorageReference(image).getDownloadURL();
+  }
+
 }

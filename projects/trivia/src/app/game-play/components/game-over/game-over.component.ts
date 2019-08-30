@@ -1,4 +1,7 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, Renderer2, ViewContainerRef } from '@angular/core';
+import {
+  ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy,
+  OnInit, Renderer2, ViewContainerRef, Inject, PLATFORM_ID
+} from '@angular/core';
 import { MatDialog, MatDialogRef, MatSnackBar } from '@angular/material';
 import { select, Store } from '@ngrx/store';
 import * as domtoimage from 'dom-to-image';
@@ -6,11 +9,13 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { Utils, WindowRef } from 'shared-library/core/services';
 import { coreState } from 'shared-library/core/store';
 import { UserActions } from 'shared-library/core/store/actions';
+import { appConstants } from 'shared-library/shared/model';
 import * as dashboardactions from '../../../dashboard/store/actions';
 import { AppState, appState } from '../../../store';
 import { gamePlayState } from '../../store';
 import { ReportGameComponent } from '../report-game/report-game.component';
 import { GameOver } from './game-over';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'game-over',
@@ -31,6 +36,7 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
     public dialog: MatDialog,
     private renderer: Renderer2,
     public userActions: UserActions,
+    @Inject(PLATFORM_ID) private platformId: Object,
     private windowRef: WindowRef,
     public utils: Utils,
     public snackBar: MatSnackBar,
@@ -62,11 +68,13 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
       if (uploadTask != null) {
         if (uploadTask.task.snapshot.state === 'success') {
           const path = uploadTask.task.snapshot.metadata.fullPath.split('/');
-          // tslint:disable-next-line:max-line-length
-          const url = `https://${this.windowRef.nativeWindow.location.hostname}/app/game/social/${this.user.userId}/${path[path.length - 1]}`;
-          this.socialFeedData.share_status = true;
-          this.socialFeedData.link = url;
-          this.loaderStatus = false;
+          if (isPlatformBrowser(this.platformId)) {
+            // tslint:disable-next-line:max-line-length
+            const url = `https://${this.windowRef.nativeWindow.location.hostname}/${appConstants.API_VERSION}/game/social/${this.user.userId}/${path[path.length - 1]}`;
+            this.socialFeedData.share_status = true;
+            this.socialFeedData.link = url;
+            this.loaderStatus = false;
+          }
         }
       } else {
         this.socialFeedData.share_status = false;
@@ -82,6 +90,9 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
     }
   }
 
+
+
+
   reportQuestion(question) {
     setTimeout(() => this.openDialog(question), 0);
   }
@@ -95,7 +106,9 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
     this.dialogRef.componentInstance.ref = this.dialogRef;
 
     this.subscriptions.push(this.dialogRef.afterOpen().subscribe(x => {
-      this.renderer.addClass(document.body, 'dialog-open');
+      if (isPlatformBrowser(this.platformId)) {
+        this.renderer.addClass(document.body, 'dialog-open');
+      }
     }));
     this.subscriptions.push(this.dialogRef.afterClosed().subscribe(x => {
       this.dialogRef = null;
@@ -105,21 +118,22 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
   shareScore() {
     this.loaderStatus = true;
     this.playerUserName = this.user.displayName;
-    setTimeout(() => {
-      const node = document.getElementById('share-content');
-      domtoimage.toPng(node)
-        .then((dataUrl) => {
-          this.store.dispatch(new dashboardactions.LoadSocialScoreShareUrl({
-            imageBlob: this.utils.dataURItoBlob(dataUrl),
-            userId: this.user.userId
-          }));
-          this.playerUserName = 'You';
-        })
-        .catch((error) => {
-          console.error('oops, something went wrong!', error);
-        });
-    }, 2000);
-
+    if (isPlatformBrowser(this.platformId)) {
+      setTimeout(() => {
+        const node = document.getElementById('share-content');
+        domtoimage.toPng(node)
+          .then((dataUrl) => {
+            this.store.dispatch(new dashboardactions.LoadSocialScoreShareUrl({
+              imageBlob: this.utils.dataURItoBlob(dataUrl),
+              userId: this.user.userId
+            }));
+            this.playerUserName = 'You';
+          })
+          .catch((error) => {
+            console.error('oops, something went wrong!', error);
+          });
+      }, 2000);
+    }
   }
 
   loadImages(sources, callback) {

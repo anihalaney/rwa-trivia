@@ -1,7 +1,7 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "module": "es2015",
+    "module": "esnext",
     "moduleResolution": "node",
     "baseUrl": "./",
     "paths": {
@@ -23,6 +23,7 @@
     "**/*.spec.ts",
     "server.ts",
     "./projects/shared-library/src/lib/shared/components/*",
+    "**/quill-module/*"
   ],
   "include": [
     "./projects/shared-library/src/lib/shared",

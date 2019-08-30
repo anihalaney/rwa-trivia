@@ -5,7 +5,7 @@ import { QuestionActions, GameActions, UserActions } from 'shared-library/core/s
 import { Utils, WindowRef } from 'shared-library/core/services';
 import { AppState } from '../../../store';
 import { Dashboard } from './dashboard';
-
+import { Router } from '@angular/router';
 @Component({
   selector: 'dashboard',
   templateUrl: './dashboard.component.html',
@@ -20,7 +20,8 @@ export class DashboardComponent extends Dashboard implements OnInit {
     @Inject(PLATFORM_ID) platformId: Object,
     utils: Utils,
     ngZone: NgZone,
-    cd: ChangeDetectorRef
+    cd: ChangeDetectorRef,
+    public router: Router
     ) {
     super(store,
       questionActions,
@@ -80,6 +81,21 @@ export class DashboardComponent extends Dashboard implements OnInit {
 
       }
     }
+  }
+
+  startNewGame(mode: string) {
+
+    if (this.applicationSettings && this.applicationSettings.lives.enable) {
+      if (this.account && this.account.lives > 0) {
+        console.log('mode::', mode);
+        this.router.navigate(['/game-play/game-options', mode]);
+      } else if (!this.account) {
+        this.router.navigate(['/game-play/game-options', mode]);
+      }
+    } else {
+      this.router.navigate(['/game-play/game-options', mode]);
+    }
+
   }
 }
 

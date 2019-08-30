@@ -4,6 +4,10 @@ import { RecentGamesComponent } from './../components/recent-games/recent-games.
 import { PrivacyPolicyComponent } from './../components/privacy-policy/privacy-policy.component';
 import { AchievementsComponent } from '../components';
 import { UserFeedbackComponent } from 'shared-library/shared/mobile/component/user-feedback/user-feedback.component';
+import { SignupExtraInfoComponent } from 'shared-library/shared/components/signup-extra-info/signup-extra-info.component'
+import { FirstQuestionComponent } from 'shared-library/shared/mobile/component/first-question/first-question.component';
+import { SelectCategoryTagComponent } from 'shared-library/shared/mobile/component/select-category-tag/select-category-tag.component';
+import { NotificationComponent } from 'shared-library/shared/mobile/component/notification/notification.component';
 
 export const routes: Routes = [
 
@@ -43,6 +47,26 @@ export const routes: Routes = [
     {
         path: 'achievements',
         component: AchievementsComponent,
+        canActivate: [AuthGuard]
+    },
+    {
+        path: 'signup-extra-info',
+        component: SignupExtraInfoComponent,
+        canActivate: [AuthGuard]
+    },
+    {
+        path: 'first-question',
+        component: FirstQuestionComponent,
+        canActivate: [AuthGuard]
+    },
+    {
+        path: 'select-category-tag',
+        component: SelectCategoryTagComponent,
+        canActivate: [AuthGuard]
+    },
+    {
+        path: 'notification',
+        component: NotificationComponent,
         canActivate: [AuthGuard]
     }
 ];

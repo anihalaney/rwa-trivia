@@ -20,6 +20,35 @@
 .margin-top-10{
   margin-top:10px;
 }
+.startgame {
+  min-width: 190px;
+
+  font-family: "hindsemibold";
+  text-transform: uppercase;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  line-height: 34px;
+  border-radius: 4px;
+  display: inline-block;
+  text-align: center;
+  letter-spacing: 1px;
+  width: 100%;
+  font-size: 14px;
+}
+
+.startgame:disabled {
+  background: silver;
+}
+
+.min-startgame {
+  min-width: 230px;
+  text-align: left !important;
+  padding-left: 24px !important;
+}
+.new-game-btn-container{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 .enterquestion{ margin-top: 25px; background-color: #f1f2f2; }
 .upload-avatar-container{position: relative; min-height: 250px;}
 .file-upload-container{display: flex;justify-content: center}
@@ -96,7 +125,7 @@ form .tags{padding-top:5px;}
 .input-edit input:hover::before{ opacity: 0.5 }
 .field-save-icon{right: 8px;content: ""; position: absolute; right: 7px; bottom: 7px; width: 28px; height: 28px; background: url(/assets/images/check.png) no-repeat; background-size: 28px 28px; transition: 0.3s ease-in-out}
 
-.input-edit > input {padding: 10px 25px; font-size: 18px; display: inline-block; width: calc(100% - 34px);
+.input-edit > input { font-size: 18px; display: inline-block; width: calc(100% - 34px);
   box-shadow: inset 5px 5px 5px rgba(0, 0, 0, 0.06);
   border-color: #9a9a9a;
   width: 116%;width: 100%;padding-right: 45px;
@@ -135,11 +164,40 @@ input:disabled { background-color: #fff; }
     color: #3b5998;
   }
 }
+.friends-div{
+  display: flex;
+  flex-direction: column;
+  margin-top: -13px;
+  cursor: pointer;
+  div{
+    img{
+      width: 62px;
+      height: 62px;
+    }
+  }
+}
 
+
+.is-friend-span{
+  margin-top: -13px;
+  color: #71b02f;
+}
+.send-friend-request-span{
+  margin-top: -13px;  
+  color: #f50057;
+}
 .viewtext{ width:63%; }
 .mt-0{ margin-top: 0px !important;}
 @media screen and (max-width:767px){
   .tagging input{ line-height: 24px;padding: 4px 10px;border-radius: 3px;display: block; width: calc(100% - 34px);}
+  .get-location{
+    position: absolute !important;
+    right: 55px !important;
+    padding: 5px 15px !important;
+    width: auto !important;
+    margin-top: 5px !important;
+  }
+
 }
 /*Custom File Upload End*/
 @media screen and ( min-width:767px){
@@ -165,6 +223,7 @@ input:disabled { background-color: #fff; }
   .displayfield .formfield > label{ width: 54% }
   .displayfield .formfield > input{ width: 35% }
   .displayfield .formfield > p{ margin-left: calc(55% + 4px ) }   
+
 }
 @media screen and ( min-width:1000px){
   .optionbox > .row > .col-sm-9, .optionbox > .row > .col-sm-3{ padding-left: 0; padding-right: 0 }
@@ -220,7 +279,6 @@ input:disabled { background-color: #fff; }
   .show-more{
     cursor: pointer;
   }
-
 
 }
 
@@ -282,10 +340,40 @@ input:disabled { background-color: #fff; }
   .location-error {
     margin-left: 0px;
   }
+  .get-location{
+    position: absolute !important;
+    right: 55px !important;
+    padding: 5px 15px !important;
+    width: auto !important;
+    margin-top: 5px !important;
+  }
 
 }
 
+.lives {
+  border: 2px solid #fff;
+  background: #71b02f;
+  border-radius: 50%;
+  height: 35px;
+  position: absolute;
+  top: -15px;
+  right: 4px;
+  color: #FFF;
+  font-size: 16px;
+  font-weight: 700;
+  width: 35px;
+  text-align: center;
+}
+
+.lives-text{
+  text-align: center;
+  line-height: 32px;
+}
+
 @media screen and ( max-width:767px) {
+  .min-startgame {
+    padding-left: calc( 50% - 90px) !important;
+  }
   .profile-display-field{
     width: 100%;
   }
@@ -381,3 +469,8 @@ input:disabled { background-color: #fff; }
   border: 1px solid rgba(0, 0, 0, 0.12)
 }
 
+
+.get-location{
+  position: absolute;
+  margin-left: 15px;
+}

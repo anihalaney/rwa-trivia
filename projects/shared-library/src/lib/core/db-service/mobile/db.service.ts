@@ -9,7 +9,7 @@ export class TNSDbService extends DbService {
 
     constructor(private zone: NgZone,
         protected _store: Store<any>
-        ) {
+    ) {
         super();
     }
 
@@ -26,9 +26,17 @@ export class TNSDbService extends DbService {
         return collectionRef.add(document);
     }
 
-    public setDoc(collectionName: string, docId: any, document: any) {
+    public setDoc(collectionName: string, docId: any, document: any, timeStamp = null) {
+        if (timeStamp !== null && timeStamp) {
+            if (timeStamp.createdOn) {
+                document = { ...document, createdOn: firebaseApp.firestore().FieldValue().serverTimestamp() };
+            }
+            if (timeStamp.updatedOn) {
+                document = { ...document, updatedOn: firebaseApp.firestore().FieldValue().serverTimestamp() };
+            }
+        }
         const userCollection = firebaseApp.firestore().collection(collectionName);
-        return userCollection.doc(docId).set(document);
+        return userCollection.doc(docId).set(document, { merge: true });
     }
 
     public updateDoc(collectionName, docId, document) {
@@ -95,11 +103,17 @@ export class TNSDbService extends DbService {
     }
 
     public getDoc(collectionName: string, docId: any): any {
-
+        const collectionRef = firebaseApp.firestore().collection(collectionName);
+        return collectionRef.doc(docId);
     }
 
     public upload(filePath: string, imageBlob: any): any {
 
+    }
+
+    public deleteDoc(collectionName: string, docId: any): any {
+        const collectionRef = firebaseApp.firestore().collection(collectionName);
+        return collectionRef.doc(docId).delete();
     }
 
 }

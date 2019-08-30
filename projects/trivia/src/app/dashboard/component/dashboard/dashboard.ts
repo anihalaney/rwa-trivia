@@ -10,12 +10,15 @@ import {
     OpponentType, PlayerMode, User
 } from 'shared-library/shared/model';
 import { AppState, appState } from '../../../store';
+import { map, flatMap } from 'rxjs/operators';
 
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class Dashboard implements OnDestroy {
 
     START_A_NEW_GAME = 'Start New Game';
     NEW_GAME_IN = 'New Game In';
+    SINGLE_PLAYER = 'Single Player';
+    TWO_PLAYER = 'Two Player';
     user: User;
     users: User[];
     activeGames$: Observable<Game[]>;
@@ -64,7 +67,8 @@ export class Dashboard implements OnDestroy {
     constructor(public store: Store<AppState>,
         private questionActions: QuestionActions,
         private gameActions: GameActions,
-        private userActions: UserActions, private windowRef: WindowRef,
+        private userActions: UserActions,
+        private windowRef: WindowRef,
         @Inject(PLATFORM_ID) private platformId: Object,
         ngZone: NgZone,
         utils: Utils,
@@ -75,67 +79,68 @@ export class Dashboard implements OnDestroy {
         this.serverCreatedTime = this.utils.getUTCTimeStamp();
         this.activeGames$ = store.select(appState.coreState).pipe(select(s => s.activeGames));
         this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
-        this.subscriptions.push(store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
-            this.ngZone.run(() => {
-                this.user = user;
-                this.cd.markForCheck();
-                if (!this.user && this.timerSub) {
-                    this.timerSub.unsubscribe();
-                }
-                if (this.user === null) {
-                    this.timeoutLive = '';
-                    this.cd.markForCheck();
-                    this.gamePlayBtnDisabled = false;
-                }
 
-                this.subscriptions.push(this.store.select(appState.coreState)
-                .pipe(select(s => s.questionOfTheDay)).subscribe(questionOfTheDay => {
+
+        this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.user),
+            map(user => {
+                this.ngZone.run(() => {
+                    this.user = user;
+                    this.cd.markForCheck();
+                    if (!this.user && this.timerSub) {
+                        this.timerSub.unsubscribe();
+                    }
+                    if (this.user === null) {
+                        this.timeoutLive = '';
+                        this.cd.markForCheck();
+                        this.gamePlayBtnDisabled = false;
+                    }
+                });
+            }),
+            flatMap(() => this.store.select(appState.coreState).pipe(select(s => s.questionOfTheDay),
+                map(questionOfTheDay => {
                     if (questionOfTheDay) {
                         this.serverCreatedTime = questionOfTheDay.serverTimeQCreated;
                     }
-                }));
-
-                if (this.user) {
-                    this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings))
-                        .subscribe(appSettings => {
-                            if (appSettings) {
-                                this.applicationSettings = appSettings[0];
-                                if (this.applicationSettings) {
-                                    this.subscriptions.push(store.select(appState.coreState).pipe(select(s => s.account))
-                                        .subscribe(account => {
-                                            this.account = account;
-                                            this.cd.markForCheck();
-                                            if (this.account && !this.account.enable) {
-                                                this.timeoutLive = '';
-                                                if (this.account && this.account.lives === 0 && this.isLivesEnable) {
-                                                    this.gamePlayBtnDisabled = true;
-                                                } else {
-                                                    this.gamePlayBtnDisabled = false;
-                                                }
-                                            } else {
-                                                this.gamePlayBtnDisabled = false;
-                                            }
-                                            if (this.timerSub) {
-                                                this.timerSub.unsubscribe();
-                                            }
-                                            this.gameLives();
-                                        }));
-                                    if (!this.applicationSettings.lives.enable) {
-                                        this.gamePlayBtnDisabled = false;
-                                        if (this.timerSub) {
-                                            this.timeoutLive = '';
-                                            this.timerSub.unsubscribe();
-                                        }
-                                    }
-                                }
-                            }
-                        }));
+                }))),
+            flatMap(() => this.store.select(appState.coreState).pipe(select(s => s.applicationSettings),
+                map(appSettings => {
+                    if (appSettings) {
+                        this.applicationSettings = appSettings[0];
+                    }
+                }))),
+            flatMap(() => this.store.select(appState.coreState).pipe(select(s => s.account)))
+        ).subscribe(userAccount => {
+            if (this.user) {
+                this.account = userAccount;
+                this.cd.markForCheck();
+                if (this.account && !this.account.enable) {
+                    this.timeoutLive = '';
+                    if (this.account && this.account.lives === 0 && this.isLivesEnable) {
+                        this.gamePlayBtnDisabled = true;
+                    } else {
+                        this.gamePlayBtnDisabled = false;
+                    }
+                } else {
+                    this.gamePlayBtnDisabled = false;
                 }
-            });
-            this.store.dispatch(this.gameActions.getActiveGames(user));
-            this.store.dispatch(this.userActions.loadGameInvites(user));
+                if (this.timerSub) {
+                    this.timerSub.unsubscribe();
+                }
+                this.gameLives();
+            }
+
+            if (this.applicationSettings && !this.applicationSettings.lives.enable) {
+                this.gamePlayBtnDisabled = false;
+                if (this.timerSub) {
+                    this.timeoutLive = '';
+                    this.timerSub.unsubscribe();
+                }
+            }
+            this.store.dispatch(this.gameActions.getActiveGames(this.user));
+            this.store.dispatch(this.userActions.loadGameInvites(this.user));
             this.showNewsCard = this.user && this.user.isSubscribed ? false : true;
-        }));
+        })
+        );
 
         this.subscriptions.push(this.userDict$.subscribe(userDict => this.userDict = userDict));
         this.subscriptions.push(this.activeGames$.subscribe(games => {
@@ -172,14 +177,6 @@ export class Dashboard implements OnDestroy {
                         || game.GameStatus === GameStatus.WAITING_FOR_RANDOM_PLAYER_INVITATION_ACCEPTANCE) {
                         this.waitingForOpponentCount++;
                     }
-                    playerIds.map(playerId => {
-                        if (playerId !== this.user.userId) {
-                            if (this.userDict[playerId] === undefined) {
-                                this.store.dispatch(this.userActions.loadOtherUserProfile(playerId));
-                            }
-
-                        }
-                    });
                 });
                 this.showGames = true;
             }
@@ -198,7 +195,6 @@ export class Dashboard implements OnDestroy {
                 } else if (Number(iGame.gameOptions.opponentType) === OpponentType.Random) {
                     this.randomPlayerCount++;
                 }
-                this.store.dispatch(this.userActions.loadOtherUserProfile(iGame.playerIds[0]));
             });
         }));
         this.gameInviteSliceStartIndex = 0;
@@ -207,9 +203,6 @@ export class Dashboard implements OnDestroy {
         this.subscriptions.push(store.select(appState.coreState).pipe(select(s => s.friendInvitations)).subscribe(invitations => {
             if (invitations.length > 0) {
                 this.friendInvitations = invitations;
-                invitations.map(invitation => {
-                    this.store.dispatch(this.userActions.loadOtherUserProfile(invitation.created_uid));
-                });
             }
         }));
 
@@ -258,68 +251,58 @@ export class Dashboard implements OnDestroy {
     }
 
     gameLives() {
+        if (this.applicationSettings) {
 
-        const maxMiliSecond = this.utils.convertMilliSIntoMinutes(this.applicationSettings.lives.lives_after_add_millisecond) - 1;
-        if (this.account) {
-            if (this.account.lives <= this.applicationSettings.lives.max_lives) {
-                this.timerSub = timer(1000, 1000).subscribe(t => {
-                    this.serverCreatedTime += 1000;
-                    const diff = this.utils.getTimeDifference(this.account.lastLiveUpdate, this.serverCreatedTime);
-                    const minute = Math.floor(diff % (CalenderConstants.HOURS_CALCULATIONS) / (CalenderConstants.MINUTE_CALCULATIONS));
-                    const second = Math.floor(diff / 1000) % 60;
-                    const timeStamp = this.serverCreatedTime;
+            const maxMiliSecond = this.utils.convertMilliSIntoMinutes(this.applicationSettings.lives.lives_after_add_millisecond) - 1;
+            if (this.account) {
+                if (this.account.lives <= this.applicationSettings.lives.max_lives) {
+                    this.timerSub = timer(1000, 1000).subscribe(t => {
+                        this.serverCreatedTime += 1000;
+                        const diff = this.utils.getTimeDifference(this.account.lastLiveUpdate, this.serverCreatedTime);
+                        const minute = Math.floor(diff % (CalenderConstants.HOURS_CALCULATIONS) / (CalenderConstants.MINUTE_CALCULATIONS));
+                        const second = Math.floor(diff / 1000) % 60;
+                        const timeStamp = this.serverCreatedTime;
 
-                    if (minute > 0) {
-                        this.remainingMinutes = (this.utils.convertIntoDoubleDigit(maxMiliSecond - minute));
-                    } else {
-                        this.remainingMinutes = (this.utils.convertIntoDoubleDigit(maxMiliSecond));
-                    }
-                    if (second > 0) {
-                        this.remaningSeconds = (this.utils.convertIntoDoubleDigit(59 - second));
-                    } else {
-                        this.remaningSeconds = (this.utils.convertIntoDoubleDigit(59 - second));
-                    }
-
-                    if (timeStamp >= this.account.nextLiveUpdate) {
-                        this.timerSub.unsubscribe();
-                        // this.timeoutLive = '(' + String(this.account.lives) + ')';
-                        this.cd.markForCheck();
-                        if (this.user) {
-                            this.store.dispatch(this.userActions.addUserLives(this.user.userId));
+                        if (minute > 0) {
+                            this.remainingMinutes = (this.utils.convertIntoDoubleDigit(maxMiliSecond - minute));
+                        } else {
+                            this.remainingMinutes = (this.utils.convertIntoDoubleDigit(maxMiliSecond));
                         }
-                    } else {
-                        let timeOut = '';
-                        if (this.account.lives !== this.applicationSettings.lives.max_lives) {
-                            timeOut = (this.remainingMinutes) + ':' + (this.remaningSeconds);
+                        if (second > 0) {
+                            this.remaningSeconds = (this.utils.convertIntoDoubleDigit(59 - second));
+                        } else {
+                            this.remaningSeconds = (this.utils.convertIntoDoubleDigit(59 - second));
                         }
-                        this.timeoutLive = timeOut;
-                        this.cd.markForCheck();
-                    }
-                });
-                this.subscriptions.push(this.timerSub);
+
+                        if (timeStamp >= this.account.nextLiveUpdate) {
+                            this.timerSub.unsubscribe();
+                            // this.timeoutLive = '(' + String(this.account.lives) + ')';
+                            this.cd.markForCheck();
+                            if (this.user) {
+                                this.store.dispatch(this.userActions.addUserLives(this.user.userId));
+                            }
+                        } else {
+                            let timeOut = '';
+                            if (this.account.lives !== this.applicationSettings.lives.max_lives) {
+                                timeOut = (this.remainingMinutes) + ':' + (this.remaningSeconds);
+                            }
+                            this.timeoutLive = timeOut;
+                            this.cd.markForCheck();
+                        }
+                    });
+                    this.subscriptions.push(this.timerSub);
+                }
             }
         }
-
     }
 
     ngOnDestroy(): void {
 
     }
 
-    get gameStart() {
-        if (this.user && this.account && this.account.lives === 0 && this.applicationSettings.lives.enable) {
-            this.startGame = this.NEW_GAME_IN;
-        } else {
-            this.startGame = this.START_A_NEW_GAME;
-        }
-        // tslint:disable-next-line:max-line-length
-        const startString = this.startGame + ((this.user && this.applicationSettings.lives.enable && this.timeoutLive) ? '   |   ' + this.timeoutLive : '');
-        this.cd.markForCheck();
-        return startString;
-    }
 
     get isLivesEnable(): Boolean {
-        const isEnable = (this.user && this.account && this.applicationSettings.lives.enable) ? true : false;
+        const isEnable = (this.user && this.account && this.applicationSettings && this.applicationSettings.lives.enable) ? true : false;
         return isEnable;
     }
 }

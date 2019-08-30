@@ -5,9 +5,9 @@ import { Store, select } from '@ngrx/store';
 import { UserActions, coreState } from 'shared-library/core/store';
 import { AppState, appState } from './../../../../../../../trivia/src/app/store';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
-import { isAndroid } from 'tns-core-modules/platform';
-import * as Toast from 'nativescript-toast';
-
+import { isAndroid, isIOS } from 'tns-core-modules/platform';
+import { Utils } from 'shared-library/core/services';
+import { FirebaseScreenNameConstants } from 'shared-library/shared/model';
 @Component({
   selector: 'user-feedback',
   templateUrl: './user-feedback.component.html',
@@ -17,27 +17,32 @@ import * as Toast from 'nativescript-toast';
 
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class UserFeedbackComponent implements OnDestroy {
+  iqKeyboard: IQKeyboardManager;
   subscriptions = [];
   feedbackForm: FormGroup;
   user: any;
-  feedbacklength = { min: 15 , max: 200};
+  feedbacklength = { min: 15, max: 200 };
   @ViewChildren('textField') textField: QueryList<ElementRef>;
   email_regexp = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
   constructor(private page: Page, private fb: FormBuilder, private store: Store<AppState>, private userAction: UserActions,
-     private cd: ChangeDetectorRef) {
+    private cd: ChangeDetectorRef, private utils: Utils) {
 
+      if (isIOS) {
+        this.iqKeyboard = IQKeyboardManager.sharedManager();
+        this.iqKeyboard.shouldResignOnTouchOutside = true;
+      }
     this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.feedback)).subscribe(status => {
       if (status === 'SUCCESS') {
         this.resetForm();
         this.cd.markForCheck();
-        Toast.makeText('Feedback sent successfully').show();
+        this.utils.showMessage('success', 'Feedback sent successfully');
       }
     }));
 
     this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
-        this.user = user;
-        this.cd.markForCheck();
+      this.user = user;
+      this.cd.markForCheck();
     }));
 
 
@@ -45,10 +50,10 @@ export class UserFeedbackComponent implements OnDestroy {
   }
 
   initForm() {
-      this.feedbackForm = this.fb.group({
-        email: [ (this.user && this.user.email) ? this.user.email : '', [Validators.required,  Validators.pattern(this.email_regexp)]],
-        feedback: ['', [Validators.required,  Validators.minLength(this.feedbacklength.min) ,
-          Validators.maxLength(this.feedbacklength.max)]]
+    this.feedbackForm = this.fb.group({
+      email: [(this.user && this.user.email) ? this.user.email : '', [Validators.required, Validators.pattern(this.email_regexp)]],
+      feedback: ['', [Validators.required, Validators.minLength(this.feedbacklength.min),
+      Validators.maxLength(this.feedbacklength.max)]]
     });
   }
 
@@ -63,23 +68,23 @@ export class UserFeedbackComponent implements OnDestroy {
     }
     let body;
     if (this.user) {
-        body = {...this.feedbackForm.value, user_id:  this.user.userId };
+      body = { ...this.feedbackForm.value, user_id: this.user.userId };
     } else {
-      body = {...this.feedbackForm.value };
+      body = { ...this.feedbackForm.value };
 
     }
     this.store.dispatch(this.userAction.addFeedback(body));
   }
 
   hideKeyboard() {
-    this.textField
-      .toArray()
-      .map((el) => {
-        if (isAndroid) {
-          el.nativeElement.android.clearFocus();
-        }
-        return el.nativeElement.dismissSoftInput();
-      });
+    if (isAndroid) {
+      this.textField
+        .toArray()
+        .map((el) => {
+            el.nativeElement.android.clearFocus();
+            return el.nativeElement.dismissSoftInput();
+          });
+    }
   }
 
   ngOnDestroy() {

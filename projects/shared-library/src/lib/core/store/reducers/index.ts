@@ -2,14 +2,19 @@ import { ActionReducerMap, createSelector, createFeatureSelector } from '@ngrx/s
 import { User, Category, Question, Game, Friends, Invitation, Account } from 'shared-library/shared/model';
 import {
   user, authInitialized, invitationToken, userDict,
-  gameInvites, userFriends, friendInvitations, userProfileSaveStatus, feedback, account, getGameResult
+  gameInvites, userFriends, friendInvitations, userProfileSaveStatus, feedback, account, getGameResult, countries,
+  addressUsingLongLat, addressSuggestions, userFriendInvitations, userUpdateStatus, firstQuestionBits, checkDisplayName
 } from './user.reducer';
-import { categories } from './categories.reducer';
-import { tags } from './tags.reducer';
-import { questionOfTheDay, questionSaveStatus } from './questions.reducer';
+import { categories, topCategories } from './categories.reducer';
+import { tags, topTags } from './tags.reducer';
+import { questionOfTheDay, questionSaveStatus, updateQuestion, firstQuestion } from './questions.reducer';
 import { loginRedirectUrl, resetPasswordLogs } from './ui-state.reducer';
-import { activeGames, newGameId, gameCreateStatus } from './game.reducer';
+import {
+  activeGames, newGameId, gameCreateStatus, updateUserReactionStatus, getUserReactionStatus,
+  getQuestionSuccess, updateQuestionStatSuccess
+} from './game.reducer';
 import { applicationSettings } from './application-settings.reducer';
+import { Country } from 'shared-library/shared/mobile/component/countryList/model/country.model';
 
 export * from './user.reducer';
 export * from './categories.reducer';
@@ -29,6 +34,7 @@ export interface CoreState {
   questionOfTheDay: Question;
   loginRedirectUrl: string;
   questionSaveStatus: string;
+  updateQuestion: string;
   activeGames: Game[];
   invitationToken: string;
   resetPasswordLogs: string[];
@@ -42,6 +48,20 @@ export interface CoreState {
   account: Account;
   gameCreateStatus: String;
   getGameResult: Game[];
+  countries: Country[];
+  addressUsingLongLat: any;
+  addressSuggestions: any;
+  userFriendInvitations: { [key: string]: Invitation };
+  userUpdateStatus: string;
+  firstQuestionBits: any;
+  firstQuestion: Question;
+  updateUserReactionStatus: any;
+  getUserReactionStatus: any;
+  getQuestionSuccess: any;
+  getTopCategories: any;
+  getTopTags: any;
+  checkDisplayName: boolean;
+  updateQuestionStatSuccess: any;
 }
 
 export const reducer: ActionReducerMap<CoreState> = {
@@ -54,6 +74,7 @@ export const reducer: ActionReducerMap<CoreState> = {
   questionSaveStatus: questionSaveStatus,
   loginRedirectUrl: loginRedirectUrl,
   activeGames: activeGames,
+  updateQuestion: updateQuestion,
   invitationToken: invitationToken,
   resetPasswordLogs: resetPasswordLogs,
   gameInvites: gameInvites,
@@ -65,7 +86,21 @@ export const reducer: ActionReducerMap<CoreState> = {
   applicationSettings: applicationSettings,
   account: account,
   gameCreateStatus: gameCreateStatus,
-  getGameResult: getGameResult
+  getGameResult: getGameResult,
+  countries: countries,
+  addressUsingLongLat: addressUsingLongLat,
+  addressSuggestions: addressSuggestions,
+  userFriendInvitations: userFriendInvitations,
+  userUpdateStatus: userUpdateStatus,
+  firstQuestionBits: firstQuestionBits,
+  firstQuestion: firstQuestion,
+  updateUserReactionStatus: updateUserReactionStatus,
+  getUserReactionStatus: getUserReactionStatus,
+  getQuestionSuccess: getQuestionSuccess,
+  getTopCategories: topCategories,
+  getTopTags: topTags,
+  checkDisplayName: checkDisplayName,
+  updateQuestionStatSuccess: updateQuestionStatSuccess
 };
 
 // Features

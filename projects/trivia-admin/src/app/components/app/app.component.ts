@@ -1,13 +1,12 @@
-import { Component, OnInit, OnDestroy, Renderer2, Inject } from '@angular/core';
-import { Router, NavigationEnd } from '@angular/router';
+import { Component, OnInit, OnDestroy, Renderer2 } from '@angular/core';
+import { Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
-import { map, skip, take, filter } from 'rxjs/operators';
+import { skip, take } from 'rxjs/operators';
 import { AppState, appState } from '../../store';
 import { AuthenticationProvider } from 'shared-library/core/auth';
 import { User } from 'shared-library/shared/model';
-import { Location } from '@angular/common';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
-
+import { ApplicationSettingsActions } from 'shared-library/core/store/actions';
 
 @Component({
   selector: 'app-root',
@@ -26,11 +25,10 @@ export class AppComponent implements OnInit, OnDestroy {
     private authService: AuthenticationProvider,
     private store: Store<AppState>,
     public router: Router,
-    private location: Location,
+    private applicationSettingsAction: ApplicationSettingsActions,
   ) {
 
-
-
+    this.store.dispatch(this.applicationSettingsAction.loadApplicationSettings());
     this.subscriptions.push(store.select(appState.coreState).pipe(select(s => s.user), skip(1)).subscribe(user => {
       this.user = user;
       if (user) {
@@ -67,9 +65,9 @@ export class AppComponent implements OnInit, OnDestroy {
   toggleTheme() {
     if (this.theme === '') {
       this.theme = 'dark';
-      this.renderer.addClass(document.body, this.theme)
+      this.renderer.addClass(document.body, this.theme);
     } else {
-      this.renderer.removeClass(document.body, this.theme)
+      this.renderer.removeClass(document.body, this.theme);
       this.theme = '';
     }
   }

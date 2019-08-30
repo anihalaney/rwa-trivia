@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Effect, Actions, ofType } from '@ngrx/effects';
 import { Question, RouterStateUrl } from '../../../shared/model';
-import { QuestionActions } from '../actions';
+import { QuestionActions, UserActions, ActionWithPayload } from '../actions';
 import { QuestionService } from '../../services'
 import { switchMap, map, filter, catchError } from 'rxjs/operators';
-import { of } from 'rxjs';
+import { of, empty } from 'rxjs';
 import { ROUTER_NAVIGATION } from '@ngrx/router-store';
 
 @Injectable()
@@ -39,6 +39,34 @@ export class QuestionEffects {
                         catchError(err => of(this.questionActions.getQuestionOfTheDayError(err)))
                     )
             ));
+
+    // Update Question
+    @Effect()
+    updateQuestion$ = this.actions$
+        .pipe(ofType(QuestionActions.UPDATE_QUESTION))
+        .pipe(
+            switchMap((action: ActionWithPayload<Question>) => {
+                this.svc.saveQuestion(action.payload);
+                return empty();
+            }
+            )
+        );
+
+
+    // Load first question for specific route
+    @Effect()
+    // handle location update
+    loadFirstQuestion$ = this.actions$
+        .pipe(ofType(ROUTER_NAVIGATION))
+        .pipe(
+            map((action: any): RouterStateUrl => action.payload.routerState),
+            filter((routerState: RouterStateUrl) =>
+                routerState.url.toLowerCase().startsWith('/first-question')))
+        .pipe(
+            switchMap(() => this.svc.getQuestionOfTheDay(true)
+                .pipe(
+                    map((question: Question) => this.questionActions.getFirstQuestionSuccess(question))
+                    , catchError(err => of(this.questionActions.getFirstQuestionError(err))))));
 
     constructor(
         private actions$: Actions,

@@ -15,13 +15,11 @@ export enum UserStatConstants {
 export enum TriggerConstants {
     invitationTxt = 'Please accept invitation to play Trivia Game',
     invitationMailSubject = 'bitwiser.io: Friend Request',
-    fromUser = 'support@trivia.com'
+    fromUser = 'support@trivia.com',
+    ANDROID = 'android',
+    IOS = 'ios',
+    WEB = 'web'
 }
-
-export enum RSSFeedConstants {
-    feedURL = 'https://blog.realworldfullstack.io/feed'
-}
-
 
 export enum UserControllerConstants {
     adminEmail = 'akshay@emaxers.com',
@@ -30,7 +28,8 @@ export enum UserControllerConstants {
 }
 
 export enum appConstants {
-    API_PREFIX = 'app'
+    API_PREFIX = 'app',
+    API_VERSION = 'v1'
 }
 
 export enum interceptorConstants {
@@ -41,7 +40,8 @@ export enum interceptorConstants {
     SUCCESS = 200,
     BAD_REQUEST = 400,
     FORBIDDEN = 403,
-    MAXIMUM_RE_REQUEST_LIMIT = 3
+    MAXIMUM_RE_REQUEST_LIMIT = 3,
+    ENTITY_NOT_FOUND = 404
 }
 
 
@@ -89,6 +89,7 @@ export enum pushNotificationRouteConstants {
     FRIEND_NOTIFICATIONS = 'friend-notifications',
     QUESTION_NOTIFICATIONS = 'my/questions',
     ACHIEVEMENT_NOTIFICATION = 'achievement-notification',
+    TOKEN_IS_NOT_REGISTERED = 'messaging/registration-token-not-registered'
 }
 
 
@@ -116,6 +117,10 @@ export enum CollectionConstants {
     STATS_SYSTEM = 'system',
     ACHIEVEMENTS = 'achievements',
     ACHIEVEMENT_RULES = 'achievement_rules',
+    USER_STATUS = 'user_status',
+    INFO = '.info',
+    CONNECTED = 'connected',
+    REACTIONS = 'reactions'
 }
 
 export enum UserConstants {
@@ -159,10 +164,12 @@ export enum GeneralConstants {
     HELLO = 'Hello',
     TRUE = 'true',
     Error_Message = 'Error : ',
-    BIT_WISER_DEV_STORAGE_BUCKET_NAME = 'rwa-trivia-dev-e57fc.appspot.com',
-    BIT_WISER_PROD_STORAGE_BUCKET_NAME = 'rwa-trivia.appspot.com',
     GAME_EXPIRED_HOURS = 32, // hr
-    NAME = 'name'
+    NAME = 'name',
+    DISPLAY_NAME = 'displayName',
+    USER_ID = 'userId',
+    WIN = 'Win',
+    LOST = 'Lost'
 }
 
 export enum SocialShareConstants {
@@ -172,7 +179,13 @@ export enum SocialShareConstants {
 
 export enum GameConstants {
     GAME_STATUS = 'GameStatus',
-    GAME_OVER = 'gameOver'
+    GAME_OVER = 'gameOver',
+    RANDOM = 'Random',
+    FRIEND = 'Friend',
+    NORMAL = 'Normal',
+    OFFLINE = 'Offline',
+    SINGLE = 'Single',
+    OPPONENT = 'Opponent'
 }
 
 export enum AccountConstants {
@@ -205,6 +218,8 @@ export enum QuestionsConstants {
     BULK_QUESTION = 'bulk-question',
     QUESTION = 'question',
     NEXT = 'next',
+    META_DATA = 'metadata',
+    UPLOAD_FINISHED = 'upload finished',
 }
 
 export enum ResponseMessagesConstants {
@@ -252,7 +267,9 @@ export enum ResponseMessagesConstants {
     ACHIEVEMENT_PROPERTY_NOT_FOUND = 'Achievement property not found',
     ACHIEVEMENT_NAME_NOT_FOUND = 'Achievement name not found',
     DISPLAY_ORDER_NOT_FOUND = 'Display order not found',
-    ACHIEVEMENT_RULES_ADDED_SUCCESSFULLY = 'Achievement rules added successfully'
+    ACHIEVEMENT_RULES_ADDED_SUCCESSFULLY = 'Achievement rules added successfully',
+    DISPLAY_NAME_NOT_FOUND = 'displayName is not added in request',
+    BITS_ADDED = 'Bits added successfully !!',
 }
 
 export enum FriendConstants {
@@ -289,6 +306,7 @@ export enum HeaderConstants {
     IMAGE_FORWARD_SLASH_PNG = 'image/png',
     TEXT_FORWARD_SLASH_PLAIN = 'text/plain',
     IMAGE_FORWARD_SLASH_JPEG = 'image/jpeg',
+    ATTACHMENT_QUESTION_IMAGE_PNG = 'attachment; filename=question_image.png',
 }
 
 export enum RoutesConstants {
@@ -351,10 +369,127 @@ export enum RoutesConstants {
     EXTENDEDINFO = 'extendedInfo',
     ACCOUNTS = 'accounts',
     ACHIEVEMENT = 'achievement',
-    RULES = 'rules'
+    RULES = 'rules',
+    GET_QUESTION_IMAGE = 'getQuestionImage',
+    UPLOAD_QUESTION_IMAGE = 'uploadQuestionImage',
+    DISPLAY_NAME = 'display-name',
+    DISPLAY_DASH_NAME = 'displayName',
+    UPDATE_USER_GAME_PLAYED_WITH_STAT = 'updateusergameplayedwithstat',
+    ADDRESS_BY_LAT_LANG = 'addressByLatLang',
+    LOCATION = 'location',
+    LAT_LONG = 'latLong',
+    ADDRESS_SUGGESTION = 'addressSuggestion',
+    UPDATE_APP_VERSION = 'updateAppVersion',
+    ADD_BITS_FIRST_QUESTION = 'add-bits-first-question',
+    TOP_CATEGORIES_COUNT = 'getTopCategories',
+    TOP_TAGS_COUNT = 'getTopTags',
+    GAME_DASH_STAT_DASH_UPDATE = 'question-stat-update'
 }
 
-export enum AppStoreUrl {
-    PLAYSTOREURL = 'https://play.google.com/store/apps/details?id=io.bitwiser.trivia&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1',
-    APPSTOREURL = 'https://itunes.apple.com/us/app/bitwiser-trivia/id1447244501?mt=8'
+export enum TermsAndPrivacyUrlConstant {
+    TERMSANDCONDITIONSURL = 'https://bitwiser.io/terms-and-conditions',
+    PRIVACYURL = 'https://bitwiser.io/terms-and-conditions'
+}
+
+export enum GameConstant {
+    SINGLE = 'Single',
+    OPPONENT = 'Opponent',
+    RANDOM = 'Random',
+    FRIEND = 'Friend',
+    COMPUTER = 'Computer',
+    NORMAL = 'Normal',
+    OFFLINE = 'Offline'
+}
+
+
+export enum FirebaseAnalyticsKeyConstants {
+    USER_ID = 'userId',
+    GAME_ID = 'gameId',
+    PLAYER_MODE = 'playerMode',
+    OPPONENT_TYPE = 'opponentType',
+    OTHER_USER_ID = 'otherUserId',
+    USER_SCORE = 'userScore',
+    OTHER_USER_SCORE = 'otherUserScore',
+    GAME_STATUS = 'gameStatus',
+    GAME_MODE = 'gameMode',
+    CATEGORY_IDS = 'categoryIds',
+    TAGS = 'tags',
+    ROUND = 'round',
+    IS_TIE = 'isTie',
+    WINNER_PLAYER_ID = 'winnerPlayerId',
+    LOCATION = 'location'
+}
+
+export enum FirebaseAnalyticsEventConstants {
+    USER_LOGIN = 'user_login',
+    COMPLETED_GAME = 'completed_game',
+    START_NEW_GAME = 'start_new_game',
+    USER_LOCATION = 'user_location'
+}
+
+export enum FirebaseScreenNameConstants {
+    NEW_GAME = 'New Game',
+    ACHIEVEMENTS = 'Achievements',
+    PRIVACY_POLICY = 'Privacy Policy',
+    RECENT_COMPLETED_GAMES = 'Recent Completed Games',
+    DASHBOARD = ' Dashboard',
+    LEADERBOARD = 'Leaderboard',
+    GAME_OVER = 'Game Over',
+    REPORT_GAME = 'Report Game',
+    GAME_CONTINUE = 'Game Continue',
+    GAME_QUESTION = 'Game Question',
+    GAME_DIALOG = 'Game Dialog',
+    INVITE_FRIENDS = 'Invite Friends',
+    FRIEND_LIST = 'Friend List',
+    MY_QUESTIONS = 'My Questions',
+    INVITE_MAIL_FRIENDS = 'Invite Mail Friends',
+    PROFILE_SETTINGS = 'Profile Settings',
+    QUESTION_ADD_UPDATE = 'Question Add Update',
+    LOGIN = 'Login',
+    USER_FEEDBACK = 'User Feedback'
+}
+
+export enum GoogleLocationAPI {
+    GOOGLE_AUTOCOMPLETE = 'https://maps.googleapis.com/maps/api/place/autocomplete/json',
+    GOOGLE_GEOCODE = 'https://maps.googleapis.com/maps/api/geocode/json'
+}
+
+export enum AnalyticsEventConstants {
+    EVENT = 'event',
+}
+
+export enum UserStatusConstants {
+    ONLINE = 'online',
+    OFFLINE = 'offline',
+    CONNECTED = 'connected'
+}
+
+export enum DrawerConstants {
+    UPDATE_TOKEN_STATUS = 'update token status',
+    LOGOUT = 'logout'
+}
+
+
+export enum userCardType {
+    USER_WEB_IMAGE_NAME_LOCATION_HORIZONTAL,
+    USER_WEB_IMAGE_40X40_NAME_HORIZONTAL,
+    USER_WEB_IMAGE_70X60_NAME_LOCATION,
+    USER_WEB_IMAGE_70X60_IMAGE_VERTICAL,
+    USER_WEB_IMAGE_NAME_STATUS_HORIZONTAL,
+    USER_WEB_NAME_IMAGE_HORIZONTAL,
+    USER_WEB_IMAGE_NAME_STATUS_LOCATION_HORIZONTAL,
+    USER_WEB_IMAGE_NAME_LOCATION_VERTICAL,
+    USER_WEB_IMAGE_NAME_VERTICAL,
+    USER_WEB_IMAGE_NAME_RECENT_GAME_VERTICAL,
+    USER_IMAGE_NAME_VERTICAL_NO_REDIRECT,
+    USER_IMAGE_NAME_WITH_SCORE,
+    USER_IMAGE_NAME_HORIZONTAL,
+    USER_IMAGE_NAME_LOCATION_HORIZONTAL,
+    USER_NAME_IMAGE_HORIZONTAL,
+    USER_IMAGE_NAME_VERTICAL,
+    USER_IMAGE_NAME_CATEGORY_HORIZONTAL,
+    USER_IMAGE_WITH_ONLINE_STATUS,
+    USER_WEB_IMAGE_WITH_ONLINE_STATUS,
+    USER_IMAGE_NAME_GAME_PROFILE_HORIZONTAL
+
 }

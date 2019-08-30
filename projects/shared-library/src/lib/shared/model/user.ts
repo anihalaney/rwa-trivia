@@ -1,6 +1,7 @@
 import * as firebase from 'firebase/app';
 import { GameOptions } from './game-options';
 import { Account } from './account';
+import { FriendsMetadata } from './friends';
 export class User {
   id?: string;
   userId: string;
@@ -26,23 +27,29 @@ export class User {
   croppedImageUrl: any;
   originalImageUrl: any;
   imageType: string;
-  androidPushTokens?: string[];
-  iosPushTokens?: string[];
+  androidPushTokens?: Array<any>;
+  iosPushTokens?: Array<any>;
   lastGamePlayOption?: GameOptions;
   account?: Account;
   achievements: string[];
+  gamePlayed: Array<{ [key: string]: FriendsMetadata }>;
+  online?: boolean;
+  isCategorySet?: boolean;
+  isFriend?: boolean;
+  phoneNumber?: string;
+  totalFriends?: number;
 
   constructor(authState?: firebase.User & { name: string }) {
+    this.totalFriends = 0;
     if (authState) {
       this.authState = authState;
       this.userId = authState.uid;
+      this.phoneNumber = authState.providerData ? authState.providerData[0].phoneNumber : authState.phoneNumber;
       this.email = authState.providerData ? authState.providerData[0].email : authState.email;
       if (authState.providerData && authState.providerData[0].displayName) {
-        this.displayName = authState.providerData[0].displayName;
+        this.name = authState.providerData[0].displayName;
       } else if (authState.name) {
-        this.displayName = authState.name;
-      } else {
-        this.displayName = this.email.split('@')[0] + new Date().getTime();
+        this.name = authState.name;
       }
     }
   }
@@ -61,3 +68,9 @@ export class UserStats {
     this.leaderBoardStats = {};
   }
 }
+
+export class DeviceToken {
+  token: string;
+  online: boolean;
+}
+

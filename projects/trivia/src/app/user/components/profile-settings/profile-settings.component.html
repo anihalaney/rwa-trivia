@@ -1,7 +1,7 @@
 <!-- My setting -->
-<div class="mainpage submitpage mysetting" [class.expand-width]="userType === 2"  *ngIf="user">
+<div class="mainpage submitpage mysetting" [class.expand-width]="userType === 2" *ngIf="user">
   <div class="row hidden-xs">
-    <div class="pageheading col-sm-6 col-xs-12">{{userType === 0 ? 'My': user?.displayName}} Profile  </div>
+    <div class="pageheading col-sm-6 col-xs-12">{{userType === 0 ? 'My': user?.displayName}} Profile </div>
   </div>
   <section id="curentactive" class="card">
     <!-- <div class="h1block">
@@ -14,303 +14,372 @@
       <div class="enterquestion">
         <div class="optionbox">
           <div class="row m-b-10 text-center" [ngClass]="{'error':errorStatus, 'success':!errorStatus}">
-              <label>
-                {{notificationMsg}}
-              </label>
+            <label>
+              {{notificationMsg}}
+            </label>
           </div>
 
-            <!-- User avatar -->
-            <div  *ngIf="userType !== 0" class="row other-user-avatar-container">
-                <div class="other-profile-img-container">
-                  <label class="custom-file-upload">
-                    <img [src]="userProfileImageUrl" width="150" height="140"
-                      alt="Avatar" />
-                  </label>
-                </div>                
+          <!-- User avatar -->
+          <div *ngIf="userType !== 0" class="row other-user-avatar-container">
+            <div class="other-profile-img-container">
+              <label class="custom-file-upload">
+                <img [src]="userProfileImageUrl" width="150" height="140" alt="Avatar" />
+              </label>
             </div>
+          </div>
           <!-- Upload avatar -->
           <div *ngIf="userType === 0" class="row">
-            
+
             <div class="profile-img-container">
               <label for="file-upload" class="custom-file-upload custom-file-upload-image" *ngIf="!profileImageFile">
-                <img [src]="profileImage.image" [width]="cropperSettings.croppedWidth" [height]="cropperSettings.croppedHeight"
-                 alt="Avatar" />
+                <img [src]="profileImage.image" [width]="cropperSettings.croppedWidth"
+                  [height]="cropperSettings.croppedHeight" alt="Avatar" />
               </label>
               <div class="file-upload-container">
-                  <div class="file-upload">
-                  </div>
-                  <img-cropper *ngIf="profileImageFile && !profileImageValidation" #cropper [image]="profileImage"
-                  [settings]="cropperSettings"></img-cropper>
-                  <br>
+                <div class="file-upload">
                 </div>
-                <button *ngIf="profileImageFile && !profileImageValidation" class="btn profile-save-btn"
+                <img-cropper *ngIf="profileImageFile && !profileImageValidation" #cropper [image]="profileImage"
+                  [settings]="cropperSettings"></img-cropper>
+                <br>
+              </div>
+              <button *ngIf="profileImageFile && !profileImageValidation" class="btn profile-save-btn"
                 (click)="saveProfileImage()">Save</button>
             </div>
-              <div class="pull-right">
-                <input id="file-upload" name='upload_cont_img' type="file" (change)="onFileChange($event)" class="hide"
-                  aria-label="file">
-              </div>
-              <div class="text-center">
-                <p *ngIf="profileImageValidation" class="error">
-                  {{profileImageValidation}}
-                </p>
-                <p class="recommend-text" *ngIf="!profileImageFile || profileImageValidation">Once Uploaded, You can adjust the cropped image
-                  Recommend
-                  an image 263 px or larger. Allowed formats: jpeg, gif and png</p>
-              </div>
+            <div class="pull-right">
+              <input id="file-upload" name='upload_cont_img' type="file" (change)="onFileChange($event)" class="hide"
+                aria-label="file">
+            </div>
+            <div class="text-center">
+              <p *ngIf="profileImageValidation" class="error">
+                {{profileImageValidation}}
+              </p>
+              <p class="recommend-text" *ngIf="!profileImageFile || profileImageValidation">Once Uploaded, You can
+                adjust the cropped image
+                Recommend
+                an image 263 px or larger. Allowed formats: jpeg, gif and png</p>
+            </div>
           </div>
           <!-- Upload avatar end -->
-      <!-- Profile pik end -->
-      <div class="clearfix displayfield" *ngIf="userType === 0">
-          <div class="formfield">
-            <div class="cell">
-            <label class="p-r-10">Display Name {{userType === 0 ? '*': ''}}</label>
-            <div *ngIf="userType === 0" class="input-edit">
-              <input  formControlName="displayName" [placeholder]="userType === 0 ? 'Enter Display Name': ''" type="text" class="required"
-                aria-label="display-name">
-                <span class="field-edit-icon" *ngIf="!singleFieldEdit.displayName && userType === 0" (click)="editSingleField('displayName')"></span>
-                <span class="field-save-icon" *ngIf="singleFieldEdit.displayName && userForm.value.displayName !=='' && userType === 0" (click)="onSubmit(true, 'displayName')"></span>
-              </div>
-            <p *ngIf="userForm.controls.displayName.errors && !userForm.controls.displayName.pristine" class="error display-name-error">
-              Display
-              Name is required!</p>
-          </div>
+          <!-- Profile pik end -->
+          <div class="clearfix displayfield" *ngIf="userType === 0">
+            <div class="formfield">
+              <div class="cell">
+                <label class="p-r-10">Display Name {{userType === 0 ? '*': ''}}</label>
+                <div *ngIf="userType === 0" class="input-edit">
+                  <app-check-display-name formControlName="displayName"
+                    placeholder="{{userType === 0 ? 'Enter Display Name': ''}}"></app-check-display-name>
+                  <span class="field-edit-icon" *ngIf="!singleFieldEdit.displayName && userType === 0"
+                    (click)="editSingleField('displayName')"></span>
+                  <span class="field-save-icon"
+                    *ngIf="singleFieldEdit.displayName && userForm.value.displayName !=='' && userType === 0"
+                    (click)="onSubmit(true, 'displayName')"></span>
+                </div>
 
-          </div>
-          <div class="formfield">
+                <p *ngIf="userForm.controls.displayName.errors && userForm.controls.displayName.errors.required && !userForm.controls.displayName.pristine"
+                  class="error display-name-error">
+                  Display Name is required!
+                </p>
+                <p *ngIf="userForm.controls.displayName.errors && userForm.controls.displayName.errors.exist"
+                  class="error display-name-error">
+                  Display Name is already taken by other user
+                </p>
+              </div>
+
+            </div>
+            <div class="formfield">
               <div class="cell">
 
-            <label class="m-r-51">Location {{userType === 0 ? '*': ''}}</label>
-            <div  *ngIf="userType === 0" class="input-edit">
-            <input formControlName="location"  [placeholder]="userType === 0 ? 'Enter Location' : ''" type="text" class="required"
-              aria-label="location" >
-              <span class="field-edit-icon" *ngIf="!singleFieldEdit.location  && userType === 0" (click)="editSingleField('location')"></span>
-              <span class="field-save-icon" *ngIf="singleFieldEdit.location && userForm.value.location !==''  && userType === 0" (click)="onSubmit(true, 'location')"></span>
+                <label class="m-r-51">Location {{userType === 0 ? '*': ''}}</label>
+                <div *ngIf="userType === 0" class="input-edit">
+                  <input formControlName="location" [placeholder]="userType === 0 ? 'Enter Location' : ''" type="text"
+                    class="required" aria-label="location" list="locationList"
+                    (ngModelChange)="locationChanged($event)">
+                  <datalist id="locationList">
+                    <option *ngFor="let item of locations" [value]="item">{{item}}</option>
+                  </datalist>
+                  <span class="field-edit-icon" *ngIf="!singleFieldEdit.location  && userType === 0"
+                    (click)="editSingleField('location')"></span>
+                  <span class="field-save-icon"
+                    *ngIf="singleFieldEdit.location && userForm.value.location !==''  && userType === 0"
+                    (click)="onSubmit(true, 'location')"></span>
+                </div>
+                <button *ngIf="singleFieldEdit.location" (click)="getLocation()" class="get-location btn save"> Get
+                  Location </button>
+                <p class="location-info" *ngIf="userType === 0">
+
+                  Where in the world you are
+                </p>
+                <p *ngIf="userForm.controls.location.errors && !userForm.controls.location.pristine"
+                  class="error location-error">
+                  Location
+                  is required!</p>
+              </div>
             </div>
-            <p class="location-info" *ngIf = "userType === 0">Where in the world you are</p>
-            <p *ngIf="userForm.controls.location.errors && !userForm.controls.location.pristine" class="error location-error">
-              Location
-              is required!</p>
           </div>
-          </div>
-      </div>
-            <div  *ngIf="userType !== 0" class="row user-info-div">
-              <div class="table-div">
-                <div class="flex-info-div">
-                  <div class="margin-auto flex-sub-div">
+          <div *ngIf="userType !== 0" class="row user-info-div">
+            <div class="table-div">
+              <div class="flex-info-div">
+                <div class="margin-auto flex-sub-div">
                   <div class="pull-left text-left">
                     <div>
-                    <label class="text-left">Display Name </label>
+                      <label class="text-left">Display Name </label>
+                    </div>
+                    <div>
+                      <label class="text-left">Location</label>
+                    </div>
                   </div>
-                  <div>
-                    <label class="text-left">Location</label>
-                  </div>
-                </div>
                   <div class="pull-left">
-                  <div class="text-left">
-                    <label class="text-display  text-left">{{user.displayName}}</label>
+                    <div class="text-left">
+                      <label class="text-display  text-left">{{user.displayName}}</label>
                     </div>
                     <div class="text-left">
-                    <label >{{user?.location ? user?.location: 'Unknown'}}</label>
-                  </div>
+                      <label>{{user?.location ? user?.location: 'Unknown'}}</label>
+                    </div>
                   </div>
                 </div>
+              </div>
+              <div class="new-game-btn-container">
+                <div class="col-md-3 col-xs-6" *ngIf="loggedInUser">
+                  <button *ngIf="loggedInUserAccount &&  isLivesEnable" class="startgame" (click)="startNewGame()">Start
+                    New Game</button>
                 </div>
               </div>
             </div>
+          </div>
 
-            <div class="row m-b-55">
-              <mat-card-content>
-                  <mat-tab-group>
-                    <mat-tab label="Profile">
-                      <div class="row">
-                        <div class="col-lg-12 profile-container" [ngStyle]="{'align-items': isEnableEditProfile ? 'flex-end': 'flex-start'}">
-                          <div class="col-lg-10 col-sm-12 col-md-9 col-xs-12">
-                            <div class="m-25">
-                              <div class="clearfix namefield" *ngIf="isEnableEditProfile">
-                                <div class="formfield">
-                                  
-                                  <label id="nameLableField">Name {{userType === 0 ? '*': ''}}</label>
-                                  <input formControlName="name" type="text" [placeholder]="userType === 0 ? 'Enter Name' : ''" class="required" aria-label="name">
-                                  <p *ngIf="userType===0">Enter your real name, so people you know and recognize you</p>
-                                  <p *ngIf="userForm.controls.name.errors && !userForm.controls.name.pristine" class="error">Name is
-                                    required!</p>
+          <div class="row m-b-55">
+            <mat-card-content>
+              <mat-tab-group>
+                <mat-tab label="Profile">
+                  <div class="row">
+                    <div class="col-lg-12 profile-container"
+                      [ngStyle]="{'align-items': isEnableEditProfile ? 'flex-end': 'flex-start'}">
+                      <div class="col-lg-10 col-sm-12 col-md-9 col-xs-12">
+                        <div class="m-25">
+                          <div class="clearfix namefield" *ngIf="isEnableEditProfile">
+                            <div class="formfield">
+
+                              <label id="nameLableField">Name {{userType === 0 ? '*': ''}}</label>
+                              <input formControlName="name" type="text"
+                                [placeholder]="userType === 0 ? 'Enter Name' : ''" class="required" aria-label="name">
+                              <p *ngIf="userType===0">Enter your real name, so people you know and recognize you</p>
+                              <p *ngIf="userForm.controls.name.errors && !userForm.controls.name.pristine"
+                                class="error">Name
+                                is
+                                required!</p>
+                            </div>
+                          </div>
+
+                          <!-- Social Accounts -->
+                          <div *ngIf="isEnableEditProfile && userType===0" class="row pcategories saccount">
+                            <div class="col-md-12 col-sm-12 clearfix namefield m-t-0" *ngIf="socialProfileSettings">
+                              <div *ngFor="let profile of socialProfileSettings; let i=index">
+                                <div class="formfield" *ngIf="profile.enable && i <= socialProfileShowLimit">
+                                  <!-- <h2 class="social-profile-name"></h2> -->
+                                  <label class="profile-display-label">{{profile.display}}</label>
+                                  <div class="profile-display-field">
+                                    <div class="social-input-field">
+                                      <div class="social-url-contain" *ngIf="userType === 0"
+                                        (click)="onSocialProfileInputFocus(i)">
+                                        <span class="social-url">{{profile?.url}}</span>
+                                      </div>
+                                      <div class="social-url-contain" *ngIf="userType !== 0">
+                                        <span class="social-url">{{profile?.url}}</span>
+                                      </div>
+                                      <input #myInput class="social-profile" [formControlName]="profile.social_name">
+                                    </div>
+                                    <p *ngIf="userForm.get(profile.social_name).errors" class="social-profile-error">
+                                      Please enter valid profile id</p>
+                                  </div>
                                 </div>
                               </div>
-      
-                              <!-- Social Accounts -->
-                              <div *ngIf="isEnableEditProfile && userType===0" class="row pcategories saccount">
-                                <div class="col-md-12 col-sm-12 clearfix namefield m-t-0"  *ngIf="socialProfileSettings">
-                                  <div *ngFor="let profile of socialProfileSettings; let i=index">
-                                      <div class="formfield" *ngIf="profile.enable && i <= socialProfileShowLimit">
-                                        <!-- <h2 class="social-profile-name"></h2> -->
-                                        <label class="profile-display-label">{{profile.display}}</label>
-                                        <div class="profile-display-field">
-                                          <div class="social-input-field">
-                                            <div class="social-url-contain" *ngIf="userType === 0" (click)="onSocialProfileInputFocus(i)">
-                                              <span class="social-url">{{profile?.url}}</span>
-                                            </div>
-                                            <div class="social-url-contain" *ngIf="userType !== 0">
-                                                <span  class="social-url">{{profile?.url}}</span>
-                                              </div>
-                                            <input #myInput class="social-profile"
-                                              [formControlName]="profile.social_name">
-                                          </div>
-                                          <p *ngIf="userForm.get(profile.social_name).errors" class="social-profile-error">Please enter valid profile id</p>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                  <div class="show-more-div">
-                                    <!-- <label></label> -->
-                                    <a *ngIf="enableSocialProfile > socialProfileShowLimit + 1" class="viewall show-more"
-                                      (click)="showMoreSocialProfile()">Show more</a>
-                                  </div>
-                                </div>
+                            </div>
+                            <div class="show-more-div">
+                              <!-- <label></label> -->
+                              <a *ngIf="enableSocialProfile > socialProfileShowLimit + 1" class="viewall show-more"
+                                (click)="showMoreSocialProfile()">Show more</a>
+                            </div>
+                          </div>
 
-                                <div  *ngIf="!isEnableEditProfile" class="row pcategories saccount">
-                                    <div class="mt-0 col-md-12 col-sm-12 clearfix namefield "  *ngIf="socialProfileSettings">
-                                      <div *ngFor="let profile of socialProfileSettings">
-                                          <div class="formfield" *ngIf="profile.enable">
-                                            <label class="profile-display-label">{{profile.display}}</label>
-                                            <div class="profile-display-field social-profile-link">
-                                                <a href="{{profile?.url}}{{user[profile.social_name]}}" target="_blank" class="social-url">{{profile?.url}}{{user[profile.social_name]}}</a>
-                                             </div>
-                                          </div>
-                                      </div>
-                                    </div>
-                                </div>
-                              <!-- Social Accounts end -->
-                              <!-- Categories -->
-                              <div *ngIf="userType === 0 && isEnableEditProfile" class="row pcategories">
-                                  <div class="col-sm-3 add-space">
-                                    <h3>Preferred Categories</h3>
-                                  </div>
-                                  <div class="col-sm-9" formArrayName="categoryList">
-                                    <div class="formfield" *ngFor="let category of categoryList.controls; let i=index" [formGroupName]="i">
-                                      <label>
-                                        <input formControlName="isSelected" type="checkbox"
-                                          name="">{{categoryDict[category.value['category']].categoryName}}
-                                      </label>
-                                    </div>
+                          <div *ngIf="!isEnableEditProfile" class="row pcategories saccount">
+                            <div class="mt-0 col-md-12 col-sm-12 clearfix namefield " *ngIf="socialProfileSettings">
+                              <div *ngFor="let profile of socialProfileSettings">
+                                <div class="formfield" *ngIf="profile.enable">
+                                  <label class="profile-display-label">{{profile.display}}</label>
+                                  <div class="profile-display-field social-profile-link">
+                                    <a href="{{profile?.url}}{{user[profile.social_name]}}" target="_blank"
+                                      class="social-url">{{profile?.url}}{{user[profile.social_name]}}</a>
                                   </div>
                                 </div>
-                                <!-- Categories end -->
-                      
-                                <!-- Tags -->
-                                <div  *ngIf="userType === 0 && isEnableEditProfile" class="row pcategories">
-                                  <div class="col-sm-3 add-space">
-                                    <h3 >Preferred Tags</h3>
-                                  </div>
-                                  <div class="col-sm-9">
-                                    <div class="tags">
-                                      <div data-tags-input-name="tag" id="tagBox" class="tagging">
-                                        <mat-chip-list>
-                                          <mat-basic-chip *ngFor="let tag of autoTags" class="tag">
-                                            {{tag}}
-                                          </mat-basic-chip>
-                                          <mat-basic-chip *ngFor="let tag of enteredTags" class="tag">
-                                            {{tag}}
-                                            <span *ngIf="isEnableEditProfile" (click)="removeEnteredTag(tag)" class="remove-tag">x</span>
-                                          </mat-basic-chip>
-                                        </mat-chip-list>
-                      
-                                        <input matInput class="type-zone margin-bottom-8" contenteditable="true" formControlName="tags"
-                                          [matAutocomplete]="tagAuto" aria-label="tags">
-                                        <mat-autocomplete #tagAuto="matAutocomplete">
-                                          <mat-option *ngFor="let tag of filteredTags$ | async" [value]="tag">
-                                            {{tag}}
-                                          </mat-option>
-                                        </mat-autocomplete>
-                                        <button mat-button class="add-tag-button matHeader margin-top-10" color="primary" [disabled]="userForm.controls.tags.value==''" 
-                                        (click)="addTag()">ADD</button>
-                                      </div>
-                                    </div>
-                                  </div>
-      
-                                  <div class="col-xs-12 text-center">
-                      
-                                      <!-- <div class="row"> -->
-                                        <!-- Bulk Uploader Request -->
-      
-                                        <!-- <div class="col-md-9 col-sm-9 bulk-upload-request"> -->
-                                          <label>
-                                            <button *ngIf="(!user.bulkUploadPermissionStatus
+                              </div>
+                            </div>
+                          </div>
+                          <!-- Social Accounts end -->
+                          <!-- Categories -->
+                          <div *ngIf="userType === 0 && isEnableEditProfile" class="row pcategories">
+                            <div class="col-sm-3 add-space">
+                              <h3>Preferred Categories</h3>
+                            </div>
+                            <div class="col-sm-9" formArrayName="categoryList">
+                              <div class="formfield" *ngFor="let category of categoryList.controls; let i=index"
+                                [formGroupName]="i">
+                                <label>
+                                  <input formControlName="isSelected" type="checkbox"
+                                    name="">{{categoryDict[category.value['category']].categoryName}}
+                                </label>
+                              </div>
+                            </div>
+                          </div>
+                          <!-- Categories end -->
+
+                          <!-- Tags -->
+                          <div *ngIf="userType === 0 && isEnableEditProfile" class="row pcategories">
+                            <div class="col-sm-3 add-space">
+                              <h3>Preferred Tags</h3>
+                            </div>
+                            <div class="col-sm-9">
+                              <div class="tags">
+                                <div data-tags-input-name="tag" id="tagBox" class="tagging">
+                                  <mat-chip-list>
+                                    <mat-basic-chip *ngFor="let tag of enteredTags" class="tag">
+                                      {{tag}}
+                                      <span *ngIf="isEnableEditProfile" (click)="removeEnteredTag(tag)"
+                                        class="remove-tag">x</span>
+                                    </mat-basic-chip>
+                                  </mat-chip-list>
+
+                                  <input matInput class="type-zone margin-bottom-8" contenteditable="true"
+                                    formControlName="tags" [matAutocomplete]="tagAuto" aria-label="tags">
+                                  <mat-autocomplete #tagAuto="matAutocomplete">
+                                    <mat-option *ngFor="let tag of filteredTags$ | async" [value]="tag">
+                                      {{tag}}
+                                    </mat-option>
+                                  </mat-autocomplete>
+                                  <button mat-button class="add-tag-button matHeader margin-top-10" color="primary"
+                                    [disabled]="userForm.controls.tags.value==''" (click)="addTag()">ADD</button>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div class="col-xs-12 text-center">
+
+                              <!-- <div class="row"> -->
+                              <!-- Bulk Uploader Request -->
+
+                              <!-- <div class="col-md-9 col-sm-9 bulk-upload-request"> -->
+                              <label>
+                                <button *ngIf="(!user.bulkUploadPermissionStatus
                                             || user.bulkUploadPermissionStatus === NONE
                                             || user.bulkUploadPermissionStatus === PENDING)
-                                            && !user.isRequestedBulkUpload"
-                                            type="button" class="btn" (click)="setBulkUploadRequest()">{{bulkUploadBtnText}}</button>
-                                            <p *ngIf="user.bulkUploadPermissionStatus === PENDING">Bulk upload requested on
-                                              {{user.bulkUploadPermissionStatusUpdateTime | date : 'medium' }}.</p>
-                                            <p *ngIf="user.bulkUploadPermissionStatus === APPROVED">User has bulk upload
-                                              privilege</p>
-                        
-                                          </label>
-                                        <!-- </div> -->
-                                      <!-- </div> -->
-                                    </div>
-                                </div>
-                                <!-- Categories end -->
-                              </div>
-                          </div>
-                          <div  *ngIf="userType === 0" class="col-lg-2 col-sm-12 col-md-3 col-xs-12">
-                              <div class="savebox textcenter" *ngIf="!isEnableEditProfile">
-                                  <button type="button" class="btn save" (click)="editProfile()">Edit Profile</button>
-                                </div>
-                              <div class="savebox textcenter" *ngIf="isEnableEditProfile">
-                                  <button type="button" class="btn save" (click)="onSubmit()">Save Profile</button>
-                                  <!-- <button type="button" class="btn margin-top-10" (click)="resetUserProfile()">Cancel</button> -->
-                                </div>
+                                            && !user.isRequestedBulkUpload" type="button" class="btn"
+                                  (click)="setBulkUploadRequest()">{{bulkUploadBtnText}}</button>
+                                <p *ngIf="user.bulkUploadPermissionStatus === PENDING">Bulk upload requested on
+                                  {{user.bulkUploadPermissionStatusUpdateTime | date : 'medium' }}.</p>
+                                <p *ngIf="user.bulkUploadPermissionStatus === APPROVED">User has bulk upload
+                                  privilege</p>
+
+                              </label>
+                              <!-- </div> -->
+                              <!-- </div> -->
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </mat-tab>
-                    <mat-tab label="Stats">
-                        <div class="statsview">
-                            <ul id="stats" class="tab-content active">
-                              <li>
-                                <div class="sprite playedicon"></div>
-                                <div class="viewtext">Game Played</div>
-                                <div class="viewcount align-right">{{account?.gamePlayed}}</div>
-                              </li>
-                          
-                              <li>
-                                <div class="sprite topicsicon"></div>
-                                <div class="viewtext">Categories</div>
-                                <div class="viewcount align-right">{{account?.categories}}</div>
-                              </li>
-                          
-                              <li>
-                                <div class="sprite winsicon"></div>
-                                <div class="viewtext">Win-Loss</div>
-                                <div class="viewcount align-right">{{account?.wins}}-{{account?.losses}}</div>
-                              </li>
-                          
-                              <li>
-                                <div class="sprite badgesicon"></div>
-                                <div class="viewtext">Badges</div>
-                                <div class="viewcount align-right">{{account?.badges}}</div>
-                              </li>
-                          
-                              <li>
-                                <div class="sprite avgicon"></div>
-                                <div class="viewtext">Avg. answer time</div>
-                                <div class="viewcount align-right">{{account?.avgAnsTime}}
-                                  <div class="sec">sec</div>
-                                </div>
-                              </li>
-                          
-                              <li>
-                                <div class="sprite contributicon"></div>
-                                <div class="viewtext">Contribution</div>
-                                <div class="viewcount align-right">{{account?.contribution}}</div>
-                              </li>
-                            </ul>        
+                      <div *ngIf="userType === 0" class="col-lg-2 col-sm-12 col-md-3 col-xs-12">
+                        <div class="savebox textcenter" *ngIf="!isEnableEditProfile">
+                          <button type="button" class="btn save" (click)="editProfile()">Edit Profile</button>
+                        </div>
+                        <div class="savebox textcenter" *ngIf="isEnableEditProfile">
+                          <button type="button" class="btn save" (click)="onSubmit()">Save Profile</button>
+                          <!-- <button type="button" class="btn margin-top-10" (click)="resetUserProfile()">Cancel</button> -->
+                        </div>
+                      </div>
+                      <div *ngIf="loggedInUser?.userId && userType === 1" class="col-lg-2 col-sm-12 col-md-3 col-xs-12">
+                        <div class="savebox textcenter">
+                          <div *ngIf="userInvitations[user.email]?.status === 'approved'" class="friends-div">
+                            <div><img src="assets/images/friends.png" alt="Friends" />
+                            </div>
+                            <span class="is-friend-span">Friends</span>
                           </div>
-                    </mat-tab>
-                  </mat-tab-group>
-                </mat-card-content>
-            </div>
+                          <div *ngIf="userInvitations[user.email]?.status === 'pending'" class="friends-div">
+                            <div>
+                              <img src="assets/images/send-friend-request.png" alt="Friend request sent" />
+                            </div>
+                            <span class="send-friend-request-span">Friend Request Sent</span>
+                          </div>
+                          <div *ngIf="userInvitations[user.email]?.status === 'add'" (click)="sendFriendRequest()"
+                            class="friends-div">
+                            <div><img src="assets/images/send-friend-request.png" alt="Add Friend" /></div>
+                            <span class="send-friend-request-span">Add Friend</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </mat-tab>
+                <mat-tab label="Stats">
+                  <div class="statsview">
+                    <ul id="stats" class="tab-content active">
+                      <li>
+                        <div class="sprite playedicon"></div>
+                        <div class="viewtext">Game Played</div>
+                        <div class="viewcount align-right">{{account?.gamePlayed}}</div>
+                      </li>
+
+                      <li>
+                        <div class="sprite topicsicon"></div>
+                        <div class="viewtext">Categories</div>
+                        <div class="viewcount align-right">{{account?.categories}}</div>
+                      </li>
+
+                      <li>
+                        <div class="sprite winsicon"></div>
+                        <div class="viewtext">Win-Loss</div>
+                        <div class="viewcount align-right">{{account?.wins}}-{{account?.losses}}</div>
+                      </li>
+
+                      <li>
+                        <div class="sprite badgesicon"></div>
+                        <div class="viewtext">Badges</div>
+                        <div class="viewcount align-right">{{account?.badges}}</div>
+                      </li>
+
+                      <li>
+                        <div class="sprite avgicon"></div>
+                        <div class="viewtext">Avg. answer time</div>
+                        <div class="viewcount align-right">{{account?.avgAnsTime}}
+                          <div class="sec">sec</div>
+                        </div>
+                      </li>
+
+                      <li>
+                        <div class="sprite contributicon"></div>
+                        <div class="viewtext">Contribution</div>
+                        <div class="viewcount align-right">{{account?.contribution}}</div>
+                      </li>
+                    </ul>
+                  </div>
+                </mat-tab>
+                <mat-tab label="Game Played" *ngIf="loggedInUser?.userId && userType === 1 && gamePlayedAgainst">
+                  <div class="statsview">
+                    <ul id="stats" class="tab-content active">
+                      <li>
+                        <div class="sprite playedicon"></div>
+                        <div class="viewtext">Game Played Against You</div>
+                        <div class="viewcount align-right">{{gamePlayedAgainst?.gamePlayed}}</div>
+                      </li>
+                      <li>
+                        <div class="sprite winsicon"></div>
+                        <div class="viewtext">Games Won-Games Lost</div>
+                        <div class="viewcount align-right">{{gamePlayedAgainst?.wins}}-{{gamePlayedAgainst?.losses}}
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                </mat-tab>
+              </mat-tab-group>
+            </mat-card-content>
+          </div>
         </div>
       </div>
     </form>

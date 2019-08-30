@@ -12,7 +12,7 @@
 .enterquestion .formfield{ padding: 0; margin-bottom: 32px; }
 .enterquestion .formfield > input{ border-width: 1px; border-style: solid; border-radius: 4px; padding: 10px 25px; font-size: 18px; display: inline-block; width: calc(100% - 34px);}
 .formfield select {  border-width: 1px; border-style: solid; border-radius: 4px; font-size: 18px; display: inline-block; }
-.enterquestion .formfield > label{ width: 30px; display: inline-block; vertical-align: -4px}
+.enterquestion .formfield > label{ width: 30px; display: inline-block; vertical-align: -4px; vertical-align: top}
 .enterquestion .formfield input[type="radio"]{ display: block;}
 
 .question-list li input[type="radio"], .optionbox input[type="radio"]{ display: none; }
@@ -20,20 +20,27 @@
 .question-list li label:before{ content: "";position: absolute; height: 17px; width: 8px; border-width:0 2px 2px 0; border-style: solid; transform: rotate(45deg); left: 22px; display: none;}
 .question-list li input:checked ~ label{ padding-left: 40px; }
 .question-list li input:checked ~ label:before{ display: block; }
-#curentactive .btnbox{ background: #fff; }
-.btn.startg{ font-size: 24px; display: block; padding: 15px 0; width: 100% ; max-width: 300px;line-height: 1.2; margin:0 auto}
+#curentactive .btnbox{ background: #fff;  display: flex; justify-content: space-evenly; }
+.btn.startg{ font-size: 24px; display: block; padding: 15px 0; width: 100% ; max-width: 300px;line-height: 1.2; margin:0}
 .btn.startg:disabled{ background-color: silver; }
 .category-font-size { font-size: 11px; }
 
 @media screen and (min-width: 767px){
   .optionbox h2 span{ font-size: 22px }
   .pcategories .formfield select{  width: 300px }
+  .formfield select{  width: 300px }
   .card .enterquestion h3{margin-top: 40px}
-  .formfield, .mysetting .formfield { display: inline-block; }
+  // .formfield, .mysetting .formfield { display: inline-block; }
+  .formfield { display: block !important; }
   .savebox a.btn.startg{ display: inline-block; margin-right: 70px}
-  .enterquestion .formfield{ width: calc(50% - 3px) }
+  // .enterquestion .formfield{ width: calc(50% - 3px) }
   // .enterquestion .formfield:nth-child(2n + 1){ text-align: right; }
   .enterquestion .formfield > input{width: calc(85%) }
+  .enterquestion .mathseditor{
+    display: inline-block;
+    width: 85%;
+  }
+  
 }
 /*
 //commenting this out as @ 1024px the menu appears; unless we want to add max-width of 1024 here.
@@ -91,4 +98,18 @@ visibility: visible;
 
 .right-question{
   margin-right: 51%;
+}
+
+.label-richtext{
+  font-size: 22px;
+  text-transform: none;
+  letter-spacing: .10px;
+  padding-left: 0;
+  font-family: 'hindmedium';
+  margin-right:15px; 
+
+}
+
+.form-group {
+  text-align: left;
 }

@@ -1,4 +1,4 @@
-import { Category } from './category'
+import { Category } from './category';
 
 export class Question {
   id: string;
@@ -25,6 +25,15 @@ export class Question {
   gameRound?: number;
   totalQALength?: number;
   serverTimeQCreated?: number;
+  renderedQuestion?: any;
+  renderedAnswer?; any;
+  questionObject?: any;
+  isRichEditor?: boolean = false;
+  maxTime?: number;
+  reactionsCount?: { [key: string]: number };
+  appeared: number;
+  correct: number;
+  wrong: number;
 
 
 
@@ -44,8 +53,19 @@ export class Question {
     question.explanation = db.explanation;
     question.bulkUploadId = db.bulkUploadId ? db.bulkUploadId : '';
     question.reason = db.reason ? db.reason : '';
+    question.isRichEditor = db.isRichEditor ? db.isRichEditor : false;
+    question.questionObject = db.questionObject ? db.questionObject : false;
     question.createdOn = db.createdOn ? db.createdOn : new Date();
     question.totalQALength = this.countQALength(db);
+    question.maxTime = db.maxTime ? db.maxTime : 0;
+    question.reactionsCount  = db.reactionsCount ? db.reactionsCount : {};
+    question.appeared = db.appeared ? db.appeared : 0;
+    question.correct = db.correct ? db.correct : 0;
+    question.wrong = db.wrong ? db.wrong : 0;
+    db.answers = db.answers.map(answer => {
+      answer.isRichEditor = answer.isRichEditor ? answer.isRichEditor : false;
+      return answer;
+    });
     return question;
   }
 
@@ -63,6 +83,14 @@ export class Question {
     question.tags = source.tags;
     question.created_uid = source.created_uid;
     question.serverTimeQCreated = source.serverTimeQCreated;
+    question.renderedQuestion = source.renderedQuestion;
+    question.isRichEditor = (source.isRichEditor) ? source.isRichEditor : false;
+    question.questionObject = (source.questionObject) ? source.questionObject : '' ;
+    question.reactionsCount = (source.reactionsCount) ? source.reactionsCount : {} ;
+    question.appeared = source.appeared ? source.appeared : 0;
+    question.correct = source.correct ? source.correct : 0;
+    question.wrong = source.wrong ? source.wrong : 0;
+
     question.totalQALength = this.countQALength(source);
     return question;
   }
@@ -96,6 +124,9 @@ export class Answer {
   id: number;
   answerText: string;
   correct: boolean;
+  renderedAnswer?: string;
+  answerObject?: any;
+  isRichEditor?: boolean = false;
 }
 
 export enum QuestionStatus {

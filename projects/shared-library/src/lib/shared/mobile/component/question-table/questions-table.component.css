@@ -21,3 +21,7 @@
     background-color: #e2f0d6;
     color: #7cb645;
 }
+
+.text-center{
+    horizontal-align: center;
+}

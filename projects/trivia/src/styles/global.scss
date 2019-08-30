@@ -25,7 +25,7 @@ button, input, select { font-family: inherit; border:none;} //textarea
 button, input { line-height: normal; text-transform: none; }
 button, html input[type="button"], input[type="reset"], input[type="submit"] { cursor: pointer; -webkit-appearance: button; }
 button[disabled], input[disabled] { cursor: default; }
-input[type="checkbox"], input[type="radio"], li, div, p, span { box-sizing: border-box; }
+input[type="number"], input[type="checkbox"], input[type="radio"], li, div, p, span { box-sizing: border-box; }
 input[type="search"] { -webkit-box-sizing: content-box; -moz-box-sizing: content-box; box-sizing: content-box; -webkit-appearance: textfield; }
 textarea { overflow: auto; vertical-align: top; padding: 15px 13px 20px; resize: none; }
 /*Fonts family*/
@@ -654,6 +654,9 @@ body.dialog-open .cdk-global-overlay-wrapper {
   }
 }
 
+.gameplay .wrong .text, .gameplay .right .text{
+  color: #fff !important;
+}
 
 .mat-link-bar {
   left: 131px !important;
@@ -668,3 +671,107 @@ body.dialog-open .cdk-global-overlay-wrapper {
   font-size: 14px !important;
 }
 
+// maths quill js
+
+.ql-input,  .mq-root-block{
+  // width: 100% !important;
+  width: 360px !important;
+  padding: 12px 20px !important;
+  margin: 8px 0 !important;
+  display: inline-block !important;
+  border: 1px solid #ccc !important;
+  border-radius: 4px !important;
+  box-sizing: border-box !important;
+  min-height: 40px;
+}
+#math-palette {
+  // border: 1px solid rgba(0,0,0,.15);
+  // border-radius: 3px;
+  // box-shadow: 0 5px 10px rgba(0,0,0,.12);
+  // max-width: 400px;
+  min-width: 400px;
+  position: absolute;
+  z-index: 999;
+  padding: 5px 7px;
+  background: white;
+  // background-color: #f7f7f7;
+  /* padding-right: 35px; */
+}
+
+
+#math-palette #toolbar{
+  // padding:15px;
+}
+
+.mq-editable-field {
+  border: none !important;
+}
+
+.mq-editable-field {
+  // width: 100%;
+}
+
+.ql-close {
+  float: right;
+    border-radius: 6px;
+    height: auto;
+    padding-left: 5px;
+    margin-top: 9px;
+    padding: 11px 5px;
+    margin-left: 13px;
+    color: #06c;
+    cursor: pointer;
+    text-decoration: none;
+    font-weight: 700;
+}
+
+.key {
+  border: 1px solid #cccccc;
+  background: #f6f6f6;
+  font-weight: bold;
+  /* color: #1c94c4; */
+  // height: 2em;
+  min-width: 2em;
+  margin: .1em;
+  cursor: pointer;
+  overflow: hidden;
+  line-height: 2em;
+  text-align: center;
+  padding: 5px;
+}
+
+.key:hover {
+  border: 1px solid #fbd850;
+  background: #ffffff;
+  font-weight: bold;
+  color: #eb8f00;
+}
+
+.ql-editor.ql-blank:focus::before {
+  content: '' !important;
+}
+
+.ql-editor.ql-blank::before {
+  content: '' !important;
+}
+
+.mq-editable-field.mq-focused, {
+  box-shadow: none !important;
+  border-color: none !important;
+  border-radius: 0px;
+}
+
+.ql-toolbar.ql-snow + .ql-container.ql-snow {
+  min-height: 400px;
+}
+// maths quill js
+
+pre.ql-syntax {
+  background-color: #23241f;
+  color: #f8f8f2;
+  overflow: visible;
+}
+
+.gameplay .wrong p, .gameplay .right p {
+  color: #fff !important;
+}

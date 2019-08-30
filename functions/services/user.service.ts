@@ -3,6 +3,7 @@ import admin from '../db/firebase.client';
 import { Utils } from '../utils/utils';
 import { AccountService } from './account.service';
 import { AppSettings } from '../services/app-settings.service';
+import { FriendService } from './friend.service';
 export class UserService {
 
     private static fireStoreClient: any = admin.firestore();
@@ -27,9 +28,39 @@ export class UserService {
     static async getUserById(userId: string): Promise<any> {
         try {
             const userData = await UserService.fireStoreClient
-                .doc(`/${CollectionConstants.USERS}/${userId}`)
+                .doc(`/${CollectionConstants.USERS}/${userId}/`)
                 .get();
             return userData.data();
+        } catch (error) {
+            return Utils.throwError(error);
+        }
+    }
+
+
+    /**
+     * getOtherUserByIdWithGameStat
+     * return userGameStatwith other user
+    */
+    static async getOtherUserGameStatById(userId: string, otherUserId): Promise<any> {
+        try {
+            const userData = await UserService.fireStoreClient
+                .doc(`/${CollectionConstants.USERS}/${userId}/game_played_with/${otherUserId}`)
+                .get();
+            return userData.data();
+        } catch (error) {
+            return Utils.throwError(error);
+        }
+    }
+
+    /**
+     * setUser Game stat with other user
+     * return ref
+     */
+    static async setGameStat(gameStat: any, userId, otherUserId: any): Promise<any> {
+        try {
+            return await UserService.fireStoreClient
+                .doc(`/${CollectionConstants.USERS}/${userId}/game_played_with/${otherUserId}`)
+                .set(gameStat, { merge: true });
         } catch (error) {
             return Utils.throwError(error);
         }
@@ -40,12 +71,16 @@ export class UserService {
      * return ref
      */
     static async updateUser(dbUser: any): Promise<any> {
-        try {
-            return await UserService.fireStoreClient
-                .doc(`/${CollectionConstants.USERS}/${dbUser.userId}`)
-                .set(dbUser, { merge: true });
-        } catch (error) {
-            return Utils.throwError(error);
+        if (dbUser && dbUser.userId) {
+            try {
+                return await UserService.fireStoreClient
+                    .doc(`/${CollectionConstants.USERS}/${dbUser.userId}`)
+                    .set(dbUser, { merge: true });
+            } catch (error) {
+                return Utils.throwError(error);
+            }
+        } else {
+            return false;
         }
     }
 
@@ -70,7 +105,7 @@ export class UserService {
      * getUserProfile
      * return user
     */
-    static async getUserProfile(userId: string, extendedInfo = false): Promise<any> {
+    static async getUserProfile(userId: string, loggedInUserId = '', extendedInfo = false): Promise<any> {
         try {
             const dbUser: User = await UserService.getUserById(userId);
             const user = new User();
@@ -78,6 +113,9 @@ export class UserService {
             user.location = (dbUser && dbUser.location) ? dbUser.location : '';
             user.profilePicture = (dbUser && dbUser.profilePicture) ? dbUser.profilePicture : '';
             user.userId = userId;
+            user.email = (dbUser && dbUser.email) ? dbUser.email : '';
+            let gamePlayed;
+            let isFriend = false;
             if (extendedInfo) {
                 user.categoryIds = (dbUser && dbUser.categoryIds) ? dbUser.categoryIds : [];
                 user.tags = (dbUser && dbUser.tags) ? dbUser.tags : [];
@@ -87,7 +125,7 @@ export class UserService {
                 if (appSetting.social_profile) {
                     for (const socialProfile of appSetting.social_profile) {
                         if (socialProfile.enable) {
-                            user[socialProfile.social_name] = dbUser[socialProfile.social_name];
+                            user[socialProfile.social_name] = (dbUser[socialProfile.social_name]) ? dbUser[socialProfile.social_name] : '';
                         }
                     }
                 }
@@ -95,13 +133,33 @@ export class UserService {
                 const account = await AccountService.getAccountById(userId);
                 user.account.avgAnsTime = (account && account.avgAnsTime) ? account.avgAnsTime : 0;
                 user.account.badges = (account && account.badges) ? account.badges : 0;
+                user.account.bits = (account && account.bits) ? account.bits : 0;
+                user.account.bytes = (account && account.bytes) ? account.bytes : 0;
                 user.account.categories = (account && account.categories) ? account.categories : 0;
                 user.account.contribution = (account && account.contribution) ? account.contribution : 0;
                 user.account.wins = (account && account.wins) ? account.wins : 0;
                 user.account.losses = (account && account.losses) ? account.losses : 0;
                 user.account.gamePlayed = (account && account.gamePlayed) ? account.gamePlayed : 0;
+                const friendList = await FriendService.getFriendByInvitee(userId);
+                user.totalFriends = (friendList && friendList.myFriends) ? friendList.myFriends.length : 0;
+                if (loggedInUserId && loggedInUserId !== '') {
+                    gamePlayed = await UserService.getOtherUserGameStatById(loggedInUserId, userId);
+
+                }
+
             }
-            return user;
+            if (loggedInUserId && loggedInUserId !== '') {
+                const friendList = await FriendService.getFriendByInvitee(loggedInUserId);
+
+                if (friendList && friendList.myFriends) {
+                    if (loggedInUserId === userId) {
+                        user.totalFriends = friendList.myFriends.length;
+                    }
+                    const friend = friendList.myFriends.filter(element => element[userId] ? true : false);
+                    isFriend = friend[0] ? true : false;
+                }
+            }
+            return { ...user, gamePlayed, 'isFriend': isFriend };
         } catch (error) {
             return Utils.throwError(error);
         }
@@ -218,6 +276,87 @@ export class UserService {
         }
         try {
             return await Promise.all(migrationPromises);
+        } catch (error) {
+            return Utils.throwError(error);
+        }
+    }
+
+
+    /**
+     * getUsersDisplayName
+     * return users
+     */
+    static async getUsersByDisplayName(displayName: string): Promise<any> {
+        try {
+            return Utils.getValesFromFirebaseSnapshot(
+                await UserService.fireStoreClient
+                    .collection(CollectionConstants.USERS)
+                    .where(GeneralConstants.DISPLAY_NAME, GeneralConstants.DOUBLE_EQUAL, displayName)
+                    .get()
+            );
+        } catch (error) {
+            return Utils.throwError(error);
+        }
+    }
+
+    /**
+   * add default number of lives into account
+   * return ref
+   */
+    static async setUserDetails(user: any): Promise<any> {
+        try {
+
+            const appSetting = await AppSettings.Instance.loadAppSettings();
+
+            let displayName = user.displayName ? user.displayName : '';
+
+            if (appSetting.default_names.length > 0) {
+                const randomNumber = Math.floor(Math.random() * Math.floor(appSetting.default_names.length));
+                displayName = appSetting.default_names[randomNumber] + appSetting.user_display_name_value;
+            }
+
+            user['displayName'] = displayName;
+            user['isCategorySet'] = false;
+            await UserService.updateUser({ ...user });
+
+            AppSettings.Instance.updateUserDisplayNameValue(appSetting.user_display_name_value + 1);
+
+            return user;
+
+        } catch (error) {
+            return Utils.throwError(error);
+        }
+    }
+
+    /**
+     * updateUserGameStat
+     * return status
+     */
+    static async updateUserGamePlayedWithStat(): Promise<any> {
+        try {
+            const friendsData = await FriendService.getFriendsCollection();
+            const promises = [];
+            for (const doc of friendsData.docs) {
+                const friends = doc.data();
+                const userId = doc.id;
+                const updateUser = { ...friends };
+                for (const [index, friendMetaDataMap] of friends.myFriends.entries()) {
+                    for (const friendUserId of Object.keys(friendMetaDataMap)) {
+                        promises.push(UserService.setGameStat({ ...friendMetaDataMap[friendUserId] }, userId, friendUserId));
+                        if (updateUser.myFriends[index] && updateUser.myFriends[index][friendUserId] &&
+                            friendMetaDataMap[friendUserId] && friendMetaDataMap[friendUserId].created_uid) {
+
+                            updateUser.myFriends[index][friendUserId] = {
+                                'created_uid': friendMetaDataMap[friendUserId].created_uid,
+                                'date': friendMetaDataMap[friendUserId].date ?
+                                    friendMetaDataMap[friendUserId].date : new Date().getUTCDate()
+                            };
+                        }
+                    }
+                }
+                promises.push(FriendService.setFriend(updateUser, userId));
+            }
+            return await Promise.all(promises);
         } catch (error) {
             return Utils.throwError(error);
         }

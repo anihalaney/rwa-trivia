@@ -1,20 +1,28 @@
 
 import * as functions from 'firebase-functions';
-import { readFileSync } from 'fs';
+import { readFileSync, stat } from 'fs';
 import { resolve } from 'path';
-import { friendInvitationConstants, Game, Invitation, LeaderBoardUsers, OpponentType, PlayerMode, pushNotificationRouteConstants, Question, QuestionStatus, SystemStatConstants, TriggerConstants, UserStatConstants } from '../../projects/shared-library/src/lib/shared/model';
+import {
+    friendInvitationConstants, Game, Invitation, LeaderBoardUsers,
+    OpponentType, PlayerMode, pushNotificationRouteConstants, Question,
+    QuestionStatus, SystemStatConstants, TriggerConstants, UserStatConstants, UserStatus, User, UserStatusConstants
+} from '../../projects/shared-library/src/lib/shared/model';
 import { AccountService } from '../services/account.service';
 import { AppSettings } from '../services/app-settings.service';
 import { LeaderBoardService } from '../services/leaderboard.service';
 import { StatsService } from '../services/stats.service';
 import { AchievementMechanics } from '../utils/achievement-mechanics';
 import { ESUtils } from '../utils/ESUtils';
-import { FriendGameStats } from '../utils/friend-game-stats';
+import { GamePlayedWithStats } from '../utils/game-played-with-stats';
 import { GameLeaderBoardStats } from '../utils/game-leader-board-stats';
 import { MailClient } from '../utils/mail-client';
 import { PushNotification } from '../utils/push-notifications';
 import { UserContributionStat } from '../utils/user-contribution-stat';
 import admin from './firebase.client';
+import { UserService } from '../services/user.service';
+import { QuestionService } from '../services/question.service';
+import { Utils } from '../utils/utils';
+import { UserStatusService } from '../services/user-status.service';
 const mailConfig = JSON.parse(readFileSync(resolve(__dirname, '../../../config/mail.config.json'), 'utf8'));
 
 export class FirebaseFunctions {
@@ -65,6 +73,45 @@ export class FirebaseFunctions {
         }
     }
 
+
+    static async doReactionWriteOperation(change: any, context: any): Promise<boolean> {
+        try {
+            if (context.params.reactions === 'reactions') {
+                const afterData = change.after.exists ? change.after.data() : null;
+                const beforeData = change.before.exists ? change.before.data() : null;
+                const question: Question = await QuestionService.getQuestionById(context.params.questionId);
+                // for update
+                if (beforeData && afterData) {
+                    if (beforeData.status != afterData.status) {
+                        question.reactionsCount[afterData.status] = question.reactionsCount
+                            && question.reactionsCount[afterData.status] ? Utils.changeFieldValue(1) : 1; // increase current status
+                        question.reactionsCount[beforeData.status] = question.reactionsCount &&
+                            question.reactionsCount[beforeData.status] ? Utils.changeFieldValue(-1) : 0; // decrease before status
+                    } else {
+                        return true;
+                    }
+                } else if (!beforeData && afterData) {
+                    // for create
+                    question.reactionsCount[afterData.status] = question.reactionsCount
+                        && question.reactionsCount[afterData.status] ? Utils.changeFieldValue(1) : 1; // increase current status
+                } else if (beforeData && !afterData) {
+                    // delete
+                    question.reactionsCount[beforeData.status] = question.reactionsCount &&
+                        question.reactionsCount[beforeData.status] ? Utils.changeFieldValue(-1) : 0; // decrease current status
+                } else {
+                    return true;
+                }
+                const newquestion = { ...question };
+                await QuestionService.updateQuestion('questions', newquestion);
+                return true;
+            } else {
+                return true;
+            }
+        } catch (error) {
+            console.error('Error :', error);
+            throw error;
+        }
+    }
     static async doInvitationWriteOperation(change: any, context: any): Promise<boolean> {
         try {
             const beforeEventData = change.before.data();
@@ -118,15 +165,16 @@ export class FirebaseFunctions {
                 if (game.gameOver) {
 
                     await StatsService.updateSystemStats(SystemStatConstants.ACTIVE_GAMES);
-                    StatsService.updateSystemStats(SystemStatConstants.GAME_PLAYED);
+                    await StatsService.updateSystemStats(SystemStatConstants.GAME_PLAYED);
 
                     await GameLeaderBoardStats.getGameUsers(game);
 
                     if (Number(game.gameOptions.playerMode) === PlayerMode.Opponent &&
                         Number(game.gameOptions.opponentType) === OpponentType.Friend) {
-                        await FriendGameStats.calculateFriendsGameState(game);
+                        await GamePlayedWithStats.calculateUserGamePlayedState(game);
                     }
                 }
+                await StatsService.calculateQuestionStat(beforeEventData, afterEventData);
             }
 
             return true;
@@ -143,6 +191,8 @@ export class FirebaseFunctions {
             if (data) {
 
                 await StatsService.updateSystemStats('total_users');
+
+                await UserService.setUserDetails(data);
 
                 const appSetting = await AppSettings.Instance.getAppSettings();
                 if (appSetting.lives.enable) {
@@ -222,10 +272,84 @@ export class FirebaseFunctions {
             throw error;
         }
     }
+
+    static async doUserStatusUpdateOperation(change: any, context: any): Promise<boolean> {
+        try {
+
+            // check realtime db status
+            const userDataStatus = change.after.val();
+            const token = context.params.tokenId;
+            console.log('userDataStatus', userDataStatus);
+
+            const onlineStatus = (userDataStatus.status === 'online') ? true : false;
+
+
+            // get firestore db object
+            let userStatus: UserStatus = await UserStatusService.getUserStatusById(userDataStatus.userId);
+
+            if (!userStatus) {
+                userStatus = new UserStatus();
+                userStatus.userId = userDataStatus.userId;
+            }
+
+            // get firestore db object
+            const user: User = await UserService.getUserById(userDataStatus.userId);
+
+            if (userDataStatus.device !== TriggerConstants.WEB) {
+
+                // get firestore db object
+                const realTimeUserStatus = await UserService.getUserById(userDataStatus.userId);
+                userDataStatus.status = realTimeUserStatus.status;
+
+                if (userDataStatus.device === TriggerConstants.ANDROID) {
+                    const deviceTokenIndex = user.androidPushTokens
+                        .findIndex(
+                            (androidPushToken) =>
+                                (androidPushToken === token ||
+                                    (androidPushToken && androidPushToken.token && androidPushToken.token === token)));
+                    if (deviceTokenIndex !== -1) {
+                        user.androidPushTokens[deviceTokenIndex].online = onlineStatus;
+                    }
+                } else {
+                    const deviceTokenIndex = user.iosPushTokens
+                        .findIndex((iosPushToken) =>
+                            (iosPushToken === token ||
+                                (iosPushToken && iosPushToken.token && iosPushToken.token === token)));
+                    if (deviceTokenIndex !== -1) {
+                        user.iosPushTokens[deviceTokenIndex].online = onlineStatus;
+                    }
+                }
+                console.log('user', user);
+                await UserService.updateUser({ ...user });
+
+            }
+
+            const androidOnlineDeviceIndex = user.androidPushTokens.findIndex((androidPushToken) =>
+                androidPushToken.token && androidPushToken.online);
+            const iosOnlineDeviceIndex = user.iosPushTokens.findIndex((iosPushToken) =>
+                iosPushToken.token && iosPushToken.online);
+
+            userStatus.online = (androidOnlineDeviceIndex !== -1 || iosOnlineDeviceIndex !== -1
+                || userDataStatus.status === UserStatusConstants.ONLINE) ? true : false;
+
+            userStatus.lastUpdated = new Date().getTime();
+            console.log('userStatus', userStatus);
+
+            // update the user service
+            return UserStatusService.updateUserStatus({ ...userStatus });
+
+        } catch (error) {
+            console.error('Error :', error);
+            throw error;
+        }
+    }
 }
 
 exports.onQuestionWrite = functions.firestore.document('/questions/{questionId}')
     .onWrite(async (change, context) => await FirebaseFunctions.doQuestionWriteOperation(change, context));
+
+exports.onReactionWrite = functions.firestore.document('/questions/{questionId}/{reactions}/{userId}')
+    .onWrite(async (snap, context) => await FirebaseFunctions.doReactionWriteOperation(snap, context));
 
 exports.onInvitationWrite = functions.firestore.document('/invitations/{invitationId}')
     .onWrite(async (change, context) => await FirebaseFunctions.doInvitationWriteOperation(change, context));
@@ -249,3 +373,7 @@ exports.onUnpublishedQuestionsUpdate = functions.firestore.document('/unpublishe
 
 exports.onQuestionCreate = functions.firestore.document('/questions/{questionId}')
     .onCreate(async (snap, context) => await FirebaseFunctions.doQuestionCreateOperation(snap, context));
+
+// update user's status based on realtime updates
+exports.onUserStatusWrite = functions.database.ref('/users/{tokenId}')
+    .onWrite(async (change, context) => await FirebaseFunctions.doUserStatusUpdateOperation(change, context));

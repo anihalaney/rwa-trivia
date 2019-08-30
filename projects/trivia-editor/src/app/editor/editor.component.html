@@ -1,0 +1,5 @@
+<div *ngIf="show">
+  <ng-quill-tex [modules]="quillConfig" (textChanged)="onTextChanged($event)" 
+  (fileUploaded)="fileUploaded($event)" [imageUrl]="quillImageUrl" [content]="editorContent" [isMobile]="true">
+  </ng-quill-tex>  
+</div>

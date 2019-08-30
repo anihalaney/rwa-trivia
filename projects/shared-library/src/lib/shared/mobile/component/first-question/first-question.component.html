@@ -1,0 +1,27 @@
+<ns-action-bar title="Get Started" class="Roboto-Regular" hideHomeIcon="true" showAdd="false"></ns-action-bar>
+<StackLayout>
+    <ScrollView>
+        <StackLayout>
+            <CardView class="cardStyle gameplay" margin="10" android:elevation="20" ios:shadowRadius="3"
+                ios:elevation="40" radius="5" backgroundColor="white" iosOverflowSafeArea="false">
+                <StackLayout class="cardStyle Roboto-Medium" backgroundColor="#ffffff" height="100%" width="100%"
+                    margin="15" iosOverflowSafeArea="false">
+                    <StackLayout padding="10">
+                        <Label text="This is first Question" color="#000" fontSize="20" textWrap="true"></Label>
+                        <Label text="Play to get 50 bits now" color="#808080" fontSize="20" textWrap="true"></Label>
+                    </StackLayout>
+                    <app-question-card [question]="question" [categoryName]="categoryName" [answeredText]="answeredText"
+                        [doPlay]="doPlay" [correctAnswerText]="correctAnswerText" [userDict]="userDict"
+                        (selectedAnswer)="selectedAnswer($event)" [user]="user">
+                    </app-question-card>
+                    <StackLayout orientation="vertical" margin="10" iosOverflowSafeArea="false">
+                        <Button class="Roboto-Regular" backgroundColor="#8ac541" color="white" margin="20"
+                            (rippleTap)="goToDashboard((answeredText === '' ? 'skip' : 'continue'))" width="100%"
+                            [text]="(answeredText === '' ? 'skip' : 'continue')" fontSize="17" padding="15"
+                            stlRippleEffect stlBackgroundColor="#8ac541"></Button>
+                    </StackLayout>
+                </StackLayout>
+            </CardView>
+        </StackLayout>
+    </ScrollView>
+</StackLayout>

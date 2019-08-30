@@ -1,50 +1,34 @@
-import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { StoreModule } from '@ngrx/store';
+import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 import { EffectsModule } from '@ngrx/effects';
-
-import {
-  Utils,
-  CategoryService, TagService, QuestionService,
-  GameService, BulkService, UserService, SocialService, StatsService,
-  WindowRef, ApplicationSettingsService, AchievementService
-} from './services';
-
-import { NavigationService } from './services/mobile/navigation.service';
-
-import { AuthenticationProvider, AuthInterceptor } from './auth';
-
-import { AuthGuard, BulkLoadGuard, CategoriesResolver, TagsResolver } from './route-guards';
-
-import { DbService } from './db-service';
-import { TNSDbService } from './db-service/mobile/db.service';
-import { FirebaseService } from './db-service/firebase.service';
-
-import {
-  UserActions, CategoryActions, TagActions, QuestionActions, UIStateActions, GameActions,
-  ApplicationSettingsActions
-} from './store/actions';
-import { effects } from './store/effects';
-import { reducer } from './store';
-
-import { SharedRoutingModule } from './routing/shared-routing.module';
-
-import { LoginComponent } from './components';
+import { StoreModule } from '@ngrx/store';
 import { SharedModule } from './../shared/shared.module';
-
-import { NativeScriptFormsModule } from 'nativescript-angular/forms';
-import { ReactiveFormsModule } from '@angular/forms';
-
+import { AuthenticationProvider, AuthInterceptor } from './auth';
 import { FirebaseAuthService } from './auth/firebase-auth.service';
 import { TNSFirebaseAuthService } from './auth/mobile/firebase-auth.service';
+import { LoginComponent } from './components';
+import { DbService } from './db-service';
+import { FirebaseService } from './db-service/firebase.service';
+import { TNSDbService } from './db-service/mobile/db.service';
+import { AuthGuard, BulkLoadGuard, CategoriesResolver, TagsResolver } from './route-guards';
+import { SharedRoutingModule } from './routing/shared-routing.module';
+import {
+  AchievementService, ApplicationSettingsService,
+  BulkService, CategoryService, GameService, QuestionService,
+  SocialService, StatsService, TagService, UserService, Utils, WindowRef
+} from './services';
+import { NavigationService } from './services/mobile';
+import { reducer } from './store';
+import {
+  ApplicationSettingsActions, CategoryActions,
+  GameActions, QuestionActions, TagActions, UIStateActions, UserActions
+} from './store/actions';
+import { effects } from './store/effects';
 
 
 @NgModule({
   declarations: [
     LoginComponent
-  ],
-
-  entryComponents: [
   ],
   imports: [
 

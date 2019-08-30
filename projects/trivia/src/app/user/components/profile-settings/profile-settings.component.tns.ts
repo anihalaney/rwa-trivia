@@ -1,30 +1,30 @@
-import {
-  ChangeDetectionStrategy, ChangeDetectorRef,
-  Component, ElementRef, OnDestroy, QueryList, ViewChild, ViewChildren
-} from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, ElementRef, OnDestroy, QueryList, ViewChild, ViewChildren, ViewContainerRef, Component } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
+import { ModalDialogService } from 'nativescript-angular/directives/dialogs';
 import { isAvailable, requestPermissions, takePicture } from 'nativescript-camera';
+import * as geolocation from 'nativescript-geolocation';
+import { ImageCropper } from 'nativescript-imagecropper';
 import * as imagepicker from 'nativescript-imagepicker';
-import * as Toast from 'nativescript-toast';
 import { TokenModel } from 'nativescript-ui-autocomplete';
 import { RadAutoCompleteTextViewComponent } from 'nativescript-ui-autocomplete/angular';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { filter } from 'rxjs/operators';
 import { Utils } from 'shared-library/core/services';
 import { coreState, UserActions } from 'shared-library/core/store';
 import { profileSettingsConstants } from 'shared-library/shared/model';
 import { ObservableArray } from 'tns-core-modules/data/observable-array';
 import { ImageAsset } from 'tns-core-modules/image-asset';
-import { ImageSource } from 'tns-core-modules/image-source';
-import { isAndroid } from 'tns-core-modules/platform';
-import { AppState } from '../../../store';
-import { ProfileSettings } from './profile-settings';
+import { fromAsset, ImageSource } from 'tns-core-modules/image-source';
+import { isAndroid, isIOS } from 'tns-core-modules/platform';
 import * as dialogs from 'tns-core-modules/ui/dialogs';
-import { fromAsset } from 'tns-core-modules/image-source';
-import { ImageCropper } from 'nativescript-imagecropper';
-import { ActivatedRoute } from '@angular/router';
 import { SegmentedBar, SegmentedBarItem } from 'tns-core-modules/ui/segmented-bar';
 import * as utils from 'tns-core-modules/utils/utils';
+import { AppState } from '../../../store';
+import { userState } from '../../store';
+import { LocationResetDialogComponent } from './location-reset-dialog/location-reset-dialog.component';
+import { ProfileSettings } from './profile-settings';
 
 @Component({
   selector: 'profile-settings',
@@ -34,7 +34,7 @@ import * as utils from 'tns-core-modules/utils/utils';
 })
 
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
-export class ProfileSettingsComponent extends ProfileSettings implements OnDestroy {
+export class ProfileSettingsComponent extends ProfileSettings implements OnDestroy, AfterViewInit {
 
   // Properties
   showSelectCategory = false;
@@ -43,9 +43,11 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
   customTag: string;
   private tagItems: ObservableArray<TokenModel>;
   SOCIAL_LABEL = 'CONNECT YOUR SOCIAL ACCOUNT';
-  @ViewChildren('textField') textField: QueryList<ElementRef>;
-  subscriptions = [];
+  @ViewChildren('textField', { read:  false }) textField: QueryList<ElementRef>;
 
+  subscriptions = [];
+  isValidDisplayName: boolean = null;
+  isLocationEdit: boolean = false;
   public imageTaken: ImageAsset;
   public saveToGallery = true;
   public keepAspectRatio = true;
@@ -55,22 +57,33 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
   public items: Array<SegmentedBarItem>;
   public selectedIndex = 0;
   tabsTitles: Array<string>;
+  private locations: ObservableArray<TokenModel>;
+  private isLocationEnalbed: boolean;
+  iqKeyboard: IQKeyboardManager;
 
-
-  @ViewChild('autocomplete') autocomplete: RadAutoCompleteTextViewComponent;
+  @ViewChild('autocomplete', { static: false }) autocomplete: RadAutoCompleteTextViewComponent;
+  @ViewChild('acLocation', { static: false }) acLocation: RadAutoCompleteTextViewComponent;
 
   constructor(public fb: FormBuilder,
     public store: Store<AppState>,
     public userAction: UserActions,
-    public utils: Utils,
+    public uUtils: Utils,
     public cd: ChangeDetectorRef,
-    public route: ActivatedRoute) {
-    super(fb, store, userAction, utils, cd, route);
+    public route: ActivatedRoute,
+    public router: Router,
+    private modal: ModalDialogService,
+    private vcRef: ViewContainerRef) {
+    super(fb, store, userAction, uUtils, cd, route, router);
     this.initDataItems();
     requestPermissions();
+
+    if (isIOS) {
+      this.iqKeyboard = IQKeyboardManager.sharedManager();
+      this.iqKeyboard.shouldResignOnTouchOutside = true;
+    }
     this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe(status => {
       if (status === 'SUCCESS') {
-        Toast.makeText('Profile is saved successfully').show();
+        this.uUtils.showMessage('success', 'Profile is saved successfully');
         this.toggleLoader(false);
       }
       this.cd.markForCheck();
@@ -83,11 +96,94 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
       this.items.push(segmentedBarItem);
     }
 
+    this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe((status: string) => {
+      if (status && status !== 'NONE' && status !== 'IN PROCESS' && status !== 'SUCCESS' && status !== 'MAKE FRIEND SUCCESS') {
+        this.utils.showMessage('success', status);
+      }
+      this.cd.markForCheck();
+    }));
+
+    this.subscriptions.push(this.gamePlayedChangeObservable.subscribe(data => {
+      if (this.tabsTitles.indexOf('Game Played') < 0) {
+        this.tabsTitles.push('Game Played');
+        const segmentedBarItem = <SegmentedBarItem>new SegmentedBarItem();
+        segmentedBarItem.title = 'Game Played';
+        this.items.push(segmentedBarItem);
+      }
+    }));
+
+
+    this.subscriptions.push(this.store.select(coreState).pipe(select(u => u.addressUsingLongLat), filter(location => !!location))
+      .subscribe(location => {
+        if (location) {
+          const cityAndCountry = this.getCityAndCountryName(location);
+          this.userForm.patchValue({ location: cityAndCountry });
+          this.acLocation.nativeElement.text = cityAndCountry;
+        }
+      }));
+
+  }
+
+  ngAfterViewInit(): void {
+    if (this.acLocation) {
+      this.acLocation.autoCompleteTextView.loadSuggestionsAsync = async (text) => {
+        return new Promise((resolve, reject) => {
+          if (text.length > 3) {
+            this.store.dispatch(this.userAction.loadAddressSuggestions(text));
+            this.subscriptions.push(this.store.select(coreState)
+              .pipe(select(u => u.addressSuggestions), filter(location => !!location))
+              .subscribe(locations => {
+                const items = [];
+                if (locations.predictions) {
+                  locations.predictions.map(location => {
+                    const city = location.terms[0].value;
+                    const country = location.terms[(location.terms.length - 1)].value;
+                    items.push(new TokenModel(`${city}, ${country}`, null));
+                  });
+                }
+                resolve(items);
+                this.cd.markForCheck();
+              }));
+          } else {
+            resolve([]);
+            this.cd.markForCheck();
+          }
+        });
+      };
+    }
+  }
+
+  onLoadedLoaction(event) {
+    if (this.userType === 1) {
+      event.object.text = this.user.location;
+      event.object.readOnly = true;
+    } else {
+      if (this.userForm.value.location) {
+        this.acLocation.nativeElement.text = this.userForm.value.location;
+        this.acLocation.nativeElement.readOnly = true;
+        this.cd.markForCheck();
+      }
+    }
+  }
+
+  onTextChangedLocation(location): void {
+    this.userForm.patchValue({ location: location.text });
+
+  }
+
+  editLocationField() {
+    this.acLocation.nativeElement.readOnly = !this.acLocation.nativeElement.readOnly;
+    this.isLocationEdit = !this.isLocationEdit;
+    this.singleFieldEdit['location'] = !this.singleFieldEdit['location'];
   }
 
   onSelectedIndexChange(args) {
     const segmentedBar = <SegmentedBar>args.object;
     this.selectedIndex = segmentedBar.selectedIndex;
+  }
+
+  get dataLocation(): ObservableArray<TokenModel> {
+    return this.locations;
   }
 
   get dataItems(): ObservableArray<TokenModel> {
@@ -127,6 +223,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
         const imageSource = await fromAsset(imageAsset);
         this.cropImage(imageSource);
       } catch (error) {
+        this.utils.sendErrorToCrashlytics('appLog', error);
         console.error(error);
       }
     }
@@ -143,6 +240,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
         this.cd.detectChanges();
       }
     } catch (error) {
+      this.utils.sendErrorToCrashlytics('appLog', error);
       console.error(error);
     }
   }
@@ -164,6 +262,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
       imageSource = await fromAsset(imageAsset);
       this.cropImage(imageSource);
     } catch (error) {
+      this.utils.sendErrorToCrashlytics('appLog', error);
       console.error(error);
     }
 
@@ -173,7 +272,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
   saveProfileImage() {
     this.getUserFromFormValue(false, '');
     this.assignImageValues();
-    this.saveUser(this.user);
+    this.saveUser(this.user, (this.user.location !== this.userCopyForReset.location) ? true : false);
   }
 
   assignImageValues(): void {
@@ -190,7 +289,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
     this.hideKeyboard();
     this.enteredTags.push(this.customTag);
     this.customTag = '';
-    this.autocomplete.autoCompleteTextView.resetAutocomplete();
+    this.autocomplete.autoCompleteTextView.resetAutoComplete();
   }
 
   selectCategory(category) {
@@ -221,7 +320,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
   setBulkUploadRequest(checkStatus: boolean): void {
     const userForm = this.userForm.value;
     if (!userForm.name || !userForm.displayName || !userForm.location || !userForm.profilePicture) {
-      Toast.makeText('Please add name, display name, location and profile picture for bulk upload request').show();
+      this.uUtils.showMessage('error', 'Please add name, display name, location and profile picture for bulk upload request');
     } else {
       this.user.bulkUploadPermissionStatus = profileSettingsConstants.NONE;
       this.onSubmit();
@@ -231,6 +330,9 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
 
   onSubmit(isEditSingleField = false, field = '') {
     // validations
+    if (field === 'location') {
+      this.editLocationField();
+    }
     this.userForm.updateValueAndValidity();
 
     if (this.profileImageFile) {
@@ -238,33 +340,50 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
     }
 
     if (this.userForm.invalid) {
-      Toast.makeText('Please fill the mandatory fields').show();
+      this.utils.showMessage('error', 'Please fill the mandatory fields');
       return;
     }
 
-    if (isEditSingleField) {
-      this.userForm.get(field).disable();
-      this.singleFieldEdit[field] = false;
+    this.checkDisplayName(this.userForm.get('displayName').value);
+
+    this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.checkDisplayName)).subscribe(status => {
+      this.isValidDisplayName = status;
+      if (this.isValidDisplayName !== null) {
+        if (this.isValidDisplayName) {
+          if (isEditSingleField) {
+            this.userForm.get(field).disable();
+            this.singleFieldEdit[field] = false;
+          }
+
+          // get user object from the forms
+          this.getUserFromFormValue(isEditSingleField, field);
+          this.user.categoryIds = this.userCategories.filter(c => c.isSelected).map(c => c.id);
+
+          // call saveUser
+          this.saveUser(this.user, (this.user.location !== this.userCopyForReset.location) ? true : false);
+
+        } else {
+          this.userForm.controls['displayName'].setErrors({ 'exist': true });
+          this.userForm.controls['displayName'].markAsTouched();
+          this.cd.markForCheck();
+        }
+        this.toggleLoader(false);
+      }
+
+    }));
+
     }
 
-    // get user object from the forms
-    this.getUserFromFormValue(isEditSingleField, field);
-    this.user.categoryIds = this.userCategories.filter(c => c.isSelected).map(c => c.id);
-    // call saveUser
-    this.saveUser(this.user);
-    this.toggleLoader(false);
-
-  }
 
   hideKeyboard() {
-    this.textField
-      .toArray()
-      .map((el) => {
-        if (isAndroid) {
-          el.nativeElement.android.clearFocus();
-        }
-        return el.nativeElement.dismissSoftInput();
-      });
+    if (isAndroid) {
+      this.textField
+        .toArray()
+        .map((el) => {
+            el.nativeElement.android.clearFocus();
+            return el.nativeElement.dismissSoftInput();
+          });
+    }
   }
 
   openUrl(url, id) {
@@ -275,4 +394,42 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
   ngOnDestroy() {
   }
 
+  async getLocation() {
+    await this.getLocationPermission();
+    if (this.isLocationEnalbed) {
+      try {
+        const position = await geolocation.getCurrentLocation({});
+        console.log(position);
+        if (position) {
+          this.store.dispatch(this.userAction.loadAddressUsingLatLong(`${position.latitude},${position.longitude}`));
+        }
+      } catch (e) {
+        console.log("Error: " + (e.message || e));
+      }
+
+    } else {
+      const options = {
+        context: {},
+        fullscreen: false,
+        viewContainerRef: this.vcRef
+      };
+      this.modal.showModal(LocationResetDialogComponent, options);
+    }
+  }
+  async getLocationPermission() {
+
+    const isEnable = await geolocation.isEnabled();
+    try {
+      if (isEnable) {
+        this.isLocationEnalbed = true;
+      } else {
+        await geolocation.enableLocationRequest();
+        this.isLocationEnalbed = await geolocation.isEnabled();
+      }
+    } catch (e) {
+      this.isLocationEnalbed = false;
+      console.log("Error: " + (e.message || e));
+
+    }
+  }
 }

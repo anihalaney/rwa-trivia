@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, OnDestroy, SimpleChanges, OnChanges, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
-import { User, Answer } from 'shared-library/shared/model';
+import { User, FirebaseScreenNameConstants } from 'shared-library/shared/model';
 import { Utils } from 'shared-library/core/services';
 import { GameQuestion } from './game-question';
 import { Store, select } from '@ngrx/store';
@@ -8,6 +8,7 @@ import { appState } from '../../../store';
 import { Observable, timer, Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { projectMeta } from 'shared-library/environments/environment';
 
 @Component({
   selector: 'game-question',
@@ -28,11 +29,13 @@ export class GameQuestionComponent extends GameQuestion implements OnInit, OnDes
   stopProcessBar;
   columns;
   doPlay = true;
-  photoUrl: String = '~/assets/icons/icon-192x192.png';
+
+  photoUrl: String = `~/assets/icons/${projectMeta.projectName}/icon-192x192.png`;
   userDict$: Observable<{ [key: string]: User }>;
   processTimeInterval: number;
   elapsedTime: number;
   timerSub: Subscription;
+
   constructor(private utils: Utils, public store: Store<GamePlayState>, private cd: ChangeDetectorRef) {
     super();
     this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
@@ -41,6 +44,8 @@ export class GameQuestionComponent extends GameQuestion implements OnInit, OnDes
   ngOnInit() {
     this.progressValue = 0;
     this.photoUrl = this.utils.getImageUrl(this.user, 70, 60, '70X60');
+
+  this.cd.markForCheck();
   }
 
   ngOnDestroy() {

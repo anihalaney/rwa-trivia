@@ -7,12 +7,12 @@ import { GameActions, UserActions } from 'shared-library/core/store/actions';
 import { Utils } from 'shared-library/core/services';
 import { GameDialog } from './game-dialog';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { FirebaseScreenNameConstants } from 'shared-library/shared/model';
+
 import {
   resumeEvent, suspendEvent, ApplicationEventData,
   on as applicationOn, off as applicationOff,
 } from 'tns-core-modules/application';
-
-import { Observable, Subscription, timer } from 'rxjs';
 
 
 @Component({
@@ -29,7 +29,7 @@ export class GameDialogComponent extends GameDialog implements OnDestroy {
   resumeTime: number;
   constructor(public store: Store<GamePlayState>, public gameActions: GameActions, public router: Router,
     public userActions: UserActions, public utils: Utils, public cd: ChangeDetectorRef) {
-    super(store, userActions, utils, cd);
+    super(store, userActions, utils, cd, router);
     this.registerLifeCycleEvent();
   }
 
@@ -62,36 +62,13 @@ export class GameDialogComponent extends GameDialog implements OnDestroy {
 
 
   continueClicked($event) {
-    this.currentQuestion = undefined;
-    this.originalAnswers = undefined;
-    if (this.turnFlag) {
-      this.continueNext = false;
-      this.store.dispatch(new gameplayactions.ResetCurrentGame());
-      this.store.dispatch(new gameplayactions.ResetCurrentQuestion());
-      this.store.dispatch(new gameplayactions.UpdateGameRound(this.game.gameId));
-      this.navigateToDashboard();
-    } else {
-      this.questionAnswered = false;
-      this.showContinueBtn = false;
-      this.continueNext = false;
-      this.store.dispatch(new gameplayactions.ResetCurrentQuestion());
-      this.checkGameOver();
-      if (!this.gameOver) {
-        this.getLoader(false);
-      }
-    }
+    this.continueGame();
     this.cd.markForCheck();
-  }
-
-  navigateToDashboard() {
-    this.router.navigate(['/dashboard']);
   }
 
   ngOnDestroy() {
     applicationOff(resumeEvent, this.resumeCallBack);
     applicationOff(suspendEvent, this.suspendCallBack);
-    this.store.dispatch(new gameplayactions.ResetCurrentGame());
-    this.utils.unsubscribe([this.timerSub, this.questionSub]);
     this.destroy();
   }
 

@@ -6,7 +6,7 @@
     <button class="flex-item" mat-raised-button mat-dialog-close color="primary" (click)="fbLogin()">facebook</button>
     <button class="flex-item" mat-raised-button mat-dialog-close color="primary" (click)="twitterLogin()">Twitter</button>
     <button class="flex-item" mat-raised-button mat-dialog-close color="primary" (click)="githubLogin()">Github</button>
-    <button class="flex-item" mat-raised-button mat-dialog-close color="primary" (click)="passwordLogin()">Email/Password</button>
+    <!-- <button class="flex-item" mat-raised-button mat-dialog-close color="primary" (click)="passwordLogin()">Email/Password</button> -->
   </mat-dialog-actions>
 
   <mat-dialog-actions>
@@ -19,13 +19,18 @@
     <div class="card">
       <div class="row">
         <div class="col-sm-7 col-xs-12">
-          <form (ngSubmit)="onSubmit()" class="sign-in-form" [formGroup]="loginForm" novalidate>
+          <div class="heading"  *ngIf="signInMethod === 'phone'">
+              <span>Sign in with Phone</span>
+          </div>
+          <div id="firebaseui-auth-container" [class.hide]="signInMethod !== 'phone'"></div>
+         
+          <form *ngIf="signInMethod === 'email'" (ngSubmit)="onSubmit()" class="sign-in-form" [formGroup]="loginForm" novalidate>
             <input type="hidden" formControlName="mode"  aria-label="hidden">
             <div class="heading" [ngSwitch]="mode">
-              <span *ngSwitchCase="0">Login to your account</span>
-              <span *ngSwitchCase="1">Get a bit wiser - Sign up</span>
-              <span *ngSwitchCase="2">Forgot Password</span>
-            </div>
+                <span *ngSwitchCase="0">Login to your account</span>
+                <span *ngSwitchCase="1">Get a bit wiser - Sign up</span>
+                <span *ngSwitchCase="2">Forgot Password</span>
+              </div>
             <div class="auth-msg" [ngClass]="{'error':errorStatus, 'success':!errorStatus}">
               <label>
                 {{notificationMsg}}
@@ -48,10 +53,10 @@
               <input [stlShowHintWhenFocusOut]="{hintRef: confPasswordHint, controlRef:loginForm.controls.confirmPassword, removeClass: 'error'}"  type="password" matInput placeholder="Confirm Password *" class="required" formControlName="confirmPassword"
                 aria-label="confirm-password">
               <mat-hint #confPasswordHint
-                class="error" [align]="end">
+                class="error" align="end">
                 Confirm Password must be atleast 6 characters
               </mat-hint>
-              <mat-hint class="error" [align]="end" *ngIf="loginForm.controls.password.valid && loginForm.controls.confirmPassword.valid && loginForm.hasError('passwordmismatch')">
+              <mat-hint class="error" align="end" *ngIf="loginForm.controls.password.valid && loginForm.controls.confirmPassword.valid && loginForm.hasError('passwordmismatch')">
                   Must match Password
              </mat-hint>
             </mat-form-field>
@@ -86,8 +91,10 @@
         </div>
         <div class="col-sm-5 col-xs-12 withsocial">
           <h3>You can also login with your social account</h3>
-          <a (click)="fbLogin()"><img src="/assets/images/faceboockbtn.png" alt="facebook" /></a>
-          <a (click)="googleLogin()"><img src="/assets/images/gpulsebtn.png" alt="Google Plus" /></a>
+          <a (click)="fbLogin()" ><img src="/assets/images/faceboockbtn.png" class="signin" alt="facebook" /></a>
+          <a (click)="googleLogin()" ><img src="/assets/images/gpulsebtn.png" class="signin" alt="Google Plus" /></a>
+          <a (click)="emailSignIn()"  *ngIf="applicationSettings && applicationSettings.phone_authentication && signInMethod === 'phone'"><img src="/assets/images/sign-email.png" class="signin" alt="Email Login" /></a>
+          <a (click)="phoneSignIn()" *ngIf="applicationSettings && applicationSettings.phone_authentication && signInMethod === 'email'"><img src="/assets/images/sign-phone.png" class="signin" alt="Phone Login" /></a>
         </div>
       </div>
     </div>
