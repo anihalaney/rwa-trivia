@@ -174,6 +174,7 @@ export class FirebaseFunctions {
                         await GamePlayedWithStats.calculateUserGamePlayedState(game);
                     }
                 }
+                await StatsService.calculateQuestionStat(beforeEventData, afterEventData);
             }
 
             return true;
