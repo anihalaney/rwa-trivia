@@ -1,9 +1,10 @@
-import { Component, Input, Output, EventEmitter, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, OnDestroy, ChangeDetectionStrategy, Inject, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { User, DashboardConstants } from 'shared-library/shared/model';
 import { WindowRef } from 'shared-library/core/services';
 import { projectMeta } from 'shared-library/environments/environment';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-footer',
@@ -17,10 +18,15 @@ export class FooterComponent implements OnInit, OnDestroy {
   @Output() loginClicked = new EventEmitter();
   blogUrl = projectMeta.blogUrl;
   hostname: string;
-  playstoreUrl =  projectMeta.playStoreUrl;
+  playstoreUrl = projectMeta.playStoreUrl;
   appStoreUrl = projectMeta.appStoreUrl;
-  constructor(private router: Router, private windowRef: WindowRef) {
-    this.hostname = `${windowRef.nativeWindow.location.protocol}//${windowRef.nativeWindow.location.hostname}/${DashboardConstants.ADMIN_ROUTE}`;
+  constructor(private router: Router,
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private windowRef: WindowRef) {
+    if (isPlatformBrowser(this.platformId)) {
+      this.hostname = `${windowRef.nativeWindow.location.protocol}//${windowRef.nativeWindow.location.hostname}/${DashboardConstants.ADMIN_ROUTE}`;
+    }
+
   }
 
   ngOnInit() {

@@ -2,10 +2,10 @@
 
 
 const ssrFunction = require('firebase-functions');
-const server = require('./server');
+// const server = require('./server');
 
 
-const ngApp = server.app;
+const ngApp = require('./../../dist/server').default;
 
 const runtimeOpts = {
   memory: '512MB'
