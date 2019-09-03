@@ -13,9 +13,9 @@ export class OpenUserProfileDirective {
   @HostListener('tap', ['$event'])
   onClick(event) {
     if (this.user.userId && this.user.userId !== '' && this.user.redirectTo === 'otherUserProfile') {
-      this.router.navigate([`/user/profile/${this.user.userId}`]);
+      this.router.navigate([`/user/game-profile/${this.user.userId}`]);
     } else if (this.user.userId && this.user.userId !== '' && this.user.redirectTo === 'userProfile') {
-      this.router.navigate([`/user/my/profile/${this.user.userId}`]);
+      this.router.navigate([`/user/my/game-profile/${this.user.userId}`]);
     }
   }
 
