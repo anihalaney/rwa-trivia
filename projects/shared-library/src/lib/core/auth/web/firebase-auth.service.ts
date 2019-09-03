@@ -119,8 +119,8 @@ export class WebFirebaseAuthService implements FirebaseAuthService {
             .update({ status: UserStatusConstants.OFFLINE });
     }
 
-    public updateTokenStatus(userId: string, status: string) {
+public updateTokenStatus(userId: string, status: string) {
         this.db.object(`/${CollectionConstants.USERS}/${userId}`)
-            .set({ status, userId, device: TriggerConstants.WEB });
+            .set({ status, userId, device: TriggerConstants.WEB, lastUpdated : new Date().getTime() });
     }
 }
