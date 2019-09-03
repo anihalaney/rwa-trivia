@@ -2,7 +2,7 @@
 <StackLayout *ngIf="renderView">
     <ScrollView>
         <StackLayout class="new-game Roboto-Regular" backgroundColor="#f1f2f2">
-            <GridLayout  *ngIf="!challengerUserId " rows="auto,auto" columns="auto,*" padding="10 10 5 10">
+            <GridLayout  *ngIf="!challengerUserId || (challengerUserId && routeType !== 'challenge')" rows="auto,auto" columns="auto,*" padding="10 10 5 10">
                 <Label row="0" col="0" text="Select Player Mode" textWrap="true" class="main-label" fontSize="18"
                     color="#616161"></Label>
                 <Label row="0" col="1" class="fa expand-options" horizontalAlignment="right"
@@ -10,7 +10,7 @@
                     borderColor="#A9A9A9" (tap)="showSelectPlayer = !showSelectPlayer" background="#fff"></Label>
             </GridLayout>
 
-            <CardView  *ngIf="!challengerUserId " margin="10" android:elevation="20" ios:elevation="40" radius="1" width="95%" margin="15 0 15 0"
+            <CardView  *ngIf="!challengerUserId || (challengerUserId && routeType !== 'challenge')" margin="10" android:elevation="20" ios:elevation="40" radius="1" width="95%" margin="15 0 15 0"
                 visibility="{{ !showSelectPlayer ? 'visible' : 'collapsed' }}">
                 <StackLayout orientation="horizontal" horizontalAlignment="center" backgroundColor="white"
                     fontSize="17">
@@ -43,7 +43,7 @@
             </CardView>
 
             <CardView margin="10 0" android:elevation="20" ios:elevation="40" radius="1"
-                visibility="{{ showSelectPlayer && !challengerUserId ? 'visible' : 'collapsed' }}" backgroundColor="white">
+                visibility="{{ showSelectPlayer && (!challengerUserId || (challengerUserId && routeType !== 'challenge')) ? 'visible' : 'collapsed' }}" backgroundColor="white">
                 <StackLayout orientation="horizontal" horizontalAlignment="center" padding="10 0 10 10"
                     class="player-type">
                     <StackLayout orientation="horizontal" width="50%">
@@ -67,7 +67,7 @@
                 </StackLayout>
             </CardView>
 
-            <CardView visibility="{{ !showSelectPlayer && !challengerUserId ? 'visible' : 'collapsed' }}"
+            <CardView visibility="{{ !showSelectPlayer && (!challengerUserId || (challengerUserId &&  routeType !== 'challenge'))? 'visible' : 'collapsed' }}"
                 *ngIf="gameOptions.playerMode === 1" margin="15 0 15 0" backgroundColor="white">
                 <StackLayout class="label">
                     <GridLayout rows="auto,auto" columns="auto,*,auto" (tap)="gameOptions.opponentType=0;"

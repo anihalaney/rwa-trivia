@@ -43,7 +43,6 @@ export default [
     UserCardComponent,
     InviteMailFriendsComponent,
     UserReactionComponent,
-    UserCardComponent,
     SignupExtraInfoComponent,
     CheckDisplayNameComponent
 ];

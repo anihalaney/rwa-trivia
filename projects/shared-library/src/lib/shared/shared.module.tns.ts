@@ -48,7 +48,6 @@ import { SafeHtmlPipe } from './pipe/safe-html.pipe';
     InviteMailFriendsComponent,
     SelectCategoryTagComponent,
     UserReactionComponent,
-    SelectCategoryTagComponent,
     SignupExtraInfoComponent,
     CheckDisplayNameComponent
   ],
@@ -94,7 +93,6 @@ import { SafeHtmlPipe } from './pipe/safe-html.pipe';
     InviteMailFriendsComponent,
     UserReactionComponent,
     SelectCategoryTagComponent,
-    UserCardComponent,
     SignupExtraInfoComponent,
     CheckDisplayNameComponent
   ],

@@ -35,7 +35,6 @@ import { NgQuillTexModule } from 'ng-quill-tex';
     UserCardComponent,
     InviteMailFriendsComponent,
     UserReactionComponent,
-    UserCardComponent,
     CheckDisplayNameComponent
   ],
   imports: [

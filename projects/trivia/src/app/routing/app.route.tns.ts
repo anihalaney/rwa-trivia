@@ -51,6 +51,7 @@ export const routes: Routes = [
     {
         path: 'signup-extra-info',
         component: SignupExtraInfoComponent,
+        canActivate: [AuthGuard]
     },
     {
         path: 'first-question',
@@ -60,6 +61,6 @@ export const routes: Routes = [
     {
         path: 'select-category-tag',
         component: SelectCategoryTagComponent,
-        // canActivate: [AuthGuard]
+        canActivate: [AuthGuard]
     }
 ];

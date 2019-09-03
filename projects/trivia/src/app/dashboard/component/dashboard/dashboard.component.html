@@ -125,6 +125,13 @@
   </section>
   <!-- Invitation to play games end   -->
 
+  <!-- Play Game With Friend -->
+  <div *ngIf="user" class="card">
+        <app-invite-to-play [userId]="user?.userId" *ngIf="user && user!==null"></app-invite-to-play>
+  </div>
+
+  <!-- Friend Invitation -->
+
   <!-- Friend Invitation -->
   <section *ngIf="user && userDict && friendInvitations.length > 0 " class="card">
     <div class="row">

@@ -20,15 +20,15 @@
                 </DockLayout>
             </DockLayout>
 
+            
 
-
-            <GridLayout rows="*,*, *, *, *, *, *, *,*" columns="*" iosOverflowSafeArea="false">
+            <GridLayout rows="*,*, *, *, *, *, *, *,*,*" columns="*" iosOverflowSafeArea="false">
 
                 <StackLayout row="0" margin="15 10 0 10" *ngIf="!user || user===null" class="sign-up-block text-center"
                     iosOverflowSafeArea="false" ios:width="350" android:width="390" stlRippleEffect (rippleTap)="navigateToLogin()">
                     <Label color="white" text="SIGN UP/SIGN IN" textWrap="true" fontSize="18"></Label>
                 </StackLayout>
-
+                
                 <!-- <GridLayout row="1" col="0" [style.marginTop]="isLivesEnable ? '10' : '0'" iosOverflowSafeArea="false">
                     <Label stlRippleEffect [text]="gameStart" android:paddingTop="18"
                         [ngClass]="{'btn-red':!gamePlayBtnDisabled, 'disabled-btn':gamePlayBtnDisabled , 'margin-r-25' :  isLivesEnable }"
@@ -173,12 +173,15 @@
                         </StackLayout>
                     </CardView>
                 </StackLayout>
-
-                <StackLayout row="7" col="0" iosOverflowSafeArea="false">
+                <StackLayout row="7" col="0">
+                    <app-invite-to-play [userId]="user?.userId" *ngIf="user && user!==null"></app-invite-to-play>
+                </StackLayout>
+                <StackLayout row="8" col="0" iosOverflowSafeArea="false">
                     <question [user]="user" [userDict]="userDict"></question>
                 </StackLayout>
 
-                <StackLayout *ngIf="user && user!==null" row="8" col="0" class="submit-question" iosOverflowSafeArea="false">
+                <StackLayout *ngIf="user && user!==null" row="9" col="0" class="submit-question"
+                    iosOverflowSafeArea="false">
                     <StackLayout class="q-title" iosOverflowSafeArea="false">
                         <Label text="Your Questions" textWrap="true"></Label>
                     </StackLayout>
@@ -192,6 +195,7 @@
                         <Button class="q-button q-button-extra" text="Submit Question" (tap)="navigateToMyQuestion()"></Button>
                     </StackLayout>
                 </StackLayout>
+
             </GridLayout>
         </StackLayout>
     </ScrollView>

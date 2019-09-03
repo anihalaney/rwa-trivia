@@ -205,11 +205,10 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
           if (user) {
             // Success
             if (user && !user.emailVerified) {
-              this.redirectTo();
-              // const isEmailVerify = await this.firebaseAuthService.sendEmailVerification(user);
-              // if (isEmailVerify) {
-              //   this.redirectTo();
-              // }
+              const isEmailVerify = await this.firebaseAuthService.sendEmailVerification(user);
+              if (isEmailVerify) {
+                this.redirectTo();
+              }
             }
           }
           break;

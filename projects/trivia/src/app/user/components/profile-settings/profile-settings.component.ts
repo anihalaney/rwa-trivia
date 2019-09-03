@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, ViewChild, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, ViewChild, OnInit, PLATFORM_ID, Inject } from '@angular/core';
 import { FormBuilder, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
@@ -14,6 +14,7 @@ import { ProfileSettings } from './profile-settings';
 import { MatDialogRef, MatDialog } from '@angular/material';
 import { LocationResetDialogComponent } from './location-reset-dialog/location-reset-dialog.component';
 import { filter } from 'rxjs/operators';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'profile-settings',
@@ -42,6 +43,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnInit,
   constructor(public fb: FormBuilder,
     public store: Store<AppState>,
     private windowRef: WindowRef,
+    @Inject(PLATFORM_ID) public platformId: Object,
     public userAction: UserActions,
     public cd: ChangeDetectorRef,
     public utils: Utils,
@@ -92,7 +94,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnInit,
   setNotificationMsg(msg: string, flag: boolean, scrollPosition: number): void {
     this.notificationMsg = msg;
     this.errorStatus = flag;
-    if (this.windowRef.nativeWindow.scrollTo) {
+    if (isPlatformBrowser(this.platformId) && this.windowRef.nativeWindow.scrollTo) {
       this.windowRef.nativeWindow.scrollTo(0, scrollPosition);
     }
   }
@@ -274,7 +276,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnInit,
   }
 
   pushAnalyticsData() {
-    if (this.windowRef.isDataLayerAvailable()) {
+    if (isPlatformBrowser(this.platformId) && this.windowRef.isDataLayerAvailable()) {
       this.windowRef.addAnalyticsParameters(FirebaseAnalyticsKeyConstants.USER_ID, this.user.userId);
       this.windowRef.addAnalyticsParameters(FirebaseAnalyticsKeyConstants.LOCATION, this.user.location);
       this.windowRef.pushAnalyticsEvents(FirebaseAnalyticsEventConstants.USER_LOCATION);
@@ -286,7 +288,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnInit,
   }
 
   getLocation() {
-    if (navigator.geolocation) {
+    if (isPlatformBrowser(this.platformId) && navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((position) => {
         this.store.dispatch(this.userAction.loadAddressUsingLatLong(`${position.coords.latitude},${position.coords.longitude}`));
       }, error => {
