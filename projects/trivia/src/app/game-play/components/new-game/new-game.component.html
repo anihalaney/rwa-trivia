@@ -12,7 +12,7 @@
                 <label>{{errMsg}}</label>
             </div>
             <div class="optionbox">
-                <div class="row" *ngIf="!challengerUserId">
+                <div class="row" *ngIf="!challengerUserId || (challengerUserId && routeType !== 'challenge')">
                     <div class="col-sm-3">
                         <h2>Select
                             <span>Player Mode</span>

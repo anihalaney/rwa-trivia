@@ -7,8 +7,9 @@ import { Category, GameOptions, User, ApplicationSettings, PlayerMode, OpponentT
 import { Utils, WindowRef } from 'shared-library/core/services';
 import { AppState, appState } from '../../../store';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
-import { OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { OnDestroy, ChangeDetectorRef, PLATFORM_ID, Inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { isPlatformBrowser } from '@angular/common';
 
 
 
@@ -37,6 +38,7 @@ export class NewGame implements OnDestroy {
   userCardType = userCardType;
   filteredCategories: Category[];
   selectedCategories: number[];
+  routeType = '';
 
   constructor(
     public store: Store<AppState>,
@@ -44,6 +46,7 @@ export class NewGame implements OnDestroy {
     public gameActions: GameActions,
     public userActions: UserActions,
     public windowRef: WindowRef,
+    @Inject(PLATFORM_ID) public platformId: Object,
     public cd: ChangeDetectorRef,
     public route: ActivatedRoute,
     public router: Router) {
@@ -55,7 +58,9 @@ export class NewGame implements OnDestroy {
     this.subscriptions.push(this.categoriesObs.subscribe(categories => { this.categories = categories; this.cd.markForCheck(); }));
     this.subscriptions.push(this.tagsObs.subscribe(tags => this.tags = tags));
     let challengerUserId = '';
-
+    this.routeType = this.router.url.indexOf('challenge') >= 0 ? 'challenge' :
+    (this.router.url.indexOf('play-game-with-friend') >= 0 ? 'play-game-with-friend' :
+     this.router.url.indexOf('play-game-with-random-user') >= 0 ? 'play-game-with-random-user' : '' );
     this.subscriptions.push(this.route.params.pipe(map(data => challengerUserId = data.userid),
       switchMap(() => this.store.select(appState.coreState).pipe(select(s => s.user)))).subscribe(user => {
         if (user) {
@@ -65,7 +70,7 @@ export class NewGame implements OnDestroy {
           } else if (this.user.lastGamePlayOption && this.user.lastGamePlayOption.tags.length > 0) {
             this.selectedTags = this.user.lastGamePlayOption.tags;
           }
-          if (!challengerUserId) {
+          if (!challengerUserId || (challengerUserId && this.routeType !== 'challenge')) {
             this.store.dispatch(this.userActions.loadUserFriends(user.userId));
           }
         }
@@ -116,7 +121,11 @@ export class NewGame implements OnDestroy {
       if (uFriends) {
         this.uFriends = [];
         uFriends.map(friend => {
-          this.uFriends = [...this.uFriends, friend.userId];
+          if (challengerUserId === friend.userId) {
+            this.uFriends = [friend.userId, ...this.uFriends];
+          } else {
+            this.uFriends = [...this.uFriends, friend.userId];
+          }
         });
         this.noFriendsStatus = false;
       } else {
@@ -165,7 +174,7 @@ export class NewGame implements OnDestroy {
           this.utils.showMessage('error', this.errMsg);
         } else {
           this.loaderStatus = false;
-          if (this.windowRef && this.windowRef.nativeWindow && this.windowRef.nativeWindow.scrollTo) {
+          if (isPlatformBrowser(this.platformId) && this.windowRef && this.windowRef.nativeWindow && this.windowRef.nativeWindow.scrollTo) {
             this.windowRef.nativeWindow.scrollTo(0, 0);
           }
         }

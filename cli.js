@@ -24,27 +24,24 @@ const platForms = ['android', 'ios'];
 
 
 
-const buildSsr = `ng build trivia  --configuration=productVariant-env && 
+const buildApps = `ng build trivia  --configuration=productVariant-env && 
                 ng build trivia-admin  --configuration=productVariant-env && 
                 ng build trivia-editor --configuration=productVariant-env && 
                 ng run trivia:server`;
-const compileFunctions = `npx rimraf functions/server && tsc --project functions`;
-const deployFunctionsCommand = `${buildSsr} && 
-                    ${compileFunctions} && 
-                    npm install firebase@5.2.0 && 
-                    npx webpack --config webpack.server.config.js && 
-                    npx cpx dist/index.html functions/dist && 
-                    npx rimraf dist/index.html && 
+const compileFunctions = `npx rimraf functions/server && npx tsc --project functions`;
+const buildSSRServer = `npx webpack --config webpack.server.config.js`;
+const deployFunctionsCommand = ` ${buildApps} && 
+                    ${compileFunctions} &&                     
+                    ${buildSSRServer} &&                   
                     setConfig
                     npx rimraf functions/index.js && 
-                    npx cp functions/app-functions.js functions/index.js && 
-                    firebase deploy -P productVariant-env --only functions && 
+                    npx cp-cli functions/app-functions.js functions/index.js &&                     
+                    firebase deploy -P productVariant-env --only functions &&
                     npx rimraf functions/index.js && 
-                    npx cp functions/ssr-functions.js functions/index.js && 
-                    firebase deploy -P productVariant-env --only functions:ssr && 
-                    firebase deploy -P productVariant-env --only hosting && 
-                    npm install firebase@6.0.2`;
-
+                    npx cp-cli functions/ssr-functions.js functions/index.js && 
+                    firebase deploy -P productVariant-env --only functions:ssr &&                          
+                    firebase deploy -P productVariant-env --only hosting`;
+                  
 const commandList = {
     "run-web":
     {
@@ -82,8 +79,7 @@ const commandList = {
     },
     "run-functions":
     {
-        "command": `npx rimraf functions/server & 
-                        tsc --project functions  && firebase serve -P productVariant-environment  --only functions`,
+        "command": `${compileFunctions} && firebase serve -P productVariant-env --only functions`,
         "description": "deploy firebase functions local",
         "options": {
             "productVariant": {
@@ -94,7 +90,7 @@ const commandList = {
                 "default": 'trivia',
                 "alias": ['PV', 'pv']
             },
-            "environment": {
+            "env": {
                 "demand": true,
                 "description": 'environment e.g. dev',
                 "type": 'string',
@@ -196,8 +192,8 @@ const commandList = {
                 "alias": ['VN', 'vn']
             },
         },
-        "builder": args => args.argv.platform === 'ios'  && args.argv.environment.search('--env.prod') >= 0 ? args.argv.forDevice = ' --for-device' : args.argv.forDevice = '',
-        "preCommand" : async (argv) => { await updateAppVersion(argv, false); await updatePackageJson(argv); }
+        "builder": args => args.argv.platform === 'ios' && args.argv.environment.search('--env.prod') >= 0 ? args.argv.forDevice = ' --for-device' : args.argv.forDevice = '',
+        "preCommand": async (argv) => { await updateAppVersion(argv, false); await updatePackageJson(argv); }
     },
     "release-mobile": {
         "command": `tns buildCmd platformName --bundle 
@@ -312,7 +308,7 @@ const commandList = {
                 args.argv.androidRelease = '';
             }
         },
-        "preCommand" : async (argv) => { await updateAppVersion(argv, true); await updatePackageJson(argv); }
+        "preCommand": async (argv) => { await updateAppVersion(argv, true); await updatePackageJson(argv); }
     },
     "run-schedular": {
         "command": "npx rimraf scheduler/server  & tsc --project scheduler && node scheduler/server/run-scheduler.js env",
@@ -338,11 +334,11 @@ function buildCommands() {
     for (const cmd in commandList) {
         argv = argv
             .command(cmd, commandList[cmd].description, function (args) {
-                argv = yargs.options(commandList[cmd].options);  
-                if(commandList[cmd].builder){
-                     commandList[cmd].builder(args);
-                }     
-                
+                argv = yargs.options(commandList[cmd].options);
+                if (commandList[cmd].builder) {
+                    commandList[cmd].builder(args);
+                }
+
             }, async function (argv) {
                 let executableCmd = commandList[cmd].command;
                 for (const opt in commandList[cmd].options) {
@@ -375,60 +371,60 @@ function checkCommands(yargs, argv, numRequired) {
     }
 }
 
-function replaceVariableInIndex(projectList, productVarient){
+function replaceVariableInIndex(projectList, productVarient) {
 
     for (const project of projectList) {
         const filepath = `./projects/${project}/src/index.html`;
-        let buffer = fs.readFileSync(filepath, {encoding:'utf-8', flag:'r'});
+        let buffer = fs.readFileSync(filepath, { encoding: 'utf-8', flag: 'r' });
         const config = getConfig(productVarient);
         const compiled = template(buffer);
         buffer = compiled(config);
-        const options = {encoding:'utf-8', flag:'w'};
-        fs.writeFileSync(filepath, buffer, options);        
+        const options = { encoding: 'utf-8', flag: 'w' };
+        fs.writeFileSync(filepath, buffer, options);
     }
 
 }
 
-async function updateAppVersion(argv, isRelease){
-    try{
+async function updateAppVersion(argv, isRelease) {
+    try {
         const platform = argv.plt;
-        const environment = argv.environment.search('--env.prod') >= 0 ? 'production': 'staging'; 
-        const filepath = platform === 'android' ? 
-        `./App_Resources/Android/src/main/AndroidManifest.xml` : `./configurations/${argv.productVariant}/ios/info.plist.${environment === 'production' ? 'prod' : 'dev'}`;
-        let buffer = fs.readFileSync(filepath, {encoding:'utf-8', flag:'r'});
+        const environment = argv.environment.search('--env.prod') >= 0 ? 'production' : 'staging';
+        const filepath = platform === 'android' ?
+            `./App_Resources/Android/src/main/AndroidManifest.xml` : `./configurations/${argv.productVariant}/ios/info.plist.${environment === 'production' ? 'prod' : 'dev'}`;
+        let buffer = fs.readFileSync(filepath, { encoding: 'utf-8', flag: 'r' });
         let compiled = template(buffer);
-        buffer = compiled({'versionCode' : argv.versionCode, 'versionName' : argv.versionName, 'EXECUTABLE_NAME': '${EXECUTABLE_NAME}'});
-        let options = {encoding:'utf-8', flag:'w'};
-        fs.writeFileSync(filepath, buffer, options);        
+        buffer = compiled({ 'versionCode': argv.versionCode, 'versionName': argv.versionName, 'EXECUTABLE_NAME': '${EXECUTABLE_NAME}' });
+        let options = { encoding: 'utf-8', flag: 'w' };
+        fs.writeFileSync(filepath, buffer, options);
 
         const config = getConfig(argv.productVariant);
         if (isRelease) {
             await axios({
                 method: 'post',
                 url: `${config.functionsUrl[environment]}/general/updateAppVersion`,
-                headers: {'token': argv.token, 'Content-Type': 'application/json'},
-                data: { 
+                headers: { 'token': argv.token, 'Content-Type': 'application/json' },
+                data: {
                     'versionCode': argv.versionCode,
                     'platform': platform
                 }
-              });
+            });
         }
-        
-        
-    } catch(error) {
+
+
+    } catch (error) {
         console.log(error, 'error');
     }
 
 }
 
-function updatePackageJson(argv){
+function updatePackageJson(argv) {
 
-        // update package.json
-        let buffer = fs.readFileSync('package.json', {encoding:'utf-8', flag:'r'});
-        const compiled = template(buffer);
-        buffer = compiled({'packageName' : argv.packageName});
-        let options = {encoding:'utf-8', flag:'w'};
-        fs.writeFileSync('package.json', buffer, options);
+    // update package.json
+    let buffer = fs.readFileSync('package.json', { encoding: 'utf-8', flag: 'r' });
+    const compiled = template(buffer);
+    buffer = compiled({ 'packageName': argv.packageName });
+    let options = { encoding: 'utf-8', flag: 'w' };
+    fs.writeFileSync('package.json', buffer, options);
 
 }
 

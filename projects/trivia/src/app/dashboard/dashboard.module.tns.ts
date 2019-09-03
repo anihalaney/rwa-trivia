@@ -13,7 +13,6 @@ import { RealtimeStatsComponent } from './component/realtime-stats/realtime-stat
 import { QuestionComponent } from './component/question/question.component';
 import { NativeScriptRouterModule } from 'nativescript-angular/router';
 import { DropDownModule } from "nativescript-drop-down/angular";
-
 @NgModule({
     declarations: [
         DashboardComponent,
@@ -22,7 +21,7 @@ import { DropDownModule } from "nativescript-drop-down/angular";
         BlogComponent,
         NewsletterComponent,
         LeaderboardComponent,
-        RealtimeStatsComponent,
+        RealtimeStatsComponent
     ],
     imports: [
         DashboardRoutingModule,

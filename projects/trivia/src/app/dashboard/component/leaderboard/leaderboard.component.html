@@ -3,7 +3,7 @@
     <div class="col-md-4 col-xs-12 categorybox skyblue">
       <h3>{{categoryDict[cat]?.categoryName.charAt(0).toUpperCase() + categoryDict[cat]?.categoryName.slice(1)}}</h3>
       <ul>
-        <li *ngFor="let user of leaderBoardStatDict[cat] | slice:lbsUsersSliceStartIndex:lbsUsersSliceLastIndex;let j=index; trackBy: j">
+        <li *ngFor="let user of leaderBoardStatDict[cat] | slice:lbsUsersSliceStartIndex:lbsUsersSliceLastIndex;let j=index; trackBy: trackByFn">
           <div class="row">
             <div class="col-xs-2 has">#{{j+1}}</div>
             <div class="col-xs-7">

@@ -12,7 +12,6 @@ import { effects, reducer } from './store';
 import { LeaderboardComponent } from './component/leaderboard/leaderboard.component';
 import { RealtimeStatsComponent } from './component/realtime-stats/realtime-stats.component';
 import { QuestionComponent } from './component/question/question.component';
-
 @NgModule({
   declarations: [
     DashboardComponent,
