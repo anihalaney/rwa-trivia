@@ -32,8 +32,8 @@
 
             <div class="profile-img-container">
               <label for="file-upload" class="custom-file-upload custom-file-upload-image" *ngIf="!profileImageFile">
-                <img [src]="profileImage.image" [width]="cropperSettings.croppedWidth" [height]="cropperSettings.croppedHeight"
-                  alt="Avatar" />
+                <img [src]="profileImage.image" [width]="cropperSettings.croppedWidth"
+                  [height]="cropperSettings.croppedHeight" alt="Avatar" />
               </label>
               <div class="file-upload-container">
                 <div class="file-upload">
@@ -42,7 +42,8 @@
                   [settings]="cropperSettings"></img-cropper>
                 <br>
               </div>
-              <button *ngIf="profileImageFile && !profileImageValidation" class="btn profile-save-btn" (click)="saveProfileImage()">Save</button>
+              <button *ngIf="profileImageFile && !profileImageValidation" class="btn profile-save-btn"
+                (click)="saveProfileImage()">Save</button>
             </div>
             <div class="pull-right">
               <input id="file-upload" name='upload_cont_img' type="file" (change)="onFileChange($event)" class="hide"
@@ -65,10 +66,12 @@
               <div class="cell">
                 <label class="p-r-10">Display Name {{userType === 0 ? '*': ''}}</label>
                 <div *ngIf="userType === 0" class="input-edit">
-                  <input formControlName="displayName" [placeholder]="userType === 0 ? 'Enter Display Name': ''" type="text"
-                    class="required" aria-label="display-name">
-                  <span class="field-edit-icon" *ngIf="!singleFieldEdit.displayName && userType === 0" (click)="editSingleField('displayName')"></span>
-                  <span class="field-save-icon" *ngIf="singleFieldEdit.displayName && userForm.value.displayName !=='' && userType === 0"
+                  <input formControlName="displayName" [placeholder]="userType === 0 ? 'Enter Display Name': ''"
+                    type="text" class="required" aria-label="display-name">
+                  <span class="field-edit-icon" *ngIf="!singleFieldEdit.displayName && userType === 0"
+                    (click)="editSingleField('displayName')"></span>
+                  <span class="field-save-icon"
+                    *ngIf="singleFieldEdit.displayName && userForm.value.displayName !=='' && userType === 0"
                     (click)="onSubmit(true, 'displayName')"></span>
                 </div>
 
@@ -76,7 +79,8 @@
                   class="error display-name-error">
                   Display Name is required!
                 </p>
-                <p *ngIf="userForm.controls.displayName.errors && userForm.controls.displayName.errors.exist" class="error display-name-error">
+                <p *ngIf="userForm.controls.displayName.errors && userForm.controls.displayName.errors.exist"
+                  class="error display-name-error">
                   Display Name is already taken by other user
                 </p>
               </div>
@@ -88,20 +92,25 @@
                 <label class="m-r-51">Location {{userType === 0 ? '*': ''}}</label>
                 <div *ngIf="userType === 0" class="input-edit">
                   <input formControlName="location" [placeholder]="userType === 0 ? 'Enter Location' : ''" type="text"
-                    class="required" aria-label="location" list="locationList" (ngModelChange)="locationChanged($event)">
+                    class="required" aria-label="location" list="locationList"
+                    (ngModelChange)="locationChanged($event)">
                   <datalist id="locationList">
                     <option *ngFor="let item of locations" [value]="item">{{item}}</option>
                   </datalist>
-                  <span class="field-edit-icon" *ngIf="!singleFieldEdit.location  && userType === 0" (click)="editSingleField('location')"></span>
-                  <span class="field-save-icon" *ngIf="singleFieldEdit.location && userForm.value.location !==''  && userType === 0"
+                  <span class="field-edit-icon" *ngIf="!singleFieldEdit.location  && userType === 0"
+                    (click)="editSingleField('location')"></span>
+                  <span class="field-save-icon"
+                    *ngIf="singleFieldEdit.location && userForm.value.location !==''  && userType === 0"
                     (click)="onSubmit(true, 'location')"></span>
                 </div>
-                <button *ngIf="singleFieldEdit.location" (click)="getLocation()" class="get-location btn save"> Get Location </button>
+                <button *ngIf="singleFieldEdit.location" (click)="getLocation()" class="get-location btn save"> Get
+                  Location </button>
                 <p class="location-info" *ngIf="userType === 0">
-                
+
                   Where in the world you are
                 </p>
-                <p *ngIf="userForm.controls.location.errors && !userForm.controls.location.pristine" class="error location-error">
+                <p *ngIf="userForm.controls.location.errors && !userForm.controls.location.pristine"
+                  class="error location-error">
                   Location
                   is required!</p>
               </div>
@@ -130,9 +139,10 @@
                 </div>
               </div>
               <div class="new-game-btn-container">
-                  <div class="col-md-3 col-xs-6" *ngIf="loggedInUser">
-                      <button *ngIf="loggedInUserAccount &&  isLivesEnable"  class="startgame" (click)="startNewGame()">Start New Game</button>
-                  </div>
+                <div class="col-md-3 col-xs-6" *ngIf="loggedInUser">
+                  <button *ngIf="loggedInUserAccount &&  isLivesEnable" class="startgame" (click)="startNewGame()">Start
+                    New Game</button>
+                </div>
               </div>
             </div>
           </div>
@@ -142,19 +152,58 @@
               <mat-tab-group>
                 <mat-tab label="Profile">
                   <div class="row">
-                    <div class="col-lg-12 profile-container" [ngStyle]="{'align-items': isEnableEditProfile ? 'flex-end': 'flex-start'}">
+                    <div class="col-lg-12 profile-container"
+                      [ngStyle]="{'align-items': isEnableEditProfile ? 'flex-end': 'flex-start'}">
                       <div class="col-lg-10 col-sm-12 col-md-9 col-xs-12">
                         <div class="m-25">
                           <div class="clearfix namefield" *ngIf="isEnableEditProfile">
                             <div class="formfield">
 
                               <label id="nameLableField">Name {{userType === 0 ? '*': ''}}</label>
-                              <input formControlName="name" type="text" [placeholder]="userType === 0 ? 'Enter Name' : ''"
-                                class="required" aria-label="name">
+                              <input formControlName="name" type="text"
+                                [placeholder]="userType === 0 ? 'Enter Name' : ''" class="required" aria-label="name">
                               <p *ngIf="userType===0">Enter your real name, so people you know and recognize you</p>
-                              <p *ngIf="userForm.controls.name.errors && !userForm.controls.name.pristine" class="error">Name
-                                is
-                                required!</p>
+                              <p *ngIf="userForm.controls.name.errors && !userForm.controls.name.pristine"
+                                class="error">Name is required!</p>
+                            </div>
+                          </div>
+
+                          <!-- Email -->
+                          <div class="clearfix namefield"
+                            *ngIf="isEnableEditProfile && (currentAuthProvider===authProviderConstants.PASSWORD || currentAuthProvider===authProviderConstants.PHONE)">
+                            <div class="formfield">
+
+                              <label id="nameLableField">Email</label>
+                              <input formControlName="email" type="text"
+                                [placeholder]="userType === 0 ? 'Enter Email' : ''" class="required" aria-label="name">
+                              <p *ngIf="userForm.controls.email.errors?.pattern && !userForm.controls.email.pristine"
+                                class="error">Email is Invalid!</p>
+                            </div>
+                          </div>
+
+                          <!-- Phone No -->
+                          <div class="clearfix namefield"
+                            *ngIf="isEnableEditProfile && (currentAuthProvider===authProviderConstants.GOOGLE || currentAuthProvider===authProviderConstants.FACEBOOK || currentAuthProvider===authProviderConstants.PASSWORD )">
+                            <div class="formfield">
+                              <label id="nameLableField">Phone No</label>
+                              <input formControlName="phoneNo" type="text"
+                                [placeholder]="userType === 0 ? 'Enter Phone No' : ''" class="required"
+                                aria-label="name">
+                              <p *ngIf="userForm.controls.phoneNo.errors?.pattern && !userForm.controls.phoneNo.pristine"
+                                class="error">Phone No is Invalid!</p>
+                            </div>
+                          </div>
+
+                          <!-- Password -->
+                          <div class="clearfix namefield"
+                            *ngIf="isEnableEditProfile && (currentAuthProvider===authProviderConstants.PASSWORD)">
+                            <div class="formfield">
+                              <label id="nameLableField">Password</label>
+                              <input formControlName="password" type="password"
+                                [placeholder]="userType === 0 ? 'Enter Password' : ''" class="required"
+                                aria-label="password">
+                              <p *ngIf="userForm.controls.password.errors?.minlength && !userForm.controls.password.pristine"
+                                class="error">Password must be atleast 6 characters</p>
                             </div>
                           </div>
 
@@ -167,7 +216,8 @@
                                   <label class="profile-display-label">{{profile.display}}</label>
                                   <div class="profile-display-field">
                                     <div class="social-input-field">
-                                      <div class="social-url-contain" *ngIf="userType === 0" (click)="onSocialProfileInputFocus(i)">
+                                      <div class="social-url-contain" *ngIf="userType === 0"
+                                        (click)="onSocialProfileInputFocus(i)">
                                         <span class="social-url">{{profile?.url}}</span>
                                       </div>
                                       <div class="social-url-contain" *ngIf="userType !== 0">
@@ -194,7 +244,8 @@
                                 <div class="formfield" *ngIf="profile.enable">
                                   <label class="profile-display-label">{{profile.display}}</label>
                                   <div class="profile-display-field social-profile-link">
-                                    <a href="{{profile?.url}}{{user[profile.social_name]}}" target="_blank" class="social-url">{{profile?.url}}{{user[profile.social_name]}}</a>
+                                    <a href="{{profile?.url}}{{user[profile.social_name]}}" target="_blank"
+                                      class="social-url">{{profile?.url}}{{user[profile.social_name]}}</a>
                                   </div>
                                 </div>
                               </div>
@@ -210,7 +261,8 @@
                               <div class="formfield" *ngFor="let category of categoryList.controls; let i=index"
                                 [formGroupName]="i">
                                 <label>
-                                  <input formControlName="isSelected" type="checkbox" name="">{{categoryDict[category.value['category']].categoryName}}
+                                  <input formControlName="isSelected" type="checkbox"
+                                    name="">{{categoryDict[category.value['category']].categoryName}}
                                 </label>
                               </div>
                             </div>
@@ -225,10 +277,11 @@
                             <div class="col-sm-9">
                               <div class="tags">
                                 <div data-tags-input-name="tag" id="tagBox" class="tagging">
-                                  <mat-chip-list>           
+                                  <mat-chip-list>
                                     <mat-basic-chip *ngFor="let tag of enteredTags" class="tag">
-                                        {{tag}}
-                                      <span *ngIf="isEnableEditProfile" (click)="removeEnteredTag(tag)" class="remove-tag">x</span>
+                                      {{tag}}
+                                      <span *ngIf="isEnableEditProfile" (click)="removeEnteredTag(tag)"
+                                        class="remove-tag">x</span>
                                     </mat-basic-chip>
                                   </mat-chip-list>
 
@@ -255,8 +308,8 @@
                                 <button *ngIf="(!user.bulkUploadPermissionStatus
                                             || user.bulkUploadPermissionStatus === NONE
                                             || user.bulkUploadPermissionStatus === PENDING)
-                                            && !user.isRequestedBulkUpload"
-                                  type="button" class="btn" (click)="setBulkUploadRequest()">{{bulkUploadBtnText}}</button>
+                                            && !user.isRequestedBulkUpload" type="button" class="btn"
+                                  (click)="setBulkUploadRequest()">{{bulkUploadBtnText}}</button>
                                 <p *ngIf="user.bulkUploadPermissionStatus === PENDING">Bulk upload requested on
                                   {{user.bulkUploadPermissionStatusUpdateTime | date : 'medium' }}.</p>
                                 <p *ngIf="user.bulkUploadPermissionStatus === APPROVED">User has bulk upload
@@ -266,7 +319,7 @@
                               <!-- </div> -->
                               <!-- </div> -->
                             </div>
-                          </div>                          
+                          </div>
                         </div>
                       </div>
                       <div *ngIf="userType === 0" class="col-lg-2 col-sm-12 col-md-3 col-xs-12">
@@ -286,12 +339,13 @@
                             <span class="is-friend-span">Friends</span>
                           </div>
                           <div *ngIf="userInvitations[user.email]?.status === 'pending'" class="friends-div">
-                              <div>
-                                <img src="assets/images/send-friend-request.png" alt="Friend request sent" />
-                              </div>
-                              <span class="send-friend-request-span">Friend Request Sent</span>
+                            <div>
+                              <img src="assets/images/send-friend-request.png" alt="Friend request sent" />
                             </div>
-                          <div *ngIf="userInvitations[user.email]?.status === 'add'" (click)="sendFriendRequest()" class="friends-div">
+                            <span class="send-friend-request-span">Friend Request Sent</span>
+                          </div>
+                          <div *ngIf="userInvitations[user.email]?.status === 'add'" (click)="sendFriendRequest()"
+                            class="friends-div">
                             <div><img src="assets/images/send-friend-request.png" alt="Add Friend" /></div>
                             <span class="send-friend-request-span">Add Friend</span>
                           </div>
