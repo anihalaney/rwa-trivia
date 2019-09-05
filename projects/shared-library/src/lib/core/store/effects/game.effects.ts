@@ -49,6 +49,17 @@ export class GameEffects {
                 switchMap((payload: User) => this.svc.getActiveGames(payload)),
                 map((games: Game[]) => this.gameActions.getActiveGamesSuccess(games))
             );
+
+        @Effect()
+        UpdateQuestionStat$ = this.actions$
+            .pipe(ofType(GameActions.UPDATE_QUESTION_STAT))
+            .pipe(
+              switchMap((action: ActionWithPayload<{questionId: string, type: string}>) =>
+              this.svc.updateQuestionStat(action.payload.questionId, action.payload.type).pipe(
+                map(() => this.gameActions.UpdateQuestionStatSuccess())
+              ))
+            );
+
     constructor(
         private actions$: Actions,
         private gameActions: GameActions,
