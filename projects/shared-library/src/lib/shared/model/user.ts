@@ -37,7 +37,6 @@ export class User {
   isCategorySet?: boolean;
   phoneNo?: string;
   isFriend?: boolean;
-  phoneNumber?: string;
   totalFriends?: number;
 
   constructor(authState?: firebase.User & { name: string }) {
@@ -45,7 +44,7 @@ export class User {
     if (authState) {
       this.authState = authState;
       this.userId = authState.uid;
-      this.phoneNumber = authState.providerData ? authState.providerData[0].phoneNumber : authState.phoneNumber;
+      this.phoneNo = authState.providerData ? authState.providerData[0].phoneNumber : authState.phoneNumber;
       this.email = authState.providerData ? authState.providerData[0].email : authState.email;
       if (authState.providerData && authState.providerData[0].displayName) {
         this.name = authState.providerData[0].displayName;
