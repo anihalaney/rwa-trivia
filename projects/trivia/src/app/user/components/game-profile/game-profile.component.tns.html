@@ -52,8 +52,8 @@
                         </StackLayout>
                         <StackLayout horizontalAlignment="right"
                             *ngIf="loggedInUser?.userId  && userInvitations[user?.email]?.status === 'approved'">
-                            <Image checked="true" horizontalAlignment="center"
-                                src="~/assets/images/friends.png" height="50" width="50" marginRight="5"></Image>
+                            <Image checked="true" horizontalAlignment="center" src="~/assets/images/friends.png"
+                                height="50" width="50" marginRight="5"></Image>
                             <Label horizontalAlignment="center" class="is-friend-span" margin="-10 0 0 0"
                                 text="Friends"></Label>
                         </StackLayout>
@@ -111,7 +111,39 @@
                         <Label text="avg. time" textWrap="true"></Label>
                     </FlexboxLayout>
                 </StackLayout>
+
+                <StackLayout orientation="horizontal" horizontalAlignment="center" class="stats-box border"
+                    margin="10 10 0 0">
+                    <FlexboxLayout flexDirection="column" justifyContent="center">
+                        <Label text="{{account?.contribution || 0}} sec" class="bold-text" textWrap="true"></Label>
+                        <Label text="contribution" textWrap="true"></Label>
+                    </FlexboxLayout>
+                </StackLayout>
             </FlexboxLayout>
+            <StackLayout
+                [visibility]="loggedInUser?.userId && userType === 1 && gamePlayedAgainst ? 'visible':'collapsed'"
+                margin="0 0 20 10" iosOverflowSafeArea="false">
+                <StackLayout class="cardStyle" orientation="vertical" verticalAlignment="center" margin="10">
+                    <StackLayout class="stats-main" iosOverflowSafeArea="false">
+                        <GridLayout rows="*" columns="30,*,auto" class="stats padding-10" iosOverflowSafeArea="false">
+                            <Label row="0" col="0" fontSize="16" class="fas" verticalAlignment="center"
+                                text="&#xf109;"></Label>
+                            <Label text="Game Played Against You" row="0" col="1" class="text-black Hind-Bold"
+                                fontSize="16" verticalAlignment="center"></Label>
+                            <Label [text]="gamePlayedAgainst?.gamePlayed" row="0" col="2" class="text-black"
+                                fontSize="16"></Label>
+                        </GridLayout>
+                        <GridLayout rows="*" columns="30,*,auto" class="stats padding-10" iosOverflowSafeArea="false">
+                            <Label row="1" col="0" fontSize="16" class="far" verticalAlignment="center"
+                                text="&#xf09d;"></Label>
+                            <Label text="Games Won-Games Lost" row="1" col="1" class="text-black Hind-Bold"
+                                fontSize="16" verticalAlignment="center"></Label>
+                            <Label text="{{gamePlayedAgainst?.wins}}-{{gamePlayedAgainst?.losses}}" row="0" col="2"
+                                class="text-black" fontSize="16"></Label>
+                        </GridLayout>
+                    </StackLayout>
+                </StackLayout>
+            </StackLayout>
         </StackLayout>
     </ScrollView>
 </StackLayout>
