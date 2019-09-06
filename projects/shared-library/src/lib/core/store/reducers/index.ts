@@ -99,7 +99,7 @@ export const reducer: ActionReducerMap<CoreState> = {
   getQuestionSuccess: getQuestionSuccess,
   getTopCategories: topCategories,
   getTopTags: topTags,
-  checkDisplayName: checkDisplayName
+  checkDisplayName: checkDisplayName,
   updateQuestionStatSuccess: updateQuestionStatSuccess
 };
 
