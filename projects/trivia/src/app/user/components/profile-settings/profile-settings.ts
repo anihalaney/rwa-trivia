@@ -4,11 +4,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import * as cloneDeep from 'lodash.clonedeep';
 import { combineLatest, Observable, Subject } from 'rxjs';
-import { flatMap, map, skipWhile, switchMap, take } from 'rxjs/operators';
+import { flatMap, map, skipWhile, switchMap, take, filter } from 'rxjs/operators';
 import { Utils } from 'shared-library/core/services';
 import { UserActions } from 'shared-library/core/store';
-import { Account, Category, profileSettingsConstants, User, Invitation } from 'shared-library/shared/model';
+import { Account, Category, profileSettingsConstants, User, Invitation, AuthProviderConstants } from 'shared-library/shared/model';
 import { AppState, appState, categoryDictionary, getCategories, getTags } from '../../../store';
+import * as userActions from '../../store/actions';
+import { AuthenticationProvider } from 'shared-library/core/auth';
 
 export enum UserType {
     userProfile,
@@ -68,28 +70,45 @@ export class ProfileSettings {
     applicationSettings: any;
     // tslint:disable-next-line:quotemark
     linkValidation = "^http(s?)\:\/\/[0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*(:(0-9)*)*(\/?)([a-zA-Z0-9\-\.\?\,\'\/\\\+&amp;%\$#_]*)?$";
+    // tslint:disable-next-line:max-line-length
+    emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    phoneNoRegex = /^\s*(?:\+?(\d{1,3}))?[- (]*(\d{3})[- )]*(\d{3})[- ]*(\d{4})(?: *[x/#]{1}(\d+))?\s*$/;
     userInvitations: { [key: string]: Invitation };
     loggedInUserAccount: Account;
+    authProviderConstants: any;
+    currentAuthProvider: string;
+
+
     constructor(public formBuilder: FormBuilder,
         public store: Store<AppState>,
         public userAction: UserActions,
         public utils: Utils,
         public cd: ChangeDetectorRef,
         public route: ActivatedRoute,
-        public router: Router) {
+        public router: Router,
+        public authenticationProvider: AuthenticationProvider) {
         this.toggleLoader(true);
         this.fb = formBuilder;
         this.tagsObs = this.store.select(getTags);
+        this.authProviderConstants = AuthProviderConstants;
+
         this.subscriptions.push(this.tagsObs.subscribe(tagsAutoComplete => this.tagsAutoComplete = tagsAutoComplete));
 
         this.subscriptions.push(
             this.route.params.pipe(
                 skipWhile(params => !params.userid),
                 map(params => this.userId = params.userid),
-                flatMap(() => this.store.select(appState.coreState).pipe(select(s => s.user))),
+                flatMap(() => this.store.select(appState.coreState).pipe(select(s => s.user), filter(u => u !== null))),
                 switchMap(user => {
                     if (user && user.userId === this.userId) {
                         this.user = user;
+                        this.currentAuthProvider =
+                            (user.authState && user.authState.providerData && user.authState.providerData.length > 0)
+                                ? user.authState.providerData[0].providerId
+                                : ((user.authState && user.authState['providers'] && user.authState['providers'].length > 1)
+                                    ? user.authState['providers'][1]['id'] : '');
+
+
                         this.userType = UserType.userProfile;
                         return this.initializeUserProfile();
                     } else {
@@ -136,7 +155,7 @@ export class ProfileSettings {
             this.categories = values[1] || [];
             this.categoryDict = values[2] || {};
 
-            this.userCopyForReset = this.user; // cloneDeep(this.user);
+            this.userCopyForReset = { ...this.user };
             this.createForm(this.user);
 
             if (this.user.profilePictureUrl) {
@@ -266,8 +285,36 @@ export class ProfileSettings {
             categoryList: categoryFA ? categoryFA : [],
             tags: '',
             tagsArray: tagsFA ? tagsFA : [],
-            profilePicture: [user.profilePicture]
+            profilePicture: [user.profilePicture],
+            email: [user.email],
+            phoneNo: [user.phoneNo],
+            password: ['']
         });
+
+        switch (this.currentAuthProvider) {
+            case AuthProviderConstants.PASSWORD:
+                this.userForm.get('email').setValidators(Validators.pattern(this.emailRegex));
+                this.userForm.get('phoneNo').setValidators(Validators.pattern(this.phoneNoRegex));
+                this.userForm.get('password').setValidators(Validators.minLength(6));
+                this.userForm.get('email').updateValueAndValidity();
+                this.userForm.get('phoneNo').updateValueAndValidity();
+                this.userForm.get('password').updateValueAndValidity();
+                break;
+            case AuthProviderConstants.GOOGLE:
+                this.userForm.get('phoneNo').setValidators(Validators.pattern(this.phoneNoRegex));
+                this.userForm.get('phoneNo').updateValueAndValidity();
+                break;
+            case AuthProviderConstants.FACEBOOK:
+                this.userForm.get('phoneNo').setValidators(Validators.pattern(this.phoneNoRegex));
+                this.userForm.get('phoneNo').updateValueAndValidity();
+                break;
+            case AuthProviderConstants.PHONE:
+                this.userForm.get('email').setValidators(Validators.pattern(this.emailRegex));
+                this.userForm.get('email').updateValueAndValidity();
+                break;
+        }
+
+
 
         this.filteredTags$ = this.userForm.get('tags').valueChanges
             .pipe(map(val => val.length > 0 ? this.filter(val) : []));
@@ -309,6 +356,22 @@ export class ProfileSettings {
             });
             this.user.tags = [...this.enteredTags];
             this.user.profilePicture = this.userForm.get('profilePicture').value ? this.userForm.get('profilePicture').value : '';
+
+            switch (this.currentAuthProvider) {
+                case AuthProviderConstants.PASSWORD:
+                    this.user.email = this.userForm.get('email').value;
+                    this.user.phoneNo = this.userForm.get('phoneNo').value;
+                    break;
+                case AuthProviderConstants.GOOGLE:
+                    this.user.phoneNo = this.userForm.get('phoneNo').value;
+                    break;
+                case AuthProviderConstants.FACEBOOK:
+                    this.user.phoneNo = this.userForm.get('phoneNo').value;
+                    break;
+                case AuthProviderConstants.PHONE:
+                    this.user.email = this.userForm.get('email').value;
+                    break;
+            }
         }
     }
 
@@ -320,7 +383,22 @@ export class ProfileSettings {
     }
 
     // store the user object
-    saveUser(user: User, isLocationChanged: boolean) {
+    async saveUser(user: User, isLocationChanged: boolean) {
+        if (this.currentAuthProvider === AuthProviderConstants.PASSWORD) {
+            const newPassword = this.userForm.get('password').value;
+            if (newPassword && newPassword !== null && newPassword.length > 0) {
+                try {
+                    await this.authenticationProvider.updatePassword(newPassword);
+                } catch (error) {
+                    console.log('error--->', error);
+                }
+            }
+        }
+
+        this.saveUserInformation(user, isLocationChanged);
+    }
+
+    saveUserInformation(user: User, isLocationChanged: boolean) {
         this.toggleLoader(true);
         this.isEnableEditProfile = false;
         this.disableForm();
