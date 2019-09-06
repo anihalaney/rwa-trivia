@@ -34,9 +34,9 @@
                 </RadListView>
             </GridLayout>
             <DockLayout row="2" stretchLastChild="true" horizontalAlignment="right">
-                <StackLayout borderRadius="30" class="fab-button1">
-                    <Image (tap)="navigateToInvite()" src="~/assets/images/add.png"></Image>
-                </StackLayout>
+                    <FlexboxLayout  stlRippleEffect (rippleTap)="navigateToInvite()" borderRadius="30" class="fab-button1" padding="10" flexDirection="column" justifyContent="center">
+                            <Image src="~/assets/images/add.png"></Image>
+                    </FlexboxLayout>
             </DockLayout>
         </GridLayout>
     </StackLayout>
