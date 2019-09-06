@@ -27,7 +27,7 @@
   <!-- <div> -->
   <label class="text-alignment">Author :</label>
   <label class="alignment-left text-alignment truncate" title="{{user?.displayName}}">{{user?.displayName}}</label>
-  <div style="position: relative">
+  <div class="author-user-card">
     <img *ngIf="isGamePlay" [src]="getImageUrl(user,44,40)" alt="User Profile Image" />
     <img *ngIf="!isGamePlay" [stlOpenUserProfile]="{userId: user.userId, redirectTo: 'otherUserProfile'}"
       [src]="getImageUrl(user,44,40)" alt="User Profile Image" />
