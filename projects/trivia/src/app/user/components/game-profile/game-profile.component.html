@@ -47,22 +47,22 @@
                         <div class="col-md-3 col-xs-6" *ngIf="loggedInUser">
                             <div class="savebox textcenter">
                                 <div *ngIf="userInvitations[user.email]?.status === 'approved'" class="friends-div">
-                                  <div><img src="assets/images/friends.png" alt="Friends" />
-                                  </div>
-                                  <span class="is-friend-span">Friends</span>
+                                    <div><img src="assets/images/friends.png" alt="Friends" />
+                                    </div>
+                                    <span class="is-friend-span">Friends</span>
                                 </div>
                                 <div *ngIf="userInvitations[user.email]?.status === 'pending'" class="friends-div">
-                                  <div>
-                                    <img src="assets/images/send-friend-request.png" alt="Friend request sent" />
-                                  </div>
-                                  <span class="send-friend-request-span">Friend Request Sent</span>
+                                    <div>
+                                        <img src="assets/images/send-friend-request.png" alt="Friend request sent" />
+                                    </div>
+                                    <span class="send-friend-request-span">Friend Request Sent</span>
                                 </div>
                                 <div *ngIf="userInvitations[user.email]?.status === 'add'" (click)="sendFriendRequest()"
-                                  class="friends-div cursor-pointer">
-                                  <div><img src="assets/images/send-friend-request.png" alt="Add Friend" /></div>
-                                  <span class="send-friend-request-span">Add Friend</span>
+                                    class="friends-div cursor-pointer">
+                                    <div><img src="assets/images/send-friend-request.png" alt="Add Friend" /></div>
+                                    <span class="send-friend-request-span">Add Friend</span>
                                 </div>
-                              </div>
+                            </div>
                         </div>
                     </div>
 
@@ -73,6 +73,20 @@
                                 [ngStyle]="{'order':profile?.position }">
                                 <img class="app-store-img social" src="/assets/images/{{profile?.display}}.png" />
                             </a>
+                        </div>
+                    </div>
+
+                    <div class="new-game-btn-container" style="margin-top: 20px;">
+                        <div style="display: inline-block;" class="points pull-left m-l-20">
+                            <div class="p-t-10"> Bits </div>
+                            <label class="points-count" [ngClass]="{'points-count-f-12': account.bits > 9999 }">
+                                {{account.bits || 0 }}</label>
+                        </div>
+
+                        <div style="display: inline-block;" class="points bytes pull-left m-l-20">
+                            <div class="p-t-10"> Bytes </div>
+                            <label class="points-count" [ngClass]="{'points-count-f-12': account.bytes > 9999 }">
+                                {{account?.bytes || 0}}</label>
                         </div>
                     </div>
                     <div class="row m-b-55">
