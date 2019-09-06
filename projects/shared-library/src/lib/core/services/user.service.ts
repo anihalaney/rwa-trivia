@@ -242,7 +242,9 @@ export class UserService {
             .pipe(map(u => {
                 user.online = (u) ? u.online : false;
                 return user;
-            }));
+            }), (error) => {
+                return of(user);
+            });
     }
 
     updateUserStatus(userStatus: UserStatus) {
