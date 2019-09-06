@@ -204,8 +204,7 @@ const commandList = {
                         --env.package_name=packageName 
                         --env.project=productVariant
                         --release 
-                        androidRelease &&
-                    tns publish ios --ipa platforms/ios/build/Release-iphoneos/rwatrivia.ipa`,
+                        androidRelease`,
         "description": "release android app for staging/production environment",
         "options": {
             "productVariant": {
@@ -295,7 +294,7 @@ const commandList = {
                     --copy-to ${productVariant}.apk`;
             } else {
                 args.options({ 'forDevice': { 'default': '--for-device' } });
-                args.argv.androidRelease = '';
+                args.argv.androidRelease = ' && tns publish ios --ipa platforms/ios/build/Release-iphoneos/rwatrivia.ipa';
             }
         },
         "preCommand": async (argv) => { await updateAppVersion(argv, true); await updatePackageJson(argv); }
