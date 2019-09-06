@@ -195,7 +195,9 @@ const commandList = {
         "preCommand": async (argv) => { await updateAppVersion(argv, false); await updatePackageJson(argv); }
     },
     "release-mobile": {
-        "command": `tns buildCmd platformName --bundle 
+        "command": `npx rimraf platforms/platformName &&
+                    tns platform add platformName &&
+                    tns build platformName --bundle 
                         environment
                         --env.aot --env.uglify 
                         forDevice
@@ -248,12 +250,6 @@ const commandList = {
                 "type": 'string',
                 "alias": ['VN', 'vn']
             },
-            "token": {
-                "demand": true,
-                "description": 'token from schedular token ',
-                "type": 'string',
-                "alias": ['T', 't']
-            },
             "androidRelease": {
                 "demand": false,
                 "hidden": true
@@ -273,11 +269,6 @@ const commandList = {
                 "description": 'key store alias password',
                 "type": 'string'
             },
-            "buildCmd": {
-                "demand": false,
-                "type": 'string',
-                "hidden": true
-            },
             "forDevice": {
                 "demand": false,
                 "hidden": true
@@ -292,7 +283,6 @@ const commandList = {
                 const keyStoreAliasPassword = args.argv.keyStoreAliasPassword;
                 args.options(
                     {
-                        'buildCmd': { 'default': 'build' },
                         'forDevice': { 'default': '' }
                     }
                 );
@@ -303,7 +293,7 @@ const commandList = {
                     --key-store-alias-password ${keyStoreAliasPassword}
                     --copy-to ${productVariant}.apk`;
             } else {
-                args.options({ 'buildCmd': { 'default': 'prepare' }, 'forDevice': { 'default': '--for-device' } });
+                args.options({ 'forDevice': { 'default': '--for-device' } });
                 args.argv.androidRelease = '';
             }
         },
@@ -397,17 +387,20 @@ async function updateAppVersion(argv, isRelease) {
         fs.writeFileSync(filepath, buffer, options);
 
         const config = getConfig(argv.productVariant);
-        if (isRelease) {
-            await axios({
-                method: 'post',
-                url: `${config.functionsUrl[environment]}/general/updateAppVersion`,
-                headers: { 'token': argv.token, 'Content-Type': 'application/json' },
-                data: {
-                    'versionCode': argv.versionCode,
-                    'platform': platform
-                }
-            });
-        }
+
+        // we need to make a seperate command to update version in firebase after uploading to appstore/playstore 
+
+        // if (isRelease) {
+            // await axios({
+            //     method: 'post',
+            //     url: `${config.functionsUrl[environment]}/general/updateAppVersion`,
+            //     headers: { 'token': argv.token, 'Content-Type': 'application/json' },
+            //     data: {
+            //         'versionCode': argv.versionCode,
+            //         'platform': platform
+            //     }
+            // });
+        // }
 
 
     } catch (error) {
