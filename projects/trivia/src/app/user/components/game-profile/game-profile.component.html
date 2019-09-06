@@ -36,18 +36,38 @@
                     </div>
                     <div class="new-game-btn-container">
                         <div class="col-md-3 col-xs-6" *ngIf="loggedInUser">
-                            <button *ngIf="loggedInUserAccount && isLivesEnable" class="startgame"
-                                (click)="startNewGame()">
+                            <button *ngIf="loggedInUserAccount && isLivesEnable" class="startgame" (click)="startNewGame()">
                                 Start New Game
                             </button>
                         </div>
                     </div>
 
-                    <div class="new-game-btn-container" style="margin-top: 20px;"
-                        *ngIf="socialProfileSettings && socialProfileSettings.length > 0">
+                    <div class="new-game-btn-container">
+                        <div class="col-md-3 col-xs-6" *ngIf="loggedInUser">
+                            <div class="savebox textcenter">
+                                <div *ngIf="userInvitations[user.email]?.status === 'approved'" class="friends-div">
+                                    <div><img src="assets/images/friends.png" alt="Friends" />
+                                    </div>
+                                    <span class="is-friend-span">Friends</span>
+                                </div>
+                                <div *ngIf="userInvitations[user.email]?.status === 'pending'" class="friends-div">
+                                    <div>
+                                        <img src="assets/images/send-friend-request.png" alt="Friend request sent" />
+                                    </div>
+                                    <span class="send-friend-request-span">Friend Request Sent</span>
+                                </div>
+                                <div *ngIf="userInvitations[user.email]?.status === 'add'" (click)="sendFriendRequest()"
+                                    class="friends-div cursor-pointer">
+                                    <div><img src="assets/images/send-friend-request.png" alt="Add Friend" /></div>
+                                    <span class="send-friend-request-span">Add Friend</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="new-game-btn-container" style="margin-top: 20px;" *ngIf="socialProfileSettings && socialProfileSettings.length > 0">
                         <div style="display: flex;" *ngFor="let profile of socialProfileSettings">
-                            <a *ngIf="profile?.enable" [href]="profile?.socialUrl" target="_blank"
-                                [ngStyle]="{'order':profile?.position }">
+                            <a *ngIf="profile?.enable" [href]="profile?.socialUrl" target="_blank" [ngStyle]="{'order':profile?.position }">
                                 <img class="app-store-img social" src="/assets/images/{{profile?.display}}.png" />
                             </a>
                         </div>
@@ -125,8 +145,7 @@
                                         </ul>
                                     </div>
                                 </mat-tab>
-                                <mat-tab label="Game Played"
-                                    *ngIf="loggedInUser?.userId && userType === 1 && gamePlayedAgainst">
+                                <mat-tab label="Game Played" *ngIf="loggedInUser?.userId && userType === 1 && gamePlayedAgainst">
                                     <div class="statsview">
                                         <ul id="stats" class="active">
                                             <li>
@@ -147,7 +166,8 @@
                                                         <div class="viewtext">Games Won-Games Lost</div>
                                                     </div>
                                                     <div class="viewcount align-right">
-                                                        {{gamePlayedAgainst?.wins || 0}}-{{gamePlayedAgainst?.losses || 0}}
+                                                        {{gamePlayedAgainst?.wins || 0}}-{{gamePlayedAgainst?.losses ||
+                                                        0}}
                                                     </div>
                                                 </div>
                                             </li>
