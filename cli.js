@@ -204,7 +204,8 @@ const commandList = {
                         --env.package_name=packageName 
                         --env.project=productVariant
                         --release 
-                        androidRelease`,
+                        androidRelease &&
+                    tns publish ios --ipa platforms/ios/build/Release-iphoneos/rwatrivia.ipa`,
         "description": "release android app for staging/production environment",
         "options": {
             "productVariant": {
