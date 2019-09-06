@@ -138,6 +138,15 @@ export enum UserConstants {
     ORIGINAL = 'original',
 }
 
+export enum AuthProviderConstants {
+    GOOGLE = 'google.com',
+    FACEBOOK = 'facebook.com',
+    PASSWORD = 'password',
+    PHONE = 'phone'
+}
+
+
+
 export enum GeneralConstants {
     LESS_THAN_OR_EQUAL = '<=',
     CREATED_UID = 'created_uid',
@@ -383,6 +392,7 @@ export enum RoutesConstants {
     ADD_BITS_FIRST_QUESTION = 'add-bits-first-question',
     TOP_CATEGORIES_COUNT = 'getTopCategories',
     TOP_TAGS_COUNT = 'getTopTags',
+    GAME_DASH_STAT_DASH_UPDATE = 'question-stat-update'
 }
 
 export enum TermsAndPrivacyUrlConstant {

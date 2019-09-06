@@ -17,6 +17,10 @@ class QuestionRoutes {
         this.questionRoutes.post(`/${RoutesConstants.UPLOAD_QUESTION_IMAGE}`,
             AuthMiddleware.authorizedOnly, QuestionController.uploadQuestionImage);
 
+        //  '/question-stat-update/'
+        this.questionRoutes.post(`/${RoutesConstants.GAME_DASH_STAT_DASH_UPDATE}`,
+        QuestionController.updateQuestionStat);
+
         //  '/day/:nextQ'
         this.questionRoutes.get(`/${RoutesConstants.DAY}/:${RoutesConstants.NEXT_Q}`,
             QuestionController.getQuestionOfDay);

@@ -80,6 +80,22 @@ export class GameActions {
     };
   }
 
+  static UPDATE_QUESTION_STAT = '[GamePlay] UpdateQuestionStat';
+  UpdateQuestionStat(questionId: string, type: string): ActionWithPayload<{questionId: string, type: string}> {
+    return {
+      type: GameActions.UPDATE_QUESTION_STAT,
+      payload: {questionId : questionId, type: type}
+    };
+  }
+
+  static UPDATE_QUESTION_STAT_SUCCESS = '[GamePlay] UpdateQuestionStatSuccess';
+  UpdateQuestionStatSuccess(): ActionWithPayload<null> {
+    return {
+      type: GameActions.UPDATE_QUESTION_STAT_SUCCESS,
+      payload: null
+    };
+  }
+
   static USER_REACTION = '[GamePlay] UserReaction';
   UserReaction( payload: { questionId: string, userId: string, status: string } ):
   ActionWithPayload<{ questionId: string, userId: string, status: string }> {
