@@ -36,7 +36,7 @@ export class SignupExtraInfoComponent implements OnInit, OnDestroy {
     this.userForm = new FormGroup(
       {
         email: new FormControl('', { validators: [Validators.pattern(this.email_regexp)] }),
-        phone: new FormControl('', { validators: [Validators.maxLength(13), Validators.minLength(9)] }),
+        phoneNo: new FormControl('', { validators: [Validators.maxLength(13), Validators.minLength(9)] }),
         displayName: new FormControl('', Validators.required),
       }
     );
@@ -48,12 +48,12 @@ export class SignupExtraInfoComponent implements OnInit, OnDestroy {
       this.userForm.patchValue(
         {
           email: this.user.email || '',
-          phone: this.user.phone || '',
+          phoneNo: this.user.phoneNo || '',
           displayName: this.user.displayName || ''
         }
       );
       this.emailEditable = (!this.user.email) ? true : false;
-      this.phoneEditable = (!this.user.phone) ? true : false;
+      this.phoneEditable = (!this.user.phoneNo) ? true : false;
     }));
   }
 
@@ -73,7 +73,7 @@ export class SignupExtraInfoComponent implements OnInit, OnDestroy {
           this.isValidDisplayName = status;
           if (this.isValidDisplayName !== null) {
             if (this.isValidDisplayName) {
-              this.user.phone = data.phone;
+              this.user.phoneNo = data.phoneNo;
               this.user.email = data.email;
               this.user.displayName = data.displayName;
               this.store.dispatch(this.userAction.addUserProfile(this.user, false));

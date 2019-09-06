@@ -35,7 +35,6 @@ export class User {
   gamePlayed: Array<{ [key: string]: FriendsMetadata }>;
   online?: boolean;
   isCategorySet?: boolean;
-  phone?: string;
   phoneNo?: string;
   isFriend?: boolean;
   totalFriends?: number;
@@ -45,7 +44,7 @@ export class User {
     if (authState) {
       this.authState = authState;
       this.userId = authState.uid;
-      this.phone = authState.providerData ? authState.providerData[0].phoneNumber : authState.phoneNumber;
+      this.phoneNo = authState.providerData ? authState.providerData[0].phoneNumber : authState.phoneNumber;
       this.email = authState.providerData ? authState.providerData[0].email : authState.email;
       if (authState.providerData && authState.providerData[0].displayName) {
         this.name = authState.providerData[0].displayName;
