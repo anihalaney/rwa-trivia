@@ -36,6 +36,7 @@ export class User {
   online?: boolean;
   isCategorySet?: boolean;
   phoneNumber?: string;
+  phoneNo?: string;
   isFriend?: boolean;
   totalFriends?: number;
 

@@ -11,7 +11,7 @@ import { questionOfTheDay, questionSaveStatus, updateQuestion, firstQuestion } f
 import { loginRedirectUrl, resetPasswordLogs } from './ui-state.reducer';
 import {
   activeGames, newGameId, gameCreateStatus, updateUserReactionStatus, getUserReactionStatus,
-  getQuestionSuccess
+  getQuestionSuccess, updateQuestionStatSuccess
 } from './game.reducer';
 import { applicationSettings } from './application-settings.reducer';
 import { Country } from 'shared-library/shared/mobile/component/countryList/model/country.model';
@@ -61,6 +61,7 @@ export interface CoreState {
   getTopCategories: any;
   getTopTags: any;
   checkDisplayName: boolean;
+  updateQuestionStatSuccess: any;
 }
 
 export const reducer: ActionReducerMap<CoreState> = {
@@ -99,6 +100,7 @@ export const reducer: ActionReducerMap<CoreState> = {
   getTopCategories: topCategories,
   getTopTags: topTags,
   checkDisplayName: checkDisplayName
+  updateQuestionStatSuccess: updateQuestionStatSuccess
 };
 
 // Features

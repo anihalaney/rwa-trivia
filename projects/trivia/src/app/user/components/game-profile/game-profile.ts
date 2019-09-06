@@ -3,9 +3,10 @@ import { skipWhile, map, flatMap, switchMap, take } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 import { AppState, appState } from '../../../store';
 import { User, userCardType, Account } from 'shared-library/shared/model';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { UserActions } from 'shared-library/core/store';
 import { ChangeDetectorRef } from '@angular/core';
+import { Utils } from 'shared-library/core/services';
 
 export enum UserType {
     userProfile,
@@ -14,6 +15,8 @@ export enum UserType {
 }
 
 export class GameProfile {
+    gamePlayedChangeSubject = new Subject();
+    gamePlayedChangeObservable = this.gamePlayedChangeSubject.asObservable();
     user: User;
     userDict: { [key: string]: User } = {};
     userDict$: Observable<{ [key: string]: User }>;
@@ -26,13 +29,17 @@ export class GameProfile {
     userCardType = userCardType;
     socialProfileSettings;
     enableSocialProfile;
+    userProfileImageUrl = '';
     subscriptions = [];
+    loggedInUserAccount: Account;
+    gamePlayedAgainst: any;
     constructor(
         public route: ActivatedRoute,
         public router: Router,
         public store: Store<AppState>,
         public userAction: UserActions,
-        public cd: ChangeDetectorRef
+        public cd: ChangeDetectorRef,
+        public _utils: Utils,
     ) {
         this.subscriptions.push(
             this.route.params.pipe(
@@ -45,6 +52,11 @@ export class GameProfile {
                         this.userType = UserType.userProfile;
                     } else {
                         this.userType = UserType.loggedInOtherUserProfile;
+                        this.loggedInUser = user ? user : null;
+                        this.store.select(appState.coreState).pipe(select(s => s.account),
+                            skipWhile(account => !account || this.loggedInUserAccount === account)).subscribe(accountInfo => {
+                                this.loggedInUserAccount = accountInfo;
+                            });
                     }
                     return this.initializeProfile();
                 })
@@ -60,6 +72,11 @@ export class GameProfile {
             map(userDict => {
                 this.user = userDict[this.userId];
                 this.account = this.user.account;
+                this.gamePlayedAgainst = this.user.gamePlayed;
+                if (this.gamePlayedAgainst && this.loggedInUser && this.loggedInUser.userId && this.userType === 1) {
+                    this.gamePlayedChangeSubject.next(true);
+                }
+                this.userProfileImageUrl = this.getImageUrl(this.user);
                 if (this.socialProfileObj) {
                     this.socialProfileObj.map(profile => {
                         if (profile.enable) {
@@ -70,6 +87,10 @@ export class GameProfile {
             }),
             flatMap(() => this.initializeSocialSetting())
         );
+    }
+
+    getImageUrl(user: User) {
+        return this._utils.getImageUrl(user, 263, 263, '400X400');
     }
 
     initializeSocialSetting() {
@@ -101,5 +122,15 @@ export class GameProfile {
 
     getIcon(icon) {
         return String.fromCharCode(parseInt(`0x${icon}`, 16));
+    }
+
+    startNewGame() {
+        this.router.navigate(['/game-play/challenge/', this.user.userId]);
+    }
+
+    get isLivesEnable(): Boolean {
+        const isEnable = (this.loggedInUser && this.loggedInUserAccount && this.loggedInUserAccount.lives > 0 &&
+            this.applicationSettings.lives.enable) || (!this.applicationSettings.lives.enable) ? true : false;
+        return isEnable;
     }
 }
