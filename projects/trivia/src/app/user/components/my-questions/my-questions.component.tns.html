@@ -54,8 +54,9 @@
             (hideQuestion)="hideQuestion($event)"></app-question-add-update>
 
         <StackLayout row="0" verticalAlignment="bottom" horizontalAlignment="right" ios:margin="0 5 55 0" android:margin="0 10 10 0">
-            <FAB *ngIf="!displayReasonViewer && !displayEditQuestion && !loaderBusy" (tap)="navigateToSubmitQuestion()"
-                icon="~/assets/images/add.png" class="fab-button1"></FAB>
+                <FlexboxLayout *ngIf="!displayReasonViewer && !displayEditQuestion && !loaderBusy"  stlRippleEffect (rippleTap)="navigateToSubmitQuestion()" borderRadius="30" class="fab-button1" padding="10" flexDirection="column" justifyContent="center">
+                        <Image src="~/assets/images/add.png"></Image>
+                </FlexboxLayout>
 
         </StackLayout>
 

@@ -23,11 +23,11 @@
   <label href="#" id="you" class="dark text-style ">{{user.displayName}}</label>
 </div>
 <!-- USER_CARD_TYPE_THREE -->
-<div class="auther" *ngIf="user && userCardType.USER_WEB_NAME_IMAGE_HORIZONTAL === type">
+<div class="author" *ngIf="user && userCardType.USER_WEB_NAME_IMAGE_HORIZONTAL === type">
   <!-- <div> -->
   <label class="text-alignment">Author :</label>
   <label class="alignment-left text-alignment truncate" title="{{user?.displayName}}">{{user?.displayName}}</label>
-  <div style="position: relative">
+  <div class="author-user-card">
     <img *ngIf="isGamePlay" [src]="getImageUrl(user,44,40)" alt="User Profile Image" />
     <img *ngIf="!isGamePlay" [stlOpenUserProfile]="{userId: user.userId, redirectTo: 'otherUserProfile'}"
       [src]="getImageUrl(user,44,40)" alt="User Profile Image" />
