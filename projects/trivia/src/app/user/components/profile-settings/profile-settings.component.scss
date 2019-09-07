@@ -125,7 +125,7 @@ form .tags{padding-top:5px;}
 .input-edit input:hover::before{ opacity: 0.5 }
 .field-save-icon{right: 8px;content: ""; position: absolute; right: 7px; bottom: 7px; width: 28px; height: 28px; background: url(/assets/images/check.png) no-repeat; background-size: 28px 28px; transition: 0.3s ease-in-out}
 
-.input-edit > input {padding: 10px 25px; font-size: 18px; display: inline-block; width: calc(100% - 34px);
+.input-edit > input { font-size: 18px; display: inline-block; width: calc(100% - 34px);
   box-shadow: inset 5px 5px 5px rgba(0, 0, 0, 0.06);
   border-color: #9a9a9a;
   width: 116%;width: 100%;padding-right: 45px;

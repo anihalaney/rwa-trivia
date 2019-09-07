@@ -466,7 +466,7 @@ export class ProfileSettings {
             { userId: this.loggedInUser.userId, inviteeUserId: inviteeUserId }));
     }
     checkDisplayName(displayName: string) {
-        this.store.dispatch(new userActions.CheckDisplayName(displayName));
+        this.store.dispatch(this.userAction.checkDisplayName(displayName));
     }
 
     getCityAndCountryName(location) {

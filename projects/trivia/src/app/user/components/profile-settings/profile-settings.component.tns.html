@@ -22,11 +22,12 @@
 
               <StackLayout class="input-field" iosOverflowSafeArea="false">
                 <GridLayout row="*" col="*, auto" orientation="horizontal" margin="0 20">
-                  <TextField row="0" col="0" #textField hint="{{userType === 0 ? 'Display Name' : 'Undefined'}}"
-                    formControlName="displayName" class="input">
-                  </TextField>
+                  <StackLayout row="0" col="0">
+                    <app-check-display-name formControlName="displayName"
+                      hint="{{userType === 0 ? 'Display Name' : 'Undefined'}}"></app-check-display-name>
+                  </StackLayout>
                   <Label *ngIf="!singleFieldEdit.displayName && userType === 0" (tap)="editSingleField('displayName')"
-                    row="0" col="1" android:marginTop="24" android:marginRight="4" ios:marginTop="8" fontSize="16"
+                    row="0" col="1" android:marginTop="22" android:marginRight="4" ios:marginTop="8" fontSize="16"
                     horizontalAlignment="right" class="fas" text="&#xf303;"></Label>
                   <Label *ngIf="singleFieldEdit.displayName && userForm.value.displayName !=='' && userType === 0"
                     (tap)="onSubmit(true, 'displayName')" row="0" col="1" android:marginTop="22" color="#71b02b"
