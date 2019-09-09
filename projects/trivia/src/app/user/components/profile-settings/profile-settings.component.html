@@ -66,8 +66,8 @@
               <div class="cell">
                 <label class="p-r-10">Display Name {{userType === 0 ? '*': ''}}</label>
                 <div *ngIf="userType === 0" class="input-edit">
-                  <input formControlName="displayName" [placeholder]="userType === 0 ? 'Enter Display Name': ''"
-                    type="text" class="required" aria-label="display-name">
+                  <app-check-display-name formControlName="displayName"
+                    placeholder="{{userType === 0 ? 'Enter Display Name': ''}}"></app-check-display-name>
                   <span class="field-edit-icon" *ngIf="!singleFieldEdit.displayName && userType === 0"
                     (click)="editSingleField('displayName')"></span>
                   <span class="field-save-icon"

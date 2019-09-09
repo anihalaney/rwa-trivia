@@ -6,6 +6,7 @@ import { Store } from '@ngrx/store';
 import { CoreState, UserActions } from 'shared-library/core/store';
 import { Utils } from 'shared-library/core/services';
 import { InviteMailFriends } from './invite-mail-friends';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
 @Component({
   selector: 'app-invite-mail-friends',
@@ -14,6 +15,7 @@ import { InviteMailFriends } from './invite-mail-friends';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
+@AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class InviteMailFriendsComponent extends InviteMailFriends {
 
   constructor(fb: FormBuilder, store: Store<CoreState>, userAction: UserActions, cd: ChangeDetectorRef,

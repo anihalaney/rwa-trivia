@@ -7,6 +7,7 @@ import { CoreState, UserActions } from 'shared-library/core/store';
 import { Utils } from 'shared-library/core/services';
 import { InviteMailFriends } from './invite-mail-friends';
 import { isAndroid, isIOS } from 'tns-core-modules/ui/page';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 declare var IQKeyboardManager;
 @Component({
     selector: 'app-invite-mail-friends',
