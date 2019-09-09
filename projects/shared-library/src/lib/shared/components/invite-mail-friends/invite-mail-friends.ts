@@ -21,7 +21,7 @@ import {
     emailCheck: Boolean = false;
     @ViewChildren('textField') textField: QueryList<ElementRef>;
     subscriptions = [];
-  
+
     constructor(private fb: FormBuilder, private store: Store<CoreState>, private userAction: UserActions, private cd: ChangeDetectorRef,
       private utils: Utils) {
       this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.user)).subscribe(user => {
@@ -29,7 +29,7 @@ import {
           this.user = user;
         }
       }));
-  
+
       this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe((status: string) => {
         if (status && status !== 'NONE' && status !== 'IN PROCESS' && status !== 'SUCCESS' && status !== 'MAKE FRIEND SUCCESS') {
           this.showSuccessMsg = status;
@@ -41,14 +41,14 @@ import {
       this.invitationForm = this.fb.group({
         email: ['', Validators.required]
       });
-  
+
     }
 
-  
+
     isValid(email) {
       return EMAIL_REGEXP.test(String(email).toLowerCase());
     }
-  
+
     onSubscribe() {
       this.emailCheck = true;
       if (!this.invitationForm.valid) {
@@ -60,7 +60,7 @@ import {
         this.invalidEmailList = [];
         this.showSuccessMsg = undefined;
         this.validEmail = [];
-  
+
         if (this.invitationForm.get('email').value.indexOf(',') > -1) {
           const emails = this.invitationForm.get('email').value.split(',');
           for (const e of emails) {
@@ -85,7 +85,7 @@ import {
           } else {
             this.validEmail.push(this.invitationForm.get('email').value);
           }
-  
+
         }
         if (this.invalidEmailList.length === 0) {
           this.store.dispatch(this.userAction.addUserInvitation(
@@ -93,6 +93,5 @@ import {
         }
       }
     }
-  
 
   }
