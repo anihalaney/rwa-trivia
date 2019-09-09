@@ -37,10 +37,10 @@ How to deploy Android app on Google play store?
 
        Dev Env : node cli release-mobile --pv trivia --pk io.bitwiser.trivia.dev --plt android --e staging 
                     --keyStorePassword <keyStorePassword> --keyStoreAlias <keyStoreAlias> --keyStoreAliasPassword <keyStoreAliasPassword> --v <versionCode>
-                    --t <token> --vn <versionName>
+                     --vn <versionName>
        Prod Env : node cli release-mobile --pv trivia --pk io.bitwiser.trivia --plt android --e production 
                     --keyStorePassword <keyStorePassword> --keyStoreAlias <keyStoreAlias> --keyStoreAliasPassword <keyStoreAliasPassword> --v <versionCode>
-                    --t <token> --vn <versionName>
+                     --vn <versionName>
 
     4) Deploy App on Google play  store:
 
