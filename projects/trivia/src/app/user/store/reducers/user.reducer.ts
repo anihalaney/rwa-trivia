@@ -20,12 +20,3 @@ export function userUnpublishedQuestions(state: any = [], action: UserActions): 
             return state;
     }
 }
-
-export function checkDisplayName(state: any = null, action: UserActions): boolean {
-    switch (action.type) {
-        case UserActionTypes.CHECK_DISPLAY_NAME_SUCCESS:
-            return action.payload;
-        default:
-            return null;
-    }
-}

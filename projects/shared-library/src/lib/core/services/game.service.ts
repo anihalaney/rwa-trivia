@@ -307,4 +307,9 @@ export class GameService {
     return this.dbService.valueChanges(`questions`, questionId );
   }
 
+  updateQuestionStat(questionId: string, type: string) {
+    const url = `${CONFIG.functionsUrl}/question/question-stat-update/`;
+    return this.http.post<Question>(url,
+      {questionId: questionId, type: type === 'CREATED' ? type : 'UPDATED', update: type === 'CORRECT' ? true : false });
+  }
 }

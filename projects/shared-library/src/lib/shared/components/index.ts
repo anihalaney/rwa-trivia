@@ -12,6 +12,8 @@ import { UserReactionComponent } from './user-reaction/user-reaction.component';
 import { UserCardComponent } from './user-card/user-card.component';
 import { FriendInviteComponent } from './friend-invite/friend-invite.component';
 import { GameInviteComponent } from './game-invite/game-invite.component';
+import { SignupExtraInfoComponent } from './signup-extra-info/signup-extra-info.component';
+import { CheckDisplayNameComponent } from './check-display-name/check-display-name.component';
 import { InviteMailFriendsComponent } from './invite-mail-friends/invite-mail-friends.component';
 export {
     QuestionsSearchComponent,
@@ -27,7 +29,9 @@ export {
     InviteMailFriendsComponent,
     UserReactionComponent,
     FriendInviteComponent,
-    GameInviteComponent
+    GameInviteComponent,
+    SignupExtraInfoComponent,
+    CheckDisplayNameComponent
 };
 
 export default [
@@ -44,5 +48,7 @@ export default [
     InviteMailFriendsComponent,
     UserReactionComponent,
     FriendInviteComponent,
-    GameInviteComponent
+    GameInviteComponent,
+    SignupExtraInfoComponent,
+    CheckDisplayNameComponent
 ];

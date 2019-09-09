@@ -43,48 +43,75 @@
                                 padding="2" width="220" color="#616161"></Label>
                         </GridLayout>
                     </StackLayout>
+                    <StackLayout *ngIf="getDisplayStatus(question.status)==='APPROVED'">
+                        <GridLayout rows="*,*,*,*" columns="*,*,*" marginTop="5">
+                                <Label row="0" col="0" text="Appeared" textWrap="true" class="label Roboto-Medium text-center"
+                                    fontWeight="bold"></Label>
+                                <Label row="1"  col="0" marginBottom="10" marginTop="5" [text]="question.appeared ? question.appeared: 0" textWrap="true" class="label Roboto-Medium text-center"
+                                    ></Label>
 
+                                <Label row="0" col="1" text="Likes" textWrap="true" class="label Roboto-Medium text-center"
+                                    fontWeight="bold"></Label>
+                                <Label row="1" col="1" marginBottom="10" marginTop="5" [text]="question.reactionsCount && question.reactionsCount.like ? question.reactionsCount.like: 0" textWrap="true" class="label Roboto-Medium text-center"
+                                    ></Label>
+
+                                <Label row="0" col="2" text="Dislikes" textWrap="true" class="label Roboto-Medium text-center"
+                                    fontWeight="bold"></Label>
+                                <Label row="1" col="2" marginBottom="10" marginTop="5" [text]="question.reactionsCount && question.reactionsCount.dislike ? question.reactionsCount.dislike: 0" textWrap="true" class="label Roboto-Medium text-center"
+                                    ></Label>
+    
+                                <Label row="2" col="0" text="Correct" textWrap="true" class="label Roboto-Medium text-center"
+                                    fontWeight="bold"></Label>
+                                <Label row="3" col="0" marginBottom="10" marginTop="5" [text]="question.correct ? question.correct: 0" textWrap="true" class="label Roboto-Medium text-center"
+                                    ></Label>
+
+                                <Label row="2" col="1" text="Wrong" textWrap="true" class="label Roboto-Medium text-center"
+                                    fontWeight="bold"></Label>
+                                <Label row="3" col="1" marginBottom="10" marginTop="5" [text]="question.wrong ? question.wrong: 0" textWrap="true" class="label Roboto-Medium text-center"
+                                    ></Label>
+                            </GridLayout>
+                    </StackLayout>
                 </StackLayout>
                 <StackLayout col="3">
-                    <GridLayout row="*,*,*,*" col="*" borderLeftWidth="1" borderLeftColor="#e5e5e5" class="status-layout Hind-Bold">
-
-                        <Button row="0" rowSpan="4" text="" [ngClass]="{'pending-btn': getDisplayStatus(question.status)==='PENDING', 
-                                                    'required-change-btn': getDisplayStatus(question.status)==='REQUIRED_CHANGE',
-                                                    'reject-btn': getDisplayStatus(question.status)==='REJECTED',
-                                                    'approve-btn': getDisplayStatus(question.status)==='APPROVED'}"
-                            width="90" height="200">
-                        </Button>
-                        <Button row="1" *ngIf="getDisplayStatus(question.status)==='PENDING'" class="fa pending-btn"
-                            horizontalAlignment="right" text="&#xf251;" textWrap="true" color="#574b4c" fontSize="16"
-                            fontWeight="bold" width="90" height="25" marginTop="-55"></Button>
-                        <Button row="1" *ngIf="getDisplayStatus(question.status)==='REQUIRED_CHANGE'" class="fa required-change-btn"
-                            horizontalAlignment="right" text="&#xf044;" textWrap="true" width="90" height="25" fontSize="20"
-                            fontWeight="bold" marginTop="-60"></Button>
-                        <Button row="1" *ngIf="getDisplayStatus(question.status)==='REJECTED'" class="fa reject-btn"
-                            horizontalAlignment="right" text="&#xf00d;" textWrap="true" width="90" height="25" fontSize="20"
-                            fontWeight="bold" marginTop="-55"></Button>
-                        <Button row="1" *ngIf="getDisplayStatus(question.status)==='APPROVED'" class="fa approve-btn"
-                            horizontalAlignment="right" text="&#xf00c;" textWrap="true" width="90" height="25" fontSize="20"
-                            fontWeight="bold" marginTop="-55"></Button>
-
-                        <Button row="2" text="{{getDisplayStatus(question.status).replace('_',' ') | titlecase}}"
-                            [ngClass]="{'pending-btn': getDisplayStatus(question.status)==='PENDING', 
-                                                             'required-change-btn': getDisplayStatus(question.status)==='REQUIRED_CHANGE',
-                                                             'reject-btn': getDisplayStatus(question.status)==='REJECTED',
-                                                             'approve-btn': getDisplayStatus(question.status)==='APPROVED'}"
-                            fontSize="12" fontWeight="bold" width="90" height="40">
-                        </Button>
-
-                        <Button row="3" *ngIf="getDisplayStatus(question.status)==='REJECTED'" class="reject-btn" text="View Reason"
-                            (tap)="showReason(question)" fontSize="12" fontWeight="bold" marginTop="45" color="#574b4c"
-                            width="90" height="25"></Button>
-
-                        <Button row="3" *ngIf="getDisplayStatus(question.status)==='REQUIRED_CHANGE'" class="required-change-btn"
-                            text="View Reason   &       Resubmit Question" (tap)="showReason(question)" fontSize="12"
-                            fontWeight="bold" marginTop="90" color="#574b4c" width="90" height="60"></Button>
-
-                    </GridLayout>
-                </StackLayout>
+                        <GridLayout row="*,*,*,*" col="*" borderLeftWidth="1" borderLeftColor="#e5e5e5" class="status-layout Hind-Bold">
+    
+                            <Button row="0" rowSpan="4" text="" [ngClass]="{'pending-btn': getDisplayStatus(question.status)==='PENDING', 
+                                                        'required-change-btn': getDisplayStatus(question.status)==='REQUIRED_CHANGE',
+                                                        'reject-btn': getDisplayStatus(question.status)==='REJECTED',
+                                                        'approve-btn': getDisplayStatus(question.status)==='APPROVED'}"
+                                width="90" minHeight="300">
+                            </Button>
+                            <Button row="1" *ngIf="getDisplayStatus(question.status)==='PENDING'" class="fa pending-btn"
+                                horizontalAlignment="right" text="&#xf251;" textWrap="true" color="#574b4c" fontSize="16"
+                                fontWeight="bold" width="90" height="25" marginTop="-55"></Button>
+                            <Button row="1" *ngIf="getDisplayStatus(question.status)==='REQUIRED_CHANGE'" class="fa required-change-btn"
+                                horizontalAlignment="right" text="&#xf044;" textWrap="true" width="90" height="25" fontSize="20"
+                                fontWeight="bold" marginTop="-60"></Button>
+                            <Button row="1" *ngIf="getDisplayStatus(question.status)==='REJECTED'" class="fa reject-btn"
+                                horizontalAlignment="right" text="&#xf00d;" textWrap="true" width="90" height="25" fontSize="20"
+                                fontWeight="bold" marginTop="-55"></Button>
+                            <Button row="1" *ngIf="getDisplayStatus(question.status)==='APPROVED'" class="fa approve-btn"
+                                horizontalAlignment="right" text="&#xf00c;" textWrap="true" width="90" height="25" fontSize="20"
+                                fontWeight="bold" marginTop="-55"></Button>
+    
+                            <Button row="2" text="{{getDisplayStatus(question.status).replace('_',' ') | titlecase}}"
+                                [ngClass]="{'pending-btn': getDisplayStatus(question.status)==='PENDING', 
+                                                                 'required-change-btn': getDisplayStatus(question.status)==='REQUIRED_CHANGE',
+                                                                 'reject-btn': getDisplayStatus(question.status)==='REJECTED',
+                                                                 'approve-btn': getDisplayStatus(question.status)==='APPROVED'}"
+                                fontSize="12" fontWeight="bold" width="90" height="40">
+                            </Button>
+    
+                            <Button row="3" *ngIf="getDisplayStatus(question.status)==='REJECTED'" class="reject-btn" text="View Reason"
+                                (tap)="showReason(question)" fontSize="12" fontWeight="bold" marginTop="45" color="#574b4c"
+                                width="90" height="25"></Button>
+    
+                            <Button row="3" *ngIf="getDisplayStatus(question.status)==='REQUIRED_CHANGE'" class="required-change-btn"
+                                text="View Reason   &       Resubmit Question" (tap)="showReason(question)" fontSize="12"
+                                fontWeight="bold" marginTop="90" color="#574b4c" width="90" height="60"></Button>
+    
+                        </GridLayout>
+                    </StackLayout>
 
             </GridLayout>
         </ng-template>

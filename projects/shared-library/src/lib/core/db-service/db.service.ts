@@ -47,4 +47,5 @@ export abstract class DbService {
     public deleteDoc(collectionName: string, docId: any): any {
 
     }
+
 }

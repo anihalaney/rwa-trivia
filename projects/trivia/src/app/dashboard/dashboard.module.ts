@@ -12,6 +12,7 @@ import { effects, reducer } from './store';
 import { LeaderboardComponent } from './component/leaderboard/leaderboard.component';
 import { RealtimeStatsComponent } from './component/realtime-stats/realtime-stats.component';
 import { QuestionComponent } from './component/question/question.component';
+import { InviteToPlayComponent } from './component/invite-to-play/invite-to-play.component';
 @NgModule({
   declarations: [
     DashboardComponent,
@@ -21,6 +22,7 @@ import { QuestionComponent } from './component/question/question.component';
     NewsletterComponent,
     LeaderboardComponent,
     RealtimeStatsComponent,
+    InviteToPlayComponent
   ],
   imports: [
     DashboardRoutingModule,
