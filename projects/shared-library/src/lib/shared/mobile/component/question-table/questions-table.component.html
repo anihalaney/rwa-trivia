@@ -54,7 +54,7 @@
                                                     'approve-btn': getDisplayStatus(question.status)==='APPROVED'}"
                             width="90" height="200">
                         </Button>
-                        <Button row="1" *ngIf="getDisplayStatus(question.status)==='PENDING'" class="fa pending-btn"
+                        <Button row="1" *ngIf="getDisplayStatus(question.status)==='PENDING' && question?.is_draft === false" class="fa pending-btn"
                             horizontalAlignment="right" text="&#xf251;" textWrap="true" color="#574b4c" fontSize="16"
                             fontWeight="bold" width="90" height="25" marginTop="-55"></Button>
                         <Button row="1" *ngIf="getDisplayStatus(question.status)==='REQUIRED_CHANGE'" class="fa required-change-btn"
@@ -67,19 +67,25 @@
                             horizontalAlignment="right" text="&#xf00c;" textWrap="true" width="90" height="25" fontSize="20"
                             fontWeight="bold" marginTop="-55"></Button>
 
-                        <Button row="2" text="{{getDisplayStatus(question.status).replace('_',' ') | titlecase}}"
-                            [ngClass]="{'pending-btn': getDisplayStatus(question.status)==='PENDING', 
+                        <Button row="2" *ngIf="question?.is_draft === false" text="{{getDisplayStatus(question.status).replace('_',' ') | titlecase}}"
+                            [ngClass]="{'pending-btn': getDisplayStatus(question.status)==='PENDING' && question?.is_draft === false, 
                                                              'required-change-btn': getDisplayStatus(question.status)==='REQUIRED_CHANGE',
                                                              'reject-btn': getDisplayStatus(question.status)==='REJECTED',
                                                              'approve-btn': getDisplayStatus(question.status)==='APPROVED'}"
                             fontSize="12" fontWeight="bold" width="90" height="40">
                         </Button>
 
+                        <Button (tap)="showEditQuestion(question)" row="1" *ngIf="question?.is_draft === true" class="fa required-change-btn"
+                            horizontalAlignment="right" text="&#xf044;" textWrap="true" width="90" height="25" fontSize="20"
+                            fontWeight="bold" marginTop="-60"></Button>
+                        <Button (tap)="showEditQuestion(question)" row="2" *ngIf="question?.is_draft === true" class="required-change-btn"
+                            horizontalAlignment="right" text="Edit" fontSize="12" fontWeight="bold" width="90" height="40"></Button>
+
                         <Button row="3" *ngIf="getDisplayStatus(question.status)==='REJECTED'" class="reject-btn" text="View Reason"
                             (tap)="showReason(question)" fontSize="12" fontWeight="bold" marginTop="45" color="#574b4c"
                             width="90" height="25"></Button>
 
-                        <Button row="3" *ngIf="getDisplayStatus(question.status)==='REQUIRED_CHANGE'" class="required-change-btn"
+                            <Button row="3" *ngIf="getDisplayStatus(question.status)==='REQUIRED_CHANGE'" class="required-change-btn"
                             text="View Reason   &       Resubmit Question" (tap)="showReason(question)" fontSize="12"
                             fontWeight="bold" marginTop="90" color="#574b4c" width="90" height="60"></Button>
 

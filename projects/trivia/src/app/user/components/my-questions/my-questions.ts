@@ -11,6 +11,7 @@ export class MyQuestions {
 
   publishedQuestions: Question[];
   unpublishedQuestions: Question[];
+  draftQuestions: Question[];
   categoryDictObs: Observable<{ [key: number]: Category }>;
   categoriesObs: Observable<Category[]>;
   tagsObs: Observable<string[]>;
@@ -50,7 +51,11 @@ export class MyQuestions {
       this.hideLoader();
     }));
     this.subscriptions.push(this.store.select(userState).pipe(select(s => s.userUnpublishedQuestions)).subscribe((questions) => {
-      this.unpublishedQuestions = questions;
+      if (questions) {
+        this.unpublishedQuestions = questions.filter(question => !question.is_draft || (question.is_draft && (question.status === 6)));
+        this.draftQuestions = questions.filter(question => question.is_draft === true && question.status !== 6);
+      }
+
       this.hideLoader();
     }));
 

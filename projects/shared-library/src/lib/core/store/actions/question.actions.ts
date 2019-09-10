@@ -62,6 +62,23 @@ export class QuestionActions {
     };
   }
 
+
+  static ADD_NEW_QUESTION_AS_DRAFT_SUCCESS = 'ADD_NEW_QUESTION_AS_DRAFT_SUCCESS';
+  addQuestionDraftSuccess(questionId): ActionWithPayload<string> {
+    return {
+      type: QuestionActions.ADD_NEW_QUESTION_AS_DRAFT_SUCCESS,
+      payload: questionId
+    };
+  }
+
+  static UPDATE_QUESTION_AS_DRAFT_SUCCESS = 'UPDATE_QUESTION_AS_DRAFT_SUCCESS';
+  updateQuestionDraftSuccess(): ActionWithPayload<null> {
+    return {
+      type: QuestionActions.UPDATE_QUESTION_AS_DRAFT_SUCCESS,
+      payload: null
+    };
+  }
+
   static RESET_QUESTION_SUCCESS = 'RESET_QUESTION_SUCCESS';
   resetQuestionSuccess(): ActionWithPayload<null> {
     return {

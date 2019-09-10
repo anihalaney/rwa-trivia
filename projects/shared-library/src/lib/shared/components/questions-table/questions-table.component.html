@@ -53,16 +53,16 @@
                   </span>
                 </div>
                 <div class="row col-sm-3 col-xs-12 question-status">
-                  <div [ngClass]="getDisplayStatus(row.status)==='APPROVED'?['sprite', 'approvedicon']:getDisplayStatus(row.status)==='PENDING'?['sprite', 'pendingicon']:'status-btn'"></div>
+                  <div [ngClass]="getDisplayStatus(row.status)==='APPROVED'?['sprite', 'approvedicon']:getDisplayStatus(row.status)==='PENDING' && !row.is_draft ?['sprite', 'pendingicon']:'status-btn'"></div>
                   <label>
-                    <b [ngClass]="getDisplayStatus(row.status)==='APPROVED'?'status-approved':getDisplayStatus(row.status)==='REJECTED'?'status-rejected':getDisplayStatus(row.status)==='REQUIRED_CHANGE'?'status-change-request':'status-pending'">{{getDisplayStatus(row.status).replace("_",'
+                    <b *ngIf="!row.is_draft" [ngClass]="getDisplayStatus(row.status)==='APPROVED'?'status-approved':getDisplayStatus(row.status)==='REJECTED'?'status-rejected':getDisplayStatus(row.status)==='REQUIRED_CHANGE'?'status-change-request':'status-pending'">{{getDisplayStatus(row.status).replace("_",'
                       ') | titlecase}}</b>
                   </label>
                   <div *ngIf="getDisplayStatus(row.status)==='REJECTED' || getDisplayStatus(row.status)==='REQUIRED_CHANGE'"
                     class="status-btn">
                     <button class="view-reason-btn" type="button" (click)='showReason(row,i)'>View Reason</button>
                   </div>
-                  <div *ngIf="getDisplayStatus(row.status)==='REQUIRED_CHANGE' || showButtons" class="status-btn">
+                  <div *ngIf="getDisplayStatus(row.status)==='REQUIRED_CHANGE' || row.is_draft || showButtons" class="status-btn">
                     <button class="edit-btn" type="button" (click)="editQuestions(row)">Edit it</button>
                   </div>
                 </div>
@@ -121,7 +121,7 @@
               <div class="button-mobile-css">
                 <div class="row">
                   <div class="col-md-12 question-status">
-                    <div [ngClass]="getDisplayStatus(row.status)==='APPROVED'?['sprite', 'approvedicon']:getDisplayStatus(row.status)==='PENDING'?['sprite', 'pendingicon']:'status-btn'"></div>
+                    <div [ngClass]="getDisplayStatus(row.status)==='APPROVED'?['sprite', 'approvedicon']:getDisplayStatus(row.status)==='PENDING' && !row.is_draft ?['sprite', 'pendingicon']:'status-btn'"></div>
                     <label>
                       <b [ngClass]="getDisplayStatus(row.status)==='APPROVED'?'status-approved':getDisplayStatus(row.status)==='REJECTED'?'status-rejected':getDisplayStatus(row.status)==='REQUIRED_CHANGE'?'status-change-request':'status-pending'">{{getDisplayStatus(row.status).replace("_",'
                         ') | titlecase}}</b>
@@ -201,7 +201,7 @@
         </div>
       </div>
       <div class="row edit-form-div" *ngIf="editQuestion !== null && row === editQuestion">
-        <app-question-form [editQuestion]="editQuestion" [tagsDictionary]="tagDictionary" [tagsObs] ="tagsObs" [categoriesObs]="categoriesObs"
+        <app-question-form  [isAutoSave]="!isAdmin" [editQuestion]="editQuestion" [tagsDictionary]="tagDictionary" [tagsObs] ="tagsObs" [categoriesObs]="categoriesObs"
           (updateStatus)=nullifyQuestion($event) (updateUnpublishedQuestions)="updateQuestionData($event)" [quillConfig]="quillConfig" [applicationSettings]="applicationSettings"></app-question-form>
       </div>
 

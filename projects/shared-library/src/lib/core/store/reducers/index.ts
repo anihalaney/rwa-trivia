@@ -7,7 +7,7 @@ import {
 } from './user.reducer';
 import { categories, topCategories } from './categories.reducer';
 import { tags, topTags } from './tags.reducer';
-import { questionOfTheDay, questionSaveStatus, updateQuestion, firstQuestion } from './questions.reducer';
+import { questionOfTheDay, questionSaveStatus, updateQuestion, firstQuestion, questionDraftSaveStatus } from './questions.reducer';
 import { loginRedirectUrl, resetPasswordLogs } from './ui-state.reducer';
 import {
   activeGames, newGameId, gameCreateStatus, updateUserReactionStatus, getUserReactionStatus,
@@ -55,6 +55,7 @@ export interface CoreState {
   userUpdateStatus: string;
   firstQuestionBits: any;
   firstQuestion: Question;
+  questionDraftSaveStatus: any;
   updateUserReactionStatus: any;
   getUserReactionStatus: any;
   getQuestionSuccess: any;
@@ -70,6 +71,7 @@ export const reducer: ActionReducerMap<CoreState> = {
   tags: tags,
   questionOfTheDay: questionOfTheDay,
   questionSaveStatus: questionSaveStatus,
+  questionDraftSaveStatus: questionDraftSaveStatus,
   loginRedirectUrl: loginRedirectUrl,
   activeGames: activeGames,
   updateQuestion: updateQuestion,
