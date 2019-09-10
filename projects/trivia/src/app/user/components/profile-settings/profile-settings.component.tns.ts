@@ -26,6 +26,8 @@ import { userState } from '../../store';
 import { LocationResetDialogComponent } from './location-reset-dialog/location-reset-dialog.component';
 import { ProfileSettings } from './profile-settings';
 declare var IQKeyboardManager;
+import { AuthenticationProvider } from 'shared-library/core/auth';
+
 @Component({
   selector: 'profile-settings',
   templateUrl: './profile-settings.component.html',
@@ -72,8 +74,10 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
     public route: ActivatedRoute,
     public router: Router,
     private modal: ModalDialogService,
-    private vcRef: ViewContainerRef) {
-    super(fb, store, userAction, uUtils, cd, route, router);
+    private vcRef: ViewContainerRef,
+    public authenticationProvider: AuthenticationProvider) {
+
+    super(fb, store, userAction, uUtils, cd, route, router, authenticationProvider);
     this.initDataItems();
     requestPermissions();
 
