@@ -10,7 +10,7 @@ import {
     OpponentType, PlayerMode, User
 } from 'shared-library/shared/model';
 import { AppState, appState } from '../../../store';
-import { map, flatMap } from 'rxjs/operators';
+import { map, flatMap, filter } from 'rxjs/operators';
 
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class Dashboard implements OnDestroy {
@@ -19,6 +19,8 @@ export class Dashboard implements OnDestroy {
     NEW_GAME_IN = 'New Game In';
     SINGLE_PLAYER = 'Single Player';
     TWO_PLAYER = 'Two Player';
+    actionText = 'Hi, there';
+    actionSubText = 'SIGN UP/SIGN IN';
     user: User;
     users: User[];
     activeGames$: Observable<Game[]>;
@@ -82,9 +84,20 @@ export class Dashboard implements OnDestroy {
 
 
         this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.user),
+            filter(u => u !== null),
             map(user => {
                 this.ngZone.run(() => {
                     this.user = user;
+                    this.actionText = `Hi ${this.user.displayName}`;
+                    if (this.user.tags && this.user.tags.length > 0) {
+                        this.actionSubText = '';
+                        const userTags = this.user.tags.join(', ');
+                        const subTagsCount = this.user.tags.length - 2;
+                        const subTags = userTags.substring(0, 12);
+                        this.actionSubText += (userTags.length > 12) ? `${subTags}..` : subTags;
+                        this.actionSubText += (subTagsCount > 0) ? `+${subTagsCount}` : '';
+                    }
+
                     this.cd.markForCheck();
                     if (!this.user && this.timerSub) {
                         this.timerSub.unsubscribe();

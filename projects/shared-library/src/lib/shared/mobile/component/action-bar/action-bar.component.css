@@ -8,16 +8,31 @@
   padding: 9 16 9 0;
   height: 56;
 }
+
+.action-subtitle {
+  padding: 9 16 9 0;
+  height: 80;
+}
+
 .action-bar-button {
   font-size: 25;
   line-height: 22;
   text-align: center;
 }
 
+.action-sub-text-title {
+  font-size: 12;
+}
+
 .action-text-title {
-  /* margin: 0 0 0 31; */
   font-size: 20;
 }
+
+.action-edit-icon {
+  margin-left: 5;
+  font-size: 15;
+}
+
 .action-text-save {
   font-size: 14;
   line-height: 11;
@@ -35,4 +50,10 @@
 
 .notification-dot {
   background-color: #f50057;
+}
+.action-user-profile
+{
+  margin-right: 10;
+  border-radius: 50%;
+  margin-left: 5;
 }

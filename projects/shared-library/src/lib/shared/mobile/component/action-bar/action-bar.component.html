@@ -1,32 +1,51 @@
-<ActionBar title="" class="action-bar action-title">
+<ActionBar title="" class="action-bar " [ngClass]=" subTitle ? 'action-subtitle' : 'action-title' " >
     <NavigationButton visibility="collapsed"></NavigationButton>
     <GridLayout ios:rows="auto" android:rows="auto" ios:columns="auto,*,auto,auto,auto"
         android:columns="auto,*,auto,auto,auto" width="100%">
 
-        <StackLayout *ngIf="!hideMenu" stlRippleEffect stlBackgroundColor="#13284F" stlOpacity="0.5" stlBackgroundColorAfter=""
-            verticalAlignment="center" width="45" col="0" (tap)="openSidebar()">
-            <Label  text="&#xf0c9;" class="fa text-left padding-back" padding="10"
-                fontSize="20"></Label>
+        <StackLayout *ngIf="!hideMenu" stlRippleEffect stlBackgroundColor="#13284F" stlOpacity="0.5"
+            stlBackgroundColorAfter="" verticalAlignment="center" width="45" col="0" (tap)="openSidebar()">
+            <Label text="&#xf0c9;" class="fa text-left padding-back" padding="10" fontSize="20"></Label>
         </StackLayout>
+
+        <!-- <StackLayout *ngIf="((user && user!== null))" verticalAlignment="center" col="0" iosOverflowSafeArea="false">
+            <Image stlRippleEffect row="0" col="0" src="{{photoUrl}}" stretch="aspectFill" height="40" width="40"
+                verticalAlignment="center" class="action-user-profile">
+            </Image>
+        </StackLayout> -->
 
         <StackLayout col="1" verticalAlignment="center">
-            <Label [text]="title" class="action-text-title" fontSize="20"></Label>
+            <Label [text]="title" [ngClass]=" subTitle ? 'action-sub-text-title' : 'action-text-title ' "
+                textWrap="true"></Label>
+            <StackLayout orientation="horizontal">
+                <Label *ngIf="subTitle" [text]="subTitle" class="action-text-title" textWrap="true"></Label>
+                <Label *ngIf="user && user!== null && subTitle" text="&#xf303;" class="fas action-edit-icon "></Label>
+            </StackLayout>
         </StackLayout>
 
-        <StackLayout *ngIf="((user && user!== null && !showSkipBtn))" col="2" stlRippleEffect stlBackgroundColor="#13284F" ios:margin="3"
-            android:margin="10" stlOpacity="0.5" stlBackgroundColorAfter="" verticalAlignment="center"
-            horizontalAlignment="right" android:width="23" ios:width="23" (rippleTap)="goToDashboard()">
+        <StackLayout col="2" *ngIf="((user && user!== null && !showSkipBtn && title=='Questions'))" stlRippleEffect
+            stlBackgroundColor="#13284F" ios:margin="3" android:margin="10" stlOpacity="0.5" stlBackgroundColorAfter=""
+            verticalAlignment="center" horizontalAlignment="right" android:width="23"  ios:width="23"
+            (rippleTap)="navigateToSubmitQuestion()">
+            <Label text="&#xf055;" class="fa" fontSize="20"></Label>
+        </StackLayout>
+
+        <StackLayout *ngIf="((user && user!== null && !showSkipBtn && title!='Questions'))" col="2" stlRippleEffect
+            stlBackgroundColor="#13284F" ios:margin="3" android:margin="10" stlOpacity="0.5" stlBackgroundColorAfter=""
+            verticalAlignment="center" horizontalAlignment="right" android:width="23" ios:width="23"
+            (rippleTap)="goToDashboard()">
             <Label text="&#xf1d1;" class="fa" fontSize="20"></Label>
         </StackLayout>
 
-        <StackLayout class="index-0" *ngIf="((user && user!== null && !showSkipBtn))" col="3" stlRippleEffect
-            stlBackgroundColor="#13284F" stlOpacity="0.5" stlBackgroundColorAfter="" ios:margin="3" margin="10"
-            android:margin="5" verticalAlignment="center" horizontalAlignment="center" android:width="40" ios:width="40"
-            (rippleTap)="gotToNotification()" orientation="horizontal">
+        <StackLayout class="index-0" *ngIf="((user && user!== null && !showSkipBtn && title!='Questions'))" col="3"
+            stlRippleEffect stlBackgroundColor="#13284F" stlOpacity="0.5" stlBackgroundColorAfter="" ios:margin="3"
+            margin="10" android:margin="5" verticalAlignment="center" horizontalAlignment="center" android:width="40"
+            ios:width="40" (rippleTap)="gotToNotification()" orientation="horizontal">
             <Label horizontalAlignment="center" verticalAlignment="center" text="&#xf0f3;" class="fa"
                 fontSize="20"></Label>
-            <Label *ngIf="notifications.length > 0" [ngClass]="{'notification-dot':notifications?.length > 0 }" height="22" width="50" marginTop="-1"
-                marginLeft="-5" paddingLeft="5" color="#fff" borderRadius="50" fontSize="16"
+            <Label *ngIf="notifications.length > 0" [ngClass]="{'notification-dot':notifications?.length > 0 }"
+                height="22" width="50" marginTop="-1" marginLeft="-5" paddingLeft="5" color="#fff" borderRadius="50"
+                fontSize="16"
                 [text]="(notifications.length === 0 ? '' : (notifications.length > 0 && notifications.length > 99) ? '99+' : notifications.length)"
                 fontWeight="600" class="index-1"></Label>
         </StackLayout>
