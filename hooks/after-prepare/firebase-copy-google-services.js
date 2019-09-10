@@ -5,8 +5,9 @@ module.exports = function($logger, $projectData, hookArgs) {
 
 return new Promise(function(resolve, reject) {
 
-        /* Decide whether to prepare for dev or prod environment */
-        var isReleaseBuild = (hookArgs.appFilesUpdaterOptions || hookArgs.prepareData).release;
+        /* do not add this line we do not use --release to decide release environment */
+        // var isReleaseBuild = (hookArgs.appFilesUpdaterOptions || hookArgs.prepareData).release;
+         /* Decide whether to prepare for dev or prod environment */
         var validProdEnvs = ['prod','production'];
         var isProdEnv = false; // building with --env.prod or --env.production flag
         var env = (hookArgs.platformSpecificData || hookArgs.prepareData).env;
@@ -17,7 +18,10 @@ return new Promise(function(resolve, reject) {
             });
         }
 
-        var buildType = isReleaseBuild || isProdEnv ? 'production' : 'development';
+        /* do not change this line 
+         we use --env.prod to decide release environment
+         we do not use --release to decide release environment */
+        var buildType =  isProdEnv ? 'production' : 'development';
         const platformFromHookArgs = hookArgs && (hookArgs.platform || (hookArgs.prepareData && hookArgs.prepareData.platform));
         const platform = (platformFromHookArgs  || '').toLowerCase();
 

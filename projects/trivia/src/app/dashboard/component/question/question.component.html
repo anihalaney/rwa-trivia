@@ -25,22 +25,24 @@
         </ul>
       </div>
       <div class=" col-xs-12">
-        <div class="col-sm-5 col-xs-12 ellipsis question-tags" title=" {{question.tags?.toString()}}">
-          Tags :
-          <span>{{question.tags?.toString()}}</span>
+          <div class="col-sm-5 col-xs-12 ellipsis question-tags" title=" {{question.tags?.toString()}}">
+            Tags :
+            <span>{{question.tags?.toString()}}</span>
+          </div>
+          <div class="col-sm-7 col-xs-12 alignment">
+            <author [isGamePlay]= false [userId]="question.created_uid"></author>
+          </div>
         </div>
-        <div class="col-sm-7 col-xs-12 alignment">
-          <author [isGamePlay]= false [userId]="question.created_uid"></author>
+        <div class="col-xs-12 nx-question-container">
+            <div class="col-sm-6 col-xs-12 like-dislike" >
+                <user-reaction *ngIf="question && answeredText!==''" [user]='user' [question]='question'></user-reaction>
+              </div>
+          <div class="col-sm-6 col-xs-12 next-question">
+            <a class="btn" (click)="getNextQuestion()" *ngIf="answeredText!==''">Try Another</a>
+          </div>
         </div>
-      </div>
-      <div class="col-xs-12 nx-question-container">
-          <div class="col-sm-6 col-xs-12 like-dislike" >
-              <user-reaction *ngIf="question && answeredText!==''" [user]='user' [question]='question'></user-reaction>
-            </div>
-        <div class="col-sm-6 col-xs-12 next-question">
-          <a class="btn" (click)="getNextQuestion()" *ngIf="answeredText!==''">Try Another</a>
-        </div>
-      </div>
+
+
     </div>
   </div>
 </div>

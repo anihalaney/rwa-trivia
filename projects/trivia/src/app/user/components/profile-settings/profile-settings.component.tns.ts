@@ -28,7 +28,6 @@ import { ProfileSettings } from './profile-settings';
 import { AuthenticationProvider } from 'shared-library/core/auth';
 declare var IQKeyboardManager;
 
-
 @Component({
   selector: 'profile-settings',
   templateUrl: './profile-settings.component.html',

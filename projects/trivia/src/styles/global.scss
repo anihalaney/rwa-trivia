@@ -776,14 +776,11 @@ pre.ql-syntax {
   color: #fff !important;
 }
 
-game-question .author{
+game-question .auther{
   justify-content: flex-end;
 }
 
-question .author{
+question .auther{
   justify-content: flex-end;
-}
-
-.cursor-pointer{
-  cursor: pointer;
+  margin-right: 20px;
 }
