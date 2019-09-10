@@ -66,7 +66,8 @@ import { NgQuillTexModule } from 'ng-quill-tex';
     SharedMaterialModule, CdkTableModule, RejectedQuestionContentComponent,
     HttpClientModule, ShareButtonModule, SocialPaletteComponent, AuthorComponent, ShowHintWhenFocusOutDirective,
     OpenUserProfileDirective, SafeHtmlPipe, RenderQuestionComponent, UserCardComponent, SignupExtraInfoComponent,
-    UserReactionComponent, CheckDisplayNameComponent, FriendInviteComponent, GameInviteComponent, InviteMailFriendsComponent
+    InviteMailFriendsComponent, UserReactionComponent, CheckDisplayNameComponent, FriendInviteComponent, GameInviteComponent,
+    InviteMailFriendsComponent
   ],
   entryComponents: [CropImageDialogComponent]
 })
