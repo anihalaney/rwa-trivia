@@ -36,8 +36,7 @@
                     </div>
                     <div class="new-game-btn-container">
                         <div class="col-md-3 col-xs-6" *ngIf="loggedInUser">
-                            <button *ngIf="loggedInUserAccount && isLivesEnable" class="startgame"
-                                (click)="startNewGame()">
+                            <button *ngIf="loggedInUserAccount && isLivesEnable" class="startgame" (click)="startNewGame()">
                                 Start New Game
                             </button>
                         </div>
@@ -66,27 +65,11 @@
                         </div>
                     </div>
 
-                    <div class="new-game-btn-container" style="margin-top: 20px;"
-                        *ngIf="socialProfileSettings && socialProfileSettings.length > 0">
+                    <div class="new-game-btn-container" style="margin-top: 20px;" *ngIf="socialProfileSettings && socialProfileSettings.length > 0">
                         <div style="display: flex;" *ngFor="let profile of socialProfileSettings">
-                            <a *ngIf="profile?.enable" [href]="profile?.socialUrl" target="_blank"
-                                [ngStyle]="{'order':profile?.position }">
+                            <a *ngIf="profile?.enable" [href]="profile?.socialUrl" target="_blank" [ngStyle]="{'order':profile?.position }">
                                 <img class="app-store-img social" src="/assets/images/{{profile?.display}}.png" />
                             </a>
-                        </div>
-                    </div>
-
-                    <div class="new-game-btn-container" style="margin-top: 20px;">
-                        <div style="display: inline-block;" class="points pull-left m-l-20">
-                            <div class="p-t-10"> Bits </div>
-                            <label class="points-count" [ngClass]="{'points-count-f-12': account.bits > 9999 }">
-                                {{account.bits || 0 }}</label>
-                        </div>
-
-                        <div style="display: inline-block;" class="points bytes pull-left m-l-20">
-                            <div class="p-t-10"> Bytes </div>
-                            <label class="points-count" [ngClass]="{'points-count-f-12': account.bytes > 9999 }">
-                                {{account?.bytes || 0}}</label>
                         </div>
                     </div>
                     <div class="row m-b-55">
@@ -162,8 +145,7 @@
                                         </ul>
                                     </div>
                                 </mat-tab>
-                                <mat-tab label="Game Played"
-                                    *ngIf="loggedInUser?.userId && userType === 1 && gamePlayedAgainst">
+                                <mat-tab label="Game Played" *ngIf="loggedInUser?.userId && userType === 1 && gamePlayedAgainst">
                                     <div class="statsview">
                                         <ul id="stats" class="active">
                                             <li>
@@ -184,7 +166,8 @@
                                                         <div class="viewtext">Games Won-Games Lost</div>
                                                     </div>
                                                     <div class="viewcount align-right">
-                                                        {{gamePlayedAgainst?.wins || 0}}-{{gamePlayedAgainst?.losses || 0}}
+                                                        {{gamePlayedAgainst?.wins || 0}}-{{gamePlayedAgainst?.losses ||
+                                                        0}}
                                                     </div>
                                                 </div>
                                             </li>

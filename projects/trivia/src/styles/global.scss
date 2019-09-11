@@ -755,7 +755,7 @@ body.dialog-open .cdk-global-overlay-wrapper {
   content: '' !important;
 }
 
-.mq-editable-field.mq-focused, {
+.mq-editable-field.mq-focused {
   box-shadow: none !important;
   border-color: none !important;
   border-radius: 0px;
@@ -782,6 +782,7 @@ game-question .author{
 
 question .author{
   justify-content: flex-end;
+  margin-right: 20px;
 }
 
 .cursor-pointer{

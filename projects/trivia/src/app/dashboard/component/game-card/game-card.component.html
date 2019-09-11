@@ -6,13 +6,13 @@
       <div class="col-xs-12 textcenter clearfix">
         <app-user-card [userId]="user.userId" [type]="userCardType.USER_WEB_IMAGE_NAME_LOCATION_VERTICAL"></app-user-card>
         <hr>
-        <div class="dark">Score {{game.stats[user.userId]?.score}}</div>
+        <div class="dark">Score {{game.stats[user.userId].score}}</div>
         <div class="div-badge">
-          <div [ngClass]="game.stats[user.userId]?.score >= 1?'score1':'score0'" class="sprite"></div>
-          <div [ngClass]="game.stats[user.userId]?.score >= 2?'score2':'score0'" class="sprite"></div>
-          <div [ngClass]="game.stats[user.userId]?.score >= 3?'score3':'score0'" class="sprite"></div>
-          <div [ngClass]="game.stats[user.userId]?.score >= 4?'score4':'score0'" class="sprite"></div>
-          <div [ngClass]="game.stats[user.userId]?.score >= 5?'score5':'score0'" class="sprite"></div>
+          <div [ngClass]="game.stats[user.userId].score >= 1?'score1':'score0'" class="sprite"></div>
+          <div [ngClass]="game.stats[user.userId].score >= 2?'score2':'score0'" class="sprite"></div>
+          <div [ngClass]="game.stats[user.userId].score >= 3?'score3':'score0'" class="sprite"></div>
+          <div [ngClass]="game.stats[user.userId].score >= 4?'score4':'score0'" class="sprite"></div>
+          <div [ngClass]="game.stats[user.userId].score >= 5?'score5':'score0'" class="sprite"></div>
         </div>
       </div>
     </ng-container>
@@ -33,16 +33,16 @@
       </div>
       <div class="textcenter clearfix">
         <div class="col-xs-6 div-right-border div-score">
-          <div class="dark">Score {{game.stats[user.userId]?.score}}</div>
+          <div class="dark">Score {{game.stats[user.userId].score}}</div>
         </div>
       </div>
       <div class="text-align clearfix">
         <div class="div-width div-right-border float-left">
-          <div [ngClass]="game.stats[user.userId]?.score >= 1?'score1':'score0'" class="sprite"></div>
-          <div [ngClass]="game.stats[user.userId]?.score >= 2?'score2':'score0'" class="sprite"></div>
-          <div [ngClass]="game.stats[user.userId]?.score >= 3?'score3':'score0'" class="sprite"></div>
-          <div [ngClass]="game.stats[user.userId]?.score >= 4?'score4':'score0'" class="sprite"></div>
-          <div [ngClass]="game.stats[user.userId]?.score >= 5?'score5':'score0'" class="sprite"></div>
+          <div [ngClass]="game.stats[user.userId].score >= 1?'score1':'score0'" class="sprite"></div>
+          <div [ngClass]="game.stats[user.userId].score >= 2?'score2':'score0'" class="sprite"></div>
+          <div [ngClass]="game.stats[user.userId].score >= 3?'score3':'score0'" class="sprite"></div>
+          <div [ngClass]="game.stats[user.userId].score >= 4?'score4':'score0'" class="sprite"></div>
+          <div [ngClass]="game.stats[user.userId].score >= 5?'score5':'score0'" class="sprite"></div>
         </div>
 
         <div class="div-width text-align padding-right float-right">
@@ -67,10 +67,10 @@
       </div>
       <div class="clearfix">
         <div class="col-xs-6 div-right-border div-score score-text-align">
-          <div class="dark">Score {{game.stats[user.userId]?.score}}</div>
+          <div class="dark">Score {{game.stats[user.userId].score}}</div>
         </div>
         <div class="col-xs-6 div-score score-text-align">
-          <div class="dark">Score {{game.stats[otherUserId]?.score}}</div>
+          <div class="dark">Score {{game.stats[otherUserId].score}}</div>
         </div>
       </div>
       <div class="text-align clearfix">

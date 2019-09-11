@@ -25,8 +25,8 @@ import { AppState } from '../../../store';
 import { userState } from '../../store';
 import { LocationResetDialogComponent } from './location-reset-dialog/location-reset-dialog.component';
 import { ProfileSettings } from './profile-settings';
-declare var IQKeyboardManager;
 import { AuthenticationProvider } from 'shared-library/core/auth';
+declare var IQKeyboardManager;
 
 @Component({
   selector: 'profile-settings',

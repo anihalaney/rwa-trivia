@@ -201,6 +201,40 @@ label.custom-file-upload-image:hover:after {
   margin: 0 5px;
 }
 
+@media screen and (min-width: 1000px) {
+  .submitpage .optionbox h2 {
+    margin-bottom: 7px;
+  }
+  .submitpage .optionbox {
+    margin-top: 0;
+    padding: 0;
+  }
+}
+
+@media screen and (min-width: 767px) {
+  .card .enterquestion h3 {
+    margin-top: 0px;
+  }
+}
+
+@media (min-width: 1355px) {
+  .mainpage {
+    max-width: 100%;
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .viewtext {
+    width: 50%;
+  }
+
+  .flex-sub-div {
+    label {
+      font-size: 16px;
+    }
+  }
+}
+
 .points {
   background-color: #3b5998;
   width: 130px;
@@ -245,38 +279,4 @@ label.custom-file-upload-image:hover:after {
   margin-right: 5px;
   font-size: 15px !important;
   padding-right: 0 !important;
-}
-
-@media screen and (min-width: 1000px) {
-  .submitpage .optionbox h2 {
-    margin-bottom: 7px;
-  }
-  .submitpage .optionbox {
-    margin-top: 0;
-    padding: 0;
-  }
-}
-
-@media screen and (min-width: 767px) {
-  .card .enterquestion h3 {
-    margin-top: 0px;
-  }
-}
-
-@media (min-width: 1355px) {
-  .mainpage {
-    max-width: 100%;
-  }
-}
-
-@media screen and (max-width: 1024px) {
-  .viewtext {
-    width: 50%;
-  }
-
-  .flex-sub-div {
-    label {
-      font-size: 16px;
-    }
-  }
 }
