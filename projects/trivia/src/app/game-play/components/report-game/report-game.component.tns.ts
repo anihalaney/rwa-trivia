@@ -7,7 +7,7 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { Observable } from 'rxjs';
 import { Utils } from 'shared-library/core/services';
 import { Category, FirebaseScreenNameConstants, Game, Question, QuestionMetadata, ReportQuestion, User } from 'shared-library/shared/model';
-import { isAndroid, isIOS } from 'tns-core-modules/ui/page/page';
+import { isIOS } from 'tns-core-modules/ui/page/page';
 import { AppState, categoryDictionary } from '../../../store';
 import * as gameplayactions from '../../store/actions';
 declare var IQKeyboardManager;
@@ -145,9 +145,7 @@ export class ReportGameComponent implements OnInit, OnDestroy {
     }
 
     hideKeyboard() {
-        if (isAndroid) {
-            this.utils.hideKeyboard(this.textField);
-        }
+        this.utils.hideKeyboard(this.textField);
     }
 
 }

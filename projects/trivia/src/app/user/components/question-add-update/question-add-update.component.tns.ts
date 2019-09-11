@@ -14,7 +14,7 @@ import { debounceTime } from 'rxjs/operators';
 import { ObservableArray } from 'tns-core-modules/data/observable-array';
 import { TokenModel } from 'nativescript-ui-autocomplete';
 import { RadAutoCompleteTextViewComponent } from 'nativescript-ui-autocomplete/angular';
-import { Page, isAndroid, isIOS } from 'tns-core-modules/ui/page';
+import { Page, isIOS } from 'tns-core-modules/ui/page';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { WebView, LoadEventData } from 'tns-core-modules/ui/web-view';
 import * as webViewInterfaceModule from 'nativescript-webview-interface';
@@ -358,9 +358,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
   }
 
   hideKeyboard() {
-    if (isAndroid) {
-      this.utils.hideKeyboard(this.textField);
-    }
+    this.utils.hideKeyboard(this.textField);
   }
 
   ngOnDestroy() {

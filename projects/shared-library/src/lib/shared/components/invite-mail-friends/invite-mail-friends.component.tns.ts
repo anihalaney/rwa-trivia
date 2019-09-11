@@ -6,7 +6,7 @@ import { Store } from '@ngrx/store';
 import { CoreState, UserActions } from 'shared-library/core/store';
 import { Utils } from 'shared-library/core/services';
 import { InviteMailFriends } from './invite-mail-friends';
-import { isAndroid, isIOS } from 'tns-core-modules/ui/page';
+import { isIOS } from 'tns-core-modules/ui/page';
 declare var IQKeyboardManager;
 @Component({
     selector: 'app-invite-mail-friends',
@@ -28,8 +28,6 @@ export class InviteMailFriendsComponent extends InviteMailFriends {
     }
 
     hideKeyboard() {
-        if (isAndroid) {
           this.utils.hideKeyboard(this.textField);
-        }
       }
 }

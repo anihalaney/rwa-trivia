@@ -17,7 +17,7 @@ import { profileSettingsConstants } from 'shared-library/shared/model';
 import { ObservableArray } from 'tns-core-modules/data/observable-array';
 import { ImageAsset } from 'tns-core-modules/image-asset';
 import { fromAsset, ImageSource } from 'tns-core-modules/image-source';
-import { isAndroid, isIOS } from 'tns-core-modules/platform';
+import { isIOS } from 'tns-core-modules/platform';
 import * as dialogs from 'tns-core-modules/ui/dialogs';
 import { SegmentedBar, SegmentedBarItem } from 'tns-core-modules/ui/segmented-bar';
 import * as utils from 'tns-core-modules/utils/utils';
@@ -380,9 +380,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
 
 
   hideKeyboard() {
-    if (isAndroid) {
-      this.utils.hideKeyboard(this.textField);
-    }
+    this.utils.hideKeyboard(this.textField);
   }
 
   openUrl(url, id) {
