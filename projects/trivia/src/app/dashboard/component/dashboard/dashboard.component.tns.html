@@ -149,7 +149,9 @@
                 <StackLayout row="8" col="0" iosOverflowSafeArea="false">
                     <question [user]="user" [userDict]="userDict"></question>
                 </StackLayout>
-                <StackLayout *ngIf="user && user!==null" row="9" col="0" class="submit-question" iosOverflowSafeArea="false">
+
+                <StackLayout *ngIf="user && user!==null" row="9" col="0" class="submit-question"
+                    iosOverflowSafeArea="false">
                     <StackLayout class="q-title" iosOverflowSafeArea="false">
                         <Label text="Your Questions" textWrap="true"></Label>
                     </StackLayout>

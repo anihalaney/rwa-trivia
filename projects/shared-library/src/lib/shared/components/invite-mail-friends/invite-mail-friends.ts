@@ -44,7 +44,6 @@ export class InviteMailFriends {
 
   }
 
-
   isValid(email) {
     return EMAIL_REGEXP.test(String(email).toLowerCase());
   }

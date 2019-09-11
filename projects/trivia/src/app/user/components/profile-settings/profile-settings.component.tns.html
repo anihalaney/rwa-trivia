@@ -115,12 +115,46 @@
                     height="80" width="80" marginRight="5"></Image>
                   <Label horizontalAlignment="center" class="is-friend-span" margin="-10 0 0 0" text="Friends"></Label>
                 </StackLayout>
+                
                 <StackLayout *ngIf="userType ===  0" class="input-field" iosOverflowSafeArea="false">
                   <TextField #textField hint="{{userType ===  0 ? '@username' : ''}}" formControlName="name"
                     class="input">
                   </TextField>
                   <Label *ngIf="userForm.controls.name.errors && !userForm.controls.name.pristine" class="error"
                     textWrap="true" text="Name is required!"></Label>
+                </StackLayout>
+
+                <!-- Email -->
+                <StackLayout
+                  *ngIf="userType ===  0 && isEnableEditProfile && (currentAuthProvider===authProviderConstants.PASSWORD || currentAuthProvider===authProviderConstants.PHONE)"
+                  class="input-field" iosOverflowSafeArea="false">
+                  <TextField #textField hint="{{userType ===  0 ? '@email' : ''}}" formControlName="email"
+                    class="input">
+                  </TextField>
+                  <Label *ngIf="userForm.controls.email.errors?.pattern && !userForm.controls.email.pristine"
+                    class="error" textWrap="true" text="Email is Invalid!"></Label>
+                </StackLayout>
+
+                <!-- Phone No -->
+                <StackLayout
+                  *ngIf="userType ===  0 && isEnableEditProfile && (currentAuthProvider===authProviderConstants.GOOGLE || currentAuthProvider===authProviderConstants.FACEBOOK || currentAuthProvider===authProviderConstants.PASSWORD )"
+                  class="input-field" iosOverflowSafeArea="false">
+                  <TextField #textField hint="{{userType ===  0 ? '@PhoneNo' : ''}}" formControlName="phoneNo"
+                    class="input">
+                  </TextField>
+                  <Label *ngIf="userForm.controls.phoneNo.errors?.pattern && !userForm.controls.phoneNo.pristine"
+                    class="error" textWrap="true" text="PhoneNo is Invalid!"></Label>
+                </StackLayout>
+
+                <!-- Password -->
+                <StackLayout
+                  *ngIf="userType ===  0 && isEnableEditProfile && (currentAuthProvider===authProviderConstants.PASSWORD)"
+                  class="input-field" iosOverflowSafeArea="false">
+                  <TextField #textField hint="{{userType ===  0 ? '@password' : ''}}" formControlName="password"
+                    class="input">
+                  </TextField>
+                  <Label *ngIf="userForm.controls.password.errors?.minlength && !userForm.controls.password.pristine"
+                    class="error" textWrap="true" text="Password must be atleast 6 characters!"></Label>
                 </StackLayout>
 
                 <StackLayout *ngIf="isEnableEditProfile && userType ===  0" class="list-view"
