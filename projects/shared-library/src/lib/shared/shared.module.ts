@@ -14,7 +14,7 @@ import {
   QuestionsSearchComponent, QuestionsTableComponent,
   QuestionFormComponent, RejectedQuestionContentComponent, SocialPaletteComponent, AuthorComponent, RenderQuestionComponent,
   RenderAnswerComponent, CropImageDialogComponent, UserCardComponent, InviteMailFriendsComponent, UserReactionComponent,
-  CheckDisplayNameComponent
+  FriendInviteComponent, GameInviteComponent, CheckDisplayNameComponent
 } from './components';
 import { ShowHintWhenFocusOutDirective, OpenUserProfileDirective } from './directive';
 import { NgQuillTexModule } from 'ng-quill-tex';
@@ -35,6 +35,8 @@ import { NgQuillTexModule } from 'ng-quill-tex';
     UserCardComponent,
     InviteMailFriendsComponent,
     UserReactionComponent,
+    FriendInviteComponent,
+    GameInviteComponent,
     CheckDisplayNameComponent
   ],
   imports: [
@@ -62,8 +64,8 @@ import { NgQuillTexModule } from 'ng-quill-tex';
     FlexLayoutModule, QuestionFormComponent,
     SharedMaterialModule, CdkTableModule, RejectedQuestionContentComponent,
     HttpClientModule, ShareButtonModule, SocialPaletteComponent, AuthorComponent, ShowHintWhenFocusOutDirective,
-    OpenUserProfileDirective, SafeHtmlPipe, RenderQuestionComponent, UserCardComponent,
-    InviteMailFriendsComponent, UserReactionComponent, CheckDisplayNameComponent
+    OpenUserProfileDirective, SafeHtmlPipe, RenderQuestionComponent, UserCardComponent, UserReactionComponent,
+    FriendInviteComponent, GameInviteComponent, InviteMailFriendsComponent, CheckDisplayNameComponent
   ],
   entryComponents: [CropImageDialogComponent]
 })

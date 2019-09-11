@@ -6,3 +6,4 @@ export * from './question-card/question-card.component';
 export * from './first-question/first-question.component';
 export * from './welcome-screen/welcome-screen.component';
 export * from './select-category-tag/select-category-tag.component';
+export * from './notification/notification.component';

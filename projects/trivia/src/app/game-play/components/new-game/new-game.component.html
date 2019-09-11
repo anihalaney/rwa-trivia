@@ -17,7 +17,7 @@
                         <h2>Select
                             <span>Player Mode</span>
                         </h2>
-                    </div>        
+                    </div>
                     <div class="col-sm-9 radiobtn">
                         <input type="radio" id="p-radio1" formControlName="playerMode" value="0" checked="true">
                         <label for="p-radio1">
@@ -33,8 +33,8 @@
                             <input type="radio" id="tp-radio2" formControlName="opponentType" value="1">
                             <label for="tp-radio2">
                                 <span class="sprite friendsp-icon icon"></span>With Friends</label>
-                                <input type="radio" id="tp-radio3" formControlName="opponentType" value="2">
-                                <!-- <label for="tp-radio3">
+                            <input type="radio" id="tp-radio3" formControlName="opponentType" value="2">
+                            <!-- <label for="tp-radio3">
                                     <span class="sprite computerp-icon"></span>With Computer</label> -->
 
                                     <div class="withfriends" *ngIf="newGameForm.value.opponentType == 1">      
@@ -53,20 +53,23 @@
                                                         </div>
                                                       </div>
                                                     </div>
-                                                  </div>
-                                                <div class="owl-next swiper-button-next" >Next</div> 
-                                          </div> 
-                                          <span class="no-frd-msg" *ngIf="noFriendsStatus">
-                                                I do not have any friends, invite your friends using link
-                                                <a [routerLink]="['/user/my/invite-friends']">Invite Friends</a>
-                                            </span>
-                                    </div>        
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="owl-next swiper-button-next">Next</div>
+                                </div>
+                                <span class="no-frd-msg" *ngIf="noFriendsStatus">
+                                    I do not have any friends, invite your friends using link
+                                    <a [routerLink]="['/user/my/invite-friends']">Invite Friends</a>
+                                </span>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <!-- Prefered Categories -->
-                <div class="row" [class.pcategories]="challengerUserId ? false: true" >
-                    <div class="col-sm-3" >
+                <div class="row" [class.pcategories]="challengerUserId ? false: true">
+                    <div class="col-sm-3">
                         <h2>Preferred
                             <span>Categories</span>
                         </h2>
@@ -75,10 +78,13 @@
                         <div class="row">
                             <div class="col-md-8">
                                 <div class="row">
-                                    <ng-container >
-                                        <div class="checkbox-group" *ngFor="let category of filteredCategories; let i=index">
-                                            <mat-checkbox [disableRipple]="true" [value]="category.id" [disabled]="category.requiredForGamePlay"
-                                                [checked]="category.isSelected" (change)="selectCategory($event,category.id)">
+                                    <ng-container>
+                                        <div class="checkbox-group"
+                                            *ngFor="let category of filteredCategories; let i=index">
+                                            <mat-checkbox [disableRipple]="true" [value]="category.id"
+                                                [disabled]="category.requiredForGamePlay"
+                                                [checked]="category.isSelected"
+                                                (change)="selectCategory($event,category.id)">
                                                 {{category.categoryName}}
                                             </mat-checkbox>
                                         </div>
@@ -108,14 +114,15 @@
                                 </mat-chip-list>
                                 <!-- <input type="text" placeholder="Tag" matInput formControlName="tagControl"
                                     [matAutocomplete]="tagAuto" (change)="autoOptionClick($event)" aria-label="tag"> -->
-                                    <input type="text" placeholder="Tag" matInput formControlName="tagControl"
+                                <input type="text" placeholder="Tag" matInput formControlName="tagControl"
                                     [matAutocomplete]="tagAuto" aria-label="tag">
                                 <mat-autocomplete #tagAuto="matAutocomplete">
                                     <mat-option *ngFor="let tag of filteredTags$ | async" [value]="tag">
                                         {{ tag }}
                                     </mat-option>
                                 </mat-autocomplete>
-                                <a mat-button class="add-tag-button" color="primary" (click)="addTag()" [disabled]="newGameForm.controls.tagControl.value === ''">ADD</a>
+                                <a mat-button class="add-tag-button" color="primary" (click)="addTag()"
+                                    [disabled]="newGameForm.controls.tagControl.value === ''">ADD</a>
                             </div>
 
                         </div>
@@ -126,7 +133,8 @@
                 <div class="row">
                     <div class="col-sm-3"></div>
                     <div id="sidebar" class="col-sm-12 btnbox">
-                        <button  *ngIf="!loaderStatus" mat-button class="btn startg" [ngClass]="loaderStatus?'not-allowed':''">
+                        <button *ngIf="!loaderStatus" mat-button class="btn startg"
+                            [ngClass]="loaderStatus?'not-allowed':''">
                             Start Game
                         </button>
                         <div class="loaderCenter" *ngIf="loaderStatus">
