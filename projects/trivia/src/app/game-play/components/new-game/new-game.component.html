@@ -37,21 +37,24 @@
                             <!-- <label for="tp-radio3">
                                     <span class="sprite computerp-icon"></span>With Computer</label> -->
 
-                                    <div class="withfriends" *ngIf="newGameForm.value.opponentType == 1">      
-                                    <div *ngIf="uFriends && uFriends.length > 0"> 
-                                        <div class="owl-prev swiper-button-prev" >Prev</div>                                
-                                        <div class="content-container" fxLayout="column" fxLayoutAlign="stretch" fxFlex="auto">
-                                                    <div  class="swiper-container" [swiper]="config">
-                                                      <div class="swiper-wrapper">
-                                                        <div *ngFor="let friendId of uFriends; let i=index" class="swiper-slide">
-                                                          <div >
-                                                                <input formControlName="friendUserId" type="radio" id="friend-{{i}}" [value]="friendId" (change)="selectFriendId(friendId)">
-                                                                <label for="friend-{{i}}">
-                                                                    <app-user-card [userId]="friendId" [type]="userCardType.USER_WEB_IMAGE_70X60_NAME_LOCATION" > </app-user-card>
-                                                                </label>
-                                                          </div>
-                                                        </div>
-                                                      </div>
+                            <div class="withfriends" *ngIf="newGameForm.value.opponentType == 1">
+                                <div *ngIf="uFriends && uFriends.length > 0">
+                                    <div class="owl-prev swiper-button-prev">Prev</div>
+                                    <div class="content-container" fxLayout="column" fxLayoutAlign="stretch"
+                                        fxFlex="auto">
+                                        <div class="swiper-container" [swiper]="config">
+                                            <div class="swiper-wrapper">
+                                                <div *ngFor="let friendId of uFriends; let i=index"
+                                                    class="swiper-slide">
+                                                    <div>
+                                                        <input formControlName="friendUserId" type="radio" id="friend-{{i}}" [value]="friendId"
+                                                            (change)="selectFriendId(friendId)">
+                                                        <label for="friend-{{i}}">
+
+                                                            <app-user-card [userId]="friendId"
+                                                                [type]="userCardType.USER_WEB_IMAGE_70X60_NAME_LOCATION">
+                                                            </app-user-card>
+                                                        </label>
                                                     </div>
                                                 </div>
                                             </div>

@@ -23,7 +23,7 @@ import { NativeScriptUIListViewModule } from 'nativescript-ui-listview/angular';
 import {
   RenderQuestionComponent, AuthorComponent, RenderAnswerComponent,
   UserCardComponent, UserReactionComponent, SignupExtraInfoComponent,
-  CheckDisplayNameComponent, InviteMailFriendsComponent, FriendInviteComponent, GameInviteComponent,
+  CheckDisplayNameComponent, FriendInviteComponent, GameInviteComponent, InviteMailFriendsComponent
 } from './components';
 import { ShowHintWhenFocusOutDirective, OpenUserProfileDirective, RippleEffectDirective } from './directive';
 import { PhoneNumberValidationProvider } from './mobile/component/countryList/phone-number-validation.provider';
@@ -49,11 +49,11 @@ import { SafeHtmlPipe } from './pipe/safe-html.pipe';
     InviteMailFriendsComponent,
     SelectCategoryTagComponent,
     UserReactionComponent,
+    SignupExtraInfoComponent,
+    CheckDisplayNameComponent,
     NotificationComponent,
     FriendInviteComponent,
-    GameInviteComponent,
-    SignupExtraInfoComponent,
-    CheckDisplayNameComponent
+    GameInviteComponent
   ],
   imports: [
     CommonModule,
@@ -97,11 +97,11 @@ import { SafeHtmlPipe } from './pipe/safe-html.pipe';
     InviteMailFriendsComponent,
     UserReactionComponent,
     SelectCategoryTagComponent,
+    SignupExtraInfoComponent,
+    CheckDisplayNameComponent,
     NotificationComponent,
     FriendInviteComponent,
-    GameInviteComponent,
-    SignupExtraInfoComponent,
-    CheckDisplayNameComponent
+    GameInviteComponent
   ],
   schemas: [NO_ERRORS_SCHEMA],
   entryComponents: [

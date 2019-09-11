@@ -30,9 +30,8 @@ export default [
     UserCardComponent,
     InviteMailFriendsComponent,
     UserReactionComponent,
-    FriendInviteComponent,
-    GameInviteComponent,
-    UserCardComponent,
     SignupExtraInfoComponent,
-    CheckDisplayNameComponent
+    CheckDisplayNameComponent,
+    FriendInviteComponent,
+    GameInviteComponent
 ];

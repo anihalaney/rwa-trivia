@@ -7,8 +7,8 @@
 
 <ng-template #renderView>
     <StackLayout>    
-        <Label text="{{ currentAnswer?.answerText }}" [class.wrong]="wrong"
-        [class.right]="right ? 'right' : ''" [ngClass]="{'answer': isGameAnswer}"   [ngClass]="{'display-answer': !isGameAnswer}" textWrap="true"></Label>
+        <Label text="{{ currentAnswer?.answerText }}" [class.wrong]="isWrong"
+        [class.right]="isRight ? 'right' : ''" [ngClass]="{'answer': isGameAnswer}"   [ngClass]="{'display-answer': !isGameAnswer}" textWrap="true"></Label>
     </StackLayout>
     
 </ng-template>

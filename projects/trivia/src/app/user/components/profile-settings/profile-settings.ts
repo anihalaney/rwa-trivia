@@ -376,7 +376,7 @@ export class ProfileSettings {
     }
 
     resetUserProfile() {
-        this.user = cloneDeep(this.userCopyForReset);
+        this.user = this.userCopyForReset; // cloneDeep(this.userCopyForReset);
         this.createForm(this.user);
         this.filteredTags$ = this.userForm.get('tags').valueChanges
             .pipe(map(val => val.length > 0 ? this.filter(val) : []));

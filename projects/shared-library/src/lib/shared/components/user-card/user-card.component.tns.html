@@ -33,9 +33,9 @@
     <GridLayout row="0" col="1" rows="*, *, *" columns="*" class="padding-10">
       <Label *ngIf="user?.displayName" [text]="user?.displayName" fontSize="16" row="0" col="0"
         class="text-black"></Label>
-      <Label *ngIf="!user?.displayName" [text]="unknown" row="0" col="0" class="text-black" fontSize="16"></Label>
+      <Label *ngIf="!user?.displayName" [text]="'unknown'" row="0" col="0" class="text-black" fontSize="16"></Label>
       <Label *ngIf="user?.location" [text]="user?.location" row="1" col="0" class="text-gray" fontSize="14"></Label>
-      <Label *ngIf="!user?.location" [text]="unknown" row="1" col="0" class="text-gray" fontSize="14"></Label>
+      <Label *ngIf="!user?.location" [text]="'unknown'" row="1" col="0" class="text-gray" fontSize="14"></Label>
       <Label *ngIf="user?.isFriend && loggedInUserId"
         text="{{ (user?.isFriend) ? user?.displayName : '' }} is your friend" textWrap="true" row="2" col="0"
         class="text-gray" fontSize="14"> </Label>
@@ -56,7 +56,7 @@
     <FlexboxLayout flexDirection="column" horizontalAlignment="center" justifyContent="space-around" row="0" col="1" class="padding-10">
       <Label *ngIf="user?.displayName" [text]="user?.displayName" fontSize="16" class="text-black"
         textWrap="true"></Label>
-      <Label *ngIf="!user?.displayName" [text]="unknown" class="text-black" fontSize="16" textWrap="true"></Label>
+      <Label *ngIf="!user?.displayName" [text]="'unknown'" class="text-black" fontSize="16" textWrap="true"></Label>
       <Label *ngIf="user?.location" text="&#xf041; {{user?.location}}" class="text-gray fa" fontSize="14"
         textWrap="true"></Label>
       <Label *ngIf="!user?.location" text="&#xf041; unknown" class="text-gray fa" fontSize="14" textWrap="true"></Label>
@@ -132,11 +132,10 @@
     <AbsoluteLayout row="0" col="2" horizontalAlignment="right" verticalAlignment="bottom">
       <Image *ngIf="isGamePlay" row="0" col="2" [src]="getImageUrl(user,44,40)" color="#FFFFFF" stretch="aspectFill"
         height="33" width="33" marginLeft="10" marginRight="10" verticalAlignment="center" borderRadius="50"></Image>
-      <Image *ngIf="!isGamePlay" [stlOpenUserProfile]="{userId: user.userId, redirectTo: 'otherUserProfile'}" row="0"
-        col="2" [src]="getImageUrl(user,44,40)" color="#FFFFFF" stretch="aspectFill" height="33" width="33"
-        marginLeft="10" marginRight="10" verticalAlignment="center" borderRadius="50"></Image>
-      <Label *ngIf="user?.online" height="10" top="23" left="33" width="10" borderRadius="22"
-        backgroundColor="#71b02f"></Label>
+      <Image *ngIf="!isGamePlay" [stlOpenUserProfile]="{userId: user?.userId, redirectTo: 'otherUserProfile'}" row="0"
+        col="2" [src]="getImageUrl(user,44,40)" color="#FFFFFF" stretch="aspectFill" height="33" width="33" marginLeft="10"
+        marginRight="10" verticalAlignment="center" borderRadius="50"></Image>
+      <Label *ngIf="user?.online" height="10" top="23" left="33" width="10" borderRadius="22" backgroundColor="#71b02f"></Label>
     </AbsoluteLayout>
   </GridLayout>
 </ng-container>

@@ -28,7 +28,7 @@
   </StackLayout>
 
   <StackLayout *ngIf="question" orientation="vertical" margin="10" iosOverflowSafeArea="false">
-    <GridLayout rows="auto" columns="*,*">
+    <GridLayout rows="auto" columns="auto,*">
       <GridLayout row="0" col="0">
         <user-reaction *ngIf="answeredText!==''" [user]='user' [question]='question'></user-reaction>
       </GridLayout>
