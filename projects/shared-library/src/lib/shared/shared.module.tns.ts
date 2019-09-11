@@ -11,7 +11,8 @@ import {
   QuestionsTableComponent,
   QuestionCardComponent,
   FirstQuestionComponent,
-  SelectCategoryTagComponent
+  SelectCategoryTagComponent,
+  BottomBarComponent
 } from './mobile/component';
 import { NativeScriptCommonModule } from 'nativescript-angular/common';
 import { GameFilterPipe } from './pipe/game-filter.pipe';
@@ -44,6 +45,7 @@ import { SafeHtmlPipe } from './pipe/safe-html.pipe';
     InviteMailFriendsComponent,
     SelectCategoryTagComponent,
     UserReactionComponent,
+    BottomBarComponent
   ],
   imports: [
     CommonModule,
@@ -88,6 +90,7 @@ import { SafeHtmlPipe } from './pipe/safe-html.pipe';
     InviteMailFriendsComponent,
     UserReactionComponent,
     SelectCategoryTagComponent,
+    BottomBarComponent
   ],
   schemas: [NO_ERRORS_SCHEMA],
   entryComponents: [
