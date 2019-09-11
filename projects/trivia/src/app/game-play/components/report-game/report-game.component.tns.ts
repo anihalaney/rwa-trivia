@@ -64,12 +64,14 @@ export class ReportGameComponent implements OnInit, OnDestroy {
             new ReportOption('Spam'),
             new ReportOption('Other')
         ];
+        this.cd.markForCheck();
 
-        
+
     }
 
     ngOnInit() {
         this.reportQuestion = new ReportQuestion();
+        this.cd.markForCheck();
     }
 
     saveReportQuestion() {
@@ -100,7 +102,7 @@ export class ReportGameComponent implements OnInit, OnDestroy {
             this.store.dispatch(new gameplayactions.SaveReportQuestion({ reportQuestion: this.reportQuestion, game: this.game }));
             this.params.closeCallback();
         }
-
+        this.cd.markForCheck();
     }
 
     changeCheckedRadio(reportOption: ReportOption): void {
@@ -115,6 +117,7 @@ export class ReportGameComponent implements OnInit, OnDestroy {
                 option.selected = false;
             }
         });
+        this.cd.markForCheck();
     }
 
     get otherAnswer() {
@@ -143,12 +146,7 @@ export class ReportGameComponent implements OnInit, OnDestroy {
 
     hideKeyboard() {
         if (isAndroid) {
-            this.textField
-                .toArray()
-                .map((el) => {
-                        el.nativeElement.android.clearFocus();
-                        return el.nativeElement.dismissSoftInput();
-                    });
+            this.utils.hideKeyboard(this.textField);
         }
     }
 

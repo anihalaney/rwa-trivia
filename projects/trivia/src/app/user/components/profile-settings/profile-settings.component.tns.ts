@@ -43,7 +43,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
   customTag: string;
   private tagItems: ObservableArray<TokenModel>;
   SOCIAL_LABEL = 'CONNECT YOUR SOCIAL ACCOUNT';
-  @ViewChildren('textField', { read:  false }) textField: QueryList<ElementRef>;
+  @ViewChildren('textField', { read: false }) textField: QueryList<ElementRef>;
 
   subscriptions = [];
   isValidDisplayName: boolean = null;
@@ -372,17 +372,12 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
 
     }));
 
-    }
+  }
 
 
   hideKeyboard() {
     if (isAndroid) {
-      this.textField
-        .toArray()
-        .map((el) => {
-            el.nativeElement.android.clearFocus();
-            return el.nativeElement.dismissSoftInput();
-          });
+      this.utils.hideKeyboard(this.textField);
     }
   }
 

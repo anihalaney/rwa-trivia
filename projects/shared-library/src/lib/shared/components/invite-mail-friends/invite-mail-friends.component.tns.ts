@@ -29,14 +29,7 @@ export class InviteMailFriendsComponent extends InviteMailFriends {
 
     hideKeyboard() {
         if (isAndroid) {
-          this.textField
-            .toArray()
-            .map((el) => {
-              if (el.nativeElement) {
-                el.nativeElement.android.clearFocus();
-                return el.nativeElement.dismissSoftInput();
-              }
-            });
+          this.utils.hideKeyboard(this.textField);
         }
       }
 }

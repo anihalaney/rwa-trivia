@@ -359,12 +359,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
 
   hideKeyboard() {
     if (isAndroid) {
-      this.textField
-        .toArray()
-        .map((el) => {
-            el.nativeElement.android.clearFocus();
-            return el.nativeElement.dismissSoftInput();
-          });
+      this.utils.hideKeyboard(this.textField);
     }
   }
 

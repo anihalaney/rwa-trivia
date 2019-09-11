@@ -349,12 +349,7 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
 
   hideKeyboard() {
     if (isAndroid) {
-      this.textField
-      .toArray()
-      .map((el) => {
-          el.nativeElement.android.clearFocus();
-          return el.nativeElement.dismissSoftInput();
-        });
+      this.utils.hideKeyboard(this.textField);
     }
   }
 

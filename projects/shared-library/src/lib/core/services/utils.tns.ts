@@ -233,6 +233,12 @@ export class Utils extends UtilsCore {
     return of('success');
   }
 
-
+  hideKeyboard(field) {
+    field.toArray()
+      .map((el) => {
+        el.nativeElement.android.clearFocus();
+        return el.nativeElement.dismissSoftInput();
+      });
+  }
 
 }
