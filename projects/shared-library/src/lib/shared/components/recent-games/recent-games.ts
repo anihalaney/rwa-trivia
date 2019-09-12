@@ -1,7 +1,7 @@
 import { Component, ChangeDetectionStrategy, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { User, GameStatus, Game } from 'shared-library/shared/model';
-import { AppState, appState } from '../../store';
+import { coreState, CoreState } from 'shared-library/core/store';
 import { Observable } from 'rxjs';
 import { UserActions } from 'shared-library/core/store/actions';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
@@ -22,17 +22,17 @@ export class RecentGames implements OnDestroy {
   subscriptions = [];
   cd: ChangeDetectorRef;
 
-  constructor(store: Store<AppState>,
+  constructor(store: Store<CoreState>,
     cd: ChangeDetectorRef,
     userActions: UserActions) {
 
     this.cd = cd;
-    this.subscriptions.push(store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
+    this.subscriptions.push(store.select(coreState).pipe(select(s => s.user)).subscribe(user => {
       this.user = user;
       store.dispatch(userActions.getGameResult(user));
     }));
 
-    this.recentGames$ = store.select(appState.coreState).pipe(select(s => s.getGameResult));
+    this.recentGames$ = store.select(coreState).pipe(select(s => s.getGameResult));
 
     this.subscriptions.push(this.recentGames$.subscribe((recentGames) => {
       this.recentGames = recentGames;
