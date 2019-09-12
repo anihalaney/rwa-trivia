@@ -137,9 +137,9 @@ const commandList = {
             replaceVariableInIndex(['trivia', 'trivia-admin'], args.argv.productVariant);
         }
     },
-    "run-mobile":
+    "mobile":
     {
-        "command": "tns run platform  --bundle environment forDevice --env.package_name=packageName --env.project=productVariant",
+        "command": "tns app platform  --bundle environment forDevice --env.package_name=packageName --env.project=productVariant",
         "description": "run android/ios app in staging/production environment",
         "options": {
             "productVariant": {
@@ -191,6 +191,13 @@ const commandList = {
                 "default": '1.0',
                 "alias": ['VN', 'vn']
             },
+            "app": {
+                "demand": true,
+                "description": 'app e.g. --run',
+                "alias": ['a', 'A'],
+                "default": 'run',
+                "coerce": args => args === 'debug' ? 'debug' : 'run',
+            }
         },
         "builder": args => args.argv.platform === 'ios' && args.argv.environment.search('--env.prod') >= 0 ? args.argv.forDevice = ' --for-device' : args.argv.forDevice = '',
         "preCommand": async (argv) => { await updateAppVersion(argv, false); await updatePackageJson(argv); }
