@@ -42,7 +42,7 @@ export class GameOver implements OnInit {
   subscriptions = [];
   userInvitations: { [key: string]: Invitation };
   userCardType = userCardType;
-
+  correctAnswerClassIndexIncrement = 0;
   continueButtonClicked(event: any) {
     this.gameOverContinueClicked.emit();
   }
@@ -75,29 +75,39 @@ export class GameOver implements OnInit {
     this.store.dispatch(new dashboardactions.LoadSocialScoreShareUrlSuccess(null));
 
     this.subscriptions.push(store.select(appState.coreState).pipe(select(s => s.userDict),
-    map(userDict => {
-      this.userDict = userDict;
-    }),
-    flatMap(() => this.store.select(appState.coreState).pipe(select(s => s.userFriendInvitations),
-    skipWhile(userInvitations => !(userInvitations && this.game)),
-    take(1),
-    map(userInvitations => {
-      if (this.game && this.userDict[this.otherUserId]) {
-        this.otherUserId = this.game.playerIds.filter(userId => userId !== this.user.userId)[0];
-        this.otherUserInfo = this.userDict[this.otherUserId];
-        this.cd.markForCheck();
-        this.userInvitations = userInvitations;
-        if (this.user && this.user.email && !this.userInvitations[this.user.email]) {
-          this.store.dispatch(this.userActions.loadUserInvitationsInfo(
-            this.user.userId, this.userDict[this.otherUserId].email, this.otherUserId));
-        }
-      }
-    })
-    ))).subscribe());
+      map(userDict => {
+        this.userDict = userDict;
+      }),
+      flatMap(() => this.store.select(appState.coreState).pipe(select(s => s.userFriendInvitations),
+        skipWhile(userInvitations => !(userInvitations && this.game)),
+        take(1),
+        map(userInvitations => {
+          if (this.game && this.userDict[this.otherUserId]) {
+            this.otherUserId = this.game.playerIds.filter(userId => userId !== this.user.userId)[0];
+            this.otherUserInfo = this.userDict[this.otherUserId];
+            this.cd.markForCheck();
+            this.userInvitations = userInvitations;
+            if (this.user && this.user.email && !this.userInvitations[this.user.email]) {
+              this.store.dispatch(this.userActions.loadUserInvitationsInfo(
+                this.user.userId, this.userDict[this.otherUserId].email, this.otherUserId));
+            }
+          }
+        })
+      ))).subscribe());
 
     this.subscriptions.push(this.store.select(gamePlayState).pipe(select(s => s.userAnsweredQuestion)).subscribe(stats => {
       if (stats != null) {
         this.questionsArray = stats;
+        this.questionsArray.map((res) => {
+          res.answers.map((response) => {
+            if (response.correct && response.answerText === res.userGivenAnswer) {
+              this.correctAnswerClassIndexIncrement++;
+              const className = `score${this.correctAnswerClassIndexIncrement}`;
+              res.className = className;
+            }
+          });
+          return res;
+        });
         this.cd.detectChanges();
       }
     }));
