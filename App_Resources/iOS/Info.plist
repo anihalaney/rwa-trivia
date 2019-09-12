@@ -1,3 +1,4 @@
+  
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
@@ -19,7 +20,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>28</string>
+	<string>28.0</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
@@ -68,9 +69,11 @@
 	<key>NSPhotoLibraryUsageDescription</key>
     <string>Please allow gallery access</string>
 	<key>NSLocationUsageDescription</key>
-	<string>App would like to access your location to offer you suggestion for current location</string>
+	<string>App would like to access your location to offer you suggestion for locations when retirve your current location</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>App would like to access your location to offer you suggestion for locations when retirve your current location</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>App would like to access your location to offer you suggestion for current location</string>
+	<string>App would like to access your location to offer you suggestion for locations when retirve your current location</string>
 
 </dict>
 </plist>
