@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild, PLATFORM_ID, Inject } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -58,13 +58,14 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     public store: Store<AppState>,
     public gameActions: GameActions,
     public windowRef: WindowRef,
+    @Inject(PLATFORM_ID) public platformId: Object,
     public router: Router,
     public route: ActivatedRoute,
     public userActions: UserActions,
     public utils: Utils,
     public snackBar: MatSnackBar,
     public cd: ChangeDetectorRef) {
-    super(store, utils, gameActions, userActions, windowRef, cd, route, router);
+    super(store, utils, gameActions, userActions, windowRef, platformId, cd, route, router);
   }
 
   ngOnInit() {
@@ -78,11 +79,20 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
       this.route.params.pipe(
         map(params => {
           this.challengerUserId = params.userid;
-          playerModeControl.setValue(this.challengerUserId ? '1' : '0');
+          playerModeControl.setValue((this.challengerUserId || this.router.url.indexOf('play-game-with-random-user') >= 0 ) ? '1' : '0');
           const isChallengeControl = this.newGameForm.get('isChallenge');
-          isChallengeControl.setValue(this.challengerUserId ? true : false);
+          isChallengeControl.setValue(this.challengerUserId && this.router.url.indexOf('challenge') >= 0  ? true : false);
           if (this.challengerUserId) {
             opponentTypeControl.setValue('1');
+          } else if (params.mode && params.mode === 'Two') {
+            playerModeControl.setValue('1');
+            opponentTypeControl.setValue('0');
+          } else if (params.mode && params.mode === 'Single') {
+            playerModeControl.setValue('0');
+          }
+
+          if (this.router.url.indexOf('play-game-with-random-user') >= 0) {
+            opponentTypeControl.setValue('0');
           }
 
           if (this.challengerUserId) {
@@ -153,7 +163,8 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
       gameMode: [gameOptions.gameMode, Validators.required],
       tagControl: '',
       tagsArray: tagsFA,
-      isChallenge: gameOptions.isChallenge
+      isChallenge: gameOptions.isChallenge,
+      friendUserId: ''
     } //, {validator: questionFormValidator}
     );
     return form;
@@ -163,6 +174,8 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
   selectFriendId(friendId: string) {
     this.friendUserId = friendId;
     this.errMsg = undefined;
+    const friendUserIdControl = this.newGameForm.get('friendUserId');
+    friendUserIdControl.setValue(friendId);
   }
 
   selectCategory(event: any, categoryId: number): void {

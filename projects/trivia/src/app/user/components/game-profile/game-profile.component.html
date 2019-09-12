@@ -1,0 +1,184 @@
+<div class="mainpage submitpage mysetting" [class.expand-width]="userType === 2" *ngIf="user">
+    <div class="row hidden-xs">
+        <div class="pageheading col-sm-6 col-xs-12">{{userType === 0 ? 'My': user?.displayName}} Profile </div>
+    </div>
+    <section id="curentactive" class="card">
+        <div class="enterquestion">
+            <div class="row other-user-avatar-container">
+                <div class="other-profile-img-container">
+                    <label class="custom-file-upload">
+                        <img [src]="userProfileImageUrl" width="150" height="140" alt="Avatar" />
+                    </label>
+                </div>
+            </div>
+
+            <div class="row user-info-div">
+                <div class="table-div">
+                    <div class="flex-info-div">
+                        <div class="margin-auto flex-sub-div">
+                            <div class="pull-left text-left">
+                                <div>
+                                    <label class="text-left">Display Name </label>
+                                </div>
+                                <div>
+                                    <label class="text-left">Location</label>
+                                </div>
+                            </div>
+                            <div class="pull-left">
+                                <div class="text-left">
+                                    <label class="text-display  text-left">{{user.displayName}}</label>
+                                </div>
+                                <div class="text-left">
+                                    <label>{{user?.location ? user?.location: 'Unknown'}}</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="new-game-btn-container">
+                        <div class="col-md-3 col-xs-6" *ngIf="loggedInUser">
+                            <button *ngIf="loggedInUserAccount && isLivesEnable" class="startgame" (click)="startNewGame()">
+                                Start New Game
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="new-game-btn-container">
+                        <div class="col-md-3 col-xs-6" *ngIf="loggedInUser">
+                            <div class="savebox textcenter">
+                                <div *ngIf="userInvitations[user.email]?.status === 'approved'" class="friends-div">
+                                    <div><img src="assets/images/friends.png" alt="Friends" />
+                                    </div>
+                                    <span class="is-friend-span">Friends</span>
+                                </div>
+                                <div *ngIf="userInvitations[user.email]?.status === 'pending'" class="friends-div">
+                                    <div>
+                                        <img src="assets/images/send-friend-request.png" alt="Friend request sent" />
+                                    </div>
+                                    <span class="send-friend-request-span">Friend Request Sent</span>
+                                </div>
+                                <div *ngIf="userInvitations[user.email]?.status === 'add'" (click)="sendFriendRequest()"
+                                    class="friends-div cursor-pointer">
+                                    <div><img src="assets/images/send-friend-request.png" alt="Add Friend" /></div>
+                                    <span class="send-friend-request-span">Add Friend</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="new-game-btn-container" style="margin-top: 20px;" *ngIf="socialProfileSettings && socialProfileSettings.length > 0">
+                        <div style="display: flex;" *ngFor="let profile of socialProfileSettings">
+                            <a *ngIf="profile?.enable" [href]="profile?.socialUrl" target="_blank" [ngStyle]="{'order':profile?.position }">
+                                <img class="app-store-img social" src="/assets/images/{{profile?.display}}.png" />
+                            </a>
+                        </div>
+                    </div>
+                    <div class="row m-b-55">
+                        <mat-card-content>
+                            <mat-tab-group class="tab-content">
+                                <mat-tab label="Stats">
+                                    <div class="statsview">
+                                        <ul id="stats" class="active">
+                                            <li>
+                                                <div class="f-between">
+                                                    <div>
+                                                        <div class="sprite playedicon"></div>
+                                                        <div class="viewtext">Game Played</div>
+                                                    </div>
+                                                    <div class="viewcount align-right">{{account?.gamePlayed}}</div>
+                                                </div>
+                                            </li>
+
+                                            <li>
+                                                <div class="f-between">
+                                                    <div>
+                                                        <div class="sprite topicsicon"></div>
+                                                        <div class="viewtext">Categories</div>
+                                                    </div>
+                                                    <div class="viewcount align-right">{{account?.categories}}</div>
+                                                </div>
+                                            </li>
+
+                                            <li>
+                                                <div class="f-between">
+                                                    <div>
+                                                        <div class="sprite winsicon"></div>
+                                                        <div class="viewtext">Win-Loss</div>
+                                                    </div>
+                                                    <div class="viewcount align-right">
+                                                        {{account?.wins}}-{{account?.losses}}
+                                                    </div>
+                                                </div>
+                                            </li>
+
+                                            <li>
+                                                <div class="f-between">
+                                                    <div>
+                                                        <div class="sprite badgesicon"></div>
+                                                        <div class="viewtext">Badges</div>
+                                                    </div>
+                                                    <div class="viewcount align-right">{{account?.badges}}</div>
+                                                </div>
+                                            </li>
+
+                                            <li>
+                                                <div class="f-between">
+                                                    <div>
+                                                        <div class="sprite avgicon"></div>
+                                                        <div class="viewtext">Avg. answer time</div>
+                                                    </div>
+                                                    <div class="viewcount align-right">{{account?.avgAnsTime}} <span
+                                                            class="sec">sec</span>
+                                                    </div>
+                                                </div>
+                                            </li>
+
+                                            <li>
+                                                <div class="f-between">
+                                                    <div>
+                                                        <div class="sprite contributicon"></div>
+                                                        <div class="viewtext">Contribution</div>
+                                                    </div>
+                                                    <div class="viewcount align-right">{{account?.contribution}}</div>
+                                                </div>
+                                            </li>
+
+                                        </ul>
+                                    </div>
+                                </mat-tab>
+                                <mat-tab label="Game Played" *ngIf="loggedInUser?.userId && userType === 1 && gamePlayedAgainst">
+                                    <div class="statsview">
+                                        <ul id="stats" class="active">
+                                            <li>
+                                                <div class="f-between">
+                                                    <div>
+                                                        <div class="sprite playedicon"></div>
+                                                        <div class="viewtext">Game Played Against You</div>
+                                                    </div>
+                                                    <div class="viewcount align-right">
+                                                        {{gamePlayedAgainst?.gamePlayed || 0}}
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="f-between">
+                                                    <div>
+                                                        <div class="sprite winsicon"></div>
+                                                        <div class="viewtext">Games Won-Games Lost</div>
+                                                    </div>
+                                                    <div class="viewcount align-right">
+                                                        {{gamePlayedAgainst?.wins || 0}}-{{gamePlayedAgainst?.losses ||
+                                                        0}}
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </mat-tab>
+                            </mat-tab-group>
+                        </mat-card-content>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

@@ -5,6 +5,7 @@
     "moduleResolution": "node",
     "experimentalDecorators": true,
     "baseUrl": "./",
+    "skipLibCheck": true,
     "paths": {
       "shared-library/*": [
         "./projects/shared-library/src/lib/*"
@@ -24,5 +25,16 @@
     "./scheduler/*",
     "**/*.spec.ts",
     "server.ts",
+    "./projects/shared-library/src/lib/shared/components/*",
+    "**/quill-module/*"
+  ],
+  "include": [
+    "./projects/shared-library/src/lib/shared",
+    "./projects/trivia/src/app/game-play/game-play.module.ts",
+    "./projects/trivia/src/app/user/user.module.ts",
+    "./projects/trivia/src/app/dashboard/dashboard.module.ts",
+    "./projects/trivia/src/main.ns.ts",
+    "./projects/shared-library/src/lib/shared/components/author/*",
+    "./projects/shared-library/src/lib/shared/components/check-display-name/*",
   ]
 }

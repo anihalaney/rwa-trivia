@@ -8,6 +8,7 @@ export abstract class FirebaseAuthService {
     abstract showLogin();
     abstract getIdToken(user, forceRefresh: boolean);
     abstract refreshToken(forceRefresh: boolean): Promise<string>;
+    abstract updatePassword(password: string): Promise<any>;
     abstract signInWithEmailAndPassword(email: string, password: string);
     abstract sendEmailVerification(user): Promise<any>;
     abstract sendPasswordResetEmail(email: string): Promise<any>;

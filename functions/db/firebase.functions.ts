@@ -174,6 +174,7 @@ export class FirebaseFunctions {
                         await GamePlayedWithStats.calculateUserGamePlayedState(game);
                     }
                 }
+                await StatsService.calculateQuestionStat(beforeEventData, afterEventData);
             }
 
             return true;
@@ -323,12 +324,12 @@ export class FirebaseFunctions {
 
             }
 
-            const androidOnlineDeviceIndex = user.androidPushTokens.findIndex((androidPushToken) =>
-                androidPushToken.token && androidPushToken.online);
-            const iosOnlineDeviceIndex = user.iosPushTokens.findIndex((iosPushToken) =>
-                iosPushToken.token && iosPushToken.online);
+            const onlineOnAndroid = user.androidPushTokens ? user.androidPushTokens.some((androidPushToken) =>
+                androidPushToken.token && androidPushToken.online) : false;
+            const onlineOnIos = user.iosPushTokens ? user.iosPushTokens.some((iosPushToken) =>
+                iosPushToken.token && iosPushToken.online): false;
 
-            userStatus.online = (androidOnlineDeviceIndex !== -1 || iosOnlineDeviceIndex !== -1
+            userStatus.online = (onlineOnAndroid || onlineOnIos
                 || userDataStatus.status === UserStatusConstants.ONLINE) ? true : false;
 
             userStatus.lastUpdated = new Date().getTime();

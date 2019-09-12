@@ -5,10 +5,10 @@ import { Store, select } from '@ngrx/store';
 import { UserActions, coreState } from 'shared-library/core/store';
 import { AppState, appState } from './../../../../../../../trivia/src/app/store';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
-import { isAndroid } from 'tns-core-modules/platform';
+import { isIOS } from 'tns-core-modules/platform';
 import { Utils } from 'shared-library/core/services';
 import { FirebaseScreenNameConstants } from 'shared-library/shared/model';
-
+declare var IQKeyboardManager;
 @Component({
   selector: 'user-feedback',
   templateUrl: './user-feedback.component.html',
@@ -18,6 +18,7 @@ import { FirebaseScreenNameConstants } from 'shared-library/shared/model';
 
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class UserFeedbackComponent implements OnDestroy {
+  iqKeyboard: any;
   subscriptions = [];
   feedbackForm: FormGroup;
   user: any;
@@ -28,7 +29,10 @@ export class UserFeedbackComponent implements OnDestroy {
   constructor(private page: Page, private fb: FormBuilder, private store: Store<AppState>, private userAction: UserActions,
     private cd: ChangeDetectorRef, private utils: Utils) {
 
-
+    if (isIOS) {
+      this.iqKeyboard = IQKeyboardManager.sharedManager();
+      this.iqKeyboard.shouldResignOnTouchOutside = true;
+    }
     this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.feedback)).subscribe(status => {
       if (status === 'SUCCESS') {
         this.resetForm();
@@ -74,14 +78,7 @@ export class UserFeedbackComponent implements OnDestroy {
   }
 
   hideKeyboard() {
-    this.textField
-      .toArray()
-      .map((el) => {
-        if (isAndroid) {
-          el.nativeElement.android.clearFocus();
-        }
-        return el.nativeElement.dismissSoftInput();
-      });
+    this.utils.hideKeyboard(this.textField);
   }
 
   ngOnDestroy() {

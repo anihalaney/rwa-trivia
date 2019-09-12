@@ -17,7 +17,7 @@ import { profileSettingsConstants } from 'shared-library/shared/model';
 import { ObservableArray } from 'tns-core-modules/data/observable-array';
 import { ImageAsset } from 'tns-core-modules/image-asset';
 import { fromAsset, ImageSource } from 'tns-core-modules/image-source';
-import { isAndroid } from 'tns-core-modules/platform';
+import { isIOS } from 'tns-core-modules/platform';
 import * as dialogs from 'tns-core-modules/ui/dialogs';
 import { SegmentedBar, SegmentedBarItem } from 'tns-core-modules/ui/segmented-bar';
 import * as utils from 'tns-core-modules/utils/utils';
@@ -25,6 +25,8 @@ import { AppState } from '../../../store';
 import { userState } from '../../store';
 import { LocationResetDialogComponent } from './location-reset-dialog/location-reset-dialog.component';
 import { ProfileSettings } from './profile-settings';
+import { AuthenticationProvider } from 'shared-library/core/auth';
+declare var IQKeyboardManager;
 
 @Component({
   selector: 'profile-settings',
@@ -43,7 +45,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
   customTag: string;
   private tagItems: ObservableArray<TokenModel>;
   SOCIAL_LABEL = 'CONNECT YOUR SOCIAL ACCOUNT';
-  @ViewChildren('textField') textField: QueryList<ElementRef>;
+  @ViewChildren('textField', { read: false }) textField: QueryList<ElementRef>;
 
   subscriptions = [];
   isValidDisplayName: boolean = null;
@@ -59,6 +61,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
   tabsTitles: Array<string>;
   private locations: ObservableArray<TokenModel>;
   private isLocationEnalbed: boolean;
+  iqKeyboard: any;
 
   @ViewChild('autocomplete', { static: false }) autocomplete: RadAutoCompleteTextViewComponent;
   @ViewChild('acLocation', { static: false }) acLocation: RadAutoCompleteTextViewComponent;
@@ -71,12 +74,17 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
     public route: ActivatedRoute,
     public router: Router,
     private modal: ModalDialogService,
-    private vcRef: ViewContainerRef) {
-    super(fb, store, userAction, uUtils, cd, route, router);
+    private vcRef: ViewContainerRef,
+    public authenticationProvider: AuthenticationProvider) {
+
+    super(fb, store, userAction, uUtils, cd, route, router, authenticationProvider);
     this.initDataItems();
     requestPermissions();
 
-
+    if (isIOS) {
+      this.iqKeyboard = IQKeyboardManager.sharedManager();
+      this.iqKeyboard.shouldResignOnTouchOutside = true;
+    }
     this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe(status => {
       if (status === 'SUCCESS') {
         this.uUtils.showMessage('success', 'Profile is saved successfully');
@@ -268,7 +276,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
   saveProfileImage() {
     this.getUserFromFormValue(false, '');
     this.assignImageValues();
-    this.saveUser(this.user,  (this.user.location !== this.userCopyForReset.location) ? true : false);
+    this.saveUser(this.user, (this.user.location !== this.userCopyForReset.location) ? true : false);
   }
 
   assignImageValues(): void {
@@ -313,7 +321,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
   }
 
 
-  setBulkUploadRequest(checkStatus: boolean): void {
+  setBulkUploadRequest(): void {
     const userForm = this.userForm.value;
     if (!userForm.name || !userForm.displayName || !userForm.location || !userForm.profilePicture) {
       this.uUtils.showMessage('error', 'Please add name, display name, location and profile picture for bulk upload request');
@@ -342,7 +350,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
 
     this.checkDisplayName(this.userForm.get('displayName').value);
 
-    this.subscriptions.push(this.store.select(userState).pipe(select(s => s.checkDisplayName)).subscribe(status => {
+    this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.checkDisplayName)).subscribe(status => {
       this.isValidDisplayName = status;
       if (this.isValidDisplayName !== null) {
         if (this.isValidDisplayName) {
@@ -372,14 +380,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
 
 
   hideKeyboard() {
-    this.textField
-      .toArray()
-      .map((el) => {
-        if (isAndroid) {
-          el.nativeElement.android.clearFocus();
-        }
-        return el.nativeElement.dismissSoftInput();
-      });
+    this.utils.hideKeyboard(this.textField);
   }
 
   openUrl(url, id) {

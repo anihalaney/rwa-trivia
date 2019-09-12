@@ -1,8 +1,11 @@
 # rwa-trivia app
 
-This is part of building a new app for my series - Real World Angular @ https://blog.realworldfullstack.io/
+See it in action:
+* On the web - https://bitwiser.io
+* App Store - https://itunes.apple.com/us/app/bitwiser-trivia/id1447244501?mt=8
+* Google Play - https://play.google.com/store/apps/details?id=io.bitwiser.trivia
 
-See it in action (still a work in progress) - https://bitwiser.io
+This is part of building a new app for my series - Real World Angular @ https://blog.realworldfullstack.io/
 
 [Part 0: From zero to cli-ng](https://blog.realworldfullstack.io/real-world-angular-part-0-from-zero-to-cli-ng-a2ff646b90cc)
 

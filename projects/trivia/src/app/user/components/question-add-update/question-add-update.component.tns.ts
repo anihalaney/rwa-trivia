@@ -14,7 +14,7 @@ import { debounceTime } from 'rxjs/operators';
 import { ObservableArray } from 'tns-core-modules/data/observable-array';
 import { TokenModel } from 'nativescript-ui-autocomplete';
 import { RadAutoCompleteTextViewComponent } from 'nativescript-ui-autocomplete/angular';
-import { Page, isAndroid } from 'tns-core-modules/ui/page';
+import { Page, isIOS } from 'tns-core-modules/ui/page';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { WebView, LoadEventData } from 'tns-core-modules/ui/web-view';
 import * as webViewInterfaceModule from 'nativescript-webview-interface';
@@ -31,7 +31,7 @@ import { SelectedIndexChangedEventData } from 'nativescript-drop-down';
 import { ModalDialogService } from 'nativescript-angular/directives/dialogs';
 import { PreviewQuestionDialogComponent } from './preview-question-dialog/preview-question-dialog.component';
 import { CONFIG } from 'shared-library/environments/environment';
-
+declare var IQKeyboardManager;
 @Component({
   selector: 'app-question-add-update',
   templateUrl: './question-add-update.component.html',
@@ -41,7 +41,7 @@ import { CONFIG } from 'shared-library/environments/environment';
 
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnDestroy, OnChanges, AfterViewInit, OnInit {
-
+  iqKeyboard: any;
   showSelectCategory = false;
   showSelectTag = false;
   dataItem;
@@ -154,6 +154,10 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
       this.cd.markForCheck();
     }));
 
+    if (isIOS) {
+      this.iqKeyboard = IQKeyboardManager.sharedManager();
+      this.iqKeyboard.shouldResignOnTouchOutside = true;
+    }
   }
 
   ngOnInit(): void {
@@ -356,14 +360,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
   }
 
   hideKeyboard() {
-    this.textField
-      .toArray()
-      .map((el) => {
-        if (isAndroid) {
-          el.nativeElement.android.clearFocus();
-        }
-        return el.nativeElement.dismissSoftInput();
-      });
+    this.utils.hideKeyboard(this.textField);
   }
 
   ngOnDestroy() {

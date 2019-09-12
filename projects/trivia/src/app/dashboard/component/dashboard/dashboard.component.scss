@@ -191,6 +191,64 @@ mat-card>:first-child {
   margin-bottom: 5px
 }
 
+.play-game-div-container{
+  margin-bottom: 10px;
+  display: flex;
+  float: right;
+  justify-content: flex-end;
+  flex-direction: column;
+
+  .flex-div{
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .play-game-btn-container{
+    flex-direction: row;
+  }
+
+  .img-24{
+    width: 24px;
+    height: 24px;
+  }
+
+  .lives-div{
+    margin-left: 10px;
+    font-size: 18px;
+    line-height: 27px;
+  }
+  
+  .single-player-btn-container{
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-right: 15px;
+  }
+
+  .multi-player-btn-container{
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+
+  .img-20{
+    width: 20px;
+    height: 20px;
+  }
+
+  .lives-sub-text{
+    margin-left: 10px;
+    font-size: 18px;
+    line-height: 27px;
+    color: #7c7c7c;
+  }
+
+  .lives-timer{
+    margin-left: 10px;
+    font-size: 18px;
+    line-height: 27px;
+    font-weight: 600
+  }
+}
+
 @media(max-width :767px) {
   .points {
     margin-bottom: 10px;
@@ -200,6 +258,16 @@ mat-card>:first-child {
 
   .min-startgame {
     padding-left: calc(50% - 90px) !important;
+  }
+}
+
+@media(max-width :428px) {
+  .play-game-div-container .play-game-btn-container{
+    flex-direction: column;
+  }
+
+  .play-game-div-container .single-player-btn-container{
+    margin-right: 0px;
   }
 }
 
@@ -326,4 +394,10 @@ mat-card>:first-child {
     color: white;
     font-weight: bold;
   }
+}
+
+.lives-card{
+  margin: 10;
+  font-size: 18;
+  font-weight: bold;
 }

@@ -27,6 +27,7 @@ import { SwUpdate } from '@angular/service-worker';
 import { PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { interval } from 'rxjs';
+import { WindowRef } from 'shared-library/core/services';
 
 @NgModule({
   declarations: [
@@ -71,14 +72,14 @@ import { interval } from 'rxjs';
 })
 export class AppModule {
 
-  constructor(updates: SwUpdate, @Inject(PLATFORM_ID) private platformId: Object, ngZone: NgZone) {
+  constructor(updates: SwUpdate, @Inject(PLATFORM_ID) private platformId: Object, ngZone: NgZone, private windowRef: WindowRef) {
 
     if (isPlatformBrowser(this.platformId) && environment.production) {
 
       if (updates.isEnabled) {
         updates.available.subscribe(() => {
           alert('New version available. Load New Version?');
-          window.location.reload();
+          windowRef.nativeWindow.location.reload();
         });
       }
       ngZone.runOutsideAngular(() => {

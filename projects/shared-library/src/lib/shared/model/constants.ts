@@ -138,6 +138,15 @@ export enum UserConstants {
     ORIGINAL = 'original',
 }
 
+export enum AuthProviderConstants {
+    GOOGLE = 'google.com',
+    FACEBOOK = 'facebook.com',
+    PASSWORD = 'password',
+    PHONE = 'phone'
+}
+
+
+
 export enum GeneralConstants {
     LESS_THAN_OR_EQUAL = '<=',
     CREATED_UID = 'created_uid',
@@ -383,6 +392,7 @@ export enum RoutesConstants {
     ADD_BITS_FIRST_QUESTION = 'add-bits-first-question',
     TOP_CATEGORIES_COUNT = 'getTopCategories',
     TOP_TAGS_COUNT = 'getTopTags',
+    GAME_DASH_STAT_DASH_UPDATE = 'question-stat-update'
 }
 
 export enum TermsAndPrivacyUrlConstant {
@@ -486,6 +496,9 @@ export enum userCardType {
     USER_IMAGE_NAME_LOCATION_HORIZONTAL,
     USER_NAME_IMAGE_HORIZONTAL,
     USER_IMAGE_NAME_VERTICAL,
-    USER_IMAGE_NAME_CATEGORY_HORIZONTAL
+    USER_IMAGE_NAME_CATEGORY_HORIZONTAL,
+    USER_IMAGE_WITH_ONLINE_STATUS,
+    USER_WEB_IMAGE_WITH_ONLINE_STATUS,
+    USER_IMAGE_NAME_GAME_PROFILE_HORIZONTAL
 
 }

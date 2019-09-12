@@ -1,13 +1,12 @@
 import { Component, Output, EventEmitter, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, OnInit } from '@angular/core';
 import { Question, Answer, User, ApplicationSettings } from 'shared-library/shared/model';
-import { AppState, appState, categoryDictionary } from '../../../../../../../trivia/src/app/store';
+import { CoreState, coreState, categoryDictionary } from './../../../../core/store';
 import { Store, select } from '@ngrx/store';
 import { Utils } from 'shared-library/core/services';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { Observable } from 'rxjs';
 import { RouterExtensions } from 'nativescript-angular/router';
 import { map, flatMap, filter } from 'rxjs/operators';
-import { coreState } from 'shared-library/core/store';
 import { UserActions } from 'shared-library/core/store';
 
 @Component({
@@ -38,7 +37,7 @@ export class FirstQuestionComponent implements OnInit, OnDestroy {
   userDict$: Observable<{ [key: string]: User }>;
 
   constructor(
-    private store: Store<AppState>, 
+    private store: Store<CoreState>,
     private utils: Utils,
     private cd: ChangeDetectorRef,
     public routerExtension: RouterExtensions,
@@ -50,7 +49,7 @@ export class FirstQuestionComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.answeredText = '';
     this.correctAnswerText = '';
-    this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings))
+    this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.applicationSettings))
       .subscribe(appSettings => {
         if (appSettings) {
           this.applicationSettings = appSettings[0];
@@ -61,7 +60,7 @@ export class FirstQuestionComponent implements OnInit, OnDestroy {
     this.subscriptions.push(this.store.select(categoryDictionary).pipe(map(categories => {
       this.categoryDictionary = categories;
     }),
-      flatMap(() => this.store.select(appState.coreState).pipe(select(s => s.firstQuestion)))).subscribe((question: Question) => {
+      flatMap(() => this.store.select(coreState).pipe(select(s => s.firstQuestion)))).subscribe((question: Question) => {
         if (question) {
           this.question = question;
           this.cd.markForCheck();
@@ -86,14 +85,14 @@ export class FirstQuestionComponent implements OnInit, OnDestroy {
         }
       }));
 
-    this.userDict$ = this.store.select(appState.coreState).pipe(select(s => s.userDict));
+    this.userDict$ = this.store.select(coreState).pipe(select(s => s.userDict));
     this.subscriptions.push(this.userDict$.subscribe(userDict => this.userDict = userDict));
     this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.user)).subscribe(user => {
       this.user = user;
     }));
     this.setFirstQuestionBitsObs = this.store.select(coreState).pipe(select(s => s.firstQuestionBits));
     this.subscriptions.push(this.setFirstQuestionBitsObs.pipe(filter((result) => result !== null)).subscribe(setBits => {
-      this.routerExtension.navigate(['/dashboard']);
+      this.routerExtension.navigate(['/user/my/app-invite-friends-dialog', { showSkip: true }]);
       this.cd.markForCheck();
     }));
   }
@@ -121,7 +120,7 @@ export class FirstQuestionComponent implements OnInit, OnDestroy {
     if (nextStep === 'continue' && this.correctAnswerText === this.answeredText) {
       this.store.dispatch(this.userAction.setFirstQuestionBits(this.user.userId));
     } else {
-      this.routerExtension.navigate(['/dashboard']);
+      this.routerExtension.navigate(['/user/my/app-invite-friends-dialog', { showSkip: true }]);
     }
   }
 

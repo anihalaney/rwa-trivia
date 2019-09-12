@@ -14,8 +14,7 @@ import { ApplicationSettings, Answer, User } from 'shared-library/shared/model';
 
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class QuestionCardComponent implements OnInit, OnDestroy, OnChanges {
-
-
+  @Input() user: User;
   @Input() question: Question;
   @Input() categoryName: string;
   categoryDictionary: any;
@@ -66,10 +65,10 @@ export class QuestionCardComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-  if(changes.question){
-    this.doPlay = true;
+    if (changes.question) {
+      this.doPlay = true;
+    }
+
   }
-  
-}
 
 }

@@ -130,6 +130,38 @@
                 </div>
               </div>
             </li>
+            <li *ngIf="getDisplayStatus(row.status)==='APPROVED'">
+                <div class="question-text ">Appeared :</div>
+                <div class="answer-text">
+                  {{row.appeared ? row.appeared: 0 }}
+                </div>
+            </li>
+            <li *ngIf="getDisplayStatus(row.status)==='APPROVED'">
+                <div class="question-text ">Likes :</div>
+                <div class="answer-text">
+                  {{row.reactionsCount && row.reactionsCount.like ? row.reactionsCount.like: 0 }}
+                </div>
+            </li>
+            <li *ngIf="getDisplayStatus(row.status)==='APPROVED'">
+                <div class="question-text ">Dislikes :</div>
+                <div class="answer-text">
+                  {{row.reactionsCount && row.reactionsCount.dislike ? row.reactionsCount.dislike: 0 }}
+                </div>
+            </li>
+            <li *ngIf="getDisplayStatus(row.status)==='APPROVED'">
+                <div class="question-text ">Correct :</div>
+                <div class="answer-text">
+                  {{row.correct ? row.correct: 0 }}
+                </div>
+            </li>
+            <li *ngIf="getDisplayStatus(row.status)==='APPROVED'">
+                <div class="question-text ">Wrong :</div>
+                <div class="answer-text">
+                  {{row.wrong ? row.wrong: 0 }}
+                </div>
+            </li>
+
+
             <li>
               <div class="button-mobile-css">
                 <div class="row">

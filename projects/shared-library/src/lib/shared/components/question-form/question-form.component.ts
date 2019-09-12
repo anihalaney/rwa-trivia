@@ -5,7 +5,7 @@ import { QuestionService } from '../../../core/services';
 import { Observable, interval, of } from 'rxjs';
 import { debounceTime, switchMap, map} from 'rxjs/operators';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
-import { QuillImageUpload } from 'ng-quill-tex/lib/models/quill-image-upload';
+// import { QuillImageUpload } from 'ng-quill-tex/lib/models/quill-image-upload';
 import { CropImageDialogComponent } from './../crop-image-dialog/crop-image-dialog.component';
 import { MatDialog } from '@angular/material';
 import { Store, select } from '@ngrx/store';
@@ -298,7 +298,7 @@ export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   // Image Upload
-  fileUploaded(quillImageUpload: QuillImageUpload) {
+  fileUploaded(quillImageUpload: any) {
     const file: File = quillImageUpload.file;
 
     this.dialogRef = this.dialog.open(CropImageDialogComponent, {

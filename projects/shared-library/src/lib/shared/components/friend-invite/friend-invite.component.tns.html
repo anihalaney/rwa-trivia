@@ -1,0 +1,11 @@
+<FlexboxLayout flexDirection="column" justifyContent="center" padding="0 5 5 5" iosOverflowSafeArea="false">
+    <app-user-card [userId]="invitation.created_uid" [otherInfo]="otherInfo()"
+        [type]="userCardType.USER_IMAGE_NAME_CATEGORY_HORIZONTAL">
+    </app-user-card>
+    <FlexboxLayout justifyContent="space-around">
+        <Button text="Accept" verticalAlignment="top" backgroundColor="#71b02b" stlRippleEffect color="#fff"
+            (tap)="acceptFriendInvitation()" height="40" borderRadius="5"></Button>
+        <Button text="Reject" verticalAlignment="top" backgroundColor="#f50057" color="#fff" stlRippleEffect
+            (tap)="rejectFriendInvitation()" height="40" borderRadius="5"></Button>
+    </FlexboxLayout>
+</FlexboxLayout>

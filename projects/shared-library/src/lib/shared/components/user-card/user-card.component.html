@@ -23,14 +23,18 @@
   <label href="#" id="you" class="dark text-style ">{{user.displayName}}</label>
 </div>
 <!-- USER_CARD_TYPE_THREE -->
-<div class="auther" *ngIf="user && userCardType.USER_WEB_NAME_IMAGE_HORIZONTAL === type">
+<div class="author" *ngIf="user && userCardType.USER_WEB_NAME_IMAGE_HORIZONTAL === type">
+  <!-- <div> -->
   <label class="text-alignment">Author :</label>
   <label class="alignment-left text-alignment truncate" title="{{user?.displayName}}">{{user?.displayName}}</label>
-  <img *ngIf="isGamePlay" [src]="getImageUrl(user,44,40)" alt="User Profile Image" />
-  <img *ngIf="!isGamePlay" [stlOpenUserProfile]="{userId: user.userId, redirectTo: 'otherUserProfile'}"
-    [src]="getImageUrl(user,44,40)" alt="User Profile Image" />
-  <span *ngIf="user?.online" class="online-dot">
-  </span>
+  <div class="author-user-card">
+    <img *ngIf="isGamePlay" [src]="getImageUrl(user,44,40)" alt="User Profile Image" />
+    <img *ngIf="!isGamePlay" [stlOpenUserProfile]="{userId: user.userId, redirectTo: 'otherUserProfile'}"
+      [src]="getImageUrl(user,44,40)" alt="User Profile Image" />
+    <span *ngIf="user?.online" class="online-dot">
+    </span>
+  </div>
+  <!-- </div> -->
 </div>
 <!-- USER_CARD_TYPE_FOUR -->
 <div class="recent-completed" *ngIf="user && userCardType.USER_WEB_IMAGE_NAME_RECENT_GAME_VERTICAL === type">
@@ -136,3 +140,14 @@
     </div>
   </div>
 </ng-container>
+
+<!-- USER_CARD_TYPE_ONE -->
+<div class="textcenter clearfix innerli" style="width: 100px;"
+  *ngIf="user && userCardType.USER_WEB_IMAGE_WITH_ONLINE_STATUS === type">
+  <div class="yourimg">
+    <img [src]="getImageUrl(user,70,60)" alt="User Profile Image">
+    <span *ngIf="user?.online" class="online-dot">
+    </span>
+  </div>
+  <div class="clear"></div>
+</div>

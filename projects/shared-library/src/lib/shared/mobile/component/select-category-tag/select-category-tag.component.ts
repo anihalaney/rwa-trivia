@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { RouterExtensions } from 'nativescript-angular/router';
 import { UserActions, CategoryActions, TagActions } from 'shared-library/core/store';
 import { select, Store } from '@ngrx/store';
@@ -14,7 +14,7 @@ import { Observable } from 'rxjs';
   styleUrls: ['./select-category-tag.component.scss']
 })
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
-export class SelectCategoryTagComponent implements OnInit {
+export class SelectCategoryTagComponent implements OnInit, OnDestroy {
   user: User;
   subscriptions = [];
   categoriesObs: Observable<Category[]>;
@@ -24,6 +24,7 @@ export class SelectCategoryTagComponent implements OnInit {
   topTagsObs: Observable<any[]>;
   topTags = [];
   tags = [];
+  selectedCategories: number = 0;
   constructor(
     private routerExtension: RouterExtensions,
     public store: Store<any>,
@@ -51,7 +52,7 @@ export class SelectCategoryTagComponent implements OnInit {
       });
       categoryData.map((category: any) => {
         category.requiredForGamePlay = false;
-      })
+      });
       this.categories = categoryData;
     }));
 
@@ -61,7 +62,7 @@ export class SelectCategoryTagComponent implements OnInit {
       this.topTags = topTags;
       this.topTags.map((tag: any) => {
         tag.requiredForGamePlay = false;
-      })
+      });
       this.tags = this.topTags;
     }));
 
@@ -74,6 +75,7 @@ export class SelectCategoryTagComponent implements OnInit {
     const categories = this.categories[args.index];
     categories.requiredForGamePlay = !categories.requiredForGamePlay;
     this.categories = [... this.categories];
+    this.selectedCategories = this.returnSelectedTagsOrCategories(this.categories).length;
   }
 
   selectTags(args) {
@@ -85,11 +87,11 @@ export class SelectCategoryTagComponent implements OnInit {
   continueToFirstQuestion() {
     const categoryIds = [];
     const tags = [];
-    const selectedTopics = this.categories.filter((selectedCategory) => selectedCategory.requiredForGamePlay);
+    const selectedTopics = this.returnSelectedTagsOrCategories(this.categories);
     selectedTopics.map((categories) => {
-      categoryIds.push(categories.id)
-    })
-    const selectedTags = this.tags.filter((selectedTags) => selectedTags.requiredForGamePlay);
+      categoryIds.push(categories.id);
+    });
+    const selectedTags = this.returnSelectedTagsOrCategories(this.tags);
     selectedTags.map((tag) => {
       tags.push(tag.key);
     });
@@ -98,6 +100,10 @@ export class SelectCategoryTagComponent implements OnInit {
     this.user.isCategorySet = true;
     this.store.dispatch(this.userAction.addUserProfile(this.user, false));
     this.routerExtension.navigate(['/first-question'], { clearHistory: true });
+  }
+
+  returnSelectedTagsOrCategories(type) {
+    return type.filter((s) => s.requiredForGamePlay);
   }
 
   ngOnDestroy() {
