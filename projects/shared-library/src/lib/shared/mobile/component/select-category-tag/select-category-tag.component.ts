@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { RouterExtensions } from 'nativescript-angular/router';
 import { UserActions, CategoryActions, TagActions } from 'shared-library/core/store';
 import { select, Store } from '@ngrx/store';
@@ -14,7 +14,7 @@ import { Observable } from 'rxjs';
   styleUrls: ['./select-category-tag.component.scss']
 })
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
-export class SelectCategoryTagComponent implements OnInit {
+export class SelectCategoryTagComponent implements OnInit, OnDestroy {
   user: User;
   subscriptions = [];
   categoriesObs: Observable<Category[]>;
@@ -52,7 +52,7 @@ export class SelectCategoryTagComponent implements OnInit {
       });
       categoryData.map((category: any) => {
         category.requiredForGamePlay = false;
-      })
+      });
       this.categories = categoryData;
     }));
 

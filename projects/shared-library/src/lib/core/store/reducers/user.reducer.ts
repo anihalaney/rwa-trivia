@@ -156,7 +156,7 @@ export function addressUsingLongLat(state: any = null, action: ActionWithPayload
   }
 }
 
-export function addressSuggestions(state: any = null, action: ActionWithPayload<any[]>): any {
+export function addressSuggestions(state: any = null, action: ActionWithPayload<any[]>) {
   switch (action.type) {
     case UserActions.LOAD_ADDRESS_SUGGESTIONS_SUCCESS:
       return action.payload;
@@ -165,6 +165,14 @@ export function addressSuggestions(state: any = null, action: ActionWithPayload<
   }
 }
 
+export function checkDisplayName(state: any = null, action: ActionWithPayload<any>) {
+  switch (action.type) {
+      case UserActions.CHECK_DISPLAY_NAME_SUCCESS:
+          return action.payload;
+      default:
+          return null;
+  }
+}
 
 // set update user status
 export function userUpdateStatus(state: any = null, action: ActionWithPayload<string>): string {

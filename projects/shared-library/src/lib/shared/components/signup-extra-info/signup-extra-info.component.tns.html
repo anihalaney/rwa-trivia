@@ -1,0 +1,34 @@
+<ns-action-bar title="User Info" class="Roboto-Regular" hideHomeIcon="true" hideMenu="true"></ns-action-bar>
+<StackLayout>
+    <ScrollView>
+        <StackLayout [formGroup]="userForm" iosOverflowSafeArea="false">
+            <!-- E-mail -->
+            <TextField [editable]="emailEditable" #textField
+                [stlShowHintWhenFocusOut]="{hintRef: emailHint, controlRef:userForm.controls.email}"
+                formControlName="email" class="input" hint="Email"></TextField>
+            <GridLayout rows="*, *" columns="*">
+                <!-- Name -->
+                <StackLayout margin="15">
+                    <app-check-display-name formControlName="displayName" hint="Display Name"></app-check-display-name>
+                </StackLayout>
+            </GridLayout>
+            <!-- Phone number -->
+            <TextField [editable]="phoneEditable" keyboardType="number" formControlName="phoneNo" class="input"
+                hint="Phone Number"></TextField>
+            <!-- Error labels -->
+            <Label #emailHint text="Invalid Email!" marginTop="10" textWrap="true" class="text-center error"></Label>
+            <Label
+                *ngIf="userForm.controls.displayName.errors && userForm.controls.displayName.errors.required && !userForm.controls.displayName.pristine"
+                class="text-center error" textWrap="true" text="Display Name is required!"></Label>
+            <Label *ngIf="userForm.controls.displayName.errors && userForm.controls.displayName.errors.exist"
+                class="text-center error" textWrap="true" text="Display Name is already taken by other user"></Label>
+            <!-- Submit button -->
+            <GridLayout iosOverflowSafeArea="false" margin="15" rows="auto" columns="*">
+                <Button row="0" col="0" width="100%" text="Continue" (tap)="submit()" class="Roboto-Medium"
+                    backgroundColor="{{userForm.valid ? '#71b02f' : 'silver' }}" color="#ffffff" borderRadius="3"
+                    fontSize="20" padding="15" fontWeight="bold" stlRippleEffect marginLeft="5"></Button>
+            </GridLayout>
+
+        </StackLayout>
+    </ScrollView>
+</StackLayout>

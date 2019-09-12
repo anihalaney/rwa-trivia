@@ -245,7 +245,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnInit,
     this.checkDisplayName(this.userForm.get('displayName').value);
 
 
-    this.checkUserSubscriptions = this.store.select(userState).pipe(select(s => s.checkDisplayName)).subscribe(status => {
+    this.checkUserSubscriptions = this.store.select(coreState).pipe(select(s => s.checkDisplayName)).subscribe(status => {
 
       this.isValidDisplayName = status;
 

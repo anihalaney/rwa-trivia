@@ -35,9 +35,9 @@
     <GridLayout row="0" col="1" rows="*, *, *" columns="*" class="padding-10">
       <Label *ngIf="user?.displayName" [text]="user?.displayName" fontSize="16" row="0" col="0"
         class="text-black"></Label>
-      <Label *ngIf="!user?.displayName" [text]="unknown" row="0" col="0" class="text-black" fontSize="16"></Label>
+      <Label *ngIf="!user?.displayName" [text]="'unknown'" row="0" col="0" class="text-black" fontSize="16"></Label>
       <Label *ngIf="user?.location" [text]="user?.location" row="1" col="0" class="text-gray" fontSize="14"></Label>
-      <Label *ngIf="!user?.location" [text]="unknown" row="1" col="0" class="text-gray" fontSize="14"></Label>
+      <Label *ngIf="!user?.location" [text]="'unknown'" row="1" col="0" class="text-gray" fontSize="14"></Label>
       <Label *ngIf="user?.isFriend && loggedInUserId"
         text="{{ (user?.isFriend) ? user?.displayName : '' }} is your friend" textWrap="true" row="2" col="0"
         class="text-gray" fontSize="14"> </Label>
@@ -59,7 +59,7 @@
       class="padding-10">
       <Label *ngIf="user?.displayName" [text]="user?.displayName" fontSize="16" class="text-black"
         textWrap="true"></Label>
-      <Label *ngIf="!user?.displayName" [text]="unknown" class="text-black" fontSize="16" textWrap="true"></Label>
+      <Label *ngIf="!user?.displayName" [text]="'unknown'" class="text-black" fontSize="16" textWrap="true"></Label>
       <Label *ngIf="user?.location" text="&#xf041; {{user?.location}}" class="text-gray fa" fontSize="14"
         textWrap="true"></Label>
       <Label *ngIf="!user?.location" text="&#xf041; unknown" class="text-gray fa" fontSize="14" textWrap="true"></Label>
@@ -139,17 +139,16 @@
       [stlOpenUserProfile]="{userId: user?.userId, redirectTo: loggedInUserId === user?.userId ? 'userProfile': 'otherUserProfile'}">
       <Image *ngIf="isGamePlay" row="0" col="2" [src]="getImageUrl(user,44,40)" color="#FFFFFF" stretch="aspectFill"
         height="33" width="33" marginLeft="10" marginRight="10" verticalAlignment="center" borderRadius="50"></Image>
-      <Image *ngIf="!isGamePlay" [stlOpenUserProfile]="{userId: user.userId, redirectTo: 'otherUserProfile'}" row="0"
-        col="2" [src]="getImageUrl(user,44,40)" color="#FFFFFF" stretch="aspectFill" height="33" width="33"
-        marginLeft="10" marginRight="10" verticalAlignment="center" borderRadius="50"></Image>
-      <Label *ngIf="user?.online" height="10" top="23" left="33" width="10" borderRadius="22"
-        backgroundColor="#71b02f"></Label>
+      <Image *ngIf="!isGamePlay" [stlOpenUserProfile]="{userId: user?.userId, redirectTo: 'otherUserProfile'}" row="0"
+        col="2" [src]="getImageUrl(user,44,40)" color="#FFFFFF" stretch="aspectFill" height="33" width="33" marginLeft="10"
+        marginRight="10" verticalAlignment="center" borderRadius="50"></Image>
+      <Label *ngIf="user?.online" height="10" top="23" left="33" width="10" borderRadius="22" backgroundColor="#71b02f"></Label>
     </AbsoluteLayout>
   </GridLayout>
 </ng-container>
 
 <ng-container *ngIf="user && userCardType.USER_IMAGE_NAME_CATEGORY_HORIZONTAL === type">
-  <GridLayout rows="auto,auto,auto" columns="auto,*" padding="5" iosOverflowSafeArea="false">
+  <GridLayout rows="auto,auto,auto" columns="auto,*" padding="0 5 0 5" iosOverflowSafeArea="false">
     <StackLayout row="0" col="0" marginLeft="10" rowSpan="3" verticalAlignment="center" marginRight="10"
       borderRadius="50" borderColor="#3b5998" borderWidth="1" paddingTop="2" paddingLeft="2" paddingRight="2"
       class="image-container" height="44" width=44>
@@ -161,13 +160,18 @@
       [stlOpenUserProfile]="{userId: user?.userId, redirectTo: loggedInUserId === user?.userId ? 'userProfile': 'otherUserProfile'}">
       <Label height="15" top="35" left="38" width="15" borderRadius="22" backgroundColor="#71b02f"></Label>
     </AbsoluteLayout>
-    <Label row="0" col="1" text="{{user?.displayName}}" textWrap="true" class="sub-title"></Label>
-    <Label row="1" col="1" *ngIf="otherInfo?.category" text="{{otherInfo?.category}}" fontSize="12"></Label>
+    <Label row="1" col="1" text=" " textWrap="true" fontSize="16ˇ">
+      <FormattedString>
+        <span text="{{user?.displayName}}" color="#6d8bca"></span>
+        <span text=" {{otherInfo?.notificationText}}"></span>
+      </FormattedString>
+    </Label>
+    <!-- <Label row="1" col="1" *ngIf="otherInfo?.category" text="{{otherInfo?.category}}" fontSize="12"></Label>
     <Label row="1" col="1" *ngIf="otherInfo?.invitationStatus" text="{{otherInfo?.invitationStatus}}"
       fontSize="12"></Label>
     <Label row="2" col="1" *ngIf="otherInfo?.remainingDays"
       text="{{otherInfo?.remainingDays}} days left to accept invitation" marginBottom="11" horizontalAlignment="left"
-      textWrap="true" color="#fe4f20" fontSize="12"></Label>
+      textWrap="true" color="#fe4f20" fontSize="12"></Label> -->
   </GridLayout>
 
 </ng-container>

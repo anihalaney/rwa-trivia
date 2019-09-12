@@ -5,10 +5,11 @@ import {
   User, Game, Category, GameStatus,
   GameInviteConstants, CalenderConstants, userCardType
 } from 'shared-library/shared/model';
-import { AppState,  categoryDictionary } from '../../../store';
+import { CoreState, categoryDictionary } from './../../../core/store';
 import { Utils } from 'shared-library/core/services';
 import { UserActions } from 'shared-library/core/store/actions';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'game-invite',
@@ -30,25 +31,37 @@ export class GameInviteComponent implements OnChanges, OnDestroy {
   userCardType = userCardType;
 
 
-  constructor(private store: Store<AppState>, private utils: Utils, private userActions: UserActions) {
+  constructor(private store: Store<CoreState>, private utils: Utils, private userActions: UserActions, private router: Router) {
     this.categoryDict$ = store.select(categoryDictionary);
     this.subscriptions.push(this.categoryDict$.subscribe(categoryDict => this.categoryDict = categoryDict));
+
   }
 
   ngOnChanges() {
     if (this.game) {
       this.randomCategoryId = Math.floor(Math.random() * this.game.gameOptions.categoryIds.length);
       this.gameStatus = (this.game.GameStatus === GameStatus.WAITING_FOR_RANDOM_PLAYER_INVITATION_ACCEPTANCE) ? 'Random' : 'Friend';
-      const currentTime =  this.utils.getUTCTimeStamp();
+      const currentTime = this.utils.getUTCTimeStamp();
       this.remainingDays = (GameInviteConstants.INVITATION_APPROVAL_TOTAL_DAYS -
         Math.floor(this.utils.getTimeDifference(this.game.turnAt, currentTime) / (CalenderConstants.DAYS_CALCULATIONS)));
     }
+  }
+
+  acceptGameInvitation(id) {
+    this.router.navigate(['game-play', id]);
   }
 
   rejectGameInvitation() {
     this.store.dispatch(this.userActions.rejectGameInvitation(this.game.gameId));
   }
 
+  otherInfo(game) {
+    const category = this.categoryDict[game.gameOptions.categoryIds[this.randomCategoryId]].categoryName.charAt(0).toUpperCase() +
+      this.categoryDict[game.gameOptions.categoryIds[this.randomCategoryId]].categoryName.slice(1);
+    return {
+      category: category, remainingDays: this.remainingDays, notificationText: 'sent you an invite to play game together'
+    };
+  }
 
   ngOnDestroy() {
   }

@@ -5,4 +5,5 @@ export class Invitation {
     created_uid: string;
     email: string;
     status: string;
+    createdAt?: number;
 }

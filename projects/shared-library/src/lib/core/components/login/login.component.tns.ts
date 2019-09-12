@@ -20,7 +20,7 @@ import { CoreState, coreState, UIStateActions } from '../../store';
 import { FirebaseAuthService } from './../../auth/firebase-auth.service';
 import { Login } from './login';
 import { Utils } from '../../services';
-
+declare var IQKeyboardManager;
 @Component({
   selector: 'login',
   templateUrl: './login.component.html',
@@ -30,7 +30,7 @@ import { Utils } from '../../services';
 
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class LoginComponent extends Login implements OnInit, OnDestroy {
-  iqKeyboard: IQKeyboardManager;
+  iqKeyboard: any;
   @ViewChildren('textField') textField: QueryList<ElementRef>;
   title: string;
   loader = false;
@@ -205,10 +205,8 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
           if (user) {
             // Success
             if (user && !user.emailVerified) {
-              const isEmailVerify = await this.firebaseAuthService.sendEmailVerification(user);
-              if (isEmailVerify) {
-                this.redirectTo();
-              }
+              await this.firebaseAuthService.sendEmailVerification(user);
+              this.redirectTo();
             }
           }
           break;
@@ -296,7 +294,7 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
             const redirectUrl = url ? url : '/dashboard';
             if (this.mode === 0 || this.mode === 1) {
               if (!user.isCategorySet && this.applicationSettings.show_category_screen && !user.categoryIds && !user.tags) {
-                this.navigateTo('select-category-tag', this.mode);
+                this.navigateTo('signup-extra-info', this.mode);
               } else {
                 this.navigateTo(redirectUrl, this.mode);
               }
@@ -348,14 +346,7 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
   }
 
   hideKeyboard() {
-    if (isAndroid) {
-      this.textField
-        .toArray()
-        .map((el) => {
-          el.nativeElement.android.clearFocus();
-          return el.nativeElement.dismissSoftInput();
-        });
-    }
+    this.utils.hideKeyboard(this.textField);
   }
 
 }

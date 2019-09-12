@@ -7,9 +7,10 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { Observable } from 'rxjs';
 import { Utils } from 'shared-library/core/services';
 import { Category, FirebaseScreenNameConstants, Game, Question, QuestionMetadata, ReportQuestion, User } from 'shared-library/shared/model';
-import { isAndroid, isIOS } from 'tns-core-modules/ui/page/page';
+import { isIOS } from 'tns-core-modules/ui/page/page';
 import { AppState, categoryDictionary } from '../../../store';
 import * as gameplayactions from '../../store/actions';
+declare var IQKeyboardManager;
 @Component({
     selector: 'report-game',
     templateUrl: './report-game.component.html',
@@ -19,7 +20,7 @@ import * as gameplayactions from '../../store/actions';
 
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class ReportGameComponent implements OnInit, OnDestroy {
-    iqKeyboard: IQKeyboardManager;
+    iqKeyboard: any;
     question: Question;
     reportQuestion: ReportQuestion;
     user: User;
@@ -63,12 +64,14 @@ export class ReportGameComponent implements OnInit, OnDestroy {
             new ReportOption('Spam'),
             new ReportOption('Other')
         ];
+        this.cd.markForCheck();
 
-        
+
     }
 
     ngOnInit() {
         this.reportQuestion = new ReportQuestion();
+        this.cd.markForCheck();
     }
 
     saveReportQuestion() {
@@ -99,7 +102,7 @@ export class ReportGameComponent implements OnInit, OnDestroy {
             this.store.dispatch(new gameplayactions.SaveReportQuestion({ reportQuestion: this.reportQuestion, game: this.game }));
             this.params.closeCallback();
         }
-
+        this.cd.markForCheck();
     }
 
     changeCheckedRadio(reportOption: ReportOption): void {
@@ -114,6 +117,7 @@ export class ReportGameComponent implements OnInit, OnDestroy {
                 option.selected = false;
             }
         });
+        this.cd.markForCheck();
     }
 
     get otherAnswer() {
@@ -141,14 +145,7 @@ export class ReportGameComponent implements OnInit, OnDestroy {
     }
 
     hideKeyboard() {
-        if (isAndroid) {
-            this.textField
-                .toArray()
-                .map((el) => {
-                        el.nativeElement.android.clearFocus();
-                        return el.nativeElement.dismissSoftInput();
-                    });
-        }
+        this.utils.hideKeyboard(this.textField);
     }
 
 }
