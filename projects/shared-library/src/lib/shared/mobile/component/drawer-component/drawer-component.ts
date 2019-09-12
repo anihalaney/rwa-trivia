@@ -43,7 +43,7 @@ export class DrawerComponent implements OnInit, OnDestroy {
     applicationSettings: ApplicationSettings;
     subscriptions = [];
     showHelp: Boolean = true;
-
+    isDrawerOpenOrClosed = '';
     constructor(private routerExtension: RouterExtensions,
         private store: Store<CoreState>,
         public authProvider: AuthenticationProvider,
@@ -153,7 +153,7 @@ export class DrawerComponent implements OnInit, OnDestroy {
     }
 
     leaderBoard(category) {
-        this.routerExtension.navigate(['/dashboard/leaderboard', category]);
+        this.routerExtension.navigate(['/dashboard/leaderboard']);
         this.closeDrawer();
     }
 
@@ -291,5 +291,13 @@ export class DrawerComponent implements OnInit, OnDestroy {
 
     ngOnDestroy(): void {
 
+    }
+
+    get isDrawerOpen() {
+        const sideDrawer = <RadSideDrawer>app.getRootView();
+        if (sideDrawer) {
+            const isDrawerOpenOrClosed = (sideDrawer.getIsOpen() ? 'drawerOpened' : 'drawerClosed');
+            return isDrawerOpenOrClosed;
+        }
     }
 }
