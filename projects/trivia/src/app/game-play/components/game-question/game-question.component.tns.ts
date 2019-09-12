@@ -9,6 +9,7 @@ import { Observable, timer, Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { projectMeta } from 'shared-library/environments/environment';
+import { Page } from 'tns-core-modules/ui/page/page';
 
 @Component({
   selector: 'game-question',
@@ -29,6 +30,7 @@ export class GameQuestionComponent extends GameQuestion implements OnInit, OnDes
   stopProcessBar;
   columns;
   doPlay = true;
+  actionText: string;
 
   photoUrl: String = `~/assets/icons/${projectMeta.projectName}/icon-192x192.png`;
   userDict$: Observable<{ [key: string]: User }>;
@@ -36,16 +38,18 @@ export class GameQuestionComponent extends GameQuestion implements OnInit, OnDes
   elapsedTime: number;
   timerSub: Subscription;
 
-  constructor(private utils: Utils, public store: Store<GamePlayState>, private cd: ChangeDetectorRef) {
+  constructor(private utils: Utils, public store: Store<GamePlayState>, private cd: ChangeDetectorRef, private page: Page) {
     super();
+    this.page.actionBarHidden = true;
     this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
+    this.actionText = 'Playing Now';
   }
 
   ngOnInit() {
     this.progressValue = 0;
     this.photoUrl = this.utils.getImageUrl(this.user, 70, 60, '70X60');
 
-  this.cd.markForCheck();
+    this.cd.markForCheck();
   }
 
   ngOnDestroy() {
@@ -53,9 +57,9 @@ export class GameQuestionComponent extends GameQuestion implements OnInit, OnDes
   }
 
   fillTimer() {
-   if (this.answeredIndex === undefined) {
+    if (this.answeredIndex === undefined) {
       this.progressValue = 100;
-   }
+    }
   }
 
   getImage(userId) {

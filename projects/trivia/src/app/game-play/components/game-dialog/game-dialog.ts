@@ -116,7 +116,7 @@ export class GameDialog {
           }
 
           if (game.GameStatus === GameStatus.COMPLETED) {
-            this.actionBarStatus = 'Game Over';
+            this.actionBarStatus = 'Game result';
           } else {
             this.actionBarStatus = 'Play Game';
           }
