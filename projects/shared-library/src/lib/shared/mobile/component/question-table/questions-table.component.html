@@ -100,10 +100,14 @@
                             fontSize="12" fontWeight="bold" width="90" height="40">
                         </Button>
 
-                        <Button (tap)="showEditQuestion(question)" row="1" *ngIf="question?.is_draft === true" class="fa required-change-btn"
+                        <Button (tap)="showEditQuestion(question)" row="1" 
+                            *ngIf="question?.is_draft === true && (getDisplayStatus(question.status)==='REQUIRED_CHANGE' || getDisplayStatus(question.status)==='PENDING' )"
+                             class="fa required-change-btn"
                             horizontalAlignment="right" text="&#xf044;" textWrap="true" width="90" height="25" fontSize="20"
                             fontWeight="bold" marginTop="-60"></Button>
-                        <Button (tap)="showEditQuestion(question)" row="2" *ngIf="question?.is_draft === true" class="required-change-btn"
+                        <Button (tap)="showEditQuestion(question)" row="2"
+                         *ngIf="question?.is_draft === true  && (getDisplayStatus(question.status)==='REQUIRED_CHANGE' || getDisplayStatus(question.status)==='PENDING' )"
+                         class="required-change-btn"
                             horizontalAlignment="right" text="Edit" fontSize="12" fontWeight="bold" width="90" height="40"></Button>
 
                         <Button row="3" *ngIf="getDisplayStatus(question.status)==='REJECTED'" class="reject-btn" text="View Reason"

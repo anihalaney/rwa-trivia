@@ -89,16 +89,15 @@ export class QuestionsTableComponent implements OnInit, OnChanges, AfterViewInit
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['questions'] && changes['questions'].currentValue !== changes['questions'].previousValue) {
-      if (this.isAdmin) {
-        (this.clientSidePagination) ? this.setClientSidePaginationDataSource(this.questions) : this.questionsSubject.next(this.questions);
-      } else if (!this.isAdmin &&
+      if (this.isAdmin ||
+        (!this.isAdmin &&
         changes.questions.currentValue &&
-         !changes.questions.previousValue) {
-       (this.clientSidePagination) ? this.setClientSidePaginationDataSource(this.questions) : this.questionsSubject.next(this.questions);
-     } else if (!this.isAdmin &&
-         changes.questions.currentValue &&
-          changes.questions.previousValue &&
-          changes.questions.currentValue.length !== changes.questions.previousValue.length) {
+         !changes.questions.previousValue) ||
+        (!this.isAdmin &&
+          changes.questions.currentValue &&
+           changes.questions.previousValue &&
+           changes.questions.currentValue.length !== changes.questions.previousValue.length)
+        ) {
         (this.clientSidePagination) ? this.setClientSidePaginationDataSource(this.questions) : this.questionsSubject.next(this.questions);
       } else if (!this.isAdmin &&
         this.isDraft !== true && changes.questions.previousValue) {
@@ -134,7 +133,7 @@ export class QuestionsTableComponent implements OnInit, OnChanges, AfterViewInit
   // approveQuestions
   approveQuestion(question: Question) {
     question.approved_uid = this.user.userId;
-
+    question.is_draft = false;
     this.approveUnpublishedQuestion.emit(question);
     if (this.bulkUploadFileInfo) {
       if (question.status === QuestionStatus.REJECTED) {
@@ -157,6 +156,7 @@ export class QuestionsTableComponent implements OnInit, OnChanges, AfterViewInit
   }
 
   displayRejectToChange(question: Question) {
+    question.is_draft = false;
     this.rejectQuestionStatus = true;
     this.requestQuestionStatus = false;
     this.rejectQuestion = question;
