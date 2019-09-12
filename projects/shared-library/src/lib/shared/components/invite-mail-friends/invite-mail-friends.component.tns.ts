@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Utils } from 'shared-library/core/services';
@@ -14,7 +14,7 @@ declare var IQKeyboardManager;
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class InviteMailFriendsComponent extends InviteMailFriends {
+export class InviteMailFriendsComponent extends InviteMailFriends implements OnDestroy {
     iqKeyboard: any;
     constructor(fb: FormBuilder, store: Store<CoreState>, userAction: UserActions, cd: ChangeDetectorRef,
         utils: Utils) {
@@ -23,10 +23,14 @@ export class InviteMailFriendsComponent extends InviteMailFriends {
         if (isIOS) {
             this.iqKeyboard = IQKeyboardManager.sharedManager();
             this.iqKeyboard.shouldResignOnTouchOutside = true;
-          }
+        }
     }
 
     hideKeyboard() {
-          this.utils.hideKeyboard(this.textField);
-      }
+        this.utils.hideKeyboard(this.textField);
+    }
+
+    ngOnDestroy(): void {
+
+    }
 }
