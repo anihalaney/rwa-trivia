@@ -1,13 +1,12 @@
-import {
-    Component, ChangeDetectionStrategy, ChangeDetectorRef
-} from '@angular/core';
-import { FormBuilder} from '@angular/forms';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { CoreState, UserActions } from 'shared-library/core/store';
 import { Utils } from 'shared-library/core/services';
-import { InviteMailFriends } from './invite-mail-friends';
+import { CoreState, UserActions } from 'shared-library/core/store';
 import { isIOS } from 'tns-core-modules/ui/page';
+import { InviteMailFriends } from './invite-mail-friends';
 declare var IQKeyboardManager;
+
 @Component({
     selector: 'app-invite-mail-friends',
     templateUrl: './invite-mail-friends.component.html',
@@ -15,7 +14,7 @@ declare var IQKeyboardManager;
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class InviteMailFriendsComponent extends InviteMailFriends {
+export class InviteMailFriendsComponent extends InviteMailFriends implements OnDestroy {
     iqKeyboard: any;
     constructor(fb: FormBuilder, store: Store<CoreState>, userAction: UserActions, cd: ChangeDetectorRef,
         utils: Utils) {
@@ -24,10 +23,14 @@ export class InviteMailFriendsComponent extends InviteMailFriends {
         if (isIOS) {
             this.iqKeyboard = IQKeyboardManager.sharedManager();
             this.iqKeyboard.shouldResignOnTouchOutside = true;
-          }
+        }
     }
 
     hideKeyboard() {
-          this.utils.hideKeyboard(this.textField);
-      }
+        this.utils.hideKeyboard(this.textField);
+    }
+
+    ngOnDestroy(): void {
+
+    }
 }

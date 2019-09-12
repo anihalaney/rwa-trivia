@@ -295,7 +295,7 @@ const commandList = {
                     --copy-to ${productVariant}.apk`;
             } else {
                 args.options({ 'forDevice': { 'default': '--for-device' } });
-                args.argv.androidRelease = '';
+                args.argv.androidRelease = ' && tns publish ios --ipa platforms/ios/build/Release-iphoneos/rwatrivia.ipa';
             }
         },
         "preCommand": async (argv) => { await updateAppVersion(argv, true); await updatePackageJson(argv); }
