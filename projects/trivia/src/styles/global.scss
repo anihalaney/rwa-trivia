@@ -333,7 +333,7 @@ main h2 span{ font-size: 14px; font-family: 'hindregular';}
 .card h3:before{ height: 11px; width:11px; border-radius: 50%; border:1px solid; content: ""; display: inline-block; margin-right: 10px}
 .btnbox{ border-top:1px solid; padding: 20px 0; margin-top: 10px; }
 
-input[type="text"], input[type="email"], select{ border:1px solid; border-radius: 3px; padding: 8px 12px; font-size: 16px; width: 100%}
+input[type="text"], input[type="email"], input[type="password"], select{ border:1px solid; border-radius: 3px; padding: 8px 12px; font-size: 16px; width: 100%}
 
 .formfield { padding: 8px 15px; }
 .formfield input[type="checkbox"],.enterquestion .formfield input[type="radio"]{  position: relative; height: 18px; width: 18px; vertical-align: -4px; margin-right: 8px;}
@@ -755,7 +755,7 @@ body.dialog-open .cdk-global-overlay-wrapper {
   content: '' !important;
 }
 
-.mq-editable-field.mq-focused, {
+.mq-editable-field.mq-focused {
   box-shadow: none !important;
   border-color: none !important;
   border-radius: 0px;
@@ -776,11 +776,15 @@ pre.ql-syntax {
   color: #fff !important;
 }
 
-game-question .auther{
+game-question .author{
   justify-content: flex-end;
 }
 
-question .auther{
+question .author{
   justify-content: flex-end;
   margin-right: 20px;
+}
+
+.cursor-pointer{
+  cursor: pointer;
 }

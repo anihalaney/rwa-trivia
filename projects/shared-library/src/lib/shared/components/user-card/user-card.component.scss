@@ -22,7 +22,7 @@
   font-size: 16px;
 }
 
-.auther {
+.author {
   display: flex;
   & img {
     border-radius: 50%;
@@ -157,7 +157,7 @@
   bottom: 0;
 }
 
-.auther .online-dot {
+.author .online-dot {
   height: 10px;
   width: 10px;
   bottom: 1px;
@@ -171,4 +171,9 @@
 .friend-invite .online-dot {
   right: 50px;
   bottom: 5px;
+}
+
+.author-user-card{
+  position: relative;
+  padding-left: 5px;
 }

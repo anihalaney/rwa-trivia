@@ -6,7 +6,7 @@ import { QuestionActions } from 'shared-library/core/store/actions';
 import { Utils } from 'shared-library/core/services';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { GameActions } from 'shared-library/core/store/actions';
-import { skipWhile } from 'rxjs/operators';
+import { skipWhile, map, switchMap } from 'rxjs/operators';
 @Component({
   selector: 'question',
   templateUrl: './question.component.html',
@@ -46,9 +46,10 @@ export class QuestionComponent implements OnDestroy {
         }
       }));
     this.subscriptions.push(this.store.select(categoryDictionary)
-    .pipe(skipWhile( categories => Object.entries(categories).length === 0 && categories.constructor === Object )).subscribe(categories => {
-      this.categoryDictionary = categories;
-      this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.questionOfTheDay)).subscribe(questionOfTheDay => {
+    .pipe(skipWhile( categories => Object.entries(categories).length === 0 && categories.constructor === Object ),
+    map(categories => this.categoryDictionary = categories),
+    switchMap(() => this.store.select(appState.coreState).pipe(select(s => s.questionOfTheDay)))
+    ).subscribe(questionOfTheDay => {
         if (questionOfTheDay) {
           this.question = questionOfTheDay;
           this.cd.markForCheck();
@@ -72,7 +73,6 @@ export class QuestionComponent implements OnDestroy {
           }
           this.cd.markForCheck();
         }
-      }));
       this.cd.markForCheck();
     }));
 

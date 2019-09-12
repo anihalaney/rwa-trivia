@@ -6,7 +6,8 @@ import {
 } from '../../projects/shared-library/src/lib/shared/model';
 import { PushNotification } from './push-notifications';
 import { Utils } from './utils';
-
+import { AppSettings } from '../services/app-settings.service';
+import { AccountService } from '../services/account.service';
 
 export class MakeFriends {
 
@@ -23,12 +24,15 @@ export class MakeFriends {
     async validateToken(): Promise<string> {
         try {
             const invitationObj: Invitation = await FriendService.getInvitationByToken(this.token);
-
+            const appSetting = await AppSettings.Instance.getAppSettings();
             if (invitationObj.email === this.email) {
                 invitationObj.status = friendInvitationConstants.APPROVED;
                 await this.updateFriendsList(invitationObj.created_uid, this.userId);
                 await this.updateFriendsList(this.userId, invitationObj.created_uid);
                 await FriendService.updateInvitation({ ...invitationObj });
+                if (appSetting.invite_bits_enabled) {
+                    await AccountService.updateBits(invitationObj.created_uid, appSetting.invite_bits);
+                }
                 return this.userId;
             }
         } catch (error) {

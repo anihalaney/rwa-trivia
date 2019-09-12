@@ -13,7 +13,6 @@ import { LeaderboardComponent } from './component/leaderboard/leaderboard.compon
 import { RealtimeStatsComponent } from './component/realtime-stats/realtime-stats.component';
 import { QuestionComponent } from './component/question/question.component';
 import { InviteToPlayComponent } from './component/invite-to-play/invite-to-play.component';
-
 @NgModule({
   declarations: [
     DashboardComponent,

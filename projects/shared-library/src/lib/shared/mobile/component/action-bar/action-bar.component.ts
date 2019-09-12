@@ -37,9 +37,6 @@ export class ActionBarComponent implements OnDestroy {
             this.user = user;
         }));
 
-        this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.user)).subscribe(user => {
-            this.user = user;
-        }));
         this.subscriptions.push(combineLatest(store.select(coreState).pipe(select(s => s.friendInvitations)),
             store.select(coreState).pipe(select(s => s.gameInvites))).subscribe((notify: any) => {
                 this.notifications = notify[0].concat(notify[1]);

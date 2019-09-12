@@ -4,7 +4,7 @@
   "license": "MIT",
   "angular-cli": {},
   "nativescript": {
-    "id": "io.bitwiser.trivia.dev",
+    "id": "${packageName}",
     "tns-ios": {
       "version": "6.0.1"
     },
@@ -12,7 +12,7 @@
       "version": "6.0.1"
     }
   },
-  "scripts": {    
+  "scripts": {
     "ng": "ng",
     "api": "json-server --watch src/db.json",
     "lint": "tslint \"src/**/*.ts\" --project src/tsconfig.json --type-check && tslint \"e2e/**/*.ts\" --project e2e/tsconfig.json --type-check",
@@ -76,7 +76,7 @@
     "nativescript-imagecropper": "1.0.5",
     "nativescript-imagepicker": "^6.2.0",
     "nativescript-iqkeyboardmanager": "^1.5.1",
-    "nativescript-plugin-firebase": "9.0.4",
+    "nativescript-plugin-firebase": "^9.1.1",
     "nativescript-screenshot": "0.0.2",
     "nativescript-social-share": "^1.5.1",
     "nativescript-theme-core": "^2.0.2",
@@ -162,6 +162,11 @@
         "tsConfigFile": "projects/trivia/tsconfig.spec.json"
       },
       "__TRANSFORM_HTML__": true
+    }
+  },
+  "husky": {
+    "hooks": {
+      "pre-push": "npm run test && ng e2e trivia-e2e"
     }
   }
 }
