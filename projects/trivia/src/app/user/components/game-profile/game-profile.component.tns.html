@@ -30,8 +30,6 @@
                     </StackLayout>
                 </StackLayout>
                 <StackLayout orientation="vertical">
-                    <!-- <Label text="&#xf05a;" fontSize="22" color="lightgray" padding="3" class="fa"></Label> -->
-
                     <StackLayout verticalAlignment="center" class="profile" iosOverflowSafeArea="false">
                         <StackLayout stlRippleEffect (rippleTap)="sendFriendRequest()" horizontalAlignment="right"
                             *ngIf="loggedInUser?.userId && userInvitations[user?.email]?.status === 'add'">
@@ -105,13 +103,13 @@
 
                 <StackLayout orientation="horizontal" horizontalAlignment="center" class="stats-box border" margin="10 10 0 0">
                     <FlexboxLayout flexDirection="column" justifyContent="center">
-                        <Label text="{{account?.contribution || 0}} sec" class="bold-text" textWrap="true"></Label>
+                        <Label text="{{account?.contribution || 0}}" class="bold-text" textWrap="true"></Label>
                         <Label text="contribution" textWrap="true"></Label>
                     </FlexboxLayout>
                 </StackLayout>
             </FlexboxLayout>
                 <StackLayout [visibility]="loggedInUser?.userId && userType === 1 && gamePlayedAgainst ? 'visible':'collapsed'"
-                    margin="0 0 20 10" iosOverflowSafeArea="false">
+                    marginLeft="0 0 20 10" iosOverflowSafeArea="false">
                     <StackLayout class="cardStyle" orientation="vertical" verticalAlignment="center" margin="10">
                         <StackLayout class="stats-main" iosOverflowSafeArea="false">
                             <GridLayout rows="*" columns="30,*,auto" class="stats padding-10" iosOverflowSafeArea="false">
@@ -129,6 +127,14 @@
                             </GridLayout>
                         </StackLayout>
                     </StackLayout>
+                </StackLayout>
+
+                <StackLayout [visibility]="userType === 0 ? 'visible' : 'collapsed'" margin="0 20 20 20">
+                    <StackLayout orientation="horizontal">
+                        <Label text="&#xf0c9;" class="fa" fontSize="20" textWrap="true" marginRight="5"></Label>
+                        <Label text="Activity Log" fontSize="18" textWrap="true"></Label>
+                    </StackLayout>
+                        <recent-games></recent-games>
                 </StackLayout>
         </StackLayout>
     </ScrollView>

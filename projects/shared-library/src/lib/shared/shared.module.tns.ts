@@ -24,6 +24,7 @@ import {
   RenderQuestionComponent, AuthorComponent, RenderAnswerComponent,
   UserCardComponent, UserReactionComponent, SignupExtraInfoComponent,
   CheckDisplayNameComponent, InviteMailFriendsComponent, FriendInviteComponent, GameInviteComponent,
+  RecentGamesComponent, RecentGameCardComponent
 } from './components';
 import { ShowHintWhenFocusOutDirective, OpenUserProfileDirective, RippleEffectDirective } from './directive';
 import { PhoneNumberValidationProvider } from './mobile/component/countryList/phone-number-validation.provider';
@@ -53,7 +54,9 @@ import { SafeHtmlPipe } from './pipe/safe-html.pipe';
     FriendInviteComponent,
     GameInviteComponent,
     SignupExtraInfoComponent,
-    CheckDisplayNameComponent
+    CheckDisplayNameComponent,
+    RecentGamesComponent,
+    RecentGameCardComponent
   ],
   imports: [
     CommonModule,
@@ -101,7 +104,9 @@ import { SafeHtmlPipe } from './pipe/safe-html.pipe';
     FriendInviteComponent,
     GameInviteComponent,
     SignupExtraInfoComponent,
-    CheckDisplayNameComponent
+    CheckDisplayNameComponent,
+    RecentGamesComponent,
+    RecentGameCardComponent
   ],
   schemas: [NO_ERRORS_SCHEMA],
   entryComponents: [

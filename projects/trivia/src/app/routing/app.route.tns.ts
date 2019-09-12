@@ -1,6 +1,5 @@
 import { Routes } from '@angular/router';
 import { AuthGuard, CategoriesResolver, TagsResolver } from 'shared-library/core/route-guards';
-import { RecentGamesComponent } from './../components/recent-games/recent-games.component';
 import { PrivacyPolicyComponent } from './../components/privacy-policy/privacy-policy.component';
 import { AchievementsComponent } from '../components';
 import { UserFeedbackComponent } from 'shared-library/shared/mobile/component/user-feedback/user-feedback.component';
@@ -26,11 +25,6 @@ export const routes: Routes = [
         path: 'user',
         loadChildren: './../user/user.module#UserModule',
         resolve: { 'categories': CategoriesResolver, 'tags': TagsResolver }
-    },
-    {
-        path: 'recent-game',
-        component: RecentGamesComponent,
-        canActivate: [AuthGuard]
     },
     {
         path: 'privacy-policy',
