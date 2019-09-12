@@ -1,14 +1,12 @@
-import {
-    Component, ChangeDetectionStrategy, ChangeDetectorRef
-} from '@angular/core';
-import { FormBuilder} from '@angular/forms';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { CoreState, UserActions } from 'shared-library/core/store';
 import { Utils } from 'shared-library/core/services';
+import { CoreState, UserActions } from 'shared-library/core/store';
+import { isIOS } from 'tns-core-modules/ui/page';
 import { InviteMailFriends } from './invite-mail-friends';
-import { isAndroid, isIOS } from 'tns-core-modules/ui/page';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 declare var IQKeyboardManager;
+
 @Component({
     selector: 'app-invite-mail-friends',
     templateUrl: './invite-mail-friends.component.html',
@@ -29,15 +27,6 @@ export class InviteMailFriendsComponent extends InviteMailFriends {
     }
 
     hideKeyboard() {
-        if (isAndroid) {
-          this.textField
-            .toArray()
-            .map((el) => {
-              if (el.nativeElement) {
-                el.nativeElement.android.clearFocus();
-                return el.nativeElement.dismissSoftInput();
-              }
-            });
-        }
+          this.utils.hideKeyboard(this.textField);
       }
 }

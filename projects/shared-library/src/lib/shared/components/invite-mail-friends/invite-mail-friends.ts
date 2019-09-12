@@ -3,7 +3,7 @@ import {
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
-import { User } from 'shared-library/shared/model';
+import { User, ApplicationSettings } from 'shared-library/shared/model';
 import { coreState, CoreState, UserActions } from 'shared-library/core/store';
 import { Utils } from 'shared-library/core/services';
 
@@ -19,11 +19,12 @@ export class InviteMailFriends {
   showSuccessMsg: string;
   validEmail = [];
   emailCheck: Boolean = false;
+  applicationSettings: ApplicationSettings;
   @ViewChildren('textField') textField: QueryList<ElementRef>;
   subscriptions = [];
 
   constructor(private fb: FormBuilder, private store: Store<CoreState>, private userAction: UserActions, private cd: ChangeDetectorRef,
-    private utils: Utils) {
+    public utils: Utils) {
     this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.user)).subscribe(user => {
       if (user) {
         this.user = user;
@@ -41,9 +42,11 @@ export class InviteMailFriends {
     this.invitationForm = this.fb.group({
       email: ['', Validators.required]
     });
-
+    this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.applicationSettings))
+      .subscribe(appSettings => {
+        this.applicationSettings = appSettings[0];
+      }));
   }
-
 
   isValid(email) {
     return EMAIL_REGEXP.test(String(email).toLowerCase());
