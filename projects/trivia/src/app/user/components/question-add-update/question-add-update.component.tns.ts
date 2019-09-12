@@ -101,7 +101,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
     requestPermissions();
 
     this.submitBtnTxt = 'SUBMIT';
-    this.actionBarTxt = 'Submit Question';
+    this.actionBarTxt = 'Add_Question';
     this.initDataItems();
     this.question = new Question();
     this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {

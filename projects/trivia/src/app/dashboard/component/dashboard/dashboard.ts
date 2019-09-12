@@ -19,8 +19,8 @@ export class Dashboard implements OnDestroy {
     NEW_GAME_IN = 'New Game In';
     SINGLE_PLAYER = 'Single Player';
     TWO_PLAYER = 'Two Player';
-    actionText = 'Hi, there';
-    actionSubText = 'SIGN UP/SIGN IN';
+    actionText = 'Dashboard';
+    actionSubText = '';
     user: User;
     users: User[];
     activeGames$: Observable<Game[]>;

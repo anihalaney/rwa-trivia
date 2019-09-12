@@ -69,6 +69,10 @@ export class ActionBarComponent implements OnDestroy {
         this.routerExtensions.navigate(['/user/my/questions/add']);
     }
 
+    navigateToMyQuestion() {
+        this.routerExtensions.navigate(['/user/my/questions']);
+    }
+
     ngOnDestroy() {
 
     }

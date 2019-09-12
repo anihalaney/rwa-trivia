@@ -1,4 +1,4 @@
-<ActionBar title="" class="action-bar " [ngClass]=" subTitle ? 'action-subtitle' : 'action-title' " >
+<ActionBar title="" class="action-bar " [ngClass]=" subTitle ? 'action-subtitle' : 'action-title' ">
     <NavigationButton visibility="collapsed"></NavigationButton>
     <GridLayout ios:rows="auto" android:rows="auto" ios:columns="auto,*,auto,auto,auto"
         android:columns="auto,*,auto,auto,auto" width="100%">
@@ -23,21 +23,31 @@
             </StackLayout>
         </StackLayout>
 
-        <StackLayout col="2" *ngIf="((user && user!== null && !showSkipBtn && title=='Questions'))" stlRippleEffect
+        <StackLayout col="2" *ngIf="((user && user!== null && !showSkipBtn && title==='Questions'))" stlRippleEffect
             stlBackgroundColor="#13284F" ios:margin="3" android:margin="10" stlOpacity="0.5" stlBackgroundColorAfter=""
-            verticalAlignment="center" horizontalAlignment="right" android:width="23"  ios:width="23"
+            verticalAlignment="center" horizontalAlignment="right" android:width="23" ios:width="23"
             (rippleTap)="navigateToSubmitQuestion()">
             <Label text="&#xf055;" class="fa" fontSize="20"></Label>
         </StackLayout>
 
-        <StackLayout *ngIf="((user && user!== null && !showSkipBtn && title!='Questions'))" col="2" stlRippleEffect
+        <Label col="1" [text]="title"  marginLeft="5" fontSize="18"></Label>
+
+        <StackLayout col="2" *ngIf="(user && user!== null && !showSkipBtn && title.includes('Add_Question'))" stlRippleEffect
+            stlBackgroundColor="#13284F" ios:margin="3" android:margin="10" stlOpacity="0.5" stlBackgroundColorAfter=""
+            verticalAlignment="center" horizontalAlignment="right" 
+            (rippleTap)="navigateToMyQuestion()" orientation="horizontal">
+            <Label text="&#xf03a;" class="fa"  fontSize="18"></Label>
+            <Label text="View All"  marginLeft="5" fontSize="18"></Label>
+        </StackLayout>
+
+        <StackLayout *ngIf="((user && user!== null && !showSkipBtn && title.includes('Hi')))" col="2" stlRippleEffect
             stlBackgroundColor="#13284F" ios:margin="3" android:margin="10" stlOpacity="0.5" stlBackgroundColorAfter=""
             verticalAlignment="center" horizontalAlignment="right" android:width="23" ios:width="23"
             (rippleTap)="goToDashboard()">
             <Label text="&#xf1d1;" class="fa" fontSize="20"></Label>
         </StackLayout>
 
-        <StackLayout class="index-0" *ngIf="((user && user!== null && !showSkipBtn && title!='Questions'))" col="3"
+        <StackLayout class="index-0" *ngIf="((user && user!== null && !showSkipBtn && title.includes('Hi')))" col="3"
             stlRippleEffect stlBackgroundColor="#13284F" stlOpacity="0.5" stlBackgroundColorAfter="" ios:margin="3"
             margin="10" android:margin="5" verticalAlignment="center" horizontalAlignment="center" android:width="40"
             ios:width="40" (rippleTap)="gotToNotification()" orientation="horizontal">
