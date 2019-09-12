@@ -30,7 +30,9 @@
             </ng-template>
         </RadListView>
     </GridLayout>
-    <StackLayout row="2" verticalAlignment="bottom" margin="0 10 10 0">
-        <FAB (tap)="navigateToInvite()" icon="~/assets/images/add.png" class="fab-button1"></FAB>
-    </StackLayout>
+    <DockLayout row="2" stretchLastChild="true" horizontalAlignment="right">
+    <FlexboxLayout  stlRippleEffect (rippleTap)="navigateToInvite()" borderRadius="30" class="fab-button1" padding="10" flexDirection="column" justifyContent="center">
+            <Image src="~/assets/images/add.png"></Image>
+        </FlexboxLayout>
+    </DockLayout>
 </GridLayout>
