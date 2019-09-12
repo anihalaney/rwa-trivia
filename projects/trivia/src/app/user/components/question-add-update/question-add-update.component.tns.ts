@@ -50,7 +50,6 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
   categoryIds: any[];
   submitBtnTxt: string;
   actionBarTxt: string;
-  subscriptions = [];
   oWebViewInterface;
 
   imagePath: string;
@@ -364,9 +363,6 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
   }
 
   ngOnDestroy() {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
   }
 
   questionLoaded(event) {

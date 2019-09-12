@@ -43,7 +43,6 @@ export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
   subscriptions = [];
   quillObject: any = {};
   dialogRef;
-  subscription: any;
   get answers(): FormArray {
     return this.questionForm.get('answers') as FormArray;
   }
@@ -88,7 +87,7 @@ export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   autoSave() {
-      this.subscription = this.store.select(coreState).pipe(
+      this.subscriptions.push(this.store.select(coreState).pipe(
         select(s => s.applicationSettings),
         map(appSettings => appSettings),
         switchMap(appSettings => {
@@ -105,7 +104,7 @@ export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
               const question = this.getQuestionFromFormValue(this.questionForm.value);
               this.store.dispatch(new userActions.AddQuestion({ question: question }));
           }
-    });
+    }));
   }
 
   ngOnChanges() {
@@ -280,9 +279,6 @@ export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnDestroy() {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
   }
 
   onAnswerChanged(event, answerIndex) {

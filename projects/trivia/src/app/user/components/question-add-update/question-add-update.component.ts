@@ -33,7 +33,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnI
   get tagsArray(): FormArray {
     return this.questionForm.get('tagsArray') as FormArray;
   }
-  subscriptions = [];
+
   htmlText: any;
   jsonObject: any;
   quillImageUrl: string;
@@ -228,9 +228,6 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnI
   }
 
   ngOnDestroy() {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
   }
 
   onAnswerChanged(event, answerIndex) {

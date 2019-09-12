@@ -28,7 +28,6 @@ export class QuestionAddUpdate {
   user: User;
   applicationSettings: ApplicationSettings;
   subscriptions = [];
-  subscription: any;
   get answers(): FormArray {
     return this.questionForm.get('answers') as FormArray;
   }
@@ -52,7 +51,7 @@ export class QuestionAddUpdate {
           this.questionForm.patchValue({ id : status });
         }
     }));
-    this.subscription = this.store.select(appState.coreState).pipe(
+    this.subscriptions.push(this.store.select(appState.coreState).pipe(
         select(s => s.applicationSettings),
         map(appSettings => appSettings),
         switchMap(appSettings => {
@@ -74,7 +73,7 @@ export class QuestionAddUpdate {
               question.created_uid = this.user.userId;
               this.store.dispatch(new userActions.AddQuestion({ question: question }));
           }
-    });
+    }));
 
   }
 
