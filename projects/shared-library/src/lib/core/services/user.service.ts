@@ -242,6 +242,8 @@ export class UserService {
             .pipe(map(u => {
                 user.online = (u) ? u.online : false;
                 return user;
+            }, (error) => {
+                return user;
             }));
     }
 
