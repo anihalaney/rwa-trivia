@@ -7,8 +7,7 @@ import {
 } from '../../shared/model';
 import { of, Observable } from 'rxjs';
 import { UtilsCore } from './utilsCore';
-
-
+import { isAndroid } from 'tns-core-modules/platform';
 
 @Injectable()
 export class Utils extends UtilsCore {
@@ -233,6 +232,14 @@ export class Utils extends UtilsCore {
     return of('success');
   }
 
-
+  hideKeyboard(field) {
+    if (isAndroid) {
+      field.toArray()
+        .map((el) => {
+          el.nativeElement.android.clearFocus();
+          return el.nativeElement.dismissSoftInput();
+        });
+    }
+  }
 
 }
