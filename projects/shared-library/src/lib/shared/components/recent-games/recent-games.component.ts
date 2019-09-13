@@ -1,7 +1,7 @@
 import { Component, ChangeDetectionStrategy, OnDestroy, OnInit, ChangeDetectorRef, AfterViewInit } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { User, GameStatus, Game } from 'shared-library/shared/model';
-import { AppState, appState } from '../../store';
+import { coreState, CoreState } from 'shared-library/core/store';
 import { Observable } from 'rxjs';
 import { Utils } from 'shared-library/core/services';
 import { UserActions } from 'shared-library/core/store/actions';
@@ -17,7 +17,7 @@ import { RecentGames } from './recent-games';
 
 export class RecentGamesComponent extends RecentGames {
 
-  constructor(store: Store<AppState>,
+  constructor(store: Store<CoreState>,
     utils: Utils,
     cd: ChangeDetectorRef,
     userActions: UserActions) {
