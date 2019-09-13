@@ -4,23 +4,27 @@
             <bottom-bar [isDrawerOpenOrClosed]="isDrawerOpen" [screen]="'drawer'"></bottom-bar>
         </StackLayout>
         <FlexboxLayout row="1" flexDirection="column">
-            <StackLayout padding="10 35 10 35" stlRippleEffect stlBackgroundColor="#10347f"
+            <StackLayout class="padding-label" stlRippleEffect stlBackgroundColor="#10347f"
                 stlBackgroundColorAfter="#e2e2e2" (rippleTap)="navigateToGameProfile()">
                 <Label text="Profile" android:fontSize="18" color="#000" textWrap="true"></Label>
             </StackLayout>
-            <StackLayout padding="10 35 10 35" stlRippleEffect stlBackgroundColor="#10347f"
+            <StackLayout class="padding-label" stlRippleEffect stlBackgroundColor="#10347f"
+                stlBackgroundColorAfter="#e2e2e2" (rippleTap)="recentGames()">
+                <Label text="Recently Completed Games" android:fontSize="18" color="#000" textWrap="true"></Label>
+            </StackLayout>
+            <StackLayout class="padding-label" stlRippleEffect stlBackgroundColor="#10347f"
                 stlBackgroundColorAfter="#e2e2e2" (rippleTap)="navigateToMyQuestion()">
                 <Label text="Questions" android:fontSize="18" color="#000" textWrap="true"></Label>
             </StackLayout>
-            <StackLayout padding="10 35 10 35" stlRippleEffect stlBackgroundColor="#10347f"
+            <StackLayout class="padding-label" stlRippleEffect stlBackgroundColor="#10347f"
                 stlBackgroundColorAfter="#e2e2e2" (rippleTap)="navigateToProfileSettings()">
                 <Label text="User Account" android:fontSize="18" color="#000" textWrap="true"></Label>
             </StackLayout>
-            <StackLayout *ngIf="!authProvider.isAuthenticated" padding="10 35 10 35" stlRippleEffect
+            <StackLayout *ngIf="!authProvider.isAuthenticated" class="padding-label" stlRippleEffect
                 stlBackgroundColor="#10347f" stlBackgroundColorAfter="#e2e2e2" (rippleTap)="login()">
                 <Label text="Login" android:fontSize="18" color="#000"></Label>
             </StackLayout>
-            <StackLayout *ngIf="authProvider.isAuthenticated" padding="10 35 10 35" stlRippleEffect
+            <StackLayout *ngIf="authProvider.isAuthenticated" class="padding-label" stlRippleEffect
                 stlBackgroundColor="#10347f" stlBackgroundColorAfter="#e2e2e2" (rippleTap)="logout()">
                 <Label text="Logout" android:fontSize="18" color="#000"></Label>
             </StackLayout>

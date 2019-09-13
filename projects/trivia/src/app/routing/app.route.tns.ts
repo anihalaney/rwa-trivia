@@ -7,6 +7,7 @@ import { SignupExtraInfoComponent } from 'shared-library/shared/components/signu
 import { FirstQuestionComponent } from 'shared-library/shared/mobile/component/first-question/first-question.component';
 import { SelectCategoryTagComponent } from 'shared-library/shared/mobile/component/select-category-tag/select-category-tag.component';
 import { NotificationComponent } from 'shared-library/shared/mobile/component/notification/notification.component';
+import { RecentGamesComponent } from 'shared-library/shared/components/recent-games/recent-games.component';
 
 export const routes: Routes = [
 
@@ -61,6 +62,11 @@ export const routes: Routes = [
     {
         path: 'notification',
         component: NotificationComponent,
+        canActivate: [AuthGuard]
+    },
+    {
+        path: 'recent-games',
+        component: RecentGamesComponent,
         canActivate: [AuthGuard]
     }
 ];
