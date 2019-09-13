@@ -33,7 +33,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnI
   get tagsArray(): FormArray {
     return this.questionForm.get('tagsArray') as FormArray;
   }
-  subscriptions = [];
+
   htmlText: any;
   jsonObject: any;
   quillImageUrl: string;
@@ -166,6 +166,8 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnI
 
     const tagsFA = new FormArray(fcs);
     this.questionForm = this.fb.group({
+      id: '',
+      is_draft: false,
       category: [(question.categories.length > 0 ? question.categories[0] : ''), Validators.required],
       questionText: ['',
         Validators.compose([Validators.required, Validators.maxLength(this.applicationSettings.question_max_length)])],
@@ -226,7 +228,6 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnI
   }
 
   ngOnDestroy() {
-
   }
 
   onAnswerChanged(event, answerIndex) {

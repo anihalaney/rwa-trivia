@@ -24,6 +24,7 @@ export class QuestionsTableComponent implements OnInit {
   @Input() displayReasonViewer: boolean;
   @Output() displayReason: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() selectedQuestion: EventEmitter<Question> = new EventEmitter<Question>();
+  @Output() editQuestion: EventEmitter<Question> = new EventEmitter<Question>();
 
 
   constructor(private cd: ChangeDetectorRef) {
@@ -54,5 +55,8 @@ export class QuestionsTableComponent implements OnInit {
     this.selectedQuestion.next(question);
   }
 
+  showEditQuestion(question: Question) {
+    this.editQuestion.next(question);
+  }
 }
 
