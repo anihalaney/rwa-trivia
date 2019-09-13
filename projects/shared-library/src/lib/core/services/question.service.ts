@@ -105,12 +105,21 @@ export class QuestionService {
 
     if (!question.id || question.id === '') {
       dbQuestion['source'] = 'question';
+      dbQuestion['id'] = this.dbService.createId();
       this.dbService.createDoc('unpublished_questions', dbQuestion).then(ref => {
-        this.store.dispatch(this.questionActions.addQuestionSuccess());
+        if (question.is_draft) {
+          this.store.dispatch(this.questionActions.addQuestionDraftSuccess(dbQuestion['id']));
+        } else {
+          this.store.dispatch(this.questionActions.addQuestionSuccess());
+        }
       });
     } else {
       this.dbService.setDoc('unpublished_questions', dbQuestion.id, dbQuestion).then(ref => {
-        this.store.dispatch(this.questionActions.addQuestionSuccess());
+        if (dbQuestion.is_draft) {
+          this.store.dispatch(this.questionActions.updateQuestionDraftSuccess());
+        } else {
+          this.store.dispatch(this.questionActions.addQuestionSuccess());
+        }
       });
     }
 

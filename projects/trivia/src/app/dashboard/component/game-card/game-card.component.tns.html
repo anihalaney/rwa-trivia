@@ -108,19 +108,11 @@
         </StackLayout>
     </GridLayout>
     <GridLayout rows="*" columns="*,*,*" iosOverflowSafeArea="false">
-<<<<<<< HEAD
-        <StackLayout row="0" col="0" class="hr-light" height="3" iosOverflowSafeArea="false"></StackLayout>
-        <Label row="0" col="1" horizontalAlignment="center" text="{{categoryDict[game.gameOptions?.categoryIds[randomCategoryId]]?.categoryName?.charAt(0)?.toUpperCase()
-                + categoryDict[game.gameOptions?.categoryIds[randomCategoryId]]?.categoryName?.slice(1)}}"
-            textWrap="true" class="tagging"> </Label>
-        <StackLayout row="0" col="2" class="hr-light" height="3" iosOverflowSafeArea="false"></StackLayout>
-=======
         <StackLayout row="0" col="0" class="hr-light m-10" iosOverflowSafeArea="false"></StackLayout>
         <Label row="0" col="1" horizontalAlignment="center" text="{{categoryDict[game.gameOptions?.categoryIds[randomCategoryId]]?.categoryName?.charAt(0)?.toUpperCase()
                 + categoryDict[game.gameOptions?.categoryIds[randomCategoryId]]?.categoryName?.slice(1)}}"
             textWrap="true" class="tagging"> </Label>
         <StackLayout row="0" col="2" class="hr-light m-10" iosOverflowSafeArea="false"></StackLayout>
->>>>>>> 6ead799eabdf50645b3df387d830f0d09e4a9f10
     </GridLayout>
     <GridLayout rows="*" columns="auto,auto,*" iosOverflowSafeArea="false">
         <app-user-card [userId]="user.userId" [type]="userCardType.USER_IMAGE_NAME_WITH_SCORE"
@@ -180,7 +172,6 @@
     </GridLayout>
     <GridLayout rows="*,*" columns="auto,*" iosOverflowSafeArea="false">
         <StackLayout row="0" col="1" class="hr-light" margin="10 0 10 0" iosOverflowSafeArea="false"></StackLayout>
-
         <StackLayout row="1" col="0" iosOverflowSafeArea="false">
             <Label text="You Scored: {{game.stats[user.userId]?.score}}" textWrap="true" class="sub-title"></Label>
         </StackLayout>

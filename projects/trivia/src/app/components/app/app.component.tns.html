@@ -1,6 +1,13 @@
-<RadSideDrawer>
+<RadSideDrawer drawerLocation="Bottom" (drawerClosed)="drawerEvent($event)" (drawerOpened)="drawerEvent($event)">
     <StackLayout tkDrawerContent rows="auto" class="sidedrawer sidedrawer-left">
         <ns-drawer-component></ns-drawer-component>
     </StackLayout>
-    <page-router-outlet tkMainContent class="page page-content"></page-router-outlet>
+    <GridLayout rows="*, auto" columns="*" tkMainContent>
+        <StackLayout ios:paddingBottom="60"row="0">
+            <page-router-outlet class="page page-content"></page-router-outlet>
+        </StackLayout>
+        <StackLayout *ngIf="user" row="1">
+            <bottom-bar [isDrawerOpenOrClosed]="isDrawerOpenOrClosed" [screen]="'app'"></bottom-bar>
+        </StackLayout>
+    </GridLayout>
 </RadSideDrawer>

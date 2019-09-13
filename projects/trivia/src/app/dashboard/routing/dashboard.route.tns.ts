@@ -9,7 +9,7 @@ export const dashboardRoutes: Routes = [
       },
 
       {
-        path: 'leaderboard/:category',
+        path: 'leaderboard',
         component: LeaderboardComponent,
       }
 ];

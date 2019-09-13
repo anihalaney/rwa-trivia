@@ -12,7 +12,8 @@ import {
   QuestionCardComponent,
   FirstQuestionComponent,
   SelectCategoryTagComponent,
-  NotificationComponent
+  NotificationComponent,
+  BottomBarComponent
 } from './mobile/component';
 import { NativeScriptCommonModule } from 'nativescript-angular/common';
 import { GameFilterPipe } from './pipe/game-filter.pipe';
@@ -50,11 +51,12 @@ import { SafeHtmlPipe } from './pipe/safe-html.pipe';
     InviteMailFriendsComponent,
     SelectCategoryTagComponent,
     UserReactionComponent,
+    SignupExtraInfoComponent,
+    CheckDisplayNameComponent,
     NotificationComponent,
     FriendInviteComponent,
     GameInviteComponent,
-    SignupExtraInfoComponent,
-    CheckDisplayNameComponent,
+    BottomBarComponent,
     RecentGamesComponent,
     RecentGameCardComponent
   ],
@@ -100,11 +102,12 @@ import { SafeHtmlPipe } from './pipe/safe-html.pipe';
     InviteMailFriendsComponent,
     UserReactionComponent,
     SelectCategoryTagComponent,
+    SignupExtraInfoComponent,
+    CheckDisplayNameComponent,
     NotificationComponent,
     FriendInviteComponent,
     GameInviteComponent,
-    SignupExtraInfoComponent,
-    CheckDisplayNameComponent,
+    BottomBarComponent,
     RecentGamesComponent,
     RecentGameCardComponent
   ],

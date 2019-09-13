@@ -14,7 +14,7 @@ import { debounceTime } from 'rxjs/operators';
 import { ObservableArray } from 'tns-core-modules/data/observable-array';
 import { TokenModel } from 'nativescript-ui-autocomplete';
 import { RadAutoCompleteTextViewComponent } from 'nativescript-ui-autocomplete/angular';
-import { Page, isAndroid, isIOS } from 'tns-core-modules/ui/page';
+import { Page, isIOS } from 'tns-core-modules/ui/page';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { WebView, LoadEventData } from 'tns-core-modules/ui/web-view';
 import * as webViewInterfaceModule from 'nativescript-webview-interface';
@@ -50,7 +50,6 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
   categoryIds: any[];
   submitBtnTxt: string;
   actionBarTxt: string;
-  subscriptions = [];
   oWebViewInterface;
 
   imagePath: string;
@@ -273,7 +272,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
         return categoryObj;
       });
       this.enteredTags = this.editQuestion.tags;
-      this.submitBtnTxt = 'RESUBMIT';
+      this.submitBtnTxt = this.editQuestion.is_draft === true && this.editQuestion.status !== 6 ? 'SUBMIT' : 'RESUBMIT';
       this.actionBarTxt = 'Update Question';
     }
 
@@ -293,6 +292,8 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
 
     const answersFA: FormArray = super.createDefaultForm(question);
     this.questionForm = this.fb.group({
+      id: question.id ?  question.id : '',
+      is_draft: question.is_draft,
       questionText: [question.questionText,
       Validators.compose([Validators.required])],
       tags: '',
@@ -358,18 +359,10 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
   }
 
   hideKeyboard() {
-    if (isAndroid) {
-      this.textField
-        .toArray()
-        .map((el) => {
-            el.nativeElement.android.clearFocus();
-            return el.nativeElement.dismissSoftInput();
-          });
-    }
+    this.utils.hideKeyboard(this.textField);
   }
 
   ngOnDestroy() {
-
   }
 
   questionLoaded(event) {
