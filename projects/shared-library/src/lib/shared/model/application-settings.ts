@@ -26,6 +26,7 @@ export class ApplicationSettings {
     game_question_bits?: number;
     invite_bits?: number;
     invite_bits_enabled?: boolean;
+    auto_save: { is_enabled: boolean, time: number };
 }
 
 export class TimerLoader {

@@ -31,6 +31,7 @@ export class Question {
   isRichEditor?: boolean = false;
   maxTime?: number;
   reactionsCount?: { [key: string]: number };
+  is_draft: boolean;
   appeared: number;
   correct: number;
   wrong: number;
@@ -59,6 +60,8 @@ export class Question {
     question.totalQALength = this.countQALength(db);
     question.maxTime = db.maxTime ? db.maxTime : 0;
     question.reactionsCount  = db.reactionsCount ? db.reactionsCount : {};
+    question.is_draft  = db.is_draft ? db.is_draft : false;
+
     question.appeared = db.appeared ? db.appeared : 0;
     question.correct = db.correct ? db.correct : 0;
     question.wrong = db.wrong ? db.wrong : 0;
@@ -97,10 +100,10 @@ export class Question {
 
   static countQALength(question: any) {
     return question.questionText.length
-      + question.answers[0].answerText.length
-      + question.answers[1].answerText.length
-      + question.answers[2].answerText.length
-      + question.answers[3].answerText.length;
+      + (question.answers[0].answerText ? question.answers[0].answerText.length : 0 )
+      + (question.answers[1].answerText ? question.answers[1].answerText.length : 0)
+      + (question.answers[2].answerText ? question.answers[2].answerText.length : 0)
+      + (question.answers[3].answerText ? question.answers[3].answerText.length : 0);
   }
 
   constructor() {

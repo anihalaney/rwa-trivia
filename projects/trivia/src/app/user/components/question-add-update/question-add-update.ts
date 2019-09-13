@@ -1,6 +1,6 @@
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
-import { Observable, Subscription } from 'rxjs';
-import { debounceTime, take, map } from 'rxjs/operators';
+import { Observable, Subscription, interval, of } from 'rxjs';
+import { debounceTime, take, map, switchMap } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 import { User, Category, Question, QuestionStatus, Answer, ApplicationSettings } from 'shared-library/shared/model';
 import { Utils } from 'shared-library/core/services';
@@ -28,7 +28,6 @@ export class QuestionAddUpdate {
   user: User;
   applicationSettings: ApplicationSettings;
   subscriptions = [];
-
   get answers(): FormArray {
     return this.questionForm.get('answers') as FormArray;
   }
@@ -47,12 +46,41 @@ export class QuestionAddUpdate {
     this.subscriptions.push(this.categoriesObs.subscribe(categories => this.categories = categories));
     this.subscriptions.push(this.tagsObs.subscribe(tags => this.tags = tags));
 
+    this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.questionDraftSaveStatus)).subscribe(status => {
+        if (status && status !== 'UPDATED') {
+          this.questionForm.patchValue({ id : status });
+        }
+    }));
+    this.subscriptions.push(this.store.select(appState.coreState).pipe(
+        select(s => s.applicationSettings),
+        map(appSettings => appSettings),
+        switchMap(appSettings => {
+          if (appSettings && appSettings[0]) {
+            if (appSettings[0]['auto_save']['is_enabled']) {
+              return interval(appSettings[0]['auto_save']['time']);
+            } else {
+              return of();
+            }
+        }
+        })).subscribe(data => {
+          if (data) {
+              this.questionForm.patchValue({ is_draft : true });
+              const question = this.getQuestionFromFormValue(this.questionForm.value);
+              if (!question.status) {
+                question.status = QuestionStatus.PENDING;
+              }
+
+              question.created_uid = this.user.userId;
+              this.store.dispatch(new userActions.AddQuestion({ question: question }));
+          }
+    }));
+
   }
 
   createDefaultForm(question: Question): FormArray {
     const fgs: FormGroup[] = question.answers.map(answer => {
       const fg = new FormGroup({
-        answerText: new FormControl(answer.answerObject,
+        answerText: new FormControl(answer.answerText,
           Validators.compose([Validators.required])),
         correct: new FormControl(answer.correct),
         isRichEditor: new FormControl(answer.isRichEditor),
@@ -99,6 +127,8 @@ export class QuestionAddUpdate {
     let question: Question;
 
     question = new Question();
+    question.id = formValue.id;
+    question.is_draft = formValue.is_draft;
     question.questionText = formValue.questionText;
     question.answers = formValue.answers;
     question.categoryIds = (formValue.category) ? [formValue.category] : [];
@@ -129,7 +159,7 @@ export class QuestionAddUpdate {
     question.status = QuestionStatus.PENDING;
 
     question.created_uid = this.user.userId;
-
+    question.is_draft = false;
     return question;
   }
 
@@ -139,7 +169,7 @@ export class QuestionAddUpdate {
   }
 
   saveQuestion(question: Question) {
-    this.store.dispatch(new userActions.AddQuestion({ question: question }));
+   this.store.dispatch(new userActions.AddQuestion({ question: question }));
   }
 
 }

@@ -4,7 +4,7 @@
     <StackLayout *ngIf="loaderBusy">
         <ActivityIndicator [busy]="loaderBusy" width="100" height="100" marginTop="225" class="activity-indicator"></ActivityIndicator>
     </StackLayout>
-    <GridLayout row="*,*" col="*" *ngIf="!loaderBusy">
+    <GridLayout row="*,*,*" col="*" *ngIf="!loaderBusy">
         <StackLayout row="0" rowSpan="2" visibility="{{ !displayReasonViewer && !displayEditQuestion && !loaderBusy ? 'visible' : 'hidden' }}">
             <TabView androidSelectedTabHighlightColor="#ef4545" tabTextFontSize="14" tabTextColor="#3b5998"
                 selectedTabTextColor="#3b5998">
@@ -18,6 +18,17 @@
                 <StackLayout stlRippleEffect *tabItem="{title: 'Pending', textTransform: 'none'}" fontSize="16" fontWeight="600">
                     <StackLayout>
                         <question-table [questions]="unpublishedQuestions" [categoryDictionary]="categoriesObs | async"  [categoriesObs]="categoriesObs"
+                            [user]="user" [showApproveButton]="false" [userDict]="userDict" [displayReasonViewer]="displayReasonViewer"
+                            (displayReason)="displayReason($event)" (selectedQuestion)="setSelectedQuestion($event)">
+                            <Button class="fa approve-btn" text="&#xf00c;" textWrap="true" top="70" width="90" height="25"
+                                fontSize="16" fontWeight="bold"></Button>
+                        </question-table>
+                    </StackLayout>
+                </StackLayout>
+
+                <StackLayout stlRippleEffect *tabItem="{title: 'Draft', textTransform: 'none'}" fontSize="16" fontWeight="600">
+                    <StackLayout>
+                        <question-table (editQuestion)="showUpdateQuestion(true);setSelectedQuestion($event)" [isDraft]="true" [questions]="draftQuestions" [categoryDictionary]="categoriesObs | async"  [categoriesObs]="categoriesObs"
                             [user]="user" [showApproveButton]="false" [userDict]="userDict" [displayReasonViewer]="displayReasonViewer"
                             (displayReason)="displayReason($event)" (selectedQuestion)="setSelectedQuestion($event)">
                             <Button class="fa approve-btn" text="&#xf00c;" textWrap="true" top="70" width="90" height="25"

@@ -34,6 +34,8 @@ export class QuestionsTableComponent implements OnInit, OnChanges, AfterViewInit
   @Input() categoriesObs: Observable<Category[]>;
   @Input() quillConfig: any;
   @Input() applicationSettings: ApplicationSettings;
+  @Input() isDraft: boolean;
+  @Input() isAdmin: boolean;
   @Output() onApproveClicked = new EventEmitter<Question>();
   @Output() onPageChanged = new EventEmitter<PageEvent>();
   @Output() onSortOrderChanged = new EventEmitter<string>();
@@ -87,7 +89,25 @@ export class QuestionsTableComponent implements OnInit, OnChanges, AfterViewInit
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['questions'] && changes['questions'].currentValue !== changes['questions'].previousValue) {
-      (this.clientSidePagination) ? this.setClientSidePaginationDataSource(this.questions) : this.questionsSubject.next(this.questions);
+      if (this.isAdmin ||
+        (!this.isAdmin &&
+        changes.questions.currentValue &&
+         !changes.questions.previousValue) ||
+        (!this.isAdmin &&
+          changes.questions.currentValue &&
+           changes.questions.previousValue &&
+           changes.questions.currentValue.length !== changes.questions.previousValue.length)
+        ) {
+        (this.clientSidePagination) ? this.setClientSidePaginationDataSource(this.questions) : this.questionsSubject.next(this.questions);
+      } else if (!this.isAdmin &&
+        this.isDraft !== true && changes.questions.previousValue) {
+        changes.questions.currentValue.map(data => {
+          const index = changes.questions.previousValue.findIndex(q => q.id === data.id);
+          if ( index >= 0 && changes.questions.previousValue[index].status !==  data.status) {
+          (this.clientSidePagination) ? this.setClientSidePaginationDataSource(this.questions) : this.questionsSubject.next(this.questions);
+          }
+        });
+    }
       (changes['questions'].previousValue) ? this.setPagination() : '';
     }
 
@@ -113,7 +133,7 @@ export class QuestionsTableComponent implements OnInit, OnChanges, AfterViewInit
   // approveQuestions
   approveQuestion(question: Question) {
     question.approved_uid = this.user.userId;
-
+    question.is_draft = false;
     this.approveUnpublishedQuestion.emit(question);
     if (this.bulkUploadFileInfo) {
       if (question.status === QuestionStatus.REJECTED) {
@@ -136,6 +156,7 @@ export class QuestionsTableComponent implements OnInit, OnChanges, AfterViewInit
   }
 
   displayRejectToChange(question: Question) {
+    question.is_draft = false;
     this.rejectQuestionStatus = true;
     this.requestQuestionStatus = false;
     this.rejectQuestion = question;
@@ -184,6 +205,7 @@ export class QuestionsTableComponent implements OnInit, OnChanges, AfterViewInit
   }
 
   editQuestions(row: Question) {
+    row.is_draft = true;
     this.editQuestion = row;
   }
 
