@@ -1,7 +1,7 @@
-<StackLayout *ngIf="uFriends && uFriends.length > 0"  marginTop="10" marginBottom="10">
+<StackLayout   marginTop="10" marginBottom="10">
     <Label padding="10" text="Bitwiser is more fun with your best buddies" textWrap="true" class="invite-main-title" ></Label>
-    <Label  padding="0 10 20 10" text="Invite your friends to play" class="invite-sub-title" ></Label>
-    <GridLayout  rows="*" columns="*,*,*,*,*"   iosOverflowSafeArea="false">
+    <Label *ngIf="uFriends && uFriends.length > 0"  padding="0 10 20 10" text="Invite your friends to play" class="invite-sub-title" ></Label>
+    <GridLayout *ngIf="uFriends && uFriends.length > 0" rows="*" columns="*,*,*,*,*"   iosOverflowSafeArea="false">
         <StackLayout (rippleTap)="startNewGame('friend',frienduser?.userId )" stlRippleEffect *ngFor="let frienduser of uFriends| slice:0:5; let i =index" row="0" col="{{i}}">
             <app-user-card   [userId]="frienduser?.userId" [type]="userCardType.USER_IMAGE_WITH_ONLINE_STATUS">
             </app-user-card>
@@ -10,6 +10,6 @@
                 <Label   text="&#xf054;" class="fa" fontSize="20" ></Label>
         </StackLayout> -->
     </GridLayout>
-    <Label padding="20 10 5 10" text="OR" class="invite-sub-title" ></Label>
-    <Label padding="10" (rippleTap)="startNewGame('random')" stlRippleEffect text="Find a friend for me  >" class="find-friend"></Label>
+    <Label *ngIf="uFriends && uFriends.length > 0" padding="20 10 5 10" text="OR" class="invite-sub-title" ></Label>
+    <Label  padding="10" (rippleTap)="startNewGame('random')" stlRippleEffect text="Find a friend for me  >" class="find-friend"></Label>
 </StackLayout>
