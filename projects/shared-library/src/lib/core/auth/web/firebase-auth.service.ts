@@ -17,6 +17,7 @@ export class WebFirebaseAuthService implements FirebaseAuthService {
 
     dialogRef: MatDialogRef<LoginComponent>;
     private user: User;
+    private password: string;
 
     constructor(protected afAuth: AngularFireAuth,
         public router: Router,
@@ -31,6 +32,7 @@ export class WebFirebaseAuthService implements FirebaseAuthService {
     }
 
     public createUserWithEmailAndPassword(email, password) {
+        this.password = password;
         return this.afAuth.auth.createUserWithEmailAndPassword(email, password);
     }
 
@@ -47,7 +49,11 @@ export class WebFirebaseAuthService implements FirebaseAuthService {
 
     public async updatePassword(password: string): Promise<any> {
         try {
-            return await this.getFirebaseUser().updatePassword(password);
+            const credentials = firebase.auth.EmailAuthProvider.credential(this.user.email, this.password);
+            await this.getFirebaseUser().reauthenticateWithCredential(credentials);
+            await this.getFirebaseUser().updatePassword(password);
+            this.password = password;
+            return 'success';
         } catch (error) {
             console.log('error---->', error);
             throw error;
@@ -78,6 +84,7 @@ export class WebFirebaseAuthService implements FirebaseAuthService {
     }
 
     public signInWithEmailAndPassword(email: string, password: string) {
+        this.password = password;
         return this.afAuth.auth.signInWithEmailAndPassword(email, password);
     }
 
@@ -132,8 +139,8 @@ export class WebFirebaseAuthService implements FirebaseAuthService {
             .update({ status: UserStatusConstants.OFFLINE });
     }
 
-public updateTokenStatus(userId: string, status: string) {
+    public updateTokenStatus(userId: string, status: string) {
         this.db.object(`/${CollectionConstants.USERS}/${userId}`)
-            .set({ status, userId, device: TriggerConstants.WEB, lastUpdated : new Date().getTime() });
+            .set({ status, userId, device: TriggerConstants.WEB, lastUpdated: new Date().getTime() });
     }
 }

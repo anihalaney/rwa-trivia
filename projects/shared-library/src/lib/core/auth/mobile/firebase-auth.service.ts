@@ -14,6 +14,7 @@ export class TNSFirebaseAuthService implements FirebaseAuthService {
     private userSubject: Subject<firebase.User>;
     private pushToken: string;
     private user: any;
+    private password: string;
 
     constructor(private routerExtension: RouterExtensions) {
         this.userSubject = new Subject<firebase.User>();
@@ -26,6 +27,7 @@ export class TNSFirebaseAuthService implements FirebaseAuthService {
     }
 
     public createUserWithEmailAndPassword(email, password) {
+        this.password = password;
         return this.firebaseAuth().createUserWithEmailAndPassword(email, password);
     }
 
@@ -63,7 +65,16 @@ export class TNSFirebaseAuthService implements FirebaseAuthService {
 
     public async updatePassword(password: string): Promise<any> {
         try {
-            return await this.firebaseAuth().updatePassword(password);
+            await firebase.reauthenticate({
+                type: firebase.LoginType.PASSWORD,
+                passwordOptions: {
+                    email: this.user.email,
+                    password: this.password
+                }
+            });
+            await this.firebaseAuth().updatePassword(password);
+            this.password = password;
+            return 'success';
         } catch (error) {
             console.log('error---->', error);
             throw error;
@@ -71,6 +82,7 @@ export class TNSFirebaseAuthService implements FirebaseAuthService {
     }
 
     public signInWithEmailAndPassword(email: string, password: string) {
+        this.password = password;
         return this.firebaseAuth().signInWithEmailAndPassword(email, password);
     }
 
