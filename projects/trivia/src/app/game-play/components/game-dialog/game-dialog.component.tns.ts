@@ -13,6 +13,7 @@ import {
   resumeEvent, suspendEvent, ApplicationEventData,
   on as applicationOn, off as applicationOff,
 } from 'tns-core-modules/application';
+import { Page } from 'tns-core-modules/ui/page/page';
 
 
 @Component({
@@ -27,10 +28,13 @@ export class GameDialogComponent extends GameDialog implements OnDestroy {
 
   suspendTime: number;
   resumeTime: number;
+  hideActionBar: boolean;
+
   constructor(public store: Store<GamePlayState>, public gameActions: GameActions, public router: Router,
-    public userActions: UserActions, public utils: Utils, public cd: ChangeDetectorRef) {
+    public userActions: UserActions, public utils: Utils, public cd: ChangeDetectorRef, private page: Page) {
     super(store, userActions, utils, cd, router);
     this.registerLifeCycleEvent();
+    this.page.actionBarHidden = true;
   }
 
   resumeCallBack(args: ApplicationEventData) {
@@ -64,6 +68,10 @@ export class GameDialogComponent extends GameDialog implements OnDestroy {
   continueClicked($event) {
     this.continueGame();
     this.cd.markForCheck();
+  }
+
+  updateActionBarStatus(flag: boolean) {
+    this.hideActionBar = true;
   }
 
   ngOnDestroy() {

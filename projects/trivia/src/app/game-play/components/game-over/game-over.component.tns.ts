@@ -19,6 +19,7 @@ import {
 import {
   FirebaseAnalyticsEventConstants, FirebaseAnalyticsKeyConstants, GeneralConstants
 } from '../../../../../../shared-library/src/lib/shared/model';
+import { Page } from 'tns-core-modules/ui/page/page';
 
 @Component({
   selector: 'game-over',
@@ -34,9 +35,9 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
   constructor(public store: Store<AppState>, public userActions: UserActions,
     private windowRef: WindowRef, public utils: Utils,
     private modal: ModalDialogService, private vcRef: ViewContainerRef,
-    public cd: ChangeDetectorRef, private routerExtensions: RouterExtensions) {
+    public cd: ChangeDetectorRef, private routerExtensions: RouterExtensions, private page: Page) {
     super(store, userActions, utils, cd);
-
+    this.page.actionBarHidden = false;
 
     this.subscriptions.push(this.store.select(gamePlayState).pipe(select(s => s.saveReportQuestion)).subscribe(state => {
       this.cd.markForCheck();

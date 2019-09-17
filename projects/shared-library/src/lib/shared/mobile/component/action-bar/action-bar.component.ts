@@ -6,7 +6,6 @@ import { select, Store } from '@ngrx/store';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { CoreState, coreState } from '../../../../core/store';
 import { User } from 'shared-library/shared/model';
-import { combineLatest } from 'rxjs';
 import { Utils } from './../../../../core/services';
 
 
@@ -22,7 +21,7 @@ export class ActionBarComponent implements OnDestroy {
 
     user: User;
     subscriptions = [];
-    notifications = [];
+
     @Input() title;
     @Input() hideMenu;
     @Input() hideHomeIcon;
@@ -43,11 +42,7 @@ export class ActionBarComponent implements OnDestroy {
             this.photoUrl = this.utils.getImageUrl(user, 70, 60, '70X60');
         }));
 
-        this.subscriptions.push(combineLatest(store.select(coreState).pipe(select(s => s.friendInvitations)),
-            store.select(coreState).pipe(select(s => s.gameInvites))).subscribe((notify: any) => {
-                this.notifications = notify[0].concat(notify[1]);
-                this.cd.markForCheck();
-            }));
+
     }
 
     openSidebar() {
@@ -61,9 +56,6 @@ export class ActionBarComponent implements OnDestroy {
         this.routerExtensions.navigate(['/dashboard'], { clearHistory: true });
     }
 
-    gotToNotification() {
-        this.routerExtensions.navigate(['/notification']);
-    }
 
     navigateToSubmitQuestion() {
         this.routerExtensions.navigate(['/user/my/questions/add']);

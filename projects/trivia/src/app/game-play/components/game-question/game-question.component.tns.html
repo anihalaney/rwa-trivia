@@ -4,10 +4,16 @@
             <CardView class="cardStyle" android:elevation="20" ios:elevation="40" radius="5" class="gameplay"
                 backgroundColor="white">
                 <StackLayout>
-                    <GridLayout row="auto,*" columns="auto,*,2*" marginRight="5" class="sideStackLayoutHeader" *ngIf="user" paddingTop="10">
+                    <GridLayout *ngIf="user && playerMode === PlayerMode.Single"  rows="auto,*" columns="auto,*,2*" marginRight="5" class="sideStackLayoutHeader" paddingTop="10">
                         <app-user-card [userId]="user.userId" [isGamePlay]=true
-                            [type]="userCardType.USER_IMAGE_NAME_WITH_SCORE_IN_GAME_PLAY"
-                            [otherInfo]="{correctCount:correctCount,questionRound:questionRound,totalRound:totalRound,otherPlayer:otherPlayer,actionText:actionText }">
+                            [type]="userCardType.USER_IMAGE_NAME_WITH_SCORE_IN_GAME_PLAY_SINGLE_PLAYER"
+                            [otherInfo]="{correctCount:correctCount,questionRound:questionRound,totalRound:totalRound,actionText:actionText }">
+                        </app-user-card>
+                    </GridLayout>
+                    <GridLayout *ngIf="user && playerMode === PlayerMode.Opponent" rows="*,*" columns="*" marginRight="5" class="sideStackLayoutHeader" paddingTop="10">
+                        <app-user-card [userId]="user.userId" [isGamePlay]=true
+                            [type]="userCardType.USER_IMAGE_NAME_WITH_SCORE_IN_GAME_PLAY_TWO_PLAYER"
+                            [otherInfo]="{correctCount:correctCount,questionRound:questionRound,totalRound:totalRound,otherPlayer:otherPlayer}">
                         </app-user-card>
                     </GridLayout>
                     <StackLayout>

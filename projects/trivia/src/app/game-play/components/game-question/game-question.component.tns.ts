@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnDestroy, SimpleChanges, OnChanges, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, SimpleChanges, OnChanges, ChangeDetectionStrategy, ChangeDetectorRef, Output, EventEmitter } from '@angular/core';
 import { User, FirebaseScreenNameConstants } from 'shared-library/shared/model';
 import { Utils } from 'shared-library/core/services';
 import { GameQuestion } from './game-question';
@@ -9,7 +9,7 @@ import { Observable, timer, Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { projectMeta } from 'shared-library/environments/environment';
-import { Page } from 'tns-core-modules/ui/page/page';
+
 
 @Component({
   selector: 'game-question',
@@ -21,7 +21,7 @@ import { Page } from 'tns-core-modules/ui/page/page';
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class GameQuestionComponent extends GameQuestion implements OnInit, OnDestroy, OnChanges {
 
-  @Input() user: User;
+
   subscriptions = [];
   answeredIndex: number;
   correctAnswerIndex: number;
@@ -38,9 +38,8 @@ export class GameQuestionComponent extends GameQuestion implements OnInit, OnDes
   elapsedTime: number;
   timerSub: Subscription;
 
-  constructor(private utils: Utils, public store: Store<GamePlayState>, private cd: ChangeDetectorRef, private page: Page) {
+  constructor(private utils: Utils, public store: Store<GamePlayState>, private cd: ChangeDetectorRef,) {
     super();
-    this.page.actionBarHidden = true;
     this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
     this.actionText = 'Playing Now';
   }

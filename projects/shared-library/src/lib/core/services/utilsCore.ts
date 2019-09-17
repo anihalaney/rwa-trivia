@@ -102,5 +102,6 @@ export abstract class UtilsCore {
   abstract setNewGameFirebaseAnalyticsParameter(gameOptions: GameOptions, userId: string, gameId: string): Observable<string>;
   abstract setEndGameFirebaseAnalyticsParameter(game: Game, userId: string, otherUserId: string): Observable<string>;
   abstract setUserLocationFirebaseAnalyticsParameter(user: User, isLocationChanged: boolean): Observable<string>;
-  public hideKeyboard(field: any){}
+  public hideKeyboard(field: any) { }
+  public goToDashboard() { }
 }
