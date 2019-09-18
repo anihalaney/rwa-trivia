@@ -56,4 +56,5 @@
 
 .padding-label {
   padding: 10 35 10 35;
+  justify-content: space-between;
 }

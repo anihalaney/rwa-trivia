@@ -16,6 +16,7 @@ import { Router, NavigationEnd, NavigationStart } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { projectMeta } from 'shared-library/environments/environment';
+import { FirebaseAuthService } from 'shared-library/core/auth';
 
 @Component({
     moduleId: module.id,
@@ -45,12 +46,14 @@ export class DrawerComponent implements OnInit, OnDestroy {
     showHelp: Boolean = true;
     isDrawerOpenOrClosed = '';
     renderView = false;
+    loader = false;
     constructor(private routerExtension: RouterExtensions,
         private store: Store<CoreState>,
         public authProvider: AuthenticationProvider,
         private utils: Utils,
         private userActions: UserActions,
-        private router: Router
+        private router: Router,
+        private firebaseAuthService: FirebaseAuthService
     ) {
         this.router.events.subscribe((val) => {
             if (val instanceof NavigationEnd) {
@@ -80,6 +83,12 @@ export class DrawerComponent implements OnInit, OnDestroy {
     }
     ngOnInit() {
         this.renderView = true;
+        this.firebaseAuthService.authState().subscribe(afUser => {
+            if (!afUser) {
+                this.store.dispatch(this.userActions.loginSuccess(null));
+                this.routerExtension.navigate(['/dashboard'], { clearHistory: true });
+            }
+        });
         this.categoriesObs = this.store.select(coreState).pipe(select(s => s.categories));
         this.categoriesObs.subscribe(categories => {
             this.categories = categories;
@@ -104,7 +113,6 @@ export class DrawerComponent implements OnInit, OnDestroy {
         }));
 
         this.subscriptions.push(this.categoriesObs);
-
         this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.user), filter(u => u !== null)).subscribe(user => {
             if (user && !this.logOut) {
                 this.photoUrl = this.utils.getImageUrl(user, 70, 60, '70X60');
@@ -153,6 +161,7 @@ export class DrawerComponent implements OnInit, OnDestroy {
     closeDrawer() {
         const sideDrawer = <RadSideDrawer>app.getRootView();
         sideDrawer.closeDrawer();
+        this.loader = false;
     }
 
     leaderBoard(category) {
@@ -172,6 +181,7 @@ export class DrawerComponent implements OnInit, OnDestroy {
 
     logout() {
         this.logOut = true;
+        this.loader = true;
         this.setLogoutFirebaseAnalyticsParameter(this.user);
         if (isAndroid && this.user.androidPushTokens) {
             const index = this.user.androidPushTokens
@@ -222,18 +232,11 @@ export class DrawerComponent implements OnInit, OnDestroy {
     }
 
     resetValues() {
-
         this.authProvider.logout();
-        /* We have used Timeout because authprovide.logout() nullify object after some time */
-        setTimeout(() => {
-            this.logOut = false;
-            this.pushToken = undefined;
-            this.activeMenu = 'Home';
-            this.closeDrawer();
-            this.store.dispatch(this.userActions.loginSuccess(null));
-            this.routerExtension.navigate(['/dashboard'], { clearHistory: true });
-        }, 2000);
-
+        this.logOut = false;
+        this.pushToken = undefined;
+        this.activeMenu = 'Home';
+        this.closeDrawer();
     }
 
     updateUser(user: User, status: string) {

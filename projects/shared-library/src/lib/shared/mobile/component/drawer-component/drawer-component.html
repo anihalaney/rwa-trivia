@@ -1,40 +1,42 @@
-<StackLayout backgroundColor="#e2e2e2" *ngIf="renderView">
-    <FlexboxLayout flexDirection="column">
-        <StackLayout>
-            <bottom-bar [isDrawerOpenOrClosed]="isDrawerOpen" [screen]="'drawer'"></bottom-bar>
-        </StackLayout>
-        <GridLayout rows="*" columns="*">
-            <StackLayout row="0">
-                <ScrollView>
-                    <FlexboxLayout flexDirection="column">
-                        <StackLayout class="padding-label" stlRippleEffect stlBackgroundColor="#10347f"
-                            stlBackgroundColorAfter="#e2e2e2" (rippleTap)="navigateToGameProfile()">
-                            <Label text="Profile" android:fontSize="18" color="#000" textWrap="true"></Label>
-                        </StackLayout>
-                        <StackLayout class="padding-label" stlRippleEffect stlBackgroundColor="#10347f"
-                            stlBackgroundColorAfter="#e2e2e2" (rippleTap)="recentGames()">
-                            <Label text="Recently Completed Games" android:fontSize="18" color="#000"
-                                textWrap="true"></Label>
-                        </StackLayout>
-                        <StackLayout class="padding-label" stlRippleEffect stlBackgroundColor="#10347f"
-                            stlBackgroundColorAfter="#e2e2e2" (rippleTap)="navigateToMyQuestion()">
-                            <Label text="Questions" android:fontSize="18" color="#000" textWrap="true"></Label>
-                        </StackLayout>
-                        <StackLayout class="padding-label" stlRippleEffect stlBackgroundColor="#10347f"
-                            stlBackgroundColorAfter="#e2e2e2" (rippleTap)="navigateToProfileSettings()">
-                            <Label text="User Account" android:fontSize="18" color="#000" textWrap="true"></Label>
-                        </StackLayout>
-                        <StackLayout *ngIf="!authProvider.isAuthenticated" class="padding-label" stlRippleEffect
-                            stlBackgroundColor="#10347f" stlBackgroundColorAfter="#e2e2e2" (rippleTap)="login()">
-                            <Label text="Login" android:fontSize="18" color="#000"></Label>
-                        </StackLayout>
-                        <StackLayout *ngIf="authProvider.isAuthenticated" class="padding-label" stlRippleEffect
-                            stlBackgroundColor="#10347f" stlBackgroundColorAfter="#e2e2e2" (rippleTap)="logout()">
-                            <Label text="Logout" android:fontSize="18" color="#000"></Label>
-                        </StackLayout>
-                    </FlexboxLayout>
-                </ScrollView>
+<StackLayout backgroundColor="#e2e2e2">
+  <FlexboxLayout flexDirection="column">
+    <StackLayout>
+      <bottom-bar [isDrawerOpenOrClosed]="isDrawerOpen" [screen]="'drawer'"></bottom-bar>
+    </StackLayout>
+    <GridLayout rows="*" columns="*">
+      <StackLayout row="0">
+        <ScrollView>
+          <FlexboxLayout flexDirection="column">
+            <StackLayout class="padding-label" stlRippleEffect stlBackgroundColor="#10347f"
+              stlBackgroundColorAfter="#e2e2e2" (rippleTap)="navigateToGameProfile()">
+              <Label text="Profile" android:fontSize="18" color="#000" textWrap="true"></Label>
             </StackLayout>
-        </GridLayout>
-    </FlexboxLayout>
+            <StackLayout class="padding-label" stlRippleEffect stlBackgroundColor="#10347f"
+              stlBackgroundColorAfter="#e2e2e2" (rippleTap)="recentGames()">
+              <Label text="Recently Completed Games" android:fontSize="18" color="#000"
+              textWrap="true"></Label>
+            </StackLayout>
+            <StackLayout class="padding-label" stlRippleEffect stlBackgroundColor="#10347f"
+              stlBackgroundColorAfter="#e2e2e2" (rippleTap)="navigateToMyQuestion()">
+              <Label text="Questions" android:fontSize="18" color="#000" textWrap="true"></Label>
+            </StackLayout>
+            <StackLayout class="padding-label" stlRippleEffect stlBackgroundColor="#10347f"
+              stlBackgroundColorAfter="#e2e2e2" (rippleTap)="navigateToProfileSettings()">
+              <Label text="User Account" android:fontSize="18" color="#000" textWrap="true"></Label>
+            </StackLayout>
+            <StackLayout *ngIf="!authProvider.isAuthenticated" class="padding-label" stlRippleEffect
+              stlBackgroundColor="#10347f" stlBackgroundColorAfter="#e2e2e2" (rippleTap)="login()">
+              <Label text="Login" android:fontSize="18" color="#000"></Label>
+            </StackLayout>
+            <FlexboxLayout [isUserInteractionEnabled]="!loader" *ngIf="authProvider.isAuthenticated" class="padding-label"
+              stlRippleEffect stlBackgroundColor="#10347f" stlBackgroundColorAfter="#e2e2e2" (rippleTap)="logout()">
+              <Label text="Logout" android:fontSize="18" color="#000"></Label>
+              <ActivityIndicator *ngIf="loader" color="gray" ios:width="25" ios:height="25" android:width="25"
+                android:height="25" busy="true" class="activity-indicator"></ActivityIndicator>
+            </FlexboxLayout>
+          </FlexboxLayout>
+        </ScrollView>
+      </StackLayout>
+    </GridLayout>
+  </FlexboxLayout>
 </StackLayout>

@@ -58,12 +58,12 @@ export class WebFirebaseAuthService implements FirebaseAuthService {
         return firebase.auth().currentUser;
     }
 
-    public signOut() {
-        this.afAuth.auth.signOut();
+    public async signOut() {
+        await this.afAuth.auth.signOut();
         this.updateTokenStatus(this.user.userId, UserStatusConstants.OFFLINE);
         this.router.navigate(['dashboard']);
         if (isPlatformBrowser(this.platformId)) {
-            this.windowsRef.nativeWindow.location.reload();
+             this.windowsRef.nativeWindow.location.reload();
         }
     }
 
