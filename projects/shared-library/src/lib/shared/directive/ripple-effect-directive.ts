@@ -43,33 +43,39 @@ export class RippleEffectDirective implements OnDestroy {
       this.stlOpacity = this.stlOpacity;
     }
 
-    await this.templateRef.nativeElement.animate({
-      opacity: this.stlOpacity,
-      backgroundColor: new Color(this.stlBackgroundColor),
-      duration: 200,
-      delay: 0,
-      iterations: 1,
-      curve: enums.AnimationCurve.easeOut
-    });
+    try {
+      await this.templateRef.nativeElement.animate({
+        opacity: this.stlOpacity,
+        backgroundColor: new Color(this.stlBackgroundColor),
+        duration: 200,
+        delay: 0,
+        iterations: 1,
+        curve: enums.AnimationCurve.easeOut
+      });
 
-    let color;
-    if (this.stlBackgroundColor === '#F8F8F8') {
-      color = new Color(0.62, 0, 0, 0);
-    } else {
-      if (this.stlBackgroundColorAfter || this.stlBackgroundColorAfter === 'transparent') {
-        color = new Color(this.stlBackgroundColorAfter);
+      let color;
+      if (this.stlBackgroundColor === '#F8F8F8') {
+        color = new Color(0.62, 0, 0, 0);
       } else {
-        color = new Color(this.stlBackgroundColor);
+        if (this.stlBackgroundColorAfter || this.stlBackgroundColorAfter === 'transparent') {
+          color = new Color(this.stlBackgroundColorAfter);
+        } else {
+          color = new Color(this.stlBackgroundColor);
+        }
       }
+
+      await this.templateRef.nativeElement.animate({
+        backgroundColor: color,
+        opacity: 1,
+        delay: 0
+      });
+
+      this.rippleTap.emit();
+    } catch (e) {
+      console.log('ERROR', e);
     }
 
-    await this.templateRef.nativeElement.animate({
-      backgroundColor: color,
-      opacity: 1,
-      delay: 0
-    });
 
-    this.rippleTap.emit();
   }
 
   constructor(templateRef: ElementRef, renderer: Renderer2) {
