@@ -56,7 +56,7 @@ export class RippleEffectDirective implements OnDestroy {
     if (this.stlBackgroundColor === '#F8F8F8') {
       color = new Color(0.62, 0, 0, 0);
     } else {
-      if (this.stlBackgroundColorAfter) {
+      if (this.stlBackgroundColorAfter || this.stlBackgroundColorAfter === 'transparent') {
         color = new Color(this.stlBackgroundColorAfter);
       } else {
         color = new Color(this.stlBackgroundColor);
