@@ -244,7 +244,7 @@ export class DrawerComponent implements OnInit, OnDestroy {
     }
 
     recentGames() {
-        this.routerExtension.navigate(['/recent-game']);
+        this.routerExtension.navigate(['/recent-games']);
         this.closeDrawer();
     }
 

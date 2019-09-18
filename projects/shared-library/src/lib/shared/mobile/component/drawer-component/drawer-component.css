@@ -41,19 +41,11 @@
 }
 
 .padding-label .active-menu {
-    /* border-right:  */
-  /* border-color: #fff #fff #fff #f7c105; */
-  /* border-width: 0 0 0 5; */
   color: #077ad6 !important;
   font-weight: 600;
   font-family: "Roboto", "Roboto-Bold";
 }
 
-/* .active-menu {
-  background-color: #10347f;
-} */
-
 .padding-label {
   padding: 10 35 10 35;
-  /* color: #000; */
 }

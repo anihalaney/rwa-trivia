@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { User, Game, Category, PlayerMode, GameStatus, userCardType } from 'shared-library/shared/model';
 import { Utils } from 'shared-library/core/services';
-import { AppState, appState, categoryDictionary } from '../../../store';
+import { coreState, CoreState, categoryDictionary } from 'shared-library/core/store';
 import { UserActions } from 'shared-library/core/store/actions';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
@@ -33,13 +33,13 @@ export class RecentGameCardComponent implements OnInit, OnDestroy {
     subscriptions = [];
     userCardType = userCardType;
 
-    constructor(private store: Store<AppState>, private userActions: UserActions, public utils: Utils, private cd: ChangeDetectorRef) {
+    constructor(private store: Store<CoreState>, private userActions: UserActions, public utils: Utils, private cd: ChangeDetectorRef) {
         this.categoryDictObs = store.select(categoryDictionary);
         this.subscriptions.push(this.categoryDictObs.subscribe(categoryDict => this.categoryDict = categoryDict));
     }
 
     ngOnInit(): void {
-        this.userDict$ = this.store.select(appState.coreState).pipe(select(s => s.userDict));
+        this.userDict$ = this.store.select(coreState).pipe(select(s => s.userDict));
         this.subscriptions.push(this.userDict$.subscribe(userDict => {
             this.userDict = userDict;
             this.cd.markForCheck();

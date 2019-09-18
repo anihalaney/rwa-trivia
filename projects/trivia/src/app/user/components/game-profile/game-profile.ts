@@ -13,7 +13,6 @@ export enum UserType {
     loggedInOtherUserProfile,
     OtherUserProfile
 }
-
 export class GameProfile {
     gamePlayedChangeSubject = new Subject();
     gamePlayedChangeObservable = this.gamePlayedChangeSubject.asObservable();

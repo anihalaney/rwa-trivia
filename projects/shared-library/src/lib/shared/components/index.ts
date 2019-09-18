@@ -15,6 +15,8 @@ import { CheckDisplayNameComponent } from './check-display-name/check-display-na
 import { FriendInviteComponent } from './friend-invite/friend-invite.component';
 import { GameInviteComponent } from './game-invite/game-invite.component';
 import { InviteMailFriendsComponent } from './invite-mail-friends/invite-mail-friends.component';
+import { RecentGamesComponent } from './recent-games/recent-games.component';
+import { RecentGameCardComponent } from './recent-games/recent-game-card/recent-game-card.component';
 
 export {
     QuestionsSearchComponent,
@@ -32,7 +34,9 @@ export {
     SignupExtraInfoComponent,
     CheckDisplayNameComponent,
     FriendInviteComponent,
-    GameInviteComponent
+    GameInviteComponent,
+    RecentGamesComponent,
+    RecentGameCardComponent
 };
 
 export default [
@@ -51,5 +55,7 @@ export default [
     SignupExtraInfoComponent,
     CheckDisplayNameComponent,
     FriendInviteComponent,
-    GameInviteComponent
+    GameInviteComponent,
+    RecentGamesComponent,
+    RecentGameCardComponent
 ];
