@@ -15,10 +15,10 @@
                 </StackLayout>
                 <StackLayout row="0" col="1" verticalAlignment="center" iosOverflowSafeArea="false" marginLeft="10">
                     <Label [text]="actionText" textWrap="true" fontSize="14"></Label>
-                    <StackLayout orientation="horizontal" stlRippleEffect (rippleTap)="navigateToLogin()">
-                        <Label *ngIf="actionSubText" [text]="actionSubText" fontSize="18" textWrap="true" fontWeight="bold"></Label>
-                        <Label *ngIf="user && user!== null && actionSubText" text="&#xf303;" class="fas" marginLeft="10" fontSize="20" color="#3a5998"
-                        stlRippleEffect (rippleTap)="navigateToCategories()"></Label>
+                    <StackLayout orientation="horizontal" stlRippleEffect stlRippleEffect (rippleTap)="navigateToCategories()">
+                        <Label *ngIf="actionSubText && actionSubText.length>0" [text]="actionSubText" fontSize="18" textWrap="true" fontWeight="bold"></Label>
+                        <Label *ngIf="user && user!== null && actionSubText && actionSubText.length>0" text="&#xf303;" class="fas" marginLeft="10" fontSize="20" color="#3a5998"
+                        stlRippleEffect ></Label>
                     </StackLayout>
                 </StackLayout>
 

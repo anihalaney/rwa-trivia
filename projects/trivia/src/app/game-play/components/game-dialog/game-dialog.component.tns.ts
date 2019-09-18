@@ -28,13 +28,11 @@ export class GameDialogComponent extends GameDialog implements OnDestroy {
 
   suspendTime: number;
   resumeTime: number;
-  hideActionBar: boolean;
 
   constructor(public store: Store<GamePlayState>, public gameActions: GameActions, public router: Router,
-    public userActions: UserActions, public utils: Utils, public cd: ChangeDetectorRef, private page: Page) {
+    public userActions: UserActions, public utils: Utils, public cd: ChangeDetectorRef) {
     super(store, userActions, utils, cd, router);
     this.registerLifeCycleEvent();
-    this.page.actionBarHidden = true;
   }
 
   resumeCallBack(args: ApplicationEventData) {
@@ -70,9 +68,6 @@ export class GameDialogComponent extends GameDialog implements OnDestroy {
     this.cd.markForCheck();
   }
 
-  updateActionBarStatus(flag: boolean) {
-    this.hideActionBar = true;
-  }
 
   ngOnDestroy() {
     applicationOff(resumeEvent, this.resumeCallBack);
@@ -80,14 +75,5 @@ export class GameDialogComponent extends GameDialog implements OnDestroy {
     this.destroy();
   }
 
-  // Hide menu if question display
-  get isDispayMenu() {
-    if (this.currentQuestion && this.showContinueBtn) {
-      return undefined;
-    }
-    if (this.currentQuestion && !this.showLoader && !this.showBadge) {
-      return true;
-    }
-    return undefined;
-  }
+
 }

@@ -9,7 +9,7 @@
         </StackLayout>
 
         <StackLayout col="1" verticalAlignment="center">
-            <Label [text]="title" class="action-text-title" textWrap="true"></Label>           
+            <Label [text]="title.replace('_',' ')" class="action-text-title" textWrap="true"></Label>           
         </StackLayout>
 
         <StackLayout col="2" *ngIf="((user && user!== null && !showSkipBtn && title==='Questions'))" stlRippleEffect
@@ -24,7 +24,7 @@
             stlRippleEffect stlBackgroundColor="#13284F" ios:margin="3" android:margin="10" stlOpacity="0.5"
             stlBackgroundColorAfter="" verticalAlignment="center" horizontalAlignment="right"
             (rippleTap)="navigateToMyQuestion()" orientation="horizontal">
-            <Label text="&#xf03a;" class="fa" fontSize="18"></Label>
+            <Label text="&#xf03a;" class="fa" fontSize="18" marginTop="5"></Label>
             <Label text="View All" marginLeft="5" fontSize="18"></Label>
         </StackLayout>
        

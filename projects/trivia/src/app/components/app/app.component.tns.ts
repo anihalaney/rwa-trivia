@@ -57,8 +57,8 @@ export class AppComponent implements OnInit, OnDestroy {
     private _vcRef: ViewContainerRef) {
 
     this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.newGameId), filter(g => g !== '')).subscribe(gameObj => {
-      console.log('gameObj', gameObj);
-      this.routerExtension.navigate(['/game-play', gameObj['gameId']]);
+      // console.log('gameObj', gameObj);
+      this.routerExtension.navigate(['/game-play', gameObj['gameId']], { clearHistory: true });
       this.store.dispatch(new gamePlayActions.ResetCurrentQuestion());
       this.cd.markForCheck();
     }));
@@ -113,6 +113,7 @@ export class AppComponent implements OnInit, OnDestroy {
       if (!(evt instanceof NavigationEnd)) {
         return;
       }
+
       switch (evt.urlAfterRedirects) {
         case '/login':
           this.utils.setScreenNameInFirebaseAnalytics(FirebaseScreenNameConstants.LOGIN);

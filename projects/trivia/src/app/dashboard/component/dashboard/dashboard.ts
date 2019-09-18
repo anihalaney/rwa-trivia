@@ -2,7 +2,7 @@ import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { ChangeDetectorRef, Inject, NgZone, OnDestroy, PLATFORM_ID } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
-import { Observable, Subscription, timer , combineLatest } from 'rxjs';
+import { Observable, Subscription, timer, combineLatest } from 'rxjs';
 import { Utils, WindowRef } from 'shared-library/core/services';
 import { GameActions, QuestionActions, UserActions } from 'shared-library/core/store/actions';
 import {
@@ -93,8 +93,8 @@ export class Dashboard implements OnDestroy {
                     this.user = user;
                     this.photoUrl = this.utils.getImageUrl(this.user, 70, 60, '70X60');
                     this.actionText = `Hi ${this.user.displayName}`;
+                    this.actionSubText = '';
                     if (this.user.tags && this.user.tags.length > 0) {
-                        this.actionSubText = '';
                         const userTags = this.user.tags.join(', ');
                         const subTagsCount = this.user.tags.length - 2;
                         const subTags = userTags.substring(0, 12);

@@ -15,7 +15,6 @@ import { GameQuestionComponent } from '../game-question/game-question.component'
 import { Router } from '@angular/router';
 
 export class GameDialog {
-  actionBarStatus: String = 'Play Game';
   user: User;
   gameObs: Observable<Game>;
   game: Game;
@@ -114,9 +113,6 @@ export class GameDialog {
             this.resetValues();
           }
 
-          if (game.GameStatus === GameStatus.COMPLETED) {
-            this.actionBarStatus = 'Game result';
-          }
         }
 
       }));

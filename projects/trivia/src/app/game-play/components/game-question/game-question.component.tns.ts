@@ -38,7 +38,7 @@ export class GameQuestionComponent extends GameQuestion implements OnInit, OnDes
   elapsedTime: number;
   timerSub: Subscription;
 
-  constructor(private utils: Utils, public store: Store<GamePlayState>, private cd: ChangeDetectorRef,) {
+  constructor(private utils: Utils, public store: Store<GamePlayState>, private cd: ChangeDetectorRef) {
     super();
     this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
     this.actionText = 'Playing Now';

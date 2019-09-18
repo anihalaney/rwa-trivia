@@ -100,12 +100,6 @@ export class DashboardComponent extends Dashboard implements OnInit, OnDestroy {
     return game.GameStatus === GameStatus.WAITING_FOR_NEXT_Q && game.nextTurnPlayerId !== this.user.userId;
   }
 
-  navigateToLogin(): void {
-    if (!this.user || this.user !== null) {
-      this.routerExtension.navigate(['/login'], { clearHistory: true });
-    }
-  }
-
   navigateToMyQuestion() {
     this.routerExtension.navigate(['/user/my/questions']);
   }
@@ -121,7 +115,11 @@ export class DashboardComponent extends Dashboard implements OnInit, OnDestroy {
   }
 
   navigateToCategories() {
-      this.routerExtension.navigate(['select-category-tag']);
+    if (this.user && this.user !== null) {
+      this.routerExtension.navigate(['/user/my/profile', this.user.userId]);
+    } else {
+      this.routerExtension.navigate(['/login'], { clearHistory: true });
+    }
   }
 
   ngOnDestroy(): void {
