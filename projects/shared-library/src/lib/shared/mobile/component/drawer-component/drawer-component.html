@@ -1,4 +1,4 @@
-<StackLayout backgroundColor="#e2e2e2">
+<StackLayout backgroundColor="#e2e2e2" *ngIf="renderView">
     <FlexboxLayout flexDirection="column">
         <StackLayout>
             <bottom-bar [isDrawerOpenOrClosed]="isDrawerOpen" [screen]="'drawer'"></bottom-bar>

@@ -11,6 +11,7 @@ import { Achievements } from './achievements';
 })
 
 export class AchievementsComponent extends Achievements implements OnInit, OnDestroy {
+  renderView = false;
 
   constructor(
     protected store: Store<AppState>,
@@ -20,8 +21,12 @@ export class AchievementsComponent extends Achievements implements OnInit, OnDes
     super(store, cd);
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.renderView = true;
+  }
 
-  ngOnDestroy() {}
+  ngOnDestroy() {
+    this.renderView = false;
+  }
 
 }

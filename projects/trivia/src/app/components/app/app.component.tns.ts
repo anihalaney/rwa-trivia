@@ -56,18 +56,6 @@ export class AppComponent implements OnInit, OnDestroy {
     private _modalService: ModalDialogService,
     private _vcRef: ViewContainerRef) {
 
-    this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.newGameId), filter(g => g !== '')).subscribe(gameObj => {
-      console.log('gameObj', gameObj);
-      this.routerExtension.navigate(['/game-play', gameObj['gameId']]);
-      this.store.dispatch(new gamePlayActions.ResetCurrentQuestion());
-      this.cd.markForCheck();
-    }));
-
-    this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe(status => {
-      if (status === 'MAKE FRIEND SUCCESS') {
-        this.routerExtension.navigate(['user/my/invite-friends']);
-      }
-    }));
     this.handleBackPress();
   }
 
@@ -104,6 +92,20 @@ export class AppComponent implements OnInit, OnDestroy {
       this.utils.sendErrorToCrashlytics('uncaughtException', args.error);
       console.error(args.error);
     });
+
+
+    this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.newGameId), filter(g => g !== '')).subscribe(gameObj => {
+      console.log('gameObj', gameObj);
+      this.routerExtension.navigate(['/game-play', gameObj['gameId']]);
+      this.store.dispatch(new gamePlayActions.ResetCurrentQuestion());
+      this.cd.markForCheck();
+    }));
+
+    this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe(status => {
+      if (status === 'MAKE FRIEND SUCCESS') {
+        this.routerExtension.navigate(['user/my/invite-friends']);
+      }
+    }));
 
     this.subscriptions.push(this.router.events.subscribe((evt) => {
       if (!(evt instanceof NavigationEnd)) {

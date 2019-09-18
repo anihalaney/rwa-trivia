@@ -68,6 +68,7 @@ export class LeaderboardComponent extends Leaderboard implements OnDestroy {
 
   ngOnDestroy() {
     this.page.off('loaded');
+    this.renderView = false;
   }
 
 

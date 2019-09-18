@@ -1,6 +1,6 @@
 <ns-action-bar title="My Question" class="Roboto-Regular" showAdd="true"></ns-action-bar>
 
-<StackLayout>
+<StackLayout *ngIf="renderView">
     <StackLayout *ngIf="loaderBusy">
         <ActivityIndicator [busy]="loaderBusy" width="100" height="100" marginTop="225" class="activity-indicator"></ActivityIndicator>
     </StackLayout>

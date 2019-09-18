@@ -44,6 +44,7 @@ export class DrawerComponent implements OnInit, OnDestroy {
     subscriptions = [];
     showHelp: Boolean = true;
     isDrawerOpenOrClosed = '';
+    renderView = false;
     constructor(private routerExtension: RouterExtensions,
         private store: Store<CoreState>,
         public authProvider: AuthenticationProvider,
@@ -76,7 +77,10 @@ export class DrawerComponent implements OnInit, OnDestroy {
 
             }
         });
-        this.categoriesObs = store.select(coreState).pipe(select(s => s.categories));
+    }
+    ngOnInit() {
+        this.renderView = true;
+        this.categoriesObs = this.store.select(coreState).pipe(select(s => s.categories));
         this.categoriesObs.subscribe(categories => {
             this.categories = categories;
         });
@@ -100,8 +104,7 @@ export class DrawerComponent implements OnInit, OnDestroy {
         }));
 
         this.subscriptions.push(this.categoriesObs);
-    }
-    ngOnInit() {
+
         this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.user), filter(u => u !== null)).subscribe(user => {
             if (user && !this.logOut) {
                 this.photoUrl = this.utils.getImageUrl(user, 70, 60, '70X60');
@@ -290,7 +293,7 @@ export class DrawerComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy(): void {
-
+        this.renderView = false;
     }
 
     get isDrawerOpen() {

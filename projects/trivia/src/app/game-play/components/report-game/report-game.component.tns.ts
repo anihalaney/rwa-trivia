@@ -35,6 +35,7 @@ export class ReportGameComponent implements OnInit, OnDestroy {
     selectedOption: string = null;
     otherReason: string = null;
     subscriptions = [];
+    renderView = false;
 
     @ViewChildren('textField') textField: QueryList<ElementRef>;
 
@@ -44,12 +45,7 @@ export class ReportGameComponent implements OnInit, OnDestroy {
             this.iqKeyboard = IQKeyboardManager.sharedManager();
             this.iqKeyboard.shouldResignOnTouchOutside = true;
         }
-        this.categoryDict$ = store.select(categoryDictionary);
-        this.subscriptions.push(this.categoryDict$.subscribe(categoryDict => {
-            this.categoryDict = categoryDict;
-            this.cd.markForCheck();
-        }));
-
+        this.renderView = true;
         this.question = params.context.question;
         this.user = params.context.user;
         this.game = params.context.game;
@@ -70,6 +66,12 @@ export class ReportGameComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
+        this.categoryDict$ = this.store.select(categoryDictionary);
+        this.subscriptions.push(this.categoryDict$.subscribe(categoryDict => {
+            this.categoryDict = categoryDict;
+            this.cd.markForCheck();
+        }));
+
         this.reportQuestion = new ReportQuestion();
         this.cd.markForCheck();
     }
@@ -142,6 +144,7 @@ export class ReportGameComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
+        this.renderView = false;
     }
 
     hideKeyboard() {

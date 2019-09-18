@@ -55,6 +55,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
   imagePath: string;
 
   demoQ: Question = new Question;
+  renderView = false;
 
 
   public imageTaken: ImageAsset;
@@ -103,6 +104,15 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
     this.actionBarTxt = 'Submit Question';
     this.initDataItems();
     this.question = new Question();
+
+    if (isIOS) {
+      this.iqKeyboard = IQKeyboardManager.sharedManager();
+      this.iqKeyboard.shouldResignOnTouchOutside = true;
+    }
+  }
+
+  ngOnInit(): void {
+    this.renderView = true;
     this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
       if (appSettings) {
         this.applicationSettings = appSettings[0];
@@ -119,7 +129,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
     this.subscriptions.push(questionControl.valueChanges.pipe(debounceTime(500)).subscribe(v => this.computeAutoTags()));
     this.subscriptions.push(this.answers.valueChanges.pipe(debounceTime(500)).subscribe(v => this.computeAutoTags()));
 
-    this.subscriptions.push(store.select(appState.coreState).pipe(select(s => s.questionSaveStatus)).subscribe((status) => {
+    this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.questionSaveStatus)).subscribe((status) => {
       if (status === 'SUCCESS') {
         this.store.dispatch(this.questionAction.resetQuestionSuccess());
         this.utils.showMessage('success', 'Question saved!');
@@ -152,14 +162,6 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
     this.subscriptions.push(this.questionForm.get('answers').valueChanges.subscribe((changes) => {
       this.cd.markForCheck();
     }));
-
-    if (isIOS) {
-      this.iqKeyboard = IQKeyboardManager.sharedManager();
-      this.iqKeyboard.shouldResignOnTouchOutside = true;
-    }
-  }
-
-  ngOnInit(): void {
     if (this.editQuestion) {
       const maxTimeIndex = this.playMaxTime.findIndex(maxTime => {
         return maxTime === this.editQuestion.maxTime;
@@ -168,8 +170,8 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
         this.selectedMaxTimeIndex = this.editQuestion.maxTime;
       }
     }
-
   }
+
   ngAfterViewInit() {
   }
 
@@ -262,6 +264,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
   }
 
   ngOnChanges() {
+    this.renderView = false;
     if (this.editQuestion && this.applicationSettings) {
       this.createForm(this.editQuestion);
       this.categoryIds = this.editQuestion.categoryIds;
@@ -363,6 +366,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
   }
 
   ngOnDestroy() {
+    this.renderView = false;
   }
 
   questionLoaded(event) {

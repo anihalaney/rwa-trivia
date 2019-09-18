@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, OnDestroy, ViewChildren, QueryList, ElementRef, ChangeDetectorRef } from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnDestroy, ViewChildren, QueryList, ElementRef, ChangeDetectorRef, OnInit } from '@angular/core';
 import { Page } from 'tns-core-modules/ui/page';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
@@ -17,7 +17,7 @@ declare var IQKeyboardManager;
 })
 
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
-export class UserFeedbackComponent implements OnDestroy {
+export class UserFeedbackComponent implements OnDestroy, OnInit {
   iqKeyboard: any;
   subscriptions = [];
   feedbackForm: FormGroup;
@@ -33,6 +33,9 @@ export class UserFeedbackComponent implements OnDestroy {
       this.iqKeyboard = IQKeyboardManager.sharedManager();
       this.iqKeyboard.shouldResignOnTouchOutside = true;
     }
+  }
+
+  ngOnInit(): void {
     this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.feedback)).subscribe(status => {
       if (status === 'SUCCESS') {
         this.resetForm();
@@ -45,7 +48,6 @@ export class UserFeedbackComponent implements OnDestroy {
       this.user = user;
       this.cd.markForCheck();
     }));
-
 
     this.initForm();
   }

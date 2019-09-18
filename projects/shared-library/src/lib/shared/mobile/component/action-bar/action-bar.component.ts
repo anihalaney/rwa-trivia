@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Component, EventEmitter, Input, Output, OnDestroy, ChangeDetectorRef, OnInit } from '@angular/core';
 import * as app from 'tns-core-modules/application';
 import { RouterExtensions } from 'nativescript-angular/router';
 import { RadSideDrawer } from 'nativescript-ui-sidedrawer';
@@ -16,7 +16,7 @@ import { combineLatest } from 'rxjs';
 })
 
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
-export class ActionBarComponent implements OnDestroy {
+export class ActionBarComponent implements OnDestroy, OnInit {
 
     user: User;
     subscriptions = [];
@@ -33,12 +33,15 @@ export class ActionBarComponent implements OnDestroy {
         public store: Store<CoreState>,
         public cd: ChangeDetectorRef
     ) {
-        this.subscriptions.push(store.select(coreState).pipe(select(s => s.user)).subscribe(user => {
+    }
+
+    ngOnInit(): void {
+        this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.user)).subscribe(user => {
             this.user = user;
         }));
 
-        this.subscriptions.push(combineLatest(store.select(coreState).pipe(select(s => s.friendInvitations)),
-            store.select(coreState).pipe(select(s => s.gameInvites))).subscribe((notify: any) => {
+        this.subscriptions.push(combineLatest(this.store.select(coreState).pipe(select(s => s.friendInvitations)),
+            this.store.select(coreState).pipe(select(s => s.gameInvites))).subscribe((notify: any) => {
                 this.notifications = notify[0].concat(notify[1]);
                 this.cd.markForCheck();
             }));

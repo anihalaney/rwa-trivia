@@ -1,6 +1,6 @@
 <ns-action-bar title="Choose your desired topics" class="Roboto-Regular"  hideMenu="true"></ns-action-bar>
 <ScrollView>
-  <StackLayout class="profile-settings Roboto-Regular">
+  <StackLayout class="profile-settings Roboto-Regular" *ngIf="renderView">
     <StackLayout>
       <Label padding="15"
         text="Select atleast five topics of your choice, this will help us show contents based on your topics"

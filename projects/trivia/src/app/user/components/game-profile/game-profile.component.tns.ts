@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, ChangeDetectorRef, OnInit } from '@angular/core';
 import { GameProfile } from './game-profile';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { Store } from '@ngrx/store';
@@ -16,7 +16,8 @@ import { Utils } from 'shared-library/core/services';
 })
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 
-export class GameProfileComponent extends GameProfile implements OnDestroy {
+export class GameProfileComponent extends GameProfile implements OnDestroy, OnInit {
+    renderView = false;
 
     constructor(public route: ActivatedRoute,
         public router: Router,
@@ -28,7 +29,12 @@ export class GameProfileComponent extends GameProfile implements OnDestroy {
         super(route, router, store, userAction, cd, _utils);
     }
 
+    ngOnInit() {
+        this.renderView = true;
+    }
+
     ngOnDestroy() {
+        this.renderView = false;
     }
 
     openLink(url: string) {

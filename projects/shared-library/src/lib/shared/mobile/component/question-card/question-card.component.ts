@@ -25,10 +25,11 @@ export class QuestionCardComponent implements OnInit, OnDestroy, OnChanges {
   @Input() doPlay: boolean
   @Output() answerClicked = new EventEmitter<number>();
   @Output() selectedAnswer = new EventEmitter<string>();
+  renderView = false;
   constructor(private store: Store<CoreState>, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
-
+    this.renderView = true;
     this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.applicationSettings))
       .subscribe(appSettings => {
         if (appSettings) {
@@ -65,6 +66,7 @@ export class QuestionCardComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
+    this.renderView = false;
     if (changes.question) {
       this.doPlay = true;
     }

@@ -29,6 +29,7 @@ export class GameQuestionComponent extends GameQuestion implements OnInit, OnDes
   stopProcessBar;
   columns;
   doPlay = true;
+  renderView = false;
 
   photoUrl: String = `~/assets/icons/${projectMeta.projectName}/icon-192x192.png`;
   userDict$: Observable<{ [key: string]: User }>;
@@ -44,7 +45,7 @@ export class GameQuestionComponent extends GameQuestion implements OnInit, OnDes
   ngOnInit() {
     this.progressValue = 0;
     this.photoUrl = this.utils.getImageUrl(this.user, 70, 60, '70X60');
-
+    this.renderView = true;
   this.cd.markForCheck();
   }
 
@@ -63,6 +64,7 @@ export class GameQuestionComponent extends GameQuestion implements OnInit, OnDes
   }
 
   ngOnChanges(changes: SimpleChanges) {
+    this.renderView = false;
     if (this.continueNext && this.answeredIndex === undefined) {
       this.progressValue = 100;
     } else if (changes.timer) {

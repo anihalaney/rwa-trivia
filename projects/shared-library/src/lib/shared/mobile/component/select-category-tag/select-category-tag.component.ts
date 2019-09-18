@@ -25,6 +25,7 @@ export class SelectCategoryTagComponent implements OnInit, OnDestroy {
   topTags = [];
   tags = [];
   selectedCategories: number = 0;
+  renderView = false;
   constructor(
     private routerExtension: RouterExtensions,
     public store: Store<any>,
@@ -36,6 +37,7 @@ export class SelectCategoryTagComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     let tempCategories = [];
+    this.renderView = true;
     this.categoriesObs = this.store.select(coreState).pipe(select(s => s.categories));
     this.subscriptions.push(this.categoriesObs.subscribe(categories => { tempCategories = categories; this.cd.markForCheck(); }));
     this.store.dispatch(this.category.loadTopCategories());
@@ -107,7 +109,7 @@ export class SelectCategoryTagComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-
+    this.renderView = false;
   }
 
 }
