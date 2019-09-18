@@ -12,7 +12,8 @@ import { InviteFriendsDialogComponent } from '../components/invite-friends/invit
 export const userRoutes: Routes = [
     {
         path: 'profile/:userid',
-        component: ProfileSettingsComponent
+        component: ProfileSettingsComponent,
+        canActivate: [AuthGuard],
     },
     {
         path: 'game-profile/:userid',
@@ -23,7 +24,8 @@ export const userRoutes: Routes = [
         children: [
             {
                 path: 'profile/:userid',
-                component: ProfileSettingsComponent
+                component: ProfileSettingsComponent,
+                canActivate: [AuthGuard],
             },
             {
                 path: 'questions',

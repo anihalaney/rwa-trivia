@@ -1,56 +1,59 @@
 .sideStackLayoutHeader {
-    background-color: #13284F;
+  background-color: #13284f;
 }
 
 .sideStackLayout {
-    background-color: #13284F;
-    color:#d7d7d7;
-    font-size: 14;
+  background-color: #13284f;
+  color: #d7d7d7;
+  font-size: 14;
 }
 
-
 .sideLabel {
-    padding: 20 10;
-    font-size: 14;
-    color: #d7d7d7;
+  padding: 20 10;
+  font-size: 14;
+  color: #d7d7d7;
 }
 
 .sideLightGrayLabel {
-    background-color: lightgray;
+  background-color: lightgray;
 }
 
-#icmenu{
-    width: 50;
-    height: 50;
+#icmenu {
+  width: 50;
+  height: 50;
 }
 
-.icmenu{
-    width: 50;
-    height: 50;
+.icmenu {
+  width: 50;
+  height: 50;
 }
 
-.ou-allez-vous{
-    /* padding: 8 8 8 0 ; */
-    font-size: 18;
-    width: 92%;
-    height: 50;
-    color: black;
+.ou-allez-vous {
+  /* padding: 8 8 8 0 ; */
+  font-size: 18;
+  width: 92%;
+  height: 50;
+  color: black;
 }
 
 .center {
-    text-align: center;
+  text-align: center;
 }
 
-.active-menu {
-    border-color:#fff #fff #fff #f7c105;
-    border-width: 0 0 0 5;
-    background-color:#10347f;
-    color:#d7d7d7;
-    font-weight: 600;
-    font-size: 14;
-    font-family: "Roboto","Roboto-Bold";
-  }
+.padding-label .active-menu {
+    /* border-right:  */
+  /* border-color: #fff #fff #fff #f7c105; */
+  /* border-width: 0 0 0 5; */
+  color: #077ad6 !important;
+  font-weight: 600;
+  font-family: "Roboto", "Roboto-Bold";
+}
 
-.active-menu  .sideLabel{
-    background-color:#10347f;
+/* .active-menu {
+  background-color: #10347f;
+} */
+
+.padding-label {
+  padding: 10 35 10 35;
+  /* color: #000; */
 }
