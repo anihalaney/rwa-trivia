@@ -63,10 +63,10 @@ export class QuestionCardComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   ngOnDestroy(): void {
+    this.renderView = false;
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    this.renderView = false;
     if (changes.question) {
       this.doPlay = true;
     }

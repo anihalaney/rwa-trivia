@@ -50,7 +50,7 @@ export class GameQuestionComponent extends GameQuestion implements OnInit, OnDes
   }
 
   ngOnDestroy() {
-
+    this.renderView = false;
   }
 
   fillTimer() {
@@ -64,7 +64,6 @@ export class GameQuestionComponent extends GameQuestion implements OnInit, OnDes
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    this.renderView = false;
     if (this.continueNext && this.answeredIndex === undefined) {
       this.progressValue = 100;
     } else if (changes.timer) {
