@@ -23,6 +23,7 @@ export class GameComponent extends Game implements OnInit, OnDestroy {
 
   constructor(public store: Store<AppState>, private page: Page, private ngZone: NgZone) {
     super(store);
+    this.page.actionBarHidden = true;
   }
 
   ngOnInit() {
