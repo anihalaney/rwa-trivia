@@ -19,7 +19,7 @@
               (rippleTap)="selectTopic(i)"
               [ngStyle]="{background: (item.requiredForGamePlay ? '#48b24e' : '#fafafa'), color : (item.requiredForGamePlay ? '#fff' : '#9b92e7') }"
               borderRadius="5">
-              <Label [text]="item.categoryName" padding="15 10" textWrap="true"></Label>
+              <Label [text]="item.categoryName" padding="15 10" ></Label>
             </FlexboxLayout>
           </StackLayout>
         </FlexboxLayout>
@@ -32,7 +32,7 @@
               (rippleTap)="selectTags(i)"
               [ngStyle]="{background: (item.requiredForGamePlay ? '#48b24e' : '#fafafa'), color : (item.requiredForGamePlay ? '#fff' : '#9b92e7') }"
               borderRadius="5">
-              <Label [text]="item.key" padding="15 10" textWrap="true"></Label>
+              <Label [text]="item.key" padding="15 10" ></Label>
             </FlexboxLayout>
           </StackLayout>
         </FlexboxLayout>
