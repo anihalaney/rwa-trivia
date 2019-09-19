@@ -137,7 +137,8 @@
     height="66" width="66">
     <Image row="0" col="0" [src]="getImageUrl(user,70,60)" backgroundColor="gray"
       stretch="aspectFill" height="64" width="64" marginLeft="10" verticalAlignment="center" marginRight="10"
-      borderRadius="50"></Image>    
+      borderRadius="50"
+      [stlOpenUserProfile]="{userId: user?.userId, redirectTo: loggedInUserId === user?.userId ? 'userProfile': 'otherUserProfile'}">></Image>    
   </StackLayout>
 
   <AbsoluteLayout *ngIf="user?.online" horizontalAlignment="center">
@@ -190,13 +191,13 @@
            height="66" width="66">
            <Image  row="0" col="0" [src]="getImageUrl(user,70,60)" backgroundColor="gray"
              stretch="aspectFill" height="64" width="64" marginLeft="10" verticalAlignment="center" marginRight="10"
-             borderRadius="50"></Image>    
+             borderRadius="50"
+             [stlOpenUserProfile]="{userId: user?.userId, redirectTo: loggedInUserId === user?.userId ? 'userProfile': 'otherUserProfile'}">></Image>    
         </StackLayout>         
 
         <StackLayout row="0" col="1" class="Roboto-Regular">
             <Label text="{{ (loggedInUserId === user.userId) ? 'You' : user?.displayName}}" fontSize="18"
               color="#616161" class="main-title"></Label>
-            <!-- <Label text="Score {{otherInfo.correctCount}}" textWrap="true" class="sub-title" color="#8c8c8c" ></Label>          -->
         </StackLayout>
 
         <AbsoluteLayout *ngIf="user?.online">
@@ -213,23 +214,21 @@
             <!-- Second Player-->
        <GridLayout row="0" col="2" rows="*,*" columns="*,*" horizontalAlignment="right" >
 
+
         <StackLayout row="0" col="0" class="Roboto-Regular"  marginLeft="15">
           <Label text="{{otherInfo.otherPlayer?.displayName}}" fontSize="18" color="#616161" class="main-title"></Label>
-          <!-- <Label text="Score {{otherInfo.otherPlayer?.score}}" textWrap="true" class="sub-title" color="#8c8c8c" ></Label>             -->
-        </StackLayout>
+        </StackLayout>       
 
-         <AbsoluteLayout *ngIf="otherInfo.otherPlayer?.online" >
-           <Label height="15" top="50" left="42" width="15" borderRadius="22" backgroundColor="#71b02f"></Label>          
-         </AbsoluteLayout>
-
-         <StackLayout row="0" col="1"  verticalAlignment="center" marginRight="10" borderRadius="50"
+         <StackLayout row="0" col="1"  verticalAlignment="center" marginRight="10" borderRadius="32"
              borderColor="#3b5998" borderWidth="1" paddingTop="2" paddingLeft="2" paddingRight="2" class="image-container"
-             height="66" width="66">
+             height="64" width="64" orientation="horizontal">
              <Image *ngIf="isGamePlay" row="0" col="0" [src]="getImageUrl(otherInfo.otherPlayer,70,60)" backgroundColor="gray"
-                stretch="aspectFill" height="64" width="64" marginLeft="10" verticalAlignment="center" marginRight="10"
-                borderRadius="50"></Image>    
-         </StackLayout>     
-  
+                stretch="aspectFill" height="64" width="64"  verticalAlignment="center" 
+                borderRadius="50"
+                [stlOpenUserProfile]="{userId: otherInfo?.otherPlayer?.userId, redirectTo: loggedInUserId === otherInfo?.otherPlayer?.userId ? 'userProfile': 'otherUserProfile'}">></Image>    
+             <Label *ngIf="otherInfo.otherPlayer?.online" height="15" width="15" borderRadius="22" backgroundColor="#71b02f"></Label>          
+        </StackLayout>   
+         
        </GridLayout>
 
     </GridLayout>
