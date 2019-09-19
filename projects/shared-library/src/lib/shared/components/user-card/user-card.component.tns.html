@@ -219,15 +219,20 @@
           <Label text="{{otherInfo.otherPlayer?.displayName}}" fontSize="18" color="#616161" class="main-title"></Label>
         </StackLayout>       
 
-         <StackLayout row="0" col="1"  verticalAlignment="center" marginRight="10" borderRadius="32"
+         <StackLayout row="0" col="1"  verticalAlignment="center" marginRight="10" borderRadius="50"
              borderColor="#3b5998" borderWidth="1" paddingTop="2" paddingLeft="2" paddingRight="2" class="image-container"
-             height="64" width="64" orientation="horizontal">
+             height="66" width="66" orientation="horizontal">           
+   
              <Image *ngIf="isGamePlay" row="0" col="0" [src]="getImageUrl(otherInfo.otherPlayer,70,60)" backgroundColor="gray"
                 stretch="aspectFill" height="64" width="64"  verticalAlignment="center" 
                 borderRadius="50"
                 [stlOpenUserProfile]="{userId: otherInfo?.otherPlayer?.userId, redirectTo: loggedInUserId === otherInfo?.otherPlayer?.userId ? 'userProfile': 'otherUserProfile'}">></Image>    
-             <Label *ngIf="otherInfo.otherPlayer?.online" height="15" width="15" borderRadius="22" backgroundColor="#71b02f"></Label>          
+             
         </StackLayout>   
+
+        <AbsoluteLayout row="0" col="1" *ngIf="otherInfo.otherPlayer?.online">
+          <Label height="15" top="50" left="18" width="15" borderRadius="22" backgroundColor="#71b02f"></Label>            
+         </AbsoluteLayout>    
          
        </GridLayout>
 

@@ -34,6 +34,7 @@ export class GameDialog {
   questionAnswered = false;
   gameOver = false;
   PlayerMode = PlayerMode;
+  playerMode: any;
 
   MAX_TIME_IN_SECONDS: number;
   showContinueBtn = false;
@@ -82,6 +83,7 @@ export class GameDialog {
     this.subscriptions.push(
       this.gameObs.subscribe(game => {
         this.game = game;
+        this.playerMode = game.gameOptions.playerMode;
         this.threeConsecutiveAnswer = false;
         if (game !== null && game.playerQnAs.length === 3) {
           let consecutiveCount = 0;

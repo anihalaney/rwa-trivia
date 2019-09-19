@@ -23,7 +23,7 @@ export class GameQuestion {
   @Input() MAX_TIME_IN_SECONDS: number;
   @Input() applicationSettings: ApplicationSettings;
   @Input() user: User;
-  @Input() playerMode: number;
+  @Input() playerMode: any;
 
   answeredIndex: number;
   correctAnswerIndex: number;
