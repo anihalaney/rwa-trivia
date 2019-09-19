@@ -1,0 +1,16 @@
+.bottom_container {
+  background-color: #e2e2e2;
+
+  &-box {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 60;
+    width: 25%;
+    color: #000;
+  }
+}
+
+.activeMenu {
+  color: #077ad6;
+}

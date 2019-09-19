@@ -6,12 +6,11 @@ import { Store, select } from '@ngrx/store';
 import { User, ApplicationSettings } from 'shared-library/shared/model';
 import { coreState, CoreState, UserActions } from 'shared-library/core/store';
 import { Utils } from 'shared-library/core/services';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
 const EMAIL_REGEXP = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-@AutoUnsubscribe({ 'arrayName': 'subscriptions' })
-export class InviteMailFriends implements OnInit, OnDestroy {
+
+export class InviteMailFriends {
   user: User;
   invitationForm: FormGroup;
   showErrorMsg = false;
@@ -25,7 +24,7 @@ export class InviteMailFriends implements OnInit, OnDestroy {
   subscriptions = [];
 
   constructor(private fb: FormBuilder, private store: Store<CoreState>, private userAction: UserActions, private cd: ChangeDetectorRef,
-    private utils: Utils) {
+    public utils: Utils) {
     this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.user)).subscribe(user => {
       if (user) {
         this.user = user;
@@ -39,9 +38,6 @@ export class InviteMailFriends implements OnInit, OnDestroy {
       }
     }));
 
-  }
-
-  ngOnInit() {
     this.showSuccessMsg = undefined;
     this.invitationForm = this.fb.group({
       email: ['', Validators.required]
@@ -101,17 +97,5 @@ export class InviteMailFriends implements OnInit, OnDestroy {
     }
   }
 
-  ngOnDestroy(): void {
-  }
 
-  hideKeyboard() {
-    this.textField
-      .toArray()
-      .map((el) => {
-        if (el.nativeElement && el.nativeElement.android) {
-          el.nativeElement.android.clearFocus();
-        }
-        // return el.nativeElement.dismissSoftInput();
-      });
-  }
 }

@@ -1,8 +1,6 @@
 import { FriendConstants, interceptorConstants, ResponseMessagesConstants, User } from '../../projects/shared-library/src/lib/shared/model';
 import { MakeFriends } from '../utils/make-friends';
 import { Utils } from '../utils/utils';
-import { AccountService } from '../services/account.service';
-import { AppSettings } from '../services/app-settings.service';
 
 export class FriendController {
 
@@ -15,14 +13,9 @@ export class FriendController {
         const token = req.body.token;
         const userId = req.body.userId;
         const email = req.body.email;
-
         try {
             const makeFriends: MakeFriends = new MakeFriends(token, userId, email);
-            const appSetting = await AppSettings.Instance.getAppSettings();
             const invitee = await makeFriends.validateToken();
-            if (appSetting.invite_bits_enabled) {
-                await AccountService.updateBits(userId, appSetting.invite_bits);
-            }
             Utils.sendResponse(res, interceptorConstants.SUCCESS, { created_uid: invitee });
         } catch (error) {
             Utils.sendError(res, error);

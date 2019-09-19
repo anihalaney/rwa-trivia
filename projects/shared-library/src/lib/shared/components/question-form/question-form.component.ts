@@ -2,12 +2,16 @@ import { Component, Input, Output, OnInit, OnChanges, OnDestroy, EventEmitter, C
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
 import { Question, QuestionStatus, Category, User, Answer, ApplicationSettings } from '../../model';
 import { QuestionService } from '../../../core/services';
-import { Observable } from 'rxjs';
-import { debounceTime } from 'rxjs/operators';
+import { Observable, interval, of } from 'rxjs';
+import { debounceTime, switchMap, map} from 'rxjs/operators';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 // import { QuillImageUpload } from 'ng-quill-tex/lib/models/quill-image-upload';
 import { CropImageDialogComponent } from './../crop-image-dialog/crop-image-dialog.component';
 import { MatDialog } from '@angular/material';
+import { Store, select } from '@ngrx/store';
+import { CoreState, coreState } from './../../../core/store';
+import * as userActions from '../../../../../../trivia/src/app/user/store/actions';
+import { Utils } from 'shared-library/core/services';
 @Component({
   selector: 'app-question-form',
   templateUrl: './question-form.component.html',
@@ -26,19 +30,19 @@ export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
   @Output() updateUnpublishedQuestions = new EventEmitter<Question>();
   @Input() quillConfig: any;
   @Input() applicationSettings: ApplicationSettings;
+  @Input() isAutoSave: boolean;
 
   questionForm: FormGroup;
   // Properties
   categories: Category[];
   tags: string[];
-
+  filteredTags$: Observable<string[]>;
   autoTags: string[] = []; // auto computed based on match within Q/A
   enteredTags: string[] = [];
   user: User;
   subscriptions = [];
   quillObject: any = {};
   dialogRef;
-
   get answers(): FormArray {
     return this.questionForm.get('answers') as FormArray;
   }
@@ -49,10 +53,12 @@ export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
   constructor(
     private fb: FormBuilder,
     public dialog: MatDialog,
-    public questionService: QuestionService) {
+    public questionService: QuestionService,
+    public store: Store<CoreState>,
+    public utils: Utils) {
 
 
-  }
+    }
 
   ngOnInit() {
 
@@ -61,14 +67,45 @@ export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
     });
 
     this.createForm(this.editQuestion);
+    if (this.editQuestion.is_draft && this.isAutoSave) {
+      this.autoSave();
+    }
 
     const questionControl = this.questionForm.get('questionText');
+
+    this.filteredTags$ = this.questionForm.get('tags').valueChanges
+    .pipe(map(val => val.length > 0 ? this.filter(val) : []));
+
     this.subscriptions.push(questionControl.valueChanges.pipe(debounceTime(500)).subscribe(v => this.computeAutoTags()));
     this.subscriptions.push(this.answers.valueChanges.pipe(debounceTime(500)).subscribe(v => this.computeAutoTags()));
     this.subscriptions.push(this.categoriesObs.subscribe(categories => this.categories = categories));
     this.subscriptions.push(this.tagsObs.subscribe(tags => this.tags = tags));
   }
 
+  filter(val: string): string[] {
+    return this.tags.filter(option => new RegExp(this.utils.regExpEscape(`${val}`), 'gi').test(option));
+  }
+
+  autoSave() {
+      this.subscriptions.push(this.store.select(coreState).pipe(
+        select(s => s.applicationSettings),
+        map(appSettings => appSettings),
+        switchMap(appSettings => {
+          if (appSettings && appSettings[0]) {
+            if (appSettings[0]['auto_save']['is_enabled']) {
+              return interval(appSettings[0]['auto_save']['time']);
+            } else {
+              return of();
+            }
+        }
+        })).subscribe(data => {
+          if (data) {
+              this.questionForm.patchValue({ is_draft : true });
+              const question = this.getQuestionFromFormValue(this.questionForm.value);
+              this.store.dispatch(new userActions.AddQuestion({ question: question }));
+          }
+    }));
+  }
 
   ngOnChanges() {
     if (this.editQuestion) {
@@ -105,6 +142,9 @@ export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
       this.quillObject.jsonObject = question.questionObject;
     }
     this.questionForm = this.fb.group({
+      id: question.id,
+      is_draft: question.is_draft,
+      status: question.status,
       category: [(question.categories.length > 0 ? question.categories[0] : ''), Validators.required],
       questionText: [questionText, Validators.required],
       tags: '',
@@ -169,6 +209,7 @@ export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
     // get question object from the forms
     const question: Question = this.getQuestionFromFormValue(this.questionForm.value);
     question.id = this.editQuestion.id;
+    question.is_draft = false;
     question.status = this.editQuestion.status === QuestionStatus.REQUIRED_CHANGE ? QuestionStatus.PENDING : this.editQuestion.status;
     question.bulkUploadId = this.editQuestion.bulkUploadId ? this.editQuestion.bulkUploadId : '';
     question.categoryIds = [];
@@ -199,6 +240,9 @@ export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
   getQuestionFromFormValue(formValue: any): Question {
     let question: Question;
     question = new Question();
+    question.id = formValue.id;
+    question.is_draft = formValue.is_draft;
+    question.status = formValue.status;
     question.questionText = formValue.questionText;
     question.answers = formValue.answers;
     question.categoryIds = this.questionForm.get('category').value;
@@ -235,7 +279,6 @@ export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnDestroy() {
-
   }
 
   onAnswerChanged(event, answerIndex) {

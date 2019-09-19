@@ -205,10 +205,8 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
           if (user) {
             // Success
             if (user && !user.emailVerified) {
-              const isEmailVerify = await this.firebaseAuthService.sendEmailVerification(user);
-              if (isEmailVerify) {
-                this.redirectTo();
-              }
+              await this.firebaseAuthService.sendEmailVerification(user);
+              this.redirectTo();
             }
           }
           break;
@@ -348,14 +346,7 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
   }
 
   hideKeyboard() {
-    if (isAndroid) {
-      this.textField
-        .toArray()
-        .map((el) => {
-          el.nativeElement.android.clearFocus();
-          return el.nativeElement.dismissSoftInput();
-        });
-    }
+    this.utils.hideKeyboard(this.textField);
   }
 
 }

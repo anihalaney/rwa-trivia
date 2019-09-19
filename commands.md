@@ -29,13 +29,14 @@ Commands :
     arguments  :  pv = product variant e.g. trivia
                   e = project environment e.g. staging
 
-4) command: run-mobile
-    description:  run android/ios app in staging/production environment
+4) command: mobile
+    description:  run or debug android/ios app in staging/production environment
     e.g.       :  node cli run-mobile --pv trivia --pk io.bitwiser.trivia.dev --plt android --e staging
     arguments  :  pv = productVarient e.g. trivia
                   pk = project package name defined in firebase e.g. io.bitwiser.trivia.dev
                   plt = Mobile platform e.g. android
                   e = project environment
+                  app = run or debug app e.g run
 
 5) command: release-mobile
     description:  release android app for staging/production environment

@@ -37,7 +37,7 @@
 
         <question-table [showSort]="false" [showPaginator]="true" [questions]="unpublishedQuestionsObs | async"
           [totalCount]="10" [categoryDictionary]="categoryDictObs | async"  [categoriesObs]="categoryDictObs"  [showApproveButton]="true" [showButtons]="true"
-          [userDict]="userDict" [user]="user" [clientSidePagination]="true" [tagsObs]="tagsObs" [categoriesObs]="categoriesObs"
+          [isAdmin]="true" [userDict]="userDict" [user]="user" [clientSidePagination]="true" [tagsObs]="tagsObs" [categoriesObs]="categoriesObs"
           (approveUnpublishedQuestion)="approveUnpublishedQuestions($event)" (updateUnpublishedQuestions)="updateUnpublishedQuestions($event)" [quillConfig]="quillConfig" [applicationSettings]="applicationSettings">
         </question-table>
       </mat-tab>

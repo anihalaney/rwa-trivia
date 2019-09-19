@@ -163,5 +163,10 @@
       },
       "__TRANSFORM_HTML__": true
     }
+  },
+  "husky": {
+    "hooks": {
+      "pre-push": "npm run test && ng e2e trivia-e2e"
+    }
   }
 }

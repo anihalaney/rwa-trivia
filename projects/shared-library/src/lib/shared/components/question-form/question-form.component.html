@@ -2,9 +2,9 @@
   <div class="row edit-form">
     <div class="col-sm-12 col-xs-12 div-border">
       <div class="sprite cancelicon col-md-offset-3 col-xs-offset-3" (click)="showQuestion()"></div>
-      <h4 class="label">Edit it</h4>
-      <p class="message">{{editQuestion.reason}}</p>
-      <h4 class="sub-message">Please do the needfull edits and resubmit the question.</h4>
+      <h4 *ngIf="editQuestion?.is_draft !== true" class="label">Edit it</h4>
+      <p  *ngIf="editQuestion?.is_draft !== true" class="message">{{editQuestion.reason}}</p>
+      <h4 *ngIf="editQuestion?.is_draft !== true" class="sub-message">Please do the needfull edits and resubmit the question.</h4>
     </div>
     <section id="curentactive" class="col-md-12">
       <div class="optionbox">
@@ -97,18 +97,23 @@
             </mat-basic-chip>
           </mat-chip-list>
           <input type="text" class="type-zone margin-bottom-8 edit-form-input-field" contenteditable="true" formControlName="tags"
-            placeholder="add tags" aria-label="tags">
+            placeholder="add tags" aria-label="tags" [matAutocomplete]="tagAuto">
+          <mat-autocomplete #tagAuto="matAutocomplete">
+            <mat-option *ngFor="let tag of filteredTags$ | async" [value]="tag">
+              {{tag}}
+            </mat-option>
+          </mat-autocomplete>
           <div>
-            <button type="button" class="add-tag-btn" [disabled]="questionForm.controls.tags.value==''" (click)="addTag()" aria-label="password">Add</button>
-          </div>
+              <button type="button" class="add-tag-btn" [disabled]="questionForm.controls.tags.value==''" (click)="addTag()" aria-label="password">Add</button>
+            </div>
 
-          <div class="error row col-md-12" *ngIf="answers.valid && questionForm.controls.questionText.valid && questionForm.hasError('tagCountInvalid')">
+            <div class="error row col-md-12" *ngIf="answers.valid && questionForm.controls.questionText.valid && questionForm.hasError('tagCountInvalid')">
             Must have atleast 3 tags
           </div>
         </div>
       </div>
       <div class="savebox">
-        <button class="btn resubmit-btn" type="submit" [disabled]="!questionForm.valid" aria-label="submit">Resubmit</button>
+        <button class="btn resubmit-btn" type="submit" [disabled]="!questionForm.valid"  aria-label="submit">{{editQuestion?.is_draft ===true ? 'Submit  ': 'Resubmit'}}</button>
       </div>
     </section>
   </div>

@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, NgZone, OnDestro
 import { Store } from '@ngrx/store';
 import { UserActions } from 'shared-library/core/store/actions';
 import { Page } from 'tns-core-modules/ui/page';
-import { AppState } from '../../store';
+import { CoreState } from 'shared-library/core/store';
 import { RecentGames } from './recent-games';
 import { Utils } from 'shared-library/core/services';
 import { FirebaseScreenNameConstants } from 'shared-library/shared/model';
@@ -21,7 +21,7 @@ export class RecentGamesComponent extends RecentGames implements OnInit, OnDestr
   // it delay complex UI show Router navigation can finish first to have smooth transition
   renderView = false;
 
-  constructor(store: Store<AppState>,
+  constructor(store: Store<CoreState>,
     cd: ChangeDetectorRef,
     userActions: UserActions,
     private ngZone: NgZone,

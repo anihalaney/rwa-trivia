@@ -18,8 +18,7 @@ import { CookieLawModule } from 'angular2-cookie-law';
 import {
   AppComponent,
   SideNavComponent, HeaderComponent, FooterComponent, InvitationRedirectionComponent,
-  PrivacyPolicyComponent, UserStatsCardComponent, RecentGameCardComponent, RecentGamesComponent,
-  ProfileCardComponent, AchievementsComponent,
+  PrivacyPolicyComponent, UserStatsCardComponent, ProfileCardComponent, AchievementsComponent
 } from './components';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from 'shared-library/environments/environment';
@@ -38,8 +37,6 @@ import { WindowRef } from 'shared-library/core/services';
     InvitationRedirectionComponent,
     PrivacyPolicyComponent,
     ProfileCardComponent,
-    RecentGamesComponent,
-    RecentGameCardComponent,
     UserStatsCardComponent,
     AchievementsComponent
   ],

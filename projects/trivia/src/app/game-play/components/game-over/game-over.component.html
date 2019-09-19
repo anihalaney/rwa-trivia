@@ -152,7 +152,10 @@
                             [ngClass]="answer.answerText === row.userGivenAnswer  && answer.correct? 'answer-label':'label'"
                             class="text-style your-answer-label">Your ans.</label>
                           <span class="text-style"
-                            [ngClass]="answer.answerText === row.userGivenAnswer  && answer.correct? '':'label'">{{row.userGivenAnswer}}
+                            [ngClass]="answer.answerText === row.userGivenAnswer  && answer.correct? '':'label'">{{row.userGivenAnswer}}  
+                          </span> 
+                          <span [ngClass]="row.className"
+                           class="sprite">
                           </span>
                         </p>
                       </span>
