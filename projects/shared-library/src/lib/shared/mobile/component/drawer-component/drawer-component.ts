@@ -233,7 +233,7 @@ export class DrawerComponent implements OnInit, OnDestroy {
             this.pushToken = undefined;
             this.activeMenu = 'Home';
             this.closeDrawer();
-            // this.store.dispatch(this.userActions.loginSuccess(null));
+            this.store.dispatch(this.userActions.loginSuccess(null));
             this.routerExtension.navigate(['/dashboard'], { clearHistory: true });
         }, 2000);
 
