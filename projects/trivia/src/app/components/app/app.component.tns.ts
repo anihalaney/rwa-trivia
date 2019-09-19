@@ -22,7 +22,7 @@ import { projectMeta } from '../../../../../shared-library/src/lib/environments/
 import * as appversion from 'nativescript-appversion';
 import { Utils } from 'shared-library/core/services';
 import { NavigationEnd, Router } from '@angular/router';
-import { FirebaseScreenNameConstants } from '../../../../../shared-library/src/lib/shared/model';
+import { FirebaseScreenNameConstants, User } from '../../../../../shared-library/src/lib/shared/model';
 import { registerElement } from "nativescript-angular/element-registry";
 import { Carousel, CarouselItem } from 'nativescript-carousel';
 import { ModalDialogOptions, ModalDialogService } from 'nativescript-angular/modal-dialog';
@@ -40,9 +40,10 @@ registerElement('CarouselItem', () => CarouselItem);
 
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class AppComponent implements OnInit, OnDestroy {
+  user: User;
   subscriptions = [];
   applicationSettings: ApplicationSettings;
-
+  isDrawerOpenOrClosed = '';
   constructor(private store: Store<AppState>,
     private navigationService: NavigationService,
     private ngZone: NgZone,
@@ -68,14 +69,10 @@ export class AppComponent implements OnInit, OnDestroy {
         this.routerExtension.navigate(['user/my/invite-friends']);
       }
     }));
-
     this.handleBackPress();
-
-
   }
 
   ngOnInit() {
-
     this.checkForceUpdate();
     firebase.init({
       onMessageReceivedCallback: (message) => {
@@ -150,10 +147,14 @@ export class AppComponent implements OnInit, OnDestroy {
     }));
 
     this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
+      this.user = user;
       this.store.dispatch(this.applicationSettingsAction.loadApplicationSettings());
       this.store.dispatch(this.categoryActions.loadCategories());
     }));
+  }
 
+  drawerEvent(args) {
+    this.isDrawerOpenOrClosed = args.eventName;
   }
 
   async showWelcomeScreen() {

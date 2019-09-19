@@ -1,4 +1,6 @@
-import { ChangeDetectorRef, ViewChildren, QueryList, ElementRef } from '@angular/core';
+import {
+  Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, OnDestroy, ViewChildren, QueryList, ElementRef
+} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
 import { User, ApplicationSettings } from 'shared-library/shared/model';
@@ -95,7 +97,5 @@ export class InviteMailFriends {
     }
   }
 
-  ngOnDestroy(): void {
-  }
 
 }

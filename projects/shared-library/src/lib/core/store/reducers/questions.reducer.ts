@@ -34,6 +34,16 @@ export function questionSaveStatus(state: any = 'NONE', action: ActionWithPayloa
   }
 }
 
+export function questionDraftSaveStatus(state: any, action: ActionWithPayload<string>): string {
+  switch (action.type) {
+    case QuestionActions.ADD_NEW_QUESTION_AS_DRAFT_SUCCESS:
+      return action.payload;
+    case QuestionActions.UPDATE_QUESTION_AS_DRAFT_SUCCESS:
+        return 'UPDATED';
+    default:
+          return state;
+  }
+}
 
 export function updateQuestion(state: any = 'NONE', action: ActionWithPayload<string>): string {
   switch (action.type) {

@@ -50,7 +50,6 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
   categoryIds: any[];
   submitBtnTxt: string;
   actionBarTxt: string;
-  subscriptions = [];
   oWebViewInterface;
 
   imagePath: string;
@@ -273,7 +272,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
         return categoryObj;
       });
       this.enteredTags = this.editQuestion.tags;
-      this.submitBtnTxt = 'RESUBMIT';
+      this.submitBtnTxt = this.editQuestion.is_draft === true && this.editQuestion.status !== 6 ? 'SUBMIT' : 'RESUBMIT';
       this.actionBarTxt = 'Update Question';
     }
 
@@ -293,6 +292,8 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
 
     const answersFA: FormArray = super.createDefaultForm(question);
     this.questionForm = this.fb.group({
+      id: question.id ?  question.id : '',
+      is_draft: question.is_draft,
       questionText: [question.questionText,
       Validators.compose([Validators.required])],
       tags: '',
@@ -362,7 +363,6 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
   }
 
   ngOnDestroy() {
-
   }
 
   questionLoaded(event) {

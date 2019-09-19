@@ -1,6 +1,5 @@
 import { Routes } from '@angular/router';
 import { AuthGuard, CategoriesResolver, TagsResolver } from 'shared-library/core/route-guards';
-import { RecentGamesComponent } from './../components/recent-games/recent-games.component';
 import { PrivacyPolicyComponent } from './../components/privacy-policy/privacy-policy.component';
 import { AchievementsComponent } from '../components';
 import { UserFeedbackComponent } from 'shared-library/shared/mobile/component/user-feedback/user-feedback.component';
@@ -8,6 +7,7 @@ import { SignupExtraInfoComponent } from 'shared-library/shared/components/signu
 import { FirstQuestionComponent } from 'shared-library/shared/mobile/component/first-question/first-question.component';
 import { SelectCategoryTagComponent } from 'shared-library/shared/mobile/component/select-category-tag/select-category-tag.component';
 import { NotificationComponent } from 'shared-library/shared/mobile/component/notification/notification.component';
+import { RecentGamesComponent } from 'shared-library/shared/components/recent-games/recent-games.component';
 
 export const routes: Routes = [
 
@@ -26,11 +26,6 @@ export const routes: Routes = [
         path: 'user',
         loadChildren: './../user/user.module#UserModule',
         resolve: { 'categories': CategoriesResolver, 'tags': TagsResolver }
-    },
-    {
-        path: 'recent-game',
-        component: RecentGamesComponent,
-        canActivate: [AuthGuard]
     },
     {
         path: 'privacy-policy',
@@ -67,6 +62,11 @@ export const routes: Routes = [
     {
         path: 'notification',
         component: NotificationComponent,
+        canActivate: [AuthGuard]
+    },
+    {
+        path: 'recent-games',
+        component: RecentGamesComponent,
         canActivate: [AuthGuard]
     }
 ];

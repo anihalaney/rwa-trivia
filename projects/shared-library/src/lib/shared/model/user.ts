@@ -37,6 +37,7 @@ export class User {
   isCategorySet?: boolean;
   phoneNo?: string;
   isFriend?: boolean;
+  phoneNumber?: string;
   totalFriends?: number;
 
   constructor(authState?: firebase.User & { name: string }) {

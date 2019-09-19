@@ -1,11 +1,12 @@
 import {
-  Component, ChangeDetectionStrategy, ChangeDetectorRef
+  Component, ChangeDetectionStrategy, ChangeDetectorRef, OnDestroy
 } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { CoreState, UserActions } from 'shared-library/core/store';
 import { Utils } from 'shared-library/core/services';
 import { InviteMailFriends } from './invite-mail-friends';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
 @Component({
   selector: 'app-invite-mail-friends',
@@ -14,11 +15,16 @@ import { InviteMailFriends } from './invite-mail-friends';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class InviteMailFriendsComponent extends InviteMailFriends {
+@AutoUnsubscribe({ 'arrayName': 'subscriptions' })
+export class InviteMailFriendsComponent extends InviteMailFriends implements OnDestroy {
 
   constructor(fb: FormBuilder, store: Store<CoreState>, userAction: UserActions, cd: ChangeDetectorRef,
     utils: Utils) {
     super(fb, store, userAction, cd, utils);
+  }
+
+  ngOnDestroy(): void {
+
   }
 }
 

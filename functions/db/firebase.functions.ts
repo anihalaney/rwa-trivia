@@ -301,6 +301,10 @@ export class FirebaseFunctions {
                 const realTimeUserStatus = await UserService.getUserById(userDataStatus.userId);
                 userDataStatus.status = realTimeUserStatus.status;
 
+               // console.log('realTimeUserStatus---->', realTimeUserStatus);
+             //   console.log('userDataStatus---->', userDataStatus);
+
+
                 if (userDataStatus.device === TriggerConstants.ANDROID) {
                     const deviceTokenIndex = user.androidPushTokens
                         .findIndex(
@@ -319,15 +323,17 @@ export class FirebaseFunctions {
                         user.iosPushTokens[deviceTokenIndex].online = onlineStatus;
                     }
                 }
-                console.log('user', user);
+               // console.log('user', user);
                 await UserService.updateUser({ ...user });
 
             }
 
-            const onlineOnAndroid = user.androidPushTokens ? user.androidPushTokens.some((androidPushToken) =>
-                androidPushToken.token && androidPushToken.online) : false;
-            const onlineOnIos = user.iosPushTokens ? user.iosPushTokens.some((iosPushToken) =>
-                iosPushToken.token && iosPushToken.online): false;
+            const onlineOnAndroid = user.androidPushTokens && user.androidPushTokens.length > 0
+                                    ? user.androidPushTokens.some((androidPushToken) =>
+                                                                    androidPushToken.token && androidPushToken.online) : false;
+            const onlineOnIos = user.iosPushTokens && user.iosPushTokens.length > 0
+                                         ? user.iosPushTokens.some((iosPushToken) =>
+                                                                    iosPushToken.token && iosPushToken.online) : false;
 
             userStatus.online = (onlineOnAndroid || onlineOnIos
                 || userDataStatus.status === UserStatusConstants.ONLINE) ? true : false;

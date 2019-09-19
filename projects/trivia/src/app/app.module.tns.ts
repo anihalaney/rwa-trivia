@@ -14,7 +14,7 @@ import { PlatformFirebaseToken } from 'shared-library/core/db-service/tokens';
 import { NativeScriptUISideDrawerModule } from 'nativescript-ui-sidedrawer/angular';
 import { registerElement } from 'nativescript-angular/element-registry';
 import { RouterModule } from '@angular/router';
-import { RecentGameCardComponent, RecentGamesComponent, PrivacyPolicyComponent, AchievementsComponent } from './components';
+import { PrivacyPolicyComponent, AchievementsComponent } from './components';
 import { UserFeedbackComponent } from './components/index.tns';
 import { WelcomeScreenComponent } from '../../../shared-library/src/lib/shared/mobile/component';
 import { ModalDialogService } from 'nativescript-angular/modal-dialog';
@@ -32,8 +32,6 @@ registerElement('Fab', () => require('nativescript-floatingactionbutton').Fab);
 @NgModule({
   declarations: [
     AppComponent,
-    RecentGameCardComponent,
-    RecentGamesComponent,
     PrivacyPolicyComponent,
     AchievementsComponent,
     UserFeedbackComponent,

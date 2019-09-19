@@ -5,11 +5,14 @@ import { RenderQuestionComponent } from './render-question/render-question.compo
 import { RenderAnswerComponent } from './render-answer/render-answer.component';
 import { UserReactionComponent } from './user-reaction/user-reaction.component';
 import { UserCardComponent } from './user-card/user-card.component';
-import { FriendInviteComponent } from './friend-invite/friend-invite.component';
-import { GameInviteComponent } from './game-invite/game-invite.component';
 import { SignupExtraInfoComponent } from './signup-extra-info/signup-extra-info.component';
 import { CheckDisplayNameComponent } from './check-display-name/check-display-name.component';
+import { FriendInviteComponent } from './friend-invite/friend-invite.component';
+import { GameInviteComponent } from './game-invite/game-invite.component';
 import { InviteMailFriendsComponent } from './invite-mail-friends/invite-mail-friends.component';
+import { RecentGamesComponent } from './recent-games/recent-games.component';
+import { RecentGameCardComponent } from './recent-games/recent-game-card/recent-game-card.component';
+
 export {
     AuthorComponent,
     RenderQuestionComponent,
@@ -17,10 +20,12 @@ export {
     UserCardComponent,
     InviteMailFriendsComponent,
     UserReactionComponent,
+    SignupExtraInfoComponent,
+    CheckDisplayNameComponent,
     FriendInviteComponent,
     GameInviteComponent,
-    SignupExtraInfoComponent,
-    CheckDisplayNameComponent
+    RecentGamesComponent,
+    RecentGameCardComponent
 };
 
 export default [
@@ -33,5 +38,7 @@ export default [
     SignupExtraInfoComponent,
     CheckDisplayNameComponent,
     FriendInviteComponent,
-    GameInviteComponent
+    GameInviteComponent,
+    RecentGamesComponent,
+    RecentGameCardComponent
 ];
