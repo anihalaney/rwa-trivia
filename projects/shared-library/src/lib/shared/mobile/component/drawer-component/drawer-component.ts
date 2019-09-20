@@ -58,7 +58,7 @@ export class DrawerComponent implements OnInit, OnDestroy {
                     this.activeMenu = 'Category Leaderboard';
                 } else if (nav === '/dashboard') {
                     this.activeMenu = 'Home';
-                } else if (nav === '/recent-game') {
+                } else if (nav === '/recent-games') {
                     this.activeMenu = 'Recently Completed Games';
                 } else if (nav.includes('/user/my/profile')) {
                     this.activeMenu = 'Profile';
