@@ -39,12 +39,13 @@
         <!-- For Search Icon in invite-friends.component.tns.html screen -->
         <StackLayout *ngIf="((user && user!== null && !showSkipBtn && title.includes('Friends')))" col="4" stlRippleEffect
             stlBackgroundColor="#13284F" ios:margin="3" android:margin="10" stlOpacity="0.5" stlBackgroundColorAfter=""
-            verticalAlignment="center" horizontalAlignment="right" marginRight="95" android:width="23" ios:width="40">
+            verticalAlignment="center" horizontalAlignment="right" marginRight="95" android:width="23" ios:width="40" >
             <Label text="&#xf002;" class="fa" fontSize="20"></Label>
         </StackLayout>
 
         <!-- For Add Friend Icon in invite-friends.component.tns.html screen -->
-        <StackLayout *ngIf="((user && user!== null && !showSkipBtn && title.includes('Friends')))" col="4" stlRippleEffect
+        <StackLayout *ngIf="((user && user!== null && !showSkipBtn && title.includes('Friends')))" col="4" 
+            stlRippleEffect (rippleTap)="navigateToInvite()"
             stlBackgroundColor="#13284F" ios:margin="3" android:margin="10" stlOpacity="0.5" stlBackgroundColorAfter=""
             verticalAlignment="center" horizontalAlignment="right" marginRight="50" android:width="23" ios:width="40">
             <Label text="&#xf234;" class="fas" fontSize="18"></Label>

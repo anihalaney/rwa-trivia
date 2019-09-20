@@ -65,6 +65,10 @@ export class ActionBarComponent implements OnDestroy {
         this.routerExtensions.navigate(['/user/my/questions']);
     }
 
+    navigateToInvite() {
+        this.routerExtensions.navigate(['/user/my/app-invite-friends-dialog', { showSkip: false }]);
+      }
+
     ngOnDestroy() {
 
     }

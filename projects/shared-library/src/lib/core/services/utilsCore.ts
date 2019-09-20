@@ -41,7 +41,7 @@ export abstract class UtilsCore {
 
   getImageUrl(user: User, width: Number, height: Number, size: string): any {
 
-    if (user && user.profilePicture && user.profilePicture !== '') {
+    if (user && user !== null && user.profilePicture && user.profilePicture !== '') {
       if (this.sanitizer) {
         return this.sanitizer.bypassSecurityTrustUrl(
           `${CONFIG.functionsUrl}/user/profile/${user.userId}/${user.profilePicture}/${width}/${height}`

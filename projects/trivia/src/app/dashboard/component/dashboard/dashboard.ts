@@ -7,7 +7,7 @@ import { Utils, WindowRef } from 'shared-library/core/services';
 import { GameActions, QuestionActions, UserActions } from 'shared-library/core/store/actions';
 import {
     Account, ApplicationSettings, CalenderConstants, Game, GameStatus, Invitation,
-    OpponentType, PlayerMode, User
+    OpponentType, PlayerMode, User, userCardType
 } from 'shared-library/shared/model';
 import { AppState, appState } from '../../../store';
 import { map, flatMap, filter } from 'rxjs/operators';
@@ -68,6 +68,7 @@ export class Dashboard implements OnDestroy {
     serverCreatedTime: number;
     photoUrl: '';
     notifications = [];
+    userCardType = userCardType;
 
     constructor(public store: Store<AppState>,
         private questionActions: QuestionActions,

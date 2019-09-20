@@ -51,7 +51,7 @@
                 horizontalAlignment="center"></Label>
         </StackLayout>
     </StackLayout>
-    <!-- <StackLayout *ngIf="showBadge && !gameOver" orientation="vertical" verticalAlignment="center" height="100%">
+    <StackLayout *ngIf="showBadge && !gameOver" orientation="vertical" verticalAlignment="center" height="100%">
         <Image src="~/assets/images/score{{correctAnswerCount+1}}.png" height="70" width="70" marginLeft="2"
             verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"></Image>
 
@@ -85,5 +85,5 @@
         [categoryName]="categoryName" [correctCount]="correctAnswerCount" [noOfQuestions]="questionIndex"
         [totalRound]="totalRound" (gameOverContinueClicked)="gameOverContinueClicked()"
         >
-    </game-over> -->
+    </game-over>
 </StackLayout>

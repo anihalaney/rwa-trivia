@@ -90,9 +90,6 @@ export class UserCardComponent implements OnInit, OnDestroy, OnChanges {
       }
 
     }
-    if (this.user) {
-      console.log('this.user', this.user);
-    }
     this.cd.markForCheck();
   }
 
