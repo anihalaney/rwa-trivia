@@ -173,7 +173,21 @@
   bottom: 5px;
 }
 
-.author-user-card{
+.author-user-card {
   position: relative;
   padding-left: 5px;
+}
+
+.user-img {
+  position: relative;
+  max-width: fit-content;
+  .online-dot {
+    position: absolute;
+    height: 12px;
+    width: 12px;
+    background: #71b02f;
+    border-radius: 10px;
+    right: 0px;
+    bottom: 7px;
+  }
 }
