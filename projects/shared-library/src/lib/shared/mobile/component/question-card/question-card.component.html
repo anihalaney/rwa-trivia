@@ -17,8 +17,12 @@
     <StackLayout iosOverflowSafeArea="false" class="question-answered Hind-Medium" margin="10"
       *ngFor="let answer of question.answers" [class.players-answer]="answeredText === answer.answerText"
       [class.wrong]="answeredText === answer.answerText && correctAnswerText !== answer.answerText"
-      [class.right]="answeredText !== '' && correctAnswerText === answer.answerText" [isUserInteractionEnabled]="doPlay"
-      stlRippleEffect (rippleTap)="rippleTap(answer)">
+      [class.right]="answeredText !== '' && correctAnswerText === answer.answerText" 
+      [isUserInteractionEnabled]="doPlay"
+      stlRippleEffect (rippleTap)="rippleTap(answer)"
+      [style.backgroundColor] = "answeredText === answer.answerText && correctAnswerText !== answer.answerText ? '#d54937' : ''"
+      [style.backgroundColor] = "answeredText !== '' && correctAnswerText === answer.answerText ? '#71b02f' : ''"
+      >
 
       <render-answer [answer]="answer" [isGameAnswer]="true"
         [isWrong]="answeredText === answer.answerText && correctAnswerText !== answer.answerText"

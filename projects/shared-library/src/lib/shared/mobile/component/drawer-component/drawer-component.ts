@@ -68,10 +68,16 @@ export class DrawerComponent implements OnInit, OnDestroy {
                     this.activeMenu = 'My Questions';
                 } else if (nav === '/user/my/invite-friends') {
                     this.activeMenu = 'Friend List';
-                } else if (nav === '/privacy-policy' || nav === '/terms-and-conditions' || nav === '/user-feedback') {
-                    this.activeMenu = 'Help';
+                } else if (nav === '/privacy-policy') {
+                    this.activeMenu = 'Privacy Policy';
+                } else if (nav === '/terms-and-conditions') {
+                    this.activeMenu = 'T&C';
+                } else if (nav === '/user-feedback') {
+                    this.activeMenu = 'User-Feedback';
                 } else if (nav === '/achievements') {
                     this.activeMenu = 'achievements';
+                } else if (nav === '/login') {
+                    this.activeMenu = 'login/signup';
                 }
 
             }
@@ -243,12 +249,12 @@ export class DrawerComponent implements OnInit, OnDestroy {
     }
 
     navigateToProfileSettings() {
-        this.routerExtension.navigate(['/user/my/profile', this.user.userId]);
+        this.routerExtension.navigate(['/user/my/profile', this.user ? this.user.userId : '']);
         this.closeDrawer();
     }
 
     navigateToGameProfile() {
-        this.routerExtension.navigate(['/user/my/game-profile', this.user.userId]);
+        this.routerExtension.navigate(['/user/my/game-profile', this.user ? this.user.userId : '']);
         this.closeDrawer();
     }
 

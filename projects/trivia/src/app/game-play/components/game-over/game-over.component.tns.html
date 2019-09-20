@@ -186,20 +186,17 @@
                                 (rippleTap)="reMatchGame()" *ngIf="game.gameOptions?.playerMode != PlayerMode.Single"
                                 stlRippleEffect></button>
                             <Button row="1" col="1" class="navigate-button Hind-Medium" text="Play Again"
-                                (rippleTap)="reMatchGame()" *ngIf="game.gameOptions?.playerMode == PlayerMode.Single"
-                                stlRippleEffect></Button>
-                            <Button row="1" col="2" class="navigate-button Hind-Medium"
-                                text="Invite as Friend {{game.gameOptions.opponentType}}" (rippleTap)="inviteAsFriend()"
-                                isEnabled="{{!disableFriendInviteBtn}}"
-                                *ngIf="(game.gameOptions.opponentType == opponentType.Random || game.gameOptions.isChallenge ) && otherUserInfo?.email && userInvitations[otherUserInfo?.email]?.status === 'add'"
-                                stlRippleEffect></Button>
+                                (rippleTap)="reMatchGame()"
+                                *ngIf="game.gameOptions?.playerMode == PlayerMode.Single" stlRippleEffect></Button>
+                            <Button row="1" col="2" class="navigate-button Hind-Medium" text="Invite as Friend"
+                                (rippleTap)="inviteAsFriend()" isEnabled="{{!disableFriendInviteBtn}}"
+                                *ngIf="(game.gameOptions.opponentType == opponentType.Random || game.gameOptions.isChallenge ) && otherUserInfo?.email && userInvitations &&  userInvitations[otherUserInfo?.email]?.status === 'add'" stlRippleEffect></Button>
 
-                            <Button row="1" col="2" class="navigate-button Hind-Medium friend-request-sent"
-                                text="Friend Request Sent"
-                                *ngIf="(game.gameOptions.opponentType == opponentType.Random || game.gameOptions.isChallenge ) && otherUserInfo?.email && userInvitations[otherUserInfo?.email]?.status === 'pending'"></Button>
+                            <Button row="1" col="2" class="navigate-button Hind-Medium friend-request-sent" text="Friend Request Sent"
+                                *ngIf="(game.gameOptions.opponentType == opponentType.Random || game.gameOptions.isChallenge ) && otherUserInfo?.email && userInvitations && userInvitations[otherUserInfo?.email]?.status === 'pending'"></Button>
 
-                            <Button row="1" col="2" class="navigate-button Hind-Medium friends" text="Friends"
-                                *ngIf="(game.gameOptions.opponentType == opponentType.Random || game.gameOptions.isChallenge ) && otherUserInfo?.email  && userInvitations[otherUserInfo?.email]?.status === 'approved'"></Button>
+                            <Button row="1" col="2" class="navigate-button Hind-Medium friends" text="Friends" 
+                                *ngIf="(game.gameOptions.opponentType == opponentType.Random || game.gameOptions.isChallenge ) && otherUserInfo?.email  && userInvitations && userInvitations[otherUserInfo?.email]?.status === 'approved'"></Button>
 
                             <Button row="1" col="3" class="navigate-button Hind-Medium" text="Home"
                                 (rippleTap)="gotoDashboard()" stlRippleEffect></Button>

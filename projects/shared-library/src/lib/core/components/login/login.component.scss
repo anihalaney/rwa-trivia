@@ -170,7 +170,9 @@ button {
   font-size: 20;
   vertical-align: center;
 }
-
+.no-border{
+	border: none;
+}
 
 @media screen and ( min-width:767px){
 	//.landinginner, .logininner{ position: absolute; top: 50%; left: 0; width: 100%; transform: translateY(-50%); padding:0 }

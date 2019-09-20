@@ -44,6 +44,7 @@ export class AppComponent implements OnInit, OnDestroy {
   subscriptions = [];
   applicationSettings: ApplicationSettings;
   isDrawerOpenOrClosed = '';
+  showBottomBar: Boolean = true;
   constructor(private store: Store<AppState>,
     private navigationService: NavigationService,
     private ngZone: NgZone,
@@ -110,39 +111,39 @@ export class AppComponent implements OnInit, OnDestroy {
       if (!(evt instanceof NavigationEnd)) {
         return;
       }
-
-      // switch (evt.urlAfterRedirects) {
-      //   case '/login':
-      //     this.utils.setScreenNameInFirebaseAnalytics(FirebaseScreenNameConstants.LOGIN);
-      //     break;
-      //   case '/privacy-policy':
-      //     this.utils.setScreenNameInFirebaseAnalytics(FirebaseScreenNameConstants.PRIVACY_POLICY);
-      //     break;
-      //   case '/recent-game':
-      //     this.utils.setScreenNameInFirebaseAnalytics(FirebaseScreenNameConstants.RECENT_COMPLETED_GAMES);
-      //     break;
-      //   case '/dashboard':
-      //     this.utils.setScreenNameInFirebaseAnalytics(FirebaseScreenNameConstants.DASHBOARD);
-      //     break;
-      //   case '/stats/leaderboard/':
-      //     this.utils.setScreenNameInFirebaseAnalytics(FirebaseScreenNameConstants.LEADERBOARD);
-      //     break;
-      //   case '/game-play':
-      //     this.utils.setScreenNameInFirebaseAnalytics(FirebaseScreenNameConstants.NEW_GAME);
-      //     break;
-      //   case '/user/my/invite-friends':
-      //     this.utils.setScreenNameInFirebaseAnalytics(FirebaseScreenNameConstants.FRIEND_LIST);
-      //     break;
-      //   case ' /user/my/questions':
-      //     this.utils.setScreenNameInFirebaseAnalytics(FirebaseScreenNameConstants.MY_QUESTIONS);
-      //     break;
-      //   case '/user/profile/':
-      //     this.utils.setScreenNameInFirebaseAnalytics(FirebaseScreenNameConstants.PROFILE_SETTINGS);
-      //     break;
-      //   case '/user/my/questions/add':
-      //     this.utils.setScreenNameInFirebaseAnalytics(FirebaseScreenNameConstants.QUESTION_ADD_UPDATE);
-      //     break;
-      // }
+      this.showBottomBar = this.hideBottomBarForSelectedRoutes(evt.url);
+      switch (evt.urlAfterRedirects) {
+        case '/login':
+          this.utils.setScreenNameInFirebaseAnalytics(FirebaseScreenNameConstants.LOGIN);
+          break;
+        case '/privacy-policy':
+          this.utils.setScreenNameInFirebaseAnalytics(FirebaseScreenNameConstants.PRIVACY_POLICY);
+          break;
+        case '/recent-game':
+          this.utils.setScreenNameInFirebaseAnalytics(FirebaseScreenNameConstants.RECENT_COMPLETED_GAMES);
+          break;
+        case '/dashboard':
+          this.utils.setScreenNameInFirebaseAnalytics(FirebaseScreenNameConstants.DASHBOARD);
+          break;
+        case '/stats/leaderboard/':
+          this.utils.setScreenNameInFirebaseAnalytics(FirebaseScreenNameConstants.LEADERBOARD);
+          break;
+        case '/game-play':
+          this.utils.setScreenNameInFirebaseAnalytics(FirebaseScreenNameConstants.NEW_GAME);
+          break;
+        case '/user/my/invite-friends':
+          this.utils.setScreenNameInFirebaseAnalytics(FirebaseScreenNameConstants.FRIEND_LIST);
+          break;
+        case ' /user/my/questions':
+          this.utils.setScreenNameInFirebaseAnalytics(FirebaseScreenNameConstants.MY_QUESTIONS);
+          break;
+        case '/user/profile/':
+          this.utils.setScreenNameInFirebaseAnalytics(FirebaseScreenNameConstants.PROFILE_SETTINGS);
+          break;
+        case '/user/my/questions/add':
+          this.utils.setScreenNameInFirebaseAnalytics(FirebaseScreenNameConstants.QUESTION_ADD_UPDATE);
+          break;
+      }
 
     }));
 
@@ -157,6 +158,15 @@ export class AppComponent implements OnInit, OnDestroy {
     this.isDrawerOpenOrClosed = args.eventName;
   }
 
+  hideBottomBarForSelectedRoutes(url) {
+    if (url === '/signup-extra-info' || url === '/select-category-tag' || url === '/first-question' ||
+      (!url.includes('game-play/game-options') && (url.includes('game-play')))) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
   async showWelcomeScreen() {
     try {
       if (!appSettingsStorage.getBoolean('isWelcomeScreenSeen', false)) {
@@ -166,7 +176,7 @@ export class AppComponent implements OnInit, OnDestroy {
           fullscreen: true
         };
 
-        const result = await this._modalService.showModal(WelcomeScreenComponent, options)
+        await this._modalService.showModal(WelcomeScreenComponent, options);
         this.cd.markForCheck();
         appSettingsStorage.setBoolean('isWelcomeScreenSeen', true);
       }

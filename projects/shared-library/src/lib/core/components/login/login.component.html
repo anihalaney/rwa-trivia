@@ -44,13 +44,13 @@
               </mat-hint>
             </mat-form-field>
             <mat-form-field *ngIf="mode !== 2" class="full-width required">
-              <input [stlShowHintWhenFocusOut]="{hintRef: passwordHint, controlRef:loginForm.controls.password, removeClass: 'error'}" type="password" matInput placeholder="Password *" class="required" formControlName="password"
+              <input [stlShowHintWhenFocusOut]="{hintRef: passwordHint, controlRef:loginForm.controls.password, removeClass: 'error'}" type="password" matInput placeholder="Password *" class="required no-border" formControlName="password"
                 aria-label="password">
               <mat-hint #passwordHint align="end"
                 class="error">Password must be atleast 6 characters</mat-hint>
             </mat-form-field>
             <mat-form-field *ngIf="mode === 1" class="full-width required">
-              <input [stlShowHintWhenFocusOut]="{hintRef: confPasswordHint, controlRef:loginForm.controls.confirmPassword, removeClass: 'error'}"  type="password" matInput placeholder="Confirm Password *" class="required" formControlName="confirmPassword"
+              <input [stlShowHintWhenFocusOut]="{hintRef: confPasswordHint, controlRef:loginForm.controls.confirmPassword, removeClass: 'error'}"  type="password" matInput placeholder="Confirm Password *" class="required no-border" formControlName="confirmPassword"
                 aria-label="confirm-password">
               <mat-hint #confPasswordHint
                 class="error" align="end">

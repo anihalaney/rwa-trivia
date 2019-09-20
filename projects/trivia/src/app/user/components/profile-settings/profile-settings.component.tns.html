@@ -126,7 +126,7 @@
 
                 <!-- Email -->
                 <StackLayout
-                  *ngIf="userType ===  0 && isEnableEditProfile && (currentAuthProvider===authProviderConstants.PASSWORD || currentAuthProvider===authProviderConstants.PHONE)"
+                  *ngIf="userType ===  0 && isEnableEditProfile && (currentAuthProvider===authProviderConstants.PHONE)"
                   class="input-field" iosOverflowSafeArea="false">
                   <TextField #textField hint="{{userType ===  0 ? '@email' : ''}}" formControlName="email"
                     class="input">
@@ -150,7 +150,7 @@
                 <StackLayout
                   *ngIf="userType ===  0 && isEnableEditProfile && (currentAuthProvider===authProviderConstants.PASSWORD)"
                   class="input-field" iosOverflowSafeArea="false">
-                  <TextField #textField hint="{{userType ===  0 ? '@password' : ''}}" formControlName="password"
+                  <TextField secure="true"  #textField hint="{{userType ===  0 ? '@password' : ''}}" formControlName="password"
                     class="input">
                   </TextField>
                   <Label *ngIf="userForm.controls.password.errors?.minlength && !userForm.controls.password.pristine"
