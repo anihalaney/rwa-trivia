@@ -29,6 +29,7 @@ import { ModalDialogOptions, ModalDialogService } from 'nativescript-angular/mod
 import { WelcomeScreenComponent } from '../../../../../shared-library/src/lib/shared/mobile/component';
 import * as appSettingsStorage from 'tns-core-modules/application-settings';
 
+
 registerElement('Carousel', () => Carousel);
 registerElement('CarouselItem', () => CarouselItem);
 
@@ -58,8 +59,8 @@ export class AppComponent implements OnInit, OnDestroy {
     private _vcRef: ViewContainerRef) {
 
     this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.newGameId), filter(g => g !== '')).subscribe(gameObj => {
-      console.log('gameObj', gameObj);
-      this.routerExtension.navigate(['/game-play', gameObj['gameId']]);
+      // console.log('gameObj', gameObj);
+      this.routerExtension.navigate(['/game-play', gameObj['gameId']], { clearHistory: true });
       this.store.dispatch(new gamePlayActions.ResetCurrentQuestion());
       this.cd.markForCheck();
     }));

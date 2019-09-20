@@ -41,7 +41,7 @@ export abstract class UtilsCore {
 
   getImageUrl(user: User, width: Number, height: Number, size: string): any {
 
-    if (user && user.profilePicture && user.profilePicture !== '') {
+    if (user && user !== null && user.profilePicture && user.profilePicture !== '') {
       if (this.sanitizer) {
         return this.sanitizer.bypassSecurityTrustUrl(
           `${CONFIG.functionsUrl}/user/profile/${user.userId}/${user.profilePicture}/${width}/${height}`
@@ -102,5 +102,6 @@ export abstract class UtilsCore {
   abstract setNewGameFirebaseAnalyticsParameter(gameOptions: GameOptions, userId: string, gameId: string): Observable<string>;
   abstract setEndGameFirebaseAnalyticsParameter(game: Game, userId: string, otherUserId: string): Observable<string>;
   abstract setUserLocationFirebaseAnalyticsParameter(user: User, isLocationChanged: boolean): Observable<string>;
-  public hideKeyboard(field: any){}
+  public hideKeyboard(field: any) { }
+  public goToDashboard() { }
 }
