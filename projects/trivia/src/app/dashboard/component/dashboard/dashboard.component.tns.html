@@ -91,9 +91,9 @@
                                         iosOverflowSafeArea="false">
                                         <game-card [game]="game" [cardType]="'singlePlayer'" stlRippleEffect>
                                         </game-card>
-                                        <StackLayout class="hr-light hr-my-turn m-10" *ngIf="!last" iosOverflowSafeArea="false">
+                                        <StackLayout class="hr-light m-10" height="2" *ngIf="!last" iosOverflowSafeArea="false">
                                         </StackLayout>
-                                        <StackLayout class="hr-light hr-my-turn m-10" *ngIf="last && twoPlayerCount > 0"
+                                        <StackLayout class="hr-light m-10" height="2" *ngIf="last && twoPlayerCount > 0"
                                             iosOverflowSafeArea="false"></StackLayout>
                                     </StackLayout>
                                 </StackLayout>
@@ -101,7 +101,7 @@
                                     <StackLayout *ngFor="let game of activeGames | gameFilter: filterTwoPlayerGame;let last = last;let index = index;"
                                         iosOverflowSafeArea="false">
                                         <game-card [game]="game" [cardType]="'twoPlayer'" stlRippleEffect></game-card>
-                                        <StackLayout class="hr-light hr-my-turn m-10" *ngIf="!last" iosOverflowSafeArea="false">
+                                        <StackLayout class="hr-light m-10" height="2" *ngIf="!last" iosOverflowSafeArea="false">
                                         </StackLayout>
                                     </StackLayout>
                                 </StackLayout>
@@ -119,7 +119,7 @@
                             <StackLayout *ngFor="let game of activeGames | gameFilter: filterTwoPlayerWaitNextQGame; let last = last;"
                                 iosOverflowSafeArea="false">
                                 <game-card [game]="game" [cardType]="'theirTurn'"></game-card>
-                                <StackLayout class="hr-light hr-their-turn m-10" *ngIf="!last" iosOverflowSafeArea="false">
+                                <StackLayout class="hr-light m-10" height="2" *ngIf="!last" iosOverflowSafeArea="false">
                                 </StackLayout>
                             </StackLayout>
                         </StackLayout>
@@ -135,7 +135,7 @@
                             <StackLayout *ngFor="let game of activeGames | gameFilter: filterGame; let last = last;"
                                 iosOverflowSafeArea="false">
                                 <game-card [game]="game" [cardType]="'opponent'"></game-card>
-                                <StackLayout class="hr-light hr-their-turn m-10" *ngIf="!last" iosOverflowSafeArea="false">
+                                <StackLayout class="hr-light m-10" height="2" *ngIf="!last" iosOverflowSafeArea="false">
                                 </StackLayout>
                             </StackLayout>
                         </StackLayout>

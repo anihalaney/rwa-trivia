@@ -1,5 +1,5 @@
 <StackLayout class="gameplay">
-  <StackLayout margin="10">
+  <StackLayout margin="15" horizontalAlignment="center">
     <render-question [question]="question"></render-question>
   </StackLayout>
 
@@ -8,27 +8,31 @@
     <Label text="{{categoryName}}" class="Roboto-Regular" fontSize="15" textWrap="true" color="#1b1c1c"></Label>
   </StackLayout>
 
-  <StackLayout *ngIf="question" orientation="horizontal" margin="10" iosOverflowSafeArea="false">
-    <Label text="Tags:" marginRight="5" color="#1B1C1C" fontSize="15" fontWeight="500" textWrap="true"></Label>
-    <Label text="{{question.tags?.toString()}}" class="Roboto-Regular" color="#1B1C1C" fontSize="15" textWrap="true"></Label>
-  </StackLayout>
-  <StackLayout *ngIf="question" iosOverflowSafeArea="false">
-    <StackLayout iosOverflowSafeArea="false" class="question-answered Hind-Medium" margin="10" *ngFor="let answer of question.answers"
-      [class.players-answer]="answeredText === answer.answerText" [class.wrong]="answeredText === answer.answerText && correctAnswerText !== answer.answerText"
+  <FlexboxLayout *ngIf="question && question.tags" margin="0 10" flexWrap="wrap" >
+    <StackLayout *ngFor="let tags of question.tags, let i = index">
+      <Label backgroundColor="#e2e2e2" borderRadius="22" margin="2.5 2.5" [text]="tags" padding="5 10" textWrap="true"></Label>
+    </StackLayout>
+  </FlexboxLayout>
+
+  <StackLayout *ngIf="question && question.answers" iosOverflowSafeArea="false">
+    <StackLayout iosOverflowSafeArea="false" class="question-answered Hind-Medium" margin="10"
+      *ngFor="let answer of question.answers" [class.players-answer]="answeredText === answer.answerText"
+      [class.wrong]="answeredText === answer.answerText && correctAnswerText !== answer.answerText"
       [class.right]="answeredText !== '' && correctAnswerText === answer.answerText" [isUserInteractionEnabled]="doPlay"
       stlRippleEffect (rippleTap)="rippleTap(answer)">
-
-      <render-answer [answer]="answer" [isGameAnswer]="true" [isWrong]="answeredText === answer.answerText && correctAnswerText !== answer.answerText"
+    
+      <render-answer [answer]="answer" [isGameAnswer]="true"
+        [isWrong]="answeredText === answer.answerText && correctAnswerText !== answer.answerText"
         [isRight]="(answeredText != '') && (correctAnswerText == answer.answerText)" [doPlay]="doPlay"
         [isUserInteractionEnabled]="doPlay"></render-answer>
     </StackLayout>
   </StackLayout>
-    <GridLayout margin="0 15" rows="auto" columns="auto" *ngIf="question" style=" horizontal-align:right;" class="Roboto-Medium">
-        <author [isGamePlay]=false [userId]="question.created_uid"></author>
-    </GridLayout>
-    <GridLayout margin="0 15" rows="auto" columns="auto" style="horizontal-align:center;"
-      class="Roboto-Medium">
-      <user-reaction *ngIf="answeredText!==''" [user]='user' [question]='question'></user-reaction>
-    </GridLayout>
+  <GridLayout margin="0 15" rows="auto" columns="auto" *ngIf="question" style=" horizontal-align:right;"
+    class="Roboto-Medium">
+    <author [isGamePlay]=false [userId]="question.created_uid"></author>
+  </GridLayout>
+  <GridLayout margin="0 15" rows="auto" columns="auto" style="horizontal-align:center;" class="Roboto-Medium">
+    <user-reaction *ngIf="answeredText!==''" [user]='user' [question]='question'></user-reaction>
+  </GridLayout>
 
 </StackLayout>

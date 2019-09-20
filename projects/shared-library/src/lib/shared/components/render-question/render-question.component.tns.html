@@ -8,8 +8,8 @@
 
 <ng-template #renderView>
     <StackLayout orientation="horizontal">
-        <Label verticalAlignment="top" paddingLeft="10" text="{{questionIndex}} . " textWrap="true" *ngIf="questionIndex"></Label>
-        <Label text="{{question?.questionText}}" color="#263238" class="Roboto-Bold" fontSize="17" fontWeight="700"
+        <Label horizontalAlignment="left" verticalAlignment="top" paddingLeft="10" text="{{questionIndex}} . " textWrap="true" *ngIf="questionIndex"></Label>
+        <Label horizontalAlignment="center"  text="{{question?.questionText}}" color="#263238" class="Roboto-Bold" fontSize="17" fontWeight="700"
             textWrap="true"></Label>
     </StackLayout>
 
