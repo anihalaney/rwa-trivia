@@ -15,11 +15,11 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>${versionName}</string>
+	<string>1.1</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>${versionCode}</string>
+	<string>42</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
@@ -71,6 +71,7 @@
 	<string>App would like to access your location to offer you suggestion for current location</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>App would like to access your location to offer you suggestion for current location</string>
-
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 </dict>
 </plist>
