@@ -25,7 +25,7 @@ export class UserFeedbackComponent implements OnDestroy, OnInit {
   feedbacklength = { min: 15, max: 200 };
   @ViewChildren('textField') textField: QueryList<ElementRef>;
   email_regexp = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-
+  renderView = false;
   constructor(private page: Page, private fb: FormBuilder, private store: Store<AppState>, private userAction: UserActions,
     private cd: ChangeDetectorRef, private utils: Utils) {
 
@@ -36,6 +36,7 @@ export class UserFeedbackComponent implements OnDestroy, OnInit {
   }
 
   ngOnInit(): void {
+    this.page.on('loaded', () => { this.renderView = true; this.cd.markForCheck(); });
     this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.feedback)).subscribe(status => {
       if (status === 'SUCCESS') {
         this.resetForm();
@@ -84,7 +85,8 @@ export class UserFeedbackComponent implements OnDestroy, OnInit {
   }
 
   ngOnDestroy() {
-
+    this.page.off('loaded');
+    this.renderView = false;
   }
 
 }

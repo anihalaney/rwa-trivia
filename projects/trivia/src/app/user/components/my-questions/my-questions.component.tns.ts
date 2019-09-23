@@ -48,7 +48,7 @@ export class MyQuestionsComponent extends MyQuestions implements OnDestroy, OnIn
       this.userDict = userDict;
       this.cd.markForCheck();
     }));
-    this.renderView = true;
+    this.page.on('loaded', () => { this.renderView = true; this.cd.markForCheck(); });
   }
 
   navigateToSubmitQuestion() {
@@ -83,6 +83,7 @@ export class MyQuestionsComponent extends MyQuestions implements OnDestroy, OnIn
     this.tabIndex = index;
   }
   ngOnDestroy() {
+    this.page.off('loaded');
     this.renderView = false;
   }
 
