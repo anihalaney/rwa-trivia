@@ -27,7 +27,6 @@ export class MyQuestionsComponent extends MyQuestions implements OnDestroy, OnIn
   displayEditQuestion = false;
   selectedQuestion: Question;
   tabIndex = 0;
-  subscriptions = [];
   renderView = false;
 
   constructor(public store: Store<AppState>,

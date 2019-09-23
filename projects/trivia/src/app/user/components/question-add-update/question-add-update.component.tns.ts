@@ -1,6 +1,6 @@
 import {
-  Component, OnDestroy, ViewChild, Input, Output, EventEmitter, OnChanges,
-  ViewChildren, QueryList, ElementRef, ChangeDetectionStrategy, ChangeDetectorRef, ViewContainerRef, AfterViewInit, OnInit
+  Component, OnDestroy, ViewChild, Input, Output, EventEmitter, OnChanges, NgZone,
+  ViewChildren, QueryList, ElementRef, ChangeDetectionStrategy, ChangeDetectorRef, ViewContainerRef, AfterViewInit, OnInit, ɵConsole
 } from '@angular/core';
 import { FormGroup, FormBuilder, FormArray, Validators } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
@@ -95,7 +95,8 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
     private page: Page, private cd: ChangeDetectorRef,
     public questionService: QuestionService,
     private modal: ModalDialogService,
-    private vcRef: ViewContainerRef) {
+    private vcRef: ViewContainerRef,
+    private ngZone: NgZone) {
 
     super(fb, store, utils, questionAction);
     requestPermissions();
@@ -109,10 +110,6 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
       this.iqKeyboard = IQKeyboardManager.sharedManager();
       this.iqKeyboard.shouldResignOnTouchOutside = true;
     }
-  }
-
-  ngOnInit(): void {
-    this.renderView = true;
     this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
       if (appSettings) {
         this.applicationSettings = appSettings[0];
@@ -124,6 +121,13 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
       this.cd.markForCheck();
     })
     );
+  }
+
+  ngOnInit(): void {
+    this.renderView = true;
+    this.page.on('navigatedFrom', () => this.ngZone.run(() => {
+        this.ngOnDestroy();
+    }));
     const questionControl = this.questionForm.get('questionText');
 
     this.subscriptions.push(questionControl.valueChanges.pipe(debounceTime(500)).subscribe(v => this.computeAutoTags()));
