@@ -59,7 +59,7 @@ export class BottomBarComponent implements OnChanges, OnDestroy, OnInit {
     }
 
     bottomBarNavigationOnRouting(url) {
-        if (url === '/dashboard') {
+        if (url === '/dashboard' || url === '/' || url.includes('game-play/game-options')) {
             this.activeMenu = 'play';
         } else if (url === '/dashboard/leaderboard') {
             this.activeMenu = 'leaderboard';
@@ -81,8 +81,10 @@ export class BottomBarComponent implements OnChanges, OnDestroy, OnInit {
             this.routerExtensions.navigate(['/dashboard/leaderboard']);
             sideDrawer.closeDrawer();
         } else if (menu === 'friends') {
-            this.activeMenu = menu;
             this.routerExtensions.navigate(['/user/my/invite-friends']);
+            if (this.router.url === '/user/my/invite-friends') {
+                this.activeMenu = menu;
+            }
             sideDrawer.closeDrawer();
         } else if (menu === 'more') {
             this.activeMenu = menu;
