@@ -39,7 +39,6 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
     super(store, userActions, utils, cd);
   }
   ngOnInit() {
-    this.renderView = true;
     this.subscriptions.push(this.store.select(gamePlayState).pipe(select(s => s.saveReportQuestion)).subscribe(state => {
       this.cd.markForCheck();
     }));
@@ -81,7 +80,6 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.renderView = false;
     this.destroy();
   }
 

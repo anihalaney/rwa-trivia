@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Utils } from 'shared-library/core/services';
 import { FirebaseScreenNameConstants } from 'shared-library/shared/model';
@@ -10,8 +10,7 @@ import { Achievements } from './achievements';
   styleUrls: ['./achievements.component.scss']
 })
 
-export class AchievementsComponent extends Achievements implements OnInit, OnDestroy {
-  renderView = false;
+export class AchievementsComponent extends Achievements implements OnDestroy {
 
   constructor(
     protected store: Store<AppState>,
@@ -21,12 +20,9 @@ export class AchievementsComponent extends Achievements implements OnInit, OnDes
     super(store, cd);
   }
 
-  ngOnInit() {
-    this.renderView = true;
-  }
+
 
   ngOnDestroy() {
-    this.renderView = false;
   }
 
 }

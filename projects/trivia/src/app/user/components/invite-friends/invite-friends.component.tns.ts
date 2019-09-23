@@ -1,4 +1,4 @@
-import { Component, OnInit, NgZone, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { Utils } from 'shared-library/core/services';
 import { AppState } from '../../../store';
 import { Store } from '@ngrx/store';
@@ -20,13 +20,12 @@ export class InviteFriendsComponent extends InviteFriends implements OnInit, OnD
   renderView = false;
 
   constructor(public store: Store<AppState>, public userActions: UserActions, public utils: Utils,
-    private routerExtension: RouterExtensions, private page: Page, private ngZone: NgZone, public cd: ChangeDetectorRef) {
+    private routerExtension: RouterExtensions, private page: Page, public cd: ChangeDetectorRef) {
     super(store, userActions, utils, cd);
   }
 
   ngOnInit() {
-    // update to variable needed to do in ngZone otherwise it did not understand it
-    this.page.on('loaded', () => this.ngZone.run(() => this.renderView = true));
+    this.page.on('loaded', () => { this.renderView = true; this.cd.markForCheck(); });
   }
   navigateToInvite() {
     this.routerExtension.navigate(['/user/my/app-invite-friends-dialog', { showSkip: false }]);

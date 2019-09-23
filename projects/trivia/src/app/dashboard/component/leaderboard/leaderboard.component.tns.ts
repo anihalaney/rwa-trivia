@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, NgZone, OnDestroy } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Store, select } from '@ngrx/store';
 import { Utils } from 'shared-library/core/services';
@@ -17,7 +17,7 @@ import { User } from 'shared-library/shared/model';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class LeaderboardComponent extends Leaderboard implements OnDestroy {
+export class LeaderboardComponent extends Leaderboard implements OnDestroy, OnInit {
 
 
   // This is magic variable
@@ -38,11 +38,6 @@ export class LeaderboardComponent extends Leaderboard implements OnDestroy {
     protected ngZone: NgZone) {
 
     super(store, userActions, utils, route, cd, ngZone);
-    this.page.on('loaded', () => this.ngZone.run(() => {
-      this.renderView = true;
-      this.cd.markForCheck();
-    }));
-
     this.items = [];
     this.categoryDictList.map((category, index) => {
       this.items.push(category.categoryName);
@@ -50,6 +45,9 @@ export class LeaderboardComponent extends Leaderboard implements OnDestroy {
     this.cd.markForCheck();
   }
 
+  ngOnInit() {
+    this.page.on('loaded', () => { this.renderView = true; this.cd.markForCheck(); });
+  }
   public onchange(args: SelectedIndexChangedEventData) {
     this.selectedCatList = this.leaderBoardStatDict[(args.newIndex + 1)];
     this.cd.markForCheck();

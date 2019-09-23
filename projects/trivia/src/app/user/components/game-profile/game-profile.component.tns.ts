@@ -7,7 +7,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { UserActions } from 'shared-library/core/store';
 import * as utils from 'tns-core-modules/utils/utils';
 import { Utils } from 'shared-library/core/services';
-
+import { Page } from 'tns-core-modules/ui/page';
 @Component({
     selector: 'game-profile',
     templateUrl: './game-profile.component.html',
@@ -24,16 +24,18 @@ export class GameProfileComponent extends GameProfile implements OnDestroy, OnIn
         public store: Store<AppState>,
         public userAction: UserActions,
         public cd: ChangeDetectorRef,
-        public _utils: Utils
+        public _utils: Utils,
+        private page: Page
     ) {
         super(route, router, store, userAction, cd, _utils);
     }
 
     ngOnInit() {
-        this.renderView = true;
+        this.page.on('loaded', () => { this.renderView = true; this.cd.markForCheck(); });
     }
 
     ngOnDestroy() {
+        this.page.off('loaded');
         this.renderView = false;
     }
 

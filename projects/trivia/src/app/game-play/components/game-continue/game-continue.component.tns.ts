@@ -19,7 +19,6 @@ import { FirebaseScreenNameConstants } from 'shared-library/shared/model';
 export class GameContinueComponent extends GameContinue implements OnInit, OnDestroy {
   stackLayout;
   showQuesAndAnswer: Boolean = true;
-  renderView = false;
   constructor(
     public store: Store<AppState>,
     public userActions: UserActions,
@@ -30,7 +29,6 @@ export class GameContinueComponent extends GameContinue implements OnInit, OnDes
     super(store, userActions, utils, cd);
   }
   ngOnInit() {
-    this.renderView = true;
     if (this.game) {
       this.otherUserId = this.game.playerIds.filter(userId => userId !== this.user.userId)[0];
       this.otherUserInfo = this.userDict[this.otherUserId];
@@ -39,7 +37,6 @@ export class GameContinueComponent extends GameContinue implements OnInit, OnDes
 
 
   ngOnDestroy() {
-    this.renderView = false;
     this.destroy();
   }
 

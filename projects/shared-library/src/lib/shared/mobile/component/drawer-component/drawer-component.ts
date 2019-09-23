@@ -45,7 +45,6 @@ export class DrawerComponent implements OnInit, OnDestroy {
     subscriptions = [];
     showHelp: Boolean = true;
     isDrawerOpenOrClosed = '';
-    renderView = false;
     loader = false;
     constructor(private routerExtension: RouterExtensions,
         private store: Store<CoreState>,
@@ -82,7 +81,6 @@ export class DrawerComponent implements OnInit, OnDestroy {
         });
     }
     ngOnInit() {
-        this.renderView = true;
         this.firebaseAuthService.authState().subscribe(afUser => {
             if (!afUser) {
                 this.store.dispatch(this.userActions.loginSuccess(null));
@@ -296,7 +294,6 @@ export class DrawerComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy(): void {
-        this.renderView = false;
     }
 
     get isDrawerOpen() {

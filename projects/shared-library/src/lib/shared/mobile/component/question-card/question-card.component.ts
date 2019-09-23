@@ -29,7 +29,6 @@ export class QuestionCardComponent implements OnInit, OnDestroy, OnChanges {
   constructor(private store: Store<CoreState>, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
-    this.renderView = true;
     this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.applicationSettings))
       .subscribe(appSettings => {
         if (appSettings) {
@@ -63,7 +62,6 @@ export class QuestionCardComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   ngOnDestroy(): void {
-    this.renderView = false;
   }
 
   ngOnChanges(changes: SimpleChanges) {

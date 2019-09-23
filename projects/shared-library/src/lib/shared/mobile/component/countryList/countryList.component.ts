@@ -21,14 +21,12 @@ export class CountryListComponent implements OnInit, OnDestroy {
   allCountries: Array<Country> = [];
   subscriptions: Subscription[] = [];
   searchCountries = '';
-  renderView = false;
 
   constructor(private _modalDialogParams: ModalDialogParams, private cd: ChangeDetectorRef,
     private store: Store<CoreState>, private userAction: UserActions) {
   }
 
   ngOnInit() {
-    this.renderView = true;
     this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.countries)).subscribe(countries => {
       this.cd.markForCheck();
       if (countries.length > 0) {
@@ -59,6 +57,5 @@ export class CountryListComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.renderView = false;
   }
 }

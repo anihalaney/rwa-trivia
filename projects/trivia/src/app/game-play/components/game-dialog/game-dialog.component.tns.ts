@@ -1,4 +1,4 @@
-import { Component, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, OnInit } from '@angular/core';
+import { Component, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import * as gameplayactions from '../../store/actions';
@@ -23,20 +23,16 @@ import {
 })
 
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
-export class GameDialogComponent extends GameDialog implements OnDestroy, OnInit {
+export class GameDialogComponent extends GameDialog implements OnDestroy {
 
   suspendTime: number;
   resumeTime: number;
-  renderView = false;
   constructor(public store: Store<GamePlayState>, public gameActions: GameActions, public router: Router,
     public userActions: UserActions, public utils: Utils, public cd: ChangeDetectorRef) {
     super(store, userActions, utils, cd, router);
     this.registerLifeCycleEvent();
   }
 
-  ngOnInit() {
-    this.renderView = true;
-  }
   resumeCallBack(args: ApplicationEventData) {
     if (args.ios) {
       this.resumeTime = this.utils.getUTCTimeStamp();
@@ -71,7 +67,6 @@ export class GameDialogComponent extends GameDialog implements OnDestroy, OnInit
   }
 
   ngOnDestroy() {
-    this.renderView = false;
     applicationOff(resumeEvent, this.resumeCallBack);
     applicationOff(suspendEvent, this.suspendCallBack);
     this.destroy();
