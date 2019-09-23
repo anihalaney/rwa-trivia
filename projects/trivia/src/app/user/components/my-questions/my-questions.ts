@@ -62,9 +62,11 @@ export class MyQuestions {
     this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
       if (appSettings) {
         this.applicationSettings = appSettings[0];
-        this.quillConfig.toolbar.container.push(this.applicationSettings.quill_options.options);
-        this.quillConfig.toolbar.container.push(this.applicationSettings.quill_options.list);
-        this.quillConfig.mathEditor = { mathOptions: this.applicationSettings };
+        if (this.applicationSettings && this.applicationSettings.quill_options) {
+          this.quillConfig.toolbar.container.push(this.applicationSettings.quill_options.options);
+          this.quillConfig.toolbar.container.push(this.applicationSettings.quill_options.list);
+          this.quillConfig.mathEditor = { mathOptions: this.applicationSettings };
+        }
       }
     }));
 
