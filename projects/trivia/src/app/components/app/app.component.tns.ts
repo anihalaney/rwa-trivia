@@ -43,6 +43,7 @@ export class AppComponent implements OnInit, OnDestroy {
   subscriptions = [];
   applicationSettings: ApplicationSettings;
   isDrawerOpenOrClosed = '';
+  showBottomBar: Boolean = true;
   constructor(private store: Store<AppState>,
     private navigationService: NavigationService,
     private ngZone: NgZone,
@@ -109,6 +110,7 @@ export class AppComponent implements OnInit, OnDestroy {
       if (!(evt instanceof NavigationEnd)) {
         return;
       }
+      this.showBottomBar = this.hideBottomBarForSelectedRoutes(evt.url);
       switch (evt.urlAfterRedirects) {
         case '/login':
           this.utils.setScreenNameInFirebaseAnalytics(FirebaseScreenNameConstants.LOGIN);
@@ -155,6 +157,15 @@ export class AppComponent implements OnInit, OnDestroy {
     this.isDrawerOpenOrClosed = args.eventName;
   }
 
+  hideBottomBarForSelectedRoutes(url) {
+    if (url === '/signup-extra-info' || url === '/select-category-tag' || url === '/first-question' ||
+      (!url.includes('game-play/game-options') && (url.includes('game-play')))) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
   async showWelcomeScreen() {
     try {
       if (!appSettingsStorage.getBoolean('isWelcomeScreenSeen', false)) {
@@ -164,7 +175,7 @@ export class AppComponent implements OnInit, OnDestroy {
           fullscreen: true
         };
 
-        const result = await this._modalService.showModal(WelcomeScreenComponent, options)
+        await this._modalService.showModal(WelcomeScreenComponent, options);
         this.cd.markForCheck();
         appSettingsStorage.setBoolean('isWelcomeScreenSeen', true);
       }
