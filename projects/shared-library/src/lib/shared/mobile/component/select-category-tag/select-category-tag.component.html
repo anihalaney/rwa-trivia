@@ -2,41 +2,35 @@
 <GridLayout rows="*,auto" columns="*">
   <ScrollView>
     <StackLayout row="0" class="profile-settings Roboto-Regular">
-      <StackLayout margin="15 15 0 15">
-        <Label text="Choose your" fontSize="30" fontWeight="bold" color="#2f3f6b" textWrap="true"></Label>
-        <Label text="desire topic" fontSize="30" fontWeight="bold" color="#2f3f6b" textWrap="true"></Label>
-      </StackLayout>
+      
+      <Label text="Choose your desire topic" margin="15 15 0 15" fontSize="30" fontWeight="bold" color="#2f3f6b" textWrap="true"></Label>
 
       <Label padding="10 15 15 15"
         text="Select atleast five topics of your choice, this will help us show contents based on your topics"
         fontSize="20" textWrap="true"></Label>
 
       <Label fontSize="16" padding="0 15 15 15" class="font-weight-bold" text="Popular topics" textWrap="true"></Label>
-      <StackLayout>
+
         <FlexboxLayout flexWrap="wrap" margin="0 10 0 10" horizontalAlignment="center">
-          <StackLayout *ngFor="let item of categories, let i = index" class="stats-box border">
-            <FlexboxLayout stlRippleEffect flexDirection="column" justifyContent="center" alignItems="center"
+            <FlexboxLayout *ngFor="let item of categories, let i = index" stlRippleEffect flexDirection="column" justifyContent="center" alignItems="center"
               (rippleTap)="selectTopic(i)"
               [ngStyle]="{background: (item.requiredForGamePlay ? '#48b24e' : '#fafafa'), color : (item.requiredForGamePlay ? '#fff' : '#9b92e7') }"
-              borderRadius="5">
+              borderRadius="5" class="stats-box border">
               <Label [text]="item.categoryName" padding="15 10" ></Label>
             </FlexboxLayout>
-          </StackLayout>
         </FlexboxLayout>
-      </StackLayout>
+
       <Label fontSize="16" padding="15" class="font-weight-bold" text="Popular tags" textWrap="true"></Label>
-      <StackLayout>
+
         <FlexboxLayout flexWrap="wrap" margin="0 10 20 10" horizontalAlignment="center">
-          <StackLayout *ngFor="let item of tags, let i = index" class="stats-box border">
-            <FlexboxLayout stlRippleEffect flexDirection="column" justifyContent="center" alignItems="center"
+            <FlexboxLayout *ngFor="let item of tags, let i = index" class="stats-box border" stlRippleEffect flexDirection="column" justifyContent="center" alignItems="center"
               (rippleTap)="selectTags(i)"
               [ngStyle]="{background: (item.requiredForGamePlay ? '#48b24e' : '#fafafa'), color : (item.requiredForGamePlay ? '#fff' : '#9b92e7') }"
               borderRadius="5">
               <Label [text]="item.key" padding="15 10" ></Label>
             </FlexboxLayout>
-          </StackLayout>
         </FlexboxLayout>
-      </StackLayout>
+
     </StackLayout>
   </ScrollView>
   <StackLayout row="1" margin="15">
