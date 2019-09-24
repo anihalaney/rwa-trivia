@@ -19,7 +19,7 @@ export class NavigationService {
   back() {
     if (this.router.url === '/user/my/invite-friends' ||
       this.router.url === '/user/my/questions' ||
-      this.router.url === '/recent-game' ||
+      this.router.url === '/recent-games' ||
       this.router.url === '/privacy-policy' ||
       this.router.url === '/terms-and-conditions' ||
       this.router.url === '/user-feedback' ||
