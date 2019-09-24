@@ -13,6 +13,7 @@ import {
   resumeEvent, suspendEvent, ApplicationEventData,
   on as applicationOn, off as applicationOff,
 } from 'tns-core-modules/application';
+import { Page } from 'tns-core-modules/ui/page/page';
 
 
 @Component({
@@ -27,6 +28,7 @@ export class GameDialogComponent extends GameDialog implements OnDestroy {
 
   suspendTime: number;
   resumeTime: number;
+
   constructor(public store: Store<GamePlayState>, public gameActions: GameActions, public router: Router,
     public userActions: UserActions, public utils: Utils, public cd: ChangeDetectorRef) {
     super(store, userActions, utils, cd, router);
@@ -66,20 +68,12 @@ export class GameDialogComponent extends GameDialog implements OnDestroy {
     this.cd.markForCheck();
   }
 
+
   ngOnDestroy() {
     applicationOff(resumeEvent, this.resumeCallBack);
     applicationOff(suspendEvent, this.suspendCallBack);
     this.destroy();
   }
 
-  // Hide menu if question display
-  get isDispayMenu() {
-    if (this.currentQuestion && this.showContinueBtn) {
-      return undefined;
-    }
-    if (this.currentQuestion && !this.showLoader && !this.showBadge) {
-      return true;
-    }
-    return undefined;
-  }
+
 }
