@@ -141,7 +141,9 @@
                         </StackLayout>
                     </CardView>
                 </StackLayout>
-
+                <StackLayout row="6" col="0" iosOverflowSafeArea="false">
+                        <app-invite-to-play [userId]="user?.userId" *ngIf="user && user!==null"></app-invite-to-play>
+                </StackLayout>
                 <StackLayout row="7" col="0" iosOverflowSafeArea="false">
                     <question [user]="user" [userDict]="userDict"></question>
                 </StackLayout>
