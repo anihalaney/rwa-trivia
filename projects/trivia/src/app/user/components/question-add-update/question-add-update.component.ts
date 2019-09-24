@@ -68,7 +68,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnI
 
     this.question = new Question();
     this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
-      if (appSettings) {
+      if (appSettings && this.applicationSettings.quill_options) {
         this.applicationSettings = appSettings[0];
         // Add editor's options from app settings
         this.quillConfig.toolbar.container.push(this.applicationSettings.quill_options.options);

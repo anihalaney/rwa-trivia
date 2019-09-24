@@ -175,7 +175,7 @@ export class AppComponent implements OnInit, OnDestroy {
           fullscreen: true
         };
 
-        const result = await this._modalService.showModal(WelcomeScreenComponent, options)
+        await this._modalService.showModal(WelcomeScreenComponent, options);
         this.cd.markForCheck();
         appSettingsStorage.setBoolean('isWelcomeScreenSeen', true);
       }

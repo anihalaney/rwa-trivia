@@ -286,7 +286,7 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
   redirectTo() {
     this.subscriptions.push(this.store.select(coreState).pipe(
       map(s => s.user),
-      filter(u => (u != null && u.userId !== '')),
+      filter(u => (u !== null && u.userId !== '')),
       take(1)).subscribe((user) => {
         this.loader = false;
         this.subscriptions.push(this.store.select(coreState).pipe(

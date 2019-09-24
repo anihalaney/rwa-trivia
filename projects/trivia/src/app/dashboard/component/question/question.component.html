@@ -33,12 +33,12 @@
             <author [isGamePlay]= false [userId]="question.created_uid"></author>
           </div>
         </div>
-        <div class="col-xs-12 nx-question-container">
-            <div class="col-sm-6 col-xs-12 like-dislike" >
-                <user-reaction *ngIf="question && answeredText!==''" [user]='user' [question]='question'></user-reaction>
+        <div *ngIf="question && answeredText!=='' || answeredText!==''" class="col-xs-12 nx-question-container">
+            <div  *ngIf="question && answeredText!==''" class="col-sm-6 col-xs-12 like-dislike" >
+                <user-reaction [user]='user' [question]='question'></user-reaction>
               </div>
-          <div class="col-sm-6 col-xs-12 next-question">
-            <a class="btn" (click)="getNextQuestion()" *ngIf="answeredText!==''">Try Another</a>
+          <div *ngIf="answeredText!==''" class="col-sm-6 col-xs-12 next-question">
+            <a class="btn" (click)="getNextQuestion()" >Try Another</a>
           </div>
         </div>
 
