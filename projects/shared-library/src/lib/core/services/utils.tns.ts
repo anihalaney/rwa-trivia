@@ -8,6 +8,7 @@ import {
 import { of, Observable } from 'rxjs';
 import { UtilsCore } from './utilsCore';
 import { isAndroid } from 'tns-core-modules/platform';
+import { RouterExtensions } from 'nativescript-angular/router';
 
 @Injectable()
 export class Utils extends UtilsCore {
@@ -21,7 +22,8 @@ export class Utils extends UtilsCore {
     message: ''
   };
 
-  constructor(@Inject(PLATFORM_ID) public platformId: Object) {
+  constructor(@Inject(PLATFORM_ID) public platformId: Object,
+    private routerExtensions: RouterExtensions) {
     super(platformId);
     this.message = new Feedback();
   }
@@ -240,6 +242,10 @@ export class Utils extends UtilsCore {
           return el.nativeElement.dismissSoftInput();
         });
     }
+  }
+
+  goToDashboard() {
+    this.routerExtensions.navigate(['/dashboard'], { clearHistory: true });
   }
 
 }
