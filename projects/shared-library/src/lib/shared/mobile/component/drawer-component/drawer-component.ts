@@ -94,9 +94,9 @@ export class DrawerComponent implements OnInit, OnDestroy {
             }
         });
         this.categoriesObs = this.store.select(coreState).pipe(select(s => s.categories));
-        this.categoriesObs.subscribe(categories => {
+        this.subscriptions.push(this.categoriesObs.subscribe(categories => {
             this.categories = categories;
-        });
+        }));
         this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
             if (appSettings) {
                 this.applicationSettings = appSettings[0];
@@ -116,7 +116,6 @@ export class DrawerComponent implements OnInit, OnDestroy {
             }
         }));
 
-        this.subscriptions.push(this.categoriesObs);
         this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.user), filter(u => u !== null)).subscribe(user => {
             if (user && !this.logOut) {
                 this.photoUrl = this.utils.getImageUrl(user, 70, 60, '70X60');
