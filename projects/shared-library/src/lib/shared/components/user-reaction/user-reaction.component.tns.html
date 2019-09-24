@@ -1,20 +1,18 @@
-<StackLayout>
-    <GridLayout rows="*" columns="auto,auto" marginRight="5">
-        <GridLayout row="0" col="0" rows="*,*" columns="*" marginRight="5">
-            <Image stlRippleEffect (rippleTap)="userReaction('like')" row="0" col="0" class="text-center"
-                margin="10 0 10 0" width="32"
-                [src]="user && userReactionStatus?.status === 'like' ?  '~/assets/images/like.png' : '~/assets/images/like-default.png'">
-            </Image>
-            <Label row="1" col="0" [text]="question?.reactionsCount?.like ? question?.reactionsCount?.like : 0"
+<StackLayout marginTop="20">
+    <StackLayout orientation="horizontal">
+        <StackLayout orientation="horizontal" marginRight="15">
+            <Label stlRippleEffect padding="15" borderRadius="50%" background="#4ab14f" text="&#xf164;" fontSize="22" 
+                    [ngStyle]="{color: (user && userReactionStatus?.status === 'like' ? '#fff':'#000')}"
+                    (rippleTap)="userReaction('like')" class="fas" textWrap="true"></Label>
+            <Label marginLeft="10" verticalAlignment="center"  [text]="question?.reactionsCount?.like ? question?.reactionsCount?.like : 0"
                 horizontalAlignment="center" textWrap="true" color="#868686"></Label>
-        </GridLayout>
-        <GridLayout row="0" col="1" rows="*,*" columns="*" marginRight="5">
-            <Image stlRippleEffect (rippleTap)="userReaction('dislike')" row="0" col="0" class="text-center"
-                margin="10 0 10 0" width="32"
-                [src]="user && userReactionStatus?.status === 'dislike' ? '~/assets/images/dislike.png' : '~/assets/images/dislike-default.png'">
-            </Image>
-            <Label row="1" col="0" [text]="question?.reactionsCount?.dislike ? question?.reactionsCount?.dislike : 0"
+        </StackLayout>
+        <StackLayout orientation="horizontal" marginLeft="15">
+            <Label stlRippleEffect padding="15" fontSize="22" borderRadius="50%" background="#f44235" text="&#xf165;"
+            [ngStyle]="{color: (user && userReactionStatus?.status === 'dislike' ? '#fff':'#000')}"
+            (rippleTap)="userReaction('dislike')" class="fas" textWrap="true"></Label>
+            <Label marginLeft="10" verticalAlignment="center" [text]="question?.reactionsCount?.dislike ? question?.reactionsCount?.dislike : 0"
                 horizontalAlignment="center" textWrap="true" color="#868686"></Label>
-        </GridLayout>
-    </GridLayout>
+        </StackLayout>
+    </StackLayout>
 </StackLayout>

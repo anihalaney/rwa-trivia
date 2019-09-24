@@ -28,12 +28,12 @@
         [isUserInteractionEnabled]="doPlay"></render-answer>
     </StackLayout>
   </StackLayout>
-    <GridLayout margin="0 15" rows="auto" columns="auto" *ngIf="question" style=" horizontal-align:right;" class="Roboto-Medium">
-        <author [isGamePlay]=false [userId]="question.created_uid"></author>
-    </GridLayout>
-    <GridLayout margin="0 15" rows="auto" columns="auto" style="horizontal-align:center;"
-      class="Roboto-Medium">
+  <StackLayout>
+    <StackLayout orientation="horizontal" horizontalAlignment="left">
+      <author *ngIf="question" [isGamePlay]=false [userId]="question.created_uid"></author>
+    </StackLayout>
+    <StackLayout orientation="horizontal" horizontalAlignment="center">
       <user-reaction *ngIf="answeredText!==''" [user]='user' [question]='question'></user-reaction>
-    </GridLayout>
-
+    </StackLayout>
+  </StackLayout>
 </StackLayout>
