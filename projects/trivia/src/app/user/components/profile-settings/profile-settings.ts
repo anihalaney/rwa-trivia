@@ -102,11 +102,17 @@ export class ProfileSettings {
                 switchMap(user => {
                     if (user && user.userId === this.userId) {
                         this.user = user;
-                        this.currentAuthProvider =
-                            (user.authState && user.authState.providerData && user.authState.providerData.length > 0)
-                                ? user.authState.providerData[0].providerId
-                                : ((user.authState && user.authState['providers'] && user.authState['providers'].length > 1)
-                                    ? user.authState['providers'][1]['id'] : '');
+                        if (user.authState && user.authState.providerData && user.authState.providerData.length > 0) {
+                            this.currentAuthProvider = user.authState.providerData[0].providerId;
+                        } else if (user.authState && user.authState['providers']) {
+                            if (user.authState['providers'].length > 1) {
+                                this.currentAuthProvider = user.authState['providers'][1]['id'];
+                            } else {
+                                this.currentAuthProvider = user.authState['providers'][0]['id'];
+                            }
+                        } else {
+                            this.currentAuthProvider = '';
+                        }
 
 
                         this.userType = UserType.userProfile;
@@ -288,17 +294,23 @@ export class ProfileSettings {
             profilePicture: [user.profilePicture],
             email: [user.email],
             phoneNo: [user.phoneNo],
-            password: ['']
-        });
+            oldPassword: [''],
+            password: [''],
+            confirmPassword: ['']
+        }, { validator: profileUpdateFormValidator });
 
         switch (this.currentAuthProvider) {
             case AuthProviderConstants.PASSWORD:
                 this.userForm.get('email').setValidators(Validators.pattern(this.emailRegex));
                 this.userForm.get('phoneNo').setValidators(Validators.pattern(this.phoneNoRegex));
+                this.userForm.get('oldPassword').setValidators(Validators.minLength(6));
                 this.userForm.get('password').setValidators(Validators.minLength(6));
+                this.userForm.get('confirmPassword').setValidators(Validators.minLength(6));
                 this.userForm.get('email').updateValueAndValidity();
                 this.userForm.get('phoneNo').updateValueAndValidity();
                 this.userForm.get('password').updateValueAndValidity();
+                this.userForm.get('oldPassword').updateValueAndValidity();
+                this.userForm.get('confirmPassword').updateValueAndValidity();
                 break;
             case AuthProviderConstants.GOOGLE:
                 this.userForm.get('phoneNo').setValidators(Validators.pattern(this.phoneNoRegex));
@@ -385,12 +397,16 @@ export class ProfileSettings {
     // store the user object
     async saveUser(user: User, isLocationChanged: boolean) {
         if (this.currentAuthProvider === AuthProviderConstants.PASSWORD) {
+
+            const currentPassword = this.userForm.get('oldPassword').value;
             const newPassword = this.userForm.get('password').value;
-            if (newPassword && newPassword !== null && newPassword.length > 0) {
+            if (currentPassword && currentPassword !== null && currentPassword.length > 0
+                && newPassword && newPassword !== null && newPassword.length > 0) {
                 try {
-                    await this.authenticationProvider.updatePassword(newPassword);
+                    await this.authenticationProvider.updatePassword(this.user.email, currentPassword, newPassword);
                 } catch (error) {
                     console.log('error--->', error);
+                    throw error;
                 }
             }
         }
@@ -498,4 +514,26 @@ export class ProfileSettings {
             this.applicationSettings.lives.enable) || (!this.applicationSettings.lives.enable) ? true : false;
         return isEnable;
     }
+}
+
+
+function profileUpdateFormValidator(fg: FormGroup): { [key: string]: boolean } {
+
+    // Password match validation for password update only
+    if (fg.get('password') && fg.get('confirmPassword') &&
+        fg.get('password').value && fg.get('confirmPassword').value) {
+
+        if (fg.get('password').value !== fg.get('confirmPassword').value) {
+            return { 'passwordmismatch': true };
+        }
+
+        if (!fg.get('oldPassword') || !fg.get('oldPassword').value) {
+            return { 'requiredoldpassword': true };
+        }
+
+        return null;
+
+    }
+
+    return null;
 }

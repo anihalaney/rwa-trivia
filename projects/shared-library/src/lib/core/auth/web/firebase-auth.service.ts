@@ -17,7 +17,6 @@ export class WebFirebaseAuthService implements FirebaseAuthService {
 
     dialogRef: MatDialogRef<LoginComponent>;
     private user: User;
-    private password: string;
 
     constructor(protected afAuth: AngularFireAuth,
         public router: Router,
@@ -32,7 +31,6 @@ export class WebFirebaseAuthService implements FirebaseAuthService {
     }
 
     public createUserWithEmailAndPassword(email, password) {
-        this.password = password;
         return this.afAuth.auth.createUserWithEmailAndPassword(email, password);
     }
 
@@ -47,12 +45,11 @@ export class WebFirebaseAuthService implements FirebaseAuthService {
         return this.getFirebaseUser().getIdToken(forceRefresh);
     }
 
-    public async updatePassword(password: string): Promise<any> {
+    public async updatePassword(email: string, currentPassword: string, newPassword: string): Promise<any> {
         try {
-            const credentials = firebase.auth.EmailAuthProvider.credential(this.user.email, this.password);
+            const credentials = firebase.auth.EmailAuthProvider.credential(email, currentPassword);
             await this.getFirebaseUser().reauthenticateWithCredential(credentials);
-            await this.getFirebaseUser().updatePassword(password);
-            this.password = password;
+            await this.getFirebaseUser().updatePassword(newPassword);
             return 'success';
         } catch (error) {
             console.log('error---->', error);
@@ -84,7 +81,6 @@ export class WebFirebaseAuthService implements FirebaseAuthService {
     }
 
     public signInWithEmailAndPassword(email: string, password: string) {
-        this.password = password;
         return this.afAuth.auth.signInWithEmailAndPassword(email, password);
     }
 
