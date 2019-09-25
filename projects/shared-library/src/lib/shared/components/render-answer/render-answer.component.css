@@ -12,3 +12,6 @@
 .display-answer{
   color:#616161;
 }
+.upper-grid {
+  z-index: 99;
+}
