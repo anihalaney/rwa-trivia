@@ -45,9 +45,12 @@ export class WebFirebaseAuthService implements FirebaseAuthService {
         return this.getFirebaseUser().getIdToken(forceRefresh);
     }
 
-    public async updatePassword(password: string): Promise<any> {
+    public async updatePassword(email: string, currentPassword: string, newPassword: string): Promise<any> {
         try {
-            return await this.getFirebaseUser().updatePassword(password);
+            const credentials = firebase.auth.EmailAuthProvider.credential(email, currentPassword);
+            await this.getFirebaseUser().reauthenticateWithCredential(credentials);
+            await this.getFirebaseUser().updatePassword(newPassword);
+            return 'success';
         } catch (error) {
             console.log('error---->', error);
             throw error;
@@ -132,8 +135,8 @@ export class WebFirebaseAuthService implements FirebaseAuthService {
             .update({ status: UserStatusConstants.OFFLINE });
     }
 
-public updateTokenStatus(userId: string, status: string) {
+    public updateTokenStatus(userId: string, status: string) {
         this.db.object(`/${CollectionConstants.USERS}/${userId}`)
-            .set({ status, userId, device: TriggerConstants.WEB, lastUpdated : new Date().getTime() });
+            .set({ status, userId, device: TriggerConstants.WEB, lastUpdated: new Date().getTime() });
     }
 }

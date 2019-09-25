@@ -1,5 +1,5 @@
-<ns-action-bar title="Friend List" class="Roboto-Regular" showAdd="true"></ns-action-bar>
-<GridLayout rows="auto,*,auto" columns="*" *ngIf="renderView">
+<ns-action-bar title="Friends" class="Roboto-Regular" showAdd="true"></ns-action-bar>
+<GridLayout rows="auto,*" columns="*" *ngIf="renderView">
     <GridLayout row="0" rows="*" columns="*,70,50,50" class="h-label">
         <Label class="Roboto-Regular" text="Friends" row="0" col="0"></Label>
         <Label class="Roboto-Regular" text="Played" row="0" col="1"></Label>
@@ -30,9 +30,4 @@
             </ng-template>
         </RadListView>
     </GridLayout>
-    <DockLayout row="2" stretchLastChild="true" horizontalAlignment="right">
-    <FlexboxLayout  stlRippleEffect (rippleTap)="navigateToInvite()" borderRadius="30" class="fab-button1" padding="10" flexDirection="column" justifyContent="center">
-            <Image src="~/assets/images/add.png"></Image>
-        </FlexboxLayout>
-    </DockLayout>
 </GridLayout>

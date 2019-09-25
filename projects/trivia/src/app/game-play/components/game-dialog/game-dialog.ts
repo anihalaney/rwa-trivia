@@ -15,7 +15,6 @@ import { GameQuestionComponent } from '../game-question/game-question.component'
 import { Router } from '@angular/router';
 
 export class GameDialog {
-  actionBarStatus: String = 'Play Game';
   user: User;
   gameObs: Observable<Game>;
   game: Game;
@@ -35,6 +34,7 @@ export class GameDialog {
   questionAnswered = false;
   gameOver = false;
   PlayerMode = PlayerMode;
+  playerMode: any;
 
   MAX_TIME_IN_SECONDS: number;
   showContinueBtn = false;
@@ -55,9 +55,8 @@ export class GameDialog {
   threeConsecutiveAnswer = false;
   currentUTC: number;
   applicationSettings: ApplicationSettings;
-
-
   showContinueScreen = false;
+
 
   private genQuestionComponent: GameQuestionComponent;
 
@@ -72,7 +71,7 @@ export class GameDialog {
     this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
     this.subscriptions.push(this.userDict$.subscribe(userDict => {
       this.userDict = userDict;
-      // this.cd.detectChanges();
+      this.cd.detectChanges();
     }));
 
     this.resetValues();
@@ -84,13 +83,14 @@ export class GameDialog {
     this.subscriptions.push(
       this.gameObs.subscribe(game => {
         this.game = game;
+        this.playerMode = game.gameOptions.playerMode;
         this.threeConsecutiveAnswer = false;
         if (game !== null && game.playerQnAs.length === 3) {
           let consecutiveCount = 0;
           this.game.playerQnAs.map((playerQnA) => {
             consecutiveCount = (playerQnA.answerCorrect) ? ++consecutiveCount : consecutiveCount;
           });
-          this.threeConsecutiveAnswer = (consecutiveCount === 3) ? true : false;
+          this.threeConsecutiveAnswer = (consecutiveCount === 3 && this.game.round === 1) ? true : false;
         }
         if (game !== null && !this.isGameLoaded) {
           this.turnFlag = (this.game.GameStatus === GameStatus.STARTED ||
@@ -115,11 +115,6 @@ export class GameDialog {
             this.resetValues();
           }
 
-          if (game.GameStatus === GameStatus.COMPLETED) {
-            this.actionBarStatus = 'Game Over';
-          } else {
-            this.actionBarStatus = 'Play Game';
-          }
         }
 
       }));
@@ -150,7 +145,13 @@ export class GameDialog {
         if (this.userDict && Number(this.game.gameOptions.playerMode) !== PlayerMode.Single) {
           this.otherPlayerUserId = this.game.playerIds.filter(playerId => playerId !== this.user.userId)[0];
           const otherPlayerObj = this.userDict[this.otherPlayerUserId];
-          (otherPlayerObj) ? this.otherPlayer = otherPlayerObj : this.initializeOtherUser();
+          if (otherPlayerObj) {
+            this.otherPlayer = otherPlayerObj;
+            this.otherPlayer['score'] = this.game.stats[this.otherPlayer.userId].score;
+            console.log('otherPlayerObj----->', this.otherPlayer);
+          } else {
+            this.initializeOtherUser();
+          }
           this.otherPlayer.displayName = (this.otherPlayer.displayName && this.otherPlayer.displayName !== '') ?
             this.otherPlayer.displayName : this.RANDOM_PLAYER;
         } else {

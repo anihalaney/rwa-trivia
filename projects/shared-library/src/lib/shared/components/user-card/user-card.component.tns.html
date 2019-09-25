@@ -17,6 +17,7 @@
       horizontalAlignment="center" row="1" col="0"></Label>
   </GridLayout>
 </ng-container>
+
 <ng-container *ngIf="userCardType.USER_IMAGE_NAME_LOCATION_HORIZONTAL === type">
   <GridLayout rows="*" columns="auto,*">
     <StackLayout row="0" col="0" marginLeft="10" verticalAlignment="center" marginRight="10" borderRadius="50"
@@ -78,6 +79,16 @@
   <Label row="0" col="1" class="name Hind-Regular" verticalAlignment="center" [text]="user?.displayName"></Label>
 </GridLayout>
 
+<ng-container *ngIf="userCardType.USER_IMAGE_NAME_PROFILE_HORIZONTAL === type" >
+  <Image col="0" [stlOpenUserProfile]="{userId: user?.userId, redirectTo: 'otherUserProfile'}"
+    [src]="getImageUrl(user,44,40)" stretch="aspectFill" height="50" width="50" marginLeft="10"
+    verticalAlignment="center" marginRight="15" borderRadius="50" ></Image>
+  <AbsoluteLayout *ngIf="user?.online" horizontalAlignment="center"
+    [stlOpenUserProfile]="{userId: user?.userId, redirectTo: loggedInUserId === user?.userId ? 'userProfile': 'otherUserProfile'}">
+    <Label height="10" top="37" left="27" width="10" borderRadius="22" backgroundColor="#71b02f"></Label>
+  </AbsoluteLayout>  
+</ng-container>
+
 
 <ng-container *ngIf="user && userCardType.USER_IMAGE_NAME_VERTICAL_NO_REDIRECT === type">
   <GridLayout rows="*, *" columns="*">
@@ -129,6 +140,164 @@
   </StackLayout>
 </ng-container>
 
+<ng-container *ngIf="user && userCardType.USER_IMAGE_NAME_WITH_SCORE_IN_GAME_PLAY_SINGLE_PLAYER === type">
+
+  <StackLayout row="0" col="0" marginLeft="10" verticalAlignment="center" marginRight="10" borderRadius="50"
+    borderColor="#3b5998" borderWidth="1" paddingTop="2" paddingLeft="2" paddingRight="2" class="image-container"
+    height="66" width="66">
+    <Image row="0" col="0" [src]="getImageUrl(user,70,60)" backgroundColor="gray" stretch="aspectFill" height="64"
+      width="64" marginLeft="10" verticalAlignment="center" marginRight="10" borderRadius="50"
+      [stlOpenUserProfile]="{userId: user?.userId, redirectTo: loggedInUserId === user?.userId ? 'userProfile': 'otherUserProfile'}">
+      ></Image>
+  </StackLayout>
+
+  <AbsoluteLayout *ngIf="user?.online" horizontalAlignment="center">
+    <Label height="15" top="50" left="42" width="15" borderRadius="22" backgroundColor="#71b02f"></Label>
+  </AbsoluteLayout>
+
+  <StackLayout row="0" col="1" class="Roboto-Regular" horizontalAlignment="left">
+    <Label text="{{ (loggedInUserId === user.userId) ? 'You' : user?.displayName}}" textWrap="true" fontSize="18"
+      color="#616161" class="main-title"></Label>
+    <Label text="{{otherInfo.actionText}}" textWrap="true" class="sub-title" color="#8c8c8c" fontWeight="bold"
+      fontSize="20"></Label>
+
+  </StackLayout>
+
+  <StackLayout row="0" col="2">
+    <GridLayout rows="*" columns="*,*">
+      <Label col="0" text="Score {{otherInfo.correctCount}}" textWrap="true" class="sub-title" color="#8c8c8c"
+        horizontalAlignment="left"></Label>
+      <Label col="1" text="&#xf015;" class="fa home-btn" fontSize="23" horizontalAlignment="right"
+        (tap)='goToDashboard()'></Label>
+    </GridLayout>
+
+    <Label text="Round {{otherInfo.questionRound}} / {{otherInfo.totalRound}}" textWrap="true" class="sub-title"
+      color="#8c8c8c"></Label>
+
+    <StackLayout orientation="horizontal" horizontalAlignment="left">
+      <Image src="{{otherInfo.correctCount>=1 ? '~/assets/images/score1.png' : '~/assets/images/score0.png'}}"
+        height="30" width="30" marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50">
+      </Image>
+      <Image src="{{otherInfo.correctCount>=2 ? '~/assets/images/score2.png' : '~/assets/images/score0.png'}}"
+        height="30" width="30" marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50">
+      </Image>
+      <Image src="{{otherInfo.correctCount>=3 ? '~/assets/images/score3.png' : '~/assets/images/score0.png'}}"
+        height="30" width="30" marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50">
+      </Image>
+      <Image src="{{otherInfo.correctCount>=4 ? '~/assets/images/score4.png' : '~/assets/images/score0.png'}}"
+        height="30" width="30" marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50">
+      </Image>
+      <Image src="{{otherInfo.correctCount>=5 ? '~/assets/images/score5.png' : '~/assets/images/score0.png'}}"
+        height="30" width="30" marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50">
+      </Image>
+    </StackLayout>
+  </StackLayout>
+
+</ng-container>
+
+<ng-container *ngIf="user && userCardType.USER_IMAGE_NAME_WITH_SCORE_IN_GAME_PLAY_TWO_PLAYER === type">
+
+
+  <GridLayout row="0" col="0" rows="*" columns="*,auto,*">
+
+    <!-- First Player-->
+    <GridLayout row="0" col="0" rows="*,*" columns="*,*" horizontalAlignment="left">
+
+      <StackLayout row="0" col="0" marginLeft="10" verticalAlignment="center" marginRight="10" borderRadius="50"
+        borderColor="#3b5998" borderWidth="1" paddingTop="2" paddingLeft="2" paddingRight="2" class="image-container"
+        height="66" width="66">
+        <Image row="0" col="0" [src]="getImageUrl(user,70,60)" backgroundColor="gray" stretch="aspectFill" height="64"
+          width="64" marginLeft="10" verticalAlignment="center" marginRight="10" borderRadius="50"
+          [stlOpenUserProfile]="{userId: user?.userId, redirectTo: loggedInUserId === user?.userId ? 'userProfile': 'otherUserProfile'}">
+          ></Image>
+      </StackLayout>
+
+      <StackLayout row="0" col="1" class="Roboto-Regular">
+        <Label text="{{ (loggedInUserId === user.userId) ? 'You' : user?.displayName}}" fontSize="18" color="#616161"
+          class="main-title"></Label>
+      </StackLayout>
+
+      <AbsoluteLayout *ngIf="user?.online">
+        <Label height="15" top="50" left="42" width="15" borderRadius="22" backgroundColor="#71b02f"></Label>
+      </AbsoluteLayout>
+    </GridLayout>
+
+
+    <StackLayout row="0" col="1" class="Roboto-Regular" horizontalAlignment="center" verticalAlignment="bottom">
+      <Label text="Round {{otherInfo.questionRound}} / {{otherInfo.totalRound}}" textWrap="true" class="sub-title"
+        color="#8c8c8c"></Label>
+    </StackLayout>
+
+    <!-- Second Player-->
+    <GridLayout row="0" col="2" rows="*,*" columns="*,*" horizontalAlignment="right">
+
+
+      <StackLayout row="0" col="0" class="Roboto-Regular" marginLeft="15">
+        <Label text="{{otherInfo.otherPlayer?.displayName}}" fontSize="18" color="#616161" class="main-title"></Label>
+      </StackLayout>
+
+      <StackLayout row="0" col="1" verticalAlignment="center" marginRight="10" borderRadius="50" borderColor="#3b5998"
+        borderWidth="1" paddingTop="2" paddingLeft="2" paddingRight="2" class="image-container" height="66" width="66"
+        orientation="horizontal">
+
+        <Image *ngIf="isGamePlay" row="0" col="0" [src]="getImageUrl(otherInfo.otherPlayer,70,60)"
+          backgroundColor="gray" stretch="aspectFill" height="64" width="64" verticalAlignment="center"
+          borderRadius="50"
+          [stlOpenUserProfile]="{userId: otherInfo?.otherPlayer?.userId, redirectTo: loggedInUserId === otherInfo?.otherPlayer?.userId ? 'userProfile': 'otherUserProfile'}">
+          ></Image>
+
+      </StackLayout>
+
+      <AbsoluteLayout row="0" col="1" *ngIf="otherInfo.otherPlayer?.online">
+        <Label height="15" top="50" left="18" width="15" borderRadius="22" backgroundColor="#71b02f"></Label>
+      </AbsoluteLayout>
+
+    </GridLayout>
+
+  </GridLayout>
+
+  <GridLayout row="1" col="0" rows="*" columns="*,*" orientation="horizontal" marginTop="10">
+
+    <StackLayout row="0" col="0" orientation="horizontal" horizontalAlignment="left" marginLeft="10">
+      <Image src="{{otherInfo.correctCount>=1 ? '~/assets/images/score1.png' : '~/assets/images/score0.png'}}"
+        height="30" width="30" marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50">
+      </Image>
+      <Image src="{{otherInfo.correctCount>=2 ? '~/assets/images/score2.png' : '~/assets/images/score0.png'}}"
+        height="30" width="30" marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50">
+      </Image>
+      <Image src="{{otherInfo.correctCount>=3 ? '~/assets/images/score3.png' : '~/assets/images/score0.png'}}"
+        height="30" width="30" marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50">
+      </Image>
+      <Image src="{{otherInfo.correctCount>=4 ? '~/assets/images/score4.png' : '~/assets/images/score0.png'}}"
+        height="30" width="30" marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50">
+      </Image>
+      <Image src="{{otherInfo.correctCount>=5 ? '~/assets/images/score5.png' : '~/assets/images/score0.png'}}"
+        height="30" width="30" marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50">
+      </Image>
+    </StackLayout>
+
+    <StackLayout row="0" col="2" orientation="horizontal" horizontalAlignment="right" marginRight="10">
+      <Image src="{{otherInfo.otherPlayer?.score>=1 ? '~/assets/images/score1.png' : '~/assets/images/score0.png'}}"
+        height="30" width="30" marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50">
+      </Image>
+      <Image src="{{otherInfo.otherPlayer?.score>=2 ? '~/assets/images/score2.png' : '~/assets/images/score0.png'}}"
+        height="30" width="30" marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50">
+      </Image>
+      <Image src="{{otherInfo.otherPlayer?.score>=3 ? '~/assets/images/score3.png' : '~/assets/images/score0.png'}}"
+        height="30" width="30" marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50">
+      </Image>
+      <Image src="{{otherInfo.otherPlayer?.score>=4 ? '~/assets/images/score4.png' : '~/assets/images/score0.png'}}"
+        height="30" width="30" marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50">
+      </Image>
+      <Image src="{{otherInfo.otherPlayer?.score>=5 ? '~/assets/images/score5.png' : '~/assets/images/score0.png'}}"
+        height="30" width="30" marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50">
+      </Image>
+    </StackLayout>
+
+  </GridLayout>
+
+</ng-container>
+
 <ng-container *ngIf="user && userCardType.USER_NAME_IMAGE_HORIZONTAL === type">
   <GridLayout rows="auto" columns="*,auto,auto" marginTop="10">
     <Label row="0" col="0" text="Author: " textWrap="true" horizontalAlignment="right"
@@ -136,13 +305,14 @@
     <Label row="0" col="1" verticalAlignment="center" text="{{user?.displayName}}" textWrap="true"
       style="font-weight:400;"></Label>
     <AbsoluteLayout row="0" col="2" horizontalAlignment="right" verticalAlignment="bottom"
-      [stlOpenUserProfile]="{userId: user?.userId, redirectTo: loggedInUserId === user?.userId ? 'userProfile': 'otherUserProfile'}">
+      [stlOpenUserProfile]="{userId: user?.userId, redirectTo: loggedInUserId === user?.userId ? 'userProfile': 'otherUserProfile', isGamePlay: true}">
       <Image *ngIf="isGamePlay" row="0" col="2" [src]="getImageUrl(user,44,40)" color="#FFFFFF" stretch="aspectFill"
         height="33" width="33" marginLeft="10" marginRight="10" verticalAlignment="center" borderRadius="50"></Image>
       <Image *ngIf="!isGamePlay" [stlOpenUserProfile]="{userId: user?.userId, redirectTo: 'otherUserProfile'}" row="0"
-        col="2" [src]="getImageUrl(user,44,40)" color="#FFFFFF" stretch="aspectFill" height="33" width="33" marginLeft="10"
-        marginRight="10" verticalAlignment="center" borderRadius="50"></Image>
-      <Label *ngIf="user?.online" height="10" top="23" left="33" width="10" borderRadius="22" backgroundColor="#71b02f"></Label>
+        col="2" [src]="getImageUrl(user,44,40)" color="#FFFFFF" stretch="aspectFill" height="33" width="33"
+        marginLeft="10" marginRight="10" verticalAlignment="center" borderRadius="50"></Image>
+      <Label *ngIf="user?.online" height="10" top="23" left="33" width="10" borderRadius="22"
+        backgroundColor="#71b02f"></Label>
     </AbsoluteLayout>
   </GridLayout>
 </ng-container>
