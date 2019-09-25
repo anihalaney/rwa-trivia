@@ -27,9 +27,7 @@ export class InviteFriendsComponent extends InviteFriends implements OnInit, OnD
   ngOnInit() {
     this.page.on('loaded', () => { this.renderView = true; this.cd.markForCheck(); });
   }
-  navigateToInvite() {
-    this.routerExtension.navigate(['/user/my/app-invite-friends-dialog', { showSkip: false }]);
-  }
+
   ngOnDestroy() {
     this.renderView = false;
     this.page.off('loaded');

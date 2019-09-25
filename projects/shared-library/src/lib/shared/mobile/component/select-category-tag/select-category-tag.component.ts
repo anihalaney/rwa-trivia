@@ -75,15 +75,15 @@ export class SelectCategoryTagComponent implements OnInit, OnDestroy {
     }));
   }
 
-  selectTopic(args) {
-    const categories = this.categories[args.index];
+  selectTopic(index) {
+    const categories = this.categories[index];
     categories.requiredForGamePlay = !categories.requiredForGamePlay;
     this.categories = [... this.categories];
     this.selectedCategories = this.returnSelectedTagsOrCategories(this.categories).length;
   }
 
-  selectTags(args) {
-    const tags = this.tags[args.index];
+  selectTags(index) {
+    const tags = this.tags[index];
     tags.requiredForGamePlay = !tags.requiredForGamePlay;
     this.tags = [... this.tags];
   }

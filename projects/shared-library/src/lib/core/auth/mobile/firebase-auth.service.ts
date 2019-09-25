@@ -61,9 +61,17 @@ export class TNSFirebaseAuthService implements FirebaseAuthService {
         return token.token;
     }
 
-    public async updatePassword(password: string): Promise<any> {
+    public async updatePassword(email: string, currentPassword: string, newPassword: string): Promise<any> {
         try {
-            return await this.firebaseAuth().updatePassword(password);
+            await firebase.reauthenticate({
+                type: firebase.LoginType.PASSWORD,
+                passwordOptions: {
+                    email: email,
+                    password: currentPassword
+                }
+            });
+            await this.firebaseAuth().updatePassword(newPassword);
+            return 'success';
         } catch (error) {
             console.log('error---->', error);
             throw error;

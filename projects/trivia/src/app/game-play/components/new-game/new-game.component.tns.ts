@@ -36,6 +36,9 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
   // it delay complex UI show Router navigation can finish first to have smooth transition
   renderView = false;
   challengerUserId: string;
+  actionBarTitle = 'Play as single player';
+
+
   @ViewChild('autocomplete', { static: false }) autocomplete: RadAutoCompleteTextViewComponent;
   @ViewChild('friendListView', { static: false }) listViewComponent: RadListViewComponent;
   modeAvailable: boolean;
@@ -75,7 +78,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
           this.challengerUserId = data.userid;
           this.gameOptions.playerMode = 1;
           this.gameOptions.opponentType = 1;
-          if (this.router.url.indexOf('challenge') > 0 ) {
+          if (this.router.url.indexOf('challenge') > 0) {
             this.gameOptions.isChallenge = true;
           }
           this.friendUserId = data.userid;
@@ -88,9 +91,11 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
           this.modeAvailable = true;
           if (data.mode === 'Single') {
             this.gameOptions.playerMode = 0;
+            this.actionBarTitle = 'Play as single player';
           } else {
             this.gameOptions.playerMode = 1;
             this.gameOptions.opponentType = 0;
+            this.actionBarTitle = 'Play as multi player';
           }
         }
       }));
@@ -216,5 +221,15 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     return (60 * this.selectedTags.length) + 20;
   }
 
+  changePlayerMode(playerMode: number, opponentType: any) {
+    this.gameOptions.playerMode = playerMode;
+    this.gameOptions.opponentType = opponentType;
+
+    if (this.gameOptions.playerMode === PlayerMode.Single) {
+      this.actionBarTitle = 'Play as single player';
+    } else {
+      this.actionBarTitle = 'Play as multi player';
+    }
+  }
 
 }

@@ -50,9 +50,10 @@ export class MyQuestionsComponent extends MyQuestions implements OnDestroy, OnIn
     this.page.on('loaded', () => { this.renderView = true; this.cd.markForCheck(); });
   }
 
-  navigateToSubmitQuestion() {
-    this.routerExtension.navigate(['/user/my/questions/add']);
-  }
+
+  // navigateToSubmitQuestion() {
+  //   this.routerExtension.navigate(['/user/my/questions/add']);
+  // }
 
   displayReason(reasonFlag: boolean) {
     this.displayReasonViewer = reasonFlag;
