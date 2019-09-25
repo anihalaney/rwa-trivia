@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnDestroy, SimpleChanges, OnChanges, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, SimpleChanges, OnChanges, ChangeDetectionStrategy, ChangeDetectorRef, Output, EventEmitter } from '@angular/core';
 import { User, FirebaseScreenNameConstants } from 'shared-library/shared/model';
 import { Utils } from 'shared-library/core/services';
 import { GameQuestion } from './game-question';
@@ -10,6 +10,7 @@ import { take } from 'rxjs/operators';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { projectMeta } from 'shared-library/environments/environment';
 
+
 @Component({
   selector: 'game-question',
   templateUrl: './game-question.component.html',
@@ -20,7 +21,7 @@ import { projectMeta } from 'shared-library/environments/environment';
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class GameQuestionComponent extends GameQuestion implements OnInit, OnDestroy, OnChanges {
 
-  @Input() user: User;
+
   subscriptions = [];
   answeredIndex: number;
   correctAnswerIndex: number;
@@ -28,6 +29,8 @@ export class GameQuestionComponent extends GameQuestion implements OnInit, OnDes
   public progressValue: number;
   stopProcessBar;
   doPlay = true;
+  actionText: string;
+
   photoUrl: String = `~/assets/icons/${projectMeta.projectName}/icon-192x192.png`;
   userDict$: Observable<{ [key: string]: User }>;
   processTimeInterval: number;
@@ -36,6 +39,7 @@ export class GameQuestionComponent extends GameQuestion implements OnInit, OnDes
   constructor(private utils: Utils, public store: Store<GamePlayState>, private cd: ChangeDetectorRef) {
     super();
     this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
+    this.actionText = 'Playing Now';
   }
 
   ngOnInit() {

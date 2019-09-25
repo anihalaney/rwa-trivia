@@ -7,6 +7,7 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { UserActions } from '../../../core/store/actions';
 import { Observable } from 'rxjs';
 import * as lodash from 'lodash';
+
 @Component({
   selector: 'app-user-card',
   templateUrl: './user-card.component.html',
@@ -72,6 +73,7 @@ export class UserCardComponent implements OnInit, OnDestroy, OnChanges {
     return imageUrl;
   }
 
+
   ngOnDestroy(): void {
 
   }
@@ -97,4 +99,10 @@ export class UserCardComponent implements OnInit, OnDestroy, OnChanges {
       this.cd.markForCheck();
     }
   }
+
+
+  goToDashboard() {
+    this.utils.goToDashboard();
+  }
+
 }

@@ -1,5 +1,5 @@
 import { Input, Output, EventEmitter } from '@angular/core';
-import { Question, Answer, User, ApplicationSettings, userCardType } from 'shared-library/shared/model';
+import { Question, Answer, User, ApplicationSettings, userCardType, PlayerMode } from 'shared-library/shared/model';
 
 export class GameQuestion {
   @Input() questionIndex: number;
@@ -23,11 +23,13 @@ export class GameQuestion {
   @Input() MAX_TIME_IN_SECONDS: number;
   @Input() applicationSettings: ApplicationSettings;
   @Input() user: User;
+  @Input() playerMode: any;
 
   answeredIndex: number;
   correctAnswerIndex: number;
   answeredText: string;
   userCardType = userCardType;
+  PlayerMode = PlayerMode;
   // applicationSettings: ApplicationSettings;
 
   doPlay = true;

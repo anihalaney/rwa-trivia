@@ -20,3 +20,25 @@
     margin-left: 5;
   }
 }
+
+
+.notification-dot {
+  background-color: #f50057;
+  width:20;
+  height:20;
+  margin-top: 20;
+  margin-left: 20;
+  color: #fff;
+  border-radius: 50%; 
+  font-size: 14;
+  font-weight: 600;
+}
+
+
+.index-0 {
+  z-index: 0;
+}
+
+.index-1 {
+    margin-left: 5;
+}

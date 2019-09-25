@@ -1,0 +1,26 @@
+.stats-box {
+  width: 45%;
+  height: 100%;
+}
+
+.border {
+  margin: 0 10 10 0;
+}
+
+.selectedBackground {
+  color: #fff;
+}
+
+.unSelectedBackground {
+  color: #9b92e7;
+}
+
+Button[isEnabled=true] {
+  background: #3c5999;
+  color: #fff;
+}
+
+Button[isEnabled=false] {
+  background: #e2e2e2;
+  color: #bebebe;
+}
