@@ -97,8 +97,8 @@ export class AuthenticationProvider {
 
   }
 
-  async updatePassword(password: string) {
-    await this.firebaseAuthService.updatePassword(password);
+  async updatePassword(email: string, currentPassword: string, newPassword: string) {
+    await this.firebaseAuthService.updatePassword(email, currentPassword, newPassword);
   }
 
   logout() {

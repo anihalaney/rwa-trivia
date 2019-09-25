@@ -2,15 +2,16 @@ import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { ChangeDetectorRef, Inject, NgZone, OnDestroy, PLATFORM_ID } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
-import { Observable, Subscription, timer } from 'rxjs';
+import { Observable, Subscription, timer, combineLatest } from 'rxjs';
 import { Utils, WindowRef } from 'shared-library/core/services';
 import { GameActions, QuestionActions, UserActions } from 'shared-library/core/store/actions';
 import {
     Account, ApplicationSettings, CalenderConstants, Game, GameStatus, Invitation,
-    OpponentType, PlayerMode, User
+    OpponentType, PlayerMode, User, userCardType
 } from 'shared-library/shared/model';
 import { AppState, appState } from '../../../store';
-import { map, flatMap } from 'rxjs/operators';
+import { map, flatMap, filter } from 'rxjs/operators';
+import { coreState } from 'shared-library/core/store';
 
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class Dashboard implements OnDestroy {
@@ -19,6 +20,8 @@ export class Dashboard implements OnDestroy {
     NEW_GAME_IN = 'New Game In';
     SINGLE_PLAYER = 'Single Player';
     TWO_PLAYER = 'Two Player';
+    actionText = 'Hi, there';
+    actionSubText = 'SIGN UP/SIGN IN';
     user: User;
     users: User[];
     activeGames$: Observable<Game[]>;
@@ -63,6 +66,9 @@ export class Dashboard implements OnDestroy {
     startGame = this.START_A_NEW_GAME;
     cd: ChangeDetectorRef;
     serverCreatedTime: number;
+    photoUrl: '';
+    notifications = [];
+    userCardType = userCardType;
 
     constructor(public store: Store<AppState>,
         private questionActions: QuestionActions,
@@ -79,12 +85,24 @@ export class Dashboard implements OnDestroy {
         this.serverCreatedTime = this.utils.getUTCTimeStamp();
         this.activeGames$ = store.select(appState.coreState).pipe(select(s => s.activeGames));
         this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
-
+        this.photoUrl = this.utils.getImageUrl(this.user, 70, 60, '70X60');
 
         this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.user),
+            filter(u => u !== null),
             map(user => {
                 this.ngZone.run(() => {
                     this.user = user;
+                    this.photoUrl = this.utils.getImageUrl(this.user, 70, 60, '70X60');
+                    this.actionText = `Hi ${this.user.displayName}`;
+                    this.actionSubText = '';
+                    if (this.user.tags && this.user.tags.length > 0) {
+                        const userTags = this.user.tags.join(', ');
+                        const subTagsCount = this.user.tags.length - 2;
+                        const subTags = userTags.substring(0, 12);
+                        this.actionSubText += (userTags.length > 12) ? `${subTags}..` : subTags;
+                        this.actionSubText += (subTagsCount > 0) ? `+${subTagsCount}` : '';
+                    }
+
                     this.cd.markForCheck();
                     if (!this.user && this.timerSub) {
                         this.timerSub.unsubscribe();
@@ -208,6 +226,13 @@ export class Dashboard implements OnDestroy {
 
         this.friendInviteSliceStartIndex = 0;
         this.friendInviteSliceLastIndex = 3;
+
+
+        this.subscriptions.push(combineLatest(store.select(coreState).pipe(select(s => s.friendInvitations)),
+            store.select(coreState).pipe(select(s => s.gameInvites))).subscribe((notify: any) => {
+                this.notifications = notify[0].concat(notify[1]);
+                this.cd.markForCheck();
+            }));
 
     }
 
