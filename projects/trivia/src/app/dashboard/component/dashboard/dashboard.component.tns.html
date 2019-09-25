@@ -1,5 +1,5 @@
 <ns-action-bar title="Dashboard" class="Roboto-Regular" hideHomeIcon="true"></ns-action-bar>
-<StackLayout class="mobile" backgroundColor="#f1f2f2" *ngIf="renderView">
+<StackLayout class="mobile" backgroundColor="#fff" *ngIf="renderView">
     <ScrollView>
         <StackLayout>
             <DockLayout margin="15 10 0 10" *ngIf="user && applicationSettings?.tokens?.enable" iosOverflowSafeArea="false">
@@ -28,18 +28,6 @@
                     iosOverflowSafeArea="false" ios:width="350" android:width="390" stlRippleEffect (rippleTap)="navigateToLogin()">
                     <Label color="white" text="SIGN UP/SIGN IN" textWrap="true" fontSize="18"></Label>
                 </StackLayout>
-                
-                <!-- <GridLayout row="1" col="0" [style.marginTop]="isLivesEnable ? '10' : '0'" iosOverflowSafeArea="false">
-                    <Label stlRippleEffect [text]="gameStart" android:paddingTop="18"
-                        [ngClass]="{'btn-red':!gamePlayBtnDisabled, 'disabled-btn':gamePlayBtnDisabled , 'margin-r-25' :  isLivesEnable }"
-                        class="Roboto-Medium text-center" height="70" (rippleTap)="startNewGame('')" fontSize="22"
-                        textWrap="true" marginTop="20"></Label>
-                    <AbsoluteLayout horizontalAlignment="right" marginRight="10"
-                        *ngIf="user && account && isLivesEnable" iosOverflowSafeArea="false">
-                        <Label text="{{account?.lives}}" android:paddingTop="10" textAlignment="center"
-                            class="lives-count"></Label>
-                    </AbsoluteLayout>
-                </GridLayout> -->
 
                 <GridLayout row="1" col="0" rows="*,*,*" columns="*" [style.marginTop]="isLivesEnable ? '10' : '0'"
                     iosOverflowSafeArea="false">

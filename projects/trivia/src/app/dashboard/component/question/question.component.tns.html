@@ -1,19 +1,14 @@
-<CardView class="cardStyle gameplay" margin="10" android:elevation="20" ios:elevation="40" radius="5"
-    backgroundColor="white" iosOverflowSafeArea="false">
-    <StackLayout class="cardStyle Roboto-Medium" backgroundColor="#ffffff" height="100%" width="100%" margin="15"
+<app-render-box [setBackgroundColor]="'#f7f7f7'">
+    <Label text="Question of the day!" color="#000" fontSize="20" class="text-center" textWrap="true"></Label>
+    <app-question-card [question]="question" [categoryName]="categoryName" [answeredText]="answeredText"
+        [doPlay]="doPlay" [correctAnswerText]="correctAnswerText" (selectedAnswer)="selectedAnswer($event)"
+        [user]="user">
+    </app-question-card>
+
+    <StackLayout iosOverflowSafeArea="false" orientation="vertical" *ngIf="question" margin="10"
         iosOverflowSafeArea="false">
-        <Label text="Question of the day!" color="#000" fontSize="20" class="text-center" textWrap="true"></Label>
-        <app-question-card [question]="question" [categoryName]="categoryName" [answeredText]="answeredText"
-            [doPlay]="doPlay" [correctAnswerText]="correctAnswerText" (selectedAnswer)="selectedAnswer($event)" [user]="user">
-        </app-question-card>
-
-        <StackLayout iosOverflowSafeArea="false" orientation="vertical" *ngIf="question" margin="10"
-            iosOverflowSafeArea="false">
-            <Button class="Roboto-Regular" backgroundColor="#8ac541" color="white" margin="20"
-                (rippleTap)="getNextQuestion()" *ngIf="answeredText!==''" width="100%" text="Try Another" fontSize="17"
-                padding="15" stlRippleEffect stlBackgroundColor="#8ac541"></Button>
-        </StackLayout>
-
+        <Button class="Roboto-Regular" backgroundColor="#8ac541" color="white" margin="20"
+            (rippleTap)="getNextQuestion()" *ngIf="answeredText!==''" width="100%" text="Try Another" fontSize="17"
+            padding="15" stlRippleEffect stlBackgroundColor="#8ac541"></Button>
     </StackLayout>
-
-</CardView>
+</app-render-box>

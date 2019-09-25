@@ -89,8 +89,7 @@
         horizontalAlignment="center">
       </Image>
     </StackLayout>
-    <AbsoluteLayout *ngIf="user?.online" horizontalAlignment="center"
-      [stlOpenUserProfile]="{userId: user?.userId, redirectTo: loggedInUserId === user?.userId ? 'userProfile': 'otherUserProfile'}">
+    <AbsoluteLayout *ngIf="user?.online" horizontalAlignment="center">
       <Label height="15" top="40" left="40" width="15" borderRadius="22" backgroundColor="#71b02f"></Label>
     </AbsoluteLayout>
     <Label row="1" col="0" [text]="user?.displayName" textWrap="true" class="user-name"
