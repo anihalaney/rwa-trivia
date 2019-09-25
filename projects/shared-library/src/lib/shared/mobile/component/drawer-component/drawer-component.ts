@@ -158,11 +158,6 @@ export class DrawerComponent implements OnInit, OnDestroy {
         sideDrawer.closeDrawer();
     }
 
-    leaderBoard(category) {
-        this.routerExtension.navigate(['/dashboard/leaderboard']);
-        this.closeDrawer();
-    }
-
     dashboard() {
         this.routerExtension.navigate(['/dashboard'], { clearHistory: true });
         this.closeDrawer();

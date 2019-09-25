@@ -7,6 +7,7 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { CoreState, coreState } from '../../../../core/store';
 import { User } from 'shared-library/shared/model';
 import { Utils } from './../../../../core/services';
+import { NavigationService } from 'shared-library/core/services/mobile';
 
 
 @Component({
@@ -35,7 +36,8 @@ export class ActionBarComponent implements OnDestroy {
         private routerExtensions: RouterExtensions,
         public store: Store<CoreState>,
         public cd: ChangeDetectorRef,
-        public utils: Utils
+        public utils: Utils,
+        private navigationService: NavigationService
     ) {
         this.subscriptions.push(store.select(coreState).pipe(select(s => s.user)).subscribe(user => {
             this.user = user;
@@ -43,6 +45,10 @@ export class ActionBarComponent implements OnDestroy {
         }));
 
 
+    }
+
+    back() {
+        this.navigationService.back();
     }
 
     openSidebar() {
@@ -67,7 +73,7 @@ export class ActionBarComponent implements OnDestroy {
 
     navigateToInvite() {
         this.routerExtensions.navigate(['/user/my/app-invite-friends-dialog', { showSkip: false }]);
-      }
+    }
 
     ngOnDestroy() {
 
