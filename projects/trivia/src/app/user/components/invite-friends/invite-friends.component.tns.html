@@ -1,7 +1,7 @@
 <ns-action-bar title="Friends" class="Roboto-Regular" showAdd="true"></ns-action-bar>
 <GridLayout rows="auto,*" columns="*" *ngIf="renderView">
     <GridLayout row="0" rows="*" columns="*,50,70" class="h-label">
-        <Label class="Roboto-Regular" text="Friends" row="0" col="0"></Label>
+        <Label class="Roboto-Regular" text="Profile" row="0" color="#212121" col="0"></Label>
         <Label class="Roboto-Regular" text="Won" row="0" col="1"></Label>
         <Label class="Roboto-Regular" text="Played" row="0" col="2"></Label>
         <!-- <Label class="Roboto-Regular" text="Lost" row="0" col="3"></Label> -->
@@ -14,9 +14,9 @@
                         <app-user-card *ngIf="row?.userId" [userId]="row.userId" [type]="userCardType.USER_IMAGE_NAME_HORIZONTAL">
                         </app-user-card>
                     </StackLayout>
-                    <Label class="won" verticalAlignment="center" textAlignment="center"
+                    <Label class="won" textAlignment="left"
                     [text]="row && row.wins ? row.wins : '0'" row="0" col="1"></Label>
-                    <Label class="played" verticalAlignment="center" textAlignment="center"
+                    <Label class="played" textAlignment="left"
                         [text]="row && row.gamePlayed ? row.gamePlayed : '0'" row="0" col="2"></Label>
                     <!-- <Label class="name Hind-Regular" verticalAlignment="center" textAlignment="center" *ngIf="!row?.gamePlayed"
                         text="0" row="0" col="1"></Label> -->
