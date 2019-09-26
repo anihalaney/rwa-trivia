@@ -1,4 +1,4 @@
-<ns-action-bar title="Friends" class="Roboto-Regular" showAdd="true"></ns-action-bar>
+<ns-action-bar title="Friends" class="Roboto-Regular" hideHomeIcon="true" showAdd="true"></ns-action-bar>
 <GridLayout rows="auto,*" columns="*" *ngIf="renderView">
     <GridLayout row="0" rows="*" columns="*,50,70" class="h-label">
         <Label class="Roboto-Regular" text="Profile" row="0" color="#212121" col="0"></Label>
@@ -14,9 +14,9 @@
                         <app-user-card *ngIf="row?.userId" [userId]="row.userId" [type]="userCardType.USER_IMAGE_NAME_HORIZONTAL">
                         </app-user-card>
                     </StackLayout>
-                    <Label class="won" textAlignment="left"
+                    <Label class="won" textAlignment="left" verticalAlignment="top"
                     [text]="row && row.wins ? row.wins : '0'" row="0" col="1"></Label>
-                    <Label class="played" textAlignment="left"
+                    <Label class="played" textAlignment="left" verticalAlignment="top"
                         [text]="row && row.gamePlayed ? row.gamePlayed : '0'" row="0" col="2"></Label>
                     <!-- <Label class="name Hind-Regular" verticalAlignment="center" textAlignment="center" *ngIf="!row?.gamePlayed"
                         text="0" row="0" col="1"></Label> -->
