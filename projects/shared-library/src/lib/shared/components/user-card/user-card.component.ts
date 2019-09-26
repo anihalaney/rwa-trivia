@@ -83,13 +83,6 @@ export class UserCardComponent implements OnInit, OnDestroy, OnChanges {
     if (this.userDict && this.userDict[this.userId]) {
       this.user = this.userDict[this.userId];
     }
-    if (this.otherInfo) {
-      console.log('otherInfo', this.otherInfo);
-      if (this.otherInfo.otherPlayer && this.otherInfo.otherPlayer.userId) {
-        console.log('this.userDict', this.userDict[this.otherInfo.userId]);
-      }
-
-    }
     this.cd.markForCheck();
   }
 
