@@ -17,7 +17,7 @@ export class NavigationService {
   }
 
   back() {
-    console.log('this.router.url------>', this.router.url);
+  //  console.log('this.router.url------>', this.router.url);
     if (this.router.url === '/dashboard/leaderboard' ||
       this.router.url === '/user/my/invite-friends' ||
       this.router.url === '/privacy-policy' ||
@@ -25,6 +25,7 @@ export class NavigationService {
       this.router.url === '/achievements' ||
       this.router.url === '/user-feedback' ||
       this.router.url === '/notification' ||
+      this.router.url === '/user/my/questions' ||
       this.router.url === '/game-play/play-game-with-random-user' ||
       this.router.url.includes('/user/profile') ||
       this.router.url.includes('/user/my/profile') ||
@@ -35,7 +36,6 @@ export class NavigationService {
       // this.routerExtensions.back();
     } else if (
       this.router.url === '/recent-games' ||
-      this.router.url === '/user/my/questions' ||
       this.router.url === '/user/my/questions/add' ||
       this.router.url.includes('/user/game-profile') ||
       this.router.url.includes('/user/my/game-profile') ||
