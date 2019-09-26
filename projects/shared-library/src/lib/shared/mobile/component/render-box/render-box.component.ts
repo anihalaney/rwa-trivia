@@ -1,12 +1,13 @@
 import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
 
 @Component({
-    selector: 'app-render-box',
+    selector: 'render-box',
     templateUrl: './render-box.component.html',
     styleUrls: ['./render-box.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class RenderBoxComponent {
+export class RenderBoxComponent  {
     @Input() setBackgroundColor;
+    @Input() theme;
     constructor() { }
 }

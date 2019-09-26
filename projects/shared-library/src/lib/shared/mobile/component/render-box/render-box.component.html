@@ -1,7 +1,13 @@
-
-<CardView radius="30" backgroundColor="#fff" android:elevation="0" shadowColor="#fff" margin="10">
-    <StackLayout class="view Roboto-Medium" iosOverflowSafeArea="false"
-    [ngStyle]="{'background-color':setBackgroundColor ? setBackgroundColor : '#f7f7f7 ' }">
+<StackLayout margin="10">
+    <StackLayout [ngStyle]="{'background-color':(setBackgroundColor ? setBackgroundColor : '#f7f7f7') }" class="boxStyle" >
         <ng-content></ng-content>
     </StackLayout>
-</CardView>
+    <GridLayout rows="30" columns="*, 10">
+        <StackLayout col="0" [ngStyle]="{'background-color':(setBackgroundColor ? setBackgroundColor : '#f7f7f7') }"
+            class="clip">
+        </StackLayout>
+        <StackLayout col="1" [ngStyle]="{'background-color':(setBackgroundColor ? setBackgroundColor : '#f7f7f7') }"
+            borderRadius="0 0 10 0">
+        </StackLayout>
+    </GridLayout>
+</StackLayout>

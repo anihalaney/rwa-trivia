@@ -1,7 +1,10 @@
-  .view {
-    clip-path: polygon(0 0, 100% 0, 100% 100%, 2% 96%, 0 95%);
-    border-radius:15;
-    padding: 20 0;
-    height: 100%;
-    width: 100%;
-  }
+.boxStyle {
+  height: 100%;
+  width: 100%;
+  border-radius: 10 10 0 5;
+}
+.clip {
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 0);
+  margin-left: 3;
+  border-radius: 10 1 10 10;
+}

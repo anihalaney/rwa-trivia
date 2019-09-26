@@ -1,16 +1,16 @@
-<StackLayout class="gameplay">
+<StackLayout class="gameplay {{theme}}-theme" >
   <StackLayout margin="10">
-    <render-question [question]="question"></render-question>
+    <render-question [question]="question" [theme]="theme"></render-question>
   </StackLayout>
 
   <StackLayout *ngIf="question" orientation="horizontal" margin="5 10 5 10" iosOverflowSafeArea="false">
-    <Label text="Categories:" marginRight="5" color="#1B1C1C" fontSize="15" fontWeight="500" textWrap="true"></Label>
-    <Label text="{{categoryName}}" class="Roboto-Regular" fontSize="15" textWrap="true" color="#1b1c1c"></Label>
+    <Label class="text-color" text="Categories:" marginRight="5" fontSize="15" fontWeight="500" textWrap="true"></Label>
+    <Label text="{{categoryName}}" class="text-color Roboto-Regular" fontSize="15" textWrap="true"></Label>
   </StackLayout>
 
   <StackLayout *ngIf="question" orientation="horizontal" margin="10" iosOverflowSafeArea="false">
-    <Label text="Tags:" marginRight="5" color="#1B1C1C" fontSize="15" fontWeight="500" textWrap="true"></Label>
-    <Label text="{{question.tags?.toString()}}" class="Roboto-Regular" color="#1B1C1C" fontSize="15" textWrap="true"></Label>
+    <Label class="text-color" text="Tags:" marginRight="5" fontSize="15" fontWeight="500" textWrap="true"></Label>
+    <Label text="{{question.tags?.toString()}}" class="text-color Roboto-Regular" fontSize="15" textWrap="true"></Label>
   </StackLayout>
   <StackLayout *ngIf="question" iosOverflowSafeArea="false">
     <StackLayout iosOverflowSafeArea="false" class="question-answered Hind-Medium" margin="10"
@@ -18,19 +18,20 @@
       [class.wrong]="answeredText === answer.answerText && correctAnswerText !== answer.answerText"
       [class.right]="answeredText !== '' && correctAnswerText === answer.answerText" 
       [isUserInteractionEnabled]="doPlay"
+      borderRadius="5"
       stlRippleEffect (rippleTap)="rippleTap(answer)"
-      [style.backgroundColor] = "answeredText === answer.answerText && correctAnswerText !== answer.answerText ? '#d54937' : ''"
-      [style.backgroundColor] = "answeredText !== '' && correctAnswerText === answer.answerText ? '#71b02f' : ''"
+      [style.backgroundColor] = "answeredText === answer.answerText && correctAnswerText !== answer.answerText && theme === 'dark' ? '#d54937' : '#a8a6a7'"
+      [style.backgroundColor] = "answeredText !== '' && correctAnswerText === answer.answerText && theme === 'dark' ? '#71b02f' : '#a8a6a7'"
       >
 
       <render-answer [answer]="answer" [isGameAnswer]="true" [isWrong]="answeredText === answer.answerText && correctAnswerText !== answer.answerText"
         [isRight]="(answeredText != '') && (correctAnswerText == answer.answerText)" [doPlay]="doPlay"
-        [isUserInteractionEnabled]="doPlay"></render-answer>
+        [isUserInteractionEnabled]="doPlay" [theme]="theme"></render-answer>
     </StackLayout>
   </StackLayout>
   <StackLayout>
-    <StackLayout orientation="horizontal" horizontalAlignment="left">
-      <author *ngIf="question" [isGamePlay]=false [userId]="question.created_uid"></author>
+    <StackLayout margin="0 10">
+      <author *ngIf="question" [isGamePlay]=false [userId]="question.created_uid" [theme]="theme"></author>
     </StackLayout>
     <StackLayout orientation="horizontal" horizontalAlignment="center">
       <user-reaction *ngIf="answeredText!==''" [user]='user' [question]='question'></user-reaction>

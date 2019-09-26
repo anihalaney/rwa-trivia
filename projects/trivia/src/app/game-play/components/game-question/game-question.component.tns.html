@@ -1,6 +1,6 @@
 <GridLayout>
     <ScrollView>
-        <StackLayout backgroundColor="#f1f2f2" [class.m-b-70]="showContinueBtn">
+        <StackLayout backgroundColor="#fff" [class.m-b-70]="showContinueBtn">
             <CardView class="cardStyle" android:elevation="20" ios:elevation="40" radius="5" class="gameplay"
                 backgroundColor="white">
                 <StackLayout>
@@ -58,8 +58,7 @@
                     color="#1b1c1c"></Label>
             </StackLayout>
 
-            <CardView class="cardStyle" android:elevation="20" ios:elevation="40" radius="5" class="gameplay"
-                backgroundColor="white" margin="15">
+            <render-box [setBackgroundColor]="'#f1f2f2'">
                 <StackLayout padding="20 10">
                     <render-question [question]="question" [questionIndex]="questionIndex"></render-question>
                     <StackLayout *ngIf="question">
@@ -85,7 +84,7 @@
                         </StackLayout>
                       </StackLayout>
                 </StackLayout>
-            </CardView>
+            </render-box>
         </StackLayout>
     </ScrollView>
     <AbsoluteLayout *ngIf="showContinueBtn" verticalAlignment="bottom">

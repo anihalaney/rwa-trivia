@@ -1,67 +1,60 @@
 <StackLayout class="mobile" backgroundColor="#fff" *ngIf="renderView">
+    <GridLayout rows="auto" columns="auto,*,auto,auto" class="sideStackLayoutHeader" paddingTop="10" paddingBottom="10"
+        borderBottomColor="black" borderBottomWidth="1" iosOverflowSafeArea="false">
 
+        <app-user-card *ngIf="user && user!==null" [user]="user" [userId]="user.userId"
+            [type]="userCardType.USER_IMAGE_NAME_PROFILE_HORIZONTAL"></app-user-card>
+
+        <StackLayout row="0" col="1" verticalAlignment="center" iosOverflowSafeArea="false" marginLeft="10">
+            <Label [text]="actionText" textWrap="true" fontSize="14"></Label>
+            <StackLayout orientation="horizontal" width="auto">
+                <Label *ngIf="actionSubText && actionSubText.length>0" [text]="actionSubText" fontSize="18"
+                    textWrap="true" fontWeight="bold" stlRippleEffect (rippleTap)="navigateToCategories()"></Label>
+                <Label *ngIf="user && user!== null && actionSubText && actionSubText.length>0" text="&#xf303;"
+                    class="fas" marginLeft="10" fontSize="20" color="#3a5998" stlRippleEffect
+                    (rippleTap)="navigateToCategories()"></Label>
+            </StackLayout>
+        </StackLayout>
+
+        <StackLayout *ngIf="user && user!==null" col="2" stlRippleEffect stlBackgroundColor="#13284F" ios:margin="3"
+            android:margin="10" stlOpacity="0.5" stlBackgroundColorAfter="transparent" verticalAlignment="center"
+            horizontalAlignment="right" android:width="24" ios:width="24">
+            <Label text="&#xf1d1;" class="fa" fontSize="24"></Label>
+        </StackLayout>
+
+        <StackLayout *ngIf="user && user!==null" class="index-0" col="3" stlRippleEffect stlBackgroundColor="#13284F"
+            stlOpacity="0.5" stlBackgroundColorAfter="transparent" ios:margin="3" android:margin="10"
+            verticalAlignment="center" horizontalAlignment="center" android:width="40" ios:width="40"
+            (rippleTap)="gotToNotification()" orientation="horizontal">
+            <Label horizontalAlignment="center" verticalAlignment="center" text="&#xf0f3;" class="fa"
+                fontSize="24"></Label>
+        </StackLayout>
+
+        <StackLayout *ngIf="user && user!==null && notifications.length > 0" col="4"
+            [ngClass]="{'notification-dot':notifications?.length > 0 }">
+            <Label
+                [text]="(notifications.length === 0 ? '' : (notifications.length > 0 && notifications.length > 99) ? '99+' : notifications.length)"
+                class="index-1"></Label>
+        </StackLayout>
+
+    </GridLayout>
     <ScrollView>
         <StackLayout>
+            <GridLayout horizontalAlignment="left" rows="auto" columns="*, *" width="60%"
+                *ngIf="user && applicationSettings?.tokens?.enable" margin="10 0 0 10">
+                <FlexboxLayout col="0" *ngIf="account && user" iosOverflowSafeArea="false">
+                    <Label text="&#xf379;" class="fab Roboto-Medium" color="#fedf79" fontSize="34" marginRight="10"
+                        textWrap="true"></Label>
+                    <Label alignSelf="center" alignContent="center" class="Roboto-Medium" [text]="account.bits || 0"
+                        textWrap="true"></Label>
 
-            <GridLayout rows="*" columns="auto,*,auto,auto" class="sideStackLayoutHeader" paddingTop="10"
-                paddingBottom="10" borderBottomColor="black" borderBottomWidth="1" iosOverflowSafeArea="false">
-                
-                <app-user-card *ngIf="user && user!==null" [user]="user" [userId]="user.userId" [type]="userCardType.USER_IMAGE_NAME_PROFILE_HORIZONTAL"></app-user-card>
-
-                <StackLayout row="0" col="1" verticalAlignment="center" iosOverflowSafeArea="false" marginLeft="10">
-                    <Label [text]="actionText" textWrap="true" fontSize="14"></Label>
-                    <StackLayout orientation="horizontal" stlRippleEffect
-                        (rippleTap)="navigateToCategories()" width="auto">
-                        <Label *ngIf="actionSubText && actionSubText.length>0" [text]="actionSubText" fontSize="18"
-                            textWrap="true" fontWeight="bold"></Label>
-                        <Label *ngIf="user && user!== null && actionSubText && actionSubText.length>0" text="&#xf303;"
-                            class="fas" marginLeft="10" fontSize="20" color="#3a5998" stlRippleEffect></Label>
-                    </StackLayout>
-                </StackLayout>
-
-                <StackLayout *ngIf="user && user!==null" col="2" stlRippleEffect stlBackgroundColor="#13284F"
-                    ios:margin="3" android:margin="10" stlOpacity="0.5" stlBackgroundColorAfter="transparent"
-                    verticalAlignment="center" horizontalAlignment="right" android:width="24" ios:width="24">
-                    <Label text="&#xf1d1;" class="fa" fontSize="24"></Label>
-                </StackLayout>
-
-                <StackLayout *ngIf="user && user!==null" class="index-0" col="3" stlRippleEffect
-                    stlBackgroundColor="#13284F" stlOpacity="0.5" stlBackgroundColorAfter="transparent" ios:margin="3"
-                    android:margin="10" verticalAlignment="center" horizontalAlignment="center" android:width="40"
-                    ios:width="40" (rippleTap)="gotToNotification()" orientation="horizontal">
-                    <Label horizontalAlignment="center" verticalAlignment="center" text="&#xf0f3;" class="fa"
-                        fontSize="24"></Label>
-                </StackLayout>
-
-                <StackLayout *ngIf="user && user!==null && notifications.length > 0" col="4"
-                    [ngClass]="{'notification-dot':notifications?.length > 0 }">
-                    <Label
-                        [text]="(notifications.length === 0 ? '' : (notifications.length > 0 && notifications.length > 99) ? '99+' : notifications.length)"
-                        class="index-1"></Label>
-                </StackLayout>
-
+                </FlexboxLayout>
+                <FlexboxLayout col="1" *ngIf="account && user">
+                    <Label text="&#xf379;" class="fab Roboto-Medium" color="#576d9e" fontSize="34" marginRight="10"
+                        textWrap="true"></Label>
+                    <Label alignSelf="center" class="Roboto-Medium" [text]="account.bytes || 0" textWrap="true"></Label>
+                </FlexboxLayout>
             </GridLayout>
-
-            <DockLayout margin="15 10 0 10" *ngIf="user && applicationSettings?.tokens?.enable"
-                iosOverflowSafeArea="false">
-                <DockLayout dock="left" *ngIf="account && user" backgroundColor="#3b5998" class="points-container"
-                    [style.width]="account.bits > 9999999 ? '150' : '135'" iosOverflowSafeArea="false">
-                    <Label text="BITS" class="Roboto-Medium points-label" verticalAlignment="center"></Label>
-                    <Label [ngClass]="{'points-m-f-15': account.bits > 9999}" [text]="account.bits || 0"
-                        android:paddingTop="9" class="Roboto-Medium points-m" textAlignment="center"
-                        horizontalAlignment="right"></Label>
-                </DockLayout>
-                <DockLayout dock="right" horizontalAlignment="right" *ngIf="account && user" backgroundColor="#71b02f"
-                    class="points-container" [style.width]="account?.bytes >= 9999999 ? '150' : '135'"
-                    iosOverflowSafeArea="false">
-                    <Label text="BYTES" class="Roboto-Medium points-label" verticalAlignment="center"></Label>
-                    <Label [ngClass]="{'points-m-f-15': account?.bytes > 9999}" [text]="account?.bytes || 0"
-                        android:paddingTop="9" class="Roboto-Medium points-m" textAlignment="center"
-                        horizontalAlignment="right"></Label>
-                </DockLayout>
-            </DockLayout>
-
-
 
             <GridLayout rows="*, *, *, *, *, *, *,*,*" columns="*" iosOverflowSafeArea="false">
 
@@ -85,8 +78,8 @@
 
                 <GridLayout row="1" col="0" rows="*,*,*" columns="*" [style.marginTop]="isLivesEnable ? '10' : '0'"
                     iosOverflowSafeArea="false">
-                    <GridLayout marginRight="10" *ngIf="user && account && account.lives >=0 && isLivesEnable" row="0"
-                        rows="*" columns="auto,auto" class="lives-card" horizontalAlignment="right">
+                    <GridLayout marginRight="10" row="0" rows="*" columns="auto,auto" class="lives-card"
+                        horizontalAlignment="right">
                         <StackLayout col="0" col="0" verticalAlignment="middle">
                             <Image row="0" col="0" src="~/assets/images/life.png" stretch="aspectFill" height="24"
                                 width="24" verticalAlignment="center" marginRight="8" borderRadius="50"></Image>
@@ -97,16 +90,32 @@
                                 textWrap="true"></Label>
                         </StackLayout>
                     </GridLayout>
-                    <GridLayout row="1" col="0" rows="*" columns="*,*" class="game-buttons">
-                        <StackLayout col="0" verticalAlignment="middle">
-                            <Button text="Single Player" class="g-btn g-btn-extra btn-1" stlRippleEffect textWrap="true"
-                                (rippleTap)="startNewGame('Single')"></Button>
+                    <render-box row="1" col="0" [setBackgroundColor]="'#1E2C4D'" [theme]="'dark'">
+                        <StackLayout padding="10 20">
+                            <FlexboxLayout justifyContent="space-between">
+                                <Label text="Play your first game" color="#fff" fontSize="24" textWrap="true"></Label>
+                                <StackLayout orientation="horizontal"
+                                    *ngIf="user && account && account.lives >=0 && isLivesEnable">
+                                    <Label verticalAlignment="center" text="&#xf1e3;" class="far" color="#C9B750"
+                                        fontSize="20" marginRight="10" textWrap="true"></Label>
+                                    <Label verticalAlignment="center"
+                                        text="{{ (account?.lives / 10 < 1) && (account?.lives / 10 > 0)  ? '0' : '' }}{{account?.lives}}"
+                                        fontSize="20" color="#fff" textWrap="true"></Label>
+                                </StackLayout>
+                            </FlexboxLayout>
+                            <FlexboxLayout justifyContent="space-between" padding="10 0">
+                                <Button text="Single Player" class="game-btn" stlRippleEffect textWrap="true"
+                                    (rippleTap)="startNewGame('Single')"></Button>
+                                <Button text="Multi Player" class="game-btn" stlRippleEffect textWrap="true"
+                                    (rippleTap)="startNewGame('Two')"></Button>
+                            </FlexboxLayout>
+                            <StackLayout orientation="horizontal">
+                                <Label text="&#xf1e3;" class="far" color="#C9B750" fontSize="20" marginRight="10"
+                                    textWrap="true"></Label>
+                                <Label text="No Life will be deducted" color="#e2e2e2" textWrap="true"></Label>
+                            </StackLayout>
                         </StackLayout>
-                        <StackLayout col="1" verticalAlignment="middle">
-                            <Button text="Multi Player" class="g-btn g-btn-extra btn-2" stlRippleEffect textWrap="true"
-                                (rippleTap)="startNewGame('Two')"></Button>
-                        </StackLayout>
-                    </GridLayout>
+                    </render-box>
                     <GridLayout *ngIf="user && applicationSettings?.lives?.enable && timeoutLive" row="2" col="0">
                         <GridLayout rows="*,*" columns="auto,auto" margin="10" horizontalAlignment="left">
                             <Image row="0" col="0" src="~/assets/images/clock.png" stretch="aspectFill" height="20"
@@ -196,21 +205,19 @@
                     </CardView>
                 </StackLayout>
                 <StackLayout row="6" col="0" iosOverflowSafeArea="false">
-                        <app-invite-to-play [userId]="user?.userId" *ngIf="user && user!==null"></app-invite-to-play>
+                    <app-invite-to-play [userId]="user?.userId" *ngIf="user && user!==null"></app-invite-to-play>
                 </StackLayout>
                 <StackLayout row="7" col="0" iosOverflowSafeArea="false">
-                    <question [user]="user" [userDict]="userDict"></question>
+                    <question [user]="user" [userDict]="userDict" [theme]="'dark'"></question>
                 </StackLayout>
                 <StackLayout *ngIf="user && user!==null" row="9" col="0" class="submit-question"
                     iosOverflowSafeArea="false">
                     <StackLayout class="q-title" iosOverflowSafeArea="false">
-                        <Label text="You can also submit questions and get">
-                        </Label>
-                        <Label text="a chance to win cash prizes">
+                        <Label text="You can also submit questions and get a chance to win cash prizes" textWrap="true">
                         </Label>
                     </StackLayout>
-                    <StackLayout iosOverflowSafeArea="false">
-                        <Button class="q-button q-button-extra" text="Submit Question"
+                    <StackLayout orientation="horizontal" iosOverflowSafeArea="false" >
+                        <Button horizontaAlignment="left" ios:padding="10 0" borderRadius="5"  borderColor="#1E2C4D" borderWidth="1" width="40%" class="q-button q-button-extra" text="Submit Question"
                             (tap)="navigateToMyQuestion()"></Button>
                     </StackLayout>
                 </StackLayout>
@@ -218,3 +225,4 @@
             </GridLayout>
         </StackLayout>
     </ScrollView>
+</StackLayout>

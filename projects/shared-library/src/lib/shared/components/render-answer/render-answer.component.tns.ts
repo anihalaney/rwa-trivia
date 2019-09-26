@@ -15,6 +15,7 @@ export class RenderAnswerComponent implements OnInit, OnChanges {
 
     @Input() answer: Answer;
     @Input() questionIndex: number;
+    @Input() theme: string;
     @Input() isGameAnswer: boolean;
     @Input() isRight;
     @Input() isWrong;

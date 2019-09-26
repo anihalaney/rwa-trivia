@@ -6,10 +6,10 @@
     <WebView width="100%" *ngIf="isAndroid" [src]="question?.questionText" [isUserInteractionEnabled]="false" minHeight="50"></WebView>
 </StackLayout>
 
-<ng-template #renderView>
-    <StackLayout orientation="horizontal">
-        <Label verticalAlignment="top" paddingLeft="10" text="{{questionIndex}} . " textWrap="true" *ngIf="questionIndex"></Label>
-        <Label text="{{question?.questionText}}" color="#263238" class="Roboto-Bold" fontSize="17" fontWeight="700"
+<ng-template #renderView >
+    <StackLayout orientation="horizontal" class="{{theme}}-theme">
+        <Label verticalAlignment="top" class="text-color" paddingLeft="10" text="{{questionIndex}} . " textWrap="true" *ngIf="questionIndex"></Label>
+        <Label class="text-color Roboto-Bold"  text="{{question?.questionText}}" fontSize="17" fontWeight="700"
             textWrap="true"></Label>
     </StackLayout>
 

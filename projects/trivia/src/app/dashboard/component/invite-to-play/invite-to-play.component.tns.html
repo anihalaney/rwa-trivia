@@ -10,6 +10,8 @@
                 <Label   text="&#xf054;" class="fa" fontSize="20" ></Label>
         </StackLayout> -->
     </GridLayout>
-    <Label *ngIf="uFriends && uFriends.length > 0"  padding="20 10 5 10" text="OR" class="invite-sub-title" ></Label>
-    <Label padding="10" (rippleTap)="startNewGame('random')" stlRippleEffect text="Find a friend for me  >" class="find-friend"></Label>
+    <FlexboxLayout margin="10">
+            <Label *ngIf="uFriends && uFriends.length > 0" marginRight="10" text="OR" class="invite-sub-title" ></Label>
+            <Label (rippleTap)="startNewGame('random')" stlRippleEffect text="Find a friend for me  >" class="find-friend"></Label>
+    </FlexboxLayout>
 </StackLayout>

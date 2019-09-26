@@ -1,8 +1,9 @@
-<app-render-box [setBackgroundColor]="'#f7f7f7'">
-    <Label text="Question of the day!" color="#000" fontSize="20" class="text-center" textWrap="true"></Label>
+<render-box [setBackgroundColor]="'#1E2C4D'" [theme]="'dark'" class="{{theme}}-theme">
+    <Label text="Question of the day!" fontSize="20" class="text-center text-color" textWrap="true"
+        paddingTop="20"></Label>
     <app-question-card [question]="question" [categoryName]="categoryName" [answeredText]="answeredText"
         [doPlay]="doPlay" [correctAnswerText]="correctAnswerText" (selectedAnswer)="selectedAnswer($event)"
-        [user]="user">
+        [user]="user" [theme]="theme">
     </app-question-card>
 
     <StackLayout iosOverflowSafeArea="false" orientation="vertical" *ngIf="question" margin="10"
@@ -11,4 +12,4 @@
             (rippleTap)="getNextQuestion()" *ngIf="answeredText!==''" width="100%" text="Try Another" fontSize="17"
             padding="15" stlRippleEffect stlBackgroundColor="#8ac541"></Button>
     </StackLayout>
-</app-render-box>
+</render-box>

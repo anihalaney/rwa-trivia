@@ -298,10 +298,10 @@
 </ng-container>
 
 <ng-container *ngIf="user && userCardType.USER_NAME_IMAGE_HORIZONTAL === type">
-  <GridLayout rows="auto" columns="auto,*" marginTop="10">
+  <GridLayout rows="auto" columns="*,auto" marginTop="10" class="{{theme}}-theme">
     <!-- <Label row="0" col="0" text="Author: " textWrap="true" horizontalAlignment="right"
       verticalAlignment="center"></Label> -->
-    <Label row="0" col="1" verticalAlignment="center" text="{{user?.displayName}}" textWrap="true"
+    <Label row="0" col="1" class="text-color" verticalAlignment="center" text="{{user?.displayName}}" textWrap="true"
       style="font-weight:400;"></Label>
     <AbsoluteLayout row="0" col="0" horizontalAlignment="right" verticalAlignment="bottom"
       [stlOpenUserProfile]="{userId: user?.userId, redirectTo: loggedInUserId === user?.userId ? 'userProfile': 'otherUserProfile', isGamePlay: true}">
