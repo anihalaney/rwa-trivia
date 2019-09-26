@@ -194,18 +194,48 @@
                             </div>
                           </div>
 
-                          <!-- Password -->
+                           <!-- Old Password -->
+                          <div class="clearfix namefield"
+                           *ngIf="isEnableEditProfile && (currentAuthProvider===authProviderConstants.PASSWORD)">
+                           <div class="formfield">
+                             <label id="nameLableField">Old Password</label>
+                             <input formControlName="oldPassword" type="password"
+                               [placeholder]="userType === 0 ? 'Enter Old Password' : ''" class="required"
+                               aria-label="oldPassword">
+                             <p *ngIf="userForm.controls.oldPassword.errors?.minlength && !userForm.controls.oldPassword.pristine"
+                               class="error">Password must be atleast 6 characters</p>
+                             <p *ngIf="userForm.controls.password.valid && userForm.controls.confirmPassword.valid && !userForm.hasError('passwordmismatch') && userForm.hasError('requiredoldpassword')"
+                                class="error">Old Password is required</p>
+                           </div>
+                         </div>
+
+                           <!-- New Password -->
+                          <div class="clearfix namefield"
+                           *ngIf="isEnableEditProfile && (currentAuthProvider===authProviderConstants.PASSWORD)">
+                           <div class="formfield">
+                             <label id="nameLableField">New Password</label>
+                             <input formControlName="password" type="password"
+                               [placeholder]="userType === 0 ? 'Enter New Password' : ''" class="required"
+                               aria-label="password">
+                             <p *ngIf="userForm.controls.password.errors?.minlength && !userForm.controls.password.pristine"
+                               class="error">Password must be atleast 6 characters</p>                               
+                           </div>
+                         </div>
+
+                          <!-- Confirm Password -->
                           <div class="clearfix namefield"
                             *ngIf="isEnableEditProfile && (currentAuthProvider===authProviderConstants.PASSWORD)">
                             <div class="formfield">
-                              <label id="nameLableField">Password</label>
-                              <input formControlName="password" type="password"
-                                [placeholder]="userType === 0 ? 'Enter Password' : ''" class="required"
-                                aria-label="password">
-                              <p *ngIf="userForm.controls.password.errors?.minlength && !userForm.controls.password.pristine"
+                              <label id="nameLableField">Confirm New Password</label>
+                              <input formControlName="confirmPassword" type="password"
+                                [placeholder]="userType === 0 ? 'Confirm New Password' : ''" class="required"
+                                aria-label="confirmPassword">
+                              <p *ngIf="userForm.controls.confirmPassword.errors?.minlength && !userForm.controls.confirmPassword.pristine"
                                 class="error">Password must be atleast 6 characters</p>
+                              <p *ngIf="userForm.controls.password.valid && userForm.controls.confirmPassword.valid && userForm.hasError('passwordmismatch')"
+                                class="error">Must match with New Password</p>
                             </div>
-                          </div>
+                          </div>                        
 
                           <!-- Social Accounts -->
                           <div *ngIf="isEnableEditProfile && userType===0" class="row pcategories saccount">

@@ -19,6 +19,7 @@ import {
 import {
   FirebaseAnalyticsEventConstants, FirebaseAnalyticsKeyConstants, GeneralConstants
 } from '../../../../../../shared-library/src/lib/shared/model';
+import { Page } from 'tns-core-modules/ui/page/page';
 
 @Component({
   selector: 'game-over',
@@ -29,15 +30,17 @@ import {
 
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
+
+  actionBarStatus: String = 'Game Result';
+  isDispayMenu = false;
   stackLayout;
   showQuesAndAnswer: Boolean = true;
   constructor(public store: Store<AppState>, public userActions: UserActions,
     private windowRef: WindowRef, public utils: Utils,
     private modal: ModalDialogService, private vcRef: ViewContainerRef,
-    public cd: ChangeDetectorRef, private routerExtensions: RouterExtensions) {
+    public cd: ChangeDetectorRef, private routerExtensions: RouterExtensions, private page: Page) {
     super(store, userActions, utils, cd);
-
-
+    this.page.actionBarHidden = false;
     this.subscriptions.push(this.store.select(gamePlayState).pipe(select(s => s.saveReportQuestion)).subscribe(state => {
       this.cd.markForCheck();
     }));
@@ -101,6 +104,7 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
     if (this.applicationSettings.lives.enable && this.account.lives === 0) {
       this.utils.showMessage('error', this.liveErrorMsg);
     } else {
+      this.page.actionBarHidden = true;
       this.reMatch();
     }
   }
