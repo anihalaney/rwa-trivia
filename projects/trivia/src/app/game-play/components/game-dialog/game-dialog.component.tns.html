@@ -1,5 +1,4 @@
-<ns-action-bar title="{{actionBarStatus}}" class="Roboto-Regular" showAdd="true" hideHomeIcon="{{isDispayMenu}}" hideMenu="{{isDispayMenu}}">
-</ns-action-bar>
+
 <StackLayout>
     <StackLayout *ngIf="showLoader && !gameOver" verticalAlignment="center" height="100%" horizontalAlignment="center">
         <StackLayout verticalAlignment="center" height="100%" horizontalAlignment="center" width="100%">
@@ -68,10 +67,10 @@
     <StackLayout *ngIf="showWinBadge && !gameOver" orientation="vertical" verticalAlignment="center" height="100%">
         <Image *ngIf="correctAnswerCount > 0" src="~/assets/images/score{{correctAnswerCount}}.png" height="70"
             width="70" marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"></Image>
-
         <Label text="You Earned" class='text-center' textWrap="true" horizontalAlignment="center"
             verticalAlignment="center"></Label>
     </StackLayout>
+
     <game-question *ngIf="currentQuestion && !showLoader && !showBadge && !showWinBadge && !showContinueScreen"
         [categoryName]="categoryName" [question]="currentQuestion" [questionIndex]="questionIndex" [timer]="timer"
         [MAX_TIME_IN_SECONDS]="MAX_TIME_IN_SECONDS" [continueNext]="continueNext" [correctCount]="correctAnswerCount"
@@ -79,7 +78,8 @@
         (answerClicked)="answerClicked($event)" (okClick)="okClick($event)" (continueClicked)="continueClicked($event)"
          [userDict]="userDict" [totalRound]="totalRound"
         [turnFlag]="turnFlag" [threeConsecutiveAnswer]="threeConsecutiveAnswer" [user]="user"
-        [questionRound]="game.round" [applicationSettings]="applicationSettings">
+        [questionRound]="game.round" [applicationSettings]="applicationSettings" [playerMode]="playerMode"
+        >
     </game-question>
     <game-over *ngIf="gameOver && !showContinueScreen" class="overlay" [userDict]="userDict" [game]="game"
         [categoryName]="categoryName" [correctCount]="correctAnswerCount" [noOfQuestions]="questionIndex"

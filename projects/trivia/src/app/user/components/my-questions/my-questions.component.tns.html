@@ -1,4 +1,4 @@
-<ns-action-bar title="My Question" class="Roboto-Regular" showAdd="true"></ns-action-bar>
+<ns-action-bar title="Questions" class="Roboto-Regular" showAdd="true"></ns-action-bar>
 
 <StackLayout>
     <StackLayout *ngIf="loaderBusy">
@@ -64,11 +64,11 @@
         <app-question-add-update row="0" rowSpan="2" *ngIf="!displayReasonViewer && displayEditQuestion" [editQuestion]="selectedQuestion"
             (hideQuestion)="hideQuestion($event)"></app-question-add-update>
 
-        <StackLayout row="0" verticalAlignment="bottom" horizontalAlignment="right" ios:margin="0 5 55 0" android:margin="0 10 10 0">
+        <!-- <StackLayout row="0" verticalAlignment="bottom" horizontalAlignment="right" ios:margin="0 5 55 0" android:margin="0 10 10 0">
                 <FlexboxLayout *ngIf="!displayReasonViewer && !displayEditQuestion && !loaderBusy"  stlRippleEffect (rippleTap)="navigateToSubmitQuestion()" borderRadius="30" class="fab-button1" padding="10" flexDirection="column" justifyContent="center">
                         <Image src="~/assets/images/add.png"></Image>
                 </FlexboxLayout>
-        </StackLayout>
+        </StackLayout> -->
 
     </GridLayout>
 

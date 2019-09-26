@@ -1,4 +1,4 @@
-<ns-action-bar title="Start New Game" class="Roboto-Regular" showAdd="true"></ns-action-bar>
+<ns-action-bar [title]="actionBarTitle" class="Roboto-Regular" showAdd="true"></ns-action-bar>
 <StackLayout *ngIf="renderView">
     <ScrollView>
         <StackLayout class="new-game Roboto-Regular" backgroundColor="#f1f2f2">
@@ -16,7 +16,7 @@
                     fontSize="17">
 
                     <StackLayout stlRippleEffect orientation="horizontal" [class.selected-player]="gameOptions.playerMode === 0" [ngStyle]="{'background-color': (gameOptions.playerMode === 0) ? '#89C24F' : '#ffffff' }"
-                        [class.player-type]="gameOptions.playerMode !== 0" (rippleTap)="gameOptions.playerMode = 0;gameOptions.opponentType=null"
+                        [class.player-type]="gameOptions.playerMode !== 0" (rippleTap)="changePlayerMode(0, null)"
                         width="50%" height="60" [isUserInteractionEnabled] = "gameOptions.playerMode !== 0">
                         <Image *ngIf="gameOptions.playerMode !== 0" src="~/assets/images/single_player.png" height="30"
                             width="30" marginLeft="10" verticalAlignment="center" marginRight="5"></Image>
@@ -29,7 +29,7 @@
                     <StackLayout stlRippleEffect  orientation="horizontal" [class.selected-player]="gameOptions.playerMode === 1"
                         [class.player-type]="gameOptions.playerMode !== 1"
                         [ngStyle]="{'background-color': (gameOptions.playerMode === 1) ? '#89C24F' : '#ffffff' }"
-                        (rippleTap)="gameOptions.playerMode = 1;gameOptions.opponentType=0" width="50%" [isUserInteractionEnabled] = "gameOptions.playerMode !== 1">
+                        (rippleTap)="changePlayerMode(1, 0)" width="50%" [isUserInteractionEnabled] = "gameOptions.playerMode !== 1">
 
                         <Image *ngIf="gameOptions.playerMode !== 1" src="~/assets/images/two_player.png" height="30"
                             width="30" marginLeft="10" verticalAlignment="center" marginRight="5"></Image>

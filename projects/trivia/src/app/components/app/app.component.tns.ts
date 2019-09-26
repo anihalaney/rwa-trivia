@@ -29,6 +29,7 @@ import { ModalDialogOptions, ModalDialogService } from 'nativescript-angular/mod
 import { WelcomeScreenComponent } from '../../../../../shared-library/src/lib/shared/mobile/component';
 import * as appSettingsStorage from 'tns-core-modules/application-settings';
 
+
 registerElement('Carousel', () => Carousel);
 registerElement('CarouselItem', () => CarouselItem);
 
@@ -43,6 +44,7 @@ export class AppComponent implements OnInit, OnDestroy {
   subscriptions = [];
   applicationSettings: ApplicationSettings;
   isDrawerOpenOrClosed = '';
+  showBottomBar: Boolean = true;
   constructor(private store: Store<AppState>,
     private navigationService: NavigationService,
     private ngZone: NgZone,
@@ -57,8 +59,8 @@ export class AppComponent implements OnInit, OnDestroy {
     private _vcRef: ViewContainerRef) {
 
     this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.newGameId), filter(g => g !== '')).subscribe(gameObj => {
-      console.log('gameObj', gameObj);
-      this.routerExtension.navigate(['/game-play', gameObj['gameId']]);
+      // console.log('gameObj', gameObj);
+      this.routerExtension.navigate(['/game-play', gameObj['gameId']], { clearHistory: true });
       this.store.dispatch(new gamePlayActions.ResetCurrentQuestion());
       this.cd.markForCheck();
     }));
@@ -109,6 +111,7 @@ export class AppComponent implements OnInit, OnDestroy {
       if (!(evt instanceof NavigationEnd)) {
         return;
       }
+      this.showBottomBar = this.hideBottomBarForSelectedRoutes(evt.url);
       switch (evt.urlAfterRedirects) {
         case '/login':
           this.utils.setScreenNameInFirebaseAnalytics(FirebaseScreenNameConstants.LOGIN);
@@ -155,6 +158,15 @@ export class AppComponent implements OnInit, OnDestroy {
     this.isDrawerOpenOrClosed = args.eventName;
   }
 
+  hideBottomBarForSelectedRoutes(url) {
+    if (url === '/signup-extra-info' || url === '/select-category-tag' || url === '/first-question' ||
+      (!url.includes('game-play/game-options') && (url.includes('game-play')))) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
   async showWelcomeScreen() {
     try {
       if (!appSettingsStorage.getBoolean('isWelcomeScreenSeen', false)) {
@@ -164,7 +176,7 @@ export class AppComponent implements OnInit, OnDestroy {
           fullscreen: true
         };
 
-        const result = await this._modalService.showModal(WelcomeScreenComponent, options)
+        await this._modalService.showModal(WelcomeScreenComponent, options);
         this.cd.markForCheck();
         appSettingsStorage.setBoolean('isWelcomeScreenSeen', true);
       }

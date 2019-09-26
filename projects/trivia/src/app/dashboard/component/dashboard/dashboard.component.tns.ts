@@ -26,6 +26,7 @@ export class DashboardComponent extends Dashboard implements OnInit, OnDestroy {
   renderView = false;
 
 
+
   constructor(public store: Store<AppState>,
     questionActions: QuestionActions,
     gameActions: GameActions,
@@ -47,6 +48,8 @@ export class DashboardComponent extends Dashboard implements OnInit, OnDestroy {
       utils,
       cd);
     this.gameStatus = GameStatus;
+    this.page.actionBarHidden = true;
+
   }
 
   ngOnInit() {
@@ -97,12 +100,26 @@ export class DashboardComponent extends Dashboard implements OnInit, OnDestroy {
     return game.GameStatus === GameStatus.WAITING_FOR_NEXT_Q && game.nextTurnPlayerId !== this.user.userId;
   }
 
-  navigateToLogin(): void {
-    this.routerExtension.navigate(['/login'], { clearHistory: true });
-  }
-
   navigateToMyQuestion() {
     this.routerExtension.navigate(['/user/my/questions']);
+  }
+
+  gotToNotification() {
+    this.routerExtension.navigate(['/notification']);
+  }
+
+  navigateToProfileSettings() {
+    if (this.user && this.user !== null) {
+      this.routerExtension.navigate(['/user/my/profile', this.user.userId]);
+    }
+  }
+
+  navigateToCategories() {
+    if (this.user && this.user !== null) {
+      this.routerExtension.navigate(['/user/my/profile', this.user.userId]);
+    } else {
+      this.routerExtension.navigate(['/login'], { clearHistory: true });
+    }
   }
 
   ngOnDestroy(): void {

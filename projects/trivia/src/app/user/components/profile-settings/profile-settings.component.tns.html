@@ -126,7 +126,7 @@
 
                 <!-- Email -->
                 <StackLayout
-                  *ngIf="userType ===  0 && isEnableEditProfile && (currentAuthProvider===authProviderConstants.PASSWORD || currentAuthProvider===authProviderConstants.PHONE)"
+                  *ngIf="userType ===  0 && isEnableEditProfile && (currentAuthProvider===authProviderConstants.PHONE)"
                   class="input-field" iosOverflowSafeArea="false">
                   <TextField #textField hint="{{userType ===  0 ? '@email' : ''}}" formControlName="email"
                     class="input">
@@ -137,7 +137,7 @@
 
                 <!-- Phone No -->
                 <StackLayout
-                  *ngIf="userType ===  0 && isEnableEditProfile && (currentAuthProvider===authProviderConstants.GOOGLE || currentAuthProvider===authProviderConstants.FACEBOOK || currentAuthProvider===authProviderConstants.PASSWORD )"
+                  *ngIf="userType ===  0  && (currentAuthProvider===authProviderConstants.GOOGLE || currentAuthProvider===authProviderConstants.FACEBOOK || currentAuthProvider===authProviderConstants.PASSWORD )"
                   class="input-field" iosOverflowSafeArea="false">
                   <TextField #textField hint="{{userType ===  0 ? '@PhoneNo' : ''}}" formControlName="phoneNo"
                     class="input">
@@ -146,15 +146,41 @@
                     class="error" textWrap="true" text="PhoneNo is Invalid!"></Label>
                 </StackLayout>
 
-                <!-- Password -->
+                <!-- Old Password -->
                 <StackLayout
                   *ngIf="userType ===  0 && isEnableEditProfile && (currentAuthProvider===authProviderConstants.PASSWORD)"
                   class="input-field" iosOverflowSafeArea="false">
-                  <TextField #textField hint="{{userType ===  0 ? '@password' : ''}}" formControlName="password"
+                  <TextField secure="true"  #textField hint="{{userType ===  0 ? '@old Password' : ''}}" formControlName="oldPassword"
+                    class="input">
+                  </TextField>
+                  <Label *ngIf="userForm.controls.oldPassword.errors?.minlength && !userForm.controls.oldPassword.pristine"
+                    class="error" textWrap="true" text="Password must be atleast 6 characters!"></Label>
+                  <Label *ngIf="userForm.controls.password.valid && userForm.controls.confirmPassword.valid && !userForm.hasError('passwordmismatch') && userForm.hasError('requiredoldpassword')"
+                    class="error" textWrap="true" text="Old Password is required"></Label>
+                </StackLayout>
+
+                <!-- New Password -->
+                <StackLayout
+                  *ngIf="userType ===  0 && isEnableEditProfile && (currentAuthProvider===authProviderConstants.PASSWORD)"
+                  class="input-field" iosOverflowSafeArea="false">
+                  <TextField secure="true"  #textField hint="{{userType ===  0 ? '@password' : ''}}" formControlName="password"
                     class="input">
                   </TextField>
                   <Label *ngIf="userForm.controls.password.errors?.minlength && !userForm.controls.password.pristine"
                     class="error" textWrap="true" text="Password must be atleast 6 characters!"></Label>
+                </StackLayout>
+
+                <!-- Confirm New Password -->
+                <StackLayout
+                  *ngIf="userType ===  0 && isEnableEditProfile && (currentAuthProvider===authProviderConstants.PASSWORD)"
+                  class="input-field" iosOverflowSafeArea="false">
+                  <TextField secure="true"  #textField hint="{{userType ===  0 ? '@confirmPassword' : ''}}" formControlName="confirmPassword"
+                    class="input">
+                  </TextField>
+                  <Label *ngIf="userForm.controls.confirmPassword.errors?.minlength && !userForm.controls.confirmPassword.pristine"
+                    class="error" textWrap="true" text="Password must be atleast 6 characters!"></Label>
+                  <Label *ngIf="userForm.controls.password.valid && userForm.controls.confirmPassword.valid && userForm.hasError('passwordmismatch')"
+                    class="error" textWrap="true" text="Must match with New Password"></Label>
                 </StackLayout>
 
                 <StackLayout *ngIf="isEnableEditProfile && userType ===  0" class="list-view"

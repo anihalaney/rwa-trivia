@@ -2,22 +2,38 @@
   background-color: #3e5b95;
   color: white;
   font-size: 15;
+  padding: 0 10;
 }
 
 .action-title {
   padding: 9 16 9 0;
   height: 56;
 }
+
+.action-subtitle {
+  padding: 9 16 9 0;
+  height: 80;
+}
+
 .action-bar-button {
   font-size: 25;
   line-height: 22;
   text-align: center;
 }
 
+.action-sub-text-title {
+  font-size: 12;
+}
+
 .action-text-title {
-  /* margin: 0 0 0 31; */
   font-size: 20;
 }
+
+.action-edit-icon {
+  margin-left: 5;
+  font-size: 15;
+}
+
 .action-text-save {
   font-size: 14;
   line-height: 11;
@@ -25,26 +41,8 @@
   height: 16;
 }
 
-.index-0 {
-  z-index: 0;
-}
-
-.index-1 {
-  z-index: 1;
-}
-
-.notification-dot {
-  background-color: #f50057;
-  height: 22;
-  width: 50;
-  margin-top: -1;
-  margin-left: -5;
-  padding-left: 5;
-  color: #fff;
-  border-radius: 50;
-  font-size: 16;
-}
 
 .no-notification {
   /* padding-right: 5; */
 }
+

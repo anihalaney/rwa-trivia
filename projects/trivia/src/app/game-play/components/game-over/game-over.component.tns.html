@@ -1,3 +1,7 @@
+<ns-action-bar title="{{actionBarStatus}}" class="Roboto-Regular" showAdd="true" hideHomeIcon="{{isDispayMenu}}"
+    hideMenu="{{isDispayMenu}}">
+</ns-action-bar>
+
 <GridLayout height="100%" backgroundColor="#f1f5f7">
     <ScrollView>
         <StackLayout>
@@ -8,11 +12,14 @@
                         <StackLayout marginTop="10">
                             <Label class="category" horizontalAlignment="center" text="{{categoryName}}"
                                 textWrap="true"></Label>
-                            <Label *ngIf="game.gameOptions.playerMode == PlayerMode.Opponent" class="round" horizontalAlignment="center" text="Round {{game.round}}/{{totalRound}}"
+                            <Label *ngIf="game.gameOptions.playerMode == PlayerMode.Opponent" class="round"
+                                horizontalAlignment="center" text="Round {{game.round}}/{{totalRound}}"
                                 textWrap="true"></Label>
 
-                            <StackLayout *ngIf="game.gameOptions?.playerMode == PlayerMode.Single" class="game-continue">
-                                <app-user-card [userId]="user.userId" [type]="userCardType.USER_IMAGE_NAME_VERTICAL"> </app-user-card>
+                            <StackLayout *ngIf="game.gameOptions?.playerMode == PlayerMode.Single"
+                                class="game-continue">
+                                <app-user-card [userId]="user.userId" [type]="userCardType.USER_IMAGE_NAME_VERTICAL">
+                                </app-user-card>
                                 <Label class="roundandscore" horizontalAlignment="center"
                                     text="Score {{game.stats[user.userId]?.score}} / {{game.round}}"
                                     textWrap="true"></Label>
@@ -40,9 +47,10 @@
                             <GridLayout rows="*" columns="*,auto,*" horizontalAlignment="center"
                                 *ngIf="game.gameOptions.playerMode == PlayerMode.Opponent">
                                 <StackLayout row="0" col="0" class="game-continue">
-                                    <app-user-card [userId]="user.userId" [type]="userCardType.USER_IMAGE_NAME_VERTICAL"> </app-user-card>
+                                    <app-user-card [userId]="user.userId"
+                                        [type]="userCardType.USER_IMAGE_NAME_VERTICAL"> </app-user-card>
                                     <Label class="roundandscore tagging" horizontalAlignment="center"
-                                            text="Score {{game.stats[user.userId]?.score}}" textWrap="true"> </Label>
+                                        text="Score {{game.stats[user.userId]?.score}}" textWrap="true"> </Label>
                                     <StackLayout class="earnedsymbolsStack" orientation="horizontal"
                                         horizontalAlignment="center">
                                         <Image *ngIf="game.stats[user.userId]?.score>=1"
@@ -71,9 +79,10 @@
                                 <Label row="0" col="1" text="V/S" verticalAlignment="top" textWrap="true"> </Label>
 
                                 <StackLayout row="0" col="2" class="game-continue">
-                                    <app-user-card [userId]="otherUserId" [type]="userCardType.USER_IMAGE_NAME_VERTICAL"> </app-user-card>
+                                    <app-user-card [userId]="otherUserId"
+                                        [type]="userCardType.USER_IMAGE_NAME_VERTICAL"> </app-user-card>
                                     <Label class="roundandscore tagging" horizontalAlignment="center"
-                                            text="Score {{game.stats[otherUserId]?.score}}" textWrap="true"> </Label>
+                                        text="Score {{game.stats[otherUserId]?.score}}" textWrap="true"> </Label>
                                     <StackLayout class="earnedsymbolsStack" orientation="horizontal"
                                         horizontalAlignment="center">
                                         <Image *ngIf="game.stats[otherUserId]?.score>=1"
@@ -146,20 +155,27 @@
 
                             </StackLayout>
 
-                            <GridLayout   rows="auto,auto" columns="auto" verticalAlignment="center"  horizontalAlignment="center"  marginTop="10">
-                                    <GridLayout horizontalAlignment="center"  row="0" col="0" >    
-                                            <Label class="bits-n-bites-lable" verticalAlignment="center" marginLeft="10"
-                                                text="You have earned" textWrap="true"> </Label>     
-                                    </GridLayout> 
-                                    <GridLayout rows="auto" columns="auto,auto,auto,auto"  marginTop="12" marginBottom="10"  row="1" col="0" > 
-                                            <Image row="0" col="0" src="~/assets/images/bits-bytes.png" height="32" width="32" padding="20"></Image>
-                                            <Label row="0" col="1" class="bits-n-bites-lable" verticalAlignment="center" marginLeft="10"
-                                                        text="Earned {{applicationSettings?.tokens?.enable === true && applicationSettings?.tokens?.earn_bits * game.stats[user.userId].score}} bits" textWrap="true"> </Label>
-                                            <Image row="0" col="2" src="~/assets/images/bits-bytes.png" height="32" width="32" padding="20" marginLeft="20"></Image> 
-                                           <Label row="0" col="3"  class="bits-n-bites-lable" verticalAlignment="center"
-                                           text="Earned {{applicationSettings?.tokens?.enable === true && applicationSettings?.tokens?.earn_bytes *  (game.stats[user.userId].score >=5 ? 1 : 0 ) }} bytes" textWrap="true"  marginLeft="10"></Label>
-                                    </GridLayout> 
+                            <GridLayout rows="auto,auto" columns="auto" verticalAlignment="center"
+                                horizontalAlignment="center" marginTop="10">
+                                <GridLayout horizontalAlignment="center" row="0" col="0">
+                                    <Label class="bits-n-bites-lable" verticalAlignment="center" marginLeft="10"
+                                        text="You have earned" textWrap="true"> </Label>
                                 </GridLayout>
+                                <GridLayout rows="auto" columns="auto,auto,auto,auto" marginTop="12" marginBottom="10"
+                                    row="1" col="0">
+                                    <Image row="0" col="0" src="~/assets/images/bits-bytes.png" height="32" width="32"
+                                        padding="20"></Image>
+                                    <Label row="0" col="1" class="bits-n-bites-lable" verticalAlignment="center"
+                                        marginLeft="10"
+                                        text="Earned {{applicationSettings?.tokens?.enable === true && applicationSettings?.tokens?.earn_bits * game.stats[user.userId].score}} bits"
+                                        textWrap="true"> </Label>
+                                    <Image row="0" col="2" src="~/assets/images/bits-bytes.png" height="32" width="32"
+                                        padding="20" marginLeft="20"></Image>
+                                    <Label row="0" col="3" class="bits-n-bites-lable" verticalAlignment="center"
+                                        text="Earned {{applicationSettings?.tokens?.enable === true && applicationSettings?.tokens?.earn_bytes *  (game.stats[user.userId].score >=5 ? 1 : 0 ) }} bytes"
+                                        textWrap="true" marginLeft="10"></Label>
+                                </GridLayout>
+                            </GridLayout>
                         </StackLayout>
                     </StackLayout>
                     <StackLayout padding="10" backgroundColor="#f3f3f3">
@@ -167,20 +183,20 @@
                             <Button row="1" col="0" class="navigate-button Hind-Medium" text="Share"
                                 (rippleTap)="screenshot()" stlRippleEffect></Button>
                             <button row="1" col="1" class="navigate-button Hind-Medium" text="Rematch"
-                                (rippleTap)="reMatchGame()"
-                                *ngIf="game.gameOptions?.playerMode != PlayerMode.Single" stlRippleEffect></button>
+                                (rippleTap)="reMatchGame()" *ngIf="game.gameOptions?.playerMode != PlayerMode.Single"
+                                stlRippleEffect></button>
                             <Button row="1" col="1" class="navigate-button Hind-Medium" text="Play Again"
                                 (rippleTap)="reMatchGame()"
                                 *ngIf="game.gameOptions?.playerMode == PlayerMode.Single" stlRippleEffect></Button>
-                            <Button row="1" col="2" class="navigate-button Hind-Medium" text="Invite as Friend {{game.gameOptions.opponentType}}"
+                            <Button row="1" col="2" class="navigate-button Hind-Medium" text="Invite as Friend"
                                 (rippleTap)="inviteAsFriend()" isEnabled="{{!disableFriendInviteBtn}}"
-                                *ngIf="(game.gameOptions.opponentType == opponentType.Random || game.gameOptions.isChallenge ) && otherUserInfo?.email && userInvitations[otherUserInfo?.email]?.status === 'add'" stlRippleEffect></Button>
+                                *ngIf="(game.gameOptions.opponentType == opponentType.Random || game.gameOptions.isChallenge ) && otherUserInfo?.email && userInvitations &&  userInvitations[otherUserInfo?.email]?.status === 'add'" stlRippleEffect></Button>
 
                             <Button row="1" col="2" class="navigate-button Hind-Medium friend-request-sent" text="Friend Request Sent"
-                                *ngIf="(game.gameOptions.opponentType == opponentType.Random || game.gameOptions.isChallenge ) && otherUserInfo?.email && userInvitations[otherUserInfo?.email]?.status === 'pending'"></Button>
+                                *ngIf="(game.gameOptions.opponentType == opponentType.Random || game.gameOptions.isChallenge ) && otherUserInfo?.email && userInvitations && userInvitations[otherUserInfo?.email]?.status === 'pending'"></Button>
 
                             <Button row="1" col="2" class="navigate-button Hind-Medium friends" text="Friends" 
-                                *ngIf="(game.gameOptions.opponentType == opponentType.Random || game.gameOptions.isChallenge ) && otherUserInfo?.email  && userInvitations[otherUserInfo?.email]?.status === 'approved'"></Button>
+                                *ngIf="(game.gameOptions.opponentType == opponentType.Random || game.gameOptions.isChallenge ) && otherUserInfo?.email  && userInvitations && userInvitations[otherUserInfo?.email]?.status === 'approved'"></Button>
 
                             <Button row="1" col="3" class="navigate-button Hind-Medium" text="Home"
                                 (rippleTap)="gotoDashboard()" stlRippleEffect></Button>
@@ -196,7 +212,7 @@
                             fontSize="18" class="label Roboto-Medium"></Label>
                         <Label row="0" col="1" class="fa expand-options" horizontalAlignment="right"
                             text="{{ showQuesAndAnswer ? '&#xf067;' : '&#xf068;' }}" textWrap="true" padding="7"
-                            borderWidth="2" borderColor="#A9A9A9" color="#A9A9A9" background="#fff"  
+                            borderWidth="2" borderColor="#A9A9A9" color="#A9A9A9" background="#fff"
                             (tap)="bindQuestions();showQuesAndAnswer=!showQuesAndAnswer;" stlRippleEffect></Label>
                     </GridLayout>
                     <ActivityIndicator *ngIf="questionsArray.length == 0 && !showQuesAndAnswer" busy="true"
@@ -231,8 +247,8 @@
                             </StackLayout>
                             <Button col="3" rowSpan="3" verticalAlignment="center"
                                 style="color:#3b444f; border-width:2px; border-color:#f3f3f3;" text="Report"
-                                marginRight="10"
-                                *ngIf="!game.playerQnAs[i].isReported" (rippleTap)="openDialog(row)" stlRippleEffect></Button>
+                                marginRight="10" *ngIf="!game.playerQnAs[i].isReported" (rippleTap)="openDialog(row)"
+                                stlRippleEffect></Button>
                             <Label col="3" rowSpan="3" text="Reported" verticalAlignment="center" marginRight="10"
                                 color="red" fontWeight="600" textWrap="true"
                                 *ngIf="game.playerQnAs[i]?.isReported"></Label>
