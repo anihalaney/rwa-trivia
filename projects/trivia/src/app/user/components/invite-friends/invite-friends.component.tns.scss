@@ -1,29 +1,30 @@
 .friend-list{
-  border-color:#fff #fff #dfdfdf #fff;
+  border-color:#fff #fff #E8E8E8 #fff;
   border-width: 0 0 2 0;
   padding:15 0 15 10;
   font-size: 16;
 }
 
 .won{
-  color: #71b02f;
+  font-size: 16;
+  color: #212121;
+  font-weight: bold;
 }
 
-.lost{
-  color: #ff3237;
+.played{
+  font-size: 16;
+  color: #212121;
+  font-weight: bold;
 }
 
 .name{
-  color: #282828;
+  color: #927c7c;
 }
 
 .h-label{
-  color: #3b5998;  
-  border-color:#fff #fff #dfdfdf #fff;
-  border-width: 0 0 3 0;
   padding:20 0 20 10;
-  font-size: 17;
-  font-weight: 500;
+  font-size: 15px;
+  color: #212121;
 }
 
 .fab-button1 {
