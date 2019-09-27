@@ -71,7 +71,7 @@ export class GameDialog {
     this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
     this.subscriptions.push(this.userDict$.subscribe(userDict => {
       this.userDict = userDict;
-      this.cd.detectChanges();
+      this.cd.markForCheck();
     }));
 
     this.resetValues();
