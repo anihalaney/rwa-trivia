@@ -4,7 +4,7 @@
         <GridLayout row="0" rows="*" columns="auto,*,auto,auto" class="sideStackLayoutHeader" paddingTop="10"
             paddingBottom="10" borderBottomColor="black" borderBottomWidth="1" iosOverflowSafeArea="false">
 
-            <app-user-card *ngIf="user && user!==null" [user]="user" [userId]="user.userId"
+            <app-user-card *ngIf="user && user!==null" [user]="user" [userId]="user?.userId"
                 [type]="userCardType.USER_IMAGE_NAME_PROFILE_HORIZONTAL"></app-user-card>
 
             <StackLayout row="0" col="1" verticalAlignment="center" iosOverflowSafeArea="false" marginLeft="10">

@@ -1,7 +1,7 @@
 <GridLayout>
     <ScrollView>
         <StackLayout backgroundColor="#f1f2f2" [class.m-b-70]="showContinueBtn">
-            <CardView class="cardStyle" android:elevation="20" ios:elevation="40" radius="5" class="gameplay"
+             <CardView class="cardStyle" android:elevation="20" ios:elevation="40" radius="5" class="gameplay"
                 backgroundColor="white">
                 <StackLayout>
                     <GridLayout *ngIf="user && user!==null && playerMode == PlayerMode.Single"  rows="auto,*" columns="auto,*,2*" marginRight="5" class="sideStackLayoutHeader" paddingTop="10">
@@ -39,7 +39,7 @@
                         <Progress [value]="progressValue" maxValue="100"></Progress>
                     </StackLayout>
                 </StackLayout>
-            </CardView>
+            </CardView> 
 
             <StackLayout margin="7 0 0 15" orientation="horizontal">
                 <Label text="Categories:" class="Roboto-Medium" marginRight="5" fontSize="15" textWrap="true"></Label>
@@ -55,16 +55,15 @@
 
             <CardView class="cardStyle" android:elevation="20" ios:elevation="40" radius="5" class="gameplay"
                 backgroundColor="white" margin="15">
-                <StackLayout padding="20 10">
+                <StackLayout padding="20 10">                    
                     <render-question [question]="question" [questionIndex]="questionIndex"></render-question>
                     <StackLayout *ngIf="question">
-                        <StackLayout class="question-answered Hind-Medium" margin="10" *ngFor="let answer of question.answers;let i=index"
+                        <StackLayout class="question-answered q-answer-container Hind-Medium" margin="10" *ngFor="let answer of question.answers;let i=index"
                             [class.players-answer]="answeredIndex === i" [class.wrong]="answeredIndex === i && correctAnswerIndex !== i"
                             [class.right]="correctAnswerIndex === i" stlRippleEffect (rippleTap)="answerButtonClicked(answer,i)"
                             [isUserInteractionEnabled]="doPlay"
                             [style.backgroundColor] = "answeredIndex === i && correctAnswerIndex !== i ? '#d54937' : ''"
-                            [style.backgroundColor] = "correctAnswerIndex === i ? '#71b02f' : ''"
-                            >
+                            [style.backgroundColor] = "correctAnswerIndex === i ? '#71b02f' : ''">
                             <render-answer [answer]="answer" [isWrong]="answeredIndex === i && correctAnswerIndex !== i"
                                 [isRight]="correctAnswerIndex === i" [doPlay]="doPlay"
                                 [isUserInteractionEnabled]="doPlay" [isGameAnswer]="true"></render-answer>

@@ -304,3 +304,21 @@ Button {
     padding: 2 0 2 0;
   }
 }
+
+.q-answer-container{
+  border-color: #000;
+  border-width: 1;
+  border-radius: 2;
+}
+
+.gameplay .right{
+  border-color: #71b02f;
+  background-color: #71b02f;
+  color: #fff;
+}
+
+.gameplay .wrong{
+  border-color: #d54937;
+  background-color: #d54937;
+  color: #fff;
+}

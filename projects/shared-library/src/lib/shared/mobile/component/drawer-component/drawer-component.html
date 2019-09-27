@@ -9,7 +9,7 @@
                     <FlexboxLayout flexDirection="column">
                         <StackLayout *ngIf="authProvider.isAuthenticated" class="padding-label" stlRippleEffect stlBackgroundColor="#10347f"
                             stlBackgroundColorAfter="#e2e2e2" (rippleTap)="navigateToProfileSettings()">
-                            <Label text="Profile" [ngStyle]="{color: (activeMenu === 'Profile' ? '#077ad6' : '#000')}"
+                            <Label text="User Account" [ngStyle]="{color: (activeMenu === 'Profile' ? '#077ad6' : '#000')}"
                                 android:fontSize="18" textWrap="true"></Label>
                         </StackLayout>
                         <StackLayout *ngIf="authProvider.isAuthenticated" class="padding-label" stlRippleEffect stlBackgroundColor="#10347f"
@@ -26,7 +26,7 @@
                         </StackLayout>
                         <StackLayout *ngIf="authProvider.isAuthenticated" class="padding-label" stlRippleEffect stlBackgroundColor="#10347f"
                             stlBackgroundColorAfter="#e2e2e2" (rippleTap)="navigateToGameProfile()">
-                            <Label text="User Account"
+                            <Label text="Game Profile"
                                 [ngStyle]="{color: (activeMenu === 'Game Profile' ? '#077ad6' : '#000')}"
                                 android:fontSize="18" textWrap="true"></Label>
                         </StackLayout>
