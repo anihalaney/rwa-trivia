@@ -4,8 +4,12 @@
         android:columns="auto,*,auto,auto,auto" width="100%">
 
         <StackLayout *ngIf="!hideMenu" stlRippleEffect stlBackgroundColor="#13284F" stlOpacity="0.5"
-            stlBackgroundColorAfter="" verticalAlignment="center" width="45" col="0" (tap)="openSidebar()">
-            <Label [text]="((user && user!== null && !showSkipBtn && title.includes('Friends'))) ? '&#xf053;': '&#xf0c9;'" class="fa text-left padding-back" padding="10" fontSize="20"></Label>
+            stlBackgroundColorAfter="" verticalAlignment="center" width="45"
+            col="0" (tap)="openSidebar()">
+            <Image horizontalAlignment="left" *ngIf="((user && user!== null && !showSkipBtn && title.includes('Friends') || title.includes('Notifications'))); else list_icon" src="~/assets/images/Chevron_Right.png" maxWidth="28" maxHeight="28" height="30%" width="30%"></Image>
+            <ng-template  #list_icon >
+                <Label text="&#xf0c9;" class="fa text-left padding-back" padding="10" fontSize="20"></Label>
+            </ng-template> 
         </StackLayout>
 
         <StackLayout col="1" verticalAlignment="center">
@@ -51,6 +55,12 @@
             stlBackgroundColor="#13284F" ios:margin="3" android:margin="10" stlOpacity="0.5" stlBackgroundColorAfter=""
             verticalAlignment="center" horizontalAlignment="right" marginRight="10" android:width="23" ios:width="40" >
             <Image src="~/assets/images/Search.png"  width="28" height="28" ></Image>
+        </StackLayout>
+
+        <!-- For Search Icon in invite-friends.component.tns.html screen -->
+        <StackLayout *ngIf="((user && user!== null && !showSkipBtn && title.includes('Notifications')))" col="4" stlRippleEffect ios:margin="3" android:margin="10" stlOpacity="0.5" stlBackgroundColorAfter=""
+            verticalAlignment="center" horizontalAlignment="right" marginRight="10" android:width="23" ios:width="40" >
+            <Image src="~/assets/images/double_check.png"  width="28" height="28" ></Image>
         </StackLayout>
 
         <StackLayout *ngIf="showSkipBtn" col="2" stlRippleEffect stlBackgroundColor="#13284F" ios:margin="3" margin="10"
