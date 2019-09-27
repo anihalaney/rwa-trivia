@@ -1,14 +1,21 @@
 <ActionBar title="" class="action-bar " [ngClass]=" subTitle ? 'action-subtitle' : 'action-title' ">
+
     <NavigationButton visibility="collapsed"></NavigationButton>
-    <GridLayout ios:rows="auto" android:rows="auto" ios:columns="auto,*,auto,auto,auto,auto"
+
+    <GridLayout ios:rows="auto" android:rows="auto" ios:columns="auto,*,auto,auto,auto"
         android:columns="auto,*,auto,auto,auto" width="100%">
+
+        <StackLayout col="0" verticalAlignment="center" marginRight="10" horizontalAlignment="left" (tap)="back()">
+            <Label text="&#xf104;" class="fa" textWrap="true" fontSize="40"></Label>
+        </StackLayout>
 
         <StackLayout col="1" verticalAlignment="center">
             <Label [text]="title.replace('_',' ')" class="action-text-title" textWrap="true"></Label>
         </StackLayout>
 
+
         <StackLayout col="2" *ngIf="((user && user!== null && !showSkipBtn && title==='Questions'))" stlRippleEffect
-            stlBackgroundColor="#13284F" ios:margin="3" android:margin="10" stlOpacity="0.5" stlBackgroundColorAfter=""
+            stlBackgroundColor="#13284F" ios:margin="3" ios:marginRight="30" android:margin="10" stlOpacity="0.5" stlBackgroundColorAfter=""
             verticalAlignment="center" horizontalAlignment="right" android:width="23" ios:width="23"
             (rippleTap)="navigateToSubmitQuestion()">
             <Label text="&#xf055;" class="fa" fontSize="20"></Label>
@@ -16,13 +23,18 @@
 
         <!-- For View All Icon in question-add-updates.component.tns.html screen -->
         <StackLayout col="2" *ngIf="(user && user!== null && !showSkipBtn && title.includes('Add_Question'))"
-            stlRippleEffect stlBackgroundColor="#13284F" ios:margin="3" android:margin="10" stlOpacity="0.5"
+            stlRippleEffect stlBackgroundColor="#13284F" ios:margin="3" ios:marginRight="30"  android:margin="10" stlOpacity="0.5"
             stlBackgroundColorAfter="" verticalAlignment="center" horizontalAlignment="right"
             (rippleTap)="navigateToMyQuestion()" orientation="horizontal">
             <Label text="&#xf03a;" class="fa" fontSize="18" marginTop="5"></Label>
             <Label text="View All" marginLeft="5" fontSize="18"></Label>
         </StackLayout>
 
+        <StackLayout *ngIf="showSkipBtn" col="2" stlRippleEffect stlBackgroundColor="#13284F" ios:margin="3" margin="10"
+            android:margin="5" stlOpacity="0.5" stlBackgroundColorAfter="transparent" verticalAlignment="center"
+            (rippleTap)="goToDashboard()">
+            <Label text="Skip" class="fa" fontSize="20" margin="5"></Label>
+        </StackLayout>
 
         <!-- For Search Icon in invite-friends.component.tns.html screen -->
         <StackLayout *ngIf="((user && user!== null && !showSkipBtn && title.includes('Friends')))" col="3"
@@ -40,18 +52,6 @@
             <Label text="&#xf234;" class="fas" fontSize="18"></Label>
         </StackLayout>
 
-        <StackLayout *ngIf="((user && user!== null && !hideHomeIcon && !showSkipBtn))" col="5" stlRippleEffect
-            stlBackgroundColor="#13284F" ios:margin="10" ios:marginRight="30" android:margin="10" stlOpacity="0.5"
-            stlBackgroundColorAfter="transparent" verticalAlignment="center" horizontalAlignment="right"
-            android:width="23" ios:width="23" (rippleTap)="goToDashboard()">
-            <Label text="&#xf015;" class="fa" fontSize="23"></Label>
-        </StackLayout>
-
-        <StackLayout *ngIf="showSkipBtn" col="2" stlRippleEffect stlBackgroundColor="#13284F" ios:margin="3" margin="10"
-            android:margin="5" stlOpacity="0.5" stlBackgroundColorAfter="transparent" verticalAlignment="center"
-            (rippleTap)="goToDashboard()">
-            <Label text="Skip" class="fa" fontSize="20" margin="5"></Label>
-        </StackLayout>
 
     </GridLayout>
 </ActionBar>

@@ -7,6 +7,7 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { CoreState, coreState } from '../../../../core/store';
 import { User } from 'shared-library/shared/model';
 import { Router, NavigationEnd } from '@angular/router';
+import { PlatformLocation } from '@angular/common';
 
 @Component({
     selector: 'bottom-bar',
@@ -30,7 +31,8 @@ export class BottomBarComponent implements OnChanges, OnDestroy, OnInit {
         private routerExtensions: RouterExtensions,
         public store: Store<CoreState>,
         private router: Router,
-        private cd: ChangeDetectorRef
+        private cd: ChangeDetectorRef,
+        private location: PlatformLocation,
     ) {
     }
 
@@ -75,6 +77,7 @@ export class BottomBarComponent implements OnChanges, OnDestroy, OnInit {
         if (menu === 'play') {
             this.activeMenu = menu;
             this.routerExtensions.navigate(['/dashboard']);
+            // this.routerExtensions.locationStrategy.replaceState('', '', '/dashboard/leaderboard', '');
             sideDrawer.closeDrawer();
         } else if (menu === 'leaderboard') {
             this.activeMenu = menu;
@@ -82,6 +85,8 @@ export class BottomBarComponent implements OnChanges, OnDestroy, OnInit {
             sideDrawer.closeDrawer();
         } else if (menu === 'friends') {
             this.routerExtensions.navigate(['/user/my/invite-friends']);
+            // console.log('this.location.getState();', this.location.getState());
+            // this.location.replaceState(this.location.getState(), '', '/dashboard');
             if (this.router.url === '/user/my/invite-friends') {
                 this.activeMenu = menu;
             }
