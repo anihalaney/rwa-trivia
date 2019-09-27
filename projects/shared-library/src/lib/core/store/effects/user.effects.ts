@@ -17,13 +17,23 @@ export class UserEffects {
     loadUserProfile$ = this.actions$
         .pipe(ofType(UserActions.LOGIN_SUCCESS))
         .pipe(map((action: ActionWithPayload<User>) => action.payload),
-            switchMap((user: User) => this.svc.loadUserProfile(user)),
-            mergeMap((user: User) => this.utils.setLoginFirebaseAnalyticsParameter(user)),
+            switchMap((user: User) => {
+                if ( user ) {
+                    return this.svc.loadUserProfile(user).pipe(catchError((error) => {
+                        return of();
+                    }));
+                } else {
+                    return of();
+                }
+              }),
+            mergeMap((user: User) => this.utils.setLoginFirebaseAnalyticsParameter(user).pipe(catchError((error) => {
+                return of();
+            }))),
             map((user: User) => this.userActions.addUserWithRoles(user)),
             catchError((error) => {
                 console.log(error);
                 this.userActions.logoff();
-                return empty();
+                return of();
             })
         );
 
@@ -32,7 +42,9 @@ export class UserEffects {
     loadUserAccounts$ = this.actions$
         .pipe(ofType(UserActions.LOGIN_SUCCESS))
         .pipe(map((action: ActionWithPayload<User>) => action.payload),
-            switchMap((account: User) => this.svc.loadAccounts(account)),
+            switchMap((account: User) => this.svc.loadAccounts(account).pipe(catchError((error) => {
+                return empty();
+            }))),
             map((account: Account) => this.userActions.loadAccountsSuccess(account)));
 
 
@@ -44,7 +56,12 @@ export class UserEffects {
             distinct(null, this.store.select(coreState).pipe(select(s => s.user))),
             mergeMap((userId: string) => this.svc.loadOtherUserProfile(userId)),
             mergeMap((user: User) => this.svc.getUserStatus(user)),
-            map((user: User) => this.userActions.loadOtherUserProfileSuccess(user)));
+            map((user: User) => this.userActions.loadOtherUserProfileSuccess(user)),
+            catchError((error) => {
+                console.log(error);
+                this.userActions.logoff();
+                return empty();
+            }));
 
     @Effect()
     // handle location update

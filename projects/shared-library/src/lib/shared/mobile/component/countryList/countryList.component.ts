@@ -24,23 +24,22 @@ export class CountryListComponent implements OnInit, OnDestroy {
 
   constructor(private _modalDialogParams: ModalDialogParams, private cd: ChangeDetectorRef,
     private store: Store<CoreState>, private userAction: UserActions) {
-    this.country = this._modalDialogParams.context.Country;
+  }
+
+  ngOnInit() {
     this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.countries)).subscribe(countries => {
       this.cd.markForCheck();
       if (countries.length > 0) {
-        this.allCountries = countries.sort((prev, next) => prev.name.localeCompare(next.name) );
+        this.allCountries = countries.sort((prev, next) => prev.name.localeCompare(next.name));
       }
     }));
+    this.country = this._modalDialogParams.context.Country;
 
     this.store.dispatch(this.userAction.getCountries());
 
     this._modalDialogParams.context.closeObserver.subscribe((res) => {
-        this.onClose();
+      this.onClose();
     });
-
-  }
-
-  ngOnInit() {
   }
 
   onItemTap(args) {
@@ -58,6 +57,5 @@ export class CountryListComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-
   }
 }

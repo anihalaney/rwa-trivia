@@ -1,5 +1,5 @@
 <ns-action-bar title="Privacy Policy" class="Roboto-Regular" showAdd="true"></ns-action-bar>
-<StackLayout>
+<StackLayout *ngIf="renderView">
   <ScrollView>
     <StackLayout class="privacy-policy-container" >
         <GridLayout rows="auto,*,*" orientation="horizontal">

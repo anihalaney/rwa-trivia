@@ -32,12 +32,13 @@ export class BottomBarComponent implements OnChanges, OnDestroy, OnInit {
         private router: Router,
         private cd: ChangeDetectorRef
     ) {
-        this.subscriptions.push(store.select(coreState).pipe(select(s => s.user)).subscribe(user => {
-            this.user = user;
-        }));
     }
 
     ngOnInit() {
+        this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.user)).subscribe(user => {
+            this.user = user;
+        }));
+
         this.router.events.subscribe((val) => {
             if (val instanceof NavigationEnd) {
                 const nav = val.url;

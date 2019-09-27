@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, OnDestroy, ViewChildren, QueryList, ElementRef, ChangeDetectorRef } from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnDestroy, ViewChildren, QueryList, ElementRef, ChangeDetectorRef, OnInit } from '@angular/core';
 import { Page } from 'tns-core-modules/ui/page';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
@@ -17,7 +17,7 @@ declare var IQKeyboardManager;
 })
 
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
-export class UserFeedbackComponent implements OnDestroy {
+export class UserFeedbackComponent implements OnDestroy, OnInit {
   iqKeyboard: any;
   subscriptions = [];
   feedbackForm: FormGroup;
@@ -25,7 +25,7 @@ export class UserFeedbackComponent implements OnDestroy {
   feedbacklength = { min: 15, max: 200 };
   @ViewChildren('textField') textField: QueryList<ElementRef>;
   email_regexp = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-
+  renderView = false;
   constructor(private page: Page, private fb: FormBuilder, private store: Store<AppState>, private userAction: UserActions,
     private cd: ChangeDetectorRef, private utils: Utils) {
 
@@ -33,6 +33,10 @@ export class UserFeedbackComponent implements OnDestroy {
       this.iqKeyboard = IQKeyboardManager.sharedManager();
       this.iqKeyboard.shouldResignOnTouchOutside = true;
     }
+  }
+
+  ngOnInit(): void {
+    this.page.on('loaded', () => { this.renderView = true; this.cd.markForCheck(); });
     this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.feedback)).subscribe(status => {
       if (status === 'SUCCESS') {
         this.resetForm();
@@ -45,7 +49,6 @@ export class UserFeedbackComponent implements OnDestroy {
       this.user = user;
       this.cd.markForCheck();
     }));
-
 
     this.initForm();
   }
@@ -82,7 +85,8 @@ export class UserFeedbackComponent implements OnDestroy {
   }
 
   ngOnDestroy() {
-
+    this.page.off('loaded');
+    this.renderView = false;
   }
 
 }

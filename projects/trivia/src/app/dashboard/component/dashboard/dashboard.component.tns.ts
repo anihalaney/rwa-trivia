@@ -53,15 +53,10 @@ export class DashboardComponent extends Dashboard implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-
     this.userDict$ = this.store.select(appState.coreState).pipe(select(s => s.userDict));
     this.subscriptions.push(this.userDict$.subscribe(userDict => { this.userDict = userDict; this.cd.markForCheck(); }));
     // update to variable needed to do in ngZone otherwise it did not understand it
-    this.page.on('loaded', () => this.ngZone.run(() => {
-      this.renderView = true;
-      this.cd.markForCheck();
-    }
-    ));
+    this.page.on('loaded', () => { this.renderView = true; this.cd.markForCheck(); });
   }
 
   startNewGame(mode: string) {
@@ -124,6 +119,7 @@ export class DashboardComponent extends Dashboard implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.page.off('loaded');
+    this.renderView = false;
   }
 }
 
