@@ -164,7 +164,7 @@ export class DrawerComponent implements OnInit, OnDestroy {
     }
 
     login() {
-        this.routerExtension.navigate(['/login']);
+        this.routerExtension.navigate(['/login'], { clearHistory: true });
         this.closeDrawer();
     }
 
@@ -239,47 +239,47 @@ export class DrawerComponent implements OnInit, OnDestroy {
     }
 
     recentGames() {
-        this.routerExtension.navigate(['/recent-games']);
+        this.routerExtension.navigate(['/recent-games'], { clearHistory: true });
         this.closeDrawer();
     }
 
     navigateToProfileSettings() {
-        this.routerExtension.navigate(['/user/my/profile', this.user ? this.user.userId : '']);
+        this.routerExtension.navigate(['/user/my/profile', this.user ? this.user.userId : ''], { clearHistory: true });
         this.closeDrawer();
     }
 
     navigateToGameProfile() {
-        this.routerExtension.navigate(['/user/my/game-profile', this.user ? this.user.userId : '']);
+        this.routerExtension.navigate(['/user/my/game-profile', this.user ? this.user.userId : ''], { clearHistory: true });
         this.closeDrawer();
     }
 
     navigateToMyQuestion() {
-        this.routerExtension.navigate(['/user/my/questions']);
+        this.routerExtension.navigate(['/user/my/questions'], { clearHistory: true });
         this.closeDrawer();
     }
 
     navigateToFriendList() {
-        this.routerExtension.navigate(['/user/my/invite-friends']);
+        this.routerExtension.navigate(['/user/my/invite-friends'], { clearHistory: true });
         this.closeDrawer();
     }
 
     navigateToPrivacyPolicy() {
-        this.routerExtension.navigate(['/privacy-policy']);
+        this.routerExtension.navigate(['/privacy-policy'], { clearHistory: true });
         this.closeDrawer();
     }
 
     navigateToTermsConditions() {
-        this.routerExtension.navigate(['/terms-and-conditions']);
+        this.routerExtension.navigate(['/terms-and-conditions'], { clearHistory: true });
         this.closeDrawer();
     }
 
     navigateToAchievements() {
-        this.routerExtension.navigate(['/achievements']);
+        this.routerExtension.navigate(['/achievements'], { clearHistory: true });
         this.closeDrawer();
     }
 
     navigateToUserFeedback() {
-        this.routerExtension.navigate(['/user-feedback']);
+        this.routerExtension.navigate(['/user-feedback'], { clearHistory: true });
         this.closeDrawer();
     }
 

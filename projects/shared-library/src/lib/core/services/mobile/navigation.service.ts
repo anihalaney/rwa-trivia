@@ -48,7 +48,7 @@ export class NavigationService {
   redirectPushRoutes(data: any) {
     switch (data.messageType) {
       case pushNotificationRouteConstants.GAME_PLAY:
-        this.routerExtensions.navigate(['/dashboard']);
+        this.routerExtensions.navigate(['/dashboard'], { clearHistory: true });
         break;
     }
   }
