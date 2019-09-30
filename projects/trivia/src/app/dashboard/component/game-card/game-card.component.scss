@@ -1,147 +1,219 @@
-.textcenter.clearfix .yourimg { margin: 0 auto 16px; }
-.innerli{ border:1px solid; border-radius: 4px; padding: 15px; display: block;min-height: 415px;max-height: 415px; }
-.T-tagging{ font-size: 14px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0px;word-break: break-all;height: 40px;}
-.innerli .yourimg{ width: 94%; max-width: 70px; border-radius: 50%; height: auto; /*box-shadow: 0 3px 7px rgba(0,0,0,0.25);*/ margin-bottom: 16px; border:1px solid; padding: 2px}
-.yourimg img{ display: block; width: 70px; height: 60px; border-radius: 50% }
-.vs {position: absolute;top: 24px;font-size: 18px;font-family: hindmedium;height: 25px;right: -9px;color: #7c7c7c;background: #FFF;}
-.light{font-family: 'hindmedium';}
-.owl-item .col-md-3{ width: 100% }
-
-.playnow{ padding: 3px 54px;font-size: 16px}
-.playnow span{ display: block; font-size: 12px; font-family: 'hindregular'}
-.opponent{  margin-top: 3px;  text-align: center;}
-hr{height:15px; visibility: hidden; margin: 0;}
-.div-right-border
-{
-    border-right: 1px solid transparent; 
-    // text-align: left;
-    border-color: rgba(204,204,204,0.44);
+.textcenter.clearfix .yourimg {
+  margin: 0 auto 16px;
 }
-.div-left-border
-{
-    margin-left: -1px;
-    border-left: 1px solid transparent;
-    border-color: rgba(204,204,204,0.44);
+.innerli {
+  border: 1px solid;
+  border-radius: 4px;
+  padding: 15px;
+  display: block;
+  min-height: 415px;
+  max-height: 415px;
 }
-.div-spacing
-{
-    padding-top: 4%
+.T-tagging {
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 0px;
+  word-break: break-all;
+  height: 40px;
 }
-.div-width
-{
-    width: 50%;
-    padding-left: 5%;
+.innerli .yourimg {
+  width: 94%;
+  max-width: 70px;
+  border-radius: 50%;
+  height: auto; /*box-shadow: 0 3px 7px rgba(0,0,0,0.25);*/
+  margin-bottom: 16px;
+  border: 1px solid;
+  padding: 2px;
 }
-.btn-share{ 
-    font-size: 14px;
-    font-family: 'hindregular';
-    border-radius: 4px;
-    display:inline-block;
-    text-align: center;
-    border-width: 1px;
-    border-style: solid;
+.yourimg img {
+  display: block;
+  width: 70px;
+  height: 60px;
+  border-radius: 50%;
 }
-.opponent-turn
-{
-    padding: 12px 38px;
+.vs {
+  position: absolute;
+  top: 24px;
+  font-size: 18px;
+  font-family: hindmedium;
+  height: 25px;
+  right: -9px;
+  color: #7c7c7c;
+  background: #fff;
 }
-.waiting-for-opponent
-{
-    padding: 3px 54px;
+.light {
+  font-family: "hindmedium";
 }
-.no-opponent{ display: block; width: 64px; height: 60px; border-radius: 50% } 
-.text-align
-{
-    text-align: left;
+.owl-item .col-md-3 {
+  width: 100%;
 }
 
-.div-score
-{
-    padding-top: 7%;
+.playnow {
+  padding: 3px 54px;
+  font-size: 16px;
 }
-.div-badge
-{
-    height: 100px;
+.playnow span {
+  display: block;
+  font-size: 12px;
+  font-family: "hindregular";
 }
-.div-location
-{
-   height: 25px;
+.opponent {
+  margin-top: 3px;
+  text-align: center;
 }
-.padding-right
-{
-    padding-right: 1px;
+hr {
+  height: 15px;
+  visibility: hidden;
+  margin: 0;
 }
-.score-text-align
-{
-    text-align: left;
+.div-right-border {
+  border-right: 1px solid transparent;
+  // text-align: left;
+  border-color: rgba(204, 204, 204, 0.44);
+}
+.div-left-border {
+  margin-left: -1px;
+  border-left: 1px solid transparent;
+  border-color: rgba(204, 204, 204, 0.44);
+}
+.div-spacing {
+  padding-top: 4%;
+}
+.div-width {
+  width: 50%;
+  padding-left: 5%;
+}
+.btn-share {
+  font-size: 14px;
+  font-family: "hindregular";
+  border-radius: 4px;
+  display: inline-block;
+  text-align: center;
+  border-width: 1px;
+  border-style: solid;
+}
+.opponent-turn {
+  padding: 12px 38px;
+}
+.waiting-for-opponent {
+  padding: 3px 54px;
+}
+.no-opponent {
+  display: block;
+  width: 64px;
+  height: 60px;
+  border-radius: 50%;
+}
+.text-align {
+  text-align: left;
+}
+
+.div-score {
+  padding-top: 7%;
+}
+.div-badge {
+  height: 100px;
+}
+.div-location {
+  height: 25px;
+}
+.padding-right {
+  padding-right: 1px;
+}
+.score-text-align {
+  text-align: left;
 }
 
 .float-left {
-    float: left !important;
+  float: left !important;
 }
 
 .float-right {
-    float: right !important;
+  float: right !important;
 }
 
-@media screen and ( max-width:990px){
-    .text-align,.div-score
-    {
-        text-align: center;
-    }
-    .div-spacing
-    {
-        padding-top: 0
-    }
-    
+@media screen and (max-width: 990px) {
+  .text-align,
+  .div-score {
+    text-align: center;
+  }
+  .div-spacing {
+    padding-top: 0;
+  }
 }
-@media screen and ( max-width:768px){
-    .score-text-align
-    {
-        text-align: center;
-    }
-    .div-badge
-    {
-        height: 70px;
-    }
-    .div-spacing
-    {
-        padding-top: 2%
-    }
-    
-    
+@media screen and (max-width: 768px) {
+  .score-text-align {
+    text-align: center;
+  }
+  .div-badge {
+    height: 70px;
+  }
+  .div-spacing {
+    padding-top: 2%;
+  }
 }
-@media screen and ( max-width:767px){
-    .btn-share
-    {
-       width: 100%;
-    }
-    
+@media screen and (max-width: 767px) {
+  .btn-share {
+    width: 100%;
+  }
 }
-@media screen and ( max-width:400px){
-    .div-spacing
-    {
-        padding-top: 4%
-    }  
+@media screen and (max-width: 400px) {
+  .div-spacing {
+    padding-top: 4%;
+  }
 }
 @media (min-width: 1025px) and (max-width: 1282px) {
-    .playnow,.opponent-turn,.waiting-for-opponent
-    {
-        font-size: 14px;
-        padding: 0 30%;
-    }
+  .playnow,
+  .opponent-turn,
+  .waiting-for-opponent {
+    font-size: 14px;
+    padding: 0 30%;
   }
-.mobile{
-    padding:10;
-    
-    .tagging {
-        color: #fe4f20;
-        padding:2 0 2 0;
-    }
-
-    .user-name{
-        // color: black;
-        // font-size: 15;
-    }
 }
- 
+.mobile {
+  padding: 10;
+
+  .tagging {
+    color: #fe4f20;
+    padding: 2 0 2 0;
+  }
+
+  .user-name {
+    // color: black;
+    // font-size: 15;
+  }
+}
+
+.active-container {
+  border-width: 2;
+  border-color: #f1f2f2;
+  border-radius: 5;
+  padding: 10;
+}
+
+.cat-title {
+  color: #1e2c4d;
+  font-size: 18;
+  font-weight: 500;
+}
+
+.active-game-timer {
+  color: #949494;
+  font-size: 17;
+  padding: 2 0 2 0;
+}
+
+.active-play-now {
+  color: #1e2c4d;
+  font-size: 19;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.active-waiting-opponent {
+  color: #949494;
+  font-size: 20;
+  text-transform: uppercase;
+  font-weight: 700;
+}

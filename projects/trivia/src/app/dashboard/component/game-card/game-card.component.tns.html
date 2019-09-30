@@ -41,7 +41,7 @@
 </StackLayout>
 
 <StackLayout *ngIf="cardType == 'singlePlayer'" class="mobile Roboto-Regular" iosOverflowSafeArea="false">
-    <GridLayout rows="*" columns="*,auto" iosOverflowSafeArea="false">
+    <!-- <GridLayout rows="*" columns="*,auto" iosOverflowSafeArea="false">
         <StackLayout row="0" col="0" [nsRouterLink]="['/game-play', game.gameId]" clearHistory="true"
             iosOverflowSafeArea="false">
             <GridLayout rows="*,*,*" columns="*" iosOverflowSafeArea="false">
@@ -74,7 +74,64 @@
                 marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"></Image>
 
         </StackLayout>
+    </GridLayout> -->
+
+    <GridLayout rows="*, *, *" columns="*, auto, auto" class="active-container" margin="15">
+        <Label text="{{categoryDict[game.gameOptions?.categoryIds[randomCategoryId]]?.categoryName?.charAt(0)?.toUpperCase()
+                + categoryDict[game.gameOptions?.categoryIds[randomCategoryId]]?.categoryName?.slice(1)}}" row="0"
+            col="0" class="cat-title"></Label>
+        <Label text="0, 1" row="0" col="1"></Label>
+
+        <AbsoluteLayout row="0" col="2" [width]="(game.stats[user.userId]?.score * 30)">
+            <Image *ngIf="game.stats[user.userId]?.score >= 5" left="70" top="10" src="~/assets/images/score5.png" height="30" width="30" marginLeft="2"
+                verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"></Image>
+
+            <Image *ngIf="game.stats[user.userId]?.score >= 4" left="55" top="10" src="~/assets/images/score4.png" height="30" width="30" marginLeft="2"
+                verticalAlignment="center" marginLeft="2" padding="-20" borderRadius="50"></Image>
+
+            <Image *ngIf="game.stats[user.userId]?.score >= 3"  left="40" top="10" src="~/assets/images/score3.png" height="30" width="30" marginLeft="2"
+                verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"></Image>
+
+            <Image *ngIf="game.stats[user.userId]?.score >= 2"  left="25" top="10" src="~/assets/images/score2.png" height="30" width="30" marginLeft="2"
+                verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"></Image>
+   
+            <Image *ngIf="game.stats[user.userId]?.score >= 1"  left="10" top="10" src="~/assets/images/score1.png" height="30" width="30" marginLeft="2"
+                verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"></Image>
+        </AbsoluteLayout>
+
+        <!-- <StackLayout row="0" col="2" orientation="horizontal" horizontalAlignment="center" iosOverflowSafeArea="false">
+            <Image *ngIf="game.stats[user.userId]?.score >= 1" src="~/assets/images/score1.png" height="30" width="30"
+                marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"></Image>
+
+            <Image *ngIf="game.stats[user.userId]?.score >= 2" src="~/assets/images/score2.png" height="30" width="30"
+                marginLeft="2" verticalAlignment="center" marginLeft="2" padding="-20" borderRadius="50"></Image>
+
+            <Image *ngIf="game.stats[user.userId]?.score >= 3" src="~/assets/images/score3.png" height="30" width="30"
+                marginLeft="2" verticalAlignment="center" marginLeft="2" padding="-20" borderRadius="50"></Image>
+
+            <Image *ngIf="game.stats[user.userId]?.score >= 4" src="~/assets/images/score4.png" height="30" width="30"
+                marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"></Image>
+
+            <Image *ngIf="game.stats[user.userId]?.score >= 5" src="~/assets/images/score5.png" height="30" width="30"
+                marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"></Image>
+        </StackLayout> -->
+
+
+        <StackLayout row="1" col="0" colSpan="3" orientation="horizontal">
+            <Label class="fa active-game-timer" text="&#xf017; {{remainingHours }}:{{remainingMinutes}}" textWrap="true"
+                padding="10 5 5 0"></Label>
+            <Label text="Your Turn " class="active-game-timer"></Label>
+        </StackLayout>
+        <!-- <Label text="1, 2" row="1" col="2"></Label> -->
+        <Label text="Play Now" row="2" col="0" colSpan="3" class="active-play-now"
+            [nsRouterLink]="['/game-play', game.gameId]" clearHistory="true"></Label>
+        <!-- <Label text="Waiting for the  opponent" row="2" col="0" colSpan="3" class="active-waiting-opponent"></Label> -->
+        <!-- <Label text="2, 1" row="2" col="1"></Label>
+            <Label text="2, 2" row="2" col="2"></Label> -->
     </GridLayout>
+
+
+
 </StackLayout>
 
 <StackLayout *ngIf="cardType == 'twoPlayer' && myTurn" class="mobile Roboto-Regular"

@@ -40,6 +40,25 @@
     </GridLayout>
     <ScrollView>
         <StackLayout>
+
+            <GridLayout rows="*, *, *" columns="*, auto, auto" class="active-container" margin="15">
+                <Label text="Swift Basic" row="0" col="0" class="cat-title"></Label>
+                <Label text="0, 1" row="0" col="1"></Label>
+                <Label text="Icons" row="0" col="2"></Label>
+                <!-- <Label text="Timer" row="1" col="0"></Label> -->
+                <Label row="1" col="0" class="fa active-game-timer"
+                    text="&#xf017; remain time" textWrap="true"
+                    padding="10 5 5 0"></Label>
+                <Label text="Your Turn " class="active-game-timer" row="1" col="1"></Label>
+                <!-- <Label text="1, 2" row="1" col="2"></Label> -->
+                <!-- <Label text="Play Now Play Now Play Now Play Now" row="2" col="0" colSpan="3" class="active-play-now"></Label> -->
+                <Label text="Waiting for the  opponent" row="2" col="0" colSpan="3" class="active-waiting-opponent"></Label>
+                <!-- <Label text="2, 1" row="2" col="1"></Label>
+                <Label text="2, 2" row="2" col="2"></Label> -->
+            </GridLayout>
+
+            
+            
             <GridLayout horizontalAlignment="left" rows="auto" columns="*, *" width="60%"
                 *ngIf="user && applicationSettings?.tokens?.enable" margin="10 0 0 10">
                 <FlexboxLayout col="0" *ngIf="account && user" iosOverflowSafeArea="false">
@@ -132,23 +151,23 @@
 
                 <StackLayout row="2" col="0" *ngIf="user && (twoPlayerCount > 0 || singlePlayerCount > 0)"
                     iosOverflowSafeArea="false">
-                    <CardView class="cardStyle" margin="10" android:elevation="20" ios:elevation="40" radius="5"
-                        class="gameplay" backgroundColor="white" iosOverflowSafeArea="false">
-                        <StackLayout class="my-turn-card">
+                    <!-- <CardView class="cardStyle" margin="10" android:elevation="20" ios:elevation="40" radius="5"
+                        class="gameplay" backgroundColor="white" iosOverflowSafeArea="false"> -->
+                        <StackLayout >
                             <GridLayout rows="auto, auto" columns="*" iosOverflowSafeArea="false">
                                 <StackLayout row="0" col="0" *ngIf="activeGames && userDict"
                                     iosOverflowSafeArea="false">
-                                    <Label text="My Turn" textWrap="true" class="title Roboto-Bold my-turn-title">
-                                    </Label>
+                                    <!-- <Label text="My Turn" textWrap="true" class="title Roboto-Bold my-turn-title">
+                                    </Label> -->
                                     <StackLayout
                                         *ngFor="let game of activeGames | gameFilter: filterSinglePlayerGame ;let last = last;"
                                         iosOverflowSafeArea="false">
                                         <game-card [game]="game" [cardType]="'singlePlayer'" stlRippleEffect>
                                         </game-card>
-                                        <StackLayout class="hr-light m-10" height="2" *ngIf="!last"
+                                        <!-- <StackLayout class="hr-light m-10" height="2" *ngIf="!last"
                                             iosOverflowSafeArea="false"></StackLayout>
                                         <StackLayout class="hr-light m-10" height="2" *ngIf="last && twoPlayerCount > 0"
-                                            iosOverflowSafeArea="false"></StackLayout>
+                                            iosOverflowSafeArea="false"></StackLayout> -->
                                     </StackLayout>
                                 </StackLayout>
                                 <StackLayout row="1" col="0" *ngIf="activeGames && userDict"
@@ -164,7 +183,7 @@
                                 </StackLayout>
                             </GridLayout>
                         </StackLayout>
-                    </CardView>
+                    <!-- </CardView> -->
                 </StackLayout>
 
                 <StackLayout row="3" col="0" *ngIf="user && theirTurnCount" iosOverflowSafeArea="false">
