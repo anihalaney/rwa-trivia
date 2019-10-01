@@ -24,9 +24,20 @@
 
 .game-btn {
   border-width: 1;
-  border-color: white;
-  background-color: #1E2C4D;
-  color: white;
+  border-color: #fff;
+  background-color: #283b66;
+  color: #fff;
+  border-radius: 5;
+  padding: 10 0;
+  font-weight: bold;
+  width: 48%
+}
+
+.game-btn-disabled {
+  border-width: 1;
+  border-color: #a5a5a5;
+  background-color: #283b66;
+  color: #a5a5a5;
   border-radius: 5;
   padding: 10 0;
   font-weight: bold;
@@ -38,4 +49,22 @@
   color: #1E2C4D;
   font-weight: bold;
   border-color: #1E2C4D;
+}
+
+.active-game{
+  color: #000;
+  font-size: 22;
+  line-height:29;
+  font-weight: bold;
+}
+
+.buy-lives{
+  color: #ffc107;
+  font-size: 14;
+  padding: 0 3;
+}
+
+.lives-number{
+  color:#ffffff;
+  padding: 0 3;
 }

@@ -87,7 +87,6 @@ export class DashboardComponent extends Dashboard implements OnInit {
 
     if (this.applicationSettings && this.applicationSettings.lives.enable) {
       if (this.account && this.account.lives > 0) {
-        console.log('mode::', mode);
         this.router.navigate(['/game-play/game-options', mode]);
       } else if (!this.account) {
         this.router.navigate(['/game-play/game-options', mode]);

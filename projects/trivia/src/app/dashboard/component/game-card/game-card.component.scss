@@ -186,34 +186,41 @@ hr {
 }
 
 .active-container {
-  border-width: 2;
-  border-color: #f1f2f2;
-  border-radius: 5;
-  padding: 10;
+  border-width: 1;
+  border-color:#e4e4e4;
+  border-radius: 12;
+  padding: 15;
+  margin: 5 10 4 10;
 }
 
 .cat-title {
-  color: #1e2c4d;
+  color: #3b5998;
   font-size: 18;
   font-weight: 500;
+  line-height: 19;
 }
 
 .active-game-timer {
   color: #949494;
   font-size: 17;
-  padding: 2 0 2 0;
+  // line-height: 15;
+  padding: 0 0 0 0;
 }
 
 .active-play-now {
-  color: #1e2c4d;
-  font-size: 19;
+  color: #3b5998;
+  font-size: 18;
   text-transform: uppercase;
   font-weight: 600;
+  line-height: 21;
+  padding-Top:8;
 }
 
 .active-waiting-opponent {
-  color: #949494;
-  font-size: 20;
+  color: #dddddd;
+  font-size: 18;
   text-transform: uppercase;
-  font-weight: 700;
+  font-weight: 600;
+  line-height: 21;
+  padding-Top:8;
 }
