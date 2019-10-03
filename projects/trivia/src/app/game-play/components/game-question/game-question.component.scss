@@ -173,6 +173,70 @@ Progress{
   padding: 12px 0px 19px 0px !important;
 }
 
+.mat-progress-spinner circle, .mat-spinner circle {
+  stroke: #3fb53f;
+}
+.md-button[disabled] {
+  color : #ffffff;
+  background-color: transparent;
+}
+
+.single-player-btn-container{
+  margin-top: 10px;
+  margin-bottom: 10px;
+  margin-right: 15px;
+}
+// .startgame{ font-family:'hindsemibold' ; text-transform: uppercase; box-shadow:0 2px 5px rgba(0,0,0,0.3); height: 42px; line-height: 42px; border-radius: 4px; display: inline-block; text-align: center; letter-spacing: 1px; width: 100%} 
+.continue-btn:disabled {
+  background: silver;
+}
+
+.loader,
+.loader:after {
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+}
+.loader {
+  margin: 9px auto;
+  font-size: 2px;
+  position: relative;
+  text-indent: -9999em;
+  border-top: 2px solid rgba(255, 255, 255, 0.2);
+  border-right: 2px solid rgba(255, 255, 255, 0.2);
+  border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+  border-left: 2px solid #ffffff;
+  -webkit-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-animation: load8 1.1s infinite linear;
+  animation: load8 1.1s infinite linear;
+  display: -webkit-inline-box;
+}
+
+.continue-btn.small{
+  margin-left: -35px;
+}
+@-webkit-keyframes load8 {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+@keyframes load8 {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
 @media (min-width: 1000px){
   main h2 span{ display: block;}
   .optionbox{width: 765px; margin: 60px auto 0;}  
