@@ -1,0 +1,75 @@
+@import '../../../../../../trivia/src/app-variables';
+
+.login-page {
+  background-color: $white;
+  padding: 20;
+
+  .section-1 {
+    margin-top: 15%;
+
+    .title-1 {
+      font-size: 36;
+      color: $title;
+      font-weight: bold;
+      margin-bottom: 20;
+    }
+
+    .title-2 {
+      font-size: 20;
+      color: $black-title;
+      margin-bottom: 30;
+    }
+
+    .logo-section {
+      margin-bottom: 15;
+    }
+
+    .logo-section>Image {
+      margin-right: 30;
+      width: 50;
+      height: 50;
+    }
+
+    .title-3 {
+      font-size: 20;
+      color: $black-title;
+      margin-bottom: 15;
+      margin-left: 10;
+    }
+
+    .title-4 {
+      font-size: 20;
+      color: $black-title;
+      margin-bottom: 15;
+    }
+  }
+
+  .section-2 {
+    margin-bottom: 20;
+
+    .text-field {      
+      border: 0;   
+      border-width: 1;
+      border-color: $border-color;
+      border-radius: 3;
+      margin-bottom:15;
+      padding:15 20;
+    }
+
+    .button-section {
+      background-color: $btn-color;
+      border-radius: 3;
+     
+
+      >Button {
+        background-color: $btn-color;
+        color: $white;    
+        font-size: 20;
+        font-weight: bold; 
+        padding:5;
+      }
+
+    }
+  }
+
+}
