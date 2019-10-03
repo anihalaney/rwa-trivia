@@ -50,22 +50,6 @@
                 </StackLayout>
             </AbsoluteLayout>
         </StackLayout>
-        <StackLayout *ngIf="!otherUserInfo" iosOverflowSafeArea="false">
-            <Image src="~/assets/images/no_user.png" marginLeft="2" verticalAlignment="center" marginLeft="2"
-                padding="20" borderRadius="50" height="64" width="64"></Image>
-        </StackLayout>
-    </GridLayout>
-    <GridLayout rows="*" columns="*,*,*" iosOverflowSafeArea="false">
-        <StackLayout row="0" col="0" class="hr-light m-10" height="2" iosOverflowSafeArea="false"></StackLayout>
-        <Label row="0" col="1" horizontalAlignment="center" text="{{categoryDict[game.gameOptions?.categoryIds[randomCategoryId]]?.categoryName?.charAt(0)?.toUpperCase()
-                + categoryDict[game.gameOptions?.categoryIds[randomCategoryId]]?.categoryName?.slice(1)}}"
-            textWrap="true" class="tagging"> </Label>
-        <StackLayout row="0" col="2" class="hr-light m-10" height="2" iosOverflowSafeArea="false"></StackLayout>
-    </GridLayout>
-    <GridLayout rows="*" columns="auto,auto,*" iosOverflowSafeArea="false">
-        <app-user-card [userId]="user.userId" [type]="userCardType.USER_IMAGE_NAME_WITH_SCORE"
-            [otherInfo]="{correctCount:game.stats[user.userId]?.score,questionRound:game.round,totalRound:totalRound}">
-        </app-user-card>
 
     </GridLayout>
 
@@ -101,6 +85,4 @@
     <Label *ngIf="(game.GameStatus === gameStatus.AVAILABLE_FOR_OPPONENT || game.GameStatus === gameStatus.WAITING_FOR_FRIEND_INVITATION_ACCEPTANCE || game.GameStatus === gameStatus.WAITING_FOR_RANDOM_PLAYER_INVITATION_ACCEPTANCE)"
         text="Waiting for Opponent" textWrap="true" class="active-waiting-opponent"></Label>
 
-        </StackLayout>
-    </GridLayout>
 </StackLayout>
