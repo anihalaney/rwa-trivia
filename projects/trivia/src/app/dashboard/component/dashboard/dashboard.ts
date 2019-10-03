@@ -234,6 +234,11 @@ export class Dashboard implements OnDestroy {
                 this.cd.markForCheck();
             }));
 
+        this.subscriptions.push(this.store.select(appState.dashboardState)
+            .pipe(select(s => s.userLatestPublishedQuestion)).subscribe((questions) => {
+                console.log('Latest Question', questions);
+            }));
+
     }
 
     displayMoreGames(): void {
