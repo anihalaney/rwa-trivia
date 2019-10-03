@@ -88,7 +88,7 @@ export class Dashboard implements OnDestroy {
         this.photoUrl = this.utils.getImageUrl(this.user, 70, 60, '70X60');
 
         this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.user),
-            filter(u => u !== null),
+            filter(u => { this.gamePlayBtnDisabled = false; return u !== null; }),
             map(user => {
                 this.ngZone.run(() => {
                     this.user = user;
