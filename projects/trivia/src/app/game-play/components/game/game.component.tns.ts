@@ -39,6 +39,7 @@ export class GameComponent extends Game implements OnInit, OnDestroy, AfterConte
 
   ngOnDestroy() {
     this.page.off('loaded');
+    this.renderView = false;
     clearTimeout(this.timeout);
   }
 }
