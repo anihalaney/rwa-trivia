@@ -20,10 +20,6 @@ export class GameMechanics {
                     const currentTurnPlayerId = game.nextTurnPlayerId;
                     game.decideNextTurn(playerQnA, userId);
 
-                    if (playerQnA.answerCorrect) {
-                        AccountService.setBits(userId);
-                    }
-
                     if (game.nextTurnPlayerId && game.nextTurnPlayerId.trim().length > 0 && currentTurnPlayerId !== game.nextTurnPlayerId) {
                         console.log('CALCULATE_SCORE----------->', currentTurnPlayerId);
                         console.log('CALCULATE_SCORE  game----------->', game);
