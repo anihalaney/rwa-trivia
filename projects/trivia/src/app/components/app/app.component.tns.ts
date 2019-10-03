@@ -45,6 +45,8 @@ export class AppComponent implements OnInit, OnDestroy {
   applicationSettings: ApplicationSettings;
   isDrawerOpenOrClosed = '';
   showBottomBar: Boolean = true;
+  currentRouteUrl: string;
+
   constructor(private store: Store<AppState>,
     private navigationService: NavigationService,
     private ngZone: NgZone,
@@ -113,6 +115,7 @@ export class AppComponent implements OnInit, OnDestroy {
       if (!(evt instanceof NavigationEnd)) {
         return;
       }
+      this.currentRouteUrl = evt.url;
       this.showBottomBar = this.hideBottomBarForSelectedRoutes(evt.url);
       switch (evt.urlAfterRedirects) {
         case '/login':
@@ -250,8 +253,12 @@ export class AppComponent implements OnInit, OnDestroy {
     android.off(AndroidApplication.activityBackPressedEvent);
     android.on(AndroidApplication.activityBackPressedEvent, (data: AndroidActivityBackPressedEventData) => {
       console.log(`can go back value${this.navigationService.canGoBack()}`);
-      data.cancel = this.navigationService.canGoBack();
-      this.ngZone.run(() => this.navigationService.back());
+      if (this.currentRouteUrl === '/dashboard') {
+        data.cancel = false;
+      } else {
+        data.cancel = true;
+        this.ngZone.run(() => this.navigationService.back());
+      }
     }, this);
   }
 }

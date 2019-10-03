@@ -7,6 +7,7 @@ import { GameService } from './game.service';
 import { QuestionService } from './question.service';
 import { UserService } from './user.service';
 import { SystemStatsAtomic } from '../model';
+import { AccountService } from './account.service';
 
 export class StatsService {
 
@@ -137,7 +138,7 @@ export class StatsService {
         }
     }
 
-    static async calculateQuestionStat(beforeEventData, afterEventData) {
+    static async calculateQuestionAndAccountStat(beforeEventData, afterEventData) {
         // update timestamp in user last played game with
         if (afterEventData.playerQnAs  &&
             afterEventData.playerQnAs.length > 0 &&
@@ -160,6 +161,9 @@ export class StatsService {
                             afterEventData.playerQnAs[afterEventData.playerQnAs.length - 1].questionId,
                             'UPDATED',
                             afterEventData.playerQnAs[afterEventData.playerQnAs.length - 1].answerCorrect);
+                            if (afterEventData.playerQnAs[afterEventData.playerQnAs.length - 1].answerCorrect) {
+                                AccountService.setBits(afterEventData.playerQnAs[afterEventData.playerQnAs.length - 1].playerId);
+                            }
                 }
 
                 // update timestamp in user last played game with
