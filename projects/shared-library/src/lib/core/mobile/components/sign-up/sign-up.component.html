@@ -1,0 +1,68 @@
+<ScrollView>
+    <GridLayout rows="*" columns="*">
+        <!--SignUp Form-->
+        <GridLayout row="0" rows="auto,auto" columns="*" class="sign-up">
+            <GridLayout row="0" rows="*,*" columns="*" class="section-1">
+                <Label row="0"  col="0"  text="Sing Up" textWrap="true" class="title-1"></Label>
+                <Label row="1"  col="0"  text="using phone" textWrap="true" class="title-2"></Label>
+            </GridLayout>
+            <GridLayout row="1"  col="0" rows="auto,auto,auto,auto,auto,auto,auto" columns="*" class="section-2">
+                <TextField row="0" col="0" #textField hint="Your phone no." returnKeyType="next" class="text-field">
+                </TextField>
+                <TextField row="1" col="0" #textField hint="Your name" returnKeyType="next" class="text-field">
+                </TextField>
+                <TextField row="2" col="0" #textField hint="Set password" returnKeyType="next" class="text-field">
+                </TextField>
+                <TextField row="3" col="0" #textField hint="Confirm password" returnKeyType="next" class="text-field">
+                </TextField>
+                <TextField row="4" col="0" #textField hint="Your email" returnKeyType="next" class="text-field">
+                </TextField>
+                <GridLayout row="5" col="0" rows="*" columns="auto,*" class="terms-text">
+                    <CheckBox col="0" #elem [checked]="'false'" class="checkbox" boxType="square"
+                        android:fillColor="rgb(59,89,152)" ios:fontSize="20" ios:tintColor="rgb(59,89,152)"
+                        ios:onTintColor="white" ios:onCheckColor="white" ios:fillColor="rgb(59,89,152)"></CheckBox>
+                    <Label col="1" text="I agree terms and condition" textWrap="true"></Label>
+                </GridLayout>
+                <StackLayout row="6" col="0" class="button-section">
+                    <Button text="Sign up"></Button>
+                </StackLayout>
+            </GridLayout>
+        </GridLayout>
+        <!--End SignUp Form-->
+        <!--Verify Phone no-->
+        <GridLayout row="0" rows="auto,auto,auto" columns="*" class="verify-phone">
+            <GridLayout row="0" rows="*,*" columns="*" class="section-1">
+                <Label row="0"  col="0"  text="Verify phone number" textWrap="true" class="title-1"></Label>
+                <Label row="1"  col="0"  text="one time password has been send to below phone number" textWrap="true"
+                    class="title-2"></Label>
+            </GridLayout>
+            <GridLayout row="1"  col="0" rows="auto,auto" columns="*" class="section-2">
+                <GridLayout row="0" col="0" rows="*" columns="*">
+                    <TextField row="0" col="0" #textField hint="Your phone no." returnKeyType="next" class="text-field">
+                    </TextField> 
+                    <Image row="0" col="0" src="~/assets/images/pencil.png" class="icon"></Image>
+                </GridLayout>
+                <GridLayout row="1" col="0" rows="*" columns="*,*" class="terms-text">
+                    <Label col="0" text="Enter your OTP here" textWrap="true" class="text-1"></Label>
+                    <Label col="1" text="RESEND" textWrap="true" class="text-2"></Label>
+                </GridLayout>
+            </GridLayout>
+            <GridLayout row="2"  col="0" rows="*,*" columns="*" class="section-3">
+                <GridLayout rows="*" columns="*,*,*,*" class="text-field-section">
+                    <TextField row="0" col="0" #textField returnKeyType="next">
+                    </TextField>
+                    <TextField row="0" col="1" #textField returnKeyType="next">
+                    </TextField>
+                    <TextField row="0" col="2" #textField returnKeyType="next">
+                    </TextField>
+                    <TextField row="0" col="3" #textField returnKeyType="next">
+                    </TextField>
+                </GridLayout>
+                <StackLayout row="1" col="0" class="button-section">
+                    <Button text="Verify"></Button>
+                </StackLayout>
+            </GridLayout>
+        </GridLayout>
+        <!--Verify Phone no-->
+    </GridLayout>
+</ScrollView>

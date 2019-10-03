@@ -1,30 +1,31 @@
 <ScrollView>
     <GridLayout rows="auto,auto,*" columns="*" class="login-page">
         <GridLayout row="0" rows="*,*,*,*,*" columns="*" class="section-1">
-          <Label row="0"  col="0"  text="Sign Up" textWrap="true" class="title-1"></Label>
+          <Label row="0"  col="0"  text="Sing In" textWrap="true" class="title-1"></Label>
           <Label row="1"  col="0"  text="using social" textWrap="true" class="title-2"></Label>
           <GridLayout row="2"  col="0" rows="*" columns="auto,auto,auto,auto,auto" class="logo-section">
             <Image col="1" src="~/assets/images/fb-icon.jpg"></Image>
             <Image col="2" src="~/assets/images/linkedin_icon.png"></Image>
-            <Image col="3" src="~/assets/images/google_icon.png"></Image>
-            <Image col="4" src="~/assets/images/google_icon.png"></Image>
+            <Image col="3" src="~/assets/images/google_icon.png"></Image>          
+            <StackLayout col="4" class="phone-logo">
+                <Label text="&#xf095;" textWrap="true" class="fas icon" ></Label>                
+            </StackLayout>
           </GridLayout>
           <Label row="3"  col="0"  text="OR" textWrap="true" class="title-3"></Label>
           <Label row="4"  col="0"   text="using email/phone" textWrap="true" class="title-4"></Label>
         </GridLayout>
-        <GridLayout row="1"  col="0" rows="auto,auto" columns="*" class="section-2">
-          <!-- <StackLayout row="0" col="0" class="text-field-section"> -->
-            <TextField row="0" col="0" #textField hint="Your Email or Phone no." returnKeyType="next" class="text-field" ></TextField>
-          <!-- </StackLayout> -->
-          <StackLayout row="1" col="0" class="button-section">
-            <Button text="Sign Up"></Button>
+        <GridLayout row="1"  col="0" rows="auto,auto,auto" columns="*" class="section-2">          
+            <TextField row="0" col="0" #textField hint="Your email or phone no." returnKeyType="next" class="text-field" ></TextField> 
+            <TextField row="1" col="0" #textField hint="Password" returnKeyType="next" class="text-field" ></TextField>          
+          <StackLayout row="2" col="0" class="button-section">
+            <Button text="Sign in"></Button>
           </StackLayout>
         </GridLayout>
         <GridLayout row="2"  col="0" rows="*,*,*" columns="*" class="section-3">
-          <Label row="0" col="0" text="FORGOT PASSWORD?" textWrap="true"></Label>
-          <Label row="1" col="0" text="Not a member yet?" textWrap="true"></Label>
+          <Label row="0" col="0" text="FORGOT PASSWORD?" textWrap="true" class="text-1"></Label>
+          <Label row="1" col="0" text="Not a member yet?" textWrap="true" class="text-2"></Label>
           <StackLayout row="2" col="0" class="button-section">
-            <Button text="Sign In"></Button>
+            <Button text="Sign up"></Button>
           </StackLayout>
         </GridLayout>
       </GridLayout>

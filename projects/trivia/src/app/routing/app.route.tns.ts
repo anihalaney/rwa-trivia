@@ -11,7 +11,7 @@ import { RecentGamesComponent } from 'shared-library/shared/components/recent-ga
 
 export const routes: Routes = [
 
-    { path: '', redirectTo: 'login', pathMatch: 'full' },
+    { path: '', redirectTo: 'sign-up', pathMatch: 'full' },
     {
         path: 'dashboard',
         loadChildren: './../dashboard/dashboard.module#DashboardModule',

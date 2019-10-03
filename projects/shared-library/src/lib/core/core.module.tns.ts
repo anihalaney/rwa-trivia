@@ -7,6 +7,7 @@ import { AuthenticationProvider, AuthInterceptor } from './auth';
 import { FirebaseAuthService } from './auth/firebase-auth.service';
 import { TNSFirebaseAuthService } from './auth/mobile/firebase-auth.service';
 import { LoginComponent } from './components';
+import { SignUpComponent } from './mobile/components';
 import { DbService } from './db-service';
 import { FirebaseService } from './db-service/firebase.service';
 import { TNSDbService } from './db-service/mobile/db.service';
@@ -28,7 +29,8 @@ import { effects } from './store/effects';
 
 @NgModule({
   declarations: [
-    LoginComponent
+    LoginComponent,
+    SignUpComponent
   ],
   imports: [
 

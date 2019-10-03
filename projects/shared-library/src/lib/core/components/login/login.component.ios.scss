@@ -5,70 +5,115 @@
   padding: 20;
 
   .section-1 {
-    margin-top: 15%;
+    margin-top: 173;
 
     .title-1 {
       font-size: 36;
       color: $title;
       font-weight: bold;
-      margin-bottom: 20;
+      margin-bottom: 22;
     }
 
     .title-2 {
       font-size: 20;
       color: $black-title;
-      margin-bottom: 30;
+      margin-bottom: 27;
     }
 
     .logo-section {
-      margin-bottom: 15;
+      margin-bottom: 10;
+
+      .phone-logo {
+        width: 48;
+        height: 48;
+        background-color: $btn-color;
+        border-radius: 50%;
+        color: $white;
+        horizontal-align : center;
+        vertical-align : center;
+      }
+
+      .icon{
+        margin-left:30%;
+        font-size: 20;
+      }
     }
 
     .logo-section>Image {
       margin-right: 30;
       width: 50;
-      height: 50;
+      height: 50;  
     }
 
     .title-3 {
       font-size: 20;
+      font-weight: bold;
       color: $black-title;
-      margin-bottom: 15;
-      margin-left: 10;
+      margin-bottom: 10;
     }
 
     .title-4 {
       font-size: 20;
       color: $black-title;
-      margin-bottom: 15;
+      margin-bottom: 17;
     }
   }
 
   .section-2 {
-    margin-bottom: 20;
+    margin-bottom: 38;
 
-    .text-field {      
-      border: 0;   
+    .text-field {
+      border: 0;
       border-width: 1;
       border-color: $border-color;
       border-radius: 3;
-      margin-bottom:15;
-      padding:15 20;
+      margin-bottom: 20;
+      padding: 15 20;
+      font-size: 24;
     }
 
 
     .button-section {
       background-color: $btn-color;
       border-radius: 3;
-      padding:5;
+      padding: 10;
 
       >Button {
         background-color: $btn-color;
         color: $white;
         font-size: 20;
-        font-weight: bold;
       }
 
+    }
+  }
+
+  .section-3 {
+
+    .text-1 {
+      color: $btn-color;
+      font-size: 18;
+      margin-bottom: 38;
+    }
+
+    .text-2 {
+      font-size: 20;
+      color: $black-title;
+      margin-bottom: 16;
+    }
+
+
+    .button-section {
+      background-color: $white;
+      border-radius: 3;
+      border-color: $btn-color;
+      border-width: 1.5;
+      padding: 10;
+
+      >Button {
+        background-color: $white;
+        color: $btn-color;
+        font-size: 20;       
+      }
     }
   }
 }
