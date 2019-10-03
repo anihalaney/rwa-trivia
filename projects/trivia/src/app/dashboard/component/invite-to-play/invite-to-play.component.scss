@@ -50,3 +50,31 @@
         justify-content: space-between;
     }
 }
+
+.buddy-icon-container{
+     transform: rotate(18deg);
+     -ms-transform: rotate(20deg); /* IE 9 */
+  -webkit-transform: rotate(20deg); 
+}
+
+.buddy-icon{
+    transform: rotate(-18deg);
+    -ms-transform: rotate(-18deg); /* IE 9 */
+    -webkit-transform: rotate(-18deg); 
+    // top:30;
+    position: absolute;
+}
+
+.mobile {
+    .invite-main-title{
+        color: #212121;
+        font-size: 18;
+
+    }
+    .invite-sub-title{
+        color:#a5a5a5;
+        font-size: 14;
+        padding:0 0 15 10;
+    }
+    
+}

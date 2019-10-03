@@ -75,9 +75,9 @@ export class GameCardComponent implements OnInit, OnChanges, OnDestroy {
       this.user = s.user;
       this.myTurn = this.game.nextTurnPlayerId === this.user.userId;
       this.randomCategoryId = Math.floor(Math.random() * this.game.gameOptions.categoryIds.length);
-      // if (this.myTurn) {
+      if (this.myTurn) {
         this.updateRemainingTime();
-      // }
+      }
       this.cd.markForCheck();
     }));
   }
@@ -101,7 +101,7 @@ export class GameCardComponent implements OnInit, OnChanges, OnDestroy {
 
   updateRemainingTime() {
     this.timerSub = timer(1000, 1000).subscribe(t => {
-      // if (this.game.nextTurnPlayerId === this.user.userId) {
+      if (this.game.nextTurnPlayerId === this.user.userId) {
         const diff = this.utils.getTimeDifference(this.game.turnAt);
         const hour = Math.floor(diff / (CalenderConstants.HOURS_CALCULATIONS));
         const minute = Math.floor(diff % (CalenderConstants.HOURS_CALCULATIONS) / (CalenderConstants.MINUTE_CALCULATIONS));
@@ -114,7 +114,7 @@ export class GameCardComponent implements OnInit, OnChanges, OnDestroy {
           this.remainingHours = this.utils.convertIntoDoubleDigit(32 - hour);
           this.remainingMinutes = this.utils.convertIntoDoubleDigit(0);
         }
-      // }
+      }
       this.cd.markForCheck();
     });
     this.subscriptions.push(this.timerSub);

@@ -56,8 +56,7 @@
     <StackLayout orientation="horizontal" *ngIf="(game.gameOptions.playerMode == PlayerMode.Opponent && game.playerIds.length > 1) ||
     (game.gameOptions.playerMode == PlayerMode.Single)">
 
-        <StackLayout orientation="horizontal" padding="7 5 0 0" [visibility]="myTurn ? 'visible' :  
-        (game.GameStatus === gameStatus.AVAILABLE_FOR_OPPONENT || game.GameStatus === gameStatus.WAITING_FOR_FRIEND_INVITATION_ACCEPTANCE || game.GameStatus === gameStatus.WAITING_FOR_RANDOM_PLAYER_INVITATION_ACCEPTANCE) ? 'hidden' : 'visible' ">
+        <StackLayout orientation="horizontal" padding="7 5 0 0" [visibility]="myTurn ? 'visible' : 'hidden' ">
             <Label class="fa active-game-timer" text="&#xf017; {{remainingHours }}:{{remainingMinutes}}" textWrap="true"
                 padding="0 5 3 0" android:paddingTop=""></Label>
         </StackLayout>

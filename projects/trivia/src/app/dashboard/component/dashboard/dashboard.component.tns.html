@@ -41,13 +41,13 @@
                 <FlexboxLayout col="0" *ngIf="account && user" iosOverflowSafeArea="false">
                     <Image src="~/assets/images/mobile/bits.png" row="0" col="1" width="35" height="35"></Image>
                     <Label alignSelf="center" alignContent="center" class="Roboto-Medium" [text]="account.bits || 0"
-                        textWrap="true" paddingLeft="3"></Label>
+                        textWrap="true" paddingLeft="3" color="#212121" fontSize="18"></Label>
 
                 </FlexboxLayout>
                 <FlexboxLayout col="1" *ngIf="account && user" paddingLeft="30">
                     <Image src="~/assets/images/mobile/bytes.png" row="0" col="1" width="35" height="35"></Image>
                     <Label alignSelf="center" class="Roboto-Medium" [text]="account.bytes || 0" textWrap="true"
-                        paddingLeft="3"></Label>
+                        paddingLeft="3" color="#212121" fontSize="18"></Label>
                 </FlexboxLayout>
             </GridLayout>
 

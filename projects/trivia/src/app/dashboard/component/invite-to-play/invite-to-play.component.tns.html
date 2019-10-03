@@ -1,17 +1,36 @@
-<StackLayout  marginTop="10" marginBottom="10">
-    <Label padding="10" text="Bitwiser is more fun with your best buddies" textWrap="true" class="invite-main-title" ></Label>
-    <Label   *ngIf="uFriends && uFriends.length > 0" padding="0 10 20 10" text="Invite your friends to play" class="invite-sub-title" ></Label>
-    <GridLayout   *ngIf="uFriends && uFriends.length > 0" rows="*" columns="*,*,*,*,*"   iosOverflowSafeArea="false">
-        <StackLayout (rippleTap)="startNewGame('friend',frienduser?.userId )" stlRippleEffect *ngFor="let frienduser of uFriends| slice:0:5; let i =index" row="0" col="{{i}}">
-            <app-user-card   [userId]="frienduser?.userId" [type]="userCardType.USER_IMAGE_WITH_ONLINE_STATUS">
+<StackLayout margin="15" class="mobile">
+    <!-- <StackLayout orientation="horizontal">
+        <AbsoluteLayout height="50" width="50" backgroundColor="#f9f9f9" borderRadius="8" class="buddy-icon-container">
+            <Image src="~/assets/images/mobile/user-blue.png" top="15" right="15" left="10" width="18" height="18"
+                class="buddy-icon"></Image>
+            <Image src="~/assets/images/mobile/user-blue.png" top="15" right="15" left="25" width="15" height="15"
+                class="buddy-icon"></Image>
+        </AbsoluteLayout>
+        <Label padding="10" text="Bitwiser is more fun with your best buddies" textWrap="true" class="invite-main-title"></Label>
+    </StackLayout> -->
+
+    <GridLayout rows="*, *" columns="auto, *">
+        <AbsoluteLayout row="0" col="0" height="50" width="50" backgroundColor="#f9f9f9" borderRadius="8" class="buddy-icon-container">
+            <Image src="~/assets/images/mobile/user-blue.png" top="15" right="15" left="10" width="18" height="18"
+                class="buddy-icon"></Image>
+            <Image src="~/assets/images/mobile/user-blue.png" top="15" right="15" left="25" width="15" height="15"
+                class="buddy-icon"></Image>
+        </AbsoluteLayout>
+        <Label row="0" col="1" padding="10" text="Bitwiser is more fun with your best buddies" class="invite-main-title"
+            textWrap="true"></Label>
+        <Label *ngIf="uFriends && uFriends.length > 0" class="invite-sub-title" text="Invite your friend to play along with you"
+            row="1" col="1" textWrap="true"></Label>
+    </GridLayout>
+
+    <GridLayout *ngIf="uFriends && uFriends.length > 0" rows="*" columns="*,*,*,*,*" iosOverflowSafeArea="false">
+        <StackLayout (rippleTap)="startNewGame('friend',frienduser?.userId )" stlRippleEffect *ngFor="let frienduser of uFriends| slice:0:5; let i =index"
+            row="0" col="{{i}}">
+            <app-user-card [userId]="frienduser?.userId" [type]="userCardType.USER_IMAGE_WITH_ONLINE_STATUS">
             </app-user-card>
         </StackLayout>
-        <!-- <StackLayout row="0" col="5"  verticalAlignment="middle">
-                <Label   text="&#xf054;" class="fa" fontSize="20" ></Label>
-        </StackLayout> -->
     </GridLayout>
     <FlexboxLayout margin="10">
-            <Label *ngIf="uFriends && uFriends.length > 0" marginRight="10" text="OR" class="invite-sub-title" ></Label>
-            <Label (rippleTap)="startNewGame('random')" stlRippleEffect text="Find a friend for me  >" class="find-friend"></Label>
+        <Label *ngIf="uFriends && uFriends.length > 0" marginRight="10" text="OR" class="invite-sub-title"></Label>
+        <Label (rippleTap)="startNewGame('random')" stlRippleEffect text="Find a friend for me  >" class="find-friend"></Label>
     </FlexboxLayout>
 </StackLayout>
