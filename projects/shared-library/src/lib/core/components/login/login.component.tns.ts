@@ -104,7 +104,7 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
 
     } catch (errorMessage) {
       console.error(errorMessage);
-      this.showMessage('error', errorMessage);
+      this.utils.showMessage('error', errorMessage);
       this.cd.markForCheck();
     }
   }
@@ -214,7 +214,7 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
           // Forgot Password
           user = await this.firebaseAuthService.sendPasswordResetEmail(this.loginForm.value.email);
           this.notificationMsg = `email sent to ${this.loginForm.value.email}`;
-          this.showMessage('success', this.notificationMsg);
+          this.utils.showMessage('success', this.notificationMsg);
           this.loader = false;
           this.errorStatus = false;
           this.notificationLogs.push(this.loginForm.get('email').value);
@@ -227,19 +227,19 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
       switch (this.mode) {
         case 0:
           const singInError = error.message.split(':');
-          this.showMessage('error', singInError[1] || error.message);
+          this.utils.showMessage('error', singInError[1] || error.message);
           break;
         case 1:
           if (user && !user.emailVerified) {
             const verificationError = error.split(':');
-            this.showMessage('error', verificationError[1] || error);
+            this.utils.showMessage('error', verificationError[1] || error);
           } else {
             const singUpError = error.split(':');
-            this.showMessage('error', singUpError[1] || error);
+            this.utils.showMessage('error', singUpError[1] || error);
           }
           break;
         case 2:
-          this.showMessage('error', error);
+          this.utils.showMessage('error', error);
           break;
       }
       this.cd.markForCheck();
@@ -262,7 +262,7 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
       }
     } catch (error) {
       this.loader = false;
-      this.showMessage('error', error);
+      this.utils.showMessage('error', error);
       this.cd.markForCheck();
     }
 
@@ -278,7 +278,7 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
       this.redirectTo();
     } catch (error) {
       this.loader = false;
-      this.showMessage('error', error);
+      this.utils.showMessage('error', error);
       this.cd.markForCheck();
     }
   }
@@ -338,6 +338,7 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
       text: ''
     };
   }
+
 
   ngOnDestroy() {
     if (isAndroid) {
