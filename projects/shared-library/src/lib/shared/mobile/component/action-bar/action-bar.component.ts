@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Component, EventEmitter, Input, Output, OnDestroy, ChangeDetectorRef, OnInit } from '@angular/core';
 import * as app from 'tns-core-modules/application';
 import { RouterExtensions } from 'nativescript-angular/router';
 import { RadSideDrawer } from 'nativescript-ui-sidedrawer';
@@ -18,7 +18,7 @@ import { NavigationService } from 'shared-library/core/services/mobile';
 })
 
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
-export class ActionBarComponent implements OnDestroy {
+export class ActionBarComponent implements OnDestroy, OnInit {
 
     user: User;
     subscriptions = [];
@@ -39,11 +39,13 @@ export class ActionBarComponent implements OnDestroy {
         public utils: Utils,
         private navigationService: NavigationService
     ) {
-        this.subscriptions.push(store.select(coreState).pipe(select(s => s.user)).subscribe(user => {
+    }
+
+    ngOnInit(): void {
+        this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.user)).subscribe(user => {
             this.user = user;
             this.photoUrl = this.utils.getImageUrl(user, 70, 60, '70X60');
         }));
-
 
     }
 

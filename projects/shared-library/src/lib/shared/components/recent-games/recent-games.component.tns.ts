@@ -48,5 +48,6 @@ export class RecentGamesComponent extends RecentGames implements OnInit, OnDestr
 
   ngOnDestroy(): void {
     this.page.off('loaded');
+    this.renderView = false;
   }
 }
