@@ -60,7 +60,6 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
   }
   ngOnInit() {
 
-
     this.userDict$ = this.store.select(appState.coreState).pipe(select(s => s.userDict));
     this.subscriptions.push(this.userDict$.subscribe(userDict => {
       this.userDict = userDict;
@@ -119,6 +118,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     this.filteredCategories = [];
     this.destroy();
     this.page.off('loaded');
+    this.renderView = false;
   }
 
   addCustomTag() {
