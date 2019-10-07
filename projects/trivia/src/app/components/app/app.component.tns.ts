@@ -130,7 +130,7 @@ export class AppComponent implements OnInit, OnDestroy {
         case '/dashboard':
           this.utils.setScreenNameInFirebaseAnalytics(FirebaseScreenNameConstants.DASHBOARD);
           break;
-        case '/stats/leaderboard/':
+        case '/dashboard/leaderboard/':
           this.utils.setScreenNameInFirebaseAnalytics(FirebaseScreenNameConstants.LEADERBOARD);
           break;
         case '/game-play':
