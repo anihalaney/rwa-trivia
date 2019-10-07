@@ -48,6 +48,7 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
   dialogCloseSubject = new Subject();
   dialogCloseObservable = this.dialogCloseSubject.asObservable();
 
+
   constructor(
     private modalDialogService: ModalDialogService,
     public fb: FormBuilder,
@@ -179,8 +180,15 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
   async onSubmit() {
     this.hideKeyboard();
     if (!this.loginForm.valid) {
+      this.utils.showMessage('error', 'Please Fill the details');
       return;
     }
+
+    if (!this.loginForm.value.tnc && this.mode === 1) {
+      this.utils.showMessage('error', 'Please accept terms & conditions');
+      return;
+    }
+
     this.loader = true;
     this.removeMessage();
     let user;

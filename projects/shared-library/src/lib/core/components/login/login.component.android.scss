@@ -29,12 +29,12 @@
         background-color: $btn-color;
         border-radius: 50%;
         color: $white;
-        horizontal-align : center;
-        vertical-align : center;
+        horizontal-align: center;
+        vertical-align: center;
       }
 
-      .icon{
-        margin-left:30%;
+      .icon {
+        margin-left: 30%;
         font-size: 20;
       }
     }
@@ -129,7 +129,7 @@
 
 
   .section-1 {
-    margin-top: 83;
+    margin-top: 10;
 
     .title-1 {
       font-size: 36;
@@ -149,7 +149,7 @@
   .section-2 {
     margin-bottom: 38;
 
-    .text-field {
+    .text-field,.flag-section {
       border: 0;
       border-width: 1;
       border-color: $border-color;
@@ -157,7 +157,26 @@
       margin-bottom: 20;
       padding: 15 20;
       font-size: 24;
+      color: $black;
+
+      >Image{
+        width:30;
+        height:30;
+      }
     }
+
+    .icon {
+      horizontal-align: right;
+      width: 20;
+      height: 20;
+      margin-right: 10;
+      margin-bottom: 20;
+    }
+
+    .input-error {
+      border-color: $red-dark;
+    }
+
 
     .terms-text {
       color: $btn-color;
@@ -197,7 +216,7 @@
 .verify-phone {
   background-color: $white;
   padding: 20;
-  margin-top: 322;
+  margin-top: 272;
   border-radius: 20;
   border-width: 1;
   border-color: $white;
@@ -223,7 +242,7 @@
   .section-2 {
     margin-bottom: 26;
 
-    .text-field {
+    .text-field,.flag-section {
       border: 0;
       border-width: 1;
       border-color: $border-color;
@@ -231,16 +250,24 @@
       margin-bottom: 20;
       padding: 15 20;
       font-size: 24;
-      margin-left: 5%;
-      margin-right: 5%;
+      color: $black;
+
+      >Image{
+        width:30;
+        height:30;
+      }
     }
 
     .icon {
       horizontal-align: right;
       width: 20;
       height: 20;
-      margin-right: 40;
-      margin-bottom: 15;
+      margin-right: 10;
+      margin-bottom: 20;
+    }
+
+    .input-error {
+      border-color: $red-dark;
     }
 
     .terms-text {
@@ -309,4 +336,11 @@
   }
 
 
+}
+
+.back-button{
+  width:30;
+  height:30;
+  horizontal-align: left;
+  margin: 15;
 }

@@ -26,9 +26,8 @@ export class Login {
 
     this.loginForm = this.fb.group({
       mode: [0],
-      name: [''],
-      phone: [''],
       tnc: [false],
+      phone: [''],
       email: new FormControl('', { validators: [Validators.required, Validators.pattern(this.email_regexp)] }),
       password: new FormControl('', { validators: [Validators.required, Validators.minLength(6)] }),
       confirmPassword: new FormControl('')
@@ -42,11 +41,14 @@ export class Login {
           // tslint:disable-next-line:max-line-length
           this.loginForm.get('confirmPassword').setValidators(Validators.compose([Validators.required, Validators.minLength(6)]));
           this.loginForm.get('confirmPassword').updateValueAndValidity();
+          this.loginForm.get('tnc').setValidators(Validators.required);
+          this.loginForm.get('tnc').updateValueAndValidity();
           break;
         // no break - fall thru
         case 0:
           // Login or Sign up
           this.loginForm.get('confirmPassword').clearValidators();
+          this.loginForm.get('tnc').clearValidators();
           this.loginForm.get('password').setValidators(Validators.compose([Validators.required, Validators.minLength(6)]));
           this.loginForm.get('password').updateValueAndValidity();
           this.loginForm.get('confirmPassword').updateValueAndValidity();
@@ -55,8 +57,10 @@ export class Login {
           // Forgot Password
           this.loginForm.get('password').clearValidators();
           this.loginForm.get('confirmPassword').clearValidators();
+          this.loginForm.get('tnc').clearValidators();
           this.loginForm.get('confirmPassword').updateValueAndValidity();
           this.loginForm.get('password').updateValueAndValidity();
+          this.loginForm.get('tnc').updateValueAndValidity();
 
       }
       this.loginForm.get('password').updateValueAndValidity();

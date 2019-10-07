@@ -62,6 +62,7 @@
   .section-2 {
     margin-bottom: 38;
 
+
     .text-field {
       border: 0;
       border-width: 1;
@@ -123,7 +124,7 @@
   padding: 20;
 
   .section-1 {
-    margin-top: 83;
+    margin-top: 10;
 
     .title-1 {
       font-size: 36;
@@ -180,6 +181,7 @@
   .section-2 {
     margin-bottom: 38;
 
+
     .text-field {
       border: 0;
       border-width: 1;
@@ -217,7 +219,7 @@
 
 }
 
-.hide-background {
+.hide-layout {
   background-color: $gray-title;
   opacity: 0.7;
 }
@@ -226,7 +228,7 @@
 .verify-phone {
   background-color: $white;
   padding: 20;
-  margin-top: 322;
+  margin-top: 262;
   border-radius: 20;
   border-width:1;
   border-color: $white;
@@ -252,7 +254,8 @@
   .section-2 {
     margin-bottom: 26;
 
-    .text-field {
+
+    .text-field, .flag-section {
       border: 0;
       border-width: 1;
       border-color: $border-color;
@@ -260,16 +263,19 @@
       margin-bottom: 20;
       padding: 15 20;
       font-size: 24;
-      margin-left: 5%;
-      margin-right: 5%;
+      color: $black;
     }
 
     .icon{
       horizontal-align: right;
       width:20;
       height: 20;
-      margin-right:40;
-      margin-bottom:15;
+      margin-right:10;
+      margin-bottom:20;
+    }
+
+    .input-error{
+      border-color: $red-dark;
     }
 
 
@@ -339,4 +345,11 @@
   }
 
 
+}
+
+.back-button{
+  width:30;
+  height:30;
+  horizontal-align: left;
+  margin: 15;
 }
