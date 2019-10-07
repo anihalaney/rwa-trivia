@@ -54,15 +54,17 @@
                                 [ngStyle]="{color: (activeMenu === 'login/signup' ? '#077ad6' : '#000')}"
                                 android:fontSize="18"></Label>
                         </StackLayout>
-                        <StackLayout *ngIf="authProvider.isAuthenticated" class="padding-label" stlRippleEffect
+                        <FlexboxLayout [isUserInteractionEnabled]="!loader" *ngIf="authProvider.isAuthenticated" class="padding-label" stlRippleEffect
                             stlBackgroundColor="#10347f" stlBackgroundColorAfter="#e2e2e2" (rippleTap)="logout()">
                             <Label text="Logout"
                                 [ngStyle]="{color: (activeMenu === 'login/signup' ? '#077ad6' : '#000')}"
                                 android:fontSize="18"></Label>
-                        </StackLayout>
+                                <ActivityIndicator *ngIf="loader" color="gray" ios:width="25" ios:height="25" android:width="25"
+                android:height="25" busy="true" class="activity-indicator"></ActivityIndicator>
+                          </FlexboxLayout>
                     </FlexboxLayout>
                 </ScrollView>
             </StackLayout>
-        </GridLayout>
-    </FlexboxLayout>
+    </GridLayout>
+  </FlexboxLayout>
 </StackLayout>

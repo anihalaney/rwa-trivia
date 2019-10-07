@@ -1,6 +1,6 @@
 import {
-  Component, OnDestroy, ViewChild, Input, Output, EventEmitter, OnChanges,
-  ViewChildren, QueryList, ElementRef, ChangeDetectionStrategy, ChangeDetectorRef, ViewContainerRef, AfterViewInit, OnInit
+  Component, OnDestroy, ViewChild, Input, Output, EventEmitter, OnChanges, NgZone,
+  ViewChildren, QueryList, ElementRef, ChangeDetectionStrategy, ChangeDetectorRef, ViewContainerRef, AfterViewInit, OnInit, ɵConsole
 } from '@angular/core';
 import { FormGroup, FormBuilder, FormArray, Validators } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
@@ -55,6 +55,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
   imagePath: string;
 
   demoQ: Question = new Question;
+  renderView = false;
 
 
   public imageTaken: ImageAsset;
@@ -94,7 +95,8 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
     private page: Page, private cd: ChangeDetectorRef,
     public questionService: QuestionService,
     private modal: ModalDialogService,
-    private vcRef: ViewContainerRef) {
+    private vcRef: ViewContainerRef,
+    private ngZone: NgZone) {
 
     super(fb, store, utils, questionAction);
     requestPermissions();
@@ -103,6 +105,11 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
     this.actionBarTxt = 'Add_Question';
     this.initDataItems();
     this.question = new Question();
+
+    if (isIOS) {
+      this.iqKeyboard = IQKeyboardManager.sharedManager();
+      this.iqKeyboard.shouldResignOnTouchOutside = true;
+    }
     this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
       if (appSettings) {
         this.applicationSettings = appSettings[0];
@@ -114,12 +121,19 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
       this.cd.markForCheck();
     })
     );
+  }
+
+  ngOnInit(): void {
+    this.renderView = true;
+    this.page.on('navigatedFrom', () => this.ngZone.run(() => {
+        this.ngOnDestroy();
+    }));
     const questionControl = this.questionForm.get('questionText');
 
     this.subscriptions.push(questionControl.valueChanges.pipe(debounceTime(500)).subscribe(v => this.computeAutoTags()));
     this.subscriptions.push(this.answers.valueChanges.pipe(debounceTime(500)).subscribe(v => this.computeAutoTags()));
 
-    this.subscriptions.push(store.select(appState.coreState).pipe(select(s => s.questionSaveStatus)).subscribe((status) => {
+    this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.questionSaveStatus)).subscribe((status) => {
       if (status === 'SUCCESS') {
         this.store.dispatch(this.questionAction.resetQuestionSuccess());
         this.utils.showMessage('success', 'Question saved!');
@@ -152,14 +166,6 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
     this.subscriptions.push(this.questionForm.get('answers').valueChanges.subscribe((changes) => {
       this.cd.markForCheck();
     }));
-
-    if (isIOS) {
-      this.iqKeyboard = IQKeyboardManager.sharedManager();
-      this.iqKeyboard.shouldResignOnTouchOutside = true;
-    }
-  }
-
-  ngOnInit(): void {
     if (this.editQuestion) {
       const maxTimeIndex = this.playMaxTime.findIndex(maxTime => {
         return maxTime === this.editQuestion.maxTime;
@@ -168,8 +174,8 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
         this.selectedMaxTimeIndex = this.editQuestion.maxTime;
       }
     }
-
   }
+
   ngAfterViewInit() {
   }
 
@@ -264,6 +270,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
   }
 
   ngOnChanges() {
+    this.renderView = false;
     if (this.editQuestion && this.applicationSettings) {
       this.createForm(this.editQuestion);
       this.categoryIds = this.editQuestion.categoryIds;
@@ -365,6 +372,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
   }
 
   ngOnDestroy() {
+    this.renderView = false;
   }
 
   questionLoaded(event) {

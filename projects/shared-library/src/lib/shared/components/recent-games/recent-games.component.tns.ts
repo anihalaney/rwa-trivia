@@ -27,7 +27,7 @@ export class RecentGamesComponent extends RecentGames implements OnInit, OnDestr
     private ngZone: NgZone,
     private page: Page,
     private utils: Utils
-    ) {
+  ) {
     super(store, cd, userActions);
   }
 
@@ -48,5 +48,6 @@ export class RecentGamesComponent extends RecentGames implements OnInit, OnDestr
 
   ngOnDestroy(): void {
     this.page.off('loaded');
+    this.renderView = false;
   }
 }
