@@ -1,44 +1,59 @@
 <ns-action-bar title="Leaderboards" class="Roboto-Regular" showAdd="true"></ns-action-bar>
-<StackLayout backgroundColor="#f1f2f2" *ngIf="renderView">
-        <!-- *ngIf="renderView" -->
+<StackLayout backgroundColor="#FFFFFF" *ngIf="renderView">
     <ScrollView>
-        <!-- *ngIf="leaderBoardCat && leaderBoardCat.length>0" -->
         <StackLayout *ngIf="leaderBoardCat && leaderBoardCat.length>0">
-            <!--  *ngFor="let cat of leaderBoardCat" -->
             <StackLayout class="question-answered Hind-Regular">
-                <!-- *ngIf="categoryDict[cat]?.categoryName == category" -->
-                <CardView margin="5" android:elevation="20" ios:elevation="40" radius="15" class="gameplay">
-                    <StackLayout class="cardStyle" orientation="vertical" verticalAlignment="center" backgroundColor="#ffffff"
-                        height="100%" margin="15">
+                <StackLayout class="cardStyle" orientation="vertical" verticalAlignment="center" height="100%">
 
-                        <!-- <StackLayout orientation="horizontal"> -->
-                            <GridLayout rows="*,*" columns="*,*">
-                               <Label text="Select Category" row="0" col="0" textWrap="true" class="label" padding="10"
-                                    fontSize="18" fontWeight="400" fontColor="black" verticalAlignment="bottom" colSpan="2"></Label>
-                                <DropDown *ngIf="items" class="filter-dropdown" [items]="items" [(ngModel)]="selectedIndex" [hint]="'Select Category'"
-                                    (selectedIndexChanged)="onchange($event)" row="1" col="0"></DropDown>
+                    <GridLayout rows="*,*" columns="*,*">
+                        <GridLayout rows="*" columns="*,auto" row="1" col="0" class="dropdown">
+                            <DropDown row="0" col="0" *ngIf="items" android:class="filter-dropdown-mobile"
+                                [items]="items" [(ngModel)]="selectedIndex" [hint]="'Select Category'"
+                                (selectedIndexChanged)="onchange($event)">
+                            </DropDown>
+                            <Label row="0" col="1" text="&#xf078;" ios:class="fas" android:class="fas dropdown-arrow"
+                                textWrap="true"></Label>
+                        </GridLayout>
 
-                                <DropDown [*ngIf="filterTopList" class]="cssClass" [items]="filterTopList" [(ngModel)]="selectedTopFilter"
-                                    (selectedIndexChanged)="onTopFilterChanged($event)" row="1" col="1"
-                                    class="filter-dropdown"></DropDown>
-                            </GridLayout>
-                        <!-- </StackLayout> -->
-                         <StackLayout class="question-answered " marginTop="10" *ngFor="let user of selectedCatList | slice:lbsUsersSliceStartIndex:pagination;let j=index;"> -->
-                             <GridLayout rows="*" columns="auto,*,auto" marginTop="10"
+                        <GridLayout rows="*" columns="*,auto" row="1" col="1" class="dropdown">
+                            <DropDown row="0" col="0" *ngIf="filterTopList" android:class="filter-dropdown-mobile"
+                                [items]="filterTopList" [(ngModel)]="selectedTopFilter"
+                                (selectedIndexChanged)="onTopFilterChanged($event)">
+                            </DropDown>
+                            <Label row="0" col="1" text="&#xf078;" ios:class="fas" android:class="fas dropdown-arrow"
+                                textWrap="true"></Label>
+                        </GridLayout>
+
+                    </GridLayout>
+
+                    <FlexboxLayout justifyContent="space-between" padding="10 15">
+                        <Label text="Profile" textWrap="true"></Label>
+                        <GridLayout rows="*" columns="auto,auto">
+                            <Label row="0" col="0" text="Won" textWrap="true" margin="0 12"></Label>
+                            <Label row="0" col="1" text="Played" textWrap="true" margin="0 12"></Label>
+                        </GridLayout>
+                    </FlexboxLayout>
+
+                    <StackLayout class="question-answered" backgroundColor="#f9f9f9"
+                        *ngFor="let user of selectedCatList | slice:lbsUsersSliceStartIndex:pagination;let j=index;">
+                        <GridLayout rows="*" columns="auto,*,auto,auto" padding="15"
                             [ngClass]="{'border-props': (loggedInUserId === user.userId)}">
-                                <Label text="#{{j+1}}" row="0" col="0" class="padding-5 text-black Hind-Bold" fontSize="16"
-                                    verticalAlignment="center"></Label>
-                                    <StackLayout row="0" col="1" class="padding-10">
-                                            <app-user-card [userId]="user.userId" [type]="userCardType.USER_IMAGE_NAME_LOCATION_HORIZONTAL"></app-user-card>
-                                    </StackLayout>
-                                <GridLayout row="0" col="3" rows="*, *" columns="*" class="padding-10">
-                                    <Label [text]="user.score" row="0" col="0" class="text-black" fontSize="16"></Label>
-                                    <Label text="points" row="1" col="0" class="text-gray" fontSize="14"></Label>
-                                </GridLayout>
-                            </GridLayout>                            
-                        </StackLayout> 
+                            <Label text="{{j+1}}" row="0" col="0" class="profile-no Hind-Bold"
+                                verticalAlignment="center"></Label>
+                            <StackLayout row="0" col="1" class="padding-10">
+                                <app-user-card [userId]="user.userId"
+                                    [type]="userCardType.USER_IMAGE_NAME_LOCATION_HORIZONTAL"></app-user-card>
+                            </StackLayout>
+                            <StackLayout row="0" col="2" margin="0 20">
+                                <Label [text]="user.score" class="text-black" fontSize="16"></Label>
+                            </StackLayout>
+                            <StackLayout row="0" col="3" margin="0 20">
+                                <Label [text]="user.score" class="text-black" fontSize="16"></Label>
+                            </StackLayout>
+                        </GridLayout>
                     </StackLayout>
-                </CardView>
+
+                </StackLayout>
             </StackLayout>
         </StackLayout>
     </ScrollView>
