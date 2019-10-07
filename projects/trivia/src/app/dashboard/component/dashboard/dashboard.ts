@@ -88,7 +88,7 @@ export class Dashboard implements OnDestroy {
         this.photoUrl = this.utils.getImageUrl(this.user, 70, 60, '70X60');
 
         this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.user),
-            filter(u => u !== null),
+            filter(u => { this.gamePlayBtnDisabled = false; return u !== null; }),
             map(user => {
                 this.ngZone.run(() => {
                     this.user = user;
@@ -232,6 +232,11 @@ export class Dashboard implements OnDestroy {
             store.select(coreState).pipe(select(s => s.gameInvites))).subscribe((notify: any) => {
                 this.notifications = notify[0].concat(notify[1]);
                 this.cd.markForCheck();
+            }));
+
+        this.subscriptions.push(this.store.select(appState.dashboardState)
+            .pipe(select(s => s.userLatestPublishedQuestion)).subscribe((questions) => {
+                console.log('Latest Question', questions);
             }));
 
     }
