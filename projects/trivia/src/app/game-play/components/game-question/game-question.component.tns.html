@@ -66,6 +66,9 @@
                             [class.players-answer]="answeredIndex === i" [class.wrong]="answeredIndex === i && correctAnswerIndex !== i"
                             [class.right]="correctAnswerIndex === i" stlRippleEffect (rippleTap)="answerButtonClicked(answer,i)"
                             [isUserInteractionEnabled]="doPlay"
+                            borderRadius="5"
+                            borderColor="#000"
+                            borderWidth="1"
                             [style.backgroundColor] = "answeredIndex === i && correctAnswerIndex !== i ? '#d54937' : ''"
                             [style.backgroundColor] = "correctAnswerIndex === i ? '#71b02f' : ''"
                             >

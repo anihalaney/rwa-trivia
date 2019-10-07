@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit, Input } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { UserActions } from 'shared-library/core/store/actions';
 import { Page } from 'tns-core-modules/ui/page';
@@ -32,6 +32,13 @@ export class RecentGamesComponent extends RecentGames implements OnInit, OnDestr
   }
 
   ngOnInit(): void {
+    if (this.hideActionbar === undefined) {
+      this.hideActionbar = false;
+      this.cd.markForCheck();
+    } else {
+      this.hideActionbar = true;
+      this.cd.markForCheck();
+    }
     // update to variable needed to do in ngZone otherwise it did not understand it
     this.page.on('loaded', () => this.ngZone.run(() => {
       this.renderView = true;

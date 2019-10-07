@@ -23,7 +23,7 @@ export class QuestionCardComponent implements OnInit, OnDestroy, OnChanges {
   applicationSettings: ApplicationSettings;
   @Input() answeredText: string;
   @Input() correctAnswerText: string;
-  @Input() doPlay: boolean
+  @Input() doPlay: boolean;
   @Output() answerClicked = new EventEmitter<number>();
   @Output() selectedAnswer = new EventEmitter<string>();
   constructor(private store: Store<CoreState>, private cd: ChangeDetectorRef) { }

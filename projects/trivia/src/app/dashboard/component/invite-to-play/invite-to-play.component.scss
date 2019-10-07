@@ -51,10 +51,19 @@
     }
 }
 
+
 .buddy-icon-container{
-     transform: rotate(18deg);
-     -ms-transform: rotate(20deg); /* IE 9 */
-  -webkit-transform: rotate(20deg); 
+    transform: rotate(18deg);
+    -ms-transform: rotate(20deg);
+    -webkit-transform: rotate(20deg); 
+    background-color:#f9f9f9;
+    margin-left:4;
+    margin-top:4;
+    padding-bottom: 4;
+    height:50;
+    width:50;
+    border-radius:8;
+
 }
 
 .buddy-icon{

@@ -61,7 +61,7 @@
                                 width="24" verticalAlignment="center" marginRight="8" borderRadius="50"></Image>
                         </StackLayout>
                         <StackLayout col="1" verticalAlignment="middle">
-                            <Label text="{{ (account?.lives / 10 < 1) && (account?.lives / 10 > 0)  ? '0' : '' }}{{account?.lives}}"
+                            <Label text="{{ (account && account?.lives / 10 < 1) && (account && account?.lives / 10 > 0)  ? '0' : '' }}{{account && account?.lives}}"
                                 textWrap="true"></Label>
                         </StackLayout>
                     </GridLayout>
@@ -69,10 +69,10 @@
                         <StackLayout padding="10 20">
                             <FlexboxLayout justifyContent="space-between">
                                 <Label text="Play your game" color="#fff" fontSize="24" textWrap="true"></Label>
-                                <StackLayout orientation="horizontal" *ngIf="user && account && account.lives >=0 && isLivesEnable">
+                                <StackLayout orientation="horizontal" *ngIf="user && account && account?.lives >=0 && isLivesEnable">
                                     <Label verticalAlignment="center" text="&#xf1e3;" class="far" color="#C9B750"
                                         fontSize="20" marginRight="10" textWrap="true"></Label>
-                                    <Label verticalAlignment="center" text="{{ (account?.lives / 10 < 1) && (account?.lives / 10 > 0)  ? '0' : '' }}{{account?.lives}}"
+                                    <Label verticalAlignment="center" text="{{ (account && account?.lives / 10 < 1) && (account && account?.lives / 10 > 0)  ? '0' : '' }}{{account && account?.lives}}"
                                         fontSize="20" color="#fff" textWrap="true"></Label>
                                 </StackLayout>
                             </FlexboxLayout>
@@ -101,7 +101,7 @@
                                 </StackLayout>
 
                             </FlexboxLayout>
-                            <StackLayout orientation="horizontal" *ngIf="user && applicationSettings?.lives?.enable && timeoutLive">
+                            <StackLayout orientation="horizontal" *ngIf="user && applicationSettings && applicationSettings?.lives?.enable && timeoutLive">
                                 <Label fontSize="14" color="#dddddd" fontWeight="500" text="The life will get activated again in "
                                     textWrap="true"></Label>
                                 <Label fontSize="14" color="#fff" fontWeight="bold" text="{{timeoutLive}}" textWrap="true"></Label>
@@ -114,7 +114,7 @@
                                 <Label fontSize="14" text="No Life will be deducted" color="#e2e2e2" textWrap="true"></Label>
                             </StackLayout>
 
-                            <GridLayout rows="*" columns="auto,auto,auto,auto" *ngIf="user && applicationSettings?.lives?.enable && account.lives === 0">
+                            <GridLayout rows="*" columns="auto,auto,auto,auto" *ngIf="user && applicationSettings && applicationSettings?.lives?.enable && account && account?.lives === 0">
                                 <Label text="Activate time instantly" class="buy-lives" row="0" col="0"></Label>
                                 <Image src="~/assets/images/mobile/bits.png" row="0" col="1" width="25" height="25"></Image>
                                 <Label text="5000" class="lives-number" row="0" col="2"></Label>

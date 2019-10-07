@@ -1,4 +1,4 @@
-<ns-action-bar title="Recently Completed Games" class="Roboto-Regular" showAdd="true"></ns-action-bar>
+<ns-action-bar title="Recently Completed Games" class="Roboto-Regular" showAdd="true" *ngIf="!hideActionbar"></ns-action-bar>
 <StackLayout *ngIf="renderView">
   <ScrollView>
     <StackLayout>
