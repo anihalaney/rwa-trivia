@@ -254,7 +254,9 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
         keepAspectRatio: true
       };
       imageSource = await fromAsset(imageAsset);
-      this.cropImage(imageSource, webviewElement);
+      setTimeout(() => {
+        this.cropImage(imageSource, webviewElement);
+      }, 1);
     } catch (error) {
       console.error(error);
     }

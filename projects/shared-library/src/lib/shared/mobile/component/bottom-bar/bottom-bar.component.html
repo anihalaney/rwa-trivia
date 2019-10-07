@@ -1,27 +1,27 @@
 <FlexboxLayout class="bottom_container">
     <FlexboxLayout class="bottom_container-box" [class.activeMenu]="activeMenu === 'play'"
         (rippleTap)="bottomBarClick('play')" stlRippleEffect>
-        <Label text="&#xf11b;" fontSize="26" class="fa" class="fa"></Label>
+        <Label text="&#xf11b;" fontSize="26" class="fa" ></Label>
         <Label text="Play" fontSize="14" textWrap="true"></Label>
     </FlexboxLayout>
     <FlexboxLayout class="bottom_container-box" [class.activeMenu]="activeMenu === 'leaderboard'"
         (rippleTap)="bottomBarClick('leaderboard')" stlRippleEffect>
-        <Label text="&#xf0cb;" fontSize="26" class="fa" class="fa"></Label>
+        <Label text="&#xf0cb;" fontSize="26" class="fa"></Label>
         <Label text="Leaderboard" fontSize="14" textWrap="true"></Label>
     </FlexboxLayout>
     <FlexboxLayout class="bottom_container-box" [class.activeMenu]="activeMenu === 'friends'"
         (rippleTap)="bottomBarClick('friends')" stlRippleEffect>
-        <Label text="&#xf007;" fontSize="26" class="fa" class="fa"></Label>
+        <Label text="&#xf007;" fontSize="26" class="fa"></Label>
         <Label text="Friends" fontSize="14" textWrap="true"></Label>
     </FlexboxLayout>
     <FlexboxLayout *ngIf="isDrawerOpenOrClosed === 'drawerClosed' || !isDrawerOpenOrClosed" class="bottom_container-box"
         [class.activeMenu]="activeMenu === 'more'" (rippleTap)="bottomBarClick('more')" stlRippleEffect>
-        <Label text="&#xf139;" fontSize="26" class="fa" class="fa"></Label>
+        <Label text="&#xf139;" fontSize="26" class="fa"></Label>
         <Label text="More" fontSize="14" textWrap="true"></Label>
     </FlexboxLayout>
     <FlexboxLayout *ngIf="isDrawerOpenOrClosed === 'drawerOpened'" class="bottom_container-box"
         [class.activeMenu]="activeMenu === 'more'" (rippleTap)="bottomBarClick('less')" stlRippleEffect>
-        <Label text="&#xf13a;" fontSize="26" class="fa" class="fa"></Label>
+        <Label text="&#xf13a;" fontSize="26" class="fa"></Label>
         <Label text="Less" fontSize="14" textWrap="true"></Label>
     </FlexboxLayout>
 </FlexboxLayout>
