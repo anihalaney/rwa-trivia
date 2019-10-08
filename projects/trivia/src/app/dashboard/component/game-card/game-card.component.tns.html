@@ -53,31 +53,31 @@
 
     </GridLayout>
 
-    <StackLayout orientation="horizontal" *ngIf="(game.gameOptions.playerMode == PlayerMode.Opponent && game.playerIds.length > 1) ||
-    (game.gameOptions.playerMode == PlayerMode.Single)">
-
-        <StackLayout orientation="horizontal" padding="7 5 0 0" [visibility]="myTurn ? 'visible' : 'hidden' ">
-            <Label class="fa active-game-timer" text="&#xf017; {{remainingHours }}:{{remainingMinutes}}" textWrap="true"
-                padding="0 5 3 0" android:paddingTop=""></Label>
-        </StackLayout>
-        <StackLayout orientation="horizontal" paddingLeft="20" padding="10 5 0 0">
-            <StackLayout width="25" height="25" padding="0 0 5 0">
-                <app-user-card *ngIf="myTurn" [userId]="user.userId" [type]="userCardType.USER_IMAGE_30X30" [width]="20"
-                    [height]="20">
-                </app-user-card>
-
-                <app-user-card *ngIf="!myTurn && otherUserId" [userId]="otherUserId" [type]="userCardType.USER_IMAGE_30X30"
-                    [width]="20" [height]="20">
-                </app-user-card>
-            </StackLayout>
-        </StackLayout>
-
-        <StackLayout orientation="horizontal" padding="7 5 0 0">
-            <Label *ngIf="myTurn" text="Your Turn " padding="0 5 3 5" class="active-game-timer"></Label>
-            <Label *ngIf="!myTurn && otherUserId" text="{{otherUserInfo?.displayName}} 's Turn" padding="0 5 3 5" class="active-game-timer"></Label>
-        </StackLayout>
-
-    </StackLayout>
+    <FlexboxLayout horizontalAlignment="left" justifyContent="space-between" width="85%" *ngIf="(game.gameOptions.playerMode == PlayerMode.Opponent && game.playerIds.length > 1) ||
+            (game.gameOptions.playerMode == PlayerMode.Single)">
+        
+                <StackLayout alignSelf="center" orientation="horizontal" [visibility]="myTurn ? 'visible' : 'hidden' ">
+                    <Label class="fa active-game-timer" text="&#xf017; {{remainingHours }}:{{remainingMinutes}}" textWrap="true"
+                        android:paddingTop=""></Label>
+                </StackLayout>
+        
+                <FlexboxLayout alignSelf="center">
+                    <Image src="~/assets/images/mobile/tally.png" width="20" marginRight="2"></Image>
+                    <Label text="{{game.round}} / {{totalRound}}" class="active-game-timer" textWrap="true"></Label>
+                </FlexboxLayout>
+        
+                <StackLayout alignSelf="center" orientation="horizontal">
+                    <app-user-card *ngIf="myTurn" [userId]="user.userId" [type]="userCardType.USER_IMAGE_30X30" [width]="20"
+                        [height]="20">
+                    </app-user-card>
+                    <app-user-card *ngIf="!myTurn && otherUserId" [userId]="otherUserId" [type]="userCardType.USER_IMAGE_30X30"
+                        [width]="20" [height]="20">
+                    </app-user-card>
+                    <Label *ngIf="myTurn" text="Your Turn " class="active-game-timer"></Label>
+                    <Label *ngIf="!myTurn && otherUserId" text="{{otherUserInfo?.displayName}} 's Turn"
+                        class="active-game-timer"></Label>
+                </StackLayout>
+            </FlexboxLayout>
 
     <Label *ngIf="myTurn" text="Play Now" textWrap="true" class="active-play-now" [nsRouterLink]="['/game-play', game.gameId]"
         clearHistory="true"></Label>

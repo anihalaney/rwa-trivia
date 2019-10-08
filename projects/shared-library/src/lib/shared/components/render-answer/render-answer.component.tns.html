@@ -11,8 +11,8 @@
 <ng-template #renderView>    
     <GridLayout class="{{theme}}-theme">
         <AbsoluteLayout>
-            <Label top="2" left="10" *ngIf="isRight" text="&#xf00c;" class="text-color fas" textWrap="true"></Label>
-            <Label top="2" left="10" *ngIf="isWrong" text="&#xf00d;" class="text-color fas" textWrap="true"></Label>
+            <Label top="2" left="10" *ngIf="isRight" text="&#xf00c;" color="#fff" class="fas" textWrap="true"></Label>
+            <Label top="2" left="10" *ngIf="isWrong" text="&#xf00d;" color="#fff" class="fas" textWrap="true"></Label>
         </AbsoluteLayout>
         <Label class="text-color" textAlignment="center" text="{{ currentAnswer?.answerText }}" [class.wrong]="isWrong"
             [class.right]="isRight ? 'right' : ''" [ngClass]="{'answer': isGameAnswer}"
