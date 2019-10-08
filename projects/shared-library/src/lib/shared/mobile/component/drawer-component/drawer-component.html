@@ -1,63 +1,64 @@
-<StackLayout backgroundColor="#e2e2e2">
+<StackLayout class="drawer">
     <FlexboxLayout flexDirection="column">
-        <StackLayout>
-            <bottom-bar [isDrawerOpenOrClosed]="isDrawerOpen" [screen]="'drawer'"></bottom-bar>
-        </StackLayout>
+        <bottom-bar [isDrawerOpenOrClosed]="isDrawerOpen" [screen]="'drawer'"></bottom-bar>
         <GridLayout rows="*" columns="*">
             <StackLayout row="0">
                 <ScrollView>
                     <FlexboxLayout flexDirection="column">
-                        <StackLayout *ngIf="authProvider.isAuthenticated" class="padding-label" stlRippleEffect stlBackgroundColor="#10347f"
-                            stlBackgroundColorAfter="#e2e2e2" (rippleTap)="navigateToProfileSettings()">
-                            <Label text="Profile" [ngStyle]="{color: (activeMenu === 'Profile' ? '#077ad6' : '#000')}"
+                        <StackLayout *ngIf="authProvider.isAuthenticated" class="padding-label" stlRippleEffect
+                            stlBackgroundColor="#10347f" stlBackgroundColorAfter="#e2e2e2"
+                            (rippleTap)="navigateToProfileSettings()">
+                            <Label text="Profile" [ngStyle]="{color: (activeMenu === 'Profile' ? '#077ad6' : '#3b5998')}"
                                 android:fontSize="18" textWrap="true"></Label>
                         </StackLayout>
-                        <StackLayout *ngIf="authProvider.isAuthenticated" class="padding-label" stlRippleEffect stlBackgroundColor="#10347f"
-                            stlBackgroundColorAfter="#e2e2e2" (rippleTap)="recentGames()">
+                        <StackLayout *ngIf="authProvider.isAuthenticated" class="padding-label" stlRippleEffect
+                            stlBackgroundColor="#10347f" stlBackgroundColorAfter="#e2e2e2" (rippleTap)="recentGames()">
                             <Label text="Recently Completed Games"
-                                [ngStyle]="{color: (activeMenu === 'Recently Completed Games' ? '#077ad6' : '#000')}"
+                                [ngStyle]="{color: (activeMenu === 'Recently Completed Games' ? '#077ad6' : '#3b5998')}"
                                 android:fontSize="18" textWrap="true"></Label>
                         </StackLayout>
-                        <StackLayout *ngIf="authProvider.isAuthenticated" class="padding-label" stlRippleEffect stlBackgroundColor="#10347f"
-                            stlBackgroundColorAfter="#e2e2e2" (rippleTap)="navigateToMyQuestion()">
+                        <StackLayout *ngIf="authProvider.isAuthenticated" class="padding-label" stlRippleEffect
+                            stlBackgroundColor="#10347f" stlBackgroundColorAfter="#e2e2e2"
+                            (rippleTap)="navigateToMyQuestion()">
                             <Label text="Questions"
-                                [ngStyle]="{color: (activeMenu === 'My Questions' ? '#077ad6' : '#000')}"
+                                [ngStyle]="{color: (activeMenu === 'My Questions' ? '#077ad6' : '#3b5998')}"
                                 android:fontSize="18" textWrap="true"></Label>
                         </StackLayout>
-                        <StackLayout *ngIf="authProvider.isAuthenticated" class="padding-label" stlRippleEffect stlBackgroundColor="#10347f"
-                            stlBackgroundColorAfter="#e2e2e2" (rippleTap)="navigateToGameProfile()">
+                        <StackLayout *ngIf="authProvider.isAuthenticated" class="padding-label" stlRippleEffect
+                            stlBackgroundColor="#10347f" stlBackgroundColorAfter="#e2e2e2"
+                            (rippleTap)="navigateToGameProfile()">
                             <Label text="User Account"
-                                [ngStyle]="{color: (activeMenu === 'Game Profile' ? '#077ad6' : '#000')}"
+                                [ngStyle]="{color: (activeMenu === 'Game Profile' ? '#077ad6' : '#3b5998')}"
                                 android:fontSize="18" textWrap="true"></Label>
                         </StackLayout>
                         <StackLayout class="padding-label" stlRippleEffect stlBackgroundColor="#10347f"
                             stlBackgroundColorAfter="#e2e2e2" (rippleTap)="navigateToPrivacyPolicy()">
                             <Label text="Privacy Policy" android:fontSize="18"
-                                [ngStyle]="{color: (activeMenu === 'Privacy Policy' ? '#077ad6' : '#000')}"
+                                [ngStyle]="{color: (activeMenu === 'Privacy Policy' ? '#077ad6' : '#3b5998')}"
                                 textWrap="true"></Label>
                         </StackLayout>
                         <StackLayout class="padding-label" stlRippleEffect stlBackgroundColor="#10347f"
                             stlBackgroundColorAfter="#e2e2e2" (rippleTap)="navigateToTermsConditions()">
                             <Label text="Terms of Use" android:fontSize="18"
-                                [ngStyle]="{color: (activeMenu === 'T&C' ? '#077ad6' : '#000')}"
+                                [ngStyle]="{color: (activeMenu === 'T&C' ? '#077ad6' : '#3b5998')}"
                                 textWrap="true"></Label>
                         </StackLayout>
                         <StackLayout class="padding-label" stlRippleEffect stlBackgroundColor="#10347f"
                             stlBackgroundColorAfter="#e2e2e2" (rippleTap)="navigateToUserFeedback()">
                             <Label text="Feedback"
-                                [ngStyle]="{color: (activeMenu === 'User-Feedback' ? '#077ad6' : '#000')}"
+                                [ngStyle]="{color: (activeMenu === 'User-Feedback' ? '#077ad6' : '#3b5998')}"
                                 android:fontSize="18" textWrap="true"></Label>
                         </StackLayout>
                         <StackLayout *ngIf="!authProvider.isAuthenticated" class="padding-label" stlRippleEffect
                             stlBackgroundColor="#10347f" stlBackgroundColorAfter="#e2e2e2" (rippleTap)="login()">
                             <Label text="Login"
-                                [ngStyle]="{color: (activeMenu === 'login/signup' ? '#077ad6' : '#000')}"
+                                [ngStyle]="{color: (activeMenu === 'login/signup' ? '#077ad6' : '#3b5998')}"
                                 android:fontSize="18"></Label>
                         </StackLayout>
                         <StackLayout *ngIf="authProvider.isAuthenticated" class="padding-label" stlRippleEffect
                             stlBackgroundColor="#10347f" stlBackgroundColorAfter="#e2e2e2" (rippleTap)="logout()">
                             <Label text="Logout"
-                                [ngStyle]="{color: (activeMenu === 'login/signup' ? '#077ad6' : '#000')}"
+                                [ngStyle]="{color: (activeMenu === 'login/signup' ? '#077ad6' : '#3b5998')}"
                                 android:fontSize="18"></Label>
                         </StackLayout>
                     </FlexboxLayout>
