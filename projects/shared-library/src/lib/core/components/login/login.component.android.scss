@@ -1,11 +1,10 @@
 @import '../../../../../../trivia/src/app-variables';
 
 .login-page {
-  background-color: $white;
   padding: 20;
 
   .section-1 {
-    margin-top: 173;
+    margin-top: 100;
 
     .title-1 {
       font-size: 36;
@@ -70,6 +69,7 @@
       margin-bottom: 20;
       padding: 15 20;
       font-size: 24;
+      background-color: $white;
     }
 
     .button-section {
@@ -124,7 +124,6 @@
 
 
 .sign-up {
-  background-color: $white;
   padding: 20;
 
 
@@ -149,7 +148,8 @@
   .section-2 {
     margin-bottom: 38;
 
-    .text-field,.flag-section {
+    .text-field,
+    .flag-section {
       border: 0;
       border-width: 1;
       border-color: $border-color;
@@ -158,10 +158,11 @@
       padding: 15 20;
       font-size: 24;
       color: $black;
+      background-color: $white;
 
-      >Image{
-        width:30;
-        height:30;
+      >Image {
+        width: 30;
+        height: 30;
       }
     }
 
@@ -207,16 +208,10 @@
 
 }
 
-.hide-layout {
-  background-color: $gray-title;
-  opacity: 0.7;
-}
-
-
 .verify-phone {
   background-color: $white;
   padding: 20;
-  margin-top: 272;
+  margin-top: 192;
   border-radius: 20;
   border-width: 1;
   border-color: $white;
@@ -242,7 +237,8 @@
   .section-2 {
     margin-bottom: 26;
 
-    .text-field,.flag-section {
+    .text-field,
+    .flag-section {
       border: 0;
       border-width: 1;
       border-color: $border-color;
@@ -252,9 +248,9 @@
       font-size: 24;
       color: $black;
 
-      >Image{
-        width:30;
-        height:30;
+      >Image {
+        width: 30;
+        height: 30;
       }
     }
 
@@ -338,9 +334,15 @@
 
 }
 
-.back-button{
-  width:30;
-  height:30;
+.back-button {
+  width: 30;
+  height: 30;
   horizontal-align: left;
   margin: 15;
+}
+
+
+.hide-layout {
+  background-color: $gray-title;
+  opacity: 0.7;
 }

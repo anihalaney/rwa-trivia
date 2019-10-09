@@ -1,11 +1,10 @@
 @import '../../../../../../trivia/src/app-variables';
 
 .login-page {
-  background-color: $white;
   padding: 20;
 
   .section-1 {
-    margin-top: 173;
+    margin-top: 100;
 
     .title-1 {
       font-size: 36;
@@ -71,6 +70,7 @@
       margin-bottom: 20;
       padding: 15 20;
       font-size: 24;
+      background-color: $white;
     }
 
 
@@ -120,7 +120,6 @@
 }
 
 .sign-up {
-  background-color: $white;
   padding: 20;
 
   .section-1 {
@@ -190,6 +189,7 @@
       margin-bottom: 20;
       padding: 15 20;
       font-size: 24;
+      background-color: $white;
     }
 
     .terms-text {
@@ -228,7 +228,7 @@
 .verify-phone {
   background-color: $white;
   padding: 20;
-  margin-top: 262;
+  margin-top: 192;
   border-radius: 20;
   border-width:1;
   border-color: $white;

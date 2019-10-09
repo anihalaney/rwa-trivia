@@ -23,7 +23,7 @@ import { Utils } from '../../services';
 declare var IQKeyboardManager;
 @Component({
   selector: 'login',
-  templateUrl: './login-new.component.html',
+  templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
