@@ -5,7 +5,7 @@
 
         <StackLayout *ngIf="!hideMenu" stlRippleEffect stlBackgroundColor="#13284F" stlOpacity="0.5"
             stlBackgroundColorAfter="" verticalAlignment="center" width="45" col="0" (tap)="openSidebar()">
-            <Label text="&#xf0c9;" class="fa text-left padding-back" padding="10" fontSize="20"></Label>
+            <Label color="#000000" text="&#xe906;" fontSize="20" class="ico icon-back"></Label>
         </StackLayout>
 
         <StackLayout col="1" verticalAlignment="center">
@@ -13,10 +13,10 @@
         </StackLayout>
 
         <StackLayout col="2" *ngIf="((user && user!== null && !showSkipBtn && title==='Questions'))" stlRippleEffect
-            stlBackgroundColor="#13284F" ios:margin="3" android:margin="10" stlOpacity="0.5" stlBackgroundColorAfter=""
+            ios:margin="3" android:margin="10" stlOpacity="0.5" stlBackgroundColorAfter=""
             verticalAlignment="center" horizontalAlignment="right" android:width="23" ios:width="23"
             (rippleTap)="navigateToSubmitQuestion()">
-            <Label text="&#xf055;" class="fa" fontSize="20"></Label>
+            <Label text="&#xe905;" color="#6c63ff" fontSize="20" class="ico icon-add"></Label>
         </StackLayout>
         
 
@@ -40,7 +40,7 @@
         <StackLayout *ngIf="((user && user!== null && !showSkipBtn && title.includes('Friends')))" col="4" stlRippleEffect
             stlBackgroundColor="#13284F" ios:margin="3" android:margin="10" stlOpacity="0.5" stlBackgroundColorAfter=""
             verticalAlignment="center" horizontalAlignment="right" marginRight="95" android:width="23" ios:width="40" >
-            <Label text="&#xf002;" class="fa" fontSize="20"></Label>
+            <Label color="#3b5998" text="&#xe942;" fontSize="20" class="ico icon-search"></Label>
         </StackLayout>
 
         <!-- For Add Friend Icon in invite-friends.component.tns.html screen -->
