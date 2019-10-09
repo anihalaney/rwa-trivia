@@ -5,7 +5,7 @@ import { AuthGuard, BulkLoadGuard, CategoriesResolver, TagsResolver } from 'shar
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: '/login',
+    redirectTo: '/dashboard',
     pathMatch: 'full'
   },
   {
