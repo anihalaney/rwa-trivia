@@ -74,7 +74,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.checkForceUpdate();
+    // this.checkForceUpdate();
     firebase.init({
       onMessageReceivedCallback: (message) => {
         console.log('message', message);
