@@ -16,3 +16,40 @@
 .activeMenu {
   color: #3b5998;
 }
+
+.animate-ease-in {
+  animation-name: animate-in;
+  animation-duration: 0.7;
+  animation-timing-function: ease-in;
+  animation-fill-mode: forwards;
+}
+@keyframes animate-in {
+  from { transform: translate(0, 9); }
+  to { transform: translate(0, 0); }
+}
+
+
+.animate-ease-out {
+  animation-name: animate-out;
+  animation-duration: 0.7;
+  animation-timing-function: ease-out;
+  animation-fill-mode: forwards;
+}
+@keyframes animate-out {
+  from { transform: translate(0, -9); }
+  to { transform: translate(0, 0); }
+}
+
+.show {
+  visibility: visible;
+  animation-name: opacity;
+  animation-duration: 0.7;
+}
+@keyframes opacity {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.hide{
+  visibility: collapsed;
+}
