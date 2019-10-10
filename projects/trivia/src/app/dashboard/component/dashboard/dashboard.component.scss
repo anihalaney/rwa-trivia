@@ -22,27 +22,24 @@
  
  .roundandscore{
      font-size:15; 
-     color:#8c8c8c;
+     color:#212121;
  }
  .earnedsymbolsStack{
      margin: 10 0 0 0;
  }
- .gamestatus{
-     background-color: #f1fff2; 
-     border-width:3px; 
-     border-color:#d0f5d3; 
-     margin:10 0 0 0;
- }
+
  .gamestatus-username{
      font-weight:700; 
      font-size: 22;
      color:#000000;
  }
  .navigate-button{
-     color:#000000; 
+     color:#3b5998; 
      background-color: #ffffff; 
-     padding:10 10 10 10; 
+     padding:10 20; 
      margin: 0 3 0 3;
+     border-width: 1;
+     border-color: #dddddd;
  }
  .question-grid{
      border-bottom-width:2px; 
@@ -80,7 +77,6 @@
  
    .bits-n-bites-lable{
      font-size: 17;
-     font-weight: bold;
      color: #333;
    }
 

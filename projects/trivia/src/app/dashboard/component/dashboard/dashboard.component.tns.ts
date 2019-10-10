@@ -71,7 +71,7 @@ export class DashboardComponent extends Dashboard implements OnInit, OnDestroy {
     @Inject(PLATFORM_ID) platformId: Object,
     utils: Utils,
     private routerExtension: RouterExtensions,
-    public store: Store<AppState>, private page: Page, public ngZone: NgZone, private cd: ChangeDetectorRef) {
+    public store: Store<AppState>, private page: Page, public ngZone: NgZone, cd: ChangeDetectorRef) {
     super(store,
       questionActions,
       gameActions,

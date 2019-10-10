@@ -1,1 +1,29 @@
 @import "./dashboard.component";
+
+.navigate-button{
+    color:#3b5998; 
+    background-color: #ffffff; 
+    padding:5 20; 
+    margin: 5 3;
+    border-width: 1;
+    border-color: #dddddd;
+    border-radius: 5;
+    text-align: center;
+}
+
+.navigate-button-solid{
+    color:#ffffff; 
+    background-color: #3b5998; 
+    padding: 10 10; 
+    margin: 5 15;
+    border-radius: 5;
+    text-align: center;
+}
+
+.navigate-button-text{
+    color:#3b5998; 
+    font-weight: 700; 
+    padding:10 20; 
+    margin: 5 3;
+    text-align: center;
+}
