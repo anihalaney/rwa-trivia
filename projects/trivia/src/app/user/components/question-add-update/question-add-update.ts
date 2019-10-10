@@ -16,6 +16,7 @@ export class QuestionAddUpdate {
 
   // Properties
   categories: Category[];
+  questionCategories: Array<string> = [];
   tags: string[];
 
   questionForm: FormGroup;
@@ -43,37 +44,41 @@ export class QuestionAddUpdate {
     this.tagsObs = store.select(appState.coreState).pipe(select(s => s.tags));
 
     this.subscriptions.push(this.store.select(appState.coreState).pipe(take(1)).subscribe(s => this.user = s.user));
-    this.subscriptions.push(this.categoriesObs.subscribe(categories => this.categories = categories));
+    this.subscriptions.push(this.categoriesObs.subscribe(categories => {
+      this.categories = categories;
+      this.questionCategories = this.categories.map(category => category.categoryName);
+    }
+    ));
     this.subscriptions.push(this.tagsObs.subscribe(tags => this.tags = tags));
 
     this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.questionDraftSaveStatus)).subscribe(status => {
-        if (status && status !== 'UPDATED') {
-          this.questionForm.patchValue({ id : status });
-        }
+      if (status && status !== 'UPDATED') {
+        this.questionForm.patchValue({ id: status });
+      }
     }));
     this.subscriptions.push(this.store.select(appState.coreState).pipe(
-        select(s => s.applicationSettings),
-        map(appSettings => appSettings),
-        switchMap(appSettings => {
-          if (appSettings && appSettings[0]) {
-            if (appSettings[0]['auto_save']['is_enabled']) {
-              return interval(appSettings[0]['auto_save']['time']);
-            } else {
-              return of();
-            }
-        }
-        })).subscribe(data => {
-          if (data) {
-              this.questionForm.patchValue({ is_draft : true });
-              const question = this.getQuestionFromFormValue(this.questionForm.value);
-              if (!question.status) {
-                question.status = QuestionStatus.PENDING;
-              }
-
-              question.created_uid = this.user.userId;
-              this.store.dispatch(new userActions.AddQuestion({ question: question }));
+      select(s => s.applicationSettings),
+      map(appSettings => appSettings),
+      switchMap(appSettings => {
+        if (appSettings && appSettings[0]) {
+          if (appSettings[0]['auto_save']['is_enabled']) {
+            return interval(appSettings[0]['auto_save']['time']);
+          } else {
+            return of();
           }
-    }));
+        }
+      })).subscribe(data => {
+        if (data) {
+          this.questionForm.patchValue({ is_draft: true });
+          const question = this.getQuestionFromFormValue(this.questionForm.value);
+          if (!question.status) {
+            question.status = QuestionStatus.PENDING;
+          }
+
+          question.created_uid = this.user.userId;
+          this.store.dispatch(new userActions.AddQuestion({ question: question }));
+        }
+      }));
 
   }
 
@@ -169,7 +174,7 @@ export class QuestionAddUpdate {
   }
 
   saveQuestion(question: Question) {
-   this.store.dispatch(new userActions.AddQuestion({ question: question }));
+    this.store.dispatch(new userActions.AddQuestion({ question: question }));
   }
 
 }

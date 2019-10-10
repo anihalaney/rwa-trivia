@@ -1,0 +1,68 @@
+<ns-action-bar [title]="actionBarTxt" class="Roboto-Regular" showAdd="true"></ns-action-bar>
+
+<StackLayout *ngIf="loaderBusy">
+    <ActivityIndicator [busy]="loaderBusy" width="100" height="100" marginTop="225" class="activity-indicator">
+    </ActivityIndicator>
+</StackLayout>
+
+<StackLayout *ngIf="!loaderBusy">
+    <ScrollView>
+        <PreviousNextView>
+            <GridLayout rows="auto,auto,auto,auto,auto,auto" columns="*" (tap)="hideKeyboard()"
+                [formGroup]="questionForm" class="submit-question">
+
+                <StackLayout row="0" class="question-section" iosOverflowSafeArea="false">
+                    <WebView #questionWebView id="questionWebView" height="200"
+                        (loadFinished)="onLoadFinished($event,-1)" (loaded)="questionLoaded($event)"
+                        (unloaded)="questionUnloaded($event)"></WebView>
+                </StackLayout>
+
+                <StackLayout row="1" class="answer-section" iosOverflowSafeArea="false">
+                    <StackLayout formArrayName="answers">
+                        <StackLayout *ngFor="let answer of answers.controls; let i=index" [formGroupName]="i">
+                            <GridLayout rows="auto" columns="auto,*" class="text-box-section">
+                                <CheckBox row="0" col="0" #elem formControlName="correct"
+                                    class="checkbox checkbox-section" fillColor="#71b02f"></CheckBox>
+                                <StackLayout row="0" col="1">
+                                    <WebView #webView [id]="i" height="100" (loadFinished)="onLoadFinished($event,i)"
+                                        (loaded)="answerLoaded($event,i)" (unloaded)="answerUnloaded($event,i)">
+                                    </WebView>
+                                </StackLayout>
+                            </GridLayout>
+                        </StackLayout>
+                    </StackLayout>
+                </StackLayout>
+
+                <StackLayout row="2" class="max-time-input" iosOverflowSafeArea="false">
+                    <GridLayout rows="*" columns="*">
+                        <DropDown row="0" [items]="playMaxTime" selectedIndex="{{selectedMaxTimeIndex}}"
+                            (selectedIndexChanged)="onchange($event)"></DropDown>
+                        <Image row="0" src="~/assets/images/dropdown_char.png" class="tick-icon"></Image>
+                    </GridLayout>
+                </StackLayout>    
+
+                <StackLayout row="3" class="category-input" iosOverflowSafeArea="false">
+                    <GridLayout rows="*" columns="*">
+                        <DropDown row="0" [items]="questionCategories" selectedIndex="{{selectedQuestionCategoryIndex}}"
+                            (selectedIndexChanged)="selectCategory($event)"></DropDown>
+                        <Image row="0" src="~/assets/images/dropdown_char.png" class="tick-icon"></Image>
+                    </GridLayout>
+                </StackLayout>
+
+                <StackLayout row="4" class="tags-section" iosOverflowSafeArea="false">
+                    <TextView #textField hint="Comma separated tags" class="tag-input"></TextView>
+                </StackLayout>
+
+                <GridLayout row="5" rows="*" columns="*,*" iosOverflowSafeArea="false" class="button-section">
+                    <Button row="0" col="0" text="Preview" (tap)="preview()"
+                        [ngClass]="(questionForm.valid && categoryIds && categoryIds.length > 0 && enteredTags.length > 2) ? 'enable-btn' : 'disable-btn' "
+                        class="question-buttons"></Button>
+                    <Button row="0" col="1" width="100%" [text]="submitBtnTxt" (tap)="submit()"
+                        [ngClass]="(questionForm.valid && categoryIds && categoryIds.length > 0 && enteredTags.length > 2) ? 'enable-btn' : 'disable-btn' "
+                        class="question-buttons"></Button>
+                </GridLayout>
+
+            </GridLayout>
+        </PreviousNextView>
+    </ScrollView>
+</StackLayout>

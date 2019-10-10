@@ -34,8 +34,8 @@ import { CONFIG } from 'shared-library/environments/environment';
 declare var IQKeyboardManager;
 @Component({
   selector: 'app-question-add-update',
-  templateUrl: './question-add-update.component.html',
-  styleUrls: ['./question-add-update.component.css'],
+  templateUrl: './question-add-update-new.component.html',
+  styleUrls: ['./question-add-update.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
@@ -70,6 +70,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
   tabsTitles: Array<string>;
   public editorUrl = CONFIG.editorUrl;
   public selectedMaxTimeIndex = 0;
+  public selectedQuestionCategoryIndex = 0;
   public webViews = [];
   public playMaxTime = [];
 
@@ -126,7 +127,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
   ngOnInit(): void {
     this.renderView = true;
     this.page.on('navigatedFrom', () => this.ngZone.run(() => {
-        this.ngOnDestroy();
+      this.ngOnDestroy();
     }));
     const questionControl = this.questionForm.get('questionText');
 
@@ -174,9 +175,20 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
         this.selectedMaxTimeIndex = this.editQuestion.maxTime;
       }
     }
+
   }
 
   ngAfterViewInit() {
+    this.renderView = false;
+    if (this.editQuestion && this.applicationSettings) {
+      this.createForm(this.editQuestion);
+      this.categoryIds = this.editQuestion.categoryIds;
+
+      console.log('this.questionCategories', this.questionCategories);
+      this.enteredTags = this.editQuestion.tags;
+      this.submitBtnTxt = this.editQuestion.is_draft === true && this.editQuestion.status !== 6 ? 'SUBMIT' : 'RESUBMIT';
+      this.actionBarTxt = 'Update Question';
+    }
   }
 
   onLoadFinished(event, id) {
@@ -268,20 +280,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
   }
 
   ngOnChanges() {
-    this.renderView = false;
-    if (this.editQuestion && this.applicationSettings) {
-      this.createForm(this.editQuestion);
-      this.categoryIds = this.editQuestion.categoryIds;
-      this.categories = this.categories.map(categoryObj => {
-        if (Number(categoryObj.id) === Number(this.categoryIds[0])) {
-          categoryObj['isSelected'] = true;
-        }
-        return categoryObj;
-      });
-      this.enteredTags = this.editQuestion.tags;
-      this.submitBtnTxt = this.editQuestion.is_draft === true && this.editQuestion.status !== 6 ? 'SUBMIT' : 'RESUBMIT';
-      this.actionBarTxt = 'Update Question';
-    }
+
 
 
   }
@@ -299,7 +298,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
 
     const answersFA: FormArray = super.createDefaultForm(question);
     this.questionForm = this.fb.group({
-      id: question.id ?  question.id : '',
+      id: question.id ? question.id : '',
       is_draft: question.is_draft,
       questionText: [question.questionText,
       Validators.compose([Validators.required])],
@@ -315,14 +314,10 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
   }
 
 
-  selectCategory(category) {
+  selectCategory(args: SelectedIndexChangedEventData) {
+    this.selectedQuestionCategoryIndex = args.newIndex;
     this.categoryIds = [];
-    this.categories = this.categories.map(categoryObj => {
-      categoryObj.isSelected = false;
-      return categoryObj;
-    });
-    category.isSelected = (!category.isSelected) ? true : false;
-    this.categoryIds.push(category.id);
+    this.categoryIds.push(this.categories[args.newIndex].id);
   }
 
   addCustomTag() {

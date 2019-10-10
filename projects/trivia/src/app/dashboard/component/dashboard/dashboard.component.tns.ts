@@ -96,7 +96,7 @@ export class DashboardComponent extends Dashboard implements OnInit, OnDestroy {
   }
 
   navigateToMyQuestion() {
-    this.routerExtension.navigate(['/user/my/questions']);
+    this.routerExtension.navigate(['/user/my/questions/add']);
   }
 
   gotToNotification() {
