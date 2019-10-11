@@ -5,9 +5,9 @@ var fs = require("fs");
 module.exports = function($logger, hookArgs) {
     return new Promise(function(resolve, reject) {
 
-        /* do not add this line we do not use --release to decide release environment */
-        // var isReleaseBuild = !!((hookArgs.checkForChangesOpts && hookArgs.checkForChangesOpts.projectChangesOptions) || hookArgs.prepareData).release;
         /* Decide whether to prepare for dev or prod environment */
+
+        var isReleaseBuild = !!((hookArgs.checkForChangesOpts && hookArgs.checkForChangesOpts.projectChangesOptions) || hookArgs.prepareData).release;
         var validProdEnvs = ['prod','production'];
         var isProdEnv = false; // building with --env.prod or --env.production flag
 
@@ -18,11 +18,7 @@ module.exports = function($logger, hookArgs) {
             });
         }
 
-
-        // do not change this line 
-        // we use --env.prod to decide release environment
-        // we do not use --release to decide release environment
-        var buildType = isProdEnv ? 'production' : 'development';
+        var buildType = isReleaseBuild || isProdEnv ? 'production' : 'development';
 
         /*
             Detect if we have nativescript-plugin-firebase temp file created during after-prepare hook, so we know

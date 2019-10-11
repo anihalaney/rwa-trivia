@@ -41,7 +41,7 @@ export class EditorComponent implements OnInit, OnDestroy {
     this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
       if (appSettings[0]) {
         this.applicationSettings = appSettings[0];
-        if(this.applicationSettings && this.applicationSettings.quill_options) {
+        if (this.applicationSettings && this.applicationSettings.quill_options) {
           this.quillConfig.toolbar.container.push(this.applicationSettings.quill_options.options);
           this.quillConfig.toolbar.container.push(this.applicationSettings.quill_options.list);
           this.quillConfig.mathEditor = { mathOptions: this.applicationSettings };
@@ -70,6 +70,18 @@ export class EditorComponent implements OnInit, OnDestroy {
       this.oWebViewInterface.on('deltaObject', (deltaObject) => {
         this.ngZone.run(() => {
           this.editorContent = deltaObject;
+        });
+      });
+
+
+      this.oWebViewInterface.on('quillConfig', (quillConfig) => {
+        this.ngZone.run(() => {
+          this.applicationSettings.quill_options = JSON.parse(quillConfig);
+          this.quillConfig.toolbar.container = [];
+          this.quillConfig.mathEditor = {};
+          this.quillConfig.toolbar.container.push(this.applicationSettings.quill_options.options);
+          this.quillConfig.toolbar.container.push(this.applicationSettings.quill_options.list);
+          this.quillConfig.mathEditor = { mathOptions: this.applicationSettings };
         });
       });
     }

@@ -1,3 +1,4 @@
+
 var path = require("path");
 var fs = require("fs");
 
@@ -5,9 +6,8 @@ module.exports = function($logger, $projectData, hookArgs) {
 
 return new Promise(function(resolve, reject) {
 
-        /* do not add this line we do not use --release to decide release environment */
-        // var isReleaseBuild = (hookArgs.appFilesUpdaterOptions || hookArgs.prepareData).release;
-         /* Decide whether to prepare for dev or prod environment */
+        /* Decide whether to prepare for dev or prod environment */
+        var isReleaseBuild = (hookArgs.appFilesUpdaterOptions || hookArgs.prepareData).release;
         var validProdEnvs = ['prod','production'];
         var isProdEnv = false; // building with --env.prod or --env.production flag
         var env = (hookArgs.platformSpecificData || hookArgs.prepareData).env;
@@ -18,10 +18,7 @@ return new Promise(function(resolve, reject) {
             });
         }
 
-        /* do not change this line 
-         we use --env.prod to decide release environment
-         we do not use --release to decide release environment */
-        var buildType =  isProdEnv ? 'production' : 'development';
+        var buildType = isReleaseBuild || isProdEnv ? 'production' : 'development';
         const platformFromHookArgs = hookArgs && (hookArgs.platform || (hookArgs.prepareData && hookArgs.prepareData.platform));
         const platform = (platformFromHookArgs  || '').toLowerCase();
 
@@ -39,13 +36,13 @@ return new Promise(function(resolve, reject) {
 
 
         /* Handle preparing of Google Services files */
-        var project = hookArgs.prepareData.env.project;
+
         if (platform === 'android') {
             var destinationGoogleJson = path.join($projectData.platformsDir, "android", "app", "google-services.json");
             var destinationGoogleJsonAlt = path.join($projectData.platformsDir, "android", "google-services.json");
             var sourceGoogleJson = path.join($projectData.appResourcesDirectoryPath, "Android", "google-services.json");
-            var sourceGoogleJsonProd = path.join($projectData.projectDir, 'configurations' , project, platform, `google-services.json.prod`);
-            var sourceGoogleJsonDev = path.join($projectData.projectDir, 'configurations' , project , platform ,`google-services.json.dev`);
+            var sourceGoogleJsonProd = path.join($projectData.appResourcesDirectoryPath, "Android", "google-services.json.prod");
+            var sourceGoogleJsonDev = path.join($projectData.appResourcesDirectoryPath, "Android", "google-services.json.dev");
 
             // ensure we have both dev/prod versions so we never overwrite singlular google-services.json
             if (fs.existsSync(sourceGoogleJsonProd) && fs.existsSync(sourceGoogleJsonDev)) {
@@ -67,7 +64,20 @@ return new Promise(function(resolve, reject) {
                 $logger.warn("Unable to copy google-services.json.");
                 reject();
             }
-        }  else {
+        } else if (platform === 'ios') {
+            // we have copied our GoogleService-Info.plist during before-checkForChanges hook, here we delete it to avoid changes in git
+            var destinationGooglePlist = path.join($projectData.appResourcesDirectoryPath, "iOS", "GoogleService-Info.plist");
+            var sourceGooglePlistProd = path.join($projectData.appResourcesDirectoryPath, "iOS", "GoogleService-Info.plist.prod");
+            var sourceGooglePlistDev = path.join($projectData.appResourcesDirectoryPath, "iOS", "GoogleService-Info.plist.dev");
+
+            // if we have both dev/prod versions, let's remove GoogleService-Info.plist in destination dir
+            if (fs.existsSync(sourceGooglePlistProd) && fs.existsSync(sourceGooglePlistDev)) {
+                if (fs.existsSync(destinationGooglePlist)) { fs.unlinkSync(destinationGooglePlist); }
+                resolve();
+            } else { // single GoogleService-Info.plist modus
+                resolve();
+            }
+        } else {
             resolve();
         }
     });
