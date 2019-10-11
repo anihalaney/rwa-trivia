@@ -1,21 +1,29 @@
 <GridLayout>
     <ScrollView>
-        <StackLayout backgroundColor="#f1f2f2" [class.m-b-70]="showContinueBtn">
-             <CardView class="cardStyle" android:elevation="20" ios:elevation="40" radius="5" class="gameplay"
+        <StackLayout backgroundColor="#fff" [class.m-b-70]="showContinueBtn">
+            <CardView class="cardStyle" android:elevation="20" ios:elevation="40" radius="5" class="gameplay"
                 backgroundColor="white">
                 <StackLayout>
-                    <GridLayout *ngIf="user && user!==null && playerMode == PlayerMode.Single"  rows="auto,*" columns="auto,*,2*" marginRight="5" class="sideStackLayoutHeader" paddingTop="10">
+                    <GridLayout *ngIf="user && user!==null && playerMode == PlayerMode.Single" rows="auto,*"
+                        columns="auto,*,2*" marginRight="5" class="sideStackLayoutHeader" paddingTop="10">
                         <app-user-card [user]="user" [userId]="user.userId" [isGamePlay]=true
                             [type]="userCardType.USER_IMAGE_NAME_WITH_SCORE_IN_GAME_PLAY_SINGLE_PLAYER"
                             [otherInfo]="{correctCount:correctCount,questionRound:questionRound,totalRound:totalRound,actionText:actionText }">
                         </app-user-card>
-                    </GridLayout>           
-                    <GridLayout *ngIf="user && user!==null && playerMode == PlayerMode.Opponent" rows="*,*" columns="*" marginRight="5" class="sideStackLayoutHeader" paddingTop="10">
+                    </GridLayout>
+                    <GridLayout *ngIf="user && user!==null && playerMode == PlayerMode.Opponent" rows="*,*" columns="*"
+                        marginRight="5" class="sideStackLayoutHeader" paddingTop="10">
                         <app-user-card [user]="user" [userId]="user.userId" [isGamePlay]=true
                             [type]="userCardType.USER_IMAGE_NAME_WITH_SCORE_IN_GAME_PLAY_TWO_PLAYER"
                             [otherInfo]="{correctCount:correctCount,questionRound:questionRound,totalRound:totalRound,otherPlayer:otherPlayer}">
                         </app-user-card>
                     </GridLayout>
+                    <StackLayout orientation="horizontal" horizontalAlignment="right">
+                        <StackLayout width="40%">
+                            <app-game-progress-bar [questionRound]="questionRound" [totalRound]="totalRound"
+                                [gameProgress]="gameProgress"></app-game-progress-bar>
+                        </StackLayout>
+                    </StackLayout>
                     <StackLayout>
                         <Label visibility="{{ turnFlag && threeConsecutiveAnswer ? 'visible'  : 'collapsed'}}"
                             class="Roboto-Regular" fontSize="17" marginLeft="15" color="#af3424"
@@ -53,43 +61,47 @@
                     color="#1b1c1c"></Label>
             </StackLayout>
 
-            <CardView class="cardStyle" android:elevation="20" ios:elevation="40" radius="5" class="gameplay"
-                backgroundColor="white" margin="15">
-                <StackLayout padding="20 10">                    
+            <render-box [setBackgroundColor]="'#f7f7f7'">
+                <StackLayout padding="20 10">
                     <render-question [question]="question" [questionIndex]="questionIndex"></render-question>
                     <StackLayout *ngIf="question">
-                        <StackLayout class="question-answered q-answer-container Hind-Medium" margin="10" *ngFor="let answer of question.answers;let i=index"
-                            [class.players-answer]="answeredIndex === i" [class.wrong]="answeredIndex === i && correctAnswerIndex !== i"
-                            [class.right]="correctAnswerIndex === i" stlRippleEffect (rippleTap)="answerButtonClicked(answer,i)"
-                            [isUserInteractionEnabled]="doPlay"
-                            [style.backgroundColor] = "answeredIndex === i && correctAnswerIndex !== i ? '#d54937' : ''"
-                            [style.backgroundColor] = "correctAnswerIndex === i ? '#71b02f' : ''">
+                        <StackLayout class="question-answered Hind-Medium" margin="10"
+                            *ngFor="let answer of question.answers;let i=index"
+                            [class.players-answer]="answeredIndex === i"
+                            [class.wrong]="answeredIndex === i && correctAnswerIndex !== i"
+                            [class.right]="correctAnswerIndex === i" stlRippleEffect
+                            (rippleTap)="answerButtonClicked(answer,i)" [isUserInteractionEnabled]="doPlay"
+                            borderColor="#a5a5a5" borderWidth="1" borderRadius="2"
+                            [style.backgroundColor]="answeredIndex === i && correctAnswerIndex !== i ? '#d54937' : ''"
+                            [style.backgroundColor]="correctAnswerIndex === i ? '#71b02f' : ''">
+
                             <render-answer [answer]="answer" [isWrong]="answeredIndex === i && correctAnswerIndex !== i"
                                 [isRight]="correctAnswerIndex === i" [doPlay]="doPlay"
                                 [isUserInteractionEnabled]="doPlay" [isGameAnswer]="true"></render-answer>
 
                         </StackLayout>
                     </StackLayout>
-                    <GridLayout margin="0 15" rows="auto" columns="auto" *ngIf="question"
-                        style=" horizontal-align:right;" class="Roboto-Medium">
-                        <author [isGamePlay]="true" [userId]="question.created_uid"></author>
-                    </GridLayout>
-                    <GridLayout margin="0 15" rows="auto" columns="auto" *ngIf="question && showContinueBtn"
-                        style="horizontal-align:center;" class="Roboto-Medium">
-                        <user-reaction *ngIf="user && question" [user]='user' [question]='question'></user-reaction>
-                    </GridLayout>
+                    <StackLayout>
+                        <StackLayout orientation="horizontal" horizontalAlignment="left">
+                            <author *ngIf="question" [isGamePlay]=true [userId]="question.created_uid"></author>
+                        </StackLayout>
+                        <StackLayout orientation="horizontal" horizontalAlignment="center">
+                            <user-reaction *ngIf="user && question && showContinueBtn" [user]='user'
+                                [question]='question'></user-reaction>
+                        </StackLayout>
+                    </StackLayout>
                 </StackLayout>
-            </CardView>
+            </render-box>
         </StackLayout>
     </ScrollView>
     <AbsoluteLayout *ngIf="showContinueBtn || ((answeredIndex>=0 || doPlay === false) && !showContinueBtn)" verticalAlignment="bottom">
-        <Button backgroundColor="#8ac541" class="Hind-Medium" color="white" (tap)="continueClicked.emit($event)" *ngIf="answeredText!== null && showContinueBtn"
-            width="100%" height="70" text="CONTINUE" fontSize="17" stlRippleEffect></Button>
-        <FlexboxLayout *ngIf="(answeredIndex>=0 || doPlay === false) && !showContinueBtn" alignItems="center" orientation="horizontal"  justifyContent="center" backgroundColor="#c0c0c0" class="Hind-Medium"  
-        width="100%" height="70">
-            <Label verticalAlignment="center"  text="SAVING GAME STAT"  color="#ffffff"></Label>
-            <ActivityIndicator marginLeft="10" verticalAlignment="center"  color="gray" ios:width="25" ios:height="25" android:width="25"
-            android:height="25" busy="true" class="activity-indicator"></ActivityIndicator>
-        </FlexboxLayout>
-    </AbsoluteLayout>
-</GridLayout>
+            <Button backgroundColor="#8ac541" class="Hind-Medium" color="white" (tap)="continueClicked.emit($event)" *ngIf="answeredText!== null && showContinueBtn"
+                width="100%" height="70" text="CONTINUE" fontSize="17" stlRippleEffect></Button>
+            <FlexboxLayout *ngIf="(answeredIndex>=0 || doPlay === false) && !showContinueBtn" alignItems="center" orientation="horizontal"  justifyContent="center" backgroundColor="#c0c0c0" class="Hind-Medium"  
+            width="100%" height="70">
+                <Label verticalAlignment="center"  text="SAVING GAME STAT"  color="#ffffff"></Label>
+                <ActivityIndicator marginLeft="10" verticalAlignment="center"  color="gray" ios:width="25" ios:height="25" android:width="25"
+                android:height="25" busy="true" class="activity-indicator"></ActivityIndicator>
+            </FlexboxLayout>
+        </AbsoluteLayout>
+    </GridLayout>

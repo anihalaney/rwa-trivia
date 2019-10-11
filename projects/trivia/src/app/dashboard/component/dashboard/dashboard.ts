@@ -12,6 +12,7 @@ import {
 import { AppState, appState } from '../../../store';
 import { map, flatMap, filter } from 'rxjs/operators';
 import { coreState } from 'shared-library/core/store';
+import * as lodash from 'lodash';
 
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class Dashboard implements OnDestroy {
@@ -56,6 +57,7 @@ export class Dashboard implements OnDestroy {
     timerSub: Subscription;
     utils: Utils;
     account: Account;
+    yourQuestion;
     public remainingHours: string;
     public remainingMinutes: string;
     public remaningSeconds: string;
@@ -88,7 +90,7 @@ export class Dashboard implements OnDestroy {
         this.photoUrl = this.utils.getImageUrl(this.user, 70, 60, '70X60');
 
         this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.user),
-            filter(u => u !== null),
+            filter(u => { this.gamePlayBtnDisabled = false; return u !== null; }),
             map(user => {
                 this.ngZone.run(() => {
                     this.user = user;
@@ -231,6 +233,23 @@ export class Dashboard implements OnDestroy {
         this.subscriptions.push(combineLatest(store.select(coreState).pipe(select(s => s.friendInvitations)),
             store.select(coreState).pipe(select(s => s.gameInvites))).subscribe((notify: any) => {
                 this.notifications = notify[0].concat(notify[1]);
+                this.cd.markForCheck();
+            }));
+
+        this.subscriptions.push(this.store.select(appState.dashboardState)
+            .pipe(select(s => s.userLatestPublishedQuestion)).subscribe((question) => {
+                if (!lodash.isEmpty(question)) {
+                    this.yourQuestion = question;
+                    const today = new Date();
+                    if (this.yourQuestion && this.yourQuestion.createdOn) {
+                        // To calculate the time difference of two dates
+                        const difference_In_Time = today.getTime() - this.yourQuestion.createdOn.getTime();
+                        // To calculate the no. of days between two dates
+                        const difference_In_Days = difference_In_Time / (1000 * 3600 * 24);
+                        this.yourQuestion.submittedDays = Math.round(difference_In_Days);
+                        this.yourQuestion.toggleButton = false;
+                    }
+                }
                 this.cd.markForCheck();
             }));
 

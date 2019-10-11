@@ -194,12 +194,12 @@ export class AppComponent implements OnInit, OnDestroy {
   async checkForceUpdate() {
 
     let version;
-    try {
-      version = await appversion.getVersionCode();
-    } catch (error) {
-      this.utils.sendErrorToCrashlytics('appLog', error);
-      console.error(error);
-    }
+    // try {
+    //   version = await appversion.getVersionCode();
+    // } catch (error) {
+    //   this.utils.sendErrorToCrashlytics('appLog', error);
+    //   console.error(error);
+    // }
 
     this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings))
       .subscribe(appSettings => {

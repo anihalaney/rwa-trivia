@@ -1,7 +1,7 @@
 <GridLayout *ngIf="currentAnswer?.isRichEditor && currentAnswer; else renderView">
     <AbsoluteLayout class="upper-grid" width="auto">
-        <Label top="2" left="10" *ngIf="isRight" text="&#xf00c;" class="fas" textWrap="true"></Label>
-        <Label top="2" left="10" *ngIf="isWrong" text="&#xf00d;" class="fas" textWrap="true"></Label>
+        <Label top="2" left="10" *ngIf="isRight" color="#fff" text="&#xf00c;" class="fas" textWrap="true"></Label>
+        <Label top="2" left="10" *ngIf="isWrong" color="#fff" text="&#xf00d;" class="fas" textWrap="true"></Label>
     </AbsoluteLayout>
      <WebView width="100%" *ngIf="!isAndroid" [src]="currentAnswer?.answerText" ios:height="{{answerHeight}}"
         (loadFinished)="onLoadFinished($event)" stlRippleEffect [isEnabled]="doPlay"></WebView>
@@ -11,11 +11,12 @@
 <ng-template #renderView>
     <GridLayout>
         <AbsoluteLayout>
-            <Label top="2" left="10" *ngIf="isRight" text="&#xf00c;" class="fas" textWrap="true"></Label>
-            <Label top="2" left="10" *ngIf="isWrong" text="&#xf00d;" class="fas" textWrap="true"></Label>
+            <Label top="2" zIndex="9999" left="10" *ngIf="isRight" class="zIndex" text="&#xf00c;" color="#fff" class="fas"></Label>
+            <Label top="2" zIndex="9999" left="10" *ngIf="isWrong" text="&#xf00d;" color="#fff" class="fas"></Label>
         </AbsoluteLayout>
+        
         <Label textAlignment="center" text="{{ currentAnswer?.answerText }}" [class.wrong]="isWrong"
-            [class.right]="isRight ? 'right' : ''" [ngClass]="{'answer': isGameAnswer}"
-            [ngClass]="{'display-answer': !isGameAnswer}" textWrap="true"></Label>
+            [class.right]="isRight" [ngClass]="{'answer': isGameAnswer}" [ngClass]="{'display-answer': !isGameAnswer}"
+            textWrap="true"></Label>
     </GridLayout>
 </ng-template>

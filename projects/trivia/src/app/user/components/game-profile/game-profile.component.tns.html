@@ -130,10 +130,10 @@
                 </StackLayout>
 
                 <StackLayout [visibility]="userType === 0 ? 'visible' : 'collapsed'" margin="0 20 20 20">
-                    <StackLayout orientation="horizontal">
+                    <FlexboxLayout>
                         <Label text="&#xf0c9;" class="fa" fontSize="20" textWrap="true" marginRight="5"></Label>
                         <Label text="Activity Log" fontSize="18" textWrap="true"></Label>
-                    </StackLayout>
+                    </FlexboxLayout>
                         <recent-games [hideActionbar]="true"></recent-games>
                 </StackLayout>
         </StackLayout>

@@ -287,7 +287,7 @@ export class GameDialog {
       }).join(',');
 
       let remainSecond = this.MAX_TIME_IN_SECONDS;
-      if (this.game.playerQnAs.length > 0) {
+      if (this.game && this.game.playerQnAs.length > 0) {
         const lastQuestionId = this.game.playerQnAs[this.game.playerQnAs.length - 1].questionId;
         if (lastQuestionId === this.currentQuestion.id) {
           const addedOn = this.game.playerQnAs[this.game.playerQnAs.length - 1].addedOn;

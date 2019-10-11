@@ -47,7 +47,7 @@ export const routes: Routes = [
     {
         path: 'signup-extra-info',
         component: SignupExtraInfoComponent,
-        canActivate: [AuthGuard]
+        // canActivate: [AuthGuard]
     },
     {
         path: 'first-question',
