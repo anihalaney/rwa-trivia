@@ -28,6 +28,7 @@ export class QuestionAddUpdate {
   loaderBusy = false;
   user: User;
   applicationSettings: ApplicationSettings;
+  selectedQuestionCategoryIndex = 0;
   subscriptions = [];
   get answers(): FormArray {
     return this.questionForm.get('answers') as FormArray;
@@ -47,6 +48,8 @@ export class QuestionAddUpdate {
     this.subscriptions.push(this.categoriesObs.subscribe(categories => {
       this.categories = categories;
       this.questionCategories = this.categories.map(category => category.categoryName);
+      this.questionCategories.push('Select Preferred Category');
+      this.selectedQuestionCategoryIndex = this.questionCategories.length - 1;
     }
     ));
     this.subscriptions.push(this.tagsObs.subscribe(tags => this.tags = tags));

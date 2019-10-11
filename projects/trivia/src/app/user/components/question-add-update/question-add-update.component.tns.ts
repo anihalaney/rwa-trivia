@@ -8,7 +8,7 @@ import { RouterExtensions } from 'nativescript-angular/router';
 import { Utils } from 'shared-library/core/services';
 import { AppState, appState } from '../../../store';
 import { QuestionActions } from 'shared-library/core/store/actions/question.actions';
-import { Question, Answer, FirebaseScreenNameConstants } from 'shared-library/shared/model';
+import { Question, Answer, Category } from 'shared-library/shared/model';
 import { QuestionAddUpdate } from './question-add-update';
 import { debounceTime } from 'rxjs/operators';
 import { ObservableArray } from 'tns-core-modules/data/observable-array';
@@ -70,7 +70,6 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
   tabsTitles: Array<string>;
   public editorUrl = CONFIG.editorUrl;
   public selectedMaxTimeIndex = 0;
-  public selectedQuestionCategoryIndex = 0;
   public webViews = [];
   public playMaxTime = [];
 
@@ -317,7 +316,10 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
   selectCategory(args: SelectedIndexChangedEventData) {
     this.selectedQuestionCategoryIndex = args.newIndex;
     this.categoryIds = [];
-    this.categoryIds.push(this.categories[args.newIndex].id);
+    const category: Category = this.categories[args.newIndex];
+    if (category) {
+      this.categoryIds.push(category.id);
+    }
   }
 
   addCustomTag() {
@@ -391,6 +393,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
       quillObject.patchValue(quillContent.delta);
       this.cd.markForCheck();
     });
+
     webInterface.on('uploadImageStart', (uploadImage) => {
       dialogs.action({
         message: 'Choose option',

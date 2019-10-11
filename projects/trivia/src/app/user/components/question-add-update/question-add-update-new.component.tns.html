@@ -31,6 +31,10 @@
                             </GridLayout>
                         </StackLayout>
                     </StackLayout>
+                    <Label *ngIf="!answers.valid && !answers.pristine" class="error-lbl " textWrap="true"
+                        text="All answers required !"></Label>
+                    <Label *ngIf="answers.valid && questionForm.hasError('correctAnswerCountInvalid')" class="error-lbl"
+                        textWrap="true" text="Pick one and only one correct answer !"></Label>
                 </StackLayout>
 
                 <StackLayout row="2" class="max-time-input" iosOverflowSafeArea="false">
@@ -39,18 +43,27 @@
                             (selectedIndexChanged)="onchange($event)"></DropDown>
                         <Image row="0" src="~/assets/images/dropdown_char.png" class="tick-icon"></Image>
                     </GridLayout>
-                </StackLayout>    
+                </StackLayout>
 
                 <StackLayout row="3" class="category-input" iosOverflowSafeArea="false">
-                    <GridLayout rows="*" columns="*">
-                        <DropDown row="0" [items]="questionCategories" selectedIndex="{{selectedQuestionCategoryIndex}}"
-                            (selectedIndexChanged)="selectCategory($event)"></DropDown>
-                        <Image row="0" src="~/assets/images/dropdown_char.png" class="tick-icon"></Image>
+                    <GridLayout rows="*,*" columns="*">
+                        <GridLayout row="0" rows="*" columns="*">
+                            <DropDown row="0" [items]="questionCategories"
+                                selectedIndex="{{selectedQuestionCategoryIndex}}"
+                                (selectedIndexChanged)="selectCategory($event)"></DropDown>
+                            <Image row="0" src="~/assets/images/dropdown_char.png" class="tick-icon"></Image>
+                        </GridLayout>
+                        <StackLayout row="1" iosOverflowSafeArea="false"
+                            *ngIf="questionForm.valid  && (!categoryIds ||  categoryIds.length===0)">
+                            <Label text="Select a category !" textWrap="true" class="error-lbl"></Label>
+                        </StackLayout>
                     </GridLayout>
+
                 </StackLayout>
 
                 <StackLayout row="4" class="tags-section" iosOverflowSafeArea="false">
                     <TextView #textField hint="Comma separated tags" class="tag-input"></TextView>
+                    <Label *ngIf="questionForm.valid  && enteredTags.length < 3" text="Must have atleast 3 tags !" textWrap="true" class="error-lbl"   ></Label>
                 </StackLayout>
 
                 <GridLayout row="5" rows="*" columns="*,*" iosOverflowSafeArea="false" class="button-section">
