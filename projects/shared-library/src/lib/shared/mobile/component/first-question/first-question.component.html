@@ -1,29 +1,25 @@
-<ns-action-bar title="Get Started" class="Roboto-Regular" hideHomeIcon="true" showAdd="false"></ns-action-bar>
+<ns-action-bar title="" class="Roboto-Regular" hideHomeIcon="true" showAdd="false"></ns-action-bar>
 <StackLayout>
     <ScrollView>
-        <StackLayout padding="10">
+        <StackLayout padding="10 0">
             <StackLayout class="cardStyle Roboto-Medium" backgroundColor="#ffffff" height="100%" width="100%"
                 iosOverflowSafeArea="false">
-                <Label text="Play for the first time" color="#000" fontSize="34" textWrap="true"></Label>
-                <StackLayout horizontalAlignment="left" width="auto" marginTop="10" backgroundColor="#f5f5f5"
-                    borderRadius="30" orientation="horizontal">
+                <Label text="Play for the first time" color="#000" padding="0 10" fontSize="34" textWrap="true"></Label>
+                <StackLayout horizontalAlignment="left" width="auto" backgroundColor="#f5f5f5" borderRadius="30"
+                    orientation="horizontal" margin="10">
                     <Label text="&#xf379;" color="#ffe27d" padding="5 10" fontSize="24" class="fab"></Label>
                     <Label text="win 50 bits instantly" fontSize="12" padding="5 10" verticalAlignment="center"></Label>
                 </StackLayout>
-                <CardView *ngIf="question" class="cardStyle gameplay" marginTop="20" android:elevation="20"
-                    ios:shadowRadius="3" ios:elevation="40" borderRadius="10" radius="10" backgroundColor="#f5f5f5"
-                    iosOverflowSafeArea="false" marginBottom="20">
-                    <StackLayout padding="20 0">
-                        <app-question-card [question]="question" [categoryName]="categoryName" [answeredText]="answeredText"
-                            [doPlay]="doPlay" [correctAnswerText]="correctAnswerText" [userDict]="userDict"
-                            (selectedAnswer)="selectedAnswer($event)" [user]="user">
-                        </app-question-card>
-                    </StackLayout>
-                </CardView>
+                <render-box>
+                    <app-question-card [question]="question" [categoryName]="categoryName" [answeredText]="answeredText"
+                        [doPlay]="doPlay" [correctAnswerText]="correctAnswerText" [userDict]="userDict"
+                        (selectedAnswer)="selectedAnswer($event)" [user]="user" [theme]="'light'">
+                    </app-question-card>
+                </render-box>
                 <StackLayout orientation="vertical" margin="10" iosOverflowSafeArea="false">
-                    <Button class="Roboto-Regular" backgroundColor="#8ac541" color="white" margin="20" (rippleTap)="goToDashboard((answeredText === '' ? 'skip' : 'continue'))"
-                        width="100%" [text]="(answeredText === '' ? 'skip' : 'continue')" fontSize="17" padding="15"
-                        stlRippleEffect stlBackgroundColor="#8ac541"></Button>
+                    <Button class="Roboto-Regular btn-transparent" (rippleTap)="goToDashboard((answeredText === '' ? 'skip' : 'continue'))"
+                        [text]="(answeredText === '' ? 'Skip' : 'Continue')" stlRippleEffect
+                        stlBackgroundColor="white"></Button>
                 </StackLayout>
             </StackLayout>
         </StackLayout>

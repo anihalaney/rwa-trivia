@@ -71,7 +71,7 @@ export class GameDialog {
     this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
     this.subscriptions.push(this.userDict$.subscribe(userDict => {
       this.userDict = userDict;
-      this.cd.detectChanges();
+      this.cd.markForCheck();
     }));
 
     this.resetValues();
@@ -287,7 +287,7 @@ export class GameDialog {
       }).join(',');
 
       let remainSecond = this.MAX_TIME_IN_SECONDS;
-      if (this.game.playerQnAs.length > 0) {
+      if (this.game && this.game.playerQnAs.length > 0) {
         const lastQuestionId = this.game.playerQnAs[this.game.playerQnAs.length - 1].questionId;
         if (lastQuestionId === this.currentQuestion.id) {
           const addedOn = this.game.playerQnAs[this.game.playerQnAs.length - 1].addedOn;

@@ -180,17 +180,17 @@
                 <StackLayout row="4" col="0" iosOverflowSafeArea="false" class="dashboard_body-grid4">
                     <app-invite-to-play [userId]="user?.userId" *ngIf="user && user!==null"></app-invite-to-play>
                 </StackLayout>
-                <!-- <StackLayout *ngIf="user && user!==null" row="5" col="0" class="submit-question" iosOverflowSafeArea="false">
-            <StackLayout class="q-title" iosOverflowSafeArea="false">
-                <Label text="You can also submit questions and get a chance to win cash prizes" textWrap="true">
-                </Label>
-            </StackLayout>
-            <StackLayout orientation="horizontal" iosOverflowSafeArea="false">
-                <Button horizontaAlignment="left" ios:padding="10 0" borderRadius="5" borderColor="#1E2C4D"
-                    borderWidth="1" width="40%" class="q-button q-button-extra" text="SUBMIT A QUESTION"
-                    (tap)="navigateToMyQuestion()"></Button>
-            </StackLayout>
-        </StackLayout> -->
+                <StackLayout *ngIf="user && !yourQuestion" row="5" col="0" class="submit-question"
+                    iosOverflowSafeArea="false">
+                    <StackLayout class="q-title" iosOverflowSafeArea="false">
+                        <Label text="You can also submit questions and get a chance to win cash prizes" textWrap="true">
+                        </Label>
+                    </StackLayout>
+                    <StackLayout orientation="horizontal" iosOverflowSafeArea="false">
+                        <Button horizontaAlignment="left"  class="btn-transparent blue-border" text="SUBMIT A QUESTION"
+                            (tap)="navigateToMyQuestion()"></Button>
+                    </StackLayout>
+                </StackLayout>
             </GridLayout>
         </StackLayout>
     </ScrollView>

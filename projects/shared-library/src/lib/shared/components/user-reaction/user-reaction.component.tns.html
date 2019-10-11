@@ -4,15 +4,15 @@
             <Label stlRippleEffect padding="15" borderRadius="50%" background="#4ab14f" text="&#xf164;" fontSize="22" 
                     [ngStyle]="{color: (user && userReactionStatus?.status === 'like' ? '#fff':'#000')}"
                     (rippleTap)="userReaction('like')" class="fas" textWrap="true"></Label>
-            <Label marginLeft="10" verticalAlignment="center"  [text]="question?.reactionsCount?.like ? question?.reactionsCount?.like : 0"
-                horizontalAlignment="center" textWrap="true" color="#868686"></Label>
+            <Label [style.color]="theme === 'dark' ? '#fff' : '#000'" marginLeft="10" verticalAlignment="center"  [text]="question?.reactionsCount?.like ? question?.reactionsCount?.like : 0"
+                horizontalAlignment="center" textWrap="true"></Label>
         </StackLayout>
         <StackLayout orientation="horizontal" marginLeft="15">
             <Label stlRippleEffect padding="15" fontSize="22" borderRadius="50%" background="#f44235" text="&#xf165;"
             [ngStyle]="{color: (user && userReactionStatus?.status === 'dislike' ? '#fff':'#000')}"
             (rippleTap)="userReaction('dislike')" class="fas" textWrap="true"></Label>
-            <Label marginLeft="10" verticalAlignment="center" [text]="question?.reactionsCount?.dislike ? question?.reactionsCount?.dislike : 0"
-                horizontalAlignment="center" textWrap="true" color="#868686"></Label>
+            <Label [style.color]="theme === 'dark' ? '#fff' : '#000'" marginLeft="10" verticalAlignment="center" [text]="question?.reactionsCount?.dislike ? question?.reactionsCount?.dislike : 0"
+                horizontalAlignment="center" textWrap="true"></Label>
         </StackLayout>
     </StackLayout>
 </StackLayout>

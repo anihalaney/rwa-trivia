@@ -18,6 +18,7 @@ import { AuthenticationProvider } from 'shared-library/core/auth';
 export class UserReactionComponent implements OnChanges, OnDestroy {
   @Input() question: Question;
   @Input() user: User;
+  @Input() theme;
   subscriptions: Subscription[] = [];
   userReactionStatus;
 

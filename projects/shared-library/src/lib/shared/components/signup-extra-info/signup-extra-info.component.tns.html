@@ -1,19 +1,20 @@
 <ns-action-bar title="User Info" class="Roboto-Regular" hideHomeIcon="true" hideMenu="true"></ns-action-bar>
-<StackLayout>
+<StackLayout class="signUpExtraInfo" marginTop="10">
     <ScrollView>
         <StackLayout [formGroup]="userForm" iosOverflowSafeArea="false">
             <!-- E-mail -->
-            <TextField [editable]="emailEditable" #textField
+            <TextField class="text-field" [editable]="emailEditable" #textField
                 [stlShowHintWhenFocusOut]="{hintRef: emailHint, controlRef:userForm.controls.email}"
-                formControlName="email" class="input" hint="Email"></TextField>
+                formControlName="email" hint="Email"></TextField>
             <GridLayout rows="*, *" columns="*">
                 <!-- Name -->
-                <StackLayout margin="15">
-                    <app-check-display-name formControlName="displayName" hint="Display Name"></app-check-display-name>
+                <StackLayout>
+                    <app-check-display-name formControlName="displayName" hint="Display Name">
+                    </app-check-display-name>
                 </StackLayout>
             </GridLayout>
             <!-- Phone number -->
-            <TextField [editable]="phoneEditable" keyboardType="number" formControlName="phoneNo" class="input"
+            <TextField class="text-field" [editable]="phoneEditable" keyboardType="number" formControlName="phoneNo"
                 hint="Phone Number"></TextField>
             <!-- Error labels -->
             <Label #emailHint text="Invalid Email!" marginTop="10" textWrap="true" class="text-center error"></Label>
@@ -24,9 +25,8 @@
                 class="text-center error" textWrap="true" text="Display Name is already taken by other user"></Label>
             <!-- Submit button -->
             <GridLayout iosOverflowSafeArea="false" margin="15" rows="auto" columns="*">
-                <Button row="0" col="0" width="100%" text="Continue" (tap)="submit()" class="Roboto-Medium"
-                    backgroundColor="{{userForm.valid ? '#71b02f' : 'silver' }}" color="#ffffff" borderRadius="3"
-                    fontSize="20" padding="15" fontWeight="bold" stlRippleEffect marginLeft="5"></Button>
+                <Button row="0" col="0" [isEnabled]="userForm.valid" width="100%"
+                    class="Roboto-Medium  btn-blue text-field" text="Continue" (tap)="submit()" stlRippleEffect></Button>
             </GridLayout>
 
         </StackLayout>
