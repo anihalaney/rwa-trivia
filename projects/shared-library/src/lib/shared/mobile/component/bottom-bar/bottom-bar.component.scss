@@ -1,5 +1,7 @@
 .bottom_container {
-  background-color: #e2e2e2;
+  background-color: #f9f9f9;
+  border-top-left-radius: 20;
+  border-top-right-radius: 20;
 
   &-box {
     flex-direction: column;
@@ -7,10 +9,47 @@
     align-items: center;
     height: 60;
     width: 25%;
-    color: #000;
+    color: #a5a5a5;
   }
 }
 
 .activeMenu {
-  color: #077ad6;
+  color: #3b5998;
+}
+
+.animate-ease-in {
+  animation-name: animate-in;
+  animation-duration: 0.7;
+  animation-timing-function: ease-in;
+  animation-fill-mode: forwards;
+}
+@keyframes animate-in {
+  from { transform: translate(0, 9); }
+  to { transform: translate(0, 0); }
+}
+
+
+.animate-ease-out {
+  animation-name: animate-out;
+  animation-duration: 0.7;
+  animation-timing-function: ease-out;
+  animation-fill-mode: forwards;
+}
+@keyframes animate-out {
+  from { transform: translate(0, -9); }
+  to { transform: translate(0, 0); }
+}
+
+.show {
+  visibility: visible;
+  animation-name: opacity;
+  animation-duration: 0.7;
+}
+@keyframes opacity {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.hide{
+  visibility: collapsed;
 }

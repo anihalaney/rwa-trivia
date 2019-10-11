@@ -22,6 +22,8 @@ export class BottomBarComponent implements OnChanges, OnDestroy, OnInit {
     user: User;
     subscriptions = [];
     activeMenu = 'play';
+    animateMenu = '';
+    prevMenu = '';
     @Input() isDrawerOpenOrClosed = 'drawerClosed';
     @Input() screen = 'app';
     @Output() open: EventEmitter<any> = new EventEmitter<any>();
@@ -97,6 +99,13 @@ export class BottomBarComponent implements OnChanges, OnDestroy, OnInit {
             sideDrawer.showDrawer();
         } else if (menu === 'less') {
             sideDrawer.closeDrawer();
+        }
+        if (menu !== 'more') {
+            this.prevMenu = this.animateMenu !== '' || this.animateMenu == undefined  ? this.animateMenu : 'play';
+            this.animateMenu = menu;
+        } else {
+            this.prevMenu = undefined;
+            this.animateMenu = undefined;
         }
         this.cd.markForCheck();
     }

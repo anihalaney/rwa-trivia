@@ -1,0 +1,131 @@
+@font-face {
+    font-family: 'icomoon';
+    src:  url('../fonts/icomoon.eot?mon7go');
+    src:  url('../fonts/icomoon.eot?mon7go#iefix') format('embedded-opentype'),
+      url('../fonts/icomoon.ttf?mon7go') format('truetype'),
+      url('../fonts/icomoon.woff?mon7go') format('woff'),
+      url('../fonts/icomoon.svg?mon7go#icomoon') format('svg');
+    font-weight: normal;
+    font-style: normal;
+    font-display: block;
+  }
+  
+  [class^="icon-"], [class*=" icon-"] {
+    /* use !important to prevent issues with browser extensions that change fonts */
+    font-family: 'icomoon' !important;
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+  
+    /* Better Font Rendering =========== */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  .ico {
+    font-family: "icomoon";
+  }
+  
+
+.icon-add:before {
+  content: "\e905";
+  color: #6c63ff;
+}
+.icon-back:before {
+  content: "\e906";
+}
+.icon-bar-stats-icon:before {
+  content: "\e917";
+  color: #283b66;
+}
+.icon-call-icon:before {
+  content: "\e920";
+  color: #3b5998;
+}
+.icon-check-green:before {
+  content: "\e921";
+  color: #4caf50;
+}
+.icon-close:before {
+  content: "\e922";
+  color: #fff;
+}
+.icon-comments:before {
+  content: "\e923";
+  color: #ddd;
+}
+.icon-correct:before {
+  content: "\e924";
+  color: #fff;
+}
+.icon-crown:before {
+  content: "\e925";
+  color: #283b66;
+}
+.icon-down-chevron:before {
+  content: "\e926";
+  color: #283b66;
+}
+.icon-edit:before {
+  content: "\e927";
+  color: #3b5998;
+}
+.icon-fb-logo:before {
+  content: "\e928";
+}
+.icon-friends:before {
+  content: "\e929";
+  color: #a5a5a5;
+}
+.icon-game-invite .path1:before {
+  content: "\e92a";
+  color: rgb(255, 193, 7);
+}
+.icon-game-invite .path2:before {
+  content: "\e92b";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-game-won:before {
+  content: "\e92c";
+  color: #4caf50;
+}
+.icon-Group-78:before {
+  content: "\e92d";
+  color: #9ccc65;
+}
+.icon-home:before {
+  content: "\e931";
+  color: #3b5998;
+}
+.icon-leraderboard-icon:before {
+  content: "\e937";
+  color: #a5a5a5;
+}
+.icon-life-icon:before {
+  content: "\e938";
+  color: #ffc107;
+}
+.icon-like:before {
+  content: "\e939";
+  color: #3b5998;
+}
+.icon-more-menu:before {
+  content: "\e93c";
+  color: #a5a5a5;
+}
+.icon-mountainwithflag:before {
+  content: "\e93d";
+  color: #9ccc65;
+}
+.icon-search:before {
+  content: "\e942";
+  color: #3b5998;
+}
+.icon-user-small:before {
+  content: "\e94f";
+  color: #a5a5a5;
+}

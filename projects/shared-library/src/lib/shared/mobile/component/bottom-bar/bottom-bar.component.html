@@ -1,27 +1,27 @@
 <FlexboxLayout class="bottom_container">
-    <FlexboxLayout class="bottom_container-box" [class.activeMenu]="activeMenu === 'play'"
+    <FlexboxLayout height="20" class="bottom_container-box" [class.activeMenu]="activeMenu === 'play'"
         (rippleTap)="bottomBarClick('play')" stlRippleEffect>
-        <Label text="&#xf11b;" fontSize="26" class="fa" class="fa"></Label>
-        <Label text="Play" fontSize="14" textWrap="true"></Label>
+        <Label text="&#xe931;"  [ngClass]="{'animate-ease-out': prevMenu === 'play', 'animate-ease-in': animateMenu === 'play' && animateMenu === 'play'}" fontSize="20" class="ico icon-home"></Label>
+        <Label text="Home" [ngClass]="{'animate-ease-out': prevMenu === 'play', 'animate-ease-in': animateMenu === 'play', 'hide': activeMenu !== 'play' && animateMenu !='' && isDrawerOpenOrClosed !== 'drawerOpened', show: animateMenu === 'play'}"  fontSize="14" textWrap="true"></Label>
     </FlexboxLayout>
     <FlexboxLayout class="bottom_container-box" [class.activeMenu]="activeMenu === 'leaderboard'"
         (rippleTap)="bottomBarClick('leaderboard')" stlRippleEffect>
-        <Label text="&#xf0cb;" fontSize="26" class="fa" class="fa"></Label>
-        <Label text="Leaderboard" fontSize="14" textWrap="true"></Label>
+        <Label text="&#xe937;" [ngClass]="{'animate-ease-out': prevMenu === 'leaderboard', 'animate-ease-in': animateMenu === 'leaderboard' && animateMenu === 'leaderboard'}" fontSize="20" class="ico icon-leraderboard-icon"></Label>
+        <Label text="Leaderboard" [ngClass]="{'animate-ease-out': prevMenu === 'leaderboard' ,'animate-ease-in': animateMenu === 'leaderboard' && animateMenu === 'leaderboard', 'hide': activeMenu !== 'leaderboard' && isDrawerOpenOrClosed !== 'drawerOpened', show: animateMenu === 'leaderboard'}"  fontSize="14" textWrap="true"></Label>
     </FlexboxLayout>
     <FlexboxLayout class="bottom_container-box" [class.activeMenu]="activeMenu === 'friends'"
         (rippleTap)="bottomBarClick('friends')" stlRippleEffect>
-        <Label text="&#xf007;" fontSize="26" class="fa" class="fa"></Label>
-        <Label text="Friends" fontSize="14" textWrap="true"></Label>
+        <Label text="&#xe929;"  [ngClass]="{'animate-ease-out': prevMenu === 'friends', 'animate-ease-in': animateMenu === 'friends' && animateMenu === 'friends'}"   fontSize="20" class="ico icon-friends"></Label>
+        <Label text="Friends" [ngClass]="{'animate-ease-out': prevMenu === 'friends' , 'animate-ease-in': animateMenu === 'friends', 'hide': activeMenu !== 'friends' && isDrawerOpenOrClosed !== 'drawerOpened', show: animateMenu === 'friends'}"   fontSize="14" textWrap="true"></Label>
     </FlexboxLayout>
     <FlexboxLayout *ngIf="isDrawerOpenOrClosed === 'drawerClosed' || !isDrawerOpenOrClosed" class="bottom_container-box"
         [class.activeMenu]="activeMenu === 'more'" (rippleTap)="bottomBarClick('more')" stlRippleEffect>
-        <Label text="&#xf139;" fontSize="26" class="fa" class="fa"></Label>
-        <Label text="More" fontSize="14" textWrap="true"></Label>
+        <Label text="&#xe93c;"  [ngClass]="{'animate-ease-out': prevMenu === 'more', 'animate-ease-in': animateMenu === 'more' && animateMenu === 'more'}"   fontSize="20" class="ico icon-more-menu"></Label>
+        <Label text="More" [ngClass]="{'animate-ease-out': prevMenu === 'more' , 'animate-ease-in': animateMenu === 'more', 'hide': activeMenu !== 'more', show: animateMenu === 'more'}"   fontSize="14" textWrap="true"></Label>
     </FlexboxLayout>
     <FlexboxLayout *ngIf="isDrawerOpenOrClosed === 'drawerOpened'" class="bottom_container-box"
         [class.activeMenu]="activeMenu === 'more'" (rippleTap)="bottomBarClick('less')" stlRippleEffect>
-        <Label text="&#xf13a;" fontSize="26" class="fa" class="fa"></Label>
+        <Label text="&#xe93c;" fontSize="20" class="ico icon-more-menu"></Label>
         <Label text="Less" fontSize="14" textWrap="true"></Label>
     </FlexboxLayout>
 </FlexboxLayout>

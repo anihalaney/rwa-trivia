@@ -14,7 +14,7 @@ export class RippleEffectDirective implements OnDestroy {
   @Input() stlBackgroundColor: string;
   @Input() stlOpacity: number;
   @Input() stlBackgroundColorAfter: string;
-
+  @Input() skipAnimation: boolean;
   templateRef: any;
   renderer: Renderer2;
   defaultColor: '#F8F8F8';
@@ -44,10 +44,13 @@ export class RippleEffectDirective implements OnDestroy {
     }
 
     try {
+      if (this.skipAnimation) {
+        this.rippleTap.emit();
+      }
       await this.templateRef.nativeElement.animate({
         opacity: this.stlOpacity,
         backgroundColor: new Color(this.stlBackgroundColor),
-        duration: 200,
+        duration: this.skipAnimation ? 100 : 200,
         delay: 0,
         iterations: 1,
         curve: enums.AnimationCurve.easeOut
@@ -64,13 +67,15 @@ export class RippleEffectDirective implements OnDestroy {
         }
       }
 
-      await this.templateRef.nativeElement.animate({
+       await this.templateRef.nativeElement.animate({
         backgroundColor: color,
         opacity: 1,
         delay: 0
       });
 
-      this.rippleTap.emit();
+      if (!this.skipAnimation) {
+        this.rippleTap.emit();
+      }
     } catch (e) {
       console.log('ERROR', e);
     }
