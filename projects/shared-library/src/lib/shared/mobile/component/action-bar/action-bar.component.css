@@ -1,13 +1,17 @@
 .action-bar {
-  background-color: #3e5b95;
-  color: white;
+  /* background-color: #3e5b95; */
+  color: black;
   font-size: 15;
   padding: 0 10;
+  border: 0;
 }
 
 .action-title {
   padding: 9 16 9 0;
   height: 56;
+  font-size: 13px;
+  font-family: "Inter";
+  font-weight: 400;
 }
 
 .action-subtitle {

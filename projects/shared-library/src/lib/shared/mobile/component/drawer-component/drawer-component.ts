@@ -87,12 +87,12 @@ export class DrawerComponent implements OnInit, OnDestroy {
         });
     }
     ngOnInit() {
-        this.firebaseAuthService.authState().subscribe(afUser => {
+        this.subscriptions.push(this.firebaseAuthService.authState().subscribe(afUser => {
             if (!afUser) {
                 this.store.dispatch(this.userActions.loginSuccess(null));
                 this.routerExtension.navigate(['/dashboard'], { clearHistory: true });
             }
-        });
+        }));
         this.categoriesObs = this.store.select(coreState).pipe(select(s => s.categories));
         this.subscriptions.push(this.categoriesObs.subscribe(categories => {
             this.categories = categories;
