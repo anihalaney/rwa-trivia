@@ -70,13 +70,15 @@
 
 <GridLayout rows="*" columns="60, *" *ngIf="user && userCardType.USER_IMAGE_NAME_HORIZONTAL === type">
   <Image row="0" col="0" [stlOpenUserProfile]="{userId: user.userId, redirectTo: 'otherUserProfile'}"
-    [src]="getImageUrl(user,44,40)" stretch="aspectFill" height="40" width="40" marginLeft="10"
-    verticalAlignment="center" marginRight="15" borderRadius="50"></Image>
+    [src]="getImageUrl(user,44,40)" stretch="aspectFill" class="friend-user-profile"></Image>
   <AbsoluteLayout *ngIf="user?.online" horizontalAlignment="center"
     [stlOpenUserProfile]="{userId: user?.userId, redirectTo: loggedInUserId === user?.userId ? 'userProfile': 'otherUserProfile'}">
-    <Label height="10" top="27" left="27" width="10" borderRadius="22" backgroundColor="#71b02f"></Label>
+    <Label height="10" top="32" left="40" width="10" borderRadius="22" backgroundColor="#71b02f"></Label>
   </AbsoluteLayout>
-  <Label row="0" col="1" class="name Hind-Regular" verticalAlignment="center" [text]="user?.displayName"></Label>
+  <FlexboxLayout row="0" col="1" flexDirection="column" marginLeft="10">
+    <Label class="disp-name"  [text]="user?.displayName"></Label>
+    <Label class="address"  [text]="user?.location"></Label>
+  </FlexboxLayout>
 </GridLayout>
 
 <ng-container *ngIf="userCardType.USER_IMAGE_NAME_PROFILE_HORIZONTAL === type" >
@@ -320,19 +322,22 @@
 <ng-container *ngIf="user && userCardType.USER_IMAGE_NAME_CATEGORY_HORIZONTAL === type">
   <GridLayout rows="auto,auto,auto" columns="auto,*" padding="0 5 0 5" iosOverflowSafeArea="false">
     <StackLayout row="0" col="0" marginLeft="10" rowSpan="3" verticalAlignment="center" marginRight="10"
-      borderRadius="50" borderColor="#3b5998" borderWidth="1" paddingTop="2" paddingLeft="2" paddingRight="2"
-      class="image-container" height="44" width=44>
-      <Image [stlOpenUserProfile]="{userId: user.userId, redirectTo: 'otherUserProfile'}"
+      borderRadius="25" borderColor="#3b5998" borderWidth="1" paddingTop="2" paddingLeft="2" paddingRight="2"
+      class="image-container" height="50" width=50>
+      <Image [stlOpenUserProfile]="{userId: user.userId, redirectTo: 'otherUserProfile'}" class="friend-user-profile"
         [src]="getImageUrl(user,44,40)" stretch="aspectFill" height="50" width="50" marginLeft="10"
         verticalAlignment="center" marginRight="10" borderRadius="50" paddingLeft="10" paddingTop="10"></Image>
     </StackLayout>
     <AbsoluteLayout *ngIf="user?.online" row="0" col="0" rowSpan="3" verticalAlignment="center"
       [stlOpenUserProfile]="{userId: user?.userId, redirectTo: loggedInUserId === user?.userId ? 'userProfile': 'otherUserProfile'}">
-      <Label height="15" top="35" left="38" width="15" borderRadius="22" backgroundColor="#71b02f"></Label>
+      <Image *ngIf="isGame === true;else online_stat" class="friend-user-profile" src="~/assets/images/game.png" height="20" top="30" left="33" width="20"></Image>
+      <ng-template #online_stat>
+        <Label  height="10" top="32" left="47" width="10" borderRadius="22" backgroundColor="#71b02f"></Label>
+      </ng-template>
     </AbsoluteLayout>
     <Label row="1" col="1" text=" " textWrap="true" fontSize="16ˇ">
       <FormattedString>
-        <span text="{{user?.displayName}}" color="#6d8bca"></span>
+        <span text="{{user?.displayName}}" color="#3b5998"></span>
         <span text=" {{otherInfo?.notificationText}}"></span>
       </FormattedString>
     </Label>

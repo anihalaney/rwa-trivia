@@ -1,4 +1,4 @@
-import { Component, OnDestroy, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnDestroy, ChangeDetectorRef, ChangeDetectionStrategy, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { RouterExtensions } from 'nativescript-angular/router';
@@ -19,7 +19,7 @@ import { Utils } from 'shared-library/core/services';
 })
 
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
-export class MyQuestionsComponent extends MyQuestions implements OnDestroy {
+export class MyQuestionsComponent extends MyQuestions implements OnDestroy, OnInit {
 
   userDict$: Observable<{ [key: string]: User }>;
   userDict: { [key: string]: User } = {};
@@ -27,7 +27,7 @@ export class MyQuestionsComponent extends MyQuestions implements OnDestroy {
   displayEditQuestion = false;
   selectedQuestion: Question;
   tabIndex = 0;
-  subscriptions = [];
+  renderView = false;
 
   constructor(public store: Store<AppState>,
     public questionActions: QuestionActions,
@@ -37,11 +37,17 @@ export class MyQuestionsComponent extends MyQuestions implements OnDestroy {
     private utils: Utils
   ) {
     super(store, questionActions, cd);
-    this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
+
+  }
+
+  ngOnInit(): void {
+
+    this.userDict$ = this.store.select(appState.coreState).pipe(select(s => s.userDict));
     this.subscriptions.push(this.userDict$.subscribe(userDict => {
       this.userDict = userDict;
       this.cd.markForCheck();
     }));
+    this.page.on('loaded', () => { this.renderView = true; this.cd.markForCheck(); });
   }
 
 
@@ -77,6 +83,8 @@ export class MyQuestionsComponent extends MyQuestions implements OnDestroy {
     this.tabIndex = index;
   }
   ngOnDestroy() {
+    this.page.off('loaded');
+    this.renderView = false;
   }
 
 }

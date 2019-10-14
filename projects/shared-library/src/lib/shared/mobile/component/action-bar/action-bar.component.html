@@ -1,54 +1,33 @@
 <ActionBar title="" class="action-bar " [ngClass]=" subTitle ? 'action-subtitle' : 'action-title' ">
+
     <NavigationButton visibility="collapsed"></NavigationButton>
+
     <GridLayout ios:rows="auto" android:rows="auto" ios:columns="auto,*,auto,auto,auto"
         android:columns="auto,*,auto,auto,auto" width="100%">
 
-        <StackLayout *ngIf="!hideMenu" stlRippleEffect stlBackgroundColor="#13284F" stlOpacity="0.5"
-            stlBackgroundColorAfter="" verticalAlignment="center" width="45" col="0" (tap)="openSidebar()">
+        <StackLayout col="0" verticalAlignment="center" marginRight="10" horizontalAlignment="left" (tap)="back()">
             <Label color="#000000" text="&#xe906;" fontSize="20" class="ico icon-back"></Label>
         </StackLayout>
 
         <StackLayout col="1" verticalAlignment="center">
-            <Label [text]="title.replace('_',' ')" class="action-text-title" textWrap="true"></Label>           
+            <Label [text]="title.replace('_',' ')" class="action-text-title" textWrap="true"></Label>
         </StackLayout>
 
+
         <StackLayout col="2" *ngIf="((user && user!== null && !showSkipBtn && title==='Questions'))" stlRippleEffect
-            ios:margin="3" android:margin="10" stlOpacity="0.5" stlBackgroundColorAfter=""
+            stlBackgroundColor="#13284F" ios:margin="3" ios:marginRight="30" android:margin="10" stlOpacity="0.5" stlBackgroundColorAfter=""
             verticalAlignment="center" horizontalAlignment="right" android:width="23" ios:width="23"
             (rippleTap)="navigateToSubmitQuestion()">
             <Label text="&#xe905;" color="#6c63ff" fontSize="20" class="ico icon-add"></Label>
         </StackLayout>
-        
 
+        <!-- For View All Icon in question-add-updates.component.tns.html screen -->
         <StackLayout col="2" *ngIf="(user && user!== null && !showSkipBtn && title.includes('Add_Question'))"
-            stlRippleEffect stlBackgroundColor="#13284F" ios:margin="3" android:margin="10" stlOpacity="0.5"
+            stlRippleEffect stlBackgroundColor="#13284F" ios:margin="3" ios:marginRight="30"  android:margin="10" stlOpacity="0.5"
             stlBackgroundColorAfter="" verticalAlignment="center" horizontalAlignment="right"
             (rippleTap)="navigateToMyQuestion()" orientation="horizontal">
             <Label text="&#xf03a;" class="fa" fontSize="18" marginTop="5"></Label>
             <Label text="View All" marginLeft="5" fontSize="18"></Label>
-        </StackLayout>
-       
-
-        <StackLayout *ngIf="((user && user!== null && !hideHomeIcon && !showSkipBtn))" col="4" stlRippleEffect
-            stlBackgroundColor="#13284F" ios:margin="3" android:margin="10" stlOpacity="0.5" stlBackgroundColorAfter="transparent"
-            verticalAlignment="center" horizontalAlignment="right" android:width="23" ios:width="23"
-            (rippleTap)="goToDashboard()">
-            <Label text="&#xf015;" class="fa" fontSize="23"></Label>
-        </StackLayout>
-
-        <!-- For Search Icon in invite-friends.component.tns.html screen -->
-        <StackLayout *ngIf="((user && user!== null && !showSkipBtn && title.includes('Friends')))" col="4" stlRippleEffect
-            stlBackgroundColor="#13284F" ios:margin="3" android:margin="10" stlOpacity="0.5" stlBackgroundColorAfter=""
-            verticalAlignment="center" horizontalAlignment="right" marginRight="95" android:width="23" ios:width="40" >
-            <Label color="#3b5998" text="&#xe942;" fontSize="20" class="ico icon-search"></Label>
-        </StackLayout>
-
-        <!-- For Add Friend Icon in invite-friends.component.tns.html screen -->
-        <StackLayout *ngIf="((user && user!== null && !showSkipBtn && title.includes('Friends')))" col="4" 
-            stlRippleEffect (rippleTap)="navigateToInvite()"
-            stlBackgroundColor="#13284F" ios:margin="3" android:margin="10" stlOpacity="0.5" stlBackgroundColorAfter=""
-            verticalAlignment="center" horizontalAlignment="right" marginRight="50" android:width="23" ios:width="40">
-            <Label text="&#xf234;" class="fas" fontSize="18"></Label>
         </StackLayout>
 
         <StackLayout *ngIf="showSkipBtn" col="2" stlRippleEffect stlBackgroundColor="#13284F" ios:margin="3" margin="10"
@@ -56,6 +35,33 @@
             (rippleTap)="goToDashboard()">
             <Label text="Skip" class="fa" fontSize="20" margin="5"></Label>
         </StackLayout>
+
+        <!-- For Search Icon in invite-friends.component.tns.html screen -->
+        <StackLayout *ngIf="((user && user!== null && !showSkipBtn && title.includes('Friends')))" col="4"
+            stlRippleEffect stlBackgroundColor="#13284F" ios:margin="3" android:margin="10" stlOpacity="0.5"
+            stlBackgroundColorAfter="" verticalAlignment="center" horizontalAlignment="right" marginRight="10"
+            android:width="23" ios:width="40">
+            <Label color="#3b5998" text="&#xe942;" fontSize="20" class="ico icon-search"></Label>
+        </StackLayout>
+
+        <StackLayout *ngIf="((user && user!== null && !showSkipBtn && title.includes('Notifications')))" col="4" stlRippleEffect ios:margin="3" android:margin="10" stlOpacity="0.5" stlBackgroundColorAfter=""
+            verticalAlignment="center" horizontalAlignment="right" marginRight="10" android:width="23" ios:width="40" >
+            <Image src="~/assets/images/double_check.png"  width="28" height="28" ></Image>
+        </StackLayout>
+
+        <StackLayout *ngIf="showSkipBtn" col="2" stlRippleEffect stlBackgroundColor="#13284F" ios:margin="3" margin="10"
+            android:margin="5" stlOpacity="0.5" stlBackgroundColorAfter="transparent" verticalAlignment="center"
+            (rippleTap)="goToDashboard()">
+            <Label text="Skip" class="fa" fontSize="20" margin="5"></Label>
+        </StackLayout>
+        <!-- For Add Friend Icon in invite-friends.component.tns.html screen -->
+        <StackLayout *ngIf="((user && user!== null && !showSkipBtn && title.includes('Friends')))" col="3"
+            stlRippleEffect (rippleTap)="navigateToInvite()" stlBackgroundColor="#13284F" ios:margin="3"
+            android:margin="10" stlOpacity="0.5" stlBackgroundColorAfter="" verticalAlignment="center"
+            horizontalAlignment="right" marginRight="10" android:width="23" ios:width="40">
+            <Label text="&#xf234;" class="fas" fontSize="18"></Label>
+        </StackLayout>
+
 
     </GridLayout>
 </ActionBar>

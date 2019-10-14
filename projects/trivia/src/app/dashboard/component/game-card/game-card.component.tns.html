@@ -108,11 +108,11 @@
         </StackLayout>
     </GridLayout>
     <GridLayout rows="*" columns="*,*,*" iosOverflowSafeArea="false">
-        <StackLayout row="0" col="0" class="hr-light m-10" height="3" iosOverflowSafeArea="false"></StackLayout>
+        <StackLayout row="0" col="0" class="hr-light m-10" height="2" iosOverflowSafeArea="false"></StackLayout>
         <Label row="0" col="1" horizontalAlignment="center" text="{{categoryDict[game.gameOptions?.categoryIds[randomCategoryId]]?.categoryName?.charAt(0)?.toUpperCase()
                 + categoryDict[game.gameOptions?.categoryIds[randomCategoryId]]?.categoryName?.slice(1)}}"
             textWrap="true" class="tagging"> </Label>
-        <StackLayout row="0" col="2" class="hr-light m-10" height="3" iosOverflowSafeArea="false"></StackLayout>
+        <StackLayout row="0" col="2" class="hr-light m-10" height="2" iosOverflowSafeArea="false"></StackLayout>
     </GridLayout>
     <GridLayout rows="*" columns="auto,auto,*" iosOverflowSafeArea="false">
         <app-user-card [userId]="user.userId" [type]="userCardType.USER_IMAGE_NAME_WITH_SCORE"
@@ -194,5 +194,4 @@
 
         </StackLayout>
     </GridLayout>
-    <StackLayout row="0" col="1" class="hr-light" height="3" iosOverflowSafeArea="false"></StackLayout>
 </StackLayout>

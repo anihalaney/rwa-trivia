@@ -52,7 +52,6 @@ export class GameQuestionComponent extends GameQuestion implements OnInit, OnDes
   }
 
   ngOnDestroy() {
-
   }
 
   fillTimer() {
