@@ -27,10 +27,10 @@
       borderRadius="5" stlRippleEffect (rippleTap)="rippleTap(answer)"
       [style.backgroundColor]="
       (answeredText === answer.answerText && correctAnswerText !== answer.answerText && theme === 'dark') ? '#d54937' : 
-      (answeredText === answer.answerText && correctAnswerText !== answer.answerText && theme === 'light') ? '#d54937' : transparent"
+      (answeredText === answer.answerText && correctAnswerText !== answer.answerText && theme === 'light') ? '#d54937' : 'transparent'"
       [style.backgroundColor]="
       (answeredText !== '' && correctAnswerText === answer.answerText && theme === 'dark') ? '#71b02f' :
-      (answeredText !== '' && correctAnswerText === answer.answerText && theme === 'light') ? '#71b02f' : transparent">
+      (answeredText !== '' && correctAnswerText === answer.answerText && theme === 'light') ? '#71b02f' : 'transparent'">
 
       <render-answer [answer]="answer" [isGameAnswer]="true"
         [isWrong]="answeredText === answer.answerText && correctAnswerText !== answer.answerText"

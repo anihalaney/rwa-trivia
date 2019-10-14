@@ -51,7 +51,6 @@
                         textWrap="true"></Label>
                 </FlexboxLayout>
             </GridLayout>
-
             <GridLayout rows="*, *, *, *, *, *" columns="*" iosOverflowSafeArea="false" class="dashboard_body-grid">
                 <render-box row="0" col="0" [setBackgroundColor]="'#283b66'" [theme]="'dark'">
                     <StackLayout class="dashboard_body-grid0">
@@ -172,7 +171,7 @@
                             </FlexboxLayout>
                         </StackLayout>
                         <FlexboxLayout>
-                            <Button horizontaAlignment="left" ios:padding="10 0" class="submit-btn"
+                            <Button horizontaAlignment="left" class="btn-transparent blue-border"
                                 text="SUBMIT A QUESTION" (tap)="navigateToMyQuestion()"></Button>
                         </FlexboxLayout>
                     </StackLayout>
