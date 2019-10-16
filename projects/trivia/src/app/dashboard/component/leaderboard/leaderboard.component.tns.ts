@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, NgZone, OnDestroy } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, NgZone, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Store, select } from '@ngrx/store';
 import { Utils } from 'shared-library/core/services';
@@ -6,10 +6,11 @@ import { UserActions } from 'shared-library/core/store/actions';
 import { Page } from 'tns-core-modules/ui/page';
 // import { AppState } from '../../../store';
 import { Leaderboard } from './leaderboard';
-import { SelectedIndexChangedEventData } from 'nativescript-drop-down';
+import { SelectedIndexChangedEventData, DropDown } from 'nativescript-drop-down';
 import { ValueList } from 'nativescript-drop-down';
 import { AppState, appState } from '../../../store';
 import { User } from 'shared-library/shared/model';
+
 @Component({
   selector: 'leaderboard',
   templateUrl: './leaderboard.component.html',
@@ -18,8 +19,7 @@ import { User } from 'shared-library/shared/model';
 })
 
 export class LeaderboardComponent extends Leaderboard implements OnDestroy {
-
-
+  @ViewChild('dropdown', { static: false }) dropdown: ElementRef;
   // This is magic variable
   // it delay complex UI show Router navigation can finish first to have smooth transition
   renderView = false;
@@ -38,6 +38,7 @@ export class LeaderboardComponent extends Leaderboard implements OnDestroy {
     protected ngZone: NgZone) {
 
     super(store, userActions, utils, route, cd, ngZone);
+
     this.page.on('loaded', () => this.ngZone.run(() => {
       this.renderView = true;
       this.cd.markForCheck();
@@ -48,6 +49,11 @@ export class LeaderboardComponent extends Leaderboard implements OnDestroy {
       this.items.push(category.categoryName);
     });
     this.cd.markForCheck();
+  }
+
+  openDropdown() {
+    let dropdown = <DropDown>this.dropdown.nativeElement;
+    dropdown.open();
   }
 
   public onchange(args: SelectedIndexChangedEventData) {

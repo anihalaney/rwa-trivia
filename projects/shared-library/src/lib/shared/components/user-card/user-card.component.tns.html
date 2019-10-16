@@ -31,15 +31,15 @@
 
     <GridLayout row="0" col="1" rows="*, *, *" columns="*" class="padding-10">
       <StackLayout row="0" col="0">
-        <Label *ngIf="user?.displayName" [text]="user?.displayName" fontSize="16" class="text-black"></Label>
-        <Label *ngIf="!user?.displayName" [text]="'unknown'" class="text-black" fontSize="16"></Label>
+        <Label *ngIf="user?.displayName" [text]="user?.displayName" fontSize="16" class="leaderboard-user-name"></Label>
+        <Label *ngIf="!user?.displayName" [text]="'unknown'" class="leaderboard-user-name" fontSize="16"></Label>
+        <Label *ngIf="user?.isFriend && loggedInUserId"
+        text="is your friend" textWrap="true" class="friend-check"
+        fontSize="14"> </Label>
         <FlexboxLayout>
           <Image src="~/assets/images/bits.png" marginRight="5" width="22" height="22"></Image>
-          <Label text="1,000,000" textWrap="true"></Label>
+          <Label text="{{user?.bits}}" fontWeight="400" textWrap="true"></Label>
         </FlexboxLayout>
-        <Label *ngIf="user?.isFriend && loggedInUserId"
-          text="{{ (user?.isFriend) ? user?.displayName : '' }} is your friend" textWrap="true" class="text-gray"
-          fontSize="14"> </Label>
       </StackLayout>
     </GridLayout>
   </GridLayout>

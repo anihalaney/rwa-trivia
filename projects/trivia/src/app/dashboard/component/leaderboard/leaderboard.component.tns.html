@@ -6,8 +6,8 @@
                 <StackLayout class="cardStyle" orientation="vertical" verticalAlignment="center" height="100%">
 
                     <GridLayout rows="*,*" columns="*,*">
-                        <GridLayout rows="*" columns="*,auto" row="1" col="0" class="dropdown">
-                            <DropDown row="0" col="0" *ngIf="items" android:class="filter-dropdown-mobile"
+                        <GridLayout rows="*" columns="*,auto" row="1" col="0" class="dropdown" (tap)="openDropdown()">
+                            <DropDown row="0" col="0" #dropdown itemsTextAlignment="center" *ngIf="items" android:class="filter-dropdown-mobile"
                                 [items]="items" [(ngModel)]="selectedIndex" [hint]="'Select Category'"
                                 (selectedIndexChanged)="onchange($event)">
                             </DropDown>
@@ -16,7 +16,7 @@
                         </GridLayout>
 
                         <GridLayout rows="*" columns="*,auto" row="1" col="1" class="dropdown">
-                            <DropDown row="0" col="0" *ngIf="filterTopList" android:class="filter-dropdown-mobile"
+                            <DropDown row="0" col="0" *ngIf="filterTopList" itemsTextAlignment="center" android:class="filter-dropdown-mobile"
                                 [items]="filterTopList" [(ngModel)]="selectedTopFilter"
                                 (selectedIndexChanged)="onTopFilterChanged($event)">
                             </DropDown>
@@ -28,27 +28,21 @@
 
                     <FlexboxLayout justifyContent="space-between" padding="10 15">
                         <Label text="Profile" textWrap="true"></Label>
-                        <GridLayout rows="*" columns="auto,auto">
-                            <Label row="0" col="0" text="Won" textWrap="true" margin="0 12"></Label>
-                            <Label row="0" col="1" text="Played" textWrap="true" margin="0 12"></Label>
-                        </GridLayout>
+                        <Label row="0" col="1" text="Points" textWrap="true" margin="0 12"></Label>
                     </FlexboxLayout>
 
-                    <StackLayout class="question-answered" backgroundColor="#f9f9f9"
+                    <StackLayout class="question-answered"
                         *ngFor="let user of selectedCatList | slice:lbsUsersSliceStartIndex:pagination;let j=index;">
                         <GridLayout rows="*" columns="auto,*,auto,auto" padding="15"
-                            [ngClass]="{'border-props': (loggedInUserId === user.userId)}">
+                            [ngClass]="{'login-user-hightlight': (loggedInUserId === user.userId)}">
                             <Label text="{{j+1}}" row="0" col="0" class="profile-no Hind-Bold"
                                 verticalAlignment="center"></Label>
                             <StackLayout row="0" col="1" class="padding-10">
                                 <app-user-card [userId]="user.userId"
                                     [type]="userCardType.USER_IMAGE_NAME_LOCATION_HORIZONTAL"></app-user-card>
                             </StackLayout>
-                            <StackLayout row="0" col="2" margin="0 20">
-                                <Label [text]="user.score" class="text-black" fontSize="16"></Label>
-                            </StackLayout>
-                            <StackLayout row="0" col="3" margin="0 20">
-                                <Label [text]="user.score" class="text-black" fontSize="16"></Label>
+                            <StackLayout row="0" col="3">
+                                <Label [text]="user.score" class="score"></Label>
                             </StackLayout>
                         </GridLayout>
                     </StackLayout>
