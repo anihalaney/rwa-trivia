@@ -99,6 +99,9 @@ export class Dashboard implements OnDestroy {
                     this.gamePlayBtnDisabled = false;
                 }
                 this.user = u;
+                if (!this.user && this.timerSub) {
+                    this.timerSub.unsubscribe();
+                }
                 this.gamePlayBtnDisabled = false; return u !== null;
             }),
             map(user => {
@@ -111,11 +114,7 @@ export class Dashboard implements OnDestroy {
                         const userTags = this.user.tags.join(', ');
                         this.actionSubText = userTags;
                     }
-
                     this.cd.markForCheck();
-                    if (!this.user && this.timerSub) {
-                        this.timerSub.unsubscribe();
-                    }
                 });
             }),
             flatMap(() => this.store.select(appState.coreState).pipe(select(s => s.questionOfTheDay),
