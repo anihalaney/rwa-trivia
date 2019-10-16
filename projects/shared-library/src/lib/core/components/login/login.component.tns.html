@@ -9,13 +9,15 @@
           <PreviousNextView> 
             <GridLayout  rows="auto,*"  columns="*"  (tap)="hideKeyboard()">
                         
-                <Image *ngIf="mode === 1" src="~/assets/images/back_btn.png" row="0"  (tap)="changeMode(0)" class="back-button">
+                <Image *ngIf="mode === 1 || mode === 2" src="~/assets/images/back_btn.png" row="0"  (tap)="changeMode(0)" class="back-button">
                     </Image>          
                 <Image *ngIf="mode === 0" src="~/assets/images/back_btn.png" row="0"  (tap)="changeMode('/dashboard')" class="back-button">
-                    </Image>          
+                    </Image>    
+                <Image *ngIf="mode === 0 && signInMethod === 'phone'" src="~/assets/images/back_btn.png" row="0"  (tap)="changeMode('email')" class="back-button">
+                    </Image>               
                     <!--SignIn & Forgot Password Form-->                    
                     <GridLayout *ngIf="mode === 0 || mode === 2" rows="auto,auto,*" columns="*" row="1" class="login-page"
-                                   [ngClass]="{'hide-layout': signInMethod === 'phone'}"  (tap)="signInMethod = ''">
+                                   [ngClass]="{'hide-layout': signInMethod === 'phone'}">
                                   <GridLayout row="0" rows="*,*,*,*,*" columns="*" class="section-1">
                                         <Label row="0"  col="0"  [text]="mode === 0 ? 'Sign In' : 'Forgot password?'" textWrap="true"
                                               class="title-1"></Label>
@@ -25,7 +27,7 @@
                                               <Image col="1" src="~/assets/images/fb-icon.jpg" (tap)="fbLogin()">
                                     </Image>               <Image col="2"  src="~/assets/images/google_icon.png"
                                      (tap)="googleLogin()"></Image>
-                                              <Image col="3" src="~/assets/images/phone.png" (tap)="phoneSignIn()">
+                                              <Image col="3" src="~/assets/images/phone.png" class="phone-icon" (tap)="phoneSignIn()">
                                     </Image>                     </GridLayout>             <Label *ngIf="mode === 0"
                                      row="3"   col="0"   text="OR"  textWrap="true"  class="title-3"></Label>
                                                 <Label row="4"  col="0"
@@ -64,7 +66,7 @@
                                   
                                             <StackLayout row="2" col="0" class="button-section">
                                                   <Button text="Sign in" [text]="mode === 0 ? 'Sign in' : 'Send Password'" (tap)="onSubmit()"
-                                                        [disabled]="loginForm.invalid"></Button>
+                                                        [disabled]="loginForm.invalid" stlRippleEffect></Button>
                                                 </StackLayout>
                                           </GridLayout>
                                       
@@ -76,7 +78,7 @@
                                                   class="text-1"  (tap)="changeMode(mode === 0? 2: 0)"></Label>
                                             <Label *ngIf="mode === 0" row="1" col="0" text="Not a member yet?" textWrap="true" class="text-2"></Label>
                                             <StackLayout *ngIf="mode === 0" row="2" col="0" class="button-section">
-                                                  <Button text="Sign up" (tap)="changeMode(1)"></Button>
+                                                  <Button text="Sign up" (tap)="changeMode(1)" stlRippleEffect></Button>
                                                 </StackLayout>
                                           </GridLayout>
                                       
