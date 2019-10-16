@@ -72,8 +72,6 @@
 
   .dashboard {
     padding: 10 0;
-    border-bottom-color: black;
-    border-bottom-width: 1;
 
     &_user {
       margin-left: 10;
@@ -85,6 +83,7 @@
       &-subText {
         font-size: 18;
         font-weight: bold;
+        color: #3a5998;
       }
 
       &-icon {
@@ -95,6 +94,7 @@
     }
 
     &_body {
+      padding-bottom: 70;
       &-bits {
         width: 60%;
         margin: 10 0 0 30;

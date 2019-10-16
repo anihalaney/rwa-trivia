@@ -5,11 +5,11 @@
     <GridLayout ios:rows="auto" android:rows="auto" ios:columns="auto,*,auto,auto,auto"
         android:columns="auto,*,auto,auto,auto" width="100%">
 
-        <StackLayout col="0" verticalAlignment="center" marginRight="10" horizontalAlignment="left" (tap)="back()">
+        <StackLayout col="0" verticalAlignment="center" paddingRight="10" horizontalAlignment="left" (tap)="back()">
             <Label text="&#xf104;" class="fa" textWrap="true" fontSize="40"></Label>
         </StackLayout>
 
-        <StackLayout col="1" verticalAlignment="center">
+        <StackLayout col="1" verticalAlignment="center" (tap)="back()">
             <Label [text]="title.replace('_',' ')" class="action-text-title" textWrap="true"></Label>
         </StackLayout>
 

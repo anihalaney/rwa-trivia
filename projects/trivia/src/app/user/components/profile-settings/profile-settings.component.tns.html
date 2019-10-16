@@ -1,5 +1,5 @@
 <ns-action-bar title="Profile" class="Roboto-Regular" showAdd="true"></ns-action-bar>
-<StackLayout iosOverflowSafeArea="false">
+<StackLayout iosOverflowSafeArea="false" class="profileSettings">
   <ActivityIndicator visibility="{{ loaderBusy ? 'visible' : 'collapsed' }}" [busy]="loaderBusy" width="100"
     height="100" marginTop="225" class="activity-indicator"></ActivityIndicator>
   <ScrollView visibility="{{ !loaderBusy ? 'visible' : 'collapsed' }}" iosOverflowSafeArea="false">
@@ -24,7 +24,7 @@
                 <GridLayout row="*" col="*, auto" orientation="horizontal" margin="0 20">
                   <StackLayout row="0" col="0">
                     <app-check-display-name formControlName="displayName"
-                      hint="{{userType === 0 ? 'Display Name' : 'Undefined'}}" class="input"></app-check-display-name>
+                      hint="{{userType === 0 ? 'Display Name' : 'Undefined'}}"></app-check-display-name>
                   </StackLayout>
                   <Label *ngIf="!singleFieldEdit.displayName && userType === 0" (tap)="editSingleField('displayName')"
                     row="0" col="1" android:marginTop="22" android:marginRight="4" ios:marginTop="8" fontSize="16"

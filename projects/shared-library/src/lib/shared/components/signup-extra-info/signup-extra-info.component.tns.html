@@ -1,34 +1,33 @@
 <ns-action-bar title="User Info" class="Roboto-Regular" hideHomeIcon="true" hideMenu="true"></ns-action-bar>
-<StackLayout class="signUpExtraInfo" marginTop="10">
+<GridLayout class="signUpExtraInfo" marginTop="10">
     <ScrollView>
-        <StackLayout [formGroup]="userForm" iosOverflowSafeArea="false">
+        <GridLayout rows="auto,auto,auto,auto,auto,auto,auto" [formGroup]="userForm" iosOverflowSafeArea="false">
             <!-- E-mail -->
-            <TextField class="text-field" [editable]="emailEditable" #textField
+            <TextField row="0" class="text-field" [editable]="emailEditable" #textField
                 [stlShowHintWhenFocusOut]="{hintRef: emailHint, controlRef:userForm.controls.email}"
                 formControlName="email" hint="Email"></TextField>
-            <GridLayout rows="*, *" columns="*">
-                <!-- Name -->
-                <StackLayout>
-                    <app-check-display-name formControlName="displayName" hint="Display Name" class="display-name text-field">
-                    </app-check-display-name>
-                </StackLayout>
+            <GridLayout row="1" rows="*, *" columns="*">
+                <app-check-display-name formControlName="displayName" hint="Display Name">
+                </app-check-display-name>
             </GridLayout>
             <!-- Phone number -->
-            <TextField class="text-field" [editable]="phoneEditable" keyboardType="number" formControlName="phoneNo"
-                hint="Phone Number"></TextField>
+            <TextField row="2" class="text-field" [editable]="phoneEditable" keyboardType="number"
+                formControlName="phoneNo" hint="Phone Number"></TextField>
             <!-- Error labels -->
-            <Label #emailHint text="Invalid Email!" marginTop="10" textWrap="true" class="text-center error"></Label>
-            <Label
+            <Label row="3" #emailHint text="Invalid Email!" marginTop="10" textWrap="true"
+                class="text-center error"></Label>
+            <Label row="4"
                 *ngIf="userForm.controls.displayName.errors && userForm.controls.displayName.errors.required && !userForm.controls.displayName.pristine"
                 class="text-center error" textWrap="true" text="Display Name is required!"></Label>
-            <Label *ngIf="userForm.controls.displayName.errors && userForm.controls.displayName.errors.exist"
+            <Label row="5" *ngIf="userForm.controls.displayName.errors && userForm.controls.displayName.errors.exist"
                 class="text-center error" textWrap="true" text="Display Name is already taken by other user"></Label>
             <!-- Submit button -->
-            <GridLayout iosOverflowSafeArea="false" margin="15" rows="auto" columns="*">
+            <GridLayout row="6" iosOverflowSafeArea="false" margin="15" rows="auto" columns="*">
                 <Button row="0" col="0" [isEnabled]="userForm.valid" width="100%"
-                    class="Roboto-Medium  btn-blue text-field" text="Continue" (tap)="submit()" stlRippleEffect></Button>
+                    class="Roboto-Medium  btn-blue text-field" text="Continue" (tap)="submit()"
+                    stlRippleEffect></Button>
             </GridLayout>
 
-        </StackLayout>
+        </GridLayout>
     </ScrollView>
-</StackLayout>
+</GridLayout>
