@@ -6,7 +6,7 @@
                 <StackLayout class="cardStyle" orientation="vertical" verticalAlignment="center" height="100%">
 
                     <GridLayout rows="*,*" columns="*,*">
-                        <GridLayout rows="*" columns="*,auto" row="1" col="0" class="dropdown" (tap)="openDropdown()">
+                        <GridLayout rows="*" columns="*,auto" row="1" col="0" android:class="dropdown-android" ios:class="dropdown-ios" (tap)="openDropdown()">
                             <DropDown row="0" col="0" #dropdown itemsTextAlignment="center" *ngIf="items" android:class="filter-dropdown-mobile"
                                 [items]="items" [(ngModel)]="selectedIndex" [hint]="'Select Category'"
                                 (selectedIndexChanged)="onchange($event)">
@@ -15,7 +15,7 @@
                                 textWrap="true"></Label>
                         </GridLayout>
 
-                        <GridLayout rows="*" columns="*,auto" row="1" col="1" class="dropdown">
+                        <GridLayout rows="*" columns="*,auto" row="1" col="1" android:class="dropdown-android" ios:class="dropdown-ios">
                             <DropDown row="0" col="0" *ngIf="filterTopList" itemsTextAlignment="center" android:class="filter-dropdown-mobile"
                                 [items]="filterTopList" [(ngModel)]="selectedTopFilter"
                                 (selectedIndexChanged)="onTopFilterChanged($event)">
