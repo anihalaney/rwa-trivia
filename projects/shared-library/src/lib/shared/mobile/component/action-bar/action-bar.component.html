@@ -30,8 +30,9 @@
         </StackLayout>
 
         <StackLayout col="2" *ngIf="((user && user!== null && !showSkipBtn && title==='Questions'))" stlRippleEffect
-            ios:margin="3" android:margin="10" stlOpacity="0.5" stlBackgroundColorAfter="" verticalAlignment="center"
-            horizontalAlignment="right" android:width="23" ios:width="23" (rippleTap)="navigateToSubmitQuestion()">
+            stlBackgroundColor="#13284F" ios:margin="3" ios:marginRight="30" android:margin="10" stlOpacity="0.5" stlBackgroundColorAfter=""
+            verticalAlignment="center" horizontalAlignment="right" android:width="23" ios:width="23"
+            (rippleTap)="navigateToSubmitQuestion()">
             <Label text="&#xe905;" color="#6c63ff" fontSize="20" class="ico icon-add"></Label>
         </StackLayout>
 
