@@ -7,9 +7,9 @@
 </StackLayout>
 
 <ng-template #renderView>
-    <StackLayout orientation="horizontal" class="{{theme}}-theme">
+    <StackLayout orientation="horizontal" horizontalAlignment="center" class="{{theme}}-theme">
        <!-- <Label verticalAlignment="top" paddingLeft="10" text="{{questionIndex}} . " textWrap="true" *ngIf="questionIndex"></Label> -->
-       <Label textAlignment="center" lineHeight="10" text="{{question?.questionText}}" color="#263238" fontSize="17" fontWeight="700"
+       <Label lineHeight="10" class="text-color" text="{{question?.questionText}}" fontSize="17" fontWeight="700"
             textWrap="true"></Label>
     </StackLayout>
 </ng-template>

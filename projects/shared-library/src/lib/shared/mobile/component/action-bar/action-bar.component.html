@@ -1,4 +1,5 @@
-<ActionBar title="" class="action-bar " [ngClass]=" subTitle ? 'action-subtitle' : 'action-title' ">
+<ActionBar flat="true" background="#fff" title="" class="action-bar "
+    [ngClass]=" subTitle ? 'action-subtitle' : 'action-title' ">
 
     <NavigationButton visibility="collapsed"></NavigationButton>
 
@@ -15,16 +16,16 @@
 
         <!-- game profile edit icon -->
         <StackLayout col="2" *ngIf="showEdit?.showEditOrOptions === 'edit' && showEdit?.userId" stlRippleEffect
-            stlBackgroundColor="transparent" stlOpacity="0.5" marginRight="10"
-            stlBackgroundColorAfter="transparent" verticalAlignment="center" horizontalAlignment="right" 
-             (rippleTap)="navigateToProfile()">
-            <Label text="&#xf303;" class="fas" fontSize="18" padding="5 10" color="#14418B"></Label>
+            stlBackgroundColor="#13284F" ios:margin="3" ios:marginRight="30" android:margin="10" stlOpacity="0.5"
+            stlBackgroundColorAfter="" verticalAlignment="center" horizontalAlignment="right" android:width="23"
+            ios:width="23" (rippleTap)="navigateToProfile()">
+            <Label text="&#xf303;" class="fas" fontSize="18" color="#14418B"></Label>
         </StackLayout>
 
         <!-- game profile option icon -->
         <StackLayout col="2" *ngIf="showEdit?.showEditOrOptions === 'options' && showEdit?.userId" istlRippleEffect
-        stlBackgroundColor="transparent" stlOpacity="0.5" marginRight="10"
-        stlBackgroundColorAfter="transparent" verticalAlignment="center" horizontalAlignment="right" >
+            stlBackgroundColor="transparent" stlOpacity="0.5" margin="0 10" stlBackgroundColorAfter="transparent"
+            verticalAlignment="center" horizontalAlignment="right">
             <Label text="&#xf142;" fontSize="22" padding="5 10" class="fa"></Label>
         </StackLayout>
 
@@ -68,11 +69,6 @@
             <Image src="~/assets/images/double_check.png" width="28" height="28"></Image>
         </StackLayout>
 
-        <StackLayout *ngIf="showSkipBtn" col="2" stlRippleEffect stlBackgroundColor="#13284F" ios:margin="3" margin="10"
-            android:margin="5" stlOpacity="0.5" stlBackgroundColorAfter="transparent" verticalAlignment="center"
-            (rippleTap)="goToDashboard()">
-            <Label text="Skip" class="fa" fontSize="20" margin="5"></Label>
-        </StackLayout>
         <!-- For Add Friend Icon in invite-friends.component.tns.html screen -->
         <StackLayout *ngIf="((user && user!== null && !showSkipBtn && title.includes('Friends')))" col="3"
             stlRippleEffect (rippleTap)="navigateToInvite()" stlBackgroundColor="#13284F" ios:margin="3"
