@@ -21,14 +21,16 @@
                 <GridLayout *ngIf="user && user!==null" col="2" stlRippleEffect stlBackgroundColor="#13284F"
                     ios:margin="3" android:margin="10" stlOpacity="0.5" stlBackgroundColorAfter="transparent"
                     verticalAlignment="center" horizontalAlignment="right" android:width="24" ios:width="24">
-                    <Label text="&#xf1d1;" class="fa" fontSize="24"></Label>
+                      <Label text="&#xe901;" class="ico icon-noun-game" fontSize="20" color="#3b5998"></Label>
+                    
                 </GridLayout>
                 <GridLayout *ngIf="user && user!==null" class="index-0" col="3" stlRippleEffect
                     stlBackgroundColor="#13284F" stlOpacity="0.5" stlBackgroundColorAfter="transparent" ios:margin="3"
                     android:margin="10" verticalAlignment="center" horizontalAlignment="center" android:width="40"
                     ios:width="40" (rippleTap)="gotToNotification()" orientation="horizontal">
-                    <Label horizontalAlignment="center" verticalAlignment="center" text="&#xf0f3;" class="fa"
-                        fontSize="24"></Label>
+                        <Label horizontalAlignment="center" verticalAlignment="center" text="&#xee900;"
+                        class="ico icon-notification icon" fontSize="22" color="#3b5998"></Label>
+                        
                 </GridLayout>
                 <GridLayout *ngIf="user && user!==null && notifications.length > 0" col="4"
                     [ngClass]="{'notification-dot':notifications?.length > 0 }">
@@ -91,7 +93,7 @@
                                             *ngIf="gamePlayBtnDisabled"></Image>
                                         <Image src="~/assets/images/mobile/friends-disabled.png" width="10" height="10"
                                             *ngIf="gamePlayBtnDisabled"></Image>
-                                        <Label text="Multi Player" paddingLeft="5"></Label>
+                                        <Label text="Two Player" paddingLeft="5"></Label>
                                     </FlexboxLayout>
                                 </FlexboxLayout>
                                 <FlexboxLayout row="2" orientation="horizontal"

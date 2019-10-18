@@ -7,7 +7,7 @@
 }
 
 .action-title {
-  padding: 9 16 9 0;
+  padding: 9 10 9 0;
   height: 56;
   font-size: 13px;
   font-family: "Inter";
@@ -15,7 +15,7 @@
 }
 
 .action-subtitle {
-  padding: 9 16 9 0;
+  padding: 9 10 9 0;
   height: 80;
 }
 
@@ -50,3 +50,8 @@
   /* padding-right: 5; */
 }
 
+
+ActionBar {
+  border-width: 0;
+  border-color: transparent;
+}
