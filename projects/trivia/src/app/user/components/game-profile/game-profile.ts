@@ -33,6 +33,7 @@ export class GameProfile {
     loggedInUserAccount: Account;
     gamePlayedAgainst: any;
     userInvitations: { [key: string]: Invitation };
+    categories: string;
 
     constructor(
         public route: ActivatedRoute,
@@ -59,6 +60,10 @@ export class GameProfile {
                                 this.loggedInUserAccount = accountInfo;
                             });
                     }
+                    if (this.user && this.user.tags && this.user.tags.length > 0) {
+                        const userTags = this.user.tags.join(', ');
+                        this.categories = userTags;
+                    }
                     return this.initializeProfile();
                 })
             ).subscribe());
@@ -76,6 +81,10 @@ export class GameProfile {
                 this.gamePlayedAgainst = this.user.gamePlayed;
                 if (this.gamePlayedAgainst && this.loggedInUser && this.loggedInUser.userId && this.userType === 1) {
                     this.gamePlayedChangeSubject.next(true);
+                }
+                if (this.user && this.user.tags && this.user.tags.length > 0) {
+                    const userTags = this.user.tags.join(', ');
+                    this.categories = userTags;
                 }
                 this.userProfileImageUrl = this.getImageUrl(this.user);
                 if (this.socialProfileObj) {
@@ -130,6 +139,14 @@ export class GameProfile {
                     }
 
                 }));
+    }
+
+    get userInfo() {
+        return {
+            showEditOrOptions: this.userType === 0 ? 'edit' : this.userType === 1 ? 'options' : false,
+            userId: this.user && this.user.userId ? this.user.userId : '',
+            routing: '/user/my/profile'
+        };
     }
 
     getIcon(icon) {

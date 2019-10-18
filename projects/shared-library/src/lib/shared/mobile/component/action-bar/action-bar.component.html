@@ -13,18 +13,33 @@
             <Label [text]="title.replace('_',' ')" class="action-text-title" textWrap="true"></Label>
         </StackLayout>
 
+        <!-- game profile edit icon -->
+        <StackLayout col="2" *ngIf="showEdit?.showEditOrOptions === 'edit' && showEdit?.userId" stlRippleEffect
+            stlBackgroundColor="#13284F" ios:margin="3" ios:marginRight="30" android:margin="10" stlOpacity="0.5"
+            stlBackgroundColorAfter="" verticalAlignment="center" horizontalAlignment="right" android:width="23"
+            ios:width="23" (rippleTap)="navigateToProfile()">
+            <Label text="&#xf044;" fontSize="22" padding="3" class="fa"></Label>
+        </StackLayout>
+
+        <!-- game profile option icon -->
+        <StackLayout col="2" *ngIf="showEdit?.showEditOrOptions === 'options' && showEdit?.userId" stlRippleEffect
+            stlBackgroundColor="#13284F" ios:margin="3" ios:marginRight="30" android:margin="10" stlOpacity="0.5"
+            stlBackgroundColorAfter="" verticalAlignment="center" horizontalAlignment="right" android:width="23"
+            ios:width="23" (rippleTap)="navigateToProfile()">
+            <Label text="&#xf142;" fontSize="22" padding="3" class="fa"></Label>
+        </StackLayout>
 
         <StackLayout col="2" *ngIf="((user && user!== null && !showSkipBtn && title==='Questions'))" stlRippleEffect
-            stlBackgroundColor="#13284F" ios:margin="3" ios:marginRight="30" android:margin="10" stlOpacity="0.5" stlBackgroundColorAfter=""
-            verticalAlignment="center" horizontalAlignment="right" android:width="23" ios:width="23"
-            (rippleTap)="navigateToSubmitQuestion()">
+            stlBackgroundColor="#13284F" ios:margin="3" ios:marginRight="30" android:margin="10" stlOpacity="0.5"
+            stlBackgroundColorAfter="" verticalAlignment="center" horizontalAlignment="right" android:width="23"
+            ios:width="23" (rippleTap)="navigateToSubmitQuestion()">
             <Label text="&#xf055;" class="fa" fontSize="20"></Label>
         </StackLayout>
 
         <!-- For View All Icon in question-add-updates.component.tns.html screen -->
         <StackLayout col="2" *ngIf="(user && user!== null && !showSkipBtn && title.includes('Add_Question'))"
-            stlRippleEffect stlBackgroundColor="#13284F" ios:margin="3" ios:marginRight="30"  android:margin="10" stlOpacity="0.5"
-            stlBackgroundColorAfter="" verticalAlignment="center" horizontalAlignment="right"
+            stlRippleEffect stlBackgroundColor="#13284F" ios:margin="3" ios:marginRight="30" android:margin="10"
+            stlOpacity="0.5" stlBackgroundColorAfter="" verticalAlignment="center" horizontalAlignment="right"
             (rippleTap)="navigateToMyQuestion()" orientation="horizontal">
             <Label text="&#xf03a;" class="fa" fontSize="18" marginTop="5"></Label>
             <Label text="View All" marginLeft="5" fontSize="18"></Label>
@@ -44,9 +59,10 @@
             <Label text="&#xf002;" class="fa" fontSize="20"></Label>
         </StackLayout>
 
-        <StackLayout *ngIf="((user && user!== null && !showSkipBtn && title.includes('Notifications')))" col="4" stlRippleEffect ios:margin="3" android:margin="10" stlOpacity="0.5" stlBackgroundColorAfter=""
-            verticalAlignment="center" horizontalAlignment="right" marginRight="10" android:width="23" ios:width="40" >
-            <Image src="~/assets/images/double_check.png"  width="28" height="28" ></Image>
+        <StackLayout *ngIf="((user && user!== null && !showSkipBtn && title.includes('Notifications')))" col="4"
+            stlRippleEffect ios:margin="3" android:margin="10" stlOpacity="0.5" stlBackgroundColorAfter=""
+            verticalAlignment="center" horizontalAlignment="right" marginRight="10" android:width="23" ios:width="40">
+            <Image src="~/assets/images/double_check.png" width="28" height="28"></Image>
         </StackLayout>
 
         <StackLayout *ngIf="showSkipBtn" col="2" stlRippleEffect stlBackgroundColor="#13284F" ios:margin="3" margin="10"
