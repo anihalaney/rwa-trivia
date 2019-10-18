@@ -23,10 +23,11 @@ export class InviteFriendsDialogComponent implements OnInit, OnDestroy {
   subscriptions = [];
   showSkipBtn: boolean;
   constructor(private store: Store<AppState>, private renderer: Renderer2, private utils: Utils, private route: ActivatedRoute) {
-    this.subscriptions.push(this.store.select(appState.coreState).pipe(take(1)).subscribe(s => this.user = s.user));
   }
 
   ngOnInit() {
+    this.subscriptions.push(this.store.select(appState.coreState).pipe(take(1)).subscribe(s => this.user = s.user));
+
     this.route.params.subscribe((params) => {
       const boolValue = (params.showSkip === 'true' ? true : false);
       this.showSkipBtn = boolValue;

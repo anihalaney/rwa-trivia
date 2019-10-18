@@ -14,6 +14,12 @@ img{ border-radius: 50%; width: 50%; max-width:70px;  display: inline-block;bord
 .clinton{ font-size: 16px; }
 .T-tagging{ font-size: 14px; text-transform: uppercase; letter-spacing: 1px}
 .text-align{text-align: left;}
+.btn{
+  background-color: rgba(255, 0, 0, 0.0);
+  border-color:rgba(255, 0, 0, 0.0);
+  border-width: 0;
+}
+
 
 @media screen and ( max-width:767px){
   .text-align{text-align: center;}

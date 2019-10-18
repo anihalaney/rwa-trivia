@@ -99,11 +99,11 @@ export class Question {
   }
 
   static countQALength(question: any) {
-    return question.questionText.length
-      + (question.answers[0].answerText ? question.answers[0].answerText.length : 0 )
-      + (question.answers[1].answerText ? question.answers[1].answerText.length : 0)
-      + (question.answers[2].answerText ? question.answers[2].answerText.length : 0)
-      + (question.answers[3].answerText ? question.answers[3].answerText.length : 0);
+    return question.questionText && question.questionText.length ? question.questionText.length : 0
+      + (question.answers[0] && question.answers[0].answerText && question.answers[0].answerText.length ? question.answers[0].answerText.length : 0 )
+      + (question.answers[1] && question.answers[1].answerText && question.answers[1].answerText.length ? question.answers[1].answerText.length : 0)
+      + (question.answers[2] && question.answers[2].answerText && question.answers[2].answerText.length ? question.answers[2].answerText.length : 0)
+      + (question.answers[3] && question.answers[3].answerText && question.answers[3].answerText.length ? question.answers[3].answerText.length : 0);
   }
 
   constructor() {

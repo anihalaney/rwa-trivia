@@ -92,7 +92,7 @@
         </ScrollView>
         <AbsoluteLayout verticalAlignment="bottom">
                 <StackLayout width="100%" *ngIf="showContinueBtn || ((answeredIndex>=0 || doPlay === false) && !showContinueBtn)">
-                    <Button class="Hind-Medium btn-transparent" (tap)="continueClicked.emit($event)"
+                    <Button backgroundColor="#8ac541" color="white" class="Hind-Medium btn-transparent" (tap)="continueClicked.emit($event)"
                         *ngIf="answeredText!== null && showContinueBtn" text="Next Round" stlRippleEffect></Button>
                     <FlexboxLayout *ngIf="(answeredIndex>=0 || doPlay === false) && !showContinueBtn" alignItems="center"
                         orientation="horizontal" justifyContent="center" backgroundColor="#c0c0c0" class="Hind-Medium"
