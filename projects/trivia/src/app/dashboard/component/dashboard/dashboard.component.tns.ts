@@ -104,5 +104,3 @@ export class DashboardComponent extends Dashboard implements OnInit, OnDestroy {
     this.routerExtension.navigate(['signup-extra-info']);
   }
 }
-
-

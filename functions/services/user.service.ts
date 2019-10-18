@@ -116,6 +116,8 @@ export class UserService {
             user.email = (dbUser && dbUser.email) ? dbUser.email : '';
             let gamePlayed;
             let isFriend = false;
+            const account = await AccountService.getAccountById(userId);
+            user.bits = (account && account.bits) ? account.bits : 0;
             if (extendedInfo) {
                 user.categoryIds = (dbUser && dbUser.categoryIds) ? dbUser.categoryIds : [];
                 user.tags = (dbUser && dbUser.tags) ? dbUser.tags : [];
@@ -130,7 +132,6 @@ export class UserService {
                     }
                 }
                 user.account = new Account();
-                const account = await AccountService.getAccountById(userId);
                 user.account.avgAnsTime = (account && account.avgAnsTime) ? account.avgAnsTime : 0;
                 user.account.badges = (account && account.badges) ? account.badges : 0;
                 user.account.bits = (account && account.bits) ? account.bits : 0;
