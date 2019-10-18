@@ -150,21 +150,37 @@ Button{
     margin-bottom: 30;
 }
 
+
 .game-result{
     justify-content: space-between;
     margin: 15;
-}
-
-.game-result-title{
+    width: 100%;
+  }
+  
+  .game-result-title{
     font-weight: 500;
     font-size: 24;
-}
-
-.game-round-info-container{
+    width: 100%;
+    color:#000000;
+  }
+  
+  .game-round-info-container{
     background-color: #4caf50;
     border-radius: 30;
-    width: 40%;
     padding: 10;
     text-align: center;
     color: #ffffff;
-}
+  }
+  .game-round-info-container-grey{
+    background-color: #f9f9f9;
+    border-radius: 30;
+    padding: 10;
+    width: 100%;
+    text-align: center;
+  }
+  
+  .main-title{
+    z-index:10;
+    text-align: center;
+    color:#000000;
+  }

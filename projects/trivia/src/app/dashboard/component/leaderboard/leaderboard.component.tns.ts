@@ -20,6 +20,8 @@ import { User } from 'shared-library/shared/model';
 
 export class LeaderboardComponent extends Leaderboard implements OnDestroy {
   @ViewChild('dropdown', { static: false }) dropdown: ElementRef;
+  @ViewChild('dropdowntop', { static: false }) dropdownTop: ElementRef;
+  
   // This is magic variable
   // it delay complex UI show Router navigation can finish first to have smooth transition
   renderView = false;
@@ -51,6 +53,11 @@ export class LeaderboardComponent extends Leaderboard implements OnDestroy {
   openDropdown() {
     let dropdown = <DropDown>this.dropdown.nativeElement;
     dropdown.open();
+  }
+
+  openDropdowntop() {
+    let dropdownTop = <DropDown>this.dropdownTop.nativeElement;
+    dropdownTop.open();
   }
 
   public onchange(args: SelectedIndexChangedEventData) {

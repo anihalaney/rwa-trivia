@@ -19,14 +19,14 @@
   
   .game-round-info-container{
     vertical-align: center;
-    margin:0 10 0 20;
+    // margin:0 10 0 20;
     width:40%;
-    height:28;
+    height:24;
     border-radius:30; 
     background-color:  #f9f9f9;
     .game-round-info{
       height:24;
-      border-radius:30 30 30 30;
+      border-radius:30; 
       horizontal-alignment:left;
       background-color: #4caf50;
       .main-title {
@@ -117,3 +117,38 @@
       padding:20;
     }
   } 
+
+
+.game-result{
+  justify-content: space-between;
+  margin: 15;
+  width: 100%;
+}
+
+.game-result-title{
+  font-weight: 500;
+  font-size: 24;
+  width: 100%;
+  color:#000000;
+}
+
+.game-round-info-container{
+  background-color: #4caf50;
+  border-radius: 30;
+  padding: 10;
+  text-align: center;
+  color: #ffffff;
+}
+.game-round-info-container-grey{
+  background-color: #f9f9f9;
+  border-radius: 30;
+  padding: 10;
+  width: 100%;
+  text-align: center;
+}
+
+.main-title{
+  z-index:10;
+  text-align: center;
+  color:#000000;
+}

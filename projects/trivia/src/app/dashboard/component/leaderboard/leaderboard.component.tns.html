@@ -15,8 +15,8 @@
                                 textWrap="true"></Label>
                         </GridLayout>
 
-                        <GridLayout rows="*" columns="*,auto" row="1" col="1" android:class="dropdown-android" ios:class="dropdown-ios">
-                            <DropDown row="0" col="0" *ngIf="filterTopList" itemsTextAlignment="center" android:class="filter-dropdown-mobile"
+                        <GridLayout rows="*" columns="*,auto" row="1" col="1" android:class="dropdown-android" ios:class="dropdown-ios" (tap)="openDropdowntop()">
+                            <DropDown row="0" col="0" #dropdowntop *ngIf="filterTopList" itemsTextAlignment="center" android:class="filter-dropdown-mobile"
                                 [items]="filterTopList" [(ngModel)]="selectedTopFilter"
                                 (selectedIndexChanged)="onTopFilterChanged($event)">
                             </DropDown>
