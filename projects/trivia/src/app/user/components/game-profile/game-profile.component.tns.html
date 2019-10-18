@@ -7,15 +7,16 @@
     [class.logged-in-profile]="userType===1">
     <ScrollView>
         <StackLayout *ngIf="renderView">
-            <GridLayout columns="auto,*,auto" rows="auto,auto" margin="20">
+            <GridLayout columns="auto,*,auto" rows="auto,auto" margin="20 20 20 0">
                 <app-user-card rowSpan="2" col="0" [userId]="user?.userId"
                     [type]="userCardType.USER_IMAGE_NAME_PROFILE_HORIZONTAL" [userType]="0">
                 </app-user-card>
 
-                <StackLayout row="0" col="1">
-                    <Label [text]="user?.displayName" color="#3c5a98" fontSize="20" textWrap="true"></Label>
+                <FlexboxLayout flexDirection="column" row="0" col="1">
+                    <Label [text]="user?.displayName" color="#3c5a98" fontSize="20" paddingBottom="10"
+                        textWrap="true"></Label>
                     <Label text="&#xf041; {{user?.location}}" color="#000" class="fa" textWrap="true"></Label>
-                </StackLayout>
+                </FlexboxLayout>
                 <FlexboxLayout row="1" col="1">
                     <FlexboxLayout *ngFor="let profile of socialProfileSettings">
                         <Label *ngIf="profile?.enable" [order]="profile?.position" text="{{getIcon(profile?.icon)}}"
@@ -36,52 +37,51 @@
                 </FlexboxLayout>
             </GridLayout>
 
-
             <FlexboxLayout *ngIf="categories" flexDirection="column" margin="10 20 10 20" iosOverflowSafeArea="false">
-                <Label text="Categories" color="#1B1C1C" fontSize="15" fontWeight="500" textWrap="true"></Label>
+                <Label text="Tags" color="#1B1C1C" fontSize="15" fontWeight="500" textWrap="true"></Label>
                 <FlexboxLayout justifyContent="space-between" orientation="horizontal">
                     <Label text="{{categories}}" class="text-blue" fontSize="15" textWrap="false"></Label>
-                    <Label *ngIf="userType === 0" [nsRouterLink]="['/user/my/profile', user?.userId]" padding="0 10" text="&#xf303;" class="fas text-blue" textWrap="true"></Label>
+                    <Label *ngIf="userType === 0" [nsRouterLink]="['/user/my/profile', user?.userId]" padding="0 10"
+                        text="&#xf303;" class="fas text-blue" textWrap="true"></Label>
                 </FlexboxLayout>
             </FlexboxLayout>
 
-            <FlexboxLayout *ngIf="userType === 0" justifyContent="space-around" borderTopWidth="1" padding="10 0"
-                marginBottom="20" borderBottomWidth="2" borderColor="#e4e4e4">
-                <FlexboxLayout>
-                    <Image src="~/assets/images/mobile/bits.png" height="40" width="40"></Image>
-                    <Label alignSelf="center" [text]="account?.bits || 0" class="bits-text" textWrap="true"></Label>
-                </FlexboxLayout>
-                <FlexboxLayout>
-                    <Image src="~/assets/images/mobile/bytes.png" height="40" width="40"></Image>
-                    <Label alignSelf="center" [text]="account?.bytes || 0" class="bits-text" textWrap="true"></Label>
-                </FlexboxLayout>
-
-                <Label alignSelf="center" text="KNOW MORE" class="text-blue font-bold" textWrap="true"></Label>
-            </FlexboxLayout>
-
-            <FlexboxLayout *ngIf="userType === 1" class="friends-border">
-                <FlexboxLayout class="friends-border-box">
-                    <FlexboxLayout *ngIf="loggedInUser?.userId && userInvitations[user?.email]?.status === 'add'"
-                        class="friends" stlRippleEffect (rippleTap)="sendFriendRequest()">
-                        <Label class="friends-text" text="Add Friend" textWrap="true"></Label>
+            <WrapLayout *ngIf="userType === 0" borderTopWidth="1" padding="10 0" marginBottom="20" borderBottomWidth="2"
+                borderColor="#e4e4e4">
+                <FlexboxLayout width="50%" justifyContent="space-around">
+                    <FlexboxLayout>
+                        <Image src="~/assets/images/mobile/bits.png" height="40" width="40"></Image>
+                        <Label alignSelf="center" [text]="account?.bits || 0" class="bits-text" textWrap="true"></Label>
                     </FlexboxLayout>
-
-                    <FlexboxLayout *ngIf="loggedInUser?.userId && userInvitations[user?.email]?.status === 'pending'"
-                        class="friends" stlRippleEffect>
-                        <Label class="friends-text" text="Friend Request Sent" textWrap="true"></Label>
-                    </FlexboxLayout>
-                    <FlexboxLayout *ngIf="loggedInUser?.userId && userInvitations[user?.email]?.status==='approved'"
-                        class="friends" stlRippleEffect>
-                        <Label class="friends-text" text="Friends" textWrap="true"></Label>
+                    <FlexboxLayout>
+                        <Image src="~/assets/images/mobile/bytes.png" height="40" width="40"></Image>
+                        <Label alignSelf="center" [text]="account?.bytes || 0" class="bits-text"
+                            textWrap="true"></Label>
                     </FlexboxLayout>
                 </FlexboxLayout>
-                <FlexboxLayout width="50%" class="friends" stlRippleEffect (rippleTap)="startNewGame()">
-                    <Label class="friends-text" text="Invite to Play" textWrap="true"></Label>
+            </WrapLayout>
+
+            <FlexboxLayout *ngIf="userType === 1" class="friends_box">
+                <FlexboxLayout class="friends_box-border" stlRippleEffect
+                    *ngIf="loggedInUser?.userId && userInvitations[user?.email]?.status === 'add'"
+                    (rippleTap)="sendFriendRequest()">
+                    <Label class="friends_box-text" text="Add Friend" textWrap="true"></Label>
+                </FlexboxLayout>
+                <FlexboxLayout class="friends_box-border" stlRippleEffect
+                    *ngIf="loggedInUser?.userId && userInvitations[user?.email]?.status === 'pending'">
+                    <Label class="friends_box-text" text="Friend Request Sent" textWrap="true"></Label>
+                </FlexboxLayout>
+                <FlexboxLayout class="friends_box-border" stlRippleEffect
+                    *ngIf="loggedInUser?.userId && userInvitations[user?.email]?.status==='approved'">
+                    <Label class="friends_box-text" text="Friends" textWrap="true"></Label>
+                </FlexboxLayout>
+
+                <FlexboxLayout class="friends_box-no-border" stlRippleEffect (rippleTap)="startNewGame()">
+                    <Label class="friends_box-text" text="Invite to Play" textWrap="true"></Label>
                 </FlexboxLayout>
             </FlexboxLayout>
 
             <FlexboxLayout flexWrap="wrap" margin="0 10 20 10" horizontalAlignment="center">
-
                 <StackLayout orientation="horizontal" horizontalAlignment="center" class="stats-box" margin="0 10 10 0">
                     <FlexboxLayout flexDirection="column" justifyContent="center">
                         <Label [text]="account?.gamePlayed || 0" class="bold-text text-color" textWrap="true"></Label>
@@ -158,14 +158,15 @@
                     </StackLayout>
                 </StackLayout>
             </StackLayout>
-
-                <StackLayout [visibility]="userType === 0 ? 'visible' : 'collapsed'" margin="0 20 20 20">
-                    <FlexboxLayout>
-                        <Label text="&#xf0c9;" class="fa" fontSize="20" textWrap="true" marginRight="5"></Label>
-                        <Label text="Activity Log" fontSize="18" textWrap="true"></Label>
-                    </FlexboxLayout>
-                        <recent-games [hideActionbar]="true"></recent-games>
-                </StackLayout>
-            </StackLayout>
+            <GridLayout *ngIf="userType === 0" margin="0 20 20 20">
+                <FlexboxLayout>
+                    <Label text="&#xf0c9;" class="fa" fontSize="20" textWrap="true" marginRight="5"></Label>
+                    <Label text="Activity Log" fontSize="18" textWrap="true"></Label>
+                </FlexboxLayout>
+                <WrapLayout marginTop="20">
+                    <recent-games [hideActionbar]="true"></recent-games>
+                </WrapLayout>
+            </GridLayout>
+        </StackLayout>
     </ScrollView>
 </StackLayout>

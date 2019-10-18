@@ -42,7 +42,7 @@
                     <GridLayout row="0" horizontalAlignment="left" rows="auto" columns="auto, *"
                         class="dashboard_body-bits" *ngIf="user && applicationSettings?.tokens?.enable">
                         <FlexboxLayout col="0" *ngIf="account && user" iosOverflowSafeArea="false">
-                            
+ 
                             <Image src="~/assets/images/mobile/bits.png" row="0" col="1"></Image>
                             <Label class="dashboard_body-text Roboto-Medium" [text]="account.bits || 0"
                                 textWrap="true"></Label>
@@ -61,15 +61,16 @@
                                     <Label text="Play your game" class="title" textWrap="true"></Label>
                                     <StackLayout orientation="horizontal"
                                         *ngIf="user && account && account?.lives >=0 && isLivesEnable">
-                                        <Label verticalAlignment="center" text="&#xf1e3;" class="far icon"
-                                            textWrap="true"></Label>
+                                        <Label verticalAlignment="center" text="&#xe938;"
+                                            class="ico icon-life-icon icon"></Label>
                                         <Label verticalAlignment="center" class="dashboard_body-grid0-1-lives"
                                             text="{{ (account && account?.lives / 10 < 1) && (account && account?.lives / 10 > 0)  ? '0' : '' }}{{account && account?.lives}}"
                                             textWrap="true"></Label>
                                     </StackLayout>
                                 </FlexboxLayout>
                                 <FlexboxLayout row="1" class="space-between dashboard_body-grid0-2">
-                                    <FlexboxLayout justifyContent="center" stlRippleEffect (rippleTap)="startNewGame('Single')"
+                                    <FlexboxLayout justifyContent="center" stlRippleEffect
+                                        (rippleTap)="startNewGame('Single')"
                                         [isUserInteractionEnabled]="!gamePlayBtnDisabled"
                                         [ngClass]="{'game-btn': !gamePlayBtnDisabled,'game-btn-disabled': gamePlayBtnDisabled}">
                                         <Image src="~/assets/images/mobile/friends.png" *ngIf="!gamePlayBtnDisabled"
@@ -78,7 +79,8 @@
                                             *ngIf="gamePlayBtnDisabled" width="15" height="15"></Image>
                                         <Label text="Single Player" paddingLeft="5" textWrap="true"></Label>
                                     </FlexboxLayout>
-                                    <FlexboxLayout justifyContent="center" stlRippleEffect (rippleTap)="startNewGame('Two')"
+                                    <FlexboxLayout justifyContent="center" stlRippleEffect
+                                        (rippleTap)="startNewGame('Two')"
                                         [isUserInteractionEnabled]="!gamePlayBtnDisabled"
                                         [ngClass]="{'game-btn': !gamePlayBtnDisabled,'game-btn-disabled': gamePlayBtnDisabled}">
                                         <Image src="~/assets/images/mobile/friends.png" width="15" height="15"
@@ -99,9 +101,9 @@
                                         textWrap="true"></Label>
                                     <Label class="timeout" text="{{timeoutLive}}" textWrap="true"></Label>
                                 </FlexboxLayout>
-                                <FlexboxLayout *ngIf="account && (!account?.gamePlayed ||account?.gamePlayed < 0)" row="3"
-                                    orientation="horizontal" class="dashboard_body-grid0-4">
-                                    <Label text="&#xf1e3;" class="far icon" textWrap="true"></Label>
+                                <FlexboxLayout *ngIf="account && (!account?.gamePlayed ||account?.gamePlayed < 0)"
+                                    row="3" orientation="horizontal" class="dashboard_body-grid0-4">
+                                    <Label text="&#xe938;" class="ico icon-life-icon icon"></Label>
                                     <Label class="no-life" text="No Life will be deducted" textWrap="true"></Label>
                                 </FlexboxLayout>
                                 <GridLayout row="4" rows="*" columns="auto,auto,auto,auto"
