@@ -40,7 +40,7 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
     private modal: ModalDialogService, private vcRef: ViewContainerRef,
     public cd: ChangeDetectorRef, private routerExtensions: RouterExtensions, private page: Page) {
     super(store, userActions, utils, cd);
-    this.page.actionBarHidden = false;
+    this.page.actionBarHidden = true;
     this.subscriptions.push(this.store.select(gamePlayState).pipe(select(s => s.saveReportQuestion)).subscribe(state => {
       this.cd.markForCheck();
     }));

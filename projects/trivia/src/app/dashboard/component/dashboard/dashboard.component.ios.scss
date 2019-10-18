@@ -1,41 +1,44 @@
 @import "./dashboard.component";
 
-.navigate-button{
-    color:#3b5998; 
-    background-color: #ffffff; 
-    padding:5 20; 
-    margin: 5 3;
-    border-width: 1;
-    border-color: #dddddd;
-    border-radius: 5;
-    text-align: center;
+.submit-question {
+  .q-button-extra {
+    padding: 10;
+  }
 }
 
-.navigate-button-solid{
-    color:#ffffff; 
-    background-color: #3b5998; 
-    padding: 10 10; 
-    margin: 5 15;
-    border-radius: 5;
-    text-align: center;
+.game-buttons {
+ 
+  .g-btn-extra {
+    padding: 10;
+  }
+
+  .btn-1 {
+    margin-right: 5;
+  }
+
+  .btn-2 {
+    margin-left: 5;
+  }
 }
 
-.navigate-button-text{
-    color:#3b5998; 
-    font-weight: 700; 
-    padding:10 20; 
-    margin: 5 3;
-    text-align: center;
+
+.notification-dot {
+  background-color: #f50057;
+  width:20;
+  height:20;
+  margin-top: 20;
+  margin-left: 20;
+  color: #fff;
+  border-radius: 50%; 
+  font-size: 14;
+  font-weight: 600;
 }
 
-.gamestatus-username-color{
-    font-weight:700; 
-    font-size: 25;
-    color:#ffc107;
+
+.index-0 {
+  z-index: 0;
 }
 
-.earnedsymbolsStack{
-    margin: 10 0 0 0;
-    background-color: #dddddd;
-    border-radius: 10;
+.index-1 {
+    margin-left: 5;
 }

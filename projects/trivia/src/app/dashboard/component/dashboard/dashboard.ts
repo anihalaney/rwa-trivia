@@ -92,7 +92,6 @@ export class Dashboard implements OnDestroy {
             map(user => {
                 this.ngZone.run(() => {
                     this.user = user;
-                    console.log(this.user.userId, ' ================================> ');
                     this.photoUrl = this.utils.getImageUrl(this.user, 70, 60, '70X60');
                     this.actionText = `Hi ${this.user.displayName}`;
                     this.actionSubText = '';
