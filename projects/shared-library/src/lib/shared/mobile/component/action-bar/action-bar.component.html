@@ -14,18 +14,18 @@
         </StackLayout>
 
         <!-- game profile edit icon -->
-        <StackLayout col="2" *ngIf="showEdit?.showEditOrOptions === 'edit' && showEdit?.userId" stlRippleEffect
+        <StackLayout col="2"  *ngIf="showEdit?.showEditOrOptions === 'edit' && showEdit?.userId" stlRippleEffect
             stlBackgroundColor="#13284F" ios:margin="3" ios:marginRight="30" android:margin="10" stlOpacity="0.5"
             stlBackgroundColorAfter="" verticalAlignment="center" horizontalAlignment="right" android:width="23"
             ios:width="23" (rippleTap)="navigateToProfile()">
-            <Label text="&#xf044;" fontSize="22" padding="3" class="fa"></Label>
+            <Label text="&#xf303;" class="fas" fontSize="18" color="#14418B" ></Label>
         </StackLayout>
 
         <!-- game profile option icon -->
         <StackLayout col="2" *ngIf="showEdit?.showEditOrOptions === 'options' && showEdit?.userId" stlRippleEffect
             stlBackgroundColor="#13284F" ios:margin="3" ios:marginRight="30" android:margin="10" stlOpacity="0.5"
             stlBackgroundColorAfter="" verticalAlignment="center" horizontalAlignment="right" android:width="23"
-            ios:width="23" (rippleTap)="navigateToProfile()">
+            ios:width="23">
             <Label text="&#xf142;" fontSize="22" padding="3" class="fa"></Label>
         </StackLayout>
 

@@ -41,7 +41,7 @@
                 <Label text="Categories" color="#1B1C1C" fontSize="15" fontWeight="500" textWrap="true"></Label>
                 <FlexboxLayout justifyContent="space-between" orientation="horizontal">
                     <Label text="{{categories}}" class="text-blue" fontSize="15" textWrap="false"></Label>
-                    <Label *ngIf="userType === 0" [nsRouterLink]="['/user/my/profile', user?.userId]" padding="0 10" text="&#xf041;" class="fa text-blue" textWrap="true"></Label>
+                    <Label *ngIf="userType === 0" [nsRouterLink]="['/user/my/profile', user?.userId]" padding="0 10" text="&#xf303;" class="fas text-blue" textWrap="true"></Label>
                 </FlexboxLayout>
             </FlexboxLayout>
 
@@ -167,6 +167,5 @@
                         <recent-games [hideActionbar]="true"></recent-games>
                 </StackLayout>
             </StackLayout>
-        </StackLayout>
     </ScrollView>
 </StackLayout>
