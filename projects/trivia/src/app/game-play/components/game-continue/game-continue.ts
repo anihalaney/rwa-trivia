@@ -3,7 +3,7 @@ import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { Utils } from 'shared-library/core/services';
 import { UserActions } from 'shared-library/core/store/actions';
-import { Game, PlayerMode, User, userCardType } from 'shared-library/shared/model';
+import { Game, PlayerMode, User, userCardType, ApplicationSettings } from 'shared-library/shared/model';
 import { AppState, appState } from '../../../store';
 
 export class GameContinue implements OnInit {
@@ -12,6 +12,7 @@ export class GameContinue implements OnInit {
   @Input() game: Game;
   @Input() userDict: { [key: string]: User };
   @Input() totalRound: number;
+  @Input() applicationSettings: ApplicationSettings;
 
   user$: Observable<User>;
   user: User;

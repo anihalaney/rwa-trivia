@@ -1,5 +1,5 @@
 <StackLayout *ngIf="question?.isRichEditor && question; else renderView" marginBottm="500" orientation="horizontal">
-    <Label verticalAlignment="top" paddingLeft="10" text="{{questionIndex}} . " textWrap="true" *ngIf="questionIndex"></Label>
+    <Label verticalAlignment="top" paddingLeft="0" text="{{questionIndex}} . " textWrap="true" *ngIf="questionIndex"></Label>
     <WebView width="100%" *ngIf="!isAndroid" [src]="question?.questionText" ios:height="{{questionHeight}}"
         (loadFinished)="onLoadFinished($event)" [isUserInteractionEnabled]="false"></WebView>
 
@@ -8,8 +8,8 @@
 
 <ng-template #renderView>
     <StackLayout orientation="horizontal" class="{{theme}}-theme">
-        <Label class="text-color" horizontalAlignment="left" verticalAlignment="top" paddingLeft="10" text="{{questionIndex}} . " textWrap="true" *ngIf="questionIndex"></Label>
-        <Label horizontalAlignment="center"  text="{{question?.questionText}}" class="text-color Roboto-Bold" fontSize="17" fontWeight="700"
+       <!-- <Label verticalAlignment="top" paddingLeft="10" text="{{questionIndex}} . " textWrap="true" *ngIf="questionIndex"></Label> -->
+       <Label textAlignment="center" lineHeight="10" text="{{question?.questionText}}" color="#263238" fontSize="17" fontWeight="700"
             textWrap="true"></Label>
     </StackLayout>
 </ng-template>

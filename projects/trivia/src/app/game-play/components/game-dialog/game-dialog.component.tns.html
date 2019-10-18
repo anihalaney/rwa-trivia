@@ -59,7 +59,7 @@
             verticalAlignment="center" textWrap="true"></Label>
     </StackLayout>
 
-    <game-continue *ngIf="showContinueScreen && !gameOver" class="overlay" [userDict]="userDict" [game]="game"
+    <game-continue *ngIf="showContinueScreen && !gameOver" class="overlay" [applicationSettings]="applicationSettings" [userDict]="userDict" [game]="game"
         [categoryName]="categoryName" [correctCount]="correctAnswerCount" [noOfQuestions]="questionIndex"
         [totalRound]="totalRound" (continueButtonClicked)="continueButtonClicked()">
     </game-continue>
