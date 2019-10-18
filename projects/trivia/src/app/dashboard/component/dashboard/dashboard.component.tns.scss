@@ -72,8 +72,6 @@
 
   .dashboard {
     padding: 10 0;
-    border-bottom-color: black;
-    border-bottom-width: 1;
 
     &_user {
       margin-left: 10;
@@ -85,6 +83,7 @@
       &-subText {
         font-size: 18;
         font-weight: bold;
+        color: #3a5998;
       }
 
       &-icon {
@@ -95,6 +94,7 @@
     }
 
     &_body {
+      padding-bottom: 70;
       &-bits {
         width: 60%;
         margin: 10 0 0 30;
@@ -199,11 +199,11 @@
             .submitted {
               font-size: 13;
               color: #a5a5a5;
+            }
 
-              .icon {
-                font-size: 20;
-                color: #e2e2e2;
-              }
+            .icon {
+              font-size: 20;
+              color: #e2e2e2;
             }
 
             .toggle-screen {

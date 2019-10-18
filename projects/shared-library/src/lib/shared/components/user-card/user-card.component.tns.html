@@ -278,9 +278,10 @@
     </StackLayout>
     <AbsoluteLayout *ngIf="user?.online" row="0" col="0" rowSpan="3" verticalAlignment="center"
       [stlOpenUserProfile]="{userId: user?.userId, redirectTo: loggedInUserId === user?.userId ? 'userProfile': 'otherUserProfile'}">
-      <Image *ngIf="isGame === true;else online_stat" class="friend-user-profile" src="~/assets/images/game.png" height="20" top="30" left="33" width="20"></Image>
+      <Image *ngIf="isGame === true;else online_stat" class="friend-user-profile" src="~/assets/images/game.png"
+        height="20" top="30" left="33" width="20"></Image>
       <ng-template #online_stat>
-        <Label  height="10" top="32" left="47" width="10" borderRadius="22" backgroundColor="#71b02f"></Label>
+        <Label height="10" top="32" left="47" width="10" borderRadius="22" backgroundColor="#71b02f"></Label>
       </ng-template>
     </AbsoluteLayout>
     <Label row="1" col="1" text=" " textWrap="true" fontSize="16ˇ">

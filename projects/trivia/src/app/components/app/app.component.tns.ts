@@ -165,7 +165,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   hideBottomBarForSelectedRoutes(url) {
     if (url === '/signup-extra-info' || url === '/select-category-tag' || url === '/first-question' ||
-      (!url.includes('game-play/game-options') && (url.includes('game-play')))) {
+      (!url.includes('game-play/game-options') && (url.includes('game-play'))) || url === '/login') {
       return false;
     } else {
       return true;
@@ -194,12 +194,12 @@ export class AppComponent implements OnInit, OnDestroy {
   async checkForceUpdate() {
 
     let version;
-    // try {
-    //   version = await appversion.getVersionCode();
-    // } catch (error) {
-    //   this.utils.sendErrorToCrashlytics('appLog', error);
-    //   console.error(error);
-    // }
+    try {
+      version = await appversion.getVersionCode();
+    } catch (error) {
+      this.utils.sendErrorToCrashlytics('appLog', error);
+      console.error(error);
+    }
 
     this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings))
       .subscribe(appSettings => {
