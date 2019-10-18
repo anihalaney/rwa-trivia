@@ -24,10 +24,10 @@ export class UserCardComponent implements OnInit, OnDestroy, OnChanges {
   @Input() otherInfo: any;
   @Input() userId: string;
   @Output() userChange = new EventEmitter();
-  @Input() isGame: boolean;
   @Input() theme: string;
   @Input() height: number;
   @Input() width: number;
+  @Input() isGame: boolean;
   loggedInUserId: string;
   userCardType = userCardType;
   subscriptions = [];

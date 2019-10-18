@@ -9,7 +9,7 @@
             <Label color="#000000" text="&#xe906;" fontSize="20" class="ico icon-back"></Label>
         </StackLayout>
 
-        <StackLayout col="1" verticalAlignment="center">
+        <StackLayout col="1" verticalAlignment="center" (tap)="back()">
             <Label [text]="title.replace('_',' ')" class="action-text-title" textWrap="true"></Label>
         </StackLayout>
 
