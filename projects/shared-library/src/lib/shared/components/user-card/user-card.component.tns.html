@@ -1,19 +1,17 @@
 <ng-container class="recent-completed" *ngIf="user && userCardType.USER_IMAGE_NAME_VERTICAL === type">
-  <GridLayout rows="*, *" columns="*">
-    <StackLayout row="0" col="0" marginLeft="10" verticalAlignment="center" marginRight="10" borderRadius="50"
-      paddingTop="2" paddingLeft="2" paddingRight="2" class="image-container">
-      <Image *ngIf="isGamePlay && user" [src]="getImageUrl(user, 44, 40)"  backgroundColor="gray" stretch="aspectFill"
-        verticalAlignment="center" borderRadius="50" horizontalAlignment="center" class="user-image"></Image>
-      <Image *ngIf="!isGamePlay && user" [stlOpenUserProfile]="{userId: user.userId, redirectTo: loggedInUserId === user.userId ? 'userProfile': 'otherUserProfile'}"
-        [src]="getImageUrl(user, 44, 40)" backgroundColor="gray" stretch="aspectFill" verticalAlignment="center"
-        borderRadius="50" horizontalAlignment="center" class="user-image"></Image>
+  <GridLayout rows="*, *" columns="*" class="user-info">
+    <StackLayout class="user-image-container" row="0" col="0">
+      <Image *ngIf="isGamePlay && user" [src]="getImageUrl(user, 44, 40)" class="user-image" stretch="aspectFill"></Image>
+      <Image *ngIf="!isGamePlay && user" class="user-image"
+        [stlOpenUserProfile]="{userId: user.userId, redirectTo: loggedInUserId === user.userId ? 'userProfile': 'otherUserProfile'}"
+        [src]="getImageUrl(user, 44, 40)" stretch="aspectFill"></Image>
     </StackLayout>
-    <AbsoluteLayout *ngIf="user?.online" horizontalAlignment="center" verticalAlignment="bottom"
-      [stlOpenUserProfile]="{userId: user?.userId, redirectTo: loggedInUserId === user?.userId ? 'userProfile': 'otherUserProfile'}">
-      <Label height="12" top="45" left="43" width="12" borderRadius="22" backgroundColor="#71b02f"></Label>
-    </AbsoluteLayout>
-    <Label text="{{ (loggedInUserId === user.userId) ? 'You' : user?.displayName}}" textWrap="true" class="user-name"
-      horizontalAlignment="center" row="1" col="0"></Label>
+    <Image src="~/assets/images/premium.png" *ngIf="otherInfo?.isWinner" marginLeft="90" width="38" height="38"></Image>
+    <!-- <StackLayout *ngIf="user?.online" marginLeft="60" verticalAlignment="bottom"
+      [stlOpenUserProfile]="{userId: user?.userId, redirectTo: loggedInUserId === quser?.userId ? 'userProfile': 'otherUserProfile'}">
+      <Label height="20" width="20" borderRadius="22" backgroundColor="#71b02f"></Label>
+    </StackLayout> -->
+    <Label row="1" col="0" text="{{ (loggedInUserId === user.userId) ? 'You' : user?.displayName}}" class="user-name" textWrap="true" horizontalAlignment="center"></Label>
   </GridLayout>
 </ng-container>
 <!-- leader -->

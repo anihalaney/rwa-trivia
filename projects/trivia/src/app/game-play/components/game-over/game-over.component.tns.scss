@@ -28,9 +28,9 @@
     margin: 10 0 0 0;
 }
 .gamestatus{
-    background-color: #f1fff2; 
-    border-width:3px; 
-    border-color:#d0f5d3; 
+    // background-color: #f1fff2; 
+    // border-width:3px; 
+    // border-color:#d0f5d3; 
     margin:10 0 0 0;
 }
 .gamestatus-username{
@@ -44,6 +44,21 @@
     padding:10 10 10 10; 
     margin: 0 3 0 3;
 }
+
+.navigate-button-green{
+    color:#FFFFFF; 
+    background-color: #4caf50; 
+    padding:10 10 10 10; 
+    margin: 0 3 0 3;
+}
+
+.navigate-button-grey{
+    color:#000000; 
+    background-color: #808080; 
+    padding:10 10 10 10; 
+    margin: 0 3 0 3;
+}
+
 .question-grid{
     border-bottom-width:2px; 
     border-color:#f3f3f3; 
@@ -83,3 +98,73 @@ Button{
     font-weight: bold;
     color: #333;
   }
+
+  // new 
+  .navigate-button{
+    color:#3b5998; 
+    background-color: #ffffff; 
+    padding:5 20; 
+    margin: 5 3;
+    border-width: 1;
+    border-color: #dddddd;
+    border-radius: 5;
+    text-align: center;
+}
+
+.navigate-button-solid{
+    color:#ffffff; 
+    background-color: #3b5998; 
+    padding: 10 10; 
+    margin: 5 15;
+    border-radius: 5;
+    text-align: center;
+}
+
+.navigate-button-text{
+    color:#3b5998; 
+    font-weight: 700; 
+    padding:10 20; 
+    margin: 5 3;
+    text-align: center;
+}
+
+.gamestatus-username-color{
+    font-weight:700; 
+    font-size: 25;
+    color:#ffc107;
+}
+
+.earnedsymbolsStack{
+    margin: 10 0 0 0;
+    padding: 5;
+    background-color: #f9f9f9;
+    border-radius: 20;
+}
+
+.score-image{
+    margin: 0 3;
+}
+
+.vs-text{
+    font-weight: 700;
+    margin-bottom: 30;
+}
+
+.game-result{
+    justify-content: space-between;
+    margin: 15;
+}
+
+.game-result-title{
+    font-weight: 500;
+    font-size: 24;
+}
+
+.game-round-info-container{
+    background-color: #4caf50;
+    border-radius: 30;
+    width: 40%;
+    padding: 10;
+    text-align: center;
+    color: #ffffff;
+}
