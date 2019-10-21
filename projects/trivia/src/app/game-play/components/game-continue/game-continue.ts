@@ -13,7 +13,7 @@ export class GameContinue implements OnInit {
   @Input() userDict: { [key: string]: User };
   @Input() totalRound: number;
   @Input() applicationSettings: ApplicationSettings;
-
+  @Input() otherPlayer: User;
   user$: Observable<User>;
   user: User;
   otherUserId: string;
