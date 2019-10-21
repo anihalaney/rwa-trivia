@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, NgZone, OnDestroy, ViewChild, ElementRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, NgZone, OnDestroy, ViewChild, ElementRef, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Store, select } from '@ngrx/store';
 import { Utils } from 'shared-library/core/services';
@@ -18,7 +18,7 @@ import { User } from 'shared-library/shared/model';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class LeaderboardComponent extends Leaderboard implements OnDestroy {
+export class LeaderboardComponent extends Leaderboard implements OnDestroy, OnInit {
   @ViewChild('dropdown', { static: false }) dropdown: ElementRef;
   // This is magic variable
   // it delay complex UI show Router navigation can finish first to have smooth transition
@@ -38,12 +38,6 @@ export class LeaderboardComponent extends Leaderboard implements OnDestroy {
     protected ngZone: NgZone) {
 
     super(store, userActions, utils, route, cd, ngZone);
-
-    this.page.on('loaded', () => this.ngZone.run(() => {
-      this.renderView = true;
-      this.cd.markForCheck();
-    }));
-
     this.items = [];
     this.categoryDictList.map((category, index) => {
       this.items.push(category.categoryName);
@@ -54,6 +48,10 @@ export class LeaderboardComponent extends Leaderboard implements OnDestroy {
   openDropdown() {
     let dropdown = <DropDown>this.dropdown.nativeElement;
     dropdown.open();
+  }
+
+  ngOnInit() {
+    this.page.on('loaded', () => { this.renderView = true; this.cd.markForCheck(); });
   }
 
   public onchange(args: SelectedIndexChangedEventData) {
@@ -74,6 +72,7 @@ export class LeaderboardComponent extends Leaderboard implements OnDestroy {
 
   ngOnDestroy() {
     this.page.off('loaded');
+    this.renderView = false;
   }
 
 

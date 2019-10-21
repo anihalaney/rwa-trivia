@@ -1,5 +1,5 @@
 <ns-action-bar title="Feedback" class="Roboto-Regular" showAdd="true"></ns-action-bar>
-<StackLayout>
+<StackLayout *ngIf="renderView">
   <PreviousNextView>
       <ScrollView>
         <StackLayout  (tap)="hideKeyboard()"  [formGroup]="feedbackForm" class="profile-settings Roboto-Regular">
