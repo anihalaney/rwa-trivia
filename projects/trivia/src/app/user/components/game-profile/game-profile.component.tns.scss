@@ -13,6 +13,7 @@
   width: 30%;
   background: #f2f2f2;
   border-radius: 5;
+  padding-left: 15;
 }
 
 .border {
@@ -31,28 +32,29 @@
 .text-black {
   color: $black-title;
 }
-.friends-border {
-  justify-content: space-between;
-  margin: 0 0 20 0;
-  border-width: 1 0 1 0;
-  border-color: #e4e4e4;
 
-  &-box {
+.friends_box {
+  border-color: #e4e4e4;
+  border-width: 1 0 1 0;
+  margin-bottom: 20;
+
+  &-border {
     border-width: 0 1 0 0;
     border-color: #e4e4e4;
     width: 50%;
     justify-content: center;
+    padding: 10 0;
   }
-  .friends {
-    width: 100%;
-    justify-content: center;
-    align-items: center;
 
-    &-text {
-      color: $midnight-light;
-      padding: 15;
-      font-size: 18;
-    }
+  &-no-border {
+    width: 50%;
+    justify-content: center;
+    padding: 10 0;
+  }
+
+  &-text {
+    color: $midnight-light;
+    font-size: 18;
   }
 }
 

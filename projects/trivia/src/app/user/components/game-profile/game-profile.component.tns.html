@@ -7,15 +7,16 @@
     [class.logged-in-profile]="userType===1">
     <ScrollView>
         <StackLayout *ngIf="renderView">
-            <GridLayout columns="auto,*,auto" rows="auto,auto" margin="20">
+            <GridLayout columns="auto,*,auto" rows="auto,auto" margin="20 20 20 0">
                 <app-user-card rowSpan="2" col="0" [userId]="user?.userId"
                     [type]="userCardType.USER_IMAGE_NAME_PROFILE_HORIZONTAL" [userType]="0">
                 </app-user-card>
 
-                <StackLayout row="0" col="1">
-                    <Label [text]="user?.displayName" color="#3c5a98" fontSize="20" textWrap="true"></Label>
+                <FlexboxLayout flexDirection="column" row="0" col="1">
+                    <Label [text]="user?.displayName" color="#3c5a98" fontSize="20" paddingBottom="10"
+                        textWrap="true"></Label>
                     <Label text="&#xf041; {{user?.location}}" color="#000" class="fa" textWrap="true"></Label>
-                </StackLayout>
+                </FlexboxLayout>
                 <FlexboxLayout row="1" col="1">
                     <FlexboxLayout *ngFor="let profile of socialProfileSettings">
                         <Label *ngIf="profile?.enable" [order]="profile?.position" text="{{getIcon(profile?.icon)}}"
@@ -41,131 +42,128 @@
                 <Label text="Categories" color="#1B1C1C" fontSize="15" fontWeight="500" textWrap="true"></Label>
                 <FlexboxLayout justifyContent="space-between" orientation="horizontal">
                     <Label text="{{categories}}" class="text-blue" fontSize="15" textWrap="false"></Label>
-                    <Label *ngIf="userType === 0" [nsRouterLink]="['/user/my/profile', user?.userId]" padding="0 10" text="&#xf041;" class="fa text-blue" textWrap="true"></Label>
+                    <Label *ngIf="userType === 0" [nsRouterLink]="['/user/my/profile', user?.userId]" padding="0 10"
+                        text="&#xf303;" class="fas text-blue" textWrap="true"></Label>
                 </FlexboxLayout>
             </FlexboxLayout>
 
-            <FlexboxLayout *ngIf="userType === 0" justifyContent="space-around" borderTopWidth="1" padding="10 0"
-                marginBottom="20" borderBottomWidth="2" borderColor="#e4e4e4">
-                <FlexboxLayout>
-                    <Image src="~/assets/images/mobile/bits.png" height="40" width="40"></Image>
-                    <Label alignSelf="center" [text]="account?.bits || 0" class="bits-text" textWrap="true"></Label>
-                </FlexboxLayout>
-                <FlexboxLayout>
-                    <Image src="~/assets/images/mobile/bytes.png" height="40" width="40"></Image>
-                    <Label alignSelf="center" [text]="account?.bytes || 0" class="bits-text" textWrap="true"></Label>
-                </FlexboxLayout>
-
-                <Label alignSelf="center" text="KNOW MORE" class="text-blue font-bold" textWrap="true"></Label>
-            </FlexboxLayout>
-
-            <FlexboxLayout *ngIf="userType === 1" class="friends-border">
-                <FlexboxLayout class="friends-border-box">
-                    <FlexboxLayout *ngIf="loggedInUser?.userId && userInvitations[user?.email]?.status === 'add'"
-                        class="friends" stlRippleEffect (rippleTap)="sendFriendRequest()">
-                        <Label class="friends-text" text="Add Friend" textWrap="true"></Label>
+            <WrapLayout *ngIf="userType === 0" borderTopWidth="1" padding="10 0" marginBottom="20" borderBottomWidth="2"
+                borderColor="#e4e4e4">
+                <FlexboxLayout width="50%" justifyContent="space-around">
+                    <FlexboxLayout>
+                        <Image src="~/assets/images/mobile/bits.png" height="40" width="40"></Image>
+                        <Label alignSelf="center" [text]="account?.bits || 0" class="bits-text" textWrap="true"></Label>
                     </FlexboxLayout>
-
-                    <FlexboxLayout *ngIf="loggedInUser?.userId && userInvitations[user?.email]?.status === 'pending'"
-                        class="friends" stlRippleEffect>
-                        <Label class="friends-text" text="Friend Request Sent" textWrap="true"></Label>
-                    </FlexboxLayout>
-                    <FlexboxLayout *ngIf="loggedInUser?.userId && userInvitations[user?.email]?.status==='approved'"
-                        class="friends" stlRippleEffect>
-                        <Label class="friends-text" text="Friends" textWrap="true"></Label>
+                    <FlexboxLayout>
+                        <Image src="~/assets/images/mobile/bytes.png" height="40" width="40"></Image>
+                        <Label alignSelf="center" [text]="account?.bytes || 0" class="bits-text"
+                            textWrap="true"></Label>
                     </FlexboxLayout>
                 </FlexboxLayout>
-                <FlexboxLayout width="50%" class="friends" stlRippleEffect (rippleTap)="startNewGame()">
-                    <Label class="friends-text" text="Invite to Play" textWrap="true"></Label>
+            </WrapLayout>
+
+            <FlexboxLayout *ngIf="userType === 1" class="friends_box">
+                <FlexboxLayout class="friends_box-border" stlRippleEffect
+                    *ngIf="loggedInUser?.userId && userInvitations[user?.email]?.status === 'add'"
+                    (rippleTap)="sendFriendRequest()">
+                    <Label class="friends_box-text" text="Add Friend" textWrap="true"></Label>
+                </FlexboxLayout>
+                <FlexboxLayout class="friends_box-border" stlRippleEffect
+                    *ngIf="loggedInUser?.userId && userInvitations[user?.email]?.status === 'pending'">
+                    <Label class="friends_box-text" text="Friend Request Sent" textWrap="true"></Label>
+                </FlexboxLayout>
+                <FlexboxLayout class="friends_box-border" stlRippleEffect
+                    *ngIf="loggedInUser?.userId && userInvitations[user?.email]?.status==='approved'">
+                    <Label class="friends_box-text" text="Friends" textWrap="true"></Label>
+                </FlexboxLayout>
+
+                <FlexboxLayout class="friends_box-no-border" stlRippleEffect (rippleTap)="startNewGame()">
+                    <Label class="friends_box-text" text="Invite to Play" textWrap="true"></Label>
                 </FlexboxLayout>
             </FlexboxLayout>
 
             <FlexboxLayout flexWrap="wrap" margin="0 10 20 10" horizontalAlignment="center">
 
-                <StackLayout orientation="horizontal" horizontalAlignment="center" class="stats-box" margin="0 10 10 0">
-                    <FlexboxLayout flexDirection="column" justifyContent="center">
+                <FlexboxLayout class="stats-box" margin="0 10 10 0">
+                    <FlexboxLayout alignSelf="center" flexDirection="column" alignItems="flex-start">
                         <Label [text]="account?.gamePlayed || 0" class="bold-text text-color" textWrap="true"></Label>
                         <Label text="Played" class="text-black" textWrap="true"></Label>
                     </FlexboxLayout>
-                </StackLayout>
+                </FlexboxLayout>
 
-                <StackLayout orientation="horizontal" horizontalAlignment="center" class="stats-box" margin="0 10 10 0">
-                    <FlexboxLayout flexDirection="column" justifyContent="center">
+                <FlexboxLayout class="stats-box" margin="0 10 10 0">
+                    <FlexboxLayout alignSelf="center" flexDirection="column">
                         <Label [text]="account?.wins || 0" class="bold-text text-color" textWrap="true"></Label>
                         <Label text="Won" class="text-black" textWrap="true"></Label>
                     </FlexboxLayout>
-                </StackLayout>
+                </FlexboxLayout>
 
-                <StackLayout orientation="horizontal" horizontalAlignment="center" class="stats-box" marginBottom="10">
-                    <FlexboxLayout flexDirection="column" justifyContent="center">
+                <FlexboxLayout class="stats-box" marginBottom="10">
+                    <FlexboxLayout alignSelf="center" flexDirection="column">
                         <Label [text]="account?.badges || 0" class="bold-text text-color" textWrap="true"></Label>
                         <Label text="Badges" class="text-black" textWrap="true"></Label>
                     </FlexboxLayout>
-                </StackLayout>
+                </FlexboxLayout>
 
 
-                <StackLayout orientation="horizontal" horizontalAlignment="center" class="stats-box" marginRight="10">
-                    <FlexboxLayout flexDirection="column" justifyContent="center">
+                <FlexboxLayout class="stats-box" marginRight="10">
+                    <FlexboxLayout alignSelf="center" flexDirection="column">
                         <Label [text]="account?.categories || 0" class="bold-text text-color" textWrap="true"></Label>
                         <Label text="Categories" class="text-black" textWrap="true"></Label>
                     </FlexboxLayout>
-                </StackLayout>
+                </FlexboxLayout>
 
-                <StackLayout orientation="horizontal" horizontalAlignment="center" class="stats-box" marginRight="10">
-                    <FlexboxLayout flexDirection="column" justifyContent="center">
+                <FlexboxLayout class="stats-box" marginRight="10">
+                    <FlexboxLayout alignSelf="center" flexDirection="column">
                         <Label [text]="user?.totalFriends || 0" class="bold-text text-color" textWrap="true"></Label>
                         <Label text="Friends" class="text-black" textWrap="true"></Label>
                     </FlexboxLayout>
-                </StackLayout>
+                </FlexboxLayout>
 
-                <StackLayout orientation="horizontal" horizontalAlignment="center" class="stats-box">
-                    <FlexboxLayout flexDirection="column" justifyContent="center">
+                <FlexboxLayout class="stats-box">
+                    <FlexboxLayout alignSelf="center" flexDirection="column">
                         <Label text="{{account?.avgAnsTime || 0}} s" class="bold-text text-color"
                             textWrap="true"></Label>
                         <Label text="Avg. time" class="text-black" textWrap="true"></Label>
                     </FlexboxLayout>
-                </StackLayout>
+                </FlexboxLayout>
 
-                <StackLayout orientation="horizontal" horizontalAlignment="center" class="stats-box" margin="10 10 0 0">
-                    <FlexboxLayout flexDirection="column" justifyContent="center">
+                <FlexboxLayout class="stats-box" margin="10 10 0 0">
+                    <FlexboxLayout alignSelf="center" flexDirection="column">
                         <Label text="{{account?.contribution || 0}}" class="bold-text text-color"
                             textWrap="true"></Label>
                         <Label text="contribution" class="text-black" textWrap="true"></Label>
                     </FlexboxLayout>
-                </StackLayout>
+                </FlexboxLayout>
             </FlexboxLayout>
-            <StackLayout
-                [visibility]="loggedInUser?.userId && userType === 1 && gamePlayedAgainst ? 'visible':'collapsed'"
-                margin="0 10 20 10" iosOverflowSafeArea="false">
-                <StackLayout class="cardStyle" orientation="vertical" verticalAlignment="center" margin="10">
-                    <StackLayout class="stats-main" iosOverflowSafeArea="false">
-                        <GridLayout rows="*" columns="30,*,auto" class="stats padding-10" iosOverflowSafeArea="false">
-                            <Label row="0" col="0" fontSize="16" class="fas" verticalAlignment="center"
-                                text="&#xf109;"></Label>
-                            <Label text="Game Played Against You" row="0" col="1" class="text-black Hind-Bold"
-                                fontSize="16" verticalAlignment="center"></Label>
-                            <Label [text]="gamePlayedAgainst?.gamePlayed" row="0" col="2" class="text-black"
-                                fontSize="16"></Label>
-                        </GridLayout>
-                        <GridLayout rows="*" columns="30,*,auto" class="stats padding-10" iosOverflowSafeArea="false">
-                            <Label row="1" col="0" fontSize="16" class="far" verticalAlignment="center"
-                                text="&#xf09d;"></Label>
-                            <Label text="Games Won-Games Lost" row="1" col="1" class="text-black Hind-Bold"
-                                fontSize="16" verticalAlignment="center"></Label>
-                            <Label text="{{gamePlayedAgainst?.wins}}-{{gamePlayedAgainst?.losses}}" row="0" col="2"
-                                class="text-black" fontSize="16"></Label>
-                        </GridLayout>
-                    </StackLayout>
-                </StackLayout>
-            </StackLayout>
 
-            <StackLayout [visibility]="userType === 0 ? 'visible' : 'collapsed'" margin="0 20 20 20">
+            <GridLayout rows="auto,auto" *ngIf="loggedInUser?.userId && userType === 1 && gamePlayedAgainst"
+                margin="0 20 20 20" class="stats-main" iosOverflowSafeArea="false">
+                <GridLayout row="0" rows="*" columns="30,*,auto" class="stats padding-10" iosOverflowSafeArea="false">
+                    <Label row="0" col="0" fontSize="16" class="fas" verticalAlignment="center" text="&#xf109;"></Label>
+                    <Label row="0" col="1" text="Game Played Against You" class="text-black Hind-Bold" fontSize="16"
+                        verticalAlignment="center"></Label>
+                    <Label row="0" col="2" [text]="gamePlayedAgainst?.gamePlayed" class="text-black"
+                        fontSize="16"></Label>
+                </GridLayout>
+                <GridLayout row="1" rows="*" columns="30,*,auto" class="stats padding-10" iosOverflowSafeArea="false">
+                    <Label row="1" col="0" fontSize="16" class="far" verticalAlignment="center" text="&#xf09d;"></Label>
+                    <Label row="1" col="1" text="Games Won-Games Lost" class="text-black Hind-Bold" fontSize="16"
+                        verticalAlignment="center"></Label>
+                    <Label row="0" col="2" text="{{gamePlayedAgainst?.wins}}-{{gamePlayedAgainst?.losses}}"
+                        class="text-black" fontSize="16"></Label>
+                </GridLayout>
+            </GridLayout>
+
+            <GridLayout *ngIf="userType === 0" margin="0 20 20 20">
                 <StackLayout orientation="horizontal">
                     <Label text="&#xf0c9;" class="fa text-black" fontSize="20" textWrap="true" marginRight="5"></Label>
                     <Label text="Activity Log" class="text-black" fontSize="18" textWrap="true"></Label>
                 </StackLayout>
-                <recent-games [hideActionbar]="true"></recent-games>
-            </StackLayout>
+                <WrapLayout marginTop="20">
+                    <recent-games [hideActionbar]="true"></recent-games>
+                </WrapLayout>
+            </GridLayout>
         </StackLayout>
     </ScrollView>
 </StackLayout>
