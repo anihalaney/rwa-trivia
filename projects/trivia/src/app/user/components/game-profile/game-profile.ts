@@ -7,6 +7,7 @@ import { Observable, Subject } from 'rxjs';
 import { UserActions } from 'shared-library/core/store';
 import { ChangeDetectorRef } from '@angular/core';
 import { Utils } from 'shared-library/core/services';
+import * as lodash from 'lodash';
 
 export enum UserType {
     userProfile,
@@ -33,8 +34,8 @@ export class GameProfile {
     loggedInUserAccount: Account;
     gamePlayedAgainst: any;
     userInvitations: { [key: string]: Invitation };
-    categories: string;
-
+    tags: any = {};
+    tagsArray: any = {};
     constructor(
         public route: ActivatedRoute,
         public router: Router,
@@ -49,6 +50,12 @@ export class GameProfile {
                 map(params => this.userId = params.userid),
                 flatMap(() => this.store.select(appState.coreState).pipe(select(s => s.user))),
                 switchMap(user => {
+                    if (user && user.tags && user.tags.length > 0) {
+                        this.tagsArray.userTags = user.tags;
+                        const userTags = user.tags.join(', ');
+                        this.tags.userTags = userTags;
+
+                    }
                     if (user && user.userId === this.userId) {
                         this.user = user;
                         this.userType = UserType.userProfile;
@@ -60,10 +67,7 @@ export class GameProfile {
                                 this.loggedInUserAccount = accountInfo;
                             });
                     }
-                    if (this.user && this.user.tags && this.user.tags.length > 0) {
-                        const userTags = this.user.tags.join(', ');
-                        this.categories = userTags;
-                    }
+
                     return this.initializeProfile();
                 })
             ).subscribe());
@@ -83,8 +87,10 @@ export class GameProfile {
                     this.gamePlayedChangeSubject.next(true);
                 }
                 if (this.user && this.user.tags && this.user.tags.length > 0) {
+                    this.tagsArray.otherUserTags = this.user.tags;
+                    this.tags.comparison = lodash.intersection(this.tagsArray.userTags, this.tagsArray.otherUserTags);
                     const userTags = this.user.tags.join(', ');
-                    this.categories = userTags;
+                    this.tags.otherUserTags = userTags;
                 }
                 this.userProfileImageUrl = this.getImageUrl(this.user);
                 if (this.socialProfileObj) {
