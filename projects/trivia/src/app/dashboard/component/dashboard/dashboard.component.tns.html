@@ -114,7 +114,8 @@
                                         iosOverflowSafeArea="false">
                                         <game-card [game]="game" [cardType]="'singlePlayer'" stlRippleEffect>
                                         </game-card>
-                                        <StackLayout class="hr-light m-10" height="2" *ngIf="!last" iosOverflowSafeArea="false">
+                                        <StackLayout class="hr-light m-10" height="2" *ngIf="!last"
+                                            iosOverflowSafeArea="false">
                                         </StackLayout>
                                         <StackLayout class="hr-light m-10" height="2" *ngIf="last && twoPlayerCount > 0"
                                             iosOverflowSafeArea="false"></StackLayout>
@@ -122,7 +123,8 @@
                                     <StackLayout row="1" col="0" *ngIf="activeGames && userDict"
                                         iosOverflowSafeArea="false">
                                         <game-card [game]="game" [cardType]="'twoPlayer'" stlRippleEffect></game-card>
-                                        <StackLayout class="hr-light m-10" height="2" *ngIf="!last" iosOverflowSafeArea="false">
+                                        <StackLayout class="hr-light m-10" height="2" *ngIf="!last"
+                                            iosOverflowSafeArea="false">
                                         </StackLayout>
                                     </StackLayout>
                                 </GridLayout>
@@ -130,36 +132,40 @@
                         </CardView>
                     </StackLayout>
 
-                <StackLayout row="3" col="0" *ngIf="user && theirTurnCount" iosOverflowSafeArea="false">
-                    <CardView class="cardStyle" margin="10" android:elevation="20" ios:elevation="40" radius="5"
-                        class="gameplay" backgroundColor="white" iosOverflowSafeArea="false">
-                        <StackLayout *ngIf="activeGames && userDict" iosOverflowSafeArea="false"
-                            class="their-turn-card">
-                            <Label text="Their Turn" textWrap="true" class="title Roboto-Bold their-turn-title">
-                            </Label>
-                            <StackLayout
-                                *ngFor="let game of activeGames | gameFilter: filterTwoPlayerWaitNextQGame; let last = last;"
-                                iosOverflowSafeArea="false">
-                                <game-card [game]="game" [cardType]="'theirTurn'"></game-card>
-                                <StackLayout class="hr-light m-10" height="2" *ngIf="!last" iosOverflowSafeArea="false">
+                    <StackLayout row="3" col="0" *ngIf="user && theirTurnCount" iosOverflowSafeArea="false">
+                        <CardView class="cardStyle" margin="10" android:elevation="20" ios:elevation="40" radius="5"
+                            class="gameplay" backgroundColor="white" iosOverflowSafeArea="false">
+                            <StackLayout *ngIf="activeGames && userDict" iosOverflowSafeArea="false"
+                                class="their-turn-card">
+                                <Label text="Their Turn" textWrap="true" class="title Roboto-Bold their-turn-title">
+                                </Label>
+                                <StackLayout
+                                    *ngFor="let game of activeGames | gameFilter: filterTwoPlayerWaitNextQGame; let last = last;"
+                                    iosOverflowSafeArea="false">
+                                    <game-card [game]="game" [cardType]="'theirTurn'"></game-card>
+                                    <StackLayout class="hr-light m-10" height="2" *ngIf="!last"
+                                        iosOverflowSafeArea="false">
+                                    </StackLayout>
                                 </StackLayout>
                             </StackLayout>
                         </StackLayout>
                         </CardView>
                     </StackLayout>
 
-                <StackLayout row="4" col="0" *ngIf="user && waitingForOpponentCount" iosOverflowSafeArea="false">
-                    <CardView class="cardStyle" margin="10" android:elevation="20" ios:elevation="40" radius="5"
-                        class="gameplay" backgroundColor="white" iosOverflowSafeArea="false">
-                        <StackLayout *ngIf="activeGames && userDict" iosOverflowSafeArea="false"
-                            class="their-turn-card">
-                            <Label text="Waiting for Opponent" textWrap="true"
-                                class="title Roboto-Bold their-turn-title">
-                            </Label>
-                            <StackLayout *ngFor="let game of activeGames | gameFilter: filterGame; let last = last;"
-                                iosOverflowSafeArea="false">
-                                <game-card [game]="game" [cardType]="'opponent'"></game-card>
-                                <StackLayout class="hr-light m-10" height="2" *ngIf="!last" iosOverflowSafeArea="false">
+                    <StackLayout row="4" col="0" *ngIf="user && waitingForOpponentCount" iosOverflowSafeArea="false">
+                        <CardView class="cardStyle" margin="10" android:elevation="20" ios:elevation="40" radius="5"
+                            class="gameplay" backgroundColor="white" iosOverflowSafeArea="false">
+                            <StackLayout *ngIf="activeGames && userDict" iosOverflowSafeArea="false"
+                                class="their-turn-card">
+                                <Label text="Waiting for Opponent" textWrap="true"
+                                    class="title Roboto-Bold their-turn-title">
+                                </Label>
+                                <StackLayout *ngFor="let game of activeGames | gameFilter: filterGame; let last = last;"
+                                    iosOverflowSafeArea="false">
+                                    <game-card [game]="game" [cardType]="'opponent'"></game-card>
+                                    <StackLayout class="hr-light m-10" height="2" *ngIf="!last"
+                                        iosOverflowSafeArea="false">
+                                    </StackLayout>
                                 </StackLayout>
                             </StackLayout>
                         </StackLayout>

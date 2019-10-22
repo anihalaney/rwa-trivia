@@ -139,7 +139,7 @@ const commandList = {
     },
     "mobile":
     {
-        "command": "tns app platform  --bundle environment forDevice --env.package_name=packageName --env.project=productVariant",
+        "command": "tns app platform --bundle environment forDevice --env.package_name=packageName --env.project=productVariant noHmr",
         "description": "run android/ios app in staging/production environment",
         "options": {
             "productVariant": {
@@ -197,6 +197,14 @@ const commandList = {
                 "alias": ['a', 'A'],
                 "default": 'run',
                 "coerce": args => args === 'debug' ? 'debug' : 'run',
+            },
+            "noHmr": {
+                "demand": false,
+                "description": 'run with no hmr e.g. true',
+                "default": 'false',
+                "alias": ['NH', 'nh'],
+                "coerce": args => {  return args == 'true' ? '--no-hmr' : ''} ,
+
             }
         },
         "builder": args => args.argv.platform === 'ios' && args.argv.environment.search('--env.prod') >= 0 ? args.argv.forDevice = ' --for-device' : args.argv.forDevice = '',
