@@ -20,6 +20,7 @@ import { User } from 'shared-library/shared/model';
 
 export class LeaderboardComponent extends Leaderboard implements OnDestroy, OnInit {
   @ViewChild('dropdown', { static: false }) dropdown: ElementRef;
+  @ViewChild('dropdowntop', { static: false }) dropdownTop: ElementRef;
   // This is magic variable
   // it delay complex UI show Router navigation can finish first to have smooth transition
   renderView = false;
@@ -46,7 +47,7 @@ export class LeaderboardComponent extends Leaderboard implements OnDestroy, OnIn
   }
 
   openDropdown() {
-    let dropdown = <DropDown>this.dropdown.nativeElement;
+    const dropdown = <DropDown>this.dropdown.nativeElement;
     dropdown.open();
   }
 
@@ -54,13 +55,18 @@ export class LeaderboardComponent extends Leaderboard implements OnDestroy, OnIn
     this.page.on('loaded', () => { this.renderView = true; this.cd.markForCheck(); });
   }
 
-  public onchange(args: SelectedIndexChangedEventData) {
+  onchange(args: SelectedIndexChangedEventData) {
     this.selectedCatList = this.leaderBoardStatDict[(args.newIndex + 1)];
     this.cd.markForCheck();
 
   }
 
-  public onTopFilterChanged(args: SelectedIndexChangedEventData) {
+  openDropdowntop() {
+    const dropdownTop = <DropDown>this.dropdownTop.nativeElement;
+    dropdownTop.open();
+  }
+
+  onTopFilterChanged(args: SelectedIndexChangedEventData) {
     this.selectedTopFilter = args.newIndex;
     this.cd.markForCheck();
   }
