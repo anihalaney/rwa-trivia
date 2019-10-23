@@ -18,17 +18,17 @@
                             (rippleTap)="navigateToCategories()"></Label>
                     </FlexboxLayout>
                 </GridLayout>
-                <GridLayout *ngIf="user && user!==null" col="2" stlRippleEffect stlBackgroundColor="transparent"
-                    ios:margin="3" android:margin="10" stlOpacity="0.5" stlBackgroundColorAfter="transparent"
+                <GridLayout *ngIf="user && user!==null" col="2" ios:margin="3" android:margin="10"
                     verticalAlignment="center" horizontalAlignment="right" android:width="24" ios:width="24">
-                    <Label text="&#xe901;" class="ico icon-noun-game" fontSize="20" color="#3b5998"></Label>
+                    <Label stlRippleEffect stlBackgroundColor="transparent" stlOpacity="0.5" stlBackgroundColorAfter="transparent"
+                        text="&#xe901;" class="ico icon-noun-game" fontSize="20" color="#3b5998"></Label>
                 </GridLayout>
-                <GridLayout *ngIf="user && user!==null" class="index-0" col="3" stlRippleEffect
-                    stlBackgroundColor="transparent" stlOpacity="0.5" stlBackgroundColorAfter="transparent"
-                    ios:margin="3" android:margin="10" verticalAlignment="center" horizontalAlignment="center"
-                    android:width="40" ios:width="40" (rippleTap)="gotToNotification()" orientation="horizontal">
-                    <Label horizontalAlignment="center" verticalAlignment="center" text="&#xee900;"
-                        class="ico icon-notification icon" fontSize="22" color="#3b5998"></Label>
+                <GridLayout *ngIf="user && user!==null" class="index-0" col="3" ios:margin="3" android:margin="10"
+                    verticalAlignment="center" horizontalAlignment="center" android:width="40" ios:width="40"
+                    (tap)="gotToNotification()" orientation="horizontal">
+                    <Label horizontalAlignment="center" stlRippleEffect stlBackgroundColor="transparent"
+                        stlOpacity="0.5" stlBackgroundColorAfter="transparent" verticalAlignment="center"
+                        text="&#xee900;" class="ico icon-notification icon" fontSize="22" color="#3b5998"></Label>
                 </GridLayout>
                 <GridLayout *ngIf="user && user!==null && notifications.length > 0" col="4"
                     [ngClass]="{'notification-dot':notifications?.length > 0 }">
@@ -195,9 +195,10 @@
                                     textWrap="true">
                                 </Label>
                             </GridLayout>
-                            <GridLayout row="1" orientation="horizontal" horizontalAlignment="left" iosOverflowSafeArea="false">
-                                <Button width="50%" class="btn-transparent blue-border"
-                                    text="SUBMIT A QUESTION" (tap)="navigateToMyQuestion()">
+                            <GridLayout row="1" orientation="horizontal" horizontalAlignment="left"
+                                iosOverflowSafeArea="false">
+                                <Button width="50%" class="btn-transparent blue-border" text="SUBMIT A QUESTION"
+                                    (tap)="navigateToMyQuestion()">
                                 </Button>
                             </GridLayout>
                         </GridLayout>
