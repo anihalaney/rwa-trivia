@@ -10,10 +10,13 @@
     font-weight: 500;
 }
 
-.find-friend{
-    font-size: 20;
-    color: #4773b8;
-    font-weight: bold;
+.find-friend {
+  font-size: 20;
+  color: #283b66;
+  font-weight: bold;
+  border-radius: 5;
+  border-width: 1;
+  padding: 10;
 }
 
 .sub-title{
@@ -49,4 +52,41 @@
     .user-card-container{
         justify-content: space-between;
     }
+}
+
+
+.buddy-icon-container{
+    transform: rotate(18deg);
+    -ms-transform: rotate(20deg);
+    -webkit-transform: rotate(20deg); 
+    background-color:#f9f9f9;
+    margin-left:4;
+    margin-top:4;
+    padding-bottom: 4;
+    height:50;
+    width:50;
+    border-radius:8;
+
+}
+
+.buddy-icon{
+    transform: rotate(-18deg);
+    -ms-transform: rotate(-18deg); /* IE 9 */
+    -webkit-transform: rotate(-18deg); 
+    // top:30;
+    position: absolute;
+}
+
+.mobile {
+    .invite-main-title{
+        color: #212121;
+        font-size: 18;
+
+    }
+    .invite-sub-title{
+        color:#a5a5a5;
+        font-size: 14;
+        padding:0 0 15 10;
+    }
+    
 }

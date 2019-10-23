@@ -1,0 +1,47 @@
+.btn-blue {
+  background-color: #3b5998;
+  color: white;
+  font-size: 17;
+  padding: 15;
+}
+
+.btn-transparent {
+  background: white;
+  color: #3b5998;
+  font-size: 17;
+  padding: 15;
+  border-width: 1;
+  border-color: #e2e2e2;
+  border-radius: 5;
+
+  &.blue-border {
+    border-color: #3b5998;
+  }
+}
+
+.signIn .text-field,
+.signUp .text-field,
+.signUpExtraInfo .text-field,
+.display-name.text-field {
+  border-width: 1;
+  border-color: #dddddd;
+  border-radius: 5;
+  padding: 15;
+  margin: 10 15;
+}
+
+.signUpExtraInfo  .display-name.text-field {
+  border-width: 1;
+  border-color: #dddddd;
+  border-radius: 5;
+  padding: 15;
+  margin: 10 15;
+}
+
+.profileSettings  .display-name.text-field {
+  padding: 10 10 10 0;
+  border: none;
+  border-width: 0;
+  border-bottom-width: 1;
+  border-bottom-color: #d3d3d3;
+}

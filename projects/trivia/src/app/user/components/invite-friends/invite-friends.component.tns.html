@@ -1,16 +1,16 @@
 <ns-action-bar title="Friends" class="Roboto-Regular" hideHomeIcon="true" showAdd="true"></ns-action-bar>
 <GridLayout rows="auto,*" columns="*" *ngIf="renderView">
-    <GridLayout row="0" rows="*" columns="*,50,70" class="h-label">
+    <GridLayout marginLeft="10" row="0" rows="*" columns="*,50,70" class="h-label">
         <Label class="Roboto-Regular" text="Profile" row="0" color="#212121" col="0"></Label>
         <Label class="Roboto-Regular" text="Won" row="0" col="1"></Label>
         <Label class="Roboto-Regular" text="Played" row="0" col="2"></Label>
         <!-- <Label class="Roboto-Regular" text="Lost" row="0" col="3"></Label> -->
     </GridLayout>
-    <GridLayout row="1" tkExampleTitle tkToggleNavButton>
+    <GridLayout marginLeft="10" row="1" tkExampleTitle tkToggleNavButton>
         <RadListView [items]="uFriends">
             <ng-template tkListItemTemplate let-row="item">
                 <GridLayout rows="*" columns="*,50,70" class="friend-list">
-                        <StackLayout row="0" col="0">
+                    <StackLayout row="0" col="0">
                         <app-user-card *ngIf="row?.userId" [userId]="row.userId" [type]="userCardType.USER_IMAGE_NAME_HORIZONTAL">
                         </app-user-card>
                     </StackLayout>

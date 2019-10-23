@@ -15,6 +15,7 @@ export class RenderQuestionComponent implements OnInit, OnChanges {
 
     @Input() question: Question;
     @Input() questionIndex: number;
+    @Input() theme: string;
     scriptToGetHeight: string;
     htmlStartTag: string;
     htmlEndTag: string;

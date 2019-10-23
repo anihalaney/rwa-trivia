@@ -28,7 +28,6 @@ export class GameQuestionComponent extends GameQuestion implements OnInit, OnDes
   minutes = 0.62;
   public progressValue: number;
   stopProcessBar;
-  columns;
   doPlay = true;
   actionText: string;
 

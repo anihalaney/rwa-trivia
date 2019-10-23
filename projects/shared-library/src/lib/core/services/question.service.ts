@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of, combineLatest } from 'rxjs';
-import { map, catchError } from 'rxjs/operators';
+import { map, catchError, tap, filter } from 'rxjs/operators';
 import { CONFIG } from '../../environments/environment';
 import {
   Question, QuestionStatus, SearchResults, SearchCriteria,
@@ -196,6 +196,29 @@ export class QuestionService {
 
   getQuestionDownloadUrl(image: string) {
     return this.dbService.getFireStorageReference(image).getDownloadURL();
+  }
+
+  // Firestore
+  getUserLatestQuestion(userId: string): Observable<Question> {
+    const collection = 'questions';
+    const queryParams = {
+      condition: [{ name: 'created_uid', comparator: '==', value: userId }],
+      orderBy: [{ name: 'createdOn', value: 'desc' }],
+      limit: 1
+    };
+    return this.dbService.valueChanges(collection, '', queryParams)
+      .pipe(
+        map(qs => {
+          if (qs[0]) {
+            return Question.getViewModelFromDb(qs[0]);
+          }
+          return null;
+        }
+        ),
+        catchError(error => {
+          console.log(error);
+          return of(null);
+        }));
   }
 
 }

@@ -36,6 +36,7 @@
               "projects/trivia/src/styles/light.theme.scss",
               "projects/trivia/src/styles/dark.theme.scss",
               "projects/trivia/src/styles/mathquill.scss",
+              "projects/trivia/src/styles/icon-moon.scss",
               "./node_modules/firebaseui/dist/firebaseui.css",
               "./node_modules/ng-quill-tex/assets/theme.css",
               "./node_modules/mathquill/formula/formula.css",
