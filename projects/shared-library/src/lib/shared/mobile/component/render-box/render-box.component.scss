@@ -8,3 +8,16 @@
   margin-left: 3;
   border-radius: 15 1 15 15;
 }
+
+.only-clip {
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 82%);
+  // border-radius: 20;
+}
+
+.zindex1 {
+  z-index: 2;
+}
+
+.zindex0 {
+  z-index: 0;
+}
