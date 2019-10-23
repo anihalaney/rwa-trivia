@@ -55,6 +55,10 @@
   &-text {
     color: $midnight-light;
     font-size: 18;
+
+    &.green {
+      color: #9ccc65;
+    }
   }
 }
 

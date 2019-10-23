@@ -1,36 +1,37 @@
-<ActionBar  flat="true" background="#fff" title="" class="action-bar " [ngClass]=" subTitle ? 'action-subtitle' : 'action-title' ">
+<ActionBar flat="true" background="#fff" title="" class="action-bar "
+    [ngClass]=" subTitle ? 'action-subtitle' : 'action-title' ">
 
     <NavigationButton visibility="collapsed"></NavigationButton>
 
     <GridLayout ios:rows="auto" android:rows="auto" ios:columns="auto,*,auto,auto,auto"
         android:columns="auto,*,auto,auto,auto" width="100%">
 
-        <StackLayout col="0" verticalAlignment="center" marginRight="10" horizontalAlignment="left" (tap)="back()">
-            <Label color="#000000" text="&#xe906;" fontSize="20" class="ico icon-back"></Label>
+        <StackLayout col="0" verticalAlignment="center" horizontalAlignment="left" (tap)="back()">
+            <Label padding="5 10 5 0" color="#000000" text="&#xe906;" fontSize="20" class="ico icon-back"></Label>
         </StackLayout>
 
-        <StackLayout col="1" verticalAlignment="center">
-            <Label [text]="title.replace('_',' ')" class="action-text-title" textWrap="true"></Label>
-        </StackLayout>
+        <Flexboxlayout col="1" verticalAlignment="center">
+            <Label (tap)="back()" [text]="title.replace('_',' ')" class="action-text-title" textWrap="true"></Label>
+        </Flexboxlayout>
 
         <!-- game profile edit icon -->
-        <StackLayout col="2" *ngIf="showEdit?.showEditOrOptions === 'edit' && showEdit?.userId" stlRippleEffect
-            stlBackgroundColor="transparent" stlOpacity="0.5" marginRight="10" stlBackgroundColorAfter="transparent"
-            verticalAlignment="center" horizontalAlignment="right" (rippleTap)="navigateToProfile()">
-            <Label text="&#xf303;" class="fas" fontSize="18" padding="5 10" color="#14418B"></Label>
+        <StackLayout col="2" *ngIf="showEdit?.showEditOrOptions === 'edit' && showEdit?.userId" marginRight="10"
+            verticalAlignment="center" horizontalAlignment="right" (tap)="navigateToProfile()">
+            <Label stlRippleEffect stlBackgroundColorAfter="transparent" stlBackgroundColor="transparent"
+                stlOpacity="0.5" text="&#xe927;" class="ico icon-edit" fontSize="18" padding="5 10" color="#14418B"></Label>
         </StackLayout>
 
         <!-- game profile option icon -->
-        <StackLayout col="2" *ngIf="showEdit?.showEditOrOptions === 'options' && showEdit?.userId" istlRippleEffect
-            stlBackgroundColor="transparent" stlOpacity="0.5" marginRight="10" stlBackgroundColorAfter="transparent"
-            verticalAlignment="center" horizontalAlignment="right">
-            <Label text="&#xf142;" fontSize="22" padding="5 10" class="fa"></Label>
+        <StackLayout col="2" *ngIf="showEdit?.showEditOrOptions === 'options' && showEdit?.userId && false"
+            marginRight="10" verticalAlignment="center" horizontalAlignment="right">
+            <Label stlRippleEffect stlBackgroundColorAfter="transparent" stlBackgroundColor="transparent"
+                stlOpacity="0.5" text="&#xf142;" fontSize="22" padding="5 10" class="fa"></Label>
         </StackLayout>
 
         <StackLayout col="2" *ngIf="((user && user!== null && !showSkipBtn && title==='Questions'))" stlRippleEffect
-            stlBackgroundColor="#13284F" ios:margin="3" ios:marginRight="30" android:margin="10" stlOpacity="0.5" stlBackgroundColorAfter=""
-            verticalAlignment="center" horizontalAlignment="right" android:width="23" ios:width="23"
-            (rippleTap)="navigateToSubmitQuestion()">
+            stlBackgroundColor="#13284F" ios:margin="3" ios:marginRight="30" android:margin="10" stlOpacity="0.5"
+            stlBackgroundColorAfter="" verticalAlignment="center" horizontalAlignment="right" android:width="23"
+            ios:width="23" (rippleTap)="navigateToSubmitQuestion()">
             <Label text="&#xe905;" color="#6c63ff" fontSize="20" class="ico icon-add"></Label>
         </StackLayout>
 
