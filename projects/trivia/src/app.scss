@@ -19,6 +19,7 @@ refer to http://docs.nativescript.org/ui/theme.
 @import "./styles/styles.scss";
 @import "./styles/global.scss";
 @import './styles/mobile.scss';
+@import './styles/icon-moon.scss';
 
 .new-btn {
   color: map-get($light-theme-text-color, primary-light);
