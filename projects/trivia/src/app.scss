@@ -14,13 +14,11 @@ refer to http://docs.nativescript.org/ui/theme.
 // @import '~@ngx-share/button/styles/share-buttons';
 // @import '~@ngx-share/button/styles/themes/circles/circles-dark-theme';
 
-
-
-
 // @import '~nativescript-theme-core/css/core.light.css';
-@import './styles/light.theme.scss';
-@import './styles/styles.scss';
-@import './styles/global.scss';
+@import "./styles/light.theme.scss";
+@import "./styles/styles.scss";
+@import "./styles/global.scss";
+@import './styles/mobile.scss';
 @import './styles/icon-moon.scss';
 
 .new-btn {
@@ -106,7 +104,6 @@ refer to http://docs.nativescript.org/ui/theme.
   font-weight: 900;
 }
 
-
 .new-btn-s {
   color: red;
 }
@@ -117,12 +114,12 @@ refer to http://docs.nativescript.org/ui/theme.
 
 .sprite {
   background-repeat: no-repeat;
-  background-image: url('~/assets/images/sprite.png');
+  background-image: url("~/assets/images/sprite.png");
   background-size: 1500 1500;
 }
 
 .background {
-  background-image: url('~/assets/images/background-image.png');
+  background-image: url("~/assets/images/background-image.png");
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
@@ -132,8 +129,6 @@ refer to http://docs.nativescript.org/ui/theme.
   width: 50;
   height: 52;
   background-position: -10 -880;
-
-
 }
 
 .score1-L {
@@ -147,7 +142,6 @@ refer to http://docs.nativescript.org/ui/theme.
   height: 53;
   background-position: -160 -1110;
 }
-
 
 .score4-L {
   width: 50;
@@ -212,14 +206,14 @@ refer to http://docs.nativescript.org/ui/theme.
 .mobile {
   .btn-red {
     font-size: 15;
-    background-color: #D4493D;
+    background-color: #d4493d;
     color: #ffffff;
     margin: 20 0 10 0;
     padding: 15 0 15 0;
   }
 
   .title {
-    color: #3B5998;
+    color: #3b5998;
     font-weight: bold;
     line-height: 0.24;
     font-size: 20;
@@ -232,7 +226,7 @@ refer to http://docs.nativescript.org/ui/theme.
   }
 
   .sub-title {
-    color: #8C8C8C;
+    color: #8c8c8c;
     font-size: 15;
     padding: 2 0 2 0;
   }
@@ -253,7 +247,7 @@ refer to http://docs.nativescript.org/ui/theme.
   }
 }
 
-Button {
+button {
   border-radius: 0;
 }
 
@@ -274,7 +268,6 @@ Button {
       height: 90;
       width: 90;
     }
-
   }
 }
 
@@ -293,7 +286,6 @@ Button {
       height: 64;
       width: 64;
     }
-
   }
 }
 
@@ -305,6 +297,11 @@ Button {
   }
 }
 
+.dark-theme {
+  .text-color {
+    color: #fff;
+  }
+}
 // mobile-design
 .error-text {
   margin-bottom: 15;

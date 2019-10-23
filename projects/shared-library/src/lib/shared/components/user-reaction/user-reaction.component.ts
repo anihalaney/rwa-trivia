@@ -1,12 +1,9 @@
-import {
-  Component, OnDestroy,
-  ChangeDetectionStrategy, ChangeDetectorRef
-} from '@angular/core';
-import { UserReaction } from './user-reaction';
+import { Component, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, Input, SimpleChanges, OnChanges } from '@angular/core';
+import { Question, User } from 'shared-library/shared/model';
+import { Store, select } from '@ngrx/store';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { Subscription } from 'rxjs';
-import { Store } from '@ngrx/store';
-import { AppState } from './../../../../../../trivia/src/app/store';
+import { CoreState, coreState } from 'shared-library/core/store';
 import { GameActions } from 'shared-library/core/store/actions';
 import { AuthenticationProvider } from 'shared-library/core/auth';
 
@@ -18,12 +15,42 @@ import { AuthenticationProvider } from 'shared-library/core/auth';
 })
 
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
-export class UserReactionComponent extends UserReaction implements OnDestroy {
+export class UserReactionComponent implements OnChanges, OnDestroy {
+  @Input() question: Question;
+  @Input() user: User;
+  @Input() theme;
   subscriptions: Subscription[] = [];
-  constructor(public store: Store<AppState>, public cd: ChangeDetectorRef, public gameActions: GameActions,
+  userReactionStatus;
+
+  constructor(public store: Store<CoreState>, public cd: ChangeDetectorRef, public gameActions: GameActions,
     public authService: AuthenticationProvider) {
-    super(store, cd, gameActions, authService);
+    this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.getUserReactionStatus)).subscribe(s => {
+        this.userReactionStatus = s;
+        this.cd.markForCheck();
+    }));
+    this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.getQuestionSuccess)).subscribe(question => {
+        this.question = question;
+        this.cd.markForCheck();
+    }));
+
   }
+
+  userReaction(status: string ) {
+    if (this.user && this.user.userId) {
+      this.store.dispatch(this.gameActions.UserReaction({questionId: this.question.id, userId: this.user.userId, status: status}));
+    } else {
+      this.authService.ensureLogin();
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (this.question && this.user) {
+        this.store.dispatch(this.gameActions.GetUserReaction({ questionId : this.question.id,
+        userId: this.user.userId }));
+        this.store.dispatch(this.gameActions.GetQuestion(this.question.id));
+    }
+  }
+
 
   ngOnDestroy() {
   }

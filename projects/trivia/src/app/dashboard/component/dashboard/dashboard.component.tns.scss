@@ -1,0 +1,226 @@
+@import "./dashboard.component";
+
+.notification-dot {
+  background-color: #f50057;
+  width: 20;
+  height: 20;
+  margin-top: 20;
+  margin-left: 20;
+  color: #fff;
+  border-radius: 50%;
+  font-size: 14;
+  font-weight: 600;
+}
+
+.index-0 {
+  z-index: 0;
+}
+
+.index-1 {
+  margin-left: 5;
+}
+
+.game-btn {
+  border-width: 1;
+  border-color: #fff;
+  background-color: #283b66;
+  color: #fff;
+  border-radius: 5;
+  padding: 10 0;
+  font-weight: bold;
+  width: 48%;
+}
+
+.game-btn-disabled {
+  border-width: 1;
+  border-color: #a5a5a5;
+  background-color: #283b66;
+  color: #a5a5a5;
+  border-radius: 5;
+  padding: 10 0;
+  font-weight: bold;
+  width: 48%;
+}
+
+.active-game {
+  color: #000;
+  font-size: 22;
+  line-height: 29;
+  font-weight: bold;
+}
+
+.buy-lives {
+  color: #ffc107;
+  font-size: 14;
+  padding: 0 3;
+}
+
+.lives-number {
+  color: #ffffff;
+  padding: 0 3;
+}
+
+.your-question {
+  color: #283b66;
+  margin-bottom: 10;
+  font-size: 18;
+}
+#dashboard {
+  .space-between {
+    justify-content: space-between;
+  }
+
+  .dashboard {
+    padding: 10 0;
+
+    &_user {
+      margin-left: 10;
+
+      &-header {
+        font-size: 14;
+      }
+
+      &-subText {
+        font-size: 18;
+        font-weight: bold;
+        color: #3a5998;
+      }
+
+      &-icon {
+        margin-left: 10;
+        font-size: 20;
+        color: #3a5998;
+      }
+    }
+
+    &_body {
+      padding-bottom: 70;
+      &-bits {
+        width: 60%;
+        margin: 10 0 0 30;
+
+        image {
+          height: 35;
+          width: 35;
+        }
+      }
+
+      &-text {
+        align-self: center;
+        align-content: center;
+        color: #212121;
+        font-size: 18;
+        padding-left: 3;
+      }
+
+      &-grid {
+        &0 {
+          padding: 10 20;
+          &-1 {
+            .title {
+              font-size: 24;
+              color: #fff;
+            }
+
+            .icon {
+              color: #c9b750;
+              font-size: 20;
+              margin-right: 10;
+            }
+
+            &-lives {
+              color: #fff;
+              font-size: 20;
+            }
+          }
+          &-2 {
+            padding: 10 0;
+          }
+
+          &-3 {
+            .life-activated {
+              font-size: 14;
+              color: #dddddd;
+              font-weight: 500;
+            }
+
+            .timeout {
+              color: #fff;
+              font-size: 14;
+              font-weight: bold;
+            }
+          }
+
+          &-4 {
+            margin-top: 5;
+
+            .icon {
+              color: #c9b750;
+              font-size: 20;
+              margin-right: 10;
+            }
+
+            .no-life {
+              font-size: 14;
+              color: #e2e2e2;
+            }
+          }
+        }
+
+        &1 {
+          .p-15 {
+            padding: 0 15 15 15;
+          }
+        }
+
+        &2 {
+          margin-top: 10;
+        }
+
+        &3 {
+          margin: 0 10 10 10;
+
+          .submit-btn {
+            border-radius: 5;
+            border-color: #1e2c4d;
+            border-width: 1;
+            width: 50%;
+            color: #1e2c4d;
+            background-color: white;
+            font-weight: bold;
+          }
+          .box {
+            padding: 15;
+            border-width: 1;
+            border-color: #e4e4e4;
+            border-radius: 12;
+            margin: 15 0;
+
+            .submitted {
+              font-size: 13;
+              color: #a5a5a5;
+            }
+
+            .icon {
+              font-size: 20;
+              color: #e2e2e2;
+            }
+
+            .toggle-screen {
+              flex-wrap: wrap;
+              margin-top: 5;
+              .content {
+                width: 50%;
+                margin: 5 0;
+
+                label {
+                  font-size: 13;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -17,3 +17,14 @@
   border: none;
   border-width: 0;
 }
+
+
+Button[isEnabled=true] {
+  background: #3b5998;
+  color: #fff;
+}
+
+Button[isEnabled=false] {
+  background: #e2e2e2;
+  color: #bebebe;
+}

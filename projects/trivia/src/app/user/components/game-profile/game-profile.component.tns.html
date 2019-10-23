@@ -167,13 +167,13 @@
             </GridLayout>
 
             <GridLayout *ngIf="userType === 0" margin="0 20 20 20">
-                <StackLayout orientation="horizontal">
+                <StackLayout orientation="horizontal" marginBottom="20">
                     <Label text="&#xf0c9;" class="fa text-black" fontSize="20" textWrap="true" marginRight="5"></Label>
                     <Label text="Activity Log" class="text-black" fontSize="18" textWrap="true"></Label>
                 </StackLayout>
-                <WrapLayout marginTop="20">
+                <!-- <WrapLayout marginTop="20"> -->
                     <recent-games [hideActionbar]="true"></recent-games>
-                </WrapLayout>
+                <!-- </WrapLayout> -->
             </GridLayout>
         </StackLayout>
     </ScrollView>

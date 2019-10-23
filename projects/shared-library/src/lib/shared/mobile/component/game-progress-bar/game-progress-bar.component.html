@@ -1,0 +1,10 @@
+<ng-container>
+    <GridLayout rows="*" columns="*">
+        <AbsoluteLayout class="index" horizontalAlignment="center" verticalAlignment="center">
+            <Label text="{{questionRound}}/{{totalRound}}" fontSize="18"></Label>
+        </AbsoluteLayout>
+        <GridLayout [columns]="gameProgress" class="progressbar">
+            <StackLayout col="0" class="progressbar-value" borderRadius="30"></StackLayout>
+        </GridLayout>
+    </GridLayout>
+</ng-container>

@@ -1,4 +1,4 @@
-<ActionBar title="" class="action-bar " [ngClass]=" subTitle ? 'action-subtitle' : 'action-title' ">
+<ActionBar  flat="true" background="#fff" title="" class="action-bar " [ngClass]=" subTitle ? 'action-subtitle' : 'action-title' ">
 
     <NavigationButton visibility="collapsed"></NavigationButton>
 
@@ -43,6 +43,11 @@
             <Label text="View All" marginLeft="5" fontSize="18"></Label>
         </StackLayout>
 
+        <!-- <StackLayout *ngIf="((user && user!== null && !hideHomeIcon && !showSkipBtn))" col="3" stlRippleEffect
+            stlBackgroundColor="#13284F" android:margin="10" stlOpacity="0.5" stlBackgroundColorAfter="transparent"
+            verticalAlignment="center" android:width="23" ios:width="23" ios:marginRight="20"
+            (rippleTap)="goToDashboard()">
+            <Label text="&#xf015;" class="fa" fontSize="23" ></Label> -->
         <StackLayout *ngIf="showSkipBtn" col="2" stlRippleEffect stlBackgroundColor="#13284F" ios:margin="3" margin="10"
             android:margin="5" stlOpacity="0.5" stlBackgroundColorAfter="transparent" verticalAlignment="center"
             (rippleTap)="goToDashboard()">
