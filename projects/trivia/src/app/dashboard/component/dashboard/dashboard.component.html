@@ -1,7 +1,7 @@
 <div class="pageinner">
   <div class="row">
     <div class="pageheading col-md-6 col-xs-12 col-md-12">
-      <span class="hidden-xs pull-left">Dashboard</span>
+        <span class="hidden-xs pull-left">Dashboard</span>
 
       <div *ngIf="applicationSettings?.tokens?.enable && user && account" style="display: inline-block;"
         class="points pull-left m-l-20">
@@ -22,7 +22,7 @@
     <!-- <div class="lives" *ngIf="user && account && account.lives >=0 && isLivesEnable" > <span class="lives-text">{{account.lives}}</span> </div> -->
     <div class="col-md-6 col-xs-12 col-md-12 align-right play-game-div-container">
       <div *ngIf="user && account && account.lives >=0 && isLivesEnable" class="flex-div">
-        <img class="img-24" src="assets/images/life.png" alt="" />
+        <span style="font-size: 22px;" class="icon icon-life-icon"></span>
         <div  class="lives-text lives-div">
           <span> {{ (account.lives / 10 < 1) && (account.lives / 10 > 0)  ? '0' : '' }}{{account.lives}} </span>
         </div>

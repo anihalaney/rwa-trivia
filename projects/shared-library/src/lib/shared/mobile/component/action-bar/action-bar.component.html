@@ -6,7 +6,7 @@
         android:columns="auto,*,auto,auto,auto" width="100%">
 
         <StackLayout col="0" verticalAlignment="center" marginRight="10" horizontalAlignment="left" (tap)="back()">
-            <Label text="&#xf104;" class="fa" textWrap="true" fontSize="40"></Label>
+            <Label color="#000000" text="&#xe906;" fontSize="20" class="ico icon-back"></Label>
         </StackLayout>
 
         <StackLayout col="1" verticalAlignment="center">
@@ -28,10 +28,10 @@
         </StackLayout>
 
         <StackLayout col="2" *ngIf="((user && user!== null && !showSkipBtn && title==='Questions'))" stlRippleEffect
-            stlBackgroundColor="#13284F" ios:margin="3" ios:marginRight="30" android:margin="10" stlOpacity="0.5"
-            stlBackgroundColorAfter="" verticalAlignment="center" horizontalAlignment="right" android:width="23"
-            ios:width="23" (rippleTap)="navigateToSubmitQuestion()">
-            <Label text="&#xf055;" class="fa" fontSize="20"></Label>
+            stlBackgroundColor="#13284F" ios:margin="3" ios:marginRight="30" android:margin="10" stlOpacity="0.5" stlBackgroundColorAfter=""
+            verticalAlignment="center" horizontalAlignment="right" android:width="23" ios:width="23"
+            (rippleTap)="navigateToSubmitQuestion()">
+            <Label text="&#xe905;" color="#6c63ff" fontSize="20" class="ico icon-add"></Label>
         </StackLayout>
 
         <!-- For View All Icon in question-add-updates.component.tns.html screen -->
@@ -54,7 +54,7 @@
             stlRippleEffect stlBackgroundColor="#13284F" ios:margin="3" android:margin="10" stlOpacity="0.5"
             stlBackgroundColorAfter="" verticalAlignment="center" horizontalAlignment="right" marginRight="10"
             android:width="23" ios:width="40">
-            <Label text="&#xf002;" class="fa" fontSize="20"></Label>
+            <Label color="#3b5998" text="&#xe942;" fontSize="20" class="ico icon-search"></Label>
         </StackLayout>
 
         <StackLayout *ngIf="((user && user!== null && !showSkipBtn && title.includes('Notifications')))" col="4"
