@@ -1,3 +1,4 @@
+<GridLayout [class.dialogOpen]="dialogOpen" (tap)="closeDialog()">
 <StackLayout margin="0 12 0 12">
     <FlexboxLayout class="game-result">
         <Label text="Game result" class="game-result-title"></Label>
@@ -278,7 +279,7 @@
                                     (rippleTap)="gotoDashboard()" stlRippleEffect></label>
 
                                 <label row="3" col="0" class="navigate-button Hind-Medium" text="Game Summary"
-                                    (rippleTap)="bindQuestions();showQuesAndAnswer=!showQuesAndAnswer;"
+                                    (rippleTap)="bindQuestions();showDialog();showQuesAndAnswer=!showQuesAndAnswer;"
                                     stlRippleEffect></label>
 
                                 <label row="4" col="0" class="navigate-button Hind-Medium"
@@ -287,63 +288,6 @@
                         </StackLayout>
                     </StackLayout>
                 </render-box>
-
-                <CardView class="cardStyle" android:elevation="20" ios:elevation="20" radius="1" backgroundColor="white"
-                    margin="15">
-                    <StackLayout class="Hind-Medium">
-                        <!-- <GridLayout rows="auto,auto" columns="auto,*" padding="5" margin="10 5">
-                        <Label row="0" col="0" text="View questions & answers" textWrap="true" color="#000000"
-                            fontSize="18" class="label Roboto-Medium"></Label>
-                        <Label row="0" col="1" class="fa expand-options" horizontalAlignment="right"
-                            text="{{ showQuesAndAnswer ? '&#xf067;' : '&#xf068;' }}" textWrap="true" padding="7"
-                            borderWidth="2" borderColor="#A9A9A9" color="#A9A9A9" background="#fff"
-                            (tap)="bindQuestions();showQuesAndAnswer=!showQuesAndAnswer;" stlRippleEffect></Label>
-                    </GridLayout> -->
-                        <ActivityIndicator *ngIf="questionsArray.length == 0 && !showQuesAndAnswer" busy="true"
-                            ios:width="100" ios:height="100" android:width="50" android:height="50"
-                            class="activity-indicator"></ActivityIndicator>
-
-                        <StackLayout *ngIf="questionsArray.length != 0 && !showQuesAndAnswer">
-                            <GridLayout class="question-grid" *ngFor="let row  of questionsArray;let i=index;"
-                                rows="auto,auto,auto" columns="auto,*,auto">
-                                <Label class="question-tag" row="0" col="0" text="Q{{i+1}}." textWrap="true"
-                                    paddingLeft="10"></Label>
-                                <Label class="question-text" row="0" col="1" text="{{row.questionText}}"
-                                    textWrap="true"></Label>
-                                <Label class="answer-tag" row="1" col="0" rowspan="2" text="A{{i+1}}." textWrap="true"
-                                    paddingLeft="10"></Label>
-                                <StackLayout row="1" col="1" *ngFor="let answer of row.answers">
-                                    <StackLayout *ngIf="answer.correct" orientation="horizontal"
-                                        style="margin:0 0 0 10;">
-                                        <Label text="Correct Ans: " textWrap="true" style="color:#63bdba"></Label>
-                                        <Label text="{{answer.answerText}}" textWrap="true"
-                                            style="color:#3b444f"></Label>
-                                    </StackLayout>
-                                </StackLayout>
-                                <StackLayout row="2" col="1">
-                                    <StackLayout orientation="horizontal" style="margin:0 0 0 10;">
-                                        <Label text="Your Ans: " textWrap="true" style="color:#63bdba"></Label>
-                                        <Label text="{{row.userGivenAnswer}}" textWrap="true"
-                                            style="color:#3b444f"></Label>
-                                    </StackLayout>
-                                    <StackLayout>
-                                        <Image src="~/assets/images/{{row.className}}.png" height="30" width="30"
-                                            marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20"
-                                            borderRadius="50" top="10" left="80"></Image>
-                                    </StackLayout>
-                                </StackLayout>
-                                <Button col="3" rowSpan="3" verticalAlignment="center"
-                                    style="color:#3b444f; border-width:2px; border-color:#f3f3f3;" text="Report"
-                                    marginRight="10" *ngIf="!game.playerQnAs[i].isReported"
-                                    (rippleTap)="openDialog(row)" stlRippleEffect></Button>
-                                <Label col="3" rowSpan="3" text="Reported" verticalAlignment="center" marginRight="10"
-                                    color="red" fontWeight="600" textWrap="true"
-                                    *ngIf="game.playerQnAs[i]?.isReported"></Label>
-
-                            </GridLayout>
-                        </StackLayout>
-                    </StackLayout>
-                </CardView>
 
             </StackLayout>
 
@@ -354,3 +298,59 @@
         </AbsoluteLayout>
     </GridLayout>
 </StackLayout>
+
+<StackLayout height="100%" class="dialog__wrapper">
+    <AbsoluteLayout width="100%" height="100%">
+        <GridLayout rows="200,*" height="100%" width="100%">
+            <StackLayout row="1" class="main-dialog">
+                <FlexboxLayout class="dialog-title-container">
+                    <Label text="Game summary" class="dialog-title" textWrap="true"></Label>
+                    <Label text="&#xf00d;" class="fa close-tag" textWrap="true" (tap)="closeDialog()"></Label>
+                </FlexboxLayout>
+                <ScrollView height="100%">
+                    <StackLayout>
+                        <GridLayout rows="*" columns="auto,*" class="question"
+                            *ngFor="let row  of questionsArray;let i=index;">
+                            <Label row="0" col="0" *ngIf="row?.ansStatus" text="&#xf00c;" verticalAlignment="top"
+                                class="fa correct-icon" textWrap="true"></Label>
+                            <Label row="0" col="0" *ngIf="!row?.ansStatus" text="&#xf00d;" verticalAlignment="top"
+                                class="fa wrong-icon" textWrap="true"></Label>
+                            <StackLayout row="0" col="1" class="question-details">
+                                <Label text="{{row.questionText}}" class="question-content" textWrap="true"></Label>
+                                <GridLayout rows="*" columns="*,auto">
+                                    <StackLayout row="0" col="0">
+                                        <StackLayout *ngFor="let answer of row.answers">
+                                            <FlexboxLayout *ngIf="row?.ansStatus && answer.correct">
+                                                <image src="~/assets/images/bits.png" width="30" height="30">
+                                                </image>
+                                                <Label class="quetion-bits"
+                                                    text="+{{applicationSettings?.tokens?.enable === true && applicationSettings?.tokens?.earn_bits}}"
+                                                    textWrap="true"></Label>
+                                            </FlexboxLayout>
+                                            <Label *ngIf="answer.correct" class="correct-answer"
+                                                text="Correct Answer: {{answer.answerText}}"
+                                                textWrap="true"></Label>
+                                        </StackLayout>
+                                        <Label *ngIf="!row?.ansStatus" class="your-answer"
+                                            text="Your Answer: {{row.userGivenAnswer ? row.userGivenAnswer : 'No answer' }}" textWrap="true"></Label>
+                                    </StackLayout>
+                                    <StackLayout row="0" col="1" horizontalAlignment="right"
+                                        verticalAlignment="center">
+                                        <Button col="3" rowSpan="3" verticalAlignment="center"
+                                            style="color:#3b444f; border-width:2px; border-color:#f3f3f3; padding:10"
+                                            text="Report" marginRight="10" *ngIf="!game.playerQnAs[i].isReported"
+                                            (rippleTap)="openDialog(row)" stlRippleEffect></Button>
+                                        <Label col="3" rowSpan="3" text="Reported" verticalAlignment="center"
+                                            marginRight="10" color="red" fontWeight="600" textWrap="true"
+                                            *ngIf="game.playerQnAs[i]?.isReported"></Label>
+                                    </StackLayout>
+                                </GridLayout>
+                            </StackLayout>
+                        </GridLayout>
+                    </StackLayout>
+                </ScrollView>
+            </StackLayout>
+        </GridLayout>
+    </AbsoluteLayout>
+</StackLayout>
+</GridLayout>
