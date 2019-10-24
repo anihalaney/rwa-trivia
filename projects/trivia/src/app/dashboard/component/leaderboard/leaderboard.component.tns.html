@@ -1,6 +1,6 @@
 <ns-action-bar title="Leaderboards" showAdd="true"></ns-action-bar>
 <ScrollView>
-  <StackLayout padding="0 10" height="100%" backgroundColor="#FFFFFF" *ngIf="renderView">
+  <StackLayout android:padding="0 15" ios:padding="0 12" height="100%" backgroundColor="#FFFFFF" *ngIf="renderView">
     <GridLayout rows="auto,auto" columns="*,*">
       <GridLayout rows="*" columns="*,auto" row="1" col="0" android:class="dropdown-android" ios:class="dropdown-ios"
         (tap)="openDropdown()">

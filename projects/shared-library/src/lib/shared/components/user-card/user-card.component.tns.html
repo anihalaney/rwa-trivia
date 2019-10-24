@@ -134,7 +134,7 @@
 <ng-container *ngIf="user && userCardType.USER_IMAGE_NAME_WITH_SCORE_IN_GAME_PLAY_SINGLE_PLAYER === type">
   <FlexboxLayout row="0" col="0" colSpan="2" class="Roboto-Regular" class="play-now-container">
     <FlexboxLayout >
-      <StackLayout (tap)='goToDashboard()' class="back-icon" width="10" verticalAlignment="middle">
+      <StackLayout (tap)='goToDashboard()' class="back-icon" width="12" verticalAlignment="middle">
         <Image src="~/assets/images/back-action.png" ></Image>
       </StackLayout>
       <Label text="{{otherInfo.actionText}}" textWrap="true"></Label>
