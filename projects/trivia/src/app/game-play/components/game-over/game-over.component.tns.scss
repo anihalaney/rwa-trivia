@@ -1,85 +1,178 @@
-.category{
- margin-bottom: 20;
- color:#f47c71;
+.category {
+    margin-bottom: 20;
+    color: #f47c71;
 }
 
-.round{
+.round {
     margin-bottom: 20;
 }
 
-.username{
-    font-size:22; 
-    margin: 10 0 0 0; 
-    color: #616161;
-    text-align: center;
-}
-.username-double{
-    font-size:18; 
-    margin: 10 0 0 0; 
+.username {
+    font-size: 22;
+    margin: 10 0 0 0;
     color: #616161;
     text-align: center;
 }
 
-.roundandscore{
-    font-size:15; 
-    color:#8c8c8c;
+.username-double {
+    font-size: 18;
+    margin: 10 0 0 0;
+    color: #616161;
+    text-align: center;
 }
-.earnedsymbolsStack{
+
+.roundandscore {
+    font-size: 15;
+    color: #8c8c8c;
+}
+
+.earnedsymbolsStack {
     margin: 10 0 0 0;
 }
-.gamestatus{
-    background-color: #f1fff2; 
-    border-width:3px; 
-    border-color:#d0f5d3; 
-    margin:10 0 0 0;
+
+.gamestatus {
+    background-color: #f1fff2;
+    border-width: 3px;
+    border-color: #d0f5d3;
+    margin: 10 0 0 0;
 }
-.gamestatus-username{
-    font-weight:700; 
+
+.gamestatus-username {
+    font-weight: 700;
     font-size: 22;
-    color:#000000;
+    color: #000000;
 }
-.navigate-button{
-    color:#000000; 
-    background-color: #ffffff; 
-    padding:10 10 10 10; 
+
+.navigate-button {
+    color: #000000;
+    background-color: #ffffff;
+    padding: 10 10 10 10;
     margin: 0 3 0 3;
 }
-.question-grid{
-    border-bottom-width:2px; 
-    border-color:#f3f3f3; 
-    padding:10 0 10 0
+
+.question-grid {
+    border-bottom-width: 2px;
+    border-color: #f3f3f3;
+    padding: 10 0 10 0
 }
-.question-tag{
-    vertical-align: top; 
-    color:#3b444f;
+
+.question-tag {
+    vertical-align: top;
+    color: #3b444f;
 }
-.question-text{
-    margin:0 0 5 10; 
-    color:#3b444f
+
+.question-text {
+    margin: 0 0 5 10;
+    color: #3b444f
 }
-.answer-tag{
-    vertical-align: top; 
-    color:#3b444f
+
+.answer-tag {
+    vertical-align: top;
+    color: #3b444f
 }
 
 .navigate-button:disabled {
-    color:gainsboro;
+    color: gainsboro;
 }
 
-Button{
+Button {
     border-radius: 1;
 }
 
-.friend-request-sent{
+.friend-request-sent {
     background-color: #f50057;
-  }
-  
-  .friends{
-    background-color: #61d461;
-  }
+}
 
-  .bits-n-bites-lable{
+.friends {
+    background-color: #61d461;
+}
+
+.bits-n-bites-lable {
     font-size: 17;
     font-weight: bold;
     color: #333;
-  }
+}
+
+.transparent-back {
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+.main-dialog {
+    background-color: #FFFFFF;
+    border-top-left-radius: 20;
+    border-top-right-radius: 20;
+    padding: 30 20 5 20;
+}
+
+.dialog-title-container {
+    justify-content: space-between;
+    align-items: center;
+}
+
+.dialog-title {
+    font-size: 24;
+    font-weight: 600;
+    color: #000000;
+}
+
+.close-tag {
+    font-size: 22;
+    color: #505050;
+}
+
+.correct-icon {
+    font-size: 25;
+    color: #4caf50;
+}
+
+.wrong-icon {
+    color: #f44336;
+    font-size: 25;
+}
+
+.question {
+    margin: 15 0;
+}
+
+.question-details {
+    margin-left: 15;
+
+    FlexboxLayout {
+        align-items: center;
+    }
+}
+
+.question-bits {
+    margin-left: 10;
+}
+
+.question-content {
+    color: #283b66;
+    font-size: 16;
+}
+
+.correct-answer {
+    color: #4caf50;
+    font-size: 14;
+    margin-top: 7;
+}
+
+.your-answer {
+    color: #f44336;
+    font-size: 14;
+    margin-top: 7;
+}
+
+.dialog {
+    // visibility: collapse;
+    .dialogOpen &__wrapper {
+        visibility: visible;
+    }
+
+    &__wrapper {
+        background: rgba(0, 0, 0, 0.5);
+        visibility: collapse;
+        width: 100%;
+        z-index: 1;
+    }
+}
