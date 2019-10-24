@@ -61,6 +61,7 @@
 
     <game-continue *ngIf="showContinueScreen && !gameOver" class="overlay" [applicationSettings]="applicationSettings" [userDict]="userDict" [game]="game"
         [categoryName]="categoryName" [correctCount]="correctAnswerCount" [noOfQuestions]="questionIndex"
+        [otherPlayer]="otherPlayer"
         [totalRound]="totalRound" (continueButtonClicked)="continueButtonClicked()">
     </game-continue>
 

@@ -13,24 +13,22 @@
                 <GridLayout rows="auto, auto" row="0" col="1" verticalAlignment="center" iosOverflowSafeArea="false"
                     class="dashboard_user">
                     <Label row="0" [text]="actionText" textWrap="true" class="dashboard_user-header"></Label>
-                    <GridLayout row="1" orientation="horizontal">
-                        <Label *ngIf="actionSubText && actionSubText.length>0" class="dashboard_user-subText"
-                            [text]="actionSubText" stlRippleEffect (rippleTap)="navigateToCategories()"></Label>
-                    </GridLayout>
+                    <FlexboxLayout row="1" *ngIf="actionSubText && actionSubText.length>0">
+                        <Label class="dashboard_user-subText" [text]="actionSubText" stlRippleEffect
+                            (rippleTap)="navigateToCategories()"></Label>
+                    </FlexboxLayout>
                 </GridLayout>
-                <GridLayout *ngIf="user && user!==null" col="2" stlRippleEffect stlBackgroundColor="#13284F"
-                    ios:margin="3" android:margin="10" stlOpacity="0.5" stlBackgroundColorAfter="transparent"
+                <GridLayout *ngIf="user && user!==null" col="2" ios:margin="3" android:margin="10"
                     verticalAlignment="center" horizontalAlignment="right" android:width="24" ios:width="24">
-                      <Label text="&#xe901;" class="ico icon-noun-game" fontSize="20" color="#3b5998"></Label>
-                    
+                    <Label stlRippleEffect stlBackgroundColor="transparent" stlOpacity="0.5" stlBackgroundColorAfter="transparent"
+                        text="&#xe901;" class="ico icon-noun-game" fontSize="20" color="#3b5998"></Label>
                 </GridLayout>
-                <GridLayout *ngIf="user && user!==null" class="index-0" col="3" stlRippleEffect
-                    stlBackgroundColor="#13284F" stlOpacity="0.5" stlBackgroundColorAfter="transparent" ios:margin="3"
-                    android:margin="10" verticalAlignment="center" horizontalAlignment="center" android:width="40"
-                    ios:width="40" (rippleTap)="gotToNotification()" orientation="horizontal">
-                        <Label horizontalAlignment="center" verticalAlignment="center" text="&#xee900;"
-                        class="ico icon-notification icon" fontSize="22" color="#3b5998"></Label>
-                        
+                <GridLayout *ngIf="user && user!==null" class="index-0" col="3" ios:margin="3" android:margin="10"
+                    verticalAlignment="center" horizontalAlignment="center" android:width="40" ios:width="40"
+                    (tap)="gotToNotification()" orientation="horizontal">
+                    <Label horizontalAlignment="center" stlRippleEffect stlBackgroundColor="transparent"
+                        stlOpacity="0.5" stlBackgroundColorAfter="transparent" verticalAlignment="center"
+                        text="&#xee900;" class="ico icon-notification icon" fontSize="22" color="#3b5998"></Label>
                 </GridLayout>
                 <GridLayout *ngIf="user && user!==null && notifications.length > 0" col="4"
                     [ngClass]="{'notification-dot':notifications?.length > 0 }">
@@ -44,7 +42,6 @@
                     <GridLayout row="0" horizontalAlignment="left" rows="auto" columns="auto, *"
                         class="dashboard_body-bits" *ngIf="user && applicationSettings?.tokens?.enable">
                         <FlexboxLayout col="0" *ngIf="account && user" iosOverflowSafeArea="false">
- 
                             <Image src="~/assets/images/mobile/bits.png" row="0" col="1"></Image>
                             <Label class="dashboard_body-text Roboto-Medium" [text]="account.bits || 0"
                                 textWrap="true"></Label>
@@ -135,7 +132,7 @@
                         </GridLayout>
 
                         <GridLayout row="2" col="0" class="dashboard_body-grid2">
-                            <question [user]="user" [userDict]="userDict" [theme]="'dark'" [hideAnswer]=true></question>
+                            <question [user]="user" [userDict]="userDict" [theme]="'dark'"></question>
                         </GridLayout>
 
                         <GridLayout row="3" col="0" iosOverflowSafeArea="false" class="dashboard_body-grid3"
@@ -197,9 +194,10 @@
                                     textWrap="true">
                                 </Label>
                             </GridLayout>
-                            <GridLayout row="1" orientation="horizontal" iosOverflowSafeArea="false">
-                                <Button horizontaAlignment="left" class="btn-transparent blue-border"
-                                    text="SUBMIT A QUESTION" (tap)="navigateToMyQuestion()">
+                            <GridLayout row="1" orientation="horizontal" horizontalAlignment="left"
+                                iosOverflowSafeArea="false">
+                                <Button width="50%" class="btn-transparent blue-border" text="SUBMIT A QUESTION"
+                                    (tap)="navigateToMyQuestion()">
                                 </Button>
                             </GridLayout>
                         </GridLayout>

@@ -13,6 +13,7 @@
   width: 30%;
   background: #f2f2f2;
   border-radius: 5;
+  padding-left: 15;
 }
 
 .border {
@@ -35,7 +36,7 @@
 .friends_box {
   border-color: #e4e4e4;
   border-width: 1 0 1 0;
-  margin-bottom: 20x;
+  margin-bottom: 20;
 
   &-border {
     border-width: 0 1 0 0;
@@ -54,6 +55,10 @@
   &-text {
     color: $midnight-light;
     font-size: 18;
+
+    &.green {
+      color: #9ccc65;
+    }
   }
 }
 

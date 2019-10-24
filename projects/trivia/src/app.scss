@@ -15,11 +15,11 @@ refer to http://docs.nativescript.org/ui/theme.
 // @import '~@ngx-share/button/styles/themes/circles/circles-dark-theme';
 
 // @import '~nativescript-theme-core/css/core.light.css';
-@import './styles/light.theme.scss';
-@import './styles/styles.scss';
-@import './styles/global.scss';
-@import './styles/icon-moon.scss';
+@import "./styles/light.theme.scss";
+@import "./styles/styles.scss";
+@import "./styles/global.scss";
 @import './styles/mobile.scss';
+@import './styles/icon-moon.scss';
 
 .new-btn {
   color: map-get($light-theme-text-color, primary-light);
