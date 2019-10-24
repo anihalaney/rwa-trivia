@@ -1,54 +1,46 @@
-<ns-action-bar title="Leaderboards" class="Roboto-Regular" showAdd="true"></ns-action-bar>
-<StackLayout backgroundColor="#FFFFFF" *ngIf="renderView">
-    <ScrollView>
-        <StackLayout *ngIf="leaderBoardCat && leaderBoardCat.length>0">
-            <StackLayout class="question-answered Hind-Regular">
-                <StackLayout class="cardStyle" orientation="vertical" verticalAlignment="center" height="100%">
-
-                    <GridLayout rows="*,*" columns="*,*">
-                        <GridLayout rows="*" columns="*,auto" row="1" col="0" android:class="dropdown-android" ios:class="dropdown-ios" (tap)="openDropdown()">
-                            <DropDown row="0" col="0" #dropdown itemsTextAlignment="center" *ngIf="items" android:class="filter-dropdown-mobile"
-                                [items]="items" [(ngModel)]="selectedIndex" [hint]="'Select Category'"
-                                (selectedIndexChanged)="onchange($event)">
-                            </DropDown>
-                            <Label row="0" col="1" text="&#xf078;" ios:class="fas" android:class="fas dropdown-arrow"
-                                textWrap="true"></Label>
-                        </GridLayout>
-
-                        <GridLayout rows="*" columns="*,auto" row="1" col="1" android:class="dropdown-android" ios:class="dropdown-ios" (tap)="openDropdowntop()">
-                            <DropDown row="0" col="0" #dropdowntop *ngIf="filterTopList" itemsTextAlignment="center" android:class="filter-dropdown-mobile"
-                                [items]="filterTopList" [(ngModel)]="selectedTopFilter"
-                                (selectedIndexChanged)="onTopFilterChanged($event)">
-                            </DropDown>
-                            <Label row="0" col="1" text="&#xf078;" ios:class="fas" android:class="fas dropdown-arrow"
-                                textWrap="true"></Label>
-                        </GridLayout>
-
-                    </GridLayout>
-
-                    <FlexboxLayout justifyContent="space-between" padding="10 15">
-                        <Label text="Profile" textWrap="true"></Label>
-                        <Label row="0" col="1" text="Points" textWrap="true" margin="0 12"></Label>
-                    </FlexboxLayout>
-
-                    <StackLayout class="question-answered"
-                        *ngFor="let user of selectedCatList | slice:lbsUsersSliceStartIndex:pagination;let j=index;">
-                        <GridLayout rows="*" columns="auto,*,auto,auto" padding="15"
-                            [ngClass]="{'login-user-hightlight': (loggedInUserId === user.userId)}">
-                            <Label text="{{j+1}}" row="0" col="0" class="profile-no Hind-Bold"
-                                verticalAlignment="center"></Label>
-                            <StackLayout row="0" col="1" class="padding-10">
-                                <app-user-card [userId]="user.userId"
-                                    [type]="userCardType.USER_IMAGE_NAME_LOCATION_HORIZONTAL"></app-user-card>
-                            </StackLayout>
-                            <StackLayout row="0" col="3">
-                                <Label [text]="user.score" class="score"></Label>
-                            </StackLayout>
-                        </GridLayout>
-                    </StackLayout>
-
-                </StackLayout>
+<ns-action-bar title="Leaderboards" showAdd="true"></ns-action-bar>
+<ScrollView>
+  <StackLayout margin="0 15 0 15" height="100%" backgroundColor="#FFFFFF" *ngIf="renderView">
+    <GridLayout rows="auto,auto" columns="*,*">
+      <GridLayout rows="*" columns="*,auto" row="1" col="0" android:class="dropdown-android" ios:class="dropdown-ios"
+        (tap)="openDropdown()">
+        <DropDown row="0" col="0" #dropdown itemsTextAlignment="center" *ngIf="items"
+          android:class="filter-dropdown-mobile" [items]="items" [(ngModel)]="selectedIndex" [hint]="'Select Category'"
+          (selectedIndexChanged)="onchange($event)">
+        </DropDown>
+        <Label row="0" col="1" text="&#xf078;" ios:class="fas" android:class="fas dropdown-arrow"
+          textWrap="true"></Label>
+      </GridLayout>
+      <GridLayout marginLeft="7" rows="*" columns="*,auto" row="1" col="1" (tap)="openDropdowntop()"
+        android:class="dropdown-android" ios:class="dropdown-ios">
+        <DropDown #dropdowntop row="0" col="0" *ngIf="filterTopList" itemsTextAlignment="center"
+          android:class="filter-dropdown-mobile" [items]="filterTopList" [(ngModel)]="selectedTopFilter"
+          (selectedIndexChanged)="onTopFilterChanged($event)">
+        </DropDown>
+        <Label row="0" col="1" text="&#xf078;" ios:class="fas" android:class="fas dropdown-arrow"
+          textWrap="true"></Label>
+      </GridLayout>
+    </GridLayout>
+    <FlexboxLayout justifyContent="space-between" class="table-titles" padding="10 0">
+      <Label text="Profile" textWrap="true"></Label>
+      <Label row="0" col="1" width="60" textAlignment="left" text="Points" textWrap="true"></Label>
+    </FlexboxLayout>
+    <StackLayout *ngIf="leaderBoardCat && leaderBoardCat.length>0" height="100%">
+      <ListView separatorColor="#00000000" height="100%" [items]="selectedCatList | slice:lbsUsersSliceStartIndex:pagination">
+        <ng-template let-user="item" let-j="index">
+          <GridLayout  [ngClass]="{'login-user-hightlight': (loggedInUserId === user.userId)}" class="data-div" rows="*,16" columns="auto,*,60">
+            <Label marginTop="10" text="{{j+1}}" row="0" col="0" class="profile-no Hind-Bold" verticalAlignment="top"></Label>
+            <StackLayout row="0" col="1" class="padding-10">
+              <app-user-card [userId]="user.userId" [type]="userCardType.USER_IMAGE_NAME_LOCATION_HORIZONTAL">
+              </app-user-card>
             </StackLayout>
-        </StackLayout>
-    </ScrollView>
-</StackLayout>
+            <StackLayout row="0" col="2">
+              <Label textAlignment="left" [text]="user.score" class="score"></Label>
+            </StackLayout>
+            <StackLayout marginTop="15" row="1" col="0" colSpan="3" ios:backgroundColor="#f2f2f2" android:backgroundColor="#e2e2e2" height="1"></StackLayout>
+          </GridLayout>
+        </ng-template>
+      </ListView>
+    </StackLayout>
+  </StackLayout>
+</ScrollView>

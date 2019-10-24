@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, NgZone, OnDestroy, ViewChild, ElementRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, NgZone, OnDestroy, ViewChild, ElementRef, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Store, select } from '@ngrx/store';
 import { Utils } from 'shared-library/core/services';
@@ -18,10 +18,9 @@ import { User } from 'shared-library/shared/model';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class LeaderboardComponent extends Leaderboard implements OnDestroy {
+export class LeaderboardComponent extends Leaderboard implements OnDestroy, OnInit {
   @ViewChild('dropdown', { static: false }) dropdown: ElementRef;
   @ViewChild('dropdowntop', { static: false }) dropdownTop: ElementRef;
-  
   // This is magic variable
   // it delay complex UI show Router navigation can finish first to have smooth transition
   renderView = false;
@@ -47,26 +46,27 @@ export class LeaderboardComponent extends Leaderboard implements OnDestroy {
     this.cd.markForCheck();
   }
 
-  ngOnInit() {
-    this.page.on('loaded', () => { this.renderView = true; this.cd.markForCheck(); });
-  }
   openDropdown() {
-    let dropdown = <DropDown>this.dropdown.nativeElement;
+    const dropdown = <DropDown>this.dropdown.nativeElement;
     dropdown.open();
   }
 
-  openDropdowntop() {
-    let dropdownTop = <DropDown>this.dropdownTop.nativeElement;
-    dropdownTop.open();
+  ngOnInit() {
+    this.page.on('loaded', () => { this.renderView = true; this.cd.markForCheck(); });
   }
 
-  public onchange(args: SelectedIndexChangedEventData) {
+  onchange(args: SelectedIndexChangedEventData) {
     this.selectedCatList = this.leaderBoardStatDict[(args.newIndex + 1)];
     this.cd.markForCheck();
 
   }
 
-  public onTopFilterChanged(args: SelectedIndexChangedEventData) {
+  openDropdowntop() {
+    const dropdownTop = <DropDown>this.dropdownTop.nativeElement;
+    dropdownTop.open();
+  }
+
+  onTopFilterChanged(args: SelectedIndexChangedEventData) {
     this.selectedTopFilter = args.newIndex;
     this.cd.markForCheck();
   }

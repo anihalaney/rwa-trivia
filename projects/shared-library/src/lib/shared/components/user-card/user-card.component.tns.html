@@ -37,7 +37,7 @@
         fontSize="14"> </Label>
         <FlexboxLayout>
           <Image src="~/assets/images/bits.png" marginRight="5" width="22" height="22"></Image>
-          <Label text="{{user?.bits}}" fontWeight="400" textWrap="true"></Label>
+          <Label class="total-bits" text="{{user?.bits}}" fontWeight="400" textWrap="true"></Label>
         </FlexboxLayout>
       </StackLayout>
     </GridLayout>
@@ -63,16 +63,16 @@
   </GridLayout>
 </ng-container>
 
-<GridLayout rows="*" columns="60, *" *ngIf="user && userCardType.USER_IMAGE_NAME_HORIZONTAL === type">
-  <Image row="0" col="0" [stlOpenUserProfile]="{userId: user.userId, redirectTo: 'otherUserProfile'}"
+<GridLayout rows="*" columns="60, *" *ngIf="userCardType.USER_IMAGE_NAME_HORIZONTAL === type">
+  <Image row="0" col="0" [stlOpenUserProfile]="{userId: user?.userId, redirectTo: 'otherUserProfile'}"
     [src]="getImageUrl(user,44,40)" stretch="aspectFill" class="friend-user-profile"></Image>
   <AbsoluteLayout *ngIf="user?.online" horizontalAlignment="center"
     [stlOpenUserProfile]="{userId: user?.userId, redirectTo: loggedInUserId === user?.userId ? 'userProfile': 'otherUserProfile'}">
     <Label height="10" top="32" left="40" width="10" borderRadius="22" backgroundColor="#71b02f"></Label>
   </AbsoluteLayout>
   <FlexboxLayout row="0" col="1" flexDirection="column" marginLeft="10">
-    <Label class="disp-name"  [text]="user?.displayName"></Label>
-    <Label class="address"  [text]="user?.location"></Label>
+    <Label class="disp-name"  [text]="user?.displayName ? user?.displayName : 'unknown'"></Label>
+    <Label class="address"  [text]="user?.location ? user?.location : 'unknown'"></Label>
   </FlexboxLayout>
 </GridLayout>
 
