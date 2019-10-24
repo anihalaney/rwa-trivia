@@ -7,7 +7,7 @@
 
     <ScrollView row="0">
           <PreviousNextView> 
-            <GridLayout  rows="auto,*"  columns="*"  (tap)="hideKeyboard()">
+            <GridLayout *ngIf="!loader"  rows="auto,*"  columns="*"  (tap)="hideKeyboard()">
                         
                 <Image *ngIf="mode === 1 || mode === 2" src="~/assets/images/back_btn.png" row="0"  (tap)="changeMode(0)" class="back-button">
                     </Image>          
@@ -230,14 +230,11 @@
                     </GridLayout>
 
         </PreviousNextView>
-          <StackLayout *ngIf="loader" verticalAlignment="center" horizontalAlignment="center">
-                    <AbsoluteLayout verticalAlignment="center" horizontalAlignment="center">
-                          
-                <ActivityIndicator color="white" ios:width="200" ios:height="200" android:width="50" android:height="50"
-                                busy="true"  class="activity-indicator"></ActivityIndicator>
-                        </AbsoluteLayout>
-                  </StackLayout>
-
-
     </ScrollView>
+                <AbsoluteLayout row="0" *ngIf="loader" verticalAlignment="center" horizontalAlignment="center">
+            
+            <ActivityIndicator color="#3b5998" ios:width="200" ios:height="200" android:width="50" android:height="50"
+                            busy="true"  class="activity-indicator"></ActivityIndicator>
+                    </AbsoluteLayout>
+
 </GridLayout>

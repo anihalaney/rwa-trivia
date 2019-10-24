@@ -83,7 +83,7 @@
                     *ngIf="loggedInUser?.userId && userInvitations[user?.email]?.status === 'add'"
                     (rippleTap)="sendFriendRequest()">
                     <Label class="friends_box-text" text="Add Friend" textWrap="true"></Label>
-                    <ActivityIndicator *ngIf="loader" color="gray" ios:width="25" ios:height="25" android:width="25"
+                    <ActivityIndicator *ngIf="loader" color="#3b5998" ios:width="25" ios:height="25" android:width="25"
                         android:height="25" busy="true" class="activity-indicator">
                     </ActivityIndicator>
                 </FlexboxLayout>
