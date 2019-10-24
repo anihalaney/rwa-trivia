@@ -39,9 +39,6 @@ export class ActionBarComponent implements OnDestroy, OnInit {
         public utils: Utils,
         private navigationService: NavigationService
     ) {
-        setTimeout(() => {
-            console.log(this.showEdit);
-        }, 100);
     }
 
     ngOnInit(): void {
