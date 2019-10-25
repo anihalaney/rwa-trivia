@@ -50,3 +50,92 @@
 Button {
   border-radius: 1;
 }
+
+.transparent-back{
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+.main-dialog{
+  z-index: 1000;
+  background-color: #FFFFFF;
+  border-radius: 4;
+  padding: 45 20 30 30;
+  .mountainwithflag {
+      height: 79;
+      width: auto;
+  }
+  Label {
+      font-weight: 600;
+      font-size: 18;
+      text-align: center;
+      margin: 25 0 25 0;
+      color: #212121;
+  }
+}
+
+.continue-btn {
+  color: #fff;
+  background-color: #3b5998;
+  border-color: #3b5998;
+  font-size: 22;
+  border-width: 1;
+  border-radius: 4;
+  // width:60%;
+  padding: 10 30;
+  height:70;
+  align-items:center;
+  orientation:horizontal;
+  justify-content:center;
+  Label {
+    vertical-alignment:center;
+    margin:0;
+    font-size:20;
+    color: #fff;
+  }
+
+  .activity-indicator {
+    margin-left:10;
+    horizontal-alignment:right;
+    vertical-alignment:center;
+    color:#fff;
+  }
+}
+
+.badges {
+  height:41;
+  width:41;
+  vertical-alignment:center;
+  margin: 0 5 0 5;
+  border-radius:50;
+  top:10;
+  left:80;
+}
+
+.badge-container {
+  justify-content:center;
+  margin-bottom: 45;
+}
+
+.action-bar{
+  padding: 0 10 0 10;
+  background-color: #fff;
+  color: #000;
+  font-size: 20;
+  Label {
+    vertical-align: center;
+  }
+  width: 100%;
+}
+
+.dialog {
+  .dialogOpen &__wrapper {
+      visibility: visible;
+  }
+
+  &__wrapper {
+      background: rgba(0, 0, 0, 0.5);
+      visibility: collapse;
+      width: 100%;
+      z-index: 1;
+  }
+}
