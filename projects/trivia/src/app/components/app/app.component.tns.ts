@@ -165,7 +165,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   hideBottomBarForSelectedRoutes(url) {
     if (url === '/signup-extra-info' || url === '/select-category-tag' || url === '/first-question' ||
-      (!url.includes('game-play/game-options') && (url.includes('game-play')))) {
+      (!url.includes('game-play/game-options') && (url.includes('game-play'))) || url === '/login') {
       return false;
     } else {
       return true;

@@ -1,0 +1,26 @@
+.question-answered{
+  border-color: #000;
+  border-width: 1;
+  border-radius: 2;
+}
+
+ .m-b-70{
+  margin-bottom:70;
+ }
+ Button{
+   border-radius:1; 
+ }
+
+ .btn-transparent {
+  background: white;
+  color: #3b5998;
+  font-size: 20;
+  padding: 15;
+  border-width: 1;
+  border-color: #e2e2e2;
+  height: 75;
+}
+
+.timeout-text, .incorrect-text {
+    color: red;
+  }

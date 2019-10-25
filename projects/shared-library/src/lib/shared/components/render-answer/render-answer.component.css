@@ -3,14 +3,16 @@
   font-size:18;
   padding:10;
   text-align: center;
+  color:#a5a5a5;
 }
 
-.right, .wrong {
+.right,
+.wrong {
   color: #fff;
 }
 
 .display-answer{
-  color:#616161;
+  color:#a5a5a5;
 }
 .upper-grid {
   z-index: 99;

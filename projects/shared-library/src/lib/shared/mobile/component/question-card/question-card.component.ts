@@ -17,12 +17,13 @@ export class QuestionCardComponent implements OnInit, OnDestroy, OnChanges {
   @Input() user: User;
   @Input() question: Question;
   @Input() categoryName: string;
+  @Input() theme: string;
   categoryDictionary: any;
   subscriptions = [];
   applicationSettings: ApplicationSettings;
   @Input() answeredText: string;
   @Input() correctAnswerText: string;
-  @Input() doPlay: boolean
+  @Input() doPlay: boolean;
   @Output() answerClicked = new EventEmitter<number>();
   @Output() selectedAnswer = new EventEmitter<string>();
   renderView = false;

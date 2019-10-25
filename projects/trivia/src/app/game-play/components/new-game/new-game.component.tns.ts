@@ -101,7 +101,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
           } else {
             this.gameOptions.playerMode = 1;
             this.gameOptions.opponentType = 0;
-            this.actionBarTitle = 'Play as multi player';
+            this.actionBarTitle = 'Play as two player';
           }
         }
       }));

@@ -13,7 +13,9 @@ import {
   FirstQuestionComponent,
   SelectCategoryTagComponent,
   NotificationComponent,
-  BottomBarComponent
+  BottomBarComponent,
+  GameProgressBarComponent,
+  RenderBoxComponent
 } from './mobile/component';
 import { NativeScriptCommonModule } from 'nativescript-angular/common';
 import { GameFilterPipe } from './pipe/game-filter.pipe';
@@ -58,7 +60,9 @@ import { SafeHtmlPipe } from './pipe/safe-html.pipe';
     GameInviteComponent,
     BottomBarComponent,
     RecentGamesComponent,
-    RecentGameCardComponent
+    RecentGameCardComponent,
+    GameProgressBarComponent,
+    RenderBoxComponent
   ],
   imports: [
     CommonModule,
@@ -109,12 +113,15 @@ import { SafeHtmlPipe } from './pipe/safe-html.pipe';
     GameInviteComponent,
     BottomBarComponent,
     RecentGamesComponent,
-    RecentGameCardComponent
+    RecentGameCardComponent,
+    GameProgressBarComponent,
+    RenderBoxComponent
   ],
   schemas: [NO_ERRORS_SCHEMA],
   entryComponents: [
     CountryListComponent,
-    RenderQuestionComponent
+    RenderQuestionComponent,
+    RenderBoxComponent
   ],
   providers: [
     PhoneNumberValidationProvider

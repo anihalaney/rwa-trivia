@@ -1,5 +1,5 @@
 import { UploadTaskSnapshot } from '@angular/fire/storage/interfaces';
-import { AchievementRule, Subscribers } from 'shared-library/shared/model';
+import { AchievementRule, Subscribers, Question } from 'shared-library/shared/model';
 import { DashboardActions, DashboardActionTypes } from '../actions';
 
 // add subscription Status
@@ -92,6 +92,16 @@ export function achievements(state: any = null, action: DashboardActions): Achie
 
     switch (action.type) {
         case DashboardActionTypes.LOAD_ACHIEVEMENTS_SUCCESS:
+            return action.payload;
+        default:
+            return state;
+    }
+}
+
+// Load User Latest Question by userId
+export function userLatestPublishedQuestion(state: any = [], action: DashboardActions): Question {
+    switch (action.type) {
+        case DashboardActionTypes.LOAD_USER_LATEST_PUBLISHED_QUESTION_SUCCESS:
             return action.payload;
         default:
             return state;

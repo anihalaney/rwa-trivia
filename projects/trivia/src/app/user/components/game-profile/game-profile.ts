@@ -7,6 +7,7 @@ import { Observable, Subject } from 'rxjs';
 import { UserActions } from 'shared-library/core/store';
 import { ChangeDetectorRef } from '@angular/core';
 import { Utils } from 'shared-library/core/services';
+import * as lodash from 'lodash';
 
 export enum UserType {
     userProfile,
@@ -33,7 +34,8 @@ export class GameProfile {
     loggedInUserAccount: Account;
     gamePlayedAgainst: any;
     userInvitations: { [key: string]: Invitation };
-
+    tags: any = {};
+    tagsArray: any = {};
     constructor(
         public route: ActivatedRoute,
         public router: Router,
@@ -48,6 +50,12 @@ export class GameProfile {
                 map(params => this.userId = params.userid),
                 flatMap(() => this.store.select(appState.coreState).pipe(select(s => s.user))),
                 switchMap(user => {
+                    if (user && user.tags && user.tags.length > 0) {
+                        this.tagsArray.userTags = user.tags;
+                        const userTags = user.tags.join(', ');
+                        this.tags.userTags = userTags;
+
+                    }
                     if (user && user.userId === this.userId) {
                         this.user = user;
                         this.userType = UserType.userProfile;
@@ -59,6 +67,7 @@ export class GameProfile {
                                 this.loggedInUserAccount = accountInfo;
                             });
                     }
+
                     return this.initializeProfile();
                 })
             ).subscribe());
@@ -76,6 +85,12 @@ export class GameProfile {
                 this.gamePlayedAgainst = this.user.gamePlayed;
                 if (this.gamePlayedAgainst && this.loggedInUser && this.loggedInUser.userId && this.userType === 1) {
                     this.gamePlayedChangeSubject.next(true);
+                }
+                if (this.user && this.user.tags && this.user.tags.length > 0) {
+                    this.tagsArray.otherUserTags = this.user.tags;
+                    this.tags.comparison = lodash.intersection(this.tagsArray.userTags, this.tagsArray.otherUserTags);
+                    const userTags = this.user.tags.join(', ');
+                    this.tags.otherUserTags = userTags;
                 }
                 this.userProfileImageUrl = this.getImageUrl(this.user);
                 if (this.socialProfileObj) {
@@ -130,6 +145,14 @@ export class GameProfile {
                     }
 
                 }));
+    }
+
+    get userInfo() {
+        return {
+            showEditOrOptions: this.userType === 0 ? 'edit' : this.userType === 1 ? 'options' : false,
+            userId: this.user && this.user.userId ? this.user.userId : '',
+            routing: '/user/my/profile'
+        };
     }
 
     getIcon(icon) {

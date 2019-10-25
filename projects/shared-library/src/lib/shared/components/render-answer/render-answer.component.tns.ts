@@ -15,6 +15,7 @@ export class RenderAnswerComponent implements OnInit, OnChanges {
 
     @Input() answer: Answer;
     @Input() questionIndex: number;
+    @Input() theme: string;
     @Input() isGameAnswer: boolean;
     @Input() isRight;
     @Input() isWrong;
@@ -38,10 +39,16 @@ export class RenderAnswerComponent implements OnInit, OnChanges {
             html.clientHeight, html.scrollHeight, html.offsetHeight);
             document.location.href += "#" + height;
             </script><style>pre.ql-syntax { background-color: #23241f;overflow: visible;}</style>`;
-            // tslint:disable-next-line:max-line-length
-            this.htmlStartTag = `<html><head><body style="font-size:12px; ${this.isGameAnswer ? 'font-weight: bold !important;' : ''} padding:10px 0;vertical-align: middle;text-align:center;"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">   <script src="${externalUrl.hightlighJs}"></script>`;
-            // tslint:disable-next-line:max-line-length
-            this.htmlEndTag = `</body><link rel="stylesheet" href="${externalUrl.katexCSS}" crossorigin="anonymous"><link rel="stylesheet" href="${externalUrl.hightlighCSS}" crossorigin="anonymous"></html>`;
+            this.htmlStartTag =
+                `<html><head><body style="font-size:12px; background-color:'#283b66'; 
+            ${this.isGameAnswer ? 'font-weight: bold !important;' : ''}
+        padding:10px 0;vertical-align: middle;text-align:center;"><meta name="viewport" content="width=device-width,
+        initial-scale=1, maximum-scale=1.0, user-scalable=no"><script src="${externalUrl.hightlighJs}"></script>`;
+            this.htmlEndTag =
+                `<style> html {background:${this.theme === 'dark' ? '#283b66' : '#f7f7f7'};color:#000}}
+            </style></body>
+            <link rel="stylesheet" href="${externalUrl.katexCSS}" crossorigin="anonymous">
+            <link rel="stylesheet" href="${externalUrl.hightlighCSS}" crossorigin="anonymous"></html>`;
             // Created new local answer object because here I am modifing answer object
         }
 
@@ -80,13 +87,19 @@ export class RenderAnswerComponent implements OnInit, OnChanges {
                 if (changes.isWrong) {
                     if (changes.isWrong.currentValue) {
                         // tslint:disable-next-line:max-line-length
-                        this.currentAnswer.answerText = `${this.htmlStartTag}  ${this.currentAnswer.answerText}   <style> html {background:#d54937;color:#ffffff;font-size:17;}</style> ${this.scriptToGetHeight}   ${this.htmlEndTag}`;
+                        this.currentAnswer.answerText =
+                            `${this.htmlStartTag}  ${this.currentAnswer.answerText}   
+                        <style> html {background:#d54937 !important;color:#ffffff !important;font-size:17;}</style> 
+                        ${this.scriptToGetHeight}   ${this.htmlEndTag}`;
                     }
                 }
                 if (changes.isRight) {
                     if (changes.isRight.currentValue) {
                         // tslint:disable-next-line:max-line-length
-                        this.currentAnswer.answerText = `${this.htmlStartTag} ${this.currentAnswer.answerText}   <style> html {background:#71b02f;color:#ffffff;font-size:17;}</style> ${this.scriptToGetHeight}   ${this.htmlEndTag}`;
+                        this.currentAnswer.answerText =
+                            `${this.htmlStartTag} ${this.currentAnswer.answerText}   
+                        <style> html {background:#71b02f!important;color:#ffffff !important;font-size:17;}</style>
+                         ${this.scriptToGetHeight}   ${this.htmlEndTag}`;
                     }
                 }
             }
