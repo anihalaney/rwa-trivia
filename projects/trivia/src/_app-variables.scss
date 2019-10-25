@@ -1,0 +1,64 @@
+// colors
+$background-dark: #F8F8F8 !default;
+$background-light: #FFFFFF !default;
+
+$blue-dark: #022734 !default;
+$blue-light: #02556E !default;
+$blue-50: rgba($blue-dark, 0.5) !default;
+$blue-20: rgba($blue-dark, 0.2) !default;
+$blue-10: rgba($blue-dark, 0.1) !default;
+
+$accent-dark: #3A53FF !default;
+$accent-light: #4781FE !default;
+
+$success-dark: #06CE6A !default;
+$success-light: #00E676 !default;
+
+$warning-dark: #f39c11 !default;
+$warning-light: #F2C112 !default;
+
+$error-dark: #D84039 !default;
+$error-light: #ED473F !default;
+
+$midnight-dark: #0F336D !default;
+$midnight-light: #14418B !default;
+
+$night-dark: #023141 !default;
+$night-light: #01526C !default;
+
+$page-icon-color: #D7D7D7 !default;
+
+$grey-dark: #8c8686 !default;
+$grey-light: #f0f0f0 !default;
+$grey: #c1c1c1;
+
+$yellow-dark:#FDA535 !default; // Sizes
+
+$black: black !default;
+
+$red-dark:#e04932 !default;
+
+$green-dark: #43a047 !default;
+
+$page-content-placeholder-font-size: 20;
+
+/**
+ * Theme variables overrides
+**/
+
+// Colors
+$background: #fff;
+$primary: lighten(#000, 13%);
+$secondary: lighten(#000, 46%);
+$disabled: lighten(#000, 62%);
+$accent: $accent-dark;
+$midnight: $midnight-dark;
+$success: $success-dark;
+$error: $error-light;
+$white : rgb(255, 255, 255);
+$title: rgb(40, 59, 102);
+$black-title:rgb(33, 33, 33);
+$border-color:rgb(221, 221, 221);
+$btn-color:rgb(59, 89, 152);
+$gray-title: rgb(165, 165, 165);
+$font-color : rgb(221,221,221)

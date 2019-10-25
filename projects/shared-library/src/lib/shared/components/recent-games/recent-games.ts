@@ -10,7 +10,6 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class RecentGames implements OnDestroy {
 
-
   @Input() hideActionbar;
   user: User;
   recentGames: Game[] = [];

@@ -1,6 +1,6 @@
 import { Action } from '@ngrx/store';
 
-import { Subscription, Subscribers, Blog, SystemStats, AchievementRule } from 'shared-library/shared/model';
+import { Subscription, Subscribers, Blog, SystemStats, AchievementRule, User, Question } from 'shared-library/shared/model';
 import { UploadTaskSnapshot } from '@angular/fire/storage/interfaces';
 
 export enum DashboardActionTypes {
@@ -25,6 +25,8 @@ export enum DashboardActionTypes {
     LOAD_SYSTEM_STAT_ERROR = '[Stats] LoadSystemStatError',
     LOAD_ACHIEVEMENTS = '[Stats] LoadAchievements',
     LOAD_ACHIEVEMENTS_SUCCESS = '[Stats] LoadAchievementsSuccess',
+    LOAD_USER_LATEST_PUBLISHED_QUESTION = '[Stats] LoadUserLatestPublishedQuestion',
+    LOAD_USER_LATEST_PUBLISHED_QUESTION_SUCCESS = '[Stats] LoadUserLatestPublishedQuestionSuccess'
 }
 
 // Save subscriber
@@ -148,6 +150,17 @@ export class LoadAchievementsSuccess implements Action {
 }
 
 
+// Load User latest Published Question by userId
+export class LoadUserLatestPublishedQuestion implements Action {
+    readonly type = DashboardActionTypes.LOAD_USER_LATEST_PUBLISHED_QUESTION;
+    constructor(public payload: { user: User }) { }
+}
+
+// Load User Latest Published Question by userId Success
+export class LoadUserLatestPublishedQuestionSuccess implements Action {
+    readonly type = DashboardActionTypes.LOAD_USER_LATEST_PUBLISHED_QUESTION_SUCCESS;
+    constructor(public payload: Question) { }
+}
 
 export type DashboardActions
     = AddSubscriber
@@ -169,5 +182,7 @@ export type DashboardActions
     | LoadSystemStatSuccess
     | LoadSystemStatError
     | LoadAchievements
-    | LoadAchievementsSuccess;
+    | LoadAchievementsSuccess
+    | LoadUserLatestPublishedQuestion
+    | LoadUserLatestPublishedQuestionSuccess;
 

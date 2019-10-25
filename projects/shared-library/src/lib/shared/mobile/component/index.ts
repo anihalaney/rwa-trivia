@@ -8,3 +8,5 @@ export * from './welcome-screen/welcome-screen.component';
 export * from './select-category-tag/select-category-tag.component';
 export * from './notification/notification.component';
 export * from './bottom-bar/bottom-bar.component';
+export * from './game-progress-bar/game-progress-bar.component';
+export * from './render-box/render-box.component';

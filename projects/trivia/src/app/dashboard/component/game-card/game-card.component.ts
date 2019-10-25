@@ -69,7 +69,7 @@ export class GameCardComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnInit() {
-  
+
     this.totalRound = (Number(this.game.gameOptions.playerMode) === PlayerMode.Single) ? 8 : 16;
     this.subscriptions.push(this.store.select(appState.coreState).pipe(take(1)).subscribe(s => {
       this.user = s.user;

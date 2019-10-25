@@ -229,7 +229,9 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
         this.imageTaken = imageAsset;
         const source = new ImageSource();
         const imageSource = await fromAsset(imageAsset);
-        this.cropImage(imageSource);
+        setTimeout(() => {
+          this.cropImage(imageSource);
+        }, 1);
       } catch (error) {
         this.utils.sendErrorToCrashlytics('appLog', error);
         console.error(error);
@@ -268,7 +270,9 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
         keepAspectRatio: true
       };
       imageSource = await fromAsset(imageAsset);
-      this.cropImage(imageSource);
+      setTimeout(() => {
+        this.cropImage(imageSource);
+      }, 1);
     } catch (error) {
       this.utils.sendErrorToCrashlytics('appLog', error);
       console.error(error);

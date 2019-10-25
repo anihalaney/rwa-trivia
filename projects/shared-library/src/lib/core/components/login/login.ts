@@ -20,31 +20,36 @@ export class Login {
     public store: Store<CoreState>,
     public cd: ChangeDetectorRef) {
 
-    this.mode = SignInMode.signIn;  // default
+    this.mode = 0;  // default
     this.notificationMsg = '';
     this.errorStatus = false;
 
     this.loginForm = this.fb.group({
       mode: [0],
-      email: new FormControl('', { validators: [Validators.required,  Validators.pattern(this.email_regexp)]}),
-      password: new FormControl('', { validators: [Validators.required, Validators.minLength(6)]}),
+      tnc: [false],
+      phone: [''],
+      email: new FormControl('', { validators: [Validators.required, Validators.pattern(this.email_regexp)] }),
+      password: new FormControl('', { validators: [Validators.required, Validators.minLength(6)] }),
       confirmPassword: new FormControl('')
-    }, { validator: loginFormValidator}
+    }, { validator: loginFormValidator }
     );
 
     this.subscriptions.push(this.loginForm.get('mode').valueChanges.subscribe((mode: number) => {
       switch (mode) {
         case 1:
           // Sign up
-         // tslint:disable-next-line:max-line-length
-         this.loginForm.get('confirmPassword').setValidators( Validators.compose([Validators.required, Validators.minLength(6)]));
+          // tslint:disable-next-line:max-line-length
+          this.loginForm.get('confirmPassword').setValidators(Validators.compose([Validators.required, Validators.minLength(6)]));
           this.loginForm.get('confirmPassword').updateValueAndValidity();
+          this.loginForm.get('tnc').setValidators(Validators.required);
+          this.loginForm.get('tnc').updateValueAndValidity();
           break;
         // no break - fall thru
         case 0:
           // Login or Sign up
           this.loginForm.get('confirmPassword').clearValidators();
-          this.loginForm.get('password').setValidators( Validators.compose([Validators.required, Validators.minLength(6)]));
+          this.loginForm.get('tnc').clearValidators();
+          this.loginForm.get('password').setValidators(Validators.compose([Validators.required, Validators.minLength(6)]));
           this.loginForm.get('password').updateValueAndValidity();
           this.loginForm.get('confirmPassword').updateValueAndValidity();
           break;
@@ -52,8 +57,10 @@ export class Login {
           // Forgot Password
           this.loginForm.get('password').clearValidators();
           this.loginForm.get('confirmPassword').clearValidators();
+          this.loginForm.get('tnc').clearValidators();
           this.loginForm.get('confirmPassword').updateValueAndValidity();
           this.loginForm.get('password').updateValueAndValidity();
+          this.loginForm.get('tnc').updateValueAndValidity();
 
       }
       this.loginForm.get('password').updateValueAndValidity();
@@ -82,7 +89,7 @@ export class Login {
 
   changeMode(mode) {
     this.mode = mode;
-    this.loginForm.patchValue({mode : this.mode});
+    this.loginForm.patchValue({ mode: this.mode });
   }
 
 }
@@ -90,7 +97,8 @@ export class Login {
 export enum SignInMode {
   signIn,
   signUp,
-  forgotPassword
+  forgotPassword,
+  verifyNumber
 }
 
 function loginFormValidator(fg: FormGroup): { [key: string]: boolean } {

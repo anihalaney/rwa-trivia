@@ -1,5 +1,5 @@
 <ns-action-bar title="Profile" class="Roboto-Regular" showAdd="true"></ns-action-bar>
-<StackLayout iosOverflowSafeArea="false">
+<StackLayout iosOverflowSafeArea="false" class="profileSettings">
   <ActivityIndicator visibility="{{ loaderBusy ? 'visible' : 'collapsed' }}" [busy]="loaderBusy" width="100"
     height="100" marginTop="225" class="activity-indicator"></ActivityIndicator>
   <ScrollView visibility="{{ !loaderBusy ? 'visible' : 'collapsed' }}" iosOverflowSafeArea="false">
