@@ -59,13 +59,14 @@
             stlRippleEffect stlBackgroundColor="#13284F" ios:margin="3" android:margin="10" stlOpacity="0.5"
             stlBackgroundColorAfter="" verticalAlignment="center" horizontalAlignment="right" marginRight="10"
             android:width="23" ios:width="40">
-            <Label color="#3b5998" text="&#xe942;" fontSize="20" class="ico icon-search"></Label>
+            <Image src="res://search" width="28" height="28"></Image>
+            <!-- <Label color="#3b5998" text="&#xe942;" fontSize="20" class="ico icon-search"></Label> -->
         </StackLayout>
 
         <StackLayout *ngIf="((user && user!== null && !showSkipBtn && title.includes('Notifications')))" col="4"
             stlRippleEffect ios:margin="3" android:margin="10" stlOpacity="0.5" stlBackgroundColorAfter=""
             verticalAlignment="center" horizontalAlignment="right" marginRight="10" android:width="23" ios:width="40">
-            <Image src="~/assets/images/double_check.png" width="28" height="28"></Image>
+            <Image src="res://readall" width="28" height="28"></Image>
         </StackLayout>
 
         <StackLayout *ngIf="showSkipBtn" col="2" stlRippleEffect stlBackgroundColor="#13284F" ios:margin="3" margin="10"
@@ -78,7 +79,8 @@
             stlRippleEffect (rippleTap)="navigateToInvite()" stlBackgroundColor="#13284F" ios:margin="3"
             android:margin="10" stlOpacity="0.5" stlBackgroundColorAfter="" verticalAlignment="center"
             horizontalAlignment="right" marginRight="10" android:width="23" ios:width="40">
-            <Label text="&#xf234;" class="fas" fontSize="18"></Label>
+            <!-- <Label text="&#xf234;" class="fas" fontSize="18"></Label> -->
+            <Image src="res://addfriend" width="28" height="28"></Image>
         </StackLayout>
 
 
