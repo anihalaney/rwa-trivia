@@ -41,7 +41,7 @@
                 iosOverflowSafeArea="false">
                 <Label *ngIf="userType === 0 && tags.userTags" text="Tags" color="#1B1C1C" fontSize="15"
                     fontWeight="500" textWrap="true"></Label>
-                <Label *ngIf="userType === 0 && tags.otherUserTags" text="Tags" color="#1B1C1C" fontSize="15"
+                <Label *ngIf="userType === 1 && tags.otherUserTags" text="Tags" color="#1B1C1C" fontSize="15"
                     fontWeight="500" textWrap="true"></Label>
                 <FlexboxLayout justifyContent="space-between" orientation="horizontal">
                     <FlexboxLayout flexDirection="column">
@@ -49,11 +49,11 @@
                             fontSize="15" textWrap="false"></Label>
                         <Label *ngIf="userType === 1">
                             <FormattedString *ngIf="tags && tags.comparison && tags.comparison.length > 0">
-                                <Span text="{{tags.comparison.length | number:'2.0-0'}} matching categories"
+                                <Span text="{{tags.comparison.length | number:'2.0-0'}} matching Tages"
                                     style="font-style: italic" color="#ffc107" fontSize="12"></Span>
                             </FormattedString>
                             <FormattedString *ngIf="tags && tags.comparison && tags.comparison.length === 0">
-                                <Span text="no matching categories"
+                                <Span text="no matching Tages"
                                     style="font-style: italic" color="#ffc107" fontSize="12"></Span>
                             </FormattedString>
                         </Label>
