@@ -4,7 +4,7 @@
   "license": "MIT",
   "angular-cli": {},
   "nativescript": {
-    "id": "${packageName}",
+    "id": "io.bitwiser.trivia.dev",
     "tns-ios": {
       "version": "6.1.1"
     },

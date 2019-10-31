@@ -1,4 +1,4 @@
-<GridLayout [class.dialogOpen]="dialogOpen" (tap)="closeDialog()">
+<GridLayout [class.dialogOpen]="dialogOpen">
     <StackLayout>
         <ns-action-bar title="{{actionBarStatus}}" class="Roboto-Regular" showAdd="true" hideHomeIcon="{{isDispayMenu}}"
             hideMenu="{{isDispayMenu}}">
@@ -28,19 +28,19 @@
                                             textWrap="true"></Label>
                                         <StackLayout class="earnedsymbolsStack" orientation="horizontal"
                                             horizontalAlignment="center">
-                                            <Image *ngIf="game.stats[user.userId]?.score>=1" src="~/assets/images/score1.png"
+                                            <Image *ngIf="game.stats[user.userId]?.score>=1" src="res://badge1"
                                                 height="30" width="30" marginLeft="2" verticalAlignment="center" marginLeft="2"
                                                 padding="20" borderRadius="50" top="10" left="80"></Image>
-                                            <Image *ngIf="game.stats[user.userId]?.score>=2" src="~/assets/images/score2.png"
+                                            <Image *ngIf="game.stats[user.userId]?.score>=2" src="res://badge2"
                                                 height="30" width="30" marginLeft="2" verticalAlignment="center" marginLeft="2"
                                                 padding="20" borderRadius="50" top="10" left="80"></Image>
-                                            <Image *ngIf="game.stats[user.userId]?.score>=3" src="~/assets/images/score3.png"
+                                            <Image *ngIf="game.stats[user.userId]?.score>=3" src="res://badge3"
                                                 height="30" width="30" marginLeft="2" verticalAlignment="center" marginLeft="2"
                                                 padding="20" borderRadius="50" top="10" left="80"></Image>
-                                            <Image *ngIf="game.stats[user.userId]?.score>=4" src="~/assets/images/score4.png"
+                                            <Image *ngIf="game.stats[user.userId]?.score>=4" src="res://badge4"
                                                 height="30" width="30" marginLeft="2" verticalAlignment="center" marginLeft="2"
                                                 padding="20" borderRadius="50" top="10" left="80"></Image>
-                                            <Image *ngIf="game.stats[user.userId]?.score>=5" src="~/assets/images/score5.png"
+                                            <Image *ngIf="game.stats[user.userId]?.score>=5" src="res://badge5"
                                                 height="30" width="30" marginLeft="2" verticalAlignment="center" marginLeft="2"
                                                 padding="20" borderRadius="50" top="10" left="80"></Image>
         
@@ -57,23 +57,23 @@
                                             <StackLayout class="earnedsymbolsStack" orientation="horizontal"
                                                 horizontalAlignment="center">
                                             <Image *ngIf="game.stats[user.userId]?.score>=1"
-                                                src="~/assets/images/score1.png" height="30" width="30" marginLeft="2"
+                                                src="res://badge1" height="30" width="30" marginLeft="2"
                                                 verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"
                                                 top="10" left="80"></Image>
                                             <Image *ngIf="game.stats[user.userId]?.score>=2"
-                                                src="~/assets/images/score2.png" height="30" width="30" marginLeft="2"
+                                                src="res://badge2" height="30" width="30" marginLeft="2"
                                                 verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"
                                                 top="10" left="80"></Image>
                                             <Image *ngIf="game.stats[user.userId]?.score>=3"
-                                                src="~/assets/images/score3.png" height="30" width="30" marginLeft="2"
+                                                src="res://badge3" height="30" width="30" marginLeft="2"
                                                 verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"
                                                 top="10" left="80"></Image>
                                             <Image *ngIf="game.stats[user.userId]?.score>=4"
-                                                src="~/assets/images/score4.png" height="30" width="30" marginLeft="2"
+                                                src="res://badge4" height="30" width="30" marginLeft="2"
                                                 verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"
                                                 top="10" left="80"></Image>
                                             <Image *ngIf="game.stats[user.userId]?.score>=5"
-                                                src="~/assets/images/score5.png" height="30" width="30" marginLeft="2"
+                                                src="res://badge5" height="30" width="30" marginLeft="2"
                                                 verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"
                                                 top="10" left="80"></Image>
                                         </StackLayout>
@@ -90,23 +90,23 @@
                                             <StackLayout class="earnedsymbolsStack" orientation="horizontal"
                                                 horizontalAlignment="center">
                                                 <Image *ngIf="game.stats[otherUserId]?.score>=1"
-                                                    src="~/assets/images/score1.png" height="30" width="30"
+                                                    src="res://badge1" height="30" width="30"
                                                     marginLeft="2" verticalAlignment="center" marginLeft="2"
                                                     padding="20" borderRadius="50" top="10" left="80"></Image>
                                                 <Image *ngIf="game.stats[otherUserId]?.score>=2"
-                                                    src="~/assets/images/score2.png" height="30" width="30"
+                                                    src="res://badge2" height="30" width="30"
                                                     marginLeft="2" verticalAlignment="center" marginLeft="2"
                                                     padding="20" borderRadius="50" top="10" left="80"></Image>
                                                 <Image *ngIf="game.stats[otherUserId]?.score>=3"
-                                                    src="~/assets/images/score3.png" height="30" width="30"
+                                                    src="res://badge3" height="30" width="30"
                                                     marginLeft="2" verticalAlignment="center" marginLeft="2"
                                                     padding="20" borderRadius="50" top="10" left="80"></Image>
                                                 <Image *ngIf="game.stats[otherUserId]?.score>=4"
-                                                    src="~/assets/images/score4.png" height="30" width="30"
+                                                    src="res://badge4" height="30" width="30"
                                                     marginLeft="2" verticalAlignment="center" marginLeft="2"
                                                     padding="20" borderRadius="50" top="10" left="80"></Image>
                                                 <Image *ngIf="game.stats[otherUserId]?.score>=5"
-                                                    src="~/assets/images/score5.png" height="30" width="30"
+                                                    src="res://badge5" height="30" width="30"
                                                     marginLeft="2" verticalAlignment="center" marginLeft="2"
                                                     padding="20" borderRadius="50" top="10" left="80"></Image>
                                             </StackLayout>
