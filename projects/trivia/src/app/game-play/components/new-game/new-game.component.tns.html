@@ -224,9 +224,14 @@
       </ScrollView>
     </StackLayout>
     <AbsoluteLayout (tap)="stopEventPropogation()" style="z-index: 1;" row="0" col="1" rowSpan="2" class="dialog__wrapper">
-      <FlexboxLayout  width="100%" height="100%" style="z-index: 1;" justifyContent="space-around" alignItems="center">
-        <StackLayout  class="main-dialog">
-          <Label color="#9ccc65"  text="&#xe93d;" fontSize="80" class="ico icon-back"></Label>
+        <FlexboxLayout  width="100%" height="100%" style="z-index: 1;" justifyContent="space-around" alignItems="center">
+            <StackLayout  class="main-dialog">
+              <GridLayout width="auto" rows="auto" columns="auto" horizontalAlignment="right">
+                  <AbsoluteLayout  row="0" col="0">
+                      <Label  text="&#xe922;" fontSize="18" backgroundColor="transparent" class="ico icon-back" (rippleTap)="dialogOpen = false"  stlRippleEffect></Label>
+                  </AbsoluteLayout>
+              </GridLayout>
+          <Label color="#9ccc65" text="&#xe93d;" fontSize="80" class="ico icon-back mountainwithflag"></Label>
           <Label text="Collect all badges to win" class="sub-title" textWrap="true"></Label>
           <FlexboxLayout class="badge-container">
             <Image src="~/assets/images/score1.png" class="badges"></Image>

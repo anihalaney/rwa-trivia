@@ -59,10 +59,9 @@ Button {
   z-index: 1000;
   background-color: #FFFFFF;
   border-radius: 4;
-  padding: 45 20 30 30;
+  padding: 25 20 30 30;
   .mountainwithflag {
-      height: 79;
-      width: auto;
+    text-align: center;
   }
   .sub-title {
       font-weight: 600;
@@ -70,10 +69,6 @@ Button {
       text-align: center;
       margin: 25 0 25 0;
       color: #212121;
-  }
-
-  Label {
-    text-align: center;
   }
 }
 
