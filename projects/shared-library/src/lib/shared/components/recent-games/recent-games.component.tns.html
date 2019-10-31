@@ -1,5 +1,5 @@
 <ns-action-bar title="Recently Completed Games" class="Roboto-Regular" showAdd="true" *ngIf="!hideActionbar"></ns-action-bar>
-<StackLayout *ngIf="renderView">
+<StackLayout *ngIf="renderView || hideActionbar">
   <ScrollView>
     <StackLayout>
         <Label paddingTop="20" text="Completed Games" orientation="horizontal" horizontalAlignment="center" padding="10"

@@ -334,9 +334,17 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
     };
   }
 
-  changeMode(mode: number) {
-    super.changeMode(mode);
-    this.removeMessage();
+  changeMode(mode) {
+    if (mode === '/dashboard') {
+      this.routerExtension.navigate([mode], { clearHistory: true });
+    } else if (mode === 'email') {
+     this.signInMethod = mode;
+     super.changeMode(0);
+     this.removeMessage();
+    } else  {
+      super.changeMode(mode);
+      this.removeMessage();
+    }
   }
 
   removeMessage() {

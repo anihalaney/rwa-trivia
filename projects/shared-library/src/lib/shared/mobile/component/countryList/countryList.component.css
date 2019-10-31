@@ -1,12 +1,12 @@
 .search-box {
   border-width: 2px;
   border-radius: 5;
-  border-color:rgb(187, 187, 187);
+  border-color: rgb(187, 187, 187);
   margin: 15 10 15 15;
   padding-bottom: 5;
 }
-.list-group{
-  width:100%;
+.list-group {
+  width: 100%;
 }
 .list-name {
   font-size: 12;
@@ -20,6 +20,14 @@
 .gi {
   font-family: "Material Icons", MaterialIcons-Regular;
 }
-.close-btn{
+.close-btn {
   color: #f50057;
+}
+
+.list-group-item {
+  padding: 12 12;
+}
+
+.p-l-10 {
+  padding-left: 10;
 }

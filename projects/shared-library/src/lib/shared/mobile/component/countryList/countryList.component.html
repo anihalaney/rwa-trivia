@@ -1,4 +1,4 @@
-<StackLayout android:height="350" ios:height = "auto" borderRadius="10">
+<StackLayout background="#fff" android:height="350" ios:height = "auto" borderRadius="10">
     <GridLayout rows="auto" columns="*,30">
         <GridLayout row="0" col="0" rows="auto" columns="auto,*" class="search-box">
             <Label row="0" col="0" text="&#xf002;" class="fa text-icon-field" fontSize="24" verticalAlignment="center" margin="12 12"></Label>
@@ -11,8 +11,8 @@
         <ng-template let-country="item ">
             <GridLayout rows="auto,auto" columns="auto,*" class="list-group-item" (tap)="onItemTap(country)">
                 <Image col="0" rowSpan="2" src="~/assets/flags/{{country.flagClass}}.png" height="20" backgroundColor="gray" width="29" class="img-rounded"></Image>
-                <Label row="0" col="1"  [text]="country.name" class="list-group-item-heading" textWrap="true" class="list-name p-l-10"></Label>
-                <Label row="1" col="1"  text="(+{{country.dialCode}})" class="p-l-10"  textWrap="true"></Label>
+                <Label row="0" col="1" [text]="country.name" class="list-group-item-heading" textWrap="true" class="list-name p-l-10"></Label>
+                <Label row="1" col="1" text="(+{{country.dialCode}})" class="p-l-10"  textWrap="true"></Label>
             </GridLayout>
         </ng-template>
     </RadListView>
