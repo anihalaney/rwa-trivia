@@ -64,12 +64,16 @@ Button {
       height: 79;
       width: auto;
   }
-  Label {
+  .sub-title {
       font-weight: 600;
       font-size: 18;
       text-align: center;
       margin: 25 0 25 0;
       color: #212121;
+  }
+
+  Label {
+    text-align: center;
   }
 }
 
