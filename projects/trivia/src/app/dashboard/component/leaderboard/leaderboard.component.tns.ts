@@ -10,7 +10,7 @@ import { SelectedIndexChangedEventData, DropDown } from 'nativescript-drop-down'
 import { ValueList } from 'nativescript-drop-down';
 import { AppState, appState } from '../../../store';
 import { User } from 'shared-library/shared/model';
-
+import { RadListViewComponent } from "nativescript-ui-listview/angular";
 @Component({
   selector: 'leaderboard',
   templateUrl: './leaderboard.component.html',
@@ -21,6 +21,7 @@ import { User } from 'shared-library/shared/model';
 export class LeaderboardComponent extends Leaderboard implements OnDestroy, OnInit {
   @ViewChild('dropdown', { static: false }) dropdown: ElementRef;
   @ViewChild('dropdowntop', { static: false }) dropdownTop: ElementRef;
+  @ViewChild('listView') listView: ElementRef;
   // This is magic variable
   // it delay complex UI show Router navigation can finish first to have smooth transition
   renderView = false;
@@ -29,7 +30,8 @@ export class LeaderboardComponent extends Leaderboard implements OnDestroy, OnIn
   public items: Array<string>;
   filterTopList = ['Top 10', 'Top 20', 'Top 30'];
   selectedTopFilter = 0;
-
+  private _paginationFunc: (item: any) => any;
+  @ViewChild("radListView", { read: RadListViewComponent, static: false }) radListView: RadListViewComponent;
   constructor(protected store: Store<AppState>,
     protected userActions: UserActions,
     protected utils: Utils,
@@ -44,6 +46,25 @@ export class LeaderboardComponent extends Leaderboard implements OnDestroy, OnIn
       this.items.push(category.categoryName);
     });
     this.cd.markForCheck();
+
+    this.paginationFunc = (item: any) => {
+      return (item &&  item.index < this.pagination ) ? true : false;
+    };
+  }
+
+  get paginationFunc(): (item: any) => any {
+    return this._paginationFunc;
+  }
+
+  set paginationFunc(value: (item: any) => any) {
+      this._paginationFunc = value;
+  }
+
+
+  public applyPagination() {
+    const listView = this.radListView.listView;
+    listView.filteringFunction = undefined;
+    listView.filteringFunction = this.paginationFunc;
   }
 
   openDropdown() {
@@ -57,6 +78,10 @@ export class LeaderboardComponent extends Leaderboard implements OnDestroy, OnIn
 
   onchange(args: SelectedIndexChangedEventData) {
     this.selectedCatList = this.leaderBoardStatDict[(args.newIndex + 1)];
+    this.selectedCatList.map((data, index) => {
+      data.index = index;
+    });
+    this.applyPagination();
     this.cd.markForCheck();
 
   }
@@ -68,6 +93,7 @@ export class LeaderboardComponent extends Leaderboard implements OnDestroy, OnIn
 
   onTopFilterChanged(args: SelectedIndexChangedEventData) {
     this.selectedTopFilter = args.newIndex;
+    this.applyPagination();
     this.cd.markForCheck();
   }
 

@@ -25,9 +25,9 @@
       <Label text="Profile" textWrap="true"></Label>
       <Label row="0" col="1" width="60" textAlignment="left" text="Points" textWrap="true"></Label>
     </FlexboxLayout>
-    <StackLayout *ngIf="leaderBoardCat && leaderBoardCat.length>0" height="100%">
-      <ListView separatorColor="#00000000" height="100%" [items]="selectedCatList | slice:lbsUsersSliceStartIndex:pagination">
-        <ng-template let-user="item" let-j="index">
+    <StackLayout *ngIf="leaderBoardCat && leaderBoardCat.length>0 && selectedCatList && selectedCatList.length>0" height="100%">
+      <RadListView #radListView separatorColor="#00000000" height="100%"  [filteringFunction]="paginationFunc" [items]="selectedCatList">
+        <ng-template  tkListItemTemplate let-user="item" let-j="index">
           <GridLayout  [ngClass]="{'login-user-hightlight': (loggedInUserId === user.userId)}" class="data-div" rows="*,16" columns="auto,*,60">
             <Label marginTop="10" text="{{j+1}}" row="0" col="0" class="profile-no Hind-Bold" verticalAlignment="top"></Label>
             <StackLayout row="0" col="1" class="padding-10">
@@ -40,7 +40,7 @@
             <StackLayout marginTop="15" row="1" col="0" colSpan="3" ios:backgroundColor="#f2f2f2" android:backgroundColor="#e2e2e2" height="1"></StackLayout>
           </GridLayout>
         </ng-template>
-      </ListView>
+      </RadListView>
     </StackLayout>
   </StackLayout>
 </ScrollView>
