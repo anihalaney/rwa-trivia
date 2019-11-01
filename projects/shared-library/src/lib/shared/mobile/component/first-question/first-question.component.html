@@ -1,27 +1,32 @@
-<ns-action-bar title="Get Started" class="Roboto-Regular" hideHomeIcon="true" showAdd="false"></ns-action-bar>
-<StackLayout>
+<ns-action-bar title="" class="Roboto-Regular" hideHomeIcon="true" showAdd="false"></ns-action-bar>
+<GridLayout>
     <ScrollView>
-        <StackLayout>
-            <CardView class="cardStyle gameplay" margin="10" android:elevation="20" ios:shadowRadius="3"
-                ios:elevation="40" radius="5" backgroundColor="white" iosOverflowSafeArea="false">
-                <StackLayout class="cardStyle Roboto-Medium" backgroundColor="#ffffff" height="100%" width="100%"
-                    margin="15" iosOverflowSafeArea="false">
-                    <StackLayout padding="10">
-                        <Label text="This is first Question" color="#000" fontSize="20" textWrap="true"></Label>
-                        <Label text="Play to get 50 bits now" color="#808080" fontSize="20" textWrap="true"></Label>
-                    </StackLayout>
-                    <app-question-card [question]="question" [categoryName]="categoryName" [answeredText]="answeredText"
-                        [doPlay]="doPlay" [correctAnswerText]="correctAnswerText" [userDict]="userDict"
-                        (selectedAnswer)="selectedAnswer($event)" [user]="user">
-                    </app-question-card>
-                    <StackLayout orientation="vertical" margin="10" iosOverflowSafeArea="false">
-                        <Button class="Roboto-Regular" backgroundColor="#8ac541" color="white" margin="20"
-                            (rippleTap)="goToDashboard((answeredText === '' ? 'skip' : 'continue'))" width="100%"
-                            [text]="(answeredText === '' ? 'skip' : 'continue')" fontSize="17" padding="15"
-                            stlRippleEffect stlBackgroundColor="#8ac541"></Button>
-                    </StackLayout>
-                </StackLayout>
-            </CardView>
-        </StackLayout>
+        <GridLayout rows="auto" columns="*" padding="10 0">
+            <GridLayout rows="auto,auto,auto,auto" columns="*" row="0" class="cardStyle Roboto-Medium"
+                backgroundColor="#ffffff" height="100%" width="100%" iosOverflowSafeArea="false">
+                <Label row="0" text="Play for the first time" color="#000" padding="0 10" fontSize="34"
+                    textWrap="true"></Label>
+                <GridLayout row="1" rows="*" columns="auto, *" horizontalAlignment="left" width="auto" backgroundColor="#f5f5f5" borderRadius="30"
+                    orientation="horizontal" margin="10">
+                    <Label col="0" text="&#xf379;" color="#ffe27d" padding="5 10" fontSize="24" class="fab"></Label>
+                    <Label col="1" text="win 50 bits instantly" fontSize="12" padding="5 10" verticalAlignment="center"></Label>
+                </GridLayout>
+                <GridLayout row="2">
+                    <render-box>
+                        <app-question-card [question]="question" [categoryName]="categoryName"
+                            [answeredText]="answeredText" [doPlay]="doPlay" [correctAnswerText]="correctAnswerText"
+                            [userDict]="userDict" (selectedAnswer)="selectedAnswer($event)" [user]="user"
+                            [theme]="'light'">
+                        </app-question-card>
+                    </render-box>
+                </GridLayout>
+                <GridLayout row="3" orientation="vertical" margin="10" iosOverflowSafeArea="false">
+                    <Button class="Roboto-Regular btn-transparent"
+                        (rippleTap)="goToDashboard((answeredText === '' ? 'skip' : 'continue'))"
+                        [text]="(answeredText === '' ? 'Skip' : 'Continue')" stlRippleEffect
+                        stlBackgroundColor="white"></Button>
+                </GridLayout>
+            </GridLayout>
+        </GridLayout>
     </ScrollView>
-</StackLayout>
+</GridLayout>

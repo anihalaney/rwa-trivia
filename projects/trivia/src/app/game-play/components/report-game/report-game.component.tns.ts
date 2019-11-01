@@ -44,12 +44,6 @@ export class ReportGameComponent implements OnInit, OnDestroy {
             this.iqKeyboard = IQKeyboardManager.sharedManager();
             this.iqKeyboard.shouldResignOnTouchOutside = true;
         }
-        this.categoryDict$ = store.select(categoryDictionary);
-        this.subscriptions.push(this.categoryDict$.subscribe(categoryDict => {
-            this.categoryDict = categoryDict;
-            this.cd.markForCheck();
-        }));
-
         this.question = params.context.question;
         this.user = params.context.user;
         this.game = params.context.game;
@@ -70,6 +64,12 @@ export class ReportGameComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
+        this.categoryDict$ = this.store.select(categoryDictionary);
+        this.subscriptions.push(this.categoryDict$.subscribe(categoryDict => {
+            this.categoryDict = categoryDict;
+            this.cd.markForCheck();
+        }));
+
         this.reportQuestion = new ReportQuestion();
         this.cd.markForCheck();
     }

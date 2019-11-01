@@ -376,25 +376,15 @@ mat-card>:first-child {
   }
 
   .q-button {
-    background-color: #71b02f;
-    color: white;
+    background-color: white;
+    color: #1E2C4D;
     font-weight: bold;
+    border-color: #1E2C4D;
   }
  
 }
 
-.game-buttons {
-  padding: 10;
-  margin: 10;
-  border-width: 1;
-  border-color: #D4493D;
 
-  .g-btn {
-    background-color: #D4493D;
-    color: white;
-    font-weight: bold;
-  }
-}
 
 .lives-card{
   margin: 10;

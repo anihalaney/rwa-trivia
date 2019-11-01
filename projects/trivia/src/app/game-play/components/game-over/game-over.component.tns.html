@@ -107,7 +107,7 @@
                                        ||
                                        (game.gameOptions?.playerMode == PlayerMode.Single &&
                                         game.playerQnAs?.length - game.stats[user.userId]?.score !== 4)}"
-                                        [type]="userCardType.USER_IMAGE_NAME_VERTICAL">
+                                        [type]="userCardType.USER_IMAGE_NAME_VERTICAL_GAME_OVER">
                                     </app-user-card>
                                     <!-- <Label class="roundandscore tagging" horizontalAlignment="center"
                                     text="Score {{game.stats[user.userId]?.score}}" textWrap="true"> </Label> -->
@@ -147,7 +147,7 @@
                                        ||
                                        (game.gameOptions?.playerMode == PlayerMode.Single &&
                                         game.playerQnAs?.length - game.stats[user.userId]?.score === 4)}"
-                                        [type]="userCardType.USER_IMAGE_NAME_VERTICAL">
+                                        [type]="userCardType.USER_IMAGE_NAME_VERTICAL_GAME_OVER">
                                     </app-user-card>
                                     <!-- <Label class="roundandscore tagging" horizontalAlignment="center"
                                     text="Score {{game.stats[otherUserId]?.score}}" textWrap="true"> </Label> -->

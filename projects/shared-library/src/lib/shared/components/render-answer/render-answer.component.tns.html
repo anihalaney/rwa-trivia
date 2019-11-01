@@ -1,14 +1,21 @@
-<StackLayout *ngIf="currentAnswer?.isRichEditor && currentAnswer; else renderView" marginBottm="500"> 
-    <WebView width="100%" padding="10 10 0 10" *ngIf="!isAndroid" [src]="currentAnswer?.answerText" ios:height="{{answerHeight}}"
-        (loadFinished)="onLoadFinished($event)" stlRippleEffect (rippleTap)="answerButtonClicked(currentAnswer)" [isUserInteractionEnabled]="doPlay"></WebView>
-    <WebView width="100%" padding="10 10 0 10" *ngIf="isAndroid" [src]="currentAnswer?.answerText" 
-        minHeight="50" stlRippleEffect (rippleTap)="answerButtonClicked(currentAnswer)" [isUserInteractionEnabled]="doPlay"></WebView>
-</StackLayout>
-
+<GridLayout *ngIf="currentAnswer?.isRichEditor && currentAnswer; else renderView">
+    <AbsoluteLayout class="upper-grid" width="auto">
+        <Label top="2" left="10" *ngIf="isRight" color="#fff" text="&#xf00c;" class="fas" textWrap="true"></Label>
+        <Label top="2" left="10" *ngIf="isWrong" color="#fff" text="&#xf00d;" class="fas" textWrap="true"></Label>
+    </AbsoluteLayout>
+    <WebView width="100%" *ngIf="!isAndroid" [src]="currentAnswer?.answerText" ios:height="{{answerHeight}}"
+        (loadFinished)="onLoadFinished($event)" stlRippleEffect [isEnabled]="doPlay"></WebView>
+    <WebView width="100%" *ngIf="isAndroid" [src]="currentAnswer?.answerText" minHeight="50" stlRippleEffect
+        [isEnabled]="doPlay"></WebView>
+</GridLayout>
 <ng-template #renderView>
-    <StackLayout>    
-        <Label text="{{ currentAnswer?.answerText }}" [class.wrong]="isWrong"
-        [class.right]="isRight ? 'right' : ''" [ngClass]="{'answer': isGameAnswer}"   [ngClass]="{'display-answer': !isGameAnswer}" textWrap="true"></Label>
-    </StackLayout>
-    
+    <GridLayout class="{{theme}}-theme">
+        <AbsoluteLayout>
+            <Label top="2" left="10" *ngIf="isRight" text="&#xf00c;" color="#fff" class="fas" textWrap="true"></Label>
+            <Label top="2" left="10" *ngIf="isWrong" text="&#xf00d;" color="#fff" class="fas" textWrap="true"></Label>
+        </AbsoluteLayout>
+        <Label textAlignment="center" text="{{ currentAnswer?.answerText }}" [class.wrong]="isWrong"
+            [class.right]="isRight" [ngClass]="{'answer': isGameAnswer}" [ngClass]="{'display-answer': !isGameAnswer}"
+            textWrap="true"></Label>
+    </GridLayout>
 </ng-template>

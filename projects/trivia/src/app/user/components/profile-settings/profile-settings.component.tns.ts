@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, ElementRef, OnDestroy, QueryList, ViewChild, ViewChildren, ViewContainerRef, Component } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, ElementRef, OnDestroy, QueryList, ViewChild, ViewChildren, ViewContainerRef, Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
@@ -36,7 +36,7 @@ declare var IQKeyboardManager;
 })
 
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
-export class ProfileSettingsComponent extends ProfileSettings implements OnDestroy, AfterViewInit {
+export class ProfileSettingsComponent extends ProfileSettings implements OnDestroy, AfterViewInit, OnInit {
 
   // Properties
   showSelectCategory = false;
@@ -85,6 +85,10 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
       this.iqKeyboard = IQKeyboardManager.sharedManager();
       this.iqKeyboard.shouldResignOnTouchOutside = true;
     }
+
+  }
+
+  ngOnInit(): void {
     this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe(status => {
       if (status === 'SUCCESS') {
         this.uUtils.showMessage('success', 'Profile is saved successfully');
@@ -225,7 +229,9 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
         this.imageTaken = imageAsset;
         const source = new ImageSource();
         const imageSource = await fromAsset(imageAsset);
-        this.cropImage(imageSource);
+        setTimeout(() => {
+          this.cropImage(imageSource);
+        }, 1);
       } catch (error) {
         this.utils.sendErrorToCrashlytics('appLog', error);
         console.error(error);
@@ -264,7 +270,9 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
         keepAspectRatio: true
       };
       imageSource = await fromAsset(imageAsset);
-      this.cropImage(imageSource);
+      setTimeout(() => {
+        this.cropImage(imageSource);
+      }, 1);
     } catch (error) {
       this.utils.sendErrorToCrashlytics('appLog', error);
       console.error(error);

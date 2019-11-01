@@ -1,13 +1,16 @@
 import { Injectable } from '@angular/core';
 import { Effect, Actions, ofType } from '@ngrx/effects';
-import { switchMap, map, filter, catchError } from 'rxjs/operators';
-import { SocialService, StatsService, AchievementService } from 'shared-library/core/services';
-import { Subscribers, Blog, RouterStateUrl, SystemStats, AchievementRule } from 'shared-library/shared/model';
+import { switchMap, map, filter, catchError, mergeMap, take } from 'rxjs/operators';
+import { SocialService, StatsService, AchievementService, QuestionService } from 'shared-library/core/services';
+import { Subscribers, Blog, RouterStateUrl, SystemStats, AchievementRule, Question } from 'shared-library/shared/model';
 import { DashboardActionTypes } from '../actions';
 import * as dashboardActions from '../actions/dashboard.actions';
 import { UploadTaskSnapshot } from '@angular/fire/storage/interfaces';
 import { of } from 'rxjs';
 import { ROUTER_NAVIGATION } from '@ngrx/router-store';
+import { Store } from '@ngrx/store';
+import { AppState } from '../../../store';
+import { coreState } from 'shared-library/core/store';
 
 @Injectable()
 export class DashboardEffects {
@@ -74,48 +77,74 @@ export class DashboardEffects {
             )
         );
 
-        // Load Score
-        @Effect()
-        LoadLeaderBoardInfo$ = this.actions$
-            .pipe(ofType(DashboardActionTypes.LOAD_LEADERBOARD))
-            .pipe(
-                switchMap((action: dashboardActions.LoadLeaderBoard) =>
-                    this.statsService.loadLeaderBoardStat().pipe(
-                        map((score: any) => {
-                            return new dashboardActions.LoadLeaderBoardSuccess(score);
-                        }
-                        )
-                    )));
+    // Load Score
+    @Effect()
+    LoadLeaderBoardInfo$ = this.actions$
+        .pipe(ofType(DashboardActionTypes.LOAD_LEADERBOARD))
+        .pipe(
+            switchMap((action: dashboardActions.LoadLeaderBoard) =>
+                this.statsService.loadLeaderBoardStat().pipe(
+                    map((score: any) => {
+                        return new dashboardActions.LoadLeaderBoardSuccess(score);
+                    }
+                    )
+                )));
 
-        // Load System Stat
-        @Effect()
-        LoadSystemStat$ = this.actions$
-            .pipe(ofType(DashboardActionTypes.LOAD_SYSTEM_STAT))
-            .pipe(
-                switchMap((action: dashboardActions.LoadSystemStat) =>
-                    this.statsService.loadSystemStat().pipe(
-                        map((stat: SystemStats) =>
-                            new dashboardActions.LoadSystemStatSuccess(stat)
-                        ), catchError(err => of(new dashboardActions.LoadSystemStatError(err)))
-                    )));
+    // Load System Stat
+    @Effect()
+    LoadSystemStat$ = this.actions$
+        .pipe(ofType(DashboardActionTypes.LOAD_SYSTEM_STAT))
+        .pipe(
+            switchMap((action: dashboardActions.LoadSystemStat) =>
+                this.statsService.loadSystemStat().pipe(
+                    map((stat: SystemStats) =>
+                        new dashboardActions.LoadSystemStatSuccess(stat)
+                    ), catchError(err => of(new dashboardActions.LoadSystemStatError(err)))
+                )));
 
-        // Load Achievements
-        @Effect()
-        getAchievements$ = this.actions$
-            .pipe(ofType(DashboardActionTypes.LOAD_ACHIEVEMENTS))
-            .pipe(
-                switchMap((action: dashboardActions.LoadAchievements) =>
-                    this.achievementService.getAchievements().pipe(
-                        map((achievements: AchievementRule[]) => {
-                            return new dashboardActions.LoadAchievementsSuccess(achievements);
-                        }
-                        )
-                    )));
+    // Load Achievements
+    @Effect()
+    getAchievements$ = this.actions$
+        .pipe(ofType(DashboardActionTypes.LOAD_ACHIEVEMENTS))
+        .pipe(
+            switchMap((action: dashboardActions.LoadAchievements) =>
+                this.achievementService.getAchievements().pipe(
+                    map((achievements: AchievementRule[]) => {
+                        return new dashboardActions.LoadAchievementsSuccess(achievements);
+                    }
+                    )
+                )));
+
+    // Load User Latest Published Question by userId from router
+    @Effect()
+    loadUserLatestPublishedRouteQuestions$ = this.actions$
+        .pipe(ofType(ROUTER_NAVIGATION))
+        .pipe(
+            map((action: any): RouterStateUrl => action.payload.routerState),
+            filter((routerState: RouterStateUrl) =>
+                routerState.url.toLowerCase().startsWith('/')),
+            mergeMap((routerState: RouterStateUrl) =>
+                this.store.select(coreState).pipe(
+                    map(s => s.user),
+                    filter(u => !!u),
+                    take(1),
+                    map(user => user.userId))
+            ))
+        .pipe(
+            switchMap((id: string) => {
+                return this.questionService.getUserLatestQuestion(id).pipe(map((question: Question) =>
+                    new dashboardActions.LoadUserLatestPublishedQuestionSuccess(question)
+                ));
+            })
+        );
 
     constructor(
         private actions$: Actions,
         private socialService: SocialService,
         private statsService: StatsService,
-        private achievementService: AchievementService
+        private achievementService: AchievementService,
+        private questionService: QuestionService,
+        private store: Store<AppState>,
+
     ) { }
 }

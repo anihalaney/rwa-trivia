@@ -1,198 +1,88 @@
-<StackLayout *ngIf="cardType == 'opponent'" class="mobile Roboto-Regular" iosOverflowSafeArea="false">
-    <GridLayout rows="*" columns="auto,auto,*" iosOverflowSafeArea="false" class="waiting-opponent">
-        <!-- <Image  [stlOpenUserProfile]="{userId: user.userId, redirectTo: 'userProfile'}" row="0" col="0" src="{{getImageUrl(user)}}" backgroundColor="gray" stretch="aspectFill" height="64"
-                width="64" marginLeft="2" verticalAlignment="center" borderRadius="50"></Image>
-            <StackLayout row="0" col="1" paddingLeft="20" paddingTop="10" iosOverflowSafeArea="false">
-                <GridLayout rows="*,*,*,*" columns="*" iosOverflowSafeArea="false">
-                    <Label row="0" column="0" text="You" fontSize="18" textWrap="true" class="main-title"></Label>
-                    <Label row="1" column="0" text="Round {{game.round}} | Score {{game.stats[user.userId]?.score}}"
-                        textWrap="true" class="sub-title"></Label>
-                    <Label row="2" column="0" text="{{categoryDict[game.gameOptions?.categoryIds[randomCategoryId]]?.categoryName?.charAt(0)?.toUpperCase()
-    + categoryDict[game.gameOptions?.categoryIds[randomCategoryId]]?.categoryName?.slice(1)}}"
-                        textWrap="true" class="tagging"> </Label>
-                </GridLayout>
-            </StackLayout> -->
-
-        <app-user-card [userId]="user.userId" [type]="userCardType.USER_IMAGE_NAME_WITH_SCORE" [otherInfo]="{correctCount:game.stats[user.userId]?.score,questionRound:game.round,totalRound:totalRound, category:categoryDict[game.gameOptions?.categoryIds[randomCategoryId]]?.categoryName?.charAt(0)?.toUpperCase()
-                + categoryDict[game.gameOptions?.categoryIds[randomCategoryId]]?.categoryName?.slice(1)}">
-        </app-user-card>
-
-        <StackLayout row="0" col="2" orientation="horizontal" horizontalAlignment="center" iosOverflowSafeArea="false">
-
-            <Image *ngIf="game.stats[user.userId]?.score >= 1" src="~/assets/images/score1.png" height="30" width="30"
-                marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"></Image>
-
-            <Image *ngIf="game.stats[user.userId]?.score >= 2" src="~/assets/images/score2.png" height="30" width="30"
-                marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"></Image>
-
-            <Image *ngIf="game.stats[user.userId]?.score >= 3" src="~/assets/images/score3.png" height="30" width="30"
-                marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"></Image>
-
-            <Image *ngIf="game.stats[user.userId]?.score >= 4" src="~/assets/images/score4.png" height="30" width="30"
-                marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"></Image>
-
-            <Image *ngIf="game.stats[user.userId]?.score >= 5" src="~/assets/images/score5.png" height="30" width="30"
-                marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"></Image>
-
-        </StackLayout>
-    </GridLayout>
-    <Button text="Waiting for Opponent" orientation="horizontal" horizontalAlignment="center" padding="10"
-        class="btn-wait-opp"></Button>
-</StackLayout>
-
-<StackLayout *ngIf="cardType == 'singlePlayer'" class="mobile Roboto-Regular" iosOverflowSafeArea="false">
-    <GridLayout rows="*" columns="*,auto" iosOverflowSafeArea="false">
-        <StackLayout row="0" col="0" [nsRouterLink]="['/game-play', game.gameId]" clearHistory="true"
-            iosOverflowSafeArea="false">
-            <GridLayout rows="*,*,*" columns="*" iosOverflowSafeArea="false">
-                <Label row="0" column="0" text="Round {{game.round}} | Score {{game.stats[user.userId].score}}"
-                    textWrap="true" class="sub-title"></Label>
-                <Label row="1" column="0" text="{{categoryDict[game.gameOptions?.categoryIds[randomCategoryId]]?.categoryName?.charAt(0)?.toUpperCase()
-        + categoryDict[game.gameOptions?.categoryIds[randomCategoryId]]?.categoryName?.slice(1)}}" textWrap="true"
-                    class="tagging" class="sub-title"> </Label>
-                <Label row="2" column="0" class="fa timer"
-                    text="&#xf017; You have {{remainingHours }}:{{remainingMinutes}} hrs left to play" textWrap="true"
-                    padding="10 5 5 0"></Label>
-            </GridLayout>
-
-        </StackLayout>
-        <StackLayout row="0" col="1" orientation="horizontal" horizontalAlignment="center" iosOverflowSafeArea="false">
-
-            <Image *ngIf="game.stats[user.userId]?.score >= 1" src="~/assets/images/score1.png" height="30" width="30"
-                marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"></Image>
-
-            <Image *ngIf="game.stats[user.userId]?.score >= 2" src="~/assets/images/score2.png" height="30" width="30"
-                marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"></Image>
-
-            <Image *ngIf="game.stats[user.userId]?.score >= 3" src="~/assets/images/score3.png" height="30" width="30"
-                marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"></Image>
-
-            <Image *ngIf="game.stats[user.userId]?.score >= 4" src="~/assets/images/score4.png" height="30" width="30"
-                marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"></Image>
-
-            <Image *ngIf="game.stats[user.userId]?.score >= 5" src="~/assets/images/score5.png" height="30" width="30"
-                marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"></Image>
-
-        </StackLayout>
-    </GridLayout>
-</StackLayout>
-
-<StackLayout *ngIf="cardType == 'twoPlayer' && myTurn" class="mobile Roboto-Regular"
-    [nsRouterLink]="['/game-play', game.gameId]" clearHistory="true" iosOverflowSafeArea="false">
-    <GridLayout rows="*" columns="auto,*" iosOverflowSafeArea="false">
-        <app-user-card row="0" col="0" [userId]="otherUserId" [type]="userCardType.USER_IMAGE_NAME_WITH_SCORE"
-            [otherInfo]="{correctCount:game.stats[otherUserId]?.score,questionRound:game.round,totalRound:totalRound}">
-        </app-user-card>
-        <StackLayout *ngIf="otherUserId" row="0" col="2" orientation="horizontal" horizontalAlignment="right"
-            iosOverflowSafeArea="false">
-
-            <Image *ngIf="game.stats[otherUserId]?.score >= 1" src="~/assets/images/score1.png" height="30" width="30"
-                marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"></Image>
-
-            <Image *ngIf="game.stats[otherUserId]?.score >= 2" src="~/assets/images/score2.png" height="30" width="30"
-                marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"></Image>
-
-            <Image *ngIf="game.stats[otherUserId]?.score >= 3" src="~/assets/images/score3.png" height="30" width="30"
-                marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"></Image>
-
-            <Image *ngIf="game.stats[otherUserId]?.score >= 4" src="~/assets/images/score4.png" height="30" width="30"
-                marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"></Image>
-
-            <Image *ngIf="game.stats[otherUserId]?.score >= 5" src="~/assets/images/score5.png" height="30" width="30"
-                marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"></Image>
-
-        </StackLayout>
-        <StackLayout *ngIf="!otherUserInfo" iosOverflowSafeArea="false">
-            <Image src="~/assets/images/no_user.png" marginLeft="2" verticalAlignment="center" marginLeft="2"
-                padding="20" borderRadius="50" height="64" width="64"></Image>
-        </StackLayout>
-    </GridLayout>
-    <GridLayout rows="*" columns="*,*,*" iosOverflowSafeArea="false">
-        <StackLayout row="0" col="0" class="hr-light m-10" height="3" iosOverflowSafeArea="false"></StackLayout>
-        <Label row="0" col="1" horizontalAlignment="center" text="{{categoryDict[game.gameOptions?.categoryIds[randomCategoryId]]?.categoryName?.charAt(0)?.toUpperCase()
+<StackLayout class="active-container">
+    <GridLayout rows="36" columns="*,auto,auto">
+        <Label text="{{categoryDict[game.gameOptions?.categoryIds[randomCategoryId]]?.categoryName?.charAt(0)?.toUpperCase()
                 + categoryDict[game.gameOptions?.categoryIds[randomCategoryId]]?.categoryName?.slice(1)}}"
-            textWrap="true" class="tagging"> </Label>
-        <StackLayout row="0" col="2" class="hr-light m-10" height="3" iosOverflowSafeArea="false"></StackLayout>
-    </GridLayout>
-    <GridLayout rows="*" columns="auto,auto,*" iosOverflowSafeArea="false">
-        <app-user-card [userId]="user.userId" [type]="userCardType.USER_IMAGE_NAME_WITH_SCORE"
-            [otherInfo]="{correctCount:game.stats[user.userId]?.score,questionRound:game.round,totalRound:totalRound}">
-        </app-user-card>
+            row="0" col="0" class="cat-title"></Label>
 
-        <StackLayout row="0" col="2" orientation="horizontal" horizontalAlignment="right" iosOverflowSafeArea="false">
+        <StackLayout row="0" col="1" horizontalAlignment="right">
+            <AbsoluteLayout>
+                <Image *ngIf="game.stats[otherUserId]?.score >= 5" left="74" top="5" src="~/assets/images/score5.png"
+                    height="30" width="30" marginLeft="2" verticalAlignment="center" marginLeft="2" borderRadius="50"></Image>
 
-            <Image *ngIf="game.stats[user.userId]?.score >= 1" src="~/assets/images/score1.png" height="30" width="30"
-                marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"></Image>
+                <Image *ngIf="game.stats[otherUserId]?.score >= 4" left="62" top="5" src="~/assets/images/score4.png"
+                    height="30" width="30" marginLeft="2" verticalAlignment="center" marginLeft="2" borderRadius="50"></Image>
 
-            <Image *ngIf="game.stats[user.userId]?.score >= 2" src="~/assets/images/score2.png" height="30" width="30"
-                marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"></Image>
+                <Image *ngIf="game.stats[otherUserId]?.score >= 3" left="50" top="5" src="~/assets/images/score3.png"
+                    height="30" width="30" marginLeft="2" verticalAlignment="center" marginLeft="2" borderRadius="50"></Image>
 
-            <Image *ngIf="game.stats[user.userId]?.score >= 3" src="~/assets/images/score3.png" height="30" width="30"
-                marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"></Image>
+                <Image *ngIf="game.stats[otherUserId]?.score >= 2" left="38" top="5" src="~/assets/images/score2.png"
+                    height="30" width="30" marginLeft="2" verticalAlignment="center" marginLeft="2" borderRadius="50"></Image>
 
-            <Image *ngIf="game.stats[user.userId]?.score >= 4" src="~/assets/images/score4.png" height="30" width="30"
-                marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"></Image>
-
-            <Image *ngIf="game.stats[user.userId]?.score >= 5" src="~/assets/images/score5.png" height="30" width="30"
-                marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"></Image>
-
-
+                <Image *ngIf="game.stats[otherUserId]?.score >= 1" left="25" top="5" src="~/assets/images/score1.png"
+                    height="30" width="30" marginLeft="2" verticalAlignment="center" marginLeft="2" borderRadius="50"></Image>
+                <StackLayout left="5" top="5">
+                    <app-user-card [userId]="otherUserId" [type]="userCardType.USER_IMAGE_30X30" [width]="30" [height]="30">
+                    </app-user-card>
+                </StackLayout>
+            </AbsoluteLayout>
         </StackLayout>
-    </GridLayout>
-    <Label row="2" column="0" class="fa timer"
-        text="&#xf017; You have {{remainingHours }}:{{remainingMinutes}} hrs left to play" textWrap="true"
-        padding="10 5 5 0"></Label>
-    <!-- <StackLayout class="hr-light m-10"></StackLayout> -->
-</StackLayout>
 
+        <StackLayout row="0" col="2" horizontalAlignment="right">
+            <AbsoluteLayout>
+                <Image *ngIf="game.stats[user.userId]?.score >= 5" left="74" top="5" src="~/assets/images/score5.png"
+                    height="30" width="30" marginLeft="2" verticalAlignment="center" marginLeft="2" borderRadius="50"></Image>
 
-<StackLayout *ngIf="cardType == 'theirTurn' && !myTurn" class="mobile Roboto-Regular" iosOverflowSafeArea="false">
-    <GridLayout rows="*" columns="auto, *" *ngIf="otherUserId" iosOverflowSafeArea="false" class="their-turn">
-        <app-user-card [userId]="otherUserId" row="0" col="0" [type]="userCardType.USER_IMAGE_NAME_WITH_SCORE"
-            [otherInfo]="{correctCount:game.stats[user.userId]?.score,questionRound:game.round,totalRound:totalRound, category:categoryDict[game.gameOptions?.categoryIds[randomCategoryId]]?.categoryName?.charAt(0)?.toUpperCase()
-                + categoryDict[game.gameOptions?.categoryIds[randomCategoryId]]?.categoryName?.slice(1)}">
-        </app-user-card>
-        <StackLayout row="0" col="1" orientation="horizontal" horizontalAlignment="right" *ngIf="otherUserId"
-            iosOverflowSafeArea="false">
-            <Image *ngIf="game.stats[otherUserId]?.score >= 1" src="~/assets/images/score1.png" height="30" width="30"
-                marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"></Image>
+                <Image *ngIf="game.stats[user.userId]?.score >= 4" left="62" top="5" src="~/assets/images/score4.png"
+                    height="30" width="30" marginLeft="2" verticalAlignment="center" marginLeft="2" borderRadius="50"></Image>
 
-            <Image *ngIf="game.stats[otherUserId]?.score >= 2" src="~/assets/images/score2.png" height="30" width="30"
-                marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"></Image>
+                <Image *ngIf="game.stats[user.userId]?.score >= 3" left="50" top="5" src="~/assets/images/score3.png"
+                    height="30" width="30" marginLeft="2" verticalAlignment="center" marginLeft="2" borderRadius="50"></Image>
 
-            <Image *ngIf="game.stats[otherUserId]?.score >= 3" src="~/assets/images/score3.png" height="30" width="30"
-                marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"></Image>
+                <Image *ngIf="game.stats[user.userId]?.score >= 2" left="38" top="5" src="~/assets/images/score2.png"
+                    height="30" width="30" marginLeft="2" verticalAlignment="center" marginLeft="2" borderRadius="50"></Image>
 
-            <Image *ngIf="game.stats[otherUserId]?.score >= 4" src="~/assets/images/score4.png" height="30" width="30"
-                marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"></Image>
+                <Image *ngIf="game.stats[user.userId]?.score >= 1" left="25" top="5" src="~/assets/images/score1.png"
+                    height="30" width="30" marginLeft="2" verticalAlignment="center" marginLeft="2" borderRadius="50"></Image>
 
-            <Image *ngIf="game.stats[otherUserId]?.score >= 5" src="~/assets/images/score5.png" height="30" width="30"
-                marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"></Image>
+                <StackLayout left="5" top="5">
+                    <app-user-card [userId]="user.userId" [type]="userCardType.USER_IMAGE_30X30" [width]="30" [height]="30">
+                    </app-user-card>
+                </StackLayout>
+            </AbsoluteLayout>
         </StackLayout>
+
     </GridLayout>
-    <GridLayout rows="*,*" columns="auto,*" iosOverflowSafeArea="false">
-        <!-- <StackLayout row="0" col="1" class="hr-light" margin="10 0 10 0" iosOverflowSafeArea="false"></StackLayout> -->
-        <StackLayout row="1" col="0" iosOverflowSafeArea="false">
-            <Label text="You Scored: {{game.stats[user.userId]?.score}}" textWrap="true" class="sub-title"></Label>
-        </StackLayout>
-        <StackLayout row="1" col="1" orientation="horizontal" horizontalAlignment="right" iosOverflowSafeArea="false">
 
-            <Image *ngIf="game.stats[user.userId]?.score >= 1" src="~/assets/images/score1.png" height="30" width="30"
-                marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"></Image>
+    <FlexboxLayout horizontalAlignment="left" justifyContent="space-between" width="85%" *ngIf="(game.gameOptions.playerMode == PlayerMode.Opponent && game.playerIds.length > 1) ||
+            (game.gameOptions.playerMode == PlayerMode.Single)">
+        
+                <StackLayout alignSelf="center" orientation="horizontal" [visibility]="myTurn ? 'visible' : 'hidden' ">
+                    <Label class="fa active-game-timer" text="&#xf017; {{remainingHours }}:{{remainingMinutes}}" textWrap="true"
+                        android:paddingTop=""></Label>
+                </StackLayout>
+        
+                <FlexboxLayout alignSelf="center">
+                    <Image src="~/assets/images/mobile/tally.png" width="20" marginRight="2"></Image>
+                    <Label text="{{game.round}} / {{totalRound}}" class="active-game-timer" textWrap="true"></Label>
+                </FlexboxLayout>
+        
+                <StackLayout alignSelf="center" orientation="horizontal">
+                    <app-user-card *ngIf="myTurn" [userId]="user.userId" [type]="userCardType.USER_IMAGE_30X30" [width]="20"
+                        [height]="20">
+                    </app-user-card>
+                    <app-user-card *ngIf="!myTurn && otherUserId" [userId]="otherUserId" [type]="userCardType.USER_IMAGE_30X30"
+                        [width]="20" [height]="20">
+                    </app-user-card>
+                    <Label *ngIf="myTurn" text="Your Turn " class="active-game-timer"></Label>
+                    <Label *ngIf="!myTurn && otherUserId" text="{{otherUserInfo?.displayName}} 's Turn"
+                        class="active-game-timer"></Label>
+                </StackLayout>
+            </FlexboxLayout>
 
-            <Image *ngIf="game.stats[user.userId]?.score >= 2" src="~/assets/images/score2.png" height="30" width="30"
-                marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"></Image>
+    <Label *ngIf="myTurn" text="Play Now" textWrap="true" class="active-play-now" [nsRouterLink]="['/game-play', game.gameId]"
+        clearHistory="true"></Label>
 
-            <Image *ngIf="game.stats[user.userId]?.score >= 3" src="~/assets/images/score3.png" height="30" width="30"
-                marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"></Image>
+    <Label *ngIf="(game.GameStatus === gameStatus.AVAILABLE_FOR_OPPONENT || game.GameStatus === gameStatus.WAITING_FOR_FRIEND_INVITATION_ACCEPTANCE || game.GameStatus === gameStatus.WAITING_FOR_RANDOM_PLAYER_INVITATION_ACCEPTANCE)"
+        text="Waiting for Opponent" textWrap="true" class="active-waiting-opponent"></Label>
 
-            <Image *ngIf="game.stats[user.userId]?.score >= 4" src="~/assets/images/score4.png" height="30" width="30"
-                marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"></Image>
-
-            <Image *ngIf="game.stats[user.userId]?.score >= 5" src="~/assets/images/score5.png" height="30" width="30"
-                marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"></Image>
-
-        </StackLayout>
-    </GridLayout>
-    <StackLayout row="0" col="1" class="hr-light" height="3" iosOverflowSafeArea="false"></StackLayout>
 </StackLayout>

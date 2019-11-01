@@ -1,16 +1,18 @@
 <StackLayout *ngIf="question?.isRichEditor && question; else renderView" marginBottm="500" orientation="horizontal">
-    <Label verticalAlignment="top" paddingLeft="10" text="{{questionIndex}} . " textWrap="true" *ngIf="questionIndex"></Label>
+    <Label verticalAlignment="top" paddingLeft="10" text="{{questionIndex}} . " textWrap="true"
+        *ngIf="questionIndex"></Label>
     <WebView width="100%" *ngIf="!isAndroid" [src]="question?.questionText" ios:height="{{questionHeight}}"
         (loadFinished)="onLoadFinished($event)" [isUserInteractionEnabled]="false"></WebView>
 
-    <WebView width="100%" *ngIf="isAndroid" [src]="question?.questionText" [isUserInteractionEnabled]="false" minHeight="50"></WebView>
+    <WebView width="100%" *ngIf="isAndroid" [src]="question?.questionText" [isUserInteractionEnabled]="false"
+        minHeight="50"></WebView>
 </StackLayout>
 
 <ng-template #renderView>
-    <StackLayout orientation="horizontal">
-        <Label verticalAlignment="top" paddingLeft="10" text="{{questionIndex}} . " textWrap="true" *ngIf="questionIndex"></Label>
-        <Label text="{{question?.questionText}}" color="#263238" class="Roboto-Bold" fontSize="17" fontWeight="700"
+    <StackLayout orientation="horizontal" horizontalAlignment="center" class="{{theme}}-theme">
+        <!-- <Label class="text-color" horizontalAlignment="left" verticalAlignment="top" paddingLeft="10"
+            text="{{questionIndex}} . " textWrap="true" *ngIf="questionIndex"></Label> -->
+        <Label textAlignment="center" lineHeight="10" class="text-color" text="{{question?.questionText}}" fontSize="17" fontWeight="700"
             textWrap="true"></Label>
     </StackLayout>
-
 </ng-template>

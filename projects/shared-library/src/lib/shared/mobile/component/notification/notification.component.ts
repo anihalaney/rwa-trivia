@@ -22,21 +22,21 @@ export class NotificationComponent implements OnInit, OnDestroy {
   notifications = [];
   userCardType = userCardType;
   constructor(public store: Store<CoreState>) {
-    this.categoryDict$ = store.select(categoryDictionary);
+  }
+
+  ngOnInit() {
+    this.categoryDict$ = this.store.select(categoryDictionary);
     this.subscriptions.push(this.categoryDict$.subscribe(categoryDict => this.categoryDict = categoryDict));
     this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.user)).subscribe(user => {
       this.user = user;
     }));
-    this.subscriptions.push(combineLatest(store.select(coreState).pipe(select(s => s.friendInvitations)),
-      store.select(coreState).pipe(select(s => s.gameInvites))).subscribe((notify: any) => {
+    this.subscriptions.push(combineLatest(this.store.select(coreState).pipe(select(s => s.friendInvitations)),
+      this.store.select(coreState).pipe(select(s => s.gameInvites))).subscribe((notify: any) => {
         this.notifications = notify[0].concat(notify[1]);
         this.notifications.sort((a, b) => {
           return b.createdAt - a.createdAt;
         });
       }));
-  }
-
-  ngOnInit() {
   }
 
   ngOnDestroy(): void {

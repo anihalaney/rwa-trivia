@@ -45,6 +45,8 @@ export class AppComponent implements OnInit, OnDestroy {
   applicationSettings: ApplicationSettings;
   isDrawerOpenOrClosed = '';
   showBottomBar: Boolean = true;
+  currentRouteUrl: string;
+
   constructor(private store: Store<AppState>,
     private navigationService: NavigationService,
     private ngZone: NgZone,
@@ -58,18 +60,6 @@ export class AppComponent implements OnInit, OnDestroy {
     private _modalService: ModalDialogService,
     private _vcRef: ViewContainerRef) {
 
-    this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.newGameId), filter(g => g !== '')).subscribe(gameObj => {
-      // console.log('gameObj', gameObj);
-      this.routerExtension.navigate(['/game-play', gameObj['gameId']], { clearHistory: true });
-      this.store.dispatch(new gamePlayActions.ResetCurrentQuestion());
-      this.cd.markForCheck();
-    }));
-
-    this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe(status => {
-      if (status === 'MAKE FRIEND SUCCESS') {
-        this.routerExtension.navigate(['user/my/invite-friends']);
-      }
-    }));
     this.handleBackPress();
   }
 
@@ -107,10 +97,25 @@ export class AppComponent implements OnInit, OnDestroy {
       console.error(args.error);
     });
 
+
+    this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.newGameId), filter(g => g !== '')).subscribe(gameObj => {
+      // console.log('gameObj', gameObj);
+      this.routerExtension.navigate(['/game-play', gameObj['gameId']], { clearHistory: true });
+      this.store.dispatch(new gamePlayActions.ResetCurrentQuestion());
+      this.cd.markForCheck();
+    }));
+
+    this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe(status => {
+      if (status === 'MAKE FRIEND SUCCESS') {
+        this.routerExtension.navigate(['user/my/invite-friends']);
+      }
+    }));
+
     this.subscriptions.push(this.router.events.subscribe((evt) => {
       if (!(evt instanceof NavigationEnd)) {
         return;
       }
+      this.currentRouteUrl = evt.url;
       this.showBottomBar = this.hideBottomBarForSelectedRoutes(evt.url);
       switch (evt.urlAfterRedirects) {
         case '/login':
@@ -125,7 +130,7 @@ export class AppComponent implements OnInit, OnDestroy {
         case '/dashboard':
           this.utils.setScreenNameInFirebaseAnalytics(FirebaseScreenNameConstants.DASHBOARD);
           break;
-        case '/stats/leaderboard/':
+        case '/dashboard/leaderboard/':
           this.utils.setScreenNameInFirebaseAnalytics(FirebaseScreenNameConstants.LEADERBOARD);
           break;
         case '/game-play':
@@ -160,7 +165,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   hideBottomBarForSelectedRoutes(url) {
     if (url === '/signup-extra-info' || url === '/select-category-tag' || url === '/first-question' ||
-      (!url.includes('game-play/game-options') && (url.includes('game-play')))) {
+      (!url.includes('game-play/game-options') && (url.includes('game-play'))) || url === '/login') {
       return false;
     } else {
       return true;
@@ -248,8 +253,12 @@ export class AppComponent implements OnInit, OnDestroy {
     android.off(AndroidApplication.activityBackPressedEvent);
     android.on(AndroidApplication.activityBackPressedEvent, (data: AndroidActivityBackPressedEventData) => {
       console.log(`can go back value${this.navigationService.canGoBack()}`);
-      data.cancel = this.navigationService.canGoBack();
-      this.ngZone.run(() => this.navigationService.back());
+      if (this.currentRouteUrl === '/dashboard') {
+        data.cancel = false;
+      } else {
+        data.cancel = true;
+        this.ngZone.run(() => this.navigationService.back());
+      }
     }, this);
   }
 }

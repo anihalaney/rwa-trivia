@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnDestroy, ChangeDetectorRef, Input } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { User, GameStatus, Game } from 'shared-library/shared/model';
 import { coreState, CoreState } from 'shared-library/core/store';
@@ -10,6 +10,7 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class RecentGames implements OnDestroy {
 
+  @Input() hideActionbar;
   user: User;
   recentGames: Game[] = [];
   startIndex = 0;
