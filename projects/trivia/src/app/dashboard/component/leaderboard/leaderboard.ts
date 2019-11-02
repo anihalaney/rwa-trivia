@@ -109,6 +109,9 @@ export class Leaderboard implements OnDestroy {
               this.lbsUsersSliceLastIndex = 3;
             }
             this.selectedCatList = this.leaderBoardStatDict[1];
+            this.selectedCatList.map((data, index) => {
+                data.index = index;
+            });
             this.cd.markForCheck();
           }
         }
