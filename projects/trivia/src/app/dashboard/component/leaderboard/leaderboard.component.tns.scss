@@ -1,0 +1,75 @@
+.dropdown-android {
+    justify-content: space-between;
+    margin: 7 0 7 0;
+    border-width: 1;
+    border-color: #dddddd;
+    border-radius: 5;
+    color: #212121;
+    font-weight: 500;
+    padding-left:25;
+}
+
+.dropdown-ios{
+    justify-content: space-between;
+    padding: 12 15 12 15;
+    margin: 7 0 7 0;
+    border-width: 1;
+    border-color: #dddddd;
+    border-radius: 5; 
+}
+
+.filter-dropdown-mobile {
+    font-size: 17px;
+    border-color: transparent;
+    border-width: 5;
+    width: 100%;
+    padding: 5 0;
+}
+
+.dropdown-arrow {
+    margin: 5 5 0 0;
+}
+
+.profile-no {
+    color: rgb(96, 125, 139);
+    font-size: 16;
+    margin-top: 10;
+    // margin-right: 10;
+}
+
+.login-user-hightlight {
+  background-color: #f2f2f2;
+  border-radius:2;
+  Label{
+    padding-left: 5;
+  }
+}
+
+.question-answered{
+    border-bottom-width: 1;
+    border-bottom-color: #dddddd;
+}
+
+.score{
+    font-weight: 500;
+    font-size: 16;
+    margin: 0 12 0 0;
+    letter-spacing: 0.05;
+    color: #212121;
+}
+
+.dropdown-arrow {
+    margin: 5 5 0 0;
+    margin: 17 17 0 0;
+}
+
+.table-titles {
+    Label {
+        color:#B7B7B7;
+        font-size: 16;
+    }
+}
+
+.data-div {
+    padding: 15 0 0 0;
+}
