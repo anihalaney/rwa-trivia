@@ -1,5 +1,5 @@
-import { Component, Input, OnInit, OnDestroy, SimpleChanges, OnChanges, ChangeDetectionStrategy, ChangeDetectorRef, Output, EventEmitter } from '@angular/core';
-import { User, FirebaseScreenNameConstants } from 'shared-library/shared/model';
+import { Component, Input, OnInit, OnDestroy, SimpleChanges, OnChanges, ChangeDetectionStrategy, ChangeDetectorRef, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
+import { User, FirebaseScreenNameConstants, Account } from 'shared-library/shared/model';
 import { Utils } from 'shared-library/core/services';
 import { GameQuestion } from './game-question';
 import { Store, select } from '@ngrx/store';
@@ -28,7 +28,6 @@ export class GameQuestionComponent extends GameQuestion implements OnInit, OnDes
   minutes = 0.62;
   public progressValue: number;
   stopProcessBar;
-  columns;
   doPlay = true;
   actionText: string;
 
@@ -37,7 +36,7 @@ export class GameQuestionComponent extends GameQuestion implements OnInit, OnDes
   processTimeInterval: number;
   elapsedTime: number;
   timerSub: Subscription;
-
+  account: Account;
   constructor(private utils: Utils, public store: Store<GamePlayState>, private cd: ChangeDetectorRef) {
     super();
     this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
@@ -47,7 +46,9 @@ export class GameQuestionComponent extends GameQuestion implements OnInit, OnDes
   ngOnInit() {
     this.progressValue = 0;
     this.photoUrl = this.utils.getImageUrl(this.user, 70, 60, '70X60');
-
+    this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.account)).subscribe(account => {
+      this.account = account;
+    }));
     this.cd.markForCheck();
   }
 

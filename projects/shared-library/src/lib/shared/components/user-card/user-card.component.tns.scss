@@ -3,6 +3,9 @@
   right: 0;
 }
 
+.friend-check{
+  color: #9c9c9c;
+}
 .disp-name{
   font-size: 16;
   color: #3b5998;
@@ -21,10 +24,227 @@
   margin-left: 10;
   margin-right: 15;
   vertical-align: center;
+  background-color:gray;
 }
 
 
 .home-btn {
   color: #3b5998;
 }
+.leaderboard-user-name{
+  color: #3b5998;
+}
 
+.total-bits{
+  color: #212121;
+  font-size: 14;
+  font-weight: 400;
+}
+.play-now-container {
+   color: rgb(33, 33, 33);
+   font-weight: bold;
+   font-size: 24;
+   margin-bottom: 18px;
+   justify-content: space-between;
+  width:100%
+}
+
+.back-icon{
+  margin: 0 30 0 0;
+  width:18; 
+  height:18;
+}
+
+.score-text{
+  font-weight: 400;
+  font-size: 14;
+}
+
+.score-container{
+  margin-left: 16;
+  vertical-align: middle;
+  align-items: center;
+  Image{
+    width: 28;
+    height: 28;
+  }
+}
+
+.background-score{
+  background-color: #f9f9f9;
+  padding: 5;
+  border-radius: 30;
+  margin:0 10 0 0;
+  orientation:horizontal;
+  horizontal-alignment:left;
+  Image{
+    height:22;
+    width:22;
+    margin-left:2;
+    vertical-alignment:center;
+    padding:20;
+    // border-radius:25;
+  }
+} 
+
+.game-progress{
+  background-color:  #f9f9f9;
+  color: rgb(255, 193, 7);
+  height: 20;
+}
+
+.game-round-info-container-single-player {
+  background-color:  #f9f9f9;
+  height:24;
+  border-radius:30;
+  .game-round-info {
+    height:28;
+    border-radius:30 30 30 30;
+    horizontal-alignment:left;
+    .main-title{
+      fontSize:16;
+      color:#616161;
+    }
+  }
+}
+
+.game-round-info {
+  background-color: rgb(76, 175, 80);
+}
+
+.main-game-play-container{
+  margin-right: 10; 
+  .image-container{
+    vertical-alignment:center;
+    margin-right:10;
+    border-radius:50;
+    padding: 2 2 0 2;
+    height:46;
+    width:46;
+    Image{
+      stretch: aspectFill;
+      height:44;
+      width:44;
+      margin:0 10 0 10;
+      vertical-alignment:center;
+      border-radius:50;
+      background-color: gray;
+    }
+  }
+
+  .background-score{
+    margin-top:10;
+  }
+}
+
+.main-title{
+  .first-player{
+    height:10;
+    top:38;
+    left:32;
+    width:10;
+    border-radius:22;
+    background-color:#71b02f;
+    font-size:16;
+    color:#000000;
+  }
+}
+
+.first-player{
+  font-size:16;
+  color:#000000;
+  font-weight: bold;
+}
+
+.second-player-game-play-container{
+  margin-left:10;
+  .image-container{
+    vertical-alignment:center;
+    margin-right:10;
+    border-radius:50; 
+    padding-top:2;
+    padding-left:2;
+    padding-right:2;
+    height:46;
+    width:46;
+    orientation:horizontal;
+    Image{
+      background-color:gray;
+      stretch:aspectFill;
+      height:44;
+      width:44;
+      vertical-alignment:center;
+      border-radius:50;
+    }
+    .online-status{
+      height:10;
+      top:38;
+      left:35;
+      width:10;
+      border-radius:22;
+      background-color:#71b02f;
+    }
+  }
+  .main-title{
+    font-size:18;
+    color:#3b5998;
+  }
+
+
+  .background-score{
+    margin-top:10;
+  }
+
+}
+.second-player-title {
+    font-size:16;
+    color:#3b5998;
+    font-weight: bold;
+}
+
+.game-round-info-container-two-player{
+  margin:10 10 0 20;
+  width:50%;
+  height:28;
+  border-radius:30; 
+  background-color:  #f9f9f9;
+  .game-round-info{
+    height:24;
+    border-radius:30 30 30 30;
+    horizontal-alignment:left;
+    .main-title {
+      fontSize:16;
+      color:#616161; 
+    }
+  }
+
+  .round-info{
+    horizontal-alignment:center;
+    verticalAlignment:center;
+    Label{
+      font-size:16;
+      color:black;
+      horizontal-alignment:center;
+      verticalAlignment:center;
+    }
+  }
+}
+
+.image-container{
+  height:70;
+  width:70;
+  border: 0;
+}
+
+.username {
+  font-size: 22;
+}
+
+.user-name {
+  font-size: 14;
+  margin-top: 10;
+}
+.small-image-container{
+  height: 25;
+  width: 25;
+}

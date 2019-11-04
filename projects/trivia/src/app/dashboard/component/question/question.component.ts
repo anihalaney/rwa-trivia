@@ -22,7 +22,7 @@ export class QuestionComponent implements OnDestroy {
 
   @Input() userDict: { [key: string]: User };
   @Input() user: User;
-
+  @Input() theme: string;
   @Output() answerClicked = new EventEmitter<number>();
   @Output() continueClicked = new EventEmitter();
 

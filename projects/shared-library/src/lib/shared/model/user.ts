@@ -39,6 +39,7 @@ export class User {
   isFriend?: boolean;
   phoneNumber?: string;
   totalFriends?: number;
+  bits?: number;
 
   constructor(authState?: firebase.User & { name: string }) {
     this.totalFriends = 0;
