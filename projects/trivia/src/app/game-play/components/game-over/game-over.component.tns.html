@@ -9,9 +9,9 @@
     <GridLayout *ngIf="user" height="100%">
         <ScrollView>
             <StackLayout>
-                <StackLayout backgroundColor="#ffffff">
-                    <StackLayout (onloaded)="stackLoaded($event)">
-                        <StackLayout>
+                <StackLayout>
+                    <StackLayout backgroundColor="#ffffff" (onloaded)="stackLoaded($event)">
+                        <StackLayout backgroundColor="#ffffff">
                             <!-- <Label class="category" horizontalAlignment="center" text="{{categoryName}}"
                             textWrap="true"></Label>
                         <Label *ngIf="game.gameOptions.playerMode == PlayerMode.Opponent" class="round"
@@ -45,8 +45,8 @@
                                         horizontalAlignment="center">
                                         <Image src="~/assets/images/win.png" width="80" height="80" marginBottom="10">
                                         </Image>
-                                        <Label class="gamestatus-username Roboto-Bold" color ="#F44336" text="{{playerUserName}} Lost"
-                                            textWrap="true" marginLeft="10"></Label>
+                                        <Label class="gamestatus-username Roboto-Bold" color="#F44336"
+                                            text="{{playerUserName}} Lost" textWrap="true" marginLeft="10"></Label>
                                     </StackLayout>
 
                                     <StackLayout *ngIf="
@@ -71,8 +71,9 @@
 
                                 </StackLayout>
 
-                                <Label *ngIf="game.stats[user.userId]?.score >= 5" class="roundandscore" horizontalAlignment="center"
-                                    text="You have collected all the badges" textWrap="true"></Label>
+                                <Label class="roundandscore" horizontalAlignment="center"
+                                    text="{{playerUserName}} {{playerUserName === 'You' ? 'have' : 'has'}} collected {{game.stats[user.userId]?.score >= 5 ? 'all the badges':''}}"
+                                    textWrap="true"></Label>
                                 <FlexboxLayout class="earnedsymbolsStack" horizontalAlignment="center">
                                     <Image
                                         src="{{game.stats[user.userId]?.score>=1 ? '~/assets/images/score1.png' : '~/assets/images/score0.png'}}"
@@ -99,9 +100,8 @@
 
                             <GridLayout rows="*,*" columns="*,auto,*" horizontalAlignment="center"
                                 *ngIf="game.gameOptions.playerMode == PlayerMode.Opponent">
-                                <StackLayout row="0" col="0" class="game-continue">
-                                    <app-user-card [userId]="user.userId"
-                                        [otherInfo]="{'isWinner': (game.gameOptions?.playerMode != PlayerMode.Single && 
+                                <StackLayout marginTop="10" row="0" col="0" class="game-continue">
+                                    <app-user-card [userId]="user.userId" [otherInfo]="{'isWinner': (game.gameOptions?.playerMode != PlayerMode.Single && 
                                         game.round < 16 &&
                                         game.stats[user.userId]?.score > game.stats[otherUserId]?.score)
                                        ||
@@ -139,9 +139,8 @@
                                     textWrap="true">
                                 </Label>
 
-                                <StackLayout row="0" col="2" class="game-continue">
-                                    <app-user-card [userId]="otherUserId"
-                                        [otherInfo]="{'isWinner': (game.gameOptions?.playerMode != PlayerMode.Single &&
+                                <StackLayout marginTop="10" row="0" col="2" class="game-continue">
+                                    <app-user-card [userId]="otherUserId" [otherInfo]="{'isWinner': (game.gameOptions?.playerMode != PlayerMode.Single &&
                                         game.round < 16 &&
                                         game.stats[user.userId]?.score < game.stats[otherUserId]?.score)
                                        ||
@@ -197,7 +196,7 @@
                                 (game.gameOptions?.playerMode == PlayerMode.Single &&
                                  game.playerQnAs?.length - game.stats[user.userId]?.score === 4)"
                                         orientation="horizontal" margin="15" horizontalAlignment="center">
-                                        <Label class="gamestatus-username-color Roboto-Bold" color ="#F44336"
+                                        <Label class="gamestatus-username-color Roboto-Bold" color="#F44336"
                                             text="{{playerUserName}} Lost" textWrap="true" marginLeft="10"
                                             horizontalAlignment="center"></Label>
                                     </StackLayout>
@@ -225,7 +224,8 @@
                                 horizontalAlignment="center" marginTop="10">
                                 <GridLayout horizontalAlignment="center" row="0" col="0">
                                     <Label class="bits-n-bites-lable" verticalAlignment="center" marginTop="10"
-                                        text="You have earned" textWrap="true"> </Label>
+                                        text="{{playerUserName}} {{playerUserName === 'You' ? 'have' : 'has'}} earned"
+                                        textWrap="true"> </Label>
                                 </GridLayout>
                                 <GridLayout rows="auto" columns="auto,auto,auto,auto" marginTop="12" marginBottom="10"
                                     row="1" col="0" verticalAlignment="center">
@@ -252,29 +252,27 @@
                                 [text]="game.gameOptions?.playerMode == PlayerMode.Single ? 'Play Again' : 'Invite to play again'"
                                 (rippleTap)="reMatchGame()" stlRippleEffect></label>
 
-                            <label row="1" col="0" class="navigate-button Hind-Medium" text="Invite as Friend"
+                            <label row="1" col="0" class="navigate-button-text Hind-Medium" text="GO TO HOME"
+                                (rippleTap)="gotoDashboard()" stlRippleEffect></label>
+
+                            <label row="2" col="0" class="navigate-button Hind-Medium" text="Game Summary"
+                                (rippleTap)="bindQuestions();showQuesAndAnswer=!showQuesAndAnswer;"
+                                stlRippleEffect></label>
+
+                            <label row="3" col="0" class="navigate-button Hind-Medium" text="Share with your friends"
+                                (rippleTap)="screenshot()" stlRippleEffect></label>
+
+                            <label row="4" col="0" class="navigate-button Hind-Medium" text="Invite as Friend"
                                 (rippleTap)="inviteAsFriend()" isEnabled="{{!disableFriendInviteBtn}}"
                                 *ngIf="(game.gameOptions.opponentType == opponentType.Random || game.gameOptions.isChallenge ) && otherUserInfo?.email && userInvitations &&  userInvitations[otherUserInfo?.email]?.status === 'add'"
                                 stlRippleEffect></label>
 
-                            <label row="1" col="0" class="navigate-button-green Hind-Medium" text="Friend Request Sent"
+                            <label row="4" col="0" class="navigate-button-green Hind-Medium" text="Friend Request Sent"
                                 isEnabled="{{!disableFriendInviteBtn}}"
-                                *ngIf="(game.gameOptions.opponentType == opponentType.Random || game.gameOptions.isChallenge ) && otherUserInfo?.email && userInvitations && userInvitations[otherUserInfo?.email]?.status === 'pending'"
-                                ></label>
+                                *ngIf="(game.gameOptions.opponentType == opponentType.Random || game.gameOptions.isChallenge ) && otherUserInfo?.email && userInvitations && userInvitations[otherUserInfo?.email]?.status === 'pending'"></label>
 
-                            <label row="1" col="0" class="navigate-button-grey Hind-Medium" text="Friends"
-                                *ngIf="(game.gameOptions.opponentType == opponentType.Random || game.gameOptions.isChallenge ) && otherUserInfo?.email  && userInvitations && userInvitations[otherUserInfo?.email]?.status === 'approved'"
-                                ></label>
-
-                            <label row="2" col="0" class="navigate-button-text Hind-Medium" text="GO TO HOME"
-                                (rippleTap)="gotoDashboard()" stlRippleEffect></label>
-
-                            <label row="3" col="0" class="navigate-button Hind-Medium" text="Game Summary"
-                                (rippleTap)="bindQuestions();showQuesAndAnswer=!showQuesAndAnswer;"
-                                stlRippleEffect></label>
-
-                            <label row="4" col="0" class="navigate-button Hind-Medium" text="Share with your friends"
-                                (rippleTap)="screenshot()" stlRippleEffect></label>
+                            <label row="4" col="0" class="navigate-button-grey Hind-Medium" text="Friends"
+                                *ngIf="(game.gameOptions.opponentType == opponentType.Random || game.gameOptions.isChallenge ) && otherUserInfo?.email  && userInvitations && userInvitations[otherUserInfo?.email]?.status === 'approved'"></label>
                         </GridLayout>
                     </StackLayout>
                 </StackLayout>
