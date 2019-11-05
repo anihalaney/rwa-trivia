@@ -1,5 +1,5 @@
 <FlexboxLayout class="bottom_container">
-    <FlexboxLayout height="20" class="bottom_container-box" [class.activeMenu]="activeMenu === 'play'"
+    <FlexboxLayout class="bottom_container-box" [class.activeMenu]="activeMenu === 'play'"
         (tap)="bottomBarClick('play')"  >
         <Label text="&#xe931;"  [ngClass]="{'animate-ease-out': prevMenu === 'play', 'animate-ease-in': animateMenu === 'play' && animateMenu === 'play'}" fontSize="20" class="ico icon-home"></Label>
         <Label text="Home" [ngClass]="{'animate-ease-out': prevMenu === 'play', 'animate-ease-in': animateMenu === 'play', 'hide': activeMenu !== 'play' && animateMenu !='' && isDrawerOpenOrClosed !== 'drawerOpened', show: animateMenu === 'play'}"  fontSize="14" textWrap="true"></Label>

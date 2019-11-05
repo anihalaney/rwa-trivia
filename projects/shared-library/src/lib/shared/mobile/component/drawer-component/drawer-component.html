@@ -12,7 +12,7 @@
                             android:fontSize="18" textWrap="true"></Label>
                     </FlexboxLayout>
                     <FlexboxLayout *ngIf="authProvider.isAuthenticated" class="padding-label" stlRippleEffect
-                        stlBackgroundColor="#10347f" stlBackgroundColorAfter="transparent" (rippleTap)="recentGames()">
+                        stlBackgroundColor="#10347f" stlBackgroundColorAfter="transparent" (rippleTap)="navigateToRecentGames()">
                         <Label text="Recently Completed Games"
                             [ngStyle]="{color: (activeMenu === 'Recently Completed Games' ? '#077ad6' : '#3b5998')}"
                             android:fontSize="18" textWrap="true"></Label>
