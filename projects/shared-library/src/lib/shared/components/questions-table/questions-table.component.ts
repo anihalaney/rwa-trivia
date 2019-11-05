@@ -69,7 +69,7 @@ export class QuestionsTableComponent implements OnInit, OnChanges, AfterViewInit
 
 
   viewReasonArray = [];
-
+  categoryObj = {};
   constructor(
     private fb: FormBuilder,
     private cd: ChangeDetectorRef) {
@@ -111,6 +111,14 @@ export class QuestionsTableComponent implements OnInit, OnChanges, AfterViewInit
       (changes['questions'].previousValue) ? this.setPagination() : '';
     }
 
+    if (changes['categoryDictionary'] && changes['categoryDictionary'].currentValue !== changes['categoryDictionary'].previousValue &&
+        this.categoryDictionary ) {
+        for (const key in this.categoryDictionary) {
+          if (this.categoryDictionary.hasOwnProperty(key)) {
+            this.categoryObj[this.categoryDictionary[key].id] = this.categoryDictionary[key].categoryName;
+          }
+        }
+    }
 
   }
 

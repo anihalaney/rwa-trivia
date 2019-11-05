@@ -83,7 +83,7 @@
                 <div class="question-text ">Category :</div>
                 <div class="answer-text">
                  <span *ngFor="let id of row?.categoryIds">
-                    {{categoriesObs && categoriesObs[id] && categoriesObs[id]?.categoryName ? categoriesObs[id]?.categoryName : ''}}
+                    {{categoryObj && categoryObj[id] ? categoryObj[id] : ''}}
                   </span>
                 </div>
               </div>
