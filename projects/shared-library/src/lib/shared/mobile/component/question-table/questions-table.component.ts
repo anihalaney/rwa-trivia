@@ -4,7 +4,6 @@ import {
 import { Question, QuestionStatus, Category, User, Answer } from '../../../../shared/model';
 import { Observable } from 'rxjs';
 
-
 @Component({
   selector: 'question-table',
   templateUrl: './questions-table.component.html',
@@ -14,7 +13,6 @@ import { Observable } from 'rxjs';
 export class QuestionsTableComponent implements OnInit {
 
   QuestionStatusTexts = ['', '', '&#xf00c;', '', '&#xf251;', '&#xf00d;', '&#xf044;'];
-
   @Input() questions: Array<Question> = [];
   @Input() categoryDictionary: { [key: number]: Category };
   @Input() userDict: { [key: string]: User };
@@ -25,8 +23,7 @@ export class QuestionsTableComponent implements OnInit {
   @Output() displayReason: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() selectedQuestion: EventEmitter<Question> = new EventEmitter<Question>();
   @Output() editQuestion: EventEmitter<Question> = new EventEmitter<Question>();
-
-
+  showQuestionId = '';
   constructor(private cd: ChangeDetectorRef) {
   }
 
@@ -34,6 +31,9 @@ export class QuestionsTableComponent implements OnInit {
     this.cd.markForCheck();
   }
 
+  onSelect(args) {
+    this.showQuestionId = args;
+  }
 
   getDisplayStatus(status: number): string {
     return QuestionStatus[status];
