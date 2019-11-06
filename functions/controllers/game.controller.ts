@@ -33,13 +33,20 @@ export class GameController {
             // Get App Settings
             const appSetting = await AppSettings.Instance.getAppSettings();
 
+            const account: Account = await AccountService.getAccountById(userId);
             if (appSetting.lives.enable) {
                 // Get Account Info
-                const account: Account = await AccountService.getAccountById(userId);
-                if (!account.isFirstGame) {
-                    const updateBits = await AccountService.updateBits(userId, appSetting.game_question_bits);
-                    account.isFirstGame = true;
+                if (!account.signUpQuestionAnswered) {
+                    await AccountService.updateBits(userId, appSetting.game_question_bits);
+                    account.signUpQuestionAnswered = true;
                     await AccountService.updateAccountData(account);
+                } else {
+                    // Decrement lives from user account
+                    AccountService.decreaseLife(userId);
+                    // Decrement Second Player's life
+                    if (gameOptions.friendId) {
+                        AccountService.decreaseLife(gameOptions.friendId);
+                    }
                 }
                 // if lives is less then or equal to 0 then send with error
                 if (account.lives <= 0) {
@@ -48,15 +55,6 @@ export class GameController {
             }
 
             const gameId = await GameMechanics.createNewGame(userId, gameOptions);
-
-            if (appSetting.lives.enable) {
-                // Decrement lives from user account
-                AccountService.decreaseLife(userId);
-                // Decrement Second Player's life
-                if (gameOptions.friendId) {
-                    AccountService.decreaseLife(gameOptions.friendId);
-                }
-            }
             Utils.sendResponse(res, interceptorConstants.SUCCESS, { gameId: gameId });
         } catch (error) {
             Utils.sendError(res, error);
