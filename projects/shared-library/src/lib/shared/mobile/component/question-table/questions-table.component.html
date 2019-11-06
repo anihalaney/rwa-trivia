@@ -1,17 +1,19 @@
-<GridLayout tkExampleTitle tkToggleNavButton>
+<GridLayout rows="*" cols="*" tkExampleTitle tkToggleNavButton>
     <RadListView [items]="questions">
         <ng-template tkListItemTemplate let-question="item">
-            <StackLayout class="question-container">
-                <StackLayout>
+            <GridLayout rows="auto,auto" columns="*" height="100%" class="question-container">
+                <StackLayout row="0" col="0"  backgroundColor="#ff0000">
                     <Label class="question-text"
                         text="Which of the following WebDriver commands is used to check the presence of a web element?"
                         textWrap="true"></Label>
                     <FlexboxLayout justifyContent="space-between" alignItems="center">
                         <Label class="publish-question" text="Published on 2nd Aug, 2019" textWrap="true"></Label>
-                        <Label *ngIf="showQuestionId === ''" text="&#xf078;" (tap)="onSelect(question.id)" class="fas" fontSize="18" padding="5" color="#212121"></Label>
+                        <Label *ngIf="showQuestionId === ''" text="&#xf078;" (tap)="onSelect(question.id)" class="fas"
+                            fontSize="18" padding="5" color="#212121"></Label>
                     </FlexboxLayout>
                 </StackLayout>
-                <StackLayout class="hide" [ngClass]="{'show animate-ease-out': showQuestionId == question.id}">
+                <!-- [ngClass]="{'show animate-ease-out': showQuestionId == question.id}" class="hide" -->
+                <StackLayout row="1" col="0" *ngIf="showQuestionId == question.id" backgroundColor="#ff6600">
                     <StackLayout class="question-box">
                         <Label text="Web Technology"></Label>
                     </StackLayout>
@@ -54,11 +56,12 @@
                             </GridLayout>
                         </StackLayout>
                         <StackLayout row="0" col="2" verticalAlignment="bottom">
-                            <Label text="&#xf077;" (tap)="showQuestionId = ''" padding="5" class="fas" fontSize="18" color="#212121"></Label>
+                            <Label text="&#xf077;" (tap)="showQuestionId = ''" padding="5" class="fas" fontSize="18"
+                                color="#212121"></Label>
                         </StackLayout>
                     </GridLayout>
                 </StackLayout>
-            </StackLayout>
+            </GridLayout>
         </ng-template>
     </RadListView>
 </GridLayout>
