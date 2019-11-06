@@ -1,27 +1,103 @@
-.status-layout>Button {
-    z-index: 0;
+/* New */
+
+.question-container:first-child{
+    margin: 20 20 20 10;
+    padding: 20;
+    border-width: 1;
+    border-color: #e4e4e4;
+    border-radius: 10;
 }
 
-.pending-btn {
-    background-color: #fafafa;
-    color: #574b4c;
+.question-container{
+    margin: 10 20;
+    padding: 20;
+    border-width: 1;
+    border-color: #e4e4e4;
+    border-radius: 10;
 }
 
-.required-change-btn {
-    background-color: #fffde2;
-    color: #aea200;
+.question-text{
+    font-weight: 600;
+    font-size: 16;
+    color: #000000;
 }
 
-.reject-btn {
-    background-color: #fbdad9;
-    color: #f05959;
+.publish-question{
+    font-size: 13;
+    color: #212121;
+    margin: 10 0;
 }
 
-.approve-btn {
-    background-color: #e2f0d6;
-    color: #7cb645;
+.question-box {
+    border-width: 1;
+    border-color:#a5a5a5;
+    border-radius: 5;
+    padding:10;
+    text-align: left;
+    margin: 10 0;
 }
 
-.text-center{
-    horizontal-align: center;
+.question-box-solid {
+    background-color: #9ccc65;
+    border-width: 1;
+    border-color:#a5a5a5;
+    border-radius: 5;
+    padding:10;
+    text-align: left;
+    margin: 10 0;
 }
+
+.question-stat{
+    justify-content: space-between;
+}
+
+.stat-tag{
+    color: #283b66;
+    font-size: 13;
+    margin-right: 10;
+    text-align: left;
+}
+
+.stat-value{
+    color: #212121;
+    font-size: 13;
+    text-align: left;
+}
+
+.animate-ease-in {
+    animation-name: animate-in;
+    animation-duration: 1.0;
+    animation-timing-function: ease-in;
+    animation-fill-mode: forwards;
+  }
+  @keyframes animate-in {
+    from { transform: translate(0, 9); }
+    to { transform: translate(0, 0); }
+  }
+  
+  
+  .animate-ease-out {
+    animation-name: animate-out;
+    animation-duration: 1s;
+    animation-timing-function: ease-out;
+    animation-fill-mode: forwards;
+  }
+  @keyframes animate-out {
+    from { transform: translate(0, -120); }
+    to { transform: translate(0, 0); }
+  }
+
+.hide{
+    visibility: collapse;
+}
+
+.show{
+    visibility: visible;
+    animation-name: opacity;
+    animation-duration: 0.7;
+  }
+  @keyframes opacity {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
