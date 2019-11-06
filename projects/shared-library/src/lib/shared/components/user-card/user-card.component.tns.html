@@ -16,27 +16,30 @@
       horizontalAlignment="center" row="1" col="0"></Label>
   </GridLayout>
 </ng-container>
-
+<!-- leader -->
 <ng-container *ngIf="userCardType.USER_IMAGE_NAME_LOCATION_HORIZONTAL === type">
   <GridLayout rows="*" columns="auto,*">
-    <StackLayout row="0" col="0" marginLeft="10" verticalAlignment="center" marginRight="10" borderRadius="50"
-      borderColor="#3b5998" borderWidth="1" paddingTop="2" paddingLeft="2" paddingRight="2" class="image-container"
-      height="57" width="57">
-      <Image [stlOpenUserProfile]="{userId: user?.userId, redirectTo: loggedInUserId === user?.userId ? 'userProfile': 'otherUserProfile'}"
-        [src]="getImageUrl(user,44,40)" backgroundColor="gray" stretch="aspectFill" stretch="aspectFill" height="55"
-        width="55" marginLeft="10" verticalAlignment="center" marginRight="10" borderRadius="50"></Image>
-    </StackLayout>
-    <AbsoluteLayout *ngIf="user?.online" horizontalAlignment="center" [stlOpenUserProfile]="{userId: user?.userId, redirectTo: loggedInUserId === user?.userId ? 'userProfile': 'otherUserProfile'}">
+    <Image
+      [stlOpenUserProfile]="{userId: user?.userId, redirectTo: loggedInUserId === user?.userId ? 'userProfile': 'otherUserProfile'}"
+      [src]="getImageUrl(user,44,40)" backgroundColor="gray" stretch="aspectFill" height="55" width="55" marginLeft="10"
+      verticalAlignment="center" marginRight="10" borderRadius="50"></Image>
+    <AbsoluteLayout *ngIf="user?.online" horizontalAlignment="center"
+      [stlOpenUserProfile]="{userId: user?.userId, redirectTo: loggedInUserId === user?.userId ? 'userProfile': 'otherUserProfile'}">
       <Label height="15" top="40" left="40" width="15" borderRadius="22" backgroundColor="#71b02f"></Label>
     </AbsoluteLayout>
 
     <GridLayout row="0" col="1" rows="*, *, *" columns="*" class="padding-10">
-      <Label *ngIf="user?.displayName" [text]="user?.displayName" fontSize="16" row="0" col="0" class="text-black"></Label>
-      <Label *ngIf="!user?.displayName" [text]="'unknown'" row="0" col="0" class="text-black" fontSize="16"></Label>
-      <Label *ngIf="user?.location" [text]="user?.location" row="1" col="0" class="text-gray" fontSize="14"></Label>
-      <Label *ngIf="!user?.location" [text]="'unknown'" row="1" col="0" class="text-gray" fontSize="14"></Label>
-      <Label *ngIf="user?.isFriend && loggedInUserId" text="{{ (user?.isFriend) ? user?.displayName : '' }} is your friend"
-        textWrap="true" row="2" col="0" class="text-gray" fontSize="14"> </Label>
+      <StackLayout row="0" col="0">
+        <Label *ngIf="user?.displayName" [text]="user?.displayName" fontSize="16" class="leaderboard-user-name"></Label>
+        <Label *ngIf="!user?.displayName" [text]="'unknown'" class="leaderboard-user-name" fontSize="16"></Label>
+        <Label *ngIf="user?.isFriend && loggedInUserId"
+        text="is your friend" textWrap="true" class="friend-check"
+        fontSize="14"> </Label>
+        <FlexboxLayout>
+          <Image src="~/assets/images/bits.png" marginRight="5" width="22" height="22"></Image>
+          <Label class="total-bits" text="{{user?.bits}}" fontWeight="400" textWrap="true"></Label>
+        </FlexboxLayout>
+      </StackLayout>
     </GridLayout>
   </GridLayout>
 </ng-container>
@@ -60,16 +63,16 @@
   </GridLayout>
 </ng-container>
 
-<GridLayout rows="*" columns="60, *" *ngIf="user && userCardType.USER_IMAGE_NAME_HORIZONTAL === type">
-  <Image row="0" col="0" [stlOpenUserProfile]="{userId: user.userId, redirectTo: 'otherUserProfile'}"
+<GridLayout rows="*" columns="60, *" *ngIf="userCardType.USER_IMAGE_NAME_HORIZONTAL === type">
+  <Image row="0" col="0" [stlOpenUserProfile]="{userId: user?.userId, redirectTo: 'otherUserProfile'}"
     [src]="getImageUrl(user,44,40)" stretch="aspectFill" class="friend-user-profile"></Image>
   <AbsoluteLayout *ngIf="user?.online" horizontalAlignment="center"
     [stlOpenUserProfile]="{userId: user?.userId, redirectTo: loggedInUserId === user?.userId ? 'userProfile': 'otherUserProfile'}">
     <Label height="10" top="32" left="40" width="10" borderRadius="22" backgroundColor="#71b02f"></Label>
   </AbsoluteLayout>
   <FlexboxLayout row="0" col="1" flexDirection="column" marginLeft="10">
-    <Label class="disp-name"  [text]="user?.displayName"></Label>
-    <Label class="address"  [text]="user?.location"></Label>
+    <Label class="disp-name"  [text]="user?.displayName ? user?.displayName : 'unknown'"></Label>
+    <Label class="address"  [text]="user?.location ? user?.location : 'unknown'"></Label>
   </FlexboxLayout>
 </GridLayout>
 
@@ -149,15 +152,15 @@
   <Progress row="1" colSpan="2" marginTop="5" marginBottom="5" col="0" [value]="otherInfo?.progressValue" android:backgroundColor="#f1f1f1" class="game-progress" maxValue="100"></Progress>
   <StackLayout  row="2" col="0">
     <StackLayout orientation="horizontal" horizontalAlignment="left" android:backgroundColor="#f1f1f1" class="background-score">
-      <Image src="{{otherInfo.correctCount>=1 ? '~/assets/images/score1.png' : '~/assets/images/score0.png'}}">
+      <Image src="{{otherInfo.correctCount>=1 ? 'res://badge1' : 'res://badge1inactive'}}">
       </Image>
-      <Image src="{{otherInfo.correctCount>=2 ? '~/assets/images/score2.png' : '~/assets/images/score0.png'}}">
+      <Image src="{{otherInfo.correctCount>=2 ? 'res://badge2' : 'res://badge2inactive'}}">
       </Image>
-      <Image src="{{otherInfo.correctCount>=3 ? '~/assets/images/score3.png' : '~/assets/images/score0.png'}}">
+      <Image src="{{otherInfo.correctCount>=3 ? 'res://badge3' : 'res://badge3inactive'}}">
       </Image>
-      <Image src="{{otherInfo.correctCount>=4 ? '~/assets/images/score4.png' : '~/assets/images/score0.png'}}">
+      <Image src="{{otherInfo.correctCount>=4 ? 'res://badge4' : 'res://badge4inactive'}}">
       </Image>
-      <Image src="{{otherInfo.correctCount>=5 ? '~/assets/images/score5.png' : '~/assets/images/score0.png'}}">
+      <Image src="{{otherInfo.correctCount>=5 ? 'res://badge5' : 'res://badge5inactive'}}">
       </Image>
     </StackLayout>
   </StackLayout>
@@ -194,15 +197,15 @@
       </StackLayout>
 
       <StackLayout  android:backgroundColor="#f1f1f1"  row="1" col="0" colSpan="2" class="background-score">
-        <Image src="{{otherInfo.correctCount>=1 ? '~/assets/images/score1.png' : '~/assets/images/score0.png'}}">
+        <Image src="{{otherInfo.correctCount>=1 ? 'res://badge1' : 'res://badge1inactive'}}">
         </Image>
-        <Image src="{{otherInfo.correctCount>=2 ? '~/assets/images/score2.png' : '~/assets/images/score0.png'}}">
+        <Image src="{{otherInfo.correctCount>=2 ? 'res://badge2' : 'res://badge2inactive'}}">
         </Image>
-        <Image src="{{otherInfo.correctCount>=3 ? '~/assets/images/score3.png' : '~/assets/images/score0.png'}}">
+        <Image src="{{otherInfo.correctCount>=3 ? 'res://badge3' : 'res://badge3inactive'}}">
         </Image>
-        <Image src="{{otherInfo.correctCount>=4 ? '~/assets/images/score4.png' : '~/assets/images/score0.png'}}">
+        <Image src="{{otherInfo.correctCount>=4 ? 'res://badge4' : 'res://badge4inactive'}}">
         </Image>
-        <Image src="{{otherInfo.correctCount>=5 ? '~/assets/images/score5.png' : '~/assets/images/score0.png'}}">
+        <Image src="{{otherInfo.correctCount>=5 ? 'res://badge5' : 'res://badge5inactive'}}">
         </Image>
       </StackLayout>
     </GridLayout>
@@ -220,15 +223,15 @@
           <Label text="{{otherInfo.otherPlayer?.displayName}}" class="second-player-title"></Label>
       </StackLayout>
       <StackLayout  row="1" col="0" colSpan="2"  android:backgroundColor="#f1f1f1" class="background-score">
-        <Image src="{{otherInfo.otherPlayer?.score>=1 ? '~/assets/images/score1.png' : '~/assets/images/score0.png'}}">
+        <Image src="{{otherInfo.otherPlayer?.score>=1 ? 'res://badge1' : 'res://badge1inactive'}}">
         </Image>
-        <Image src="{{otherInfo.otherPlayer?.score>=2 ? '~/assets/images/score2.png' : '~/assets/images/score0.png'}}">
+        <Image src="{{otherInfo.otherPlayer?.score>=2 ? 'res://badge2' : 'res://badge2inactive'}}">
         </Image>
-        <Image src="{{otherInfo.otherPlayer?.score>=3 ? '~/assets/images/score3.png' : '~/assets/images/score0.png'}}">
+        <Image src="{{otherInfo.otherPlayer?.score>=3 ? 'res://badge3' : 'res://badge3inactive'}}">
         </Image>
-        <Image src="{{otherInfo.otherPlayer?.score>=4 ? '~/assets/images/score4.png' : '~/assets/images/score0.png'}}">
+        <Image src="{{otherInfo.otherPlayer?.score>=4 ? 'res://badge4' : 'res://badge4inactive'}}">
         </Image>
-        <Image src="{{otherInfo.otherPlayer?.score>=5 ? '~/assets/images/score5.png' : '~/assets/images/score0.png'}}">
+        <Image src="{{otherInfo.otherPlayer?.score>=5 ? 'res://badge5' : 'res://badge5inactive'}}">
         </Image>
       </StackLayout>
     </GridLayout>

@@ -88,6 +88,15 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
     this.destroy();
   }
 
+
+  showDialog() {
+    this.dialogOpen = true;
+  }
+
+  closeDialog() {
+    this.dialogOpen = false;
+  }
+
   openDialog(question) {
     const options = {
       context: { 'question': question, 'user': this.user, 'game': this.game, 'userDict': this.userDict },

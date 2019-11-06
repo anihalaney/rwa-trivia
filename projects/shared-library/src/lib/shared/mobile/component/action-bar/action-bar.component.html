@@ -29,11 +29,11 @@
                 stlOpacity="0.5" text="&#xf142;" fontSize="22" padding="5 10" class="fa"></Label>
         </StackLayout>
 
-        <StackLayout col="2" *ngIf="((user && user!== null && !showSkipBtn && title==='Questions'))" ios:margin="3"
-            ios:marginRight="30" android:margin="10" verticalAlignment="center" horizontalAlignment="right"
-            android:width="23" ios:width="23" (tap)="navigateToSubmitQuestion()">
-            <Label stlRippleEffect stlBackgroundColor="#13284F" stlOpacity="0.5" stlBackgroundColorAfter="transparent"
-                text="&#xe905;" color="#6c63ff" fontSize="20" class="ico icon-add"></Label>
+        <StackLayout col="2" *ngIf="((user && user!== null && !showSkipBtn && title==='Questions'))" stlRippleEffect
+            ios:margin="3" ios:marginRight="30" android:margin="10" stlOpacity="0.5"
+            stlBackgroundColorAfter="transparent" verticalAlignment="center" horizontalAlignment="right"
+            android:width="23" ios:width="23" (rippleTap)="navigateToSubmitQuestion()">
+            <Image src="res://addquestion" class="icon-add" width="28" height="28"></Image>
         </StackLayout>
 
         <!-- For View All Icon in question-add-updates.component.tns.html screen -->
@@ -61,28 +61,28 @@
         <StackLayout *ngIf="((user && user!== null && !showSkipBtn && title.includes('Friends')))" col="4"
             ios:margin="3" android:margin="10" verticalAlignment="center" horizontalAlignment="right" marginRight="10"
             android:width="23" ios:width="40">
-            <Label stlRippleEffect stlBackgroundColor="#13284F" stlOpacity="0.5" stlBackgroundColorAfter="transparent"
+            <Label stlRippleEffect stlBackgroundColor="transparent" stlOpacity="0.5" stlBackgroundColorAfter="transparent"
                 color="#3b5998" text="&#xe942;" fontSize="20" class="ico icon-search"></Label>
         </StackLayout>
 
-        <StackLayout *ngIf="((user && user!== null && !showSkipBtn && title.includes('Notifications')))" col="4"
-            ios:margin="3" android:margin="10" verticalAlignment="center" horizontalAlignment="right" marginRight="10"
-            android:width="23" ios:width="40">
-            <Image stlRippleEffect stlBackgroundColor="#13284F" stlOpacity="0.5" stlBackgroundColorAfter="transparent"
-                src="~/assets/images/double_check.png" width="28" height="28"></Image>
+        <StackLayout stlRippleEffect stlOpacity="0.5" stlBackgroundColorAfter="transparent"
+            *ngIf="((user && user!== null && !showSkipBtn && title.includes('Notifications')))" col="4" stlRippleEffect
+            ios:margin="3" android:margin="10" stlOpacity="0.5" stlBackgroundColorAfter="" verticalAlignment="center"
+            horizontalAlignment="right" marginRight="10" android:width="23" ios:width="40">
+            <Image src="res://readall" width="28" height="28"></Image>
         </StackLayout>
 
         <StackLayout *ngIf="showSkipBtn" col="2" ios:margin="3" margin="10" android:margin="5"
             verticalAlignment="center" (tap)="goToDashboard()">
-            <Label stlRippleEffect stlBackgroundColor="#13284F" stlOpacity="0.5" stlBackgroundColorAfter="transparent"
-                text="Skip" class="fa" fontSize="20" margin="5"></Label>
+            <Label stlRippleEffect stlBackgroundColor="transparent" stlOpacity="0.5"
+                stlBackgroundColorAfter="transparent" text="Skip" class="fa" fontSize="20" margin="5"></Label>
         </StackLayout>
         <!-- For Add Friend Icon in invite-friends.component.tns.html screen -->
         <StackLayout *ngIf="((user && user!== null && !showSkipBtn && title.includes('Friends')))" col="3"
             (tap)="navigateToInvite()" ios:margin="3" android:margin="10" verticalAlignment="center"
             horizontalAlignment="right" marginRight="10" android:width="23" ios:width="40">
-            <Label stlRippleEffect stlBackgroundColor="#13284F" stlOpacity="0.5" stlBackgroundColorAfter="transparent"
-                text="&#xf234;" class="fas" fontSize="18"></Label>
+            <Image stlRippleEffect stlOpacity="0.5" stlBackgroundColorAfter="transparent" src="res://addfriend"
+                width="28" height="28"></Image>
         </StackLayout>
 
 

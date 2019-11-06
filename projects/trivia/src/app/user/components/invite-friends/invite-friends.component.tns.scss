@@ -1,7 +1,7 @@
 .friend-list{
   border-color:#fff #fff #E8E8E8 #fff;
   border-width: 0 0 2 0;
-  padding:15 0 15 10;
+  padding:15 0 15 0;
   font-size: 16;
 }
 
@@ -22,9 +22,9 @@
 }
 
 .h-label{
-  padding:20 0 20 10;
+  padding:20 0 20 0;
   font-size: 15px;
-  color: #212121;
+  color: #B7B7B7;
 }
 
 .fab-button1 {
@@ -34,4 +34,7 @@
 	background-color: #f50057;
 	horizontal-align: right;
 	vertical-align: bottom;
+}
+.main-container {
+  margin:0 15 0 15;
 }
