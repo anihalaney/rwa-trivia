@@ -29,11 +29,7 @@ export class RenderAnswerComponent implements OnInit, OnChanges {
     isAndroid = isAndroid;
 
     constructor(@Inject(PLATFORM_ID) private platformId: Object) {
-
-    }
-
-    ngOnInit(): void {
-        if (isPlatformBrowser(this.platformId)) {
+        if (isPlatformBrowser(this.platformId) || isAndroid || isIOS) {
             this.scriptToGetHeight = `<script> var body = document.body, html = document.documentElement;
             var height = Math.max(body.scrollHeight, body.offsetHeight,
             html.clientHeight, html.scrollHeight, html.offsetHeight);
@@ -51,6 +47,10 @@ export class RenderAnswerComponent implements OnInit, OnChanges {
             <link rel="stylesheet" href="${externalUrl.hightlighCSS}" crossorigin="anonymous"></html>`;
             // Created new local answer object because here I am modifing answer object
         }
+
+    }
+
+    ngOnInit(): void {
 
         if (this.answer) {
             this.currentAnswer = { ...this.answer };

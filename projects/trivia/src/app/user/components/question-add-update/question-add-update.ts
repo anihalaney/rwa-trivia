@@ -21,6 +21,7 @@ export class QuestionAddUpdate {
 
   questionForm: FormGroup;
   question: Question;
+  quillObject: any = {};
 
   autoTags: string[] = []; // auto computed based on match within Q/A
   enteredTags: string[] = [];
@@ -81,11 +82,23 @@ export class QuestionAddUpdate {
             question.status = QuestionStatus.PENDING;
           }
 
+          if (question.isRichEditor) {
+            question.questionText = this.quillObject.questionText ? this.quillObject.questionText : '';
+            question.questionObject = this.quillObject.jsonObject ? this.quillObject.jsonObject : {};
+          }
+
           question.created_uid = this.user.userId;
           this.store.dispatch(new userActions.AddQuestion({ question: question }));
         }
       }));
 
+  }
+
+
+  // Text change in quill editor
+  onTextChanged(text) {
+    this.quillObject.jsonObject = text.delta;
+    this.quillObject.questionText = text.html;
   }
 
   createDefaultForm(question: Question): FormArray {
@@ -126,7 +139,9 @@ export class QuestionAddUpdate {
     this.tags.forEach(tag => {
       const patt = new RegExp('\\b(' + tag.replace("+", "\\+") + ')\\b', "ig");
       if (wordString.match(patt)) {
-        matchingTags.push(tag);
+        if (this.enteredTags.indexOf(tag) === -1 ) {
+          matchingTags.push(tag);
+        }
       }
     });
     this.autoTags = matchingTags;

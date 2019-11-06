@@ -30,7 +30,7 @@
   <ng-container cdkColumnDef="questionText">
     <mat-header-cell class="col-question" *cdkHeaderCellDef> Question </mat-header-cell>
     <mat-cell *cdkCellDef="let row;let i = index" class="col-question" fxLayout="column" fxLayoutAlign="space-between">
-      <div *ngIf="row !== editQuestion && row !== viewReasonArray[i]">
+      <div *ngIf="row !== editQuestion && row !== viewReasonArray[i]"  [ngStyle]="{backgroundColor: row.is_draft === true && isAdmin != true ? '#dddddd': ''}">
         <!-- <div *ngIf="getDisplayStatus(row.status)==='REQUIRED_CHANGE' || showButtons" class="col-xs-12 textrigth">
           <mat-icon class="cursor" (click)="editQuestions(row)">edit</mat-icon>
         </div> -->

@@ -110,6 +110,10 @@ export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
               } else {
                 question.categoryIds.push(this.questionForm.get('category').value);
               }
+              if (question.isRichEditor) {
+                question.questionText = this.quillObject.questionText;
+                question.questionObject = this.quillObject.jsonObject;
+              }
               this.store.dispatch(new userActions.AddQuestion({ question: question }));
           }
     }));
@@ -195,7 +199,9 @@ export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
     this.tags.forEach(tag => {
       const part = new RegExp('\\b(' + tag.replace('+', '\\+') + ')\\b', 'ig');
       if (wordString.match(part)) {
-        matchingTags.push(tag);
+        if (this.enteredTags.indexOf(tag) === -1 ) {
+          matchingTags.push(tag);
+        }
       }
     });
     this.autoTags = matchingTags;

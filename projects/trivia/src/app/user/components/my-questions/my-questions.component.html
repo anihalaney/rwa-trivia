@@ -25,12 +25,6 @@
           [user]="user" [showApproveButton]="false" (updateUnpublishedQuestions)="updateUnpublishedQuestions($event)" [quillConfig]="quillConfig" [applicationSettings]="applicationSettings">
         </question-table>
       </mat-tab>
-      <mat-tab label="Draft">
-        <question-table [isDraft]="true" [showSort]="false" [tagsObs]="tagsObs" [categoriesObs]="categoriesObs" [showPaginator]="false"
-          [questions]="draftQuestions" [totalCount]="10" [categoryDictionary]="categoriesObs | async"
-          [user]="user" [showApproveButton]="false" (updateUnpublishedQuestions)="updateUnpublishedQuestions($event)" [quillConfig]="quillConfig" [applicationSettings]="applicationSettings">
-        </question-table>
-      </mat-tab>
     </mat-tab-group>
   </mat-card-content>
 </div>

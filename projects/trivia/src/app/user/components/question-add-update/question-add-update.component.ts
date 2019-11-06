@@ -37,7 +37,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnI
   htmlText: any;
   jsonObject: any;
   quillImageUrl: string;
-  quillObject: any = {};
+
 
   quillConfig = {
     toolbar: {
@@ -112,11 +112,6 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnI
     }));
   }
 
-  // Text change in quill editor
-  onTextChanged(text) {
-    this.quillObject.jsonObject = text.delta;
-    this.quillObject.questionText = text.html;
-  }
 
   // Image Upload
   fileUploaded(quillImageUpload: QuillImageUpload) {
