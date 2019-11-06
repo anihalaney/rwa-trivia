@@ -3,9 +3,9 @@
         <Label top="2" left="10" *ngIf="isRight" color="#fff" text="&#xf00c;" class="fas" textWrap="true"></Label>
         <Label top="2" left="10" *ngIf="isWrong" color="#fff" text="&#xf00d;" class="fas" textWrap="true"></Label>
     </AbsoluteLayout>
-    <WebView width="100%" *ngIf="!isAndroid" [src]="currentAnswer?.answerText" ios:height="{{answerHeight}}"
+    <WebView width="100%" *ngIf="!isAndroid && currentAnswer?.answerText" [src]="currentAnswer?.answerText" ios:height="{{answerHeight}}"
         (loadFinished)="onLoadFinished($event)" stlRippleEffect [isEnabled]="doPlay"></WebView>
-    <WebView width="100%" *ngIf="isAndroid" [src]="currentAnswer?.answerText" minHeight="50" stlRippleEffect
+    <WebView width="100%" *ngIf="isAndroid && currentAnswer?.answerText" [src]="currentAnswer?.answerText" minHeight="50" stlRippleEffect
         [isEnabled]="doPlay"></WebView>
 </GridLayout>
 <ng-template #renderView>

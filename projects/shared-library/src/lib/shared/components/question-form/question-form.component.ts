@@ -102,6 +102,14 @@ export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
           if (data) {
               this.questionForm.patchValue({ is_draft : true });
               const question = this.getQuestionFromFormValue(this.questionForm.value);
+
+              question.categoryIds = [];
+
+              if (Array.isArray(this.questionForm.get('category').value)) {
+                question.categoryIds = this.questionForm.get('category').value;
+              } else {
+                question.categoryIds.push(this.questionForm.get('category').value);
+              }
               this.store.dispatch(new userActions.AddQuestion({ question: question }));
           }
     }));

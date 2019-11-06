@@ -1,10 +1,10 @@
 <StackLayout *ngIf="question?.isRichEditor && question; else renderView" marginBottm="500" orientation="horizontal">
     <Label verticalAlignment="top" paddingLeft="10" text="{{questionIndex}} . " textWrap="true"
         *ngIf="questionIndex"></Label>
-    <WebView width="100%" *ngIf="!isAndroid" [src]="question?.questionText" ios:height="{{questionHeight}}"
+    <WebView width="100%" *ngIf="!isAndroid && question?.questionText" [src]="question?.questionText" ios:height="{{questionHeight}}"
         (loadFinished)="onLoadFinished($event)" [isUserInteractionEnabled]="false"></WebView>
 
-    <WebView width="100%" *ngIf="isAndroid" [src]="question?.questionText" [isUserInteractionEnabled]="false"
+    <WebView width="100%" *ngIf="isAndroid && question?.questionText" [src]="question?.questionText" [isUserInteractionEnabled]="false"
         minHeight="50"></WebView>
 </StackLayout>
 

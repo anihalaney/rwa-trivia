@@ -59,6 +59,9 @@ export class QuestionAddUpdate {
         this.questionForm.patchValue({ id: status });
       }
     }));
+  }
+
+  saveDraft() {
     this.subscriptions.push(this.store.select(appState.coreState).pipe(
       select(s => s.applicationSettings),
       map(appSettings => appSettings),

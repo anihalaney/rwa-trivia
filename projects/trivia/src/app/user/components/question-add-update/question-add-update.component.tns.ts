@@ -10,7 +10,7 @@ import { AppState, appState } from '../../../store';
 import { QuestionActions } from 'shared-library/core/store/actions/question.actions';
 import { Question, Answer, Category } from 'shared-library/shared/model';
 import { QuestionAddUpdate } from './question-add-update';
-import { debounceTime } from 'rxjs/operators';
+import { debounceTime, take } from 'rxjs/operators';
 import { ObservableArray } from 'tns-core-modules/data/observable-array';
 import { TokenModel } from 'nativescript-ui-autocomplete';
 import { RadAutoCompleteTextViewComponent } from 'nativescript-ui-autocomplete/angular';
@@ -130,6 +130,9 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
     }));
     const questionControl = this.questionForm.get('questionText');
 
+    this.subscriptions.push(this.questionForm.valueChanges.pipe(take(1)).subscribe(val => {
+      this.saveDraft();
+    }));
     this.subscriptions.push(questionControl.valueChanges.pipe(debounceTime(500)).subscribe(v => this.computeAutoTags()));
     this.subscriptions.push(this.answers.valueChanges.pipe(debounceTime(500)).subscribe(v => this.computeAutoTags()));
 
