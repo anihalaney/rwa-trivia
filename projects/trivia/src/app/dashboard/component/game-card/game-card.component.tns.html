@@ -6,19 +6,19 @@
 
         <StackLayout row="0" col="1" horizontalAlignment="right">
             <AbsoluteLayout>
-                <Image *ngIf="game.stats[otherUserId]?.score >= 5" left="74" top="5" src="~/assets/images/score5.png"
+                <Image *ngIf="game.stats[otherUserId]?.score >= 5" left="74" top="5" src="res://badge5"
                     height="30" width="30" marginLeft="2" verticalAlignment="center" marginLeft="2" borderRadius="50"></Image>
 
-                <Image *ngIf="game.stats[otherUserId]?.score >= 4" left="62" top="5" src="~/assets/images/score4.png"
+                <Image *ngIf="game.stats[otherUserId]?.score >= 4" left="62" top="5" src="res://badge4"
                     height="30" width="30" marginLeft="2" verticalAlignment="center" marginLeft="2" borderRadius="50"></Image>
 
-                <Image *ngIf="game.stats[otherUserId]?.score >= 3" left="50" top="5" src="~/assets/images/score3.png"
+                <Image *ngIf="game.stats[otherUserId]?.score >= 3" left="50" top="5" src="res://badge3"
                     height="30" width="30" marginLeft="2" verticalAlignment="center" marginLeft="2" borderRadius="50"></Image>
 
-                <Image *ngIf="game.stats[otherUserId]?.score >= 2" left="38" top="5" src="~/assets/images/score2.png"
+                <Image *ngIf="game.stats[otherUserId]?.score >= 2" left="38" top="5" src="res://badge2"
                     height="30" width="30" marginLeft="2" verticalAlignment="center" marginLeft="2" borderRadius="50"></Image>
 
-                <Image *ngIf="game.stats[otherUserId]?.score >= 1" left="25" top="5" src="~/assets/images/score1.png"
+                <Image *ngIf="game.stats[otherUserId]?.score >= 1" left="25" top="5" src="res://badge1"
                     height="30" width="30" marginLeft="2" verticalAlignment="center" marginLeft="2" borderRadius="50"></Image>
                 <StackLayout left="5" top="5">
                     <app-user-card [userId]="otherUserId" [type]="userCardType.USER_IMAGE_30X30" [width]="30" [height]="30">
@@ -29,19 +29,19 @@
 
         <StackLayout row="0" col="2" horizontalAlignment="right">
             <AbsoluteLayout>
-                <Image *ngIf="game.stats[user.userId]?.score >= 5" left="74" top="5" src="~/assets/images/score5.png"
+                <Image *ngIf="game.stats[user.userId]?.score >= 5" left="74" top="5" src="res://badge5"
                     height="30" width="30" marginLeft="2" verticalAlignment="center" marginLeft="2" borderRadius="50"></Image>
 
-                <Image *ngIf="game.stats[user.userId]?.score >= 4" left="62" top="5" src="~/assets/images/score4.png"
+                <Image *ngIf="game.stats[user.userId]?.score >= 4" left="62" top="5" src="res://badge4"
                     height="30" width="30" marginLeft="2" verticalAlignment="center" marginLeft="2" borderRadius="50"></Image>
 
-                <Image *ngIf="game.stats[user.userId]?.score >= 3" left="50" top="5" src="~/assets/images/score3.png"
+                <Image *ngIf="game.stats[user.userId]?.score >= 3" left="50" top="5" src="res://badge3"
                     height="30" width="30" marginLeft="2" verticalAlignment="center" marginLeft="2" borderRadius="50"></Image>
 
-                <Image *ngIf="game.stats[user.userId]?.score >= 2" left="38" top="5" src="~/assets/images/score2.png"
+                <Image *ngIf="game.stats[user.userId]?.score >= 2" left="38" top="5" src="res://badge2"
                     height="30" width="30" marginLeft="2" verticalAlignment="center" marginLeft="2" borderRadius="50"></Image>
 
-                <Image *ngIf="game.stats[user.userId]?.score >= 1" left="25" top="5" src="~/assets/images/score1.png"
+                <Image *ngIf="game.stats[user.userId]?.score >= 1" left="25" top="5" src="res://badge1"
                     height="30" width="30" marginLeft="2" verticalAlignment="center" marginLeft="2" borderRadius="50"></Image>
 
                 <StackLayout left="5" top="5">
