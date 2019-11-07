@@ -1,59 +1,75 @@
 <GridLayout rows="*" cols="*" tkExampleTitle tkToggleNavButton>
     <RadListView [items]="questions">
         <ng-template tkListItemTemplate let-question="item">
-            <GridLayout rows="auto,auto" columns="*" height="100%" class="question-container">
-                <StackLayout row="0" col="0"  backgroundColor="#ff0000">
-                    <Label class="question-text"
-                        text="Which of the following WebDriver commands is used to check the presence of a web element?"
-                        textWrap="true"></Label>
+            <GridLayout rows="auto,auto" columns="*" class="question-container">
+                <StackLayout row="0" col="0">
+                    <StackLayout class="question-text">
+                        <render-question [textAlign]="'left'" [question]="question"></render-question>
+                    </StackLayout>
+                    <GridLayout rows="*" columns="auto,auto" margin="3 0">
+                        <Label row="0" col="0" text="Category : " textWrap="true" class="label Roboto-Medium"
+                            fontWeight="bold"></Label>
+                        <StackLayout row="0" col="1" *ngFor="let id of question.categoryIds">
+                            <Label [text]="categoryDictionary[id]?.categoryName" textWrap="true"
+                                class="label Roboto-Regular" color="#616161"></Label>
+                        </StackLayout>
+                    </GridLayout>
+                    <FlexboxLayout alignItems="center" margin="3 0">
+                        <Label text="Tags : " textWrap="true" class="label Roboto-Medium"
+                            fontWeight="bold"></Label>
+                        <StackLayout *ngFor="let item of question.tags" class="tag">
+                            <Label [text]="item" textWrap="true"
+                            class="label Roboto-Regular"></Label>
+                        </StackLayout>                        
+                    </FlexboxLayout>
                     <FlexboxLayout justifyContent="space-between" alignItems="center">
-                        <Label class="publish-question" text="Published on 2nd Aug, 2019" textWrap="true"></Label>
-                        <Label *ngIf="showQuestionId === ''" text="&#xf078;" (tap)="onSelect(question.id)" class="fas"
-                            fontSize="18" padding="5" color="#212121"></Label>
+                        <Label class="publish-question"
+                            text="Published on {{ question.createdOn | date:'dd MMM yyyy' }}" textWrap="true"></Label>
+                        <Label *ngIf="showQuestionId !== question.id" text="&#xf078;" (tap)="onSelect(question.id)"
+                            class="fas" fontSize="18" padding="5" color="#212121"></Label>
                     </FlexboxLayout>
                 </StackLayout>
                 <!-- [ngClass]="{'show animate-ease-out': showQuestionId == question.id}" class="hide" -->
-                <StackLayout row="1" col="0" *ngIf="showQuestionId == question.id" backgroundColor="#ff6600">
-                    <StackLayout class="question-box">
-                        <Label text="Web Technology"></Label>
-                    </StackLayout>
-                    <StackLayout class="question-box-solid">
-                        <Label text="Web Technology"></Label>
-                    </StackLayout>
-                    <StackLayout class="question-box">
-                        <Label text="Web Technology"></Label>
-                    </StackLayout>
-                    <StackLayout class="question-box">
-                        <Label text="Web Technology"></Label>
-                    </StackLayout>
+                <StackLayout row="1" col="0" *ngIf="showQuestionId == question.id">
+                    <ng-template ngFor let-answer [ngForOf]="question.answers">
+                        <StackLayout class="question-box" [class.question-box-solid]="answer.correct">
+                            <render-answer [answer]="answer" [isGameAnswer]="false">
+                            </render-answer>
+                        </StackLayout>
+                    </ng-template>
                     <GridLayout rows="*" columns="*,*,auto">
                         <StackLayout row="0" col="0" horizontalAlignment="left">
                             <GridLayout rows="auto" columns="*,*" class="question-stat">
                                 <Label row="0" col="0" class="stat-tag" text="Appeared"></Label>
-                                <Label row="0" col="1" class="stat-value" text="510 times"></Label>
+                                <Label row="0" col="1" class="stat-value"
+                                    text="{{question.appeared ? question.appeared: 0}} times"></Label>
                             </GridLayout>
                             <GridLayout rows="auto" columns="*,*" class="question-stat">
                                 <Label row="0" col="0" class="stat-tag" text="Likes"></Label>
-                                <Label row="0" col="1" class="stat-value" text="123"></Label>
+                                <Label row="0" col="1" class="stat-value"
+                                    [text]="question.reactionsCount && question.reactionsCount.like ? question.reactionsCount.like: 0"></Label>
                             </GridLayout>
                             <GridLayout rows="auto" columns="*,*" class="question-stat">
                                 <Label row="0" col="0" class="stat-tag" text="Dislikes"></Label>
-                                <Label row="0" col="1" class="stat-value" text="10"></Label>
+                                <Label row="0" col="1" class="stat-value"
+                                    [text]="question.reactionsCount && question.reactionsCount.dislike ? question.reactionsCount.dislike: 0"></Label>
                             </GridLayout>
                         </StackLayout>
                         <StackLayout row="0" col="1" horizontalAlignment="left">
                             <GridLayout rows="auto" columns="*,*" class="question-stat">
                                 <Label row="0" col="0" class="stat-tag" text="Correct"></Label>
-                                <Label row="0" col="1" class="stat-value" text="210"></Label>
+                                <Label row="0" col="1" class="stat-value"
+                                    [text]="question.correct ? question.correct: 0"></Label>
                             </GridLayout>
                             <GridLayout rows="auto" columns="*,*" class="question-stat">
                                 <Label row="0" col="0" class="stat-tag" text="Wrong"></Label>
-                                <Label row="0" col="1" class="stat-value" text="300"></Label>
+                                <Label row="0" col="1" class="stat-value"
+                                    [text]="question.wrong ? question.wrong: 0"></Label>
                             </GridLayout>
-                            <GridLayout rows="auto" columns="*,*" class="question-stat">
+                            <!-- <GridLayout rows="auto" columns="*,*" class="question-stat">
                                 <Label row="0" col="0" class="stat-tag" text="Trending"></Label>
                                 <Label row="0" col="1" class="stat-value" text="01"></Label>
-                            </GridLayout>
+                            </GridLayout> -->
                         </StackLayout>
                         <StackLayout row="0" col="2" verticalAlignment="bottom">
                             <Label text="&#xf077;" (tap)="showQuestionId = ''" padding="5" class="fas" fontSize="18"

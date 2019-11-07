@@ -1,103 +1,130 @@
 /* New */
 
-.question-container:first-child{
-    margin: 20 20 20 10;
-    padding: 20;
-    border-width: 1;
-    border-color: #e4e4e4;
-    border-radius: 10;
+.question-container:first-child {
+  margin: 20 20 20 10;
+  padding: 20;
+  border-width: 1;
+  border-color: #e4e4e4;
+  border-radius: 10;
+  text-align: left;
 }
 
-.question-container{
-    margin: 10 20;
-    padding: 20;
-    border-width: 1;
-    border-color: #e4e4e4;
-    border-radius: 10;
+.question-container {
+  margin: 10 20;
+  padding: 20;
+  border-width: 1;
+  border-color: #e4e4e4;
+  border-radius: 10;
+  text-align: left;
 }
 
-.question-text{
-    font-weight: 600;
-    font-size: 16;
-    color: #000000;
+.question-text {
+  font-weight: 600;
+  font-size: 16;
+  color: #000000;
 }
 
-.publish-question{
-    font-size: 13;
-    color: #212121;
-    margin: 10 0;
+.publish-question {
+  font-size: 13;
+  color: #212121;
+  margin: 10 0;
 }
 
 .question-box {
-    border-width: 1;
-    border-color:#a5a5a5;
-    border-radius: 5;
-    padding:10;
-    text-align: left;
-    margin: 10 0;
+  border-width: 1;
+  border-color: #a5a5a5;
+  border-radius: 5;
+  padding: 10;
+  text-align: left;
+  margin: 10 0;
 }
 
 .question-box-solid {
-    background-color: #9ccc65;
-    border-width: 1;
-    border-color:#a5a5a5;
-    border-radius: 5;
-    padding:10;
-    text-align: left;
-    margin: 10 0;
+  background-color: #9ccc65;
+  border-width: 1;
+  border-color: #a5a5a5;
+  border-radius: 5;
+  padding: 10;
+  text-align: left;
+  margin: 10 0;
 }
 
-.question-stat{
-    justify-content: space-between;
+.question-stat {
+  justify-content: space-between;
 }
 
-.stat-tag{
-    color: #283b66;
-    font-size: 13;
-    margin-right: 10;
-    text-align: left;
+.tag {
+  background-color: #e4e4e4;
+  color: #000000;
+  border-radius: 15;
+  margin: 0 5;
+  padding: 2 7;
 }
 
-.stat-value{
-    color: #212121;
-    font-size: 13;
-    text-align: left;
+.stat-tag {
+  color: #283b66;
+  font-size: 13;
+  margin-right: 10;
+  text-align: left;
+}
+
+.stat-value {
+  color: #212121;
+  font-size: 13;
+  text-align: left;
 }
 
 .animate-ease-in {
-    animation-name: animate-in;
-    animation-duration: 1.0;
-    animation-timing-function: ease-in;
-    animation-fill-mode: forwards;
-  }
-  @keyframes animate-in {
-    from { transform: translate(0, 9); }
-    to { transform: translate(0, 0); }
-  }
-  
-  
-  .animate-ease-out {
-    animation-name: animate-out;
-    animation-duration: 1s;
-    animation-timing-function: ease-out;
-    animation-fill-mode: forwards;
-  }
-  @keyframes animate-out {
-    from { transform: translate(0, -120); }
-    to { transform: translate(0, 0); }
-  }
-
-.hide{
-    visibility: collapse;
+  animation-name: animate-in;
+  animation-duration: 1.0;
+  animation-timing-function: ease-in;
+  animation-fill-mode: forwards;
 }
 
-.show{
-    visibility: visible;
-    animation-name: opacity;
-    animation-duration: 0.7;
-  }
-  @keyframes opacity {
-    from { opacity: 0; }
-    to { opacity: 1; }
+@keyframes animate-in {
+  from {
+    transform: translate(0, 9);
   }
 
+  to {
+    transform: translate(0, 0);
+  }
+}
+
+
+.animate-ease-out {
+  animation-name: animate-out;
+  animation-duration: 1s;
+  animation-timing-function: ease-out;
+  animation-fill-mode: forwards;
+}
+
+@keyframes animate-out {
+  from {
+    transform: translate(0, -120);
+  }
+
+  to {
+    transform: translate(0, 0);
+  }
+}
+
+.hide {
+  visibility: collapse;
+}
+
+.show {
+  visibility: visible;
+  animation-name: opacity;
+  animation-duration: 0.7;
+}
+
+@keyframes opacity {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
