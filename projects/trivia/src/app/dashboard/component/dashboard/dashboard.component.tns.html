@@ -101,7 +101,7 @@
                                         textWrap="true"></Label>
                                     <Label class="timeout" text="{{timeoutLive}}" textWrap="true"></Label>
                                 </FlexboxLayout>
-                                <FlexboxLayout *ngIf="account && (!account?.gamePlayed ||account?.gamePlayed < 0)"
+                                <FlexboxLayout *ngIf="account && !account?.signUpQuestionAnswered)"
                                     row="3" orientation="horizontal" class="dashboard_body-grid0-4">
                                     <Label text="&#xe938;" class="ico icon-life-icon icon"></Label>
                                     <Label class="no-life" text="No Life will be deducted" textWrap="true"></Label>
