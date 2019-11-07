@@ -20,6 +20,7 @@ export class RenderAnswerComponent implements OnInit, OnChanges {
     @Input() isRight;
     @Input() isWrong;
     @Input() doPlay;
+    @Input() bgColor;
 
     currentAnswer: Answer;
     scriptToGetHeight: string;
@@ -81,6 +82,13 @@ export class RenderAnswerComponent implements OnInit, OnChanges {
     }
 
     ngOnChanges(changes: SimpleChanges) {
+        if (this.answer && this.answer.isRichEditor && this.bgColor && this.bgColor !== '') {
+                this.answer.answerText =
+                            `${this.htmlStartTag} ${this.answer.answerText}
+                        <style> html {background:` + this.bgColor + `!important;color:#212121 !important;font-size:17;}</style>
+                         ${this.scriptToGetHeight}   ${this.htmlEndTag}`;
+
+        }
         // Change background color of webview after answer given
         if (this.currentAnswer) {
             if (this.currentAnswer.isRichEditor) {

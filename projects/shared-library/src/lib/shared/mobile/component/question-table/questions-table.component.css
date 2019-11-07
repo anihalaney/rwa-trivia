@@ -51,6 +51,7 @@
 
 .question-stat {
   justify-content: space-between;
+  margin: 5 0;
 }
 
 .tag {

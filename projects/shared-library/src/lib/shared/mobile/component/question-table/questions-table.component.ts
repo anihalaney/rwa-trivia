@@ -33,8 +33,13 @@ export class QuestionsTableComponent implements OnInit {
 
   onSelect(args) {
     this.showQuestionId = args;
+    this.cd.markForCheck();
   }
 
+  hideData() {
+    this.showQuestionId = '';
+    this.cd.markForCheck();
+  }
   getDisplayStatus(status: number): string {
     return QuestionStatus[status];
   }
