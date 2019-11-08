@@ -29,57 +29,64 @@
                                         <StackLayout class="earnedsymbolsStack" orientation="horizontal"
                                             horizontalAlignment="center">
                                             <Image *ngIf="game.stats[user.userId]?.score>=1" src="res://badge1"
-                                                height="30" width="30" marginLeft="2" verticalAlignment="center" marginLeft="2"
-                                                padding="20" borderRadius="50" top="10" left="80"></Image>
+                                                height="30" width="30" marginLeft="2" verticalAlignment="center"
+                                                marginLeft="2" padding="20" borderRadius="50" top="10" left="80">
+                                            </Image>
                                             <Image *ngIf="game.stats[user.userId]?.score>=2" src="res://badge2"
-                                                height="30" width="30" marginLeft="2" verticalAlignment="center" marginLeft="2"
-                                                padding="20" borderRadius="50" top="10" left="80"></Image>
+                                                height="30" width="30" marginLeft="2" verticalAlignment="center"
+                                                marginLeft="2" padding="20" borderRadius="50" top="10" left="80">
+                                            </Image>
                                             <Image *ngIf="game.stats[user.userId]?.score>=3" src="res://badge3"
-                                                height="30" width="30" marginLeft="2" verticalAlignment="center" marginLeft="2"
-                                                padding="20" borderRadius="50" top="10" left="80"></Image>
+                                                height="30" width="30" marginLeft="2" verticalAlignment="center"
+                                                marginLeft="2" padding="20" borderRadius="50" top="10" left="80">
+                                            </Image>
                                             <Image *ngIf="game.stats[user.userId]?.score>=4" src="res://badge4"
-                                                height="30" width="30" marginLeft="2" verticalAlignment="center" marginLeft="2"
-                                                padding="20" borderRadius="50" top="10" left="80"></Image>
+                                                height="30" width="30" marginLeft="2" verticalAlignment="center"
+                                                marginLeft="2" padding="20" borderRadius="50" top="10" left="80">
+                                            </Image>
                                             <Image *ngIf="game.stats[user.userId]?.score>=5" src="res://badge5"
-                                                height="30" width="30" marginLeft="2" verticalAlignment="center" marginLeft="2"
-                                                padding="20" borderRadius="50" top="10" left="80"></Image>
-        
+                                                height="30" width="30" marginLeft="2" verticalAlignment="center"
+                                                marginLeft="2" padding="20" borderRadius="50" top="10" left="80">
+                                            </Image>
+
                                         </StackLayout>
                                     </StackLayout>
-        
+
                                     <GridLayout rows="*" columns="*,auto,*" horizontalAlignment="center"
                                         *ngIf="game.gameOptions.playerMode == PlayerMode.Opponent">
                                         <StackLayout row="0" col="0" class="game-continue">
                                             <app-user-card [userId]="user.userId"
                                                 [type]="userCardType.USER_IMAGE_NAME_VERTICAL"> </app-user-card>
                                             <Label class="roundandscore tagging" horizontalAlignment="center"
-                                                text="Score {{game.stats[user.userId]?.score}}" textWrap="true"> </Label>
+                                                text="Score {{game.stats[user.userId]?.score}}" textWrap="true">
+                                            </Label>
                                             <StackLayout class="earnedsymbolsStack" orientation="horizontal"
                                                 horizontalAlignment="center">
-                                            <Image *ngIf="game.stats[user.userId]?.score>=1"
-                                                src="res://badge1" height="30" width="30" marginLeft="2"
-                                                verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"
-                                                top="10" left="80"></Image>
-                                            <Image *ngIf="game.stats[user.userId]?.score>=2"
-                                                src="res://badge2" height="30" width="30" marginLeft="2"
-                                                verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"
-                                                top="10" left="80"></Image>
-                                            <Image *ngIf="game.stats[user.userId]?.score>=3"
-                                                src="res://badge3" height="30" width="30" marginLeft="2"
-                                                verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"
-                                                top="10" left="80"></Image>
-                                            <Image *ngIf="game.stats[user.userId]?.score>=4"
-                                                src="res://badge4" height="30" width="30" marginLeft="2"
-                                                verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"
-                                                top="10" left="80"></Image>
-                                            <Image *ngIf="game.stats[user.userId]?.score>=5"
-                                                src="res://badge5" height="30" width="30" marginLeft="2"
-                                                verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"
-                                                top="10" left="80"></Image>
+                                                <Image *ngIf="game.stats[user.userId]?.score>=1" src="res://badge1"
+                                                    height="30" width="30" marginLeft="2" verticalAlignment="center"
+                                                    marginLeft="2" padding="20" borderRadius="50" top="10" left="80">
+                                                </Image>
+                                                <Image *ngIf="game.stats[user.userId]?.score>=2" src="res://badge2"
+                                                    height="30" width="30" marginLeft="2" verticalAlignment="center"
+                                                    marginLeft="2" padding="20" borderRadius="50" top="10" left="80">
+                                                </Image>
+                                                <Image *ngIf="game.stats[user.userId]?.score>=3" src="res://badge3"
+                                                    height="30" width="30" marginLeft="2" verticalAlignment="center"
+                                                    marginLeft="2" padding="20" borderRadius="50" top="10" left="80">
+                                                </Image>
+                                                <Image *ngIf="game.stats[user.userId]?.score>=4" src="res://badge4"
+                                                    height="30" width="30" marginLeft="2" verticalAlignment="center"
+                                                    marginLeft="2" padding="20" borderRadius="50" top="10" left="80">
+                                                </Image>
+                                                <Image *ngIf="game.stats[user.userId]?.score>=5" src="res://badge5"
+                                                    height="30" width="30" marginLeft="2" verticalAlignment="center"
+                                                    marginLeft="2" padding="20" borderRadius="50" top="10" left="80">
+                                                </Image>
+                                            </StackLayout>
                                         </StackLayout>
-                                    </StackLayout>
 
-                                    <Label row="0" col="1" text="V/S" verticalAlignment="top" textWrap="true"> </Label>
+                                        <Label row="0" col="1" text="V/S" verticalAlignment="top" textWrap="true">
+                                        </Label>
 
                                         <StackLayout row="0" col="2" class="game-continue">
                                             <app-user-card [userId]="otherUserId"
@@ -89,26 +96,26 @@
                                             </Label>
                                             <StackLayout class="earnedsymbolsStack" orientation="horizontal"
                                                 horizontalAlignment="center">
-                                                <Image *ngIf="game.stats[otherUserId]?.score>=1"
-                                                    src="res://badge1" height="30" width="30"
-                                                    marginLeft="2" verticalAlignment="center" marginLeft="2"
-                                                    padding="20" borderRadius="50" top="10" left="80"></Image>
-                                                <Image *ngIf="game.stats[otherUserId]?.score>=2"
-                                                    src="res://badge2" height="30" width="30"
-                                                    marginLeft="2" verticalAlignment="center" marginLeft="2"
-                                                    padding="20" borderRadius="50" top="10" left="80"></Image>
-                                                <Image *ngIf="game.stats[otherUserId]?.score>=3"
-                                                    src="res://badge3" height="30" width="30"
-                                                    marginLeft="2" verticalAlignment="center" marginLeft="2"
-                                                    padding="20" borderRadius="50" top="10" left="80"></Image>
-                                                <Image *ngIf="game.stats[otherUserId]?.score>=4"
-                                                    src="res://badge4" height="30" width="30"
-                                                    marginLeft="2" verticalAlignment="center" marginLeft="2"
-                                                    padding="20" borderRadius="50" top="10" left="80"></Image>
-                                                <Image *ngIf="game.stats[otherUserId]?.score>=5"
-                                                    src="res://badge5" height="30" width="30"
-                                                    marginLeft="2" verticalAlignment="center" marginLeft="2"
-                                                    padding="20" borderRadius="50" top="10" left="80"></Image>
+                                                <Image *ngIf="game.stats[otherUserId]?.score>=1" src="res://badge1"
+                                                    height="30" width="30" marginLeft="2" verticalAlignment="center"
+                                                    marginLeft="2" padding="20" borderRadius="50" top="10" left="80">
+                                                </Image>
+                                                <Image *ngIf="game.stats[otherUserId]?.score>=2" src="res://badge2"
+                                                    height="30" width="30" marginLeft="2" verticalAlignment="center"
+                                                    marginLeft="2" padding="20" borderRadius="50" top="10" left="80">
+                                                </Image>
+                                                <Image *ngIf="game.stats[otherUserId]?.score>=3" src="res://badge3"
+                                                    height="30" width="30" marginLeft="2" verticalAlignment="center"
+                                                    marginLeft="2" padding="20" borderRadius="50" top="10" left="80">
+                                                </Image>
+                                                <Image *ngIf="game.stats[otherUserId]?.score>=4" src="res://badge4"
+                                                    height="30" width="30" marginLeft="2" verticalAlignment="center"
+                                                    marginLeft="2" padding="20" borderRadius="50" top="10" left="80">
+                                                </Image>
+                                                <Image *ngIf="game.stats[otherUserId]?.score>=5" src="res://badge5"
+                                                    height="30" width="30" marginLeft="2" verticalAlignment="center"
+                                                    marginLeft="2" padding="20" borderRadius="50" top="10" left="80">
+                                                </Image>
                                             </StackLayout>
                                         </StackLayout>
                                     </GridLayout>
@@ -241,7 +248,7 @@
         <AbsoluteLayout width="100%" height="100%">
             <GridLayout rows="200,*" height="100%" width="100%">
                 <StackLayout row="1" class="main-dialog">
-                    <FlexboxLayout class="dialog-title-container">
+                    <FlexboxLayout (tap)="closeAllPopOver()" class="dialog-title-container">
                         <Label text="Game summary" class="dialog-title" textWrap="true"></Label>
                         <Label text="&#xf00d;" class="fa close-tag" textWrap="true" (tap)="closeDialog()"></Label>
                     </FlexboxLayout>
@@ -249,14 +256,14 @@
                         <StackLayout>
                             <GridLayout rows="*" columns="auto,*" class="question"
                                 *ngFor="let row  of questionsArray;let i=index;">
-                                <Label row="0" col="0" *ngIf="row?.ansStatus" text="&#xf00c;" verticalAlignment="top"
+                                <Label (tap)="closeAllPopOver()" row="0" col="0" *ngIf="row?.ansStatus" text="&#xf00c;" verticalAlignment="top"
                                     class="fa correct-icon" textWrap="true"></Label>
-                                <Label row="0" col="0" *ngIf="!row?.ansStatus" text="&#xf00d;" verticalAlignment="top"
+                                <Label (tap)="closeAllPopOver()" row="0" col="0" *ngIf="!row?.ansStatus" text="&#xf00d;" verticalAlignment="top"
                                     class="fa wrong-icon" textWrap="true"></Label>
-                                <StackLayout row="0" col="1" class="question-details">
+                                <StackLayout (tap)="closeAllPopOver()" row="0" col="1" class="question-details" marginRight="20">
                                     <Label text="{{row.questionText}}" class="question-content" textWrap="true"></Label>
                                     <GridLayout rows="*" columns="*,auto">
-                                        <StackLayout row="0" col="0">
+                                        <StackLayout row="0" col="0"  >
                                             <StackLayout *ngFor="let answer of row.answers">
                                                 <FlexboxLayout *ngIf="row?.ansStatus && answer.correct">
                                                     <image src="~/assets/images/bits.png" width="30" height="30">
@@ -270,19 +277,26 @@
                                                     textWrap="true"></Label>
                                             </StackLayout>
                                             <Label *ngIf="!row?.ansStatus" class="your-answer"
-                                                text="Your Answer: {{row.userGivenAnswer ? row.userGivenAnswer : 'No answer' }}" textWrap="true"></Label>
-                                        </StackLayout>
-                                        <StackLayout row="0" col="1" horizontalAlignment="right"
-                                            verticalAlignment="center">
-                                            <Button col="3" rowSpan="3" verticalAlignment="center"
-                                                style="color:#3b444f; border-width:2px; border-color:#f3f3f3; padding:10"
-                                                text="Report" marginRight="10" *ngIf="!game.playerQnAs[i].isReported"
-                                                (rippleTap)="openDialog(row)" stlRippleEffect></Button>
-                                            <Label col="3" rowSpan="3" text="Reported" verticalAlignment="center"
-                                                marginRight="10" color="red" fontWeight="600" textWrap="true"
-                                                *ngIf="game.playerQnAs[i]?.isReported"></Label>
+                                                text="Your Answer: {{row.userGivenAnswer ? row.userGivenAnswer : 'No answer' }}"
+                                                textWrap="true"></Label>
                                         </StackLayout>
                                     </GridLayout>
+                                </StackLayout>
+                                <StackLayout row="0" col="1" orientation="horizontal" horizontalAlignment="right">
+                                    <StackLayout orientation="vertical">
+                                        <FlexboxLayout justifyContent="flex-end">
+                                            <Label (tap)="handlePopOver(row)" stlRippleEffect
+                                                stlBackgroundColorAfter="transparent" stlBackgroundColor="transparent"
+                                                stlOpacity="0.5" text="&#xf142;" fontSize="22" padding="5 10"
+                                                class="fa"></Label>
+                                        </FlexboxLayout>
+                                        <Button (rippleTap)="openDialog(row)"
+                                            *ngIf="row.openReport && !game.playerQnAs[i].isReported"
+                                            style="border-radius:5; height: 30; color:#000; border-width:2px; border-color:#f3f3f3; background: white"
+                                            stlRippleEffect text="Report"></Button>
+                                        <Button *ngIf="row.openReport && game.playerQnAs[i]?.isReported" style="border-radius:5;height: 30; color:red; border-width:2px; border-color:#f3f3f3; background: white;
+                                            font-weight: 600" stlRippleEffect text="Reported"></Button>
+                                    </StackLayout>
                                 </StackLayout>
                             </GridLayout>
                         </StackLayout>

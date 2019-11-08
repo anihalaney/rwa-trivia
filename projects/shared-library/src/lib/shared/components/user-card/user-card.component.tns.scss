@@ -82,10 +82,17 @@
   }
 } 
 
-.game-progress{
-  background-color:  #f9f9f9;
-  color: rgb(255, 193, 7);
+.game-progress {
+  background-color: #f9f9f9;
   height: 20;
+}
+
+.red-color {
+  color: rgb(244, 67, 54);
+}
+
+.yellow-color {
+  color: rgb(255, 193, 7);
 }
 
 .game-round-info-container-single-player {
