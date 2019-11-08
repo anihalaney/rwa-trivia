@@ -15,10 +15,7 @@
           [otherInfo]="{progressValue: progressValue, correctCount:correctCount,questionRound:questionRound,totalRound:totalRound,otherPlayer:otherPlayer}">
         </app-user-card>
       </GridLayout>
-      <Label visibility="{{ turnFlag && threeConsecutiveAnswer ? 'visible'  : 'collapsed'}}" class="Roboto-Regular"
-        fontSize="17" marginLeft="15" color="#af3424"
-        text="You have reached the maximum number of correct answers you are allowed to give in the first round."
-        textWrap="true"></Label>
+    
         <FlexboxLayout justifyContent="center">
       <Label
             visibility="{{ (answeredIndex!==undefined && correctAnswerIndex === answeredIndex)  ? 'visible'  : 'collapsed' }}"
