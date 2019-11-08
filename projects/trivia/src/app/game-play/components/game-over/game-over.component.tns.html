@@ -14,10 +14,10 @@
     <GridLayout *ngIf="user" height="100%">
       <ScrollView>
         <StackLayout>
-          <render-box [setBackgroundColor]="'#f7f7f7'">
+          <render-box>
             <StackLayout>
-              <StackLayout backgroundColor="#ffffff" (onloaded)="stackLoaded($event)">
-                <StackLayout backgroundColor="#ffffff">
+              <StackLayout (onloaded)="stackLoaded($event)">
+                <StackLayout [backgroundColor]="stackBackgroundColor">
                   <!-- <Label class="category" horizontalAlignment="center" text="{{categoryName}}"
                                 textWrap="true"></Label>
                             <Label *ngIf="game.gameOptions.playerMode == PlayerMode.Opponent" class="round"

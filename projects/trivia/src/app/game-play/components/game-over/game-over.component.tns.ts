@@ -36,6 +36,7 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
   stackLayout;
   showQuesAndAnswer: Boolean = true;
   renderView = false;
+  stackBackgroundColor = '';
   constructor(public store: Store<AppState>, public userActions: UserActions,
     private windowRef: WindowRef, public utils: Utils,
     private modal: ModalDialogService, private vcRef: ViewContainerRef,
@@ -124,6 +125,7 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
 
   screenshot() {
     this.playerUserName = this.user.displayName;
+    this.stackBackgroundColor = '#ffffff';
     // we need to put setTimeout because to change username before screenshot.
     setTimeout(() => {
       const img = new Image;
@@ -131,6 +133,8 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
       const shareImage = img.imageSource;
       SocialShare.shareImage(shareImage);
       this.playerUserName = 'You';
+      this.stackBackgroundColor = '';
+      this.cd.markForCheck();
     }, 100);
   }
 
