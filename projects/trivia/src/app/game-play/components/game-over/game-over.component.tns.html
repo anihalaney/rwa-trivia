@@ -85,7 +85,7 @@
                   <GridLayout rows="*,*" columns="*,auto,*" horizontalAlignment="center"
                     *ngIf="game.gameOptions.playerMode == PlayerMode.Opponent">
                     <StackLayout marginTop="10" row="0" col="0" class="game-continue">
-                      <app-user-card [userId]="user.userId" [otherInfo]="{'isWinner': (game.gameOptions?.playerMode != PlayerMode.Single && 
+                      <app-user-card [userId]="user.userId" [otherInfo]="{'isScreenShot': isScreenShot ? 'true' : 'false', 'isWinner': (game.gameOptions?.playerMode != PlayerMode.Single && 
                                             game.round < 16 &&
                                             game.stats[user.userId]?.score > game.stats[otherUserId]?.score)
                                            ||
@@ -283,7 +283,7 @@
                   class="fa correct-icon" textWrap="true"></Label>
                 <Label (tap)="closeAllPopOver()"  row="0" col="0" *ngIf="!row?.ansStatus" text="&#xf00d;" verticalAlignment="top"
                   class="fa wrong-icon" textWrap="true"></Label>
-                <StackLayout (tap)="closeAllPopOver()" row="0" col="1" class="question-details">
+                <StackLayout (tap)="closeAllPopOver()" row="0" col="1" class="question-details" marginRight="20">
                   <Label  text="{{row.questionText}}" class="question-content" textWrap="true"></Label>
                   <GridLayout rows="*" columns="*,auto">
                     <StackLayout   row="0" col="0">
