@@ -11,7 +11,7 @@
       [stlOpenUserProfile]="{userId: user?.userId, redirectTo: loggedInUserId === quser?.userId ? 'userProfile': 'otherUserProfile'}">
       <Label height="20" width="20" borderRadius="22" backgroundColor="#71b02f"></Label>
     </StackLayout> -->
-    <Label row="1" col="0" text="{{ (loggedInUserId === user.userId) ? 'You' : user?.displayName}}" class="user-name" textWrap="true" horizontalAlignment="center"></Label>
+    <Label row="1" col="0" text="{{ (loggedInUserId === user.userId && otherInfo?.isScreenShot != 'true') ? 'You' : user?.displayName}}" class="user-name" textWrap="true" horizontalAlignment="center"></Label>
     </GridLayout>
 </ng-container>
 
