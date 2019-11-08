@@ -59,8 +59,8 @@ export class NewGame implements OnDestroy {
     this.subscriptions.push(this.tagsObs.subscribe(tags => this.tags = tags));
     let challengerUserId = '';
     this.routeType = this.router.url.indexOf('challenge') >= 0 ? 'challenge' :
-    (this.router.url.indexOf('play-game-with-friend') >= 0 ? 'play-game-with-friend' :
-     this.router.url.indexOf('play-game-with-random-user') >= 0 ? 'play-game-with-random-user' : '' );
+      (this.router.url.indexOf('play-game-with-friend') >= 0 ? 'play-game-with-friend' :
+        this.router.url.indexOf('play-game-with-random-user') >= 0 ? 'play-game-with-random-user' : '');
     this.subscriptions.push(this.route.params.pipe(map(data => challengerUserId = data.userid),
       switchMap(() => this.store.select(appState.coreState).pipe(select(s => s.user)))).subscribe(user => {
         if (user) {
@@ -172,14 +172,17 @@ export class NewGame implements OnDestroy {
         this.errMsg = 'Please Select Friend';
         if (isMobile) {
           this.utils.showMessage('error', this.errMsg);
+          return false;
         } else {
           this.loaderStatus = false;
           if (isPlatformBrowser(this.platformId) && this.windowRef && this.windowRef.nativeWindow && this.windowRef.nativeWindow.scrollTo) {
             this.windowRef.nativeWindow.scrollTo(0, 0);
           }
         }
-        return;
       }
+      return true;
+    } else if (isMobile) {
+      return true;
     }
 
     if (this.applicationSettings.lives.enable && this.life === 0) {

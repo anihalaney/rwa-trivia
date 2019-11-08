@@ -20,6 +20,7 @@ refer to http://docs.nativescript.org/ui/theme.
 @import "./styles/global.scss";
 @import './styles/mobile.scss';
 @import './styles/icon-moon.scss';
+@import './app-variables';
 
 .new-btn {
   color: map-get($light-theme-text-color, primary-light);
@@ -311,5 +312,5 @@ button {
 // mobile-design
 .error-text {
   margin-bottom: 15;
-  color: red;
+  color: $red-dark;
 }

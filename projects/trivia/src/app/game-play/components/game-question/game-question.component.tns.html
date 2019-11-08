@@ -73,10 +73,10 @@
       </render-box>
     </StackLayout>
   </ScrollView>
-  <AbsoluteLayout verticalAlignment="bottom">
+  <AbsoluteLayout backgroundColor="#ffffff" verticalAlignment="bottom">
     <StackLayout width="100%" *ngIf="showContinueBtn || ((answeredIndex>=0 || doPlay === false) && !showContinueBtn)">
       <Button class="Hind-Medium btn-transparent" (rippleTap)="continueClicked.emit($event)"
-        *ngIf="answeredText!== null && showContinueBtn" text="Next Round" stlRippleEffect></Button>
+        *ngIf="answeredText!== null && showContinueBtn" text="Next Round"  stlRippleEffect></Button>
       <FlexboxLayout *ngIf="(answeredIndex>=0 || doPlay === false) && !showContinueBtn" alignItems="center"
         orientation="horizontal" justifyContent="center" backgroundColor="#c0c0c0" class="Hind-Medium" width="100%"
         height="70">

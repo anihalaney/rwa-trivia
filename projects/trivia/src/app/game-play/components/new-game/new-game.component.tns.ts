@@ -14,6 +14,7 @@ import { ObservableArray } from 'tns-core-modules/data/observable-array';
 import { Page, isIOS } from 'tns-core-modules/ui/page/page';
 import { AppState, appState } from '../../../store';
 import { NewGame } from './new-game';
+import { NavigationService } from 'shared-library/core/services/mobile';
 
 @Component({
   selector: 'new-game',
@@ -38,6 +39,9 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
   challengerUserId: string;
   actionBarTitle = 'Play as single player';
 
+  showModal = false;
+  showGameStartLoader = false;
+  dialogOpen;
 
   @ViewChild('autocomplete', { static: false }) autocomplete: RadAutoCompleteTextViewComponent;
   @ViewChild('friendListView', { static: false }) listViewComponent: RadListViewComponent;
@@ -53,10 +57,12 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     private page: Page,
     public windowRef: WindowRef,
     @Inject(PLATFORM_ID) public platformId: Object,
-    private ngZone: NgZone) {
+    private ngZone: NgZone,
+    private navigationService: NavigationService) {
     super(store, utils, gameActions, userActions, windowRef, platformId, cd, route, router);
     this.initDataItems();
     this.modeAvailable = false;
+    this.page.actionBarHidden = true;
   }
   ngOnInit() {
 
@@ -107,6 +113,19 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     }));
   }
 
+  showDialog() {
+    this.dialogOpen = true;
+  }
+
+  // it does nothing but stop the tap event from propogate to background component
+  stopEventPropogation() {
+    return false;
+  }
+
+  back() {
+    this.navigationService.back();
+  }
+
   ngOnDestroy() {
     this.showSelectPlayer = undefined;
     this.showSelectCategory = undefined;
@@ -131,15 +150,16 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
   }
 
   startGame() {
+    this.showGameStartLoader = true;
     this.gameOptions.tags = this.selectedTags;
     this.gameOptions.categoryIds = this.filteredCategories.filter(c => c.requiredForGamePlay || c.isSelected).map(c => c.id);
-    this.validateGameOptions(true, this.gameOptions);
-
-    if (this.gameOptions.playerMode === PlayerMode.Single) {
-      delete this.gameOptions.opponentType;
+    if (this.validateGameOptions(true, this.gameOptions)) {
+      if (this.gameOptions.playerMode === PlayerMode.Single) {
+        delete this.gameOptions.opponentType;
+      }
+      this.startNewGame(this.gameOptions);
     }
 
-    this.startNewGame(this.gameOptions);
   }
 
 

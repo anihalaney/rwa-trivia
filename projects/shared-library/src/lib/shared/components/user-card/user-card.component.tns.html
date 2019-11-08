@@ -77,11 +77,10 @@
 </GridLayout>
 
 <ng-container *ngIf="userCardType.USER_IMAGE_NAME_PROFILE_HORIZONTAL === type">
-  <Image col="0" [stlOpenUserProfile]="{userId: user?.userId, redirectTo: 'otherUserProfile'}"
-    [src]="getImageUrl(user,44,40)" stretch="aspectFill" height="50" width="50" marginLeft="10"
-    verticalAlignment="center" marginRight="15" borderRadius="50"></Image>
-  <AbsoluteLayout *ngIf="user?.online" horizontalAlignment="center"
-    [stlOpenUserProfile]="{userId: user?.userId, redirectTo: loggedInUserId === user?.userId ? 'userProfile': 'otherUserProfile'}">
+  <Image col="0" [stlOpenUserProfile]="{userId: user?.userId, redirectTo: 'otherUserProfile'}" [src]="getImageUrl(user,44,40)"
+    stretch="aspectFill" height="50" width="50" marginLeft="10" verticalAlignment="center" marginRight="15"
+    borderRadius="50"></Image>
+  <AbsoluteLayout *ngIf="user?.online" horizontalAlignment="center" [stlOpenUserProfile]="{userId: user?.userId, redirectTo: loggedInUserId === user?.userId ? 'userProfile': 'otherUserProfile'}">
     <Label height="10" top="37" left="27" width="10" borderRadius="22" backgroundColor="#71b02f"></Label>
   </AbsoluteLayout>
 </ng-container>
@@ -134,7 +133,7 @@
 <ng-container *ngIf="user && userCardType.USER_IMAGE_NAME_WITH_SCORE_IN_GAME_PLAY_SINGLE_PLAYER === type">
   <FlexboxLayout row="0" col="0" colSpan="2" class="Roboto-Regular" class="play-now-container">
     <FlexboxLayout >
-      <StackLayout (tap)='goToDashboard()' class="back-icon" width="12" verticalAlignment="middle">
+      <StackLayout (tap)='goToDashboard()' class="back-icon" width="10" verticalAlignment="middle">
         <Image src="~/assets/images/back-action.png" ></Image>
       </StackLayout>
       <Label text="{{otherInfo.actionText}}" textWrap="true"></Label>
@@ -153,15 +152,15 @@
   <Progress row="1" colSpan="2" marginTop="5" marginBottom="5" col="0" [value]="otherInfo?.progressValue" android:backgroundColor="#f1f1f1" class="game-progress" maxValue="100"></Progress>
   <StackLayout  row="2" col="0">
     <StackLayout orientation="horizontal" horizontalAlignment="left" android:backgroundColor="#f1f1f1" class="background-score">
-      <Image src="{{otherInfo.correctCount>=1 ? '~/assets/images/score1.png' : '~/assets/images/score0.png'}}">
+      <Image src="{{otherInfo.correctCount>=1 ? 'res://badge1' : 'res://badge1inactive'}}">
       </Image>
-      <Image src="{{otherInfo.correctCount>=2 ? '~/assets/images/score2.png' : '~/assets/images/score0.png'}}">
+      <Image src="{{otherInfo.correctCount>=2 ? 'res://badge2' : 'res://badge2inactive'}}">
       </Image>
-      <Image src="{{otherInfo.correctCount>=3 ? '~/assets/images/score3.png' : '~/assets/images/score0.png'}}">
+      <Image src="{{otherInfo.correctCount>=3 ? 'res://badge3' : 'res://badge3inactive'}}">
       </Image>
-      <Image src="{{otherInfo.correctCount>=4 ? '~/assets/images/score4.png' : '~/assets/images/score0.png'}}">
+      <Image src="{{otherInfo.correctCount>=4 ? 'res://badge4' : 'res://badge4inactive'}}">
       </Image>
-      <Image src="{{otherInfo.correctCount>=5 ? '~/assets/images/score5.png' : '~/assets/images/score0.png'}}">
+      <Image src="{{otherInfo.correctCount>=5 ? 'res://badge5' : 'res://badge5inactive'}}">
       </Image>
     </StackLayout>
   </StackLayout>
@@ -198,15 +197,15 @@
       </StackLayout>
 
       <StackLayout  android:backgroundColor="#f1f1f1"  row="1" col="0" colSpan="2" class="background-score">
-        <Image src="{{otherInfo.correctCount>=1 ? '~/assets/images/score1.png' : '~/assets/images/score0.png'}}">
+        <Image src="{{otherInfo.correctCount>=1 ? 'res://badge1' : 'res://badge1inactive'}}">
         </Image>
-        <Image src="{{otherInfo.correctCount>=2 ? '~/assets/images/score2.png' : '~/assets/images/score0.png'}}">
+        <Image src="{{otherInfo.correctCount>=2 ? 'res://badge2' : 'res://badge2inactive'}}">
         </Image>
-        <Image src="{{otherInfo.correctCount>=3 ? '~/assets/images/score3.png' : '~/assets/images/score0.png'}}">
+        <Image src="{{otherInfo.correctCount>=3 ? 'res://badge3' : 'res://badge3inactive'}}">
         </Image>
-        <Image src="{{otherInfo.correctCount>=4 ? '~/assets/images/score4.png' : '~/assets/images/score0.png'}}">
+        <Image src="{{otherInfo.correctCount>=4 ? 'res://badge4' : 'res://badge4inactive'}}">
         </Image>
-        <Image src="{{otherInfo.correctCount>=5 ? '~/assets/images/score5.png' : '~/assets/images/score0.png'}}">
+        <Image src="{{otherInfo.correctCount>=5 ? 'res://badge5' : 'res://badge5inactive'}}">
         </Image>
       </StackLayout>
     </GridLayout>
@@ -224,15 +223,15 @@
           <Label text="{{otherInfo.otherPlayer?.displayName}}" class="second-player-title"></Label>
       </StackLayout>
       <StackLayout  row="1" col="0" colSpan="2"  android:backgroundColor="#f1f1f1" class="background-score">
-        <Image src="{{otherInfo.otherPlayer?.score>=1 ? '~/assets/images/score1.png' : '~/assets/images/score0.png'}}">
+        <Image src="{{otherInfo.otherPlayer?.score>=1 ? 'res://badge1' : 'res://badge1inactive'}}">
         </Image>
-        <Image src="{{otherInfo.otherPlayer?.score>=2 ? '~/assets/images/score2.png' : '~/assets/images/score0.png'}}">
+        <Image src="{{otherInfo.otherPlayer?.score>=2 ? 'res://badge2' : 'res://badge2inactive'}}">
         </Image>
-        <Image src="{{otherInfo.otherPlayer?.score>=3 ? '~/assets/images/score3.png' : '~/assets/images/score0.png'}}">
+        <Image src="{{otherInfo.otherPlayer?.score>=3 ? 'res://badge3' : 'res://badge3inactive'}}">
         </Image>
-        <Image src="{{otherInfo.otherPlayer?.score>=4 ? '~/assets/images/score4.png' : '~/assets/images/score0.png'}}">
+        <Image src="{{otherInfo.otherPlayer?.score>=4 ? 'res://badge4' : 'res://badge4inactive'}}">
         </Image>
-        <Image src="{{otherInfo.otherPlayer?.score>=5 ? '~/assets/images/score5.png' : '~/assets/images/score0.png'}}">
+        <Image src="{{otherInfo.otherPlayer?.score>=5 ? 'res://badge5' : 'res://badge5inactive'}}">
         </Image>
       </StackLayout>
     </GridLayout>
