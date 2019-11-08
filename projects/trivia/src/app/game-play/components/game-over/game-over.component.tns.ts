@@ -78,6 +78,9 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
     }
   }
 
+  preventEventPropogation() {
+
+  }
 
   shareScore() {
     this.loaderStatus = true;
@@ -86,6 +89,15 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.destroy();
+  }
+
+
+  showDialog() {
+    this.dialogOpen = true;
+  }
+
+  closeDialog() {
+    this.dialogOpen = false;
   }
 
   openDialog(question) {
