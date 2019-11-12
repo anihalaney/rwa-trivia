@@ -300,10 +300,32 @@ button {
 .dark-theme {
   .text-color {
     color: #fff;
+    font-weight: 700;
+    text-align:center;
+    align-items: center;
   }
 }
 // mobile-design
 .error-text {
   margin-bottom: 15;
   color: red;
+}
+
+.report .text-color{
+  color: black;
+  font-weight: 200;
+  text-align: left;
+}
+
+
+.light-theme {
+  .text-color {
+    font-weight: 700;
+    text-align:center;
+    align-items: center;
+  }
+}
+
+.q-container{
+  align-items: center;  
 }
