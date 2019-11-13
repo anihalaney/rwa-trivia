@@ -101,7 +101,7 @@ export class QuestionAddUpdate {
     this.quillObject.questionText = text.html;
   }
 
-  createDefaultForm(question: Question): FormArray {
+  createDefaultForm(question: Question, isRichEditor = false): FormArray {
     const fgs: FormGroup[] = question.answers.map(answer => {
       const fg = new FormGroup({
         answerText: new FormControl(answer.answerText,

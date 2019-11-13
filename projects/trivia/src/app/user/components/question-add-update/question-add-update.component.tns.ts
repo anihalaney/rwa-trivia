@@ -195,15 +195,21 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
 
   onLoadFinished(event, id) {
     if (id === -1) {
+      if (this.oWebViewInterface) {
+        this.oWebViewInterface.emit('viewType', 'question');
+      }
       if (this.oWebViewInterface && this.editQuestion) {
         this.oWebViewInterface.emit('deltaObject', this.editQuestion.questionObject);
       }
 
     } else {
       const webviews = this.webViews.filter(p => p.id === id);
-      if (webviews.length === 1 && this.editQuestion) {
-        webviews[0].element.emit('deltaObject', this.editQuestion.answers[id].answerObject);
-      }
+        if (webviews.length === 1 && webviews[0].element) {
+          webviews[0].element.emit('viewType', 'answer');
+        }
+        if (webviews.length === 1 && this.editQuestion) {
+          webviews[0].element.emit('deltaObject', this.editQuestion.answers[id].answerObject);
+        }
     }
 
   }
@@ -394,10 +400,10 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
     const webInterface = new webViewInterfaceModule.WebViewInterface(webViewInstace, CONFIG.editorUrl);
 
     webInterface.on('quillContent', (quillContent) => {
-      quillText.patchValue(quillContent.html);
-      quillObject.patchValue(quillContent.delta);
-      this.cd.markForCheck();
-    });
+        quillText.patchValue(quillContent.html);
+        quillObject.patchValue(quillContent.delta);
+        this.cd.markForCheck();
+      });
 
     webInterface.on('uploadImageStart', (uploadImage) => {
       dialogs.action({

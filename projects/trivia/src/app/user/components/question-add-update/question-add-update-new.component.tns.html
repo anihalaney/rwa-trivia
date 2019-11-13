@@ -24,7 +24,7 @@
                                 <CheckBox row="0" col="0" #elem formControlName="correct"
                                     class="checkbox checkbox-section" fillColor="#71b02f"></CheckBox>
                                 <StackLayout row="0" col="1">
-                                    <WebView #webView [id]="i" height="100" (loadFinished)="onLoadFinished($event,i)"
+                                    <WebView #webView [id]="i" height="200"  (loadFinished)="onLoadFinished($event,i)"
                                         (loaded)="answerLoaded($event,i)" (unloaded)="answerUnloaded($event,i)">
                                     </WebView>
                                 </StackLayout>
