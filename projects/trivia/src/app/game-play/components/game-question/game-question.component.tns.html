@@ -1,6 +1,6 @@
 <GridLayout>
   <ScrollView id="scrollList">
-    <StackLayout marginLeft="10" marginRight="10" [class.m-b-70]="showContinueBtn" backgroundColor="#ffffff">
+    <StackLayout marginLeft="10" marginRight="10" [class.m-b-70]="showContinueBtn || ((answeredIndex>=0 || doPlay === false) && !showContinueBtn)" backgroundColor="#ffffff">
       <GridLayout *ngIf="user && user!==null && playerMode == PlayerMode.Single" rows="*,*,*,*" columns="*,*"
         class="sideStackLayoutHeader" paddingTop="10" paddingBottom="10">
         <app-user-card [user]="user" [userId]="user.userId" [isGamePlay]=true

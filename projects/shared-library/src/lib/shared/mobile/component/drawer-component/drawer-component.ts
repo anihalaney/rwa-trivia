@@ -241,7 +241,7 @@ export class DrawerComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.userActions.updateUser(user, status));
     }
 
-    recentGames() {
+    navigateToRecentGames() {
         this.routerExtension.navigate(['/recent-games'], { clearHistory: true });
         this.closeDrawer();
     }
@@ -261,11 +261,6 @@ export class DrawerComponent implements OnInit, OnDestroy {
         this.closeDrawer();
     }
 
-    navigateToFriendList() {
-        this.routerExtension.navigate(['/user/my/invite-friends'], { clearHistory: true });
-        this.closeDrawer();
-    }
-
     navigateToPrivacyPolicy() {
         this.routerExtension.navigate(['/privacy-policy'], { clearHistory: true });
         this.closeDrawer();
@@ -276,24 +271,9 @@ export class DrawerComponent implements OnInit, OnDestroy {
         this.closeDrawer();
     }
 
-    navigateToAchievements() {
-        this.routerExtension.navigate(['/achievements'], { clearHistory: true });
-        this.closeDrawer();
-    }
-
     navigateToUserFeedback() {
         this.routerExtension.navigate(['/user-feedback'], { clearHistory: true });
         this.closeDrawer();
-    }
-
-    scrollToBottom() {
-        // wait for the layout to be loaded before scroll to bottom
-        setTimeout(() => {
-            this.scrollList.nativeElement.scrollToVerticalOffset(this.scrollList.nativeElement.scrollableHeight, true);
-        }, 100);
-    }
-
-    ngOnDestroy(): void {
     }
 
     get isDrawerOpen() {
@@ -303,4 +283,8 @@ export class DrawerComponent implements OnInit, OnDestroy {
             return isDrawerOpenOrClosed;
         }
     }
+
+    ngOnDestroy(): void {
+    }
+
 }

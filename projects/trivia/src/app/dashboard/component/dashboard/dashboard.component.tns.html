@@ -20,7 +20,7 @@
                 </GridLayout>
                 <GridLayout *ngIf="user && user!==null" col="2" ios:margin="3" android:margin="10"
                     verticalAlignment="center" horizontalAlignment="right" android:width="24" ios:width="24">
-                    <Label stlRippleEffect stlBackgroundColor="transparent" stlOpacity="0.5" stlBackgroundColorAfter="transparent"
+                    <Label (rippleTap)="open()"stlRippleEffect stlBackgroundColor="transparent" stlOpacity="0.5" stlBackgroundColorAfter="transparent"
                         text="&#xe901;" class="ico icon-noun-game" fontSize="20" color="#3b5998"></Label>
                 </GridLayout>
                 <GridLayout *ngIf="user && user!==null" class="index-0" col="3" ios:margin="3" android:margin="10"
@@ -101,7 +101,7 @@
                                         textWrap="true"></Label>
                                     <Label class="timeout" text="{{timeoutLive}}" textWrap="true"></Label>
                                 </FlexboxLayout>
-                                <FlexboxLayout *ngIf="account && (!account?.gamePlayed ||account?.gamePlayed < 0)"
+                                <FlexboxLayout *ngIf="account && !account?.signUpQuestionAnswered"
                                     row="3" orientation="horizontal" class="dashboard_body-grid0-4">
                                     <Label text="&#xe938;" class="ico icon-life-icon icon"></Label>
                                     <Label class="no-life" text="No Life will be deducted" textWrap="true"></Label>
@@ -133,7 +133,7 @@
                         </GridLayout>
 
                         <GridLayout row="2" col="0" class="dashboard_body-grid2">
-                            <question [user]="user" [userDict]="userDict" [theme]="'dark'" [hideAnswer]=true></question>
+                            <question [user]="user" [userDict]="userDict" [theme]="'dark'"></question>
                         </GridLayout>
 
                         <GridLayout row="3" col="0" iosOverflowSafeArea="false" class="dashboard_body-grid3"
@@ -197,7 +197,7 @@
                             </GridLayout>
                             <GridLayout row="1" orientation="horizontal" horizontalAlignment="left"
                                 iosOverflowSafeArea="false">
-                                <Button width="50%" class="btn-transparent blue-border" text="SUBMIT A QUESTION"
+                                <Button class="btn-transparent blue-border" text="SUBMIT A QUESTION"
                                     (tap)="navigateToMyQuestion()">
                                 </Button>
                             </GridLayout>

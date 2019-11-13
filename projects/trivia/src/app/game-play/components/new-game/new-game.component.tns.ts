@@ -153,13 +153,13 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     this.showGameStartLoader = true;
     this.gameOptions.tags = this.selectedTags;
     this.gameOptions.categoryIds = this.filteredCategories.filter(c => c.requiredForGamePlay || c.isSelected).map(c => c.id);
-    this.validateGameOptions(true, this.gameOptions);
-
-    if (this.gameOptions.playerMode === PlayerMode.Single) {
-      delete this.gameOptions.opponentType;
+    if (this.validateGameOptions(true, this.gameOptions)) {
+      if (this.gameOptions.playerMode === PlayerMode.Single) {
+        delete this.gameOptions.opponentType;
+      }
+      this.startNewGame(this.gameOptions);
     }
 
-    this.startNewGame(this.gameOptions);
   }
 
 

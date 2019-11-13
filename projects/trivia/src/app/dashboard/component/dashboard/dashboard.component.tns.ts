@@ -59,6 +59,10 @@ export class DashboardComponent extends Dashboard implements OnInit, OnDestroy {
     this.page.on('loaded', () => { this.renderView = true; this.cd.markForCheck(); });
   }
 
+  open() {
+    this.routerExtension.navigate(['/game-play', 'Mt8jyX30KBFsqvTFRNsU'], { clearHistory: true })
+  }
+
   startNewGame(mode: string) {
 
     if (this.applicationSettings && this.applicationSettings.lives.enable) {
@@ -100,5 +104,3 @@ export class DashboardComponent extends Dashboard implements OnInit, OnDestroy {
     this.renderView = false;
   }
 }
-
-
