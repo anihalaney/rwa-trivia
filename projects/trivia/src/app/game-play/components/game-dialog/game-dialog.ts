@@ -45,7 +45,7 @@ export class GameDialog {
   showBadge = false;
   MAX_TIME_IN_SECONDS_LOADER = 2;
   MAX_TIME_IN_SECONDS_BADGE = 1;
-  showLoader = false;
+  showLoader = true;
   showWinBadge = false;
   isCorrectAnswer = false;
   turnFlag: boolean;
@@ -82,6 +82,7 @@ export class GameDialog {
     this.subscriptions.push(this.store.select(categoryDictionary).pipe(take(1)).subscribe(c => this.categoryDictionary = c));
     this.subscriptions.push(
       this.gameObs.subscribe(game => {
+        this.showLoader = false;
         this.game = game;
         this.playerMode = game.gameOptions.playerMode;
         this.threeConsecutiveAnswer = false;
