@@ -21,7 +21,6 @@ import { RadListViewComponent } from "nativescript-ui-listview/angular";
 export class LeaderboardComponent extends Leaderboard implements OnDestroy, OnInit {
   @ViewChild('dropdown', { static: false }) dropdown: ElementRef;
   @ViewChild('dropdowntop', { static: false }) dropdownTop: ElementRef;
-  @ViewChild('listView') listView: ElementRef;
   // This is magic variable
   // it delay complex UI show Router navigation can finish first to have smooth transition
   renderView = false;

@@ -29,7 +29,6 @@ import { ModalDialogOptions, ModalDialogService } from 'nativescript-angular/mod
 import { WelcomeScreenComponent } from '../../../../../shared-library/src/lib/shared/mobile/component';
 import * as appSettingsStorage from 'tns-core-modules/application-settings';
 
-
 registerElement('Carousel', () => Carousel);
 registerElement('CarouselItem', () => CarouselItem);
 
@@ -165,7 +164,8 @@ export class AppComponent implements OnInit, OnDestroy {
 
   hideBottomBarForSelectedRoutes(url) {
     if (url === '/signup-extra-info' || url === '/select-category-tag' || url === '/first-question' ||
-      (!url.includes('game-play/game-options') && (url.includes('game-play'))) || url === '/login') {
+      url.includes('user/my/profile') || url === '/login' ||
+      (!url.includes('game-play/game-options') && (url.includes('game-play')))) {
       return false;
     } else {
       return true;
