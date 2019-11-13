@@ -37,6 +37,8 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
   showQuesAndAnswer: Boolean = true;
   renderView = false;
   reportQuestion: Question;
+  stackBackgroundColor = '';
+  isScreenShot = false;
   constructor(public store: Store<AppState>, public userActions: UserActions,
     private windowRef: WindowRef, public utils: Utils,
     private modal: ModalDialogService, private vcRef: ViewContainerRef,
@@ -44,7 +46,7 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
     super(store, userActions, utils, cd);
   }
   ngOnInit() {
-    this.page.actionBarHidden = false;
+    this.page.actionBarHidden = true;
     this.subscriptions.push(this.store.select(gamePlayState).pipe(select(s => s.saveReportQuestion)).subscribe(state => {
       this.cd.markForCheck();
     }));
@@ -79,6 +81,9 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
     }
   }
 
+  preventEventPropogation() {
+
+  }
 
   shareScore() {
     this.loaderStatus = true;
@@ -122,13 +127,18 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
 
   screenshot() {
     this.playerUserName = this.user.displayName;
+    this.stackBackgroundColor = '#ffffff';
+    this.isScreenShot = true;
     // we need to put setTimeout because to change username before screenshot.
     setTimeout(() => {
       const img = new Image;
+      this.isScreenShot = false;
       img.imageSource = getImage(this.stackLayout);
       const shareImage = img.imageSource;
       SocialShare.shareImage(shareImage);
       this.playerUserName = 'You';
+      this.stackBackgroundColor = '';
+      this.cd.markForCheck();
     }, 100);
   }
 

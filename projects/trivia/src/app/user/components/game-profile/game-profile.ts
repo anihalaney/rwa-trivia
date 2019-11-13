@@ -36,6 +36,7 @@ export class GameProfile {
     userInvitations: { [key: string]: Invitation };
     tags: any = {};
     tagsArray: any = {};
+    loader: Boolean = false;
     constructor(
         public route: ActivatedRoute,
         public router: Router,
@@ -170,6 +171,7 @@ export class GameProfile {
     }
 
     sendFriendRequest() {
+        this.loader = true;
         const inviteeUserId = this.user.userId;
         this.store.dispatch(this.userAction.addUserInvitation(
             { userId: this.loggedInUser.userId, inviteeUserId: inviteeUserId }));

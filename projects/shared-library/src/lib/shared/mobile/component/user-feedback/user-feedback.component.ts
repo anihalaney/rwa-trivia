@@ -47,10 +47,9 @@ export class UserFeedbackComponent implements OnDestroy, OnInit {
 
     this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
       this.user = user;
+      this.initForm();
       this.cd.markForCheck();
     }));
-
-    this.initForm();
   }
 
   initForm() {
@@ -63,11 +62,15 @@ export class UserFeedbackComponent implements OnDestroy, OnInit {
 
   resetForm() {
     this.feedbackForm.controls['feedback'].reset();
+    if (!(this.user && this.user.email)) {
+      this.feedbackForm.controls['email'].reset();
+    }
   }
 
   onSubmit() {
     this.hideKeyboard();
     if (!this.feedbackForm.valid) {
+      this.utils.showMessage('error', 'Please Fill the details');
       return;
     }
     let body;
