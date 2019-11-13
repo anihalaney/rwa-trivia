@@ -1,8 +1,7 @@
 import {
-    ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, QueryList, ViewChildren
+    ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, QueryList, ViewChildren, Input, SimpleChanges, OnChanges, Output, EventEmitter
 } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { ModalDialogParams } from 'nativescript-angular/directives/dialogs';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { Observable } from 'rxjs';
 import { Utils } from 'shared-library/core/services';
@@ -21,12 +20,13 @@ declare var IQKeyboardManager;
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class ReportGameComponent implements OnInit, OnDestroy {
     iqKeyboard: any;
-    question: Question;
+    @Input() question: Question;
     reportQuestion: ReportQuestion;
-    user: User;
-    game: Game;
+    @Input() user: User;
+    @Input() game: Game;
     ref: any;
-    userDict: { [key: string]: User };
+    @Input() userDict: { [key: string]: User };
+    @Output() closePopUp = new EventEmitter<boolean>();
     categoryDict$: Observable<{ [key: number]: Category }>;
     categoryDict: { [key: number]: Category };
     issue = '';
@@ -38,29 +38,15 @@ export class ReportGameComponent implements OnInit, OnDestroy {
 
     @ViewChildren('textField') textField: QueryList<ElementRef>;
 
-    constructor(private store: Store<AppState>, private params: ModalDialogParams, public utils: Utils,
+    constructor(private store: Store<AppState>, public utils: Utils,
         private cd: ChangeDetectorRef) {
         if (isIOS) {
             this.iqKeyboard = IQKeyboardManager.sharedManager();
             this.iqKeyboard.shouldResignOnTouchOutside = true;
         }
-        this.question = params.context.question;
-        this.user = params.context.user;
-        this.game = params.context.game;
-        this.userDict = params.context.userDict;
 
-        this.reportOptions = [
-            new ReportOption('Offensive content'),
-            new ReportOption('Spelling or grammar error'),
-            new ReportOption('Wrong answer'),
-            new ReportOption('Incorrect category or tags'),
-            new ReportOption('Question is not clear'),
-            new ReportOption('Spam'),
-            new ReportOption('Other')
-        ];
+        this.generateNewReportOptions();
         this.cd.markForCheck();
-
-
     }
 
     ngOnInit() {
@@ -76,60 +62,57 @@ export class ReportGameComponent implements OnInit, OnDestroy {
 
     saveReportQuestion() {
         this.hideKeyboard();
-        if (this.selectedOption == null) {
-            this.utils.showMessage('error', 'Select issue!');
-            return;
-        }
-        if (this.otherReason === null && this.selectedOption === 'Other') {
-            this.utils.showMessage('error', 'Reason is required!');
-            return;
-        } {
-            this.reportQuestion.gameId = this.game.gameId;
-            let reason: string;
-
-            this.reportQuestion.created_uid = this.user.userId;
-            if (this.selectedOption === 'Other') {
-                reason = this.otherReason;
-            } else {
-                reason = this.selectedOption;
+        const selectedReasons: string[] = [];
+        this.reportOptions.map((res) => {
+            if (res.selected && res.text !== 'Other') {
+                selectedReasons.push(res.text);
             }
-            const info: { [key: string]: QuestionMetadata } = {};
-            const questionMetadata = new QuestionMetadata();
-            questionMetadata.reason = reason;
+        });
 
-            info[this.question.id] = { ...questionMetadata };
-            this.reportQuestion.questions = info;
-            this.store.dispatch(new gameplayactions.SaveReportQuestion({ reportQuestion: this.reportQuestion, game: this.game }));
-            this.params.closeCallback();
+        if (this.otherReason !== null && this.otherReason !== '') {
+            selectedReasons.push(this.otherReason);
         }
+
+        if (Array.isArray(selectedReasons) && selectedReasons.length <= 0) {
+            this.utils.showMessage('error', 'Select any one!');
+            return;
+        }
+        this.reportQuestion.gameId = this.game.gameId;
+        this.reportQuestion.created_uid = this.user.userId;
+        const info: { [key: string]: QuestionMetadata } = {};
+        const questionMetadata = new QuestionMetadata();
+        questionMetadata.reason = selectedReasons;
+
+        info[this.question.id] = { ...questionMetadata };
+        this.reportQuestion.questions = info;
+
+        this.store.dispatch(new gameplayactions.SaveReportQuestion({ reportQuestion: this.reportQuestion, game: this.game }));
+        this.generateNewReportOptions();
+        this.closePopUp.emit(false);
         this.cd.markForCheck();
     }
 
-    changeCheckedRadio(reportOption: ReportOption): void {
-        reportOption.selected = !reportOption.selected;
-        if (!reportOption.selected) {
-            return;
-        }
-        this.selectedOption = reportOption.text;
-        // uncheck all other optionss
-        this.reportOptions.forEach(option => {
-            if (option.text !== reportOption.text) {
-                option.selected = false;
-            }
-        });
+    selectReasons(i): void {
+        const reportOptions = this.reportOptions[i];
+        reportOptions.selected = !reportOptions.selected;
+        this.reportOptions = [...this.reportOptions];
         this.cd.markForCheck();
+    }
+
+    closeDialogReport() {
+        this.generateNewReportOptions();
+        this.closePopUp.emit(false);
     }
 
     get otherAnswer() {
-        const otherAnswer = this.question.answers.filter(ans => !ans.correct).map(ans => ans.answerText);
+        const otherAnswer = this.question.answers.filter(ans => !ans.correct);
         return otherAnswer;
     }
 
     get correctAnswer() {
-        const correctAnswer = this.question.answers.filter(ans => ans.correct).map(ans => ans.answerText);
+        const correctAnswer = this.question.answers.filter(ans => ans.correct);
         return correctAnswer;
     }
-
     get categoryName() {
         const categories = this.question.categoryIds.map(id => {
             return this.categoryDict[id];
@@ -137,15 +120,23 @@ export class ReportGameComponent implements OnInit, OnDestroy {
         return categories.map(category => category.categoryName).join(',');
     }
 
-    onClose(): void {
-        this.params.closeCallback();
-    }
-
     ngOnDestroy() {
     }
 
     hideKeyboard() {
         this.utils.hideKeyboard(this.textField);
+    }
+
+    private generateNewReportOptions() {
+        this.reportOptions = [
+            new ReportOption('Offensive content'),
+            new ReportOption('Spelling or grammar error'),
+            new ReportOption('Wrong answer'),
+            new ReportOption('Incorrect category or tags'),
+            new ReportOption('Question is not clear'),
+            new ReportOption('Spam'),
+            new ReportOption('Other')
+        ];
     }
 
 }

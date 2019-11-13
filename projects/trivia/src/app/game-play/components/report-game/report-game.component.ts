@@ -44,9 +44,7 @@ export class ReportGameComponent implements OnInit, OnDestroy {
             this.categoryDict = categoryDict;
             this.cd.markForCheck();
         }));
-
     }
-
 
     ngOnInit() {
         this.reportQuestion = new ReportQuestion();
@@ -62,13 +60,13 @@ export class ReportGameComponent implements OnInit, OnDestroy {
 
     saveReportQuestion() {
         this.reportQuestion.gameId = this.game.gameId;
-        let reason = '';
+        const reason: string[] = [];
 
         this.reportQuestion.created_uid = this.user.userId;
         if (this.reportQuestionForm.get('reason').value === 'other') {
-            reason = this.reportQuestionForm.get('otherReason').value;
+            reason.push(this.reportQuestionForm.get('otherReason').value);
         } else {
-            reason = this.reportQuestionForm.get('reason').value;
+            reason.push(this.reportQuestionForm.get('reason').value);
         }
         const info: { [key: string]: QuestionMetadata } = {};
         const questionMetadata = new QuestionMetadata();

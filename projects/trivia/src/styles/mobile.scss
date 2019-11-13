@@ -45,3 +45,20 @@
   border-bottom-width: 1;
   border-bottom-color: #d3d3d3;
 }
+
+.report .text-color{
+  color: black;
+}
+
+.report .report-text-color{
+  color: rgb(76, 175, 80);
+}
+
+.QA-text-align{
+  text-align:center;
+}
+
+.report .QA-text-align,
+.reported-details-title .QA-text-align {
+  text-align: left;
+}

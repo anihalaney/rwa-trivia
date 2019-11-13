@@ -176,3 +176,17 @@ Button {
         z-index: 1;
     }
 }
+
+.dialog {
+    // visibility: collapse;
+    .report__dialogOpen &__wrapper--report {
+        visibility: visible;
+    }
+
+    &__wrapper--report {
+        background: rgba(0, 0, 0, 0.5);
+        visibility: collapse;
+        width: 100%;
+        z-index: 1;
+    }
+}

@@ -6,6 +6,6 @@ export class ReportQuestion {
 
 
 export class QuestionMetadata {
-    reason: string;
+    reason: string[];
 }
 

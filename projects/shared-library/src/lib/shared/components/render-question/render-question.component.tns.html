@@ -9,15 +9,8 @@
 </StackLayout>
 
 <ng-template #renderView>
-        <!-- <Label class="text-color" horizontalAlignment="left" verticalAlignment="top" paddingLeft="10"
-            text="{{questionIndex}} . " textWrap="true" *ngIf="questionIndex"></Label> -->
-    <!-- <StackLayout orientation="horizontal"  width="100%" class="{{theme}}-theme">
-        <Label  lineHeight="10" class="text-color" text="{{question?.questionText}}" fontSize="17" 
+    <StackLayout orientation="horizontal"  width="100%" class="{{theme}}-theme">
+        <Label lineHeight="10" class="text-color QA-text-align" text="{{question?.questionText}}" fontSize="17" 
             textWrap="true"></Label>
-    </StackLayout> -->
-
-    <GridLayout rows="*" columns="*">
-            <Label  lineHeight="10"  class="text-color"text="{{question?.questionText}}" fontSize="17" 
-            textWrap="true"></Label>  
-    </GridLayout>
+    </StackLayout>
 </ng-template>

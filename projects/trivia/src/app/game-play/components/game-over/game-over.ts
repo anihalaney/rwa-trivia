@@ -43,7 +43,8 @@ export class GameOver implements OnInit {
   userInvitations: { [key: string]: Invitation };
   userCardType = userCardType;
   correctAnswerClassIndexIncrement = 0;
-  dialogOpen = false;
+  dialogOpen: boolean = false;
+  openReportDialog: boolean = false;
   continueButtonClicked(event: any) {
     this.gameOverContinueClicked.emit();
   }

@@ -51,7 +51,6 @@ export class RenderAnswerComponent implements OnInit, OnChanges {
             <link rel="stylesheet" href="${externalUrl.hightlighCSS}" crossorigin="anonymous"></html>`;
             // Created new local answer object because here I am modifing answer object
         }
-
         if (this.answer) {
             this.currentAnswer = { ...this.answer };
         }
@@ -88,7 +87,7 @@ export class RenderAnswerComponent implements OnInit, OnChanges {
                     if (changes.isWrong.currentValue) {
                         // tslint:disable-next-line:max-line-length
                         this.currentAnswer.answerText =
-                            `${this.htmlStartTag}  ${this.currentAnswer.answerText}   
+                            `${this.htmlStartTag}  ${this.currentAnswer.answerText}
                         <style> html {background:#d54937 !important;color:#ffffff !important;font-size:17;}</style> 
                         ${this.scriptToGetHeight}   ${this.htmlEndTag}`;
                     }
@@ -97,7 +96,7 @@ export class RenderAnswerComponent implements OnInit, OnChanges {
                     if (changes.isRight.currentValue) {
                         // tslint:disable-next-line:max-line-length
                         this.currentAnswer.answerText =
-                            `${this.htmlStartTag} ${this.currentAnswer.answerText}   
+                            `${this.htmlStartTag} ${this.currentAnswer.answerText}
                         <style> html {background:#71b02f!important;color:#ffffff !important;font-size:17;}</style>
                          ${this.scriptToGetHeight}   ${this.htmlEndTag}`;
                     }

@@ -17,7 +17,7 @@ import {
   appConstants, GameConstant, GameMode, OpponentType, Parameter, PlayerMode, FirebaseScreenNameConstants
 } from 'shared-library/shared/model';
 import {
-  FirebaseAnalyticsEventConstants, FirebaseAnalyticsKeyConstants, GeneralConstants
+  FirebaseAnalyticsEventConstants, FirebaseAnalyticsKeyConstants, GeneralConstants, Question
 } from '../../../../../../shared-library/src/lib/shared/model';
 import { Page } from 'tns-core-modules/ui/page/page';
 
@@ -36,6 +36,7 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
   stackLayout;
   showQuesAndAnswer: Boolean = true;
   renderView = false;
+  reportQuestion: Question;
   constructor(public store: Store<AppState>, public userActions: UserActions,
     private windowRef: WindowRef, public utils: Utils,
     private modal: ModalDialogService, private vcRef: ViewContainerRef,
@@ -88,7 +89,6 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
     this.destroy();
   }
 
-
   showDialog() {
     this.dialogOpen = true;
   }
@@ -97,13 +97,14 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
     this.dialogOpen = false;
   }
 
-  openDialog(question) {
-    const options = {
-      context: { 'question': question, 'user': this.user, 'game': this.game, 'userDict': this.userDict },
-      fullscreen: false,
-      viewContainerRef: this.vcRef
-    };
-    this.modal.showModal(ReportGameComponent, options);
+  closeDialogReport(closePopUp) {
+    this.openReportDialog = this.page.actionBarHidden = closePopUp;
+  }
+
+  openDialogReport(question) {
+    this.reportQuestion = new Question();
+    this.reportQuestion = question;
+    this.openReportDialog = this.page.actionBarHidden = true;
   }
 
   stackLoaded(args) {

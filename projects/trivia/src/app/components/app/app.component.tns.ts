@@ -47,7 +47,8 @@ export class AppComponent implements OnInit, OnDestroy {
   showBottomBar: Boolean = true;
   currentRouteUrl: string;
 
-  constructor(private store: Store<AppState>,
+  constructor(
+    private store: Store<AppState>,
     private navigationService: NavigationService,
     private ngZone: NgZone,
     private routerExtension: RouterExtensions,
@@ -58,8 +59,8 @@ export class AppComponent implements OnInit, OnDestroy {
     private cd: ChangeDetectorRef,
     private router: Router,
     private _modalService: ModalDialogService,
-    private _vcRef: ViewContainerRef) {
-
+    private _vcRef: ViewContainerRef
+  ) {
     this.handleBackPress();
   }
 
