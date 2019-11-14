@@ -166,6 +166,7 @@ Button {
   justify-content: space-between;
   margin: 15;
   width: 100%;
+  padding: 0 12 0 12;
 }
 
 .game-result-title{
@@ -279,5 +280,46 @@ Button {
     visibility: collapse;
     width: 100%;
     z-index: 1;
+  }
+}
+
+.flex {
+  &-c {
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+  }
+}
+
+.p-r {
+  &-10 {
+    padding-right: 10;
+  }
+
+  &-20 {
+    padding-right: 20;
+  }
+}
+
+.connect {
+  &_label {
+    color: #000;
+    font-size: 18;
+  }
+
+  &_name {
+    font-size: 16;
+  }
+}
+
+.add-friend-border {
+  // padding: 10;
+  border-width: 1;
+  border-color: #3b5998;
+  border-radius: 30;
+
+  image {
+    height: 20;
+    width: 20;
   }
 }
