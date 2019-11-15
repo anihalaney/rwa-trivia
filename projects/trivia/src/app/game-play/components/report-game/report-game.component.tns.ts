@@ -81,7 +81,7 @@ export class ReportGameComponent implements OnInit, OnDestroy {
         this.reportQuestion.created_uid = this.user.userId;
         const info: { [key: string]: QuestionMetadata } = {};
         const questionMetadata = new QuestionMetadata();
-        questionMetadata.reason = selectedReasons;
+        questionMetadata.reasons = selectedReasons;
 
         info[this.question.id] = { ...questionMetadata };
         this.reportQuestion.questions = info;
