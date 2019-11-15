@@ -1,8 +1,10 @@
 <GridLayout>
   <ScrollView id="scrollList">
-    <StackLayout marginLeft="10" marginRight="10" [class.m-b-70]="showContinueBtn || ((answeredIndex>=0 || doPlay === false) && !showContinueBtn)" backgroundColor="#ffffff">
+    <StackLayout margin="0 10"
+      [class.m-b-70]="showContinueBtn || ((answeredIndex>=0 || doPlay === false) && !showContinueBtn)"
+      backgroundColor="#ffffff">
       <GridLayout *ngIf="user && user!==null && playerMode == PlayerMode.Single" rows="*,*,*,*" columns="*,*"
-        class="sideStackLayoutHeader" paddingTop="10" paddingBottom="10">
+        class="sideStackLayoutHeader" padding="10 0">
         <app-user-card [user]="user" [userId]="user.userId" [isGamePlay]=true
           [type]="userCardType.USER_IMAGE_NAME_WITH_SCORE_IN_GAME_PLAY_SINGLE_PLAYER"
           [otherInfo]="{bits: account.bits, bytes:account.bytes, progressValue: progressValue, correctCount:correctCount,questionRound:questionRound,totalRound:totalRound,actionText:actionText }">
@@ -76,7 +78,7 @@
   <AbsoluteLayout backgroundColor="#ffffff" verticalAlignment="bottom">
     <StackLayout width="100%" *ngIf="showContinueBtn || ((answeredIndex>=0 || doPlay === false) && !showContinueBtn)">
       <Button class="Hind-Medium btn-transparent" (rippleTap)="continueClicked.emit($event)"
-        *ngIf="answeredText!== null && showContinueBtn" text="Next Round"  stlRippleEffect></Button>
+        *ngIf="answeredText!== null && showContinueBtn" text="Next Round" stlRippleEffect></Button>
       <FlexboxLayout *ngIf="(answeredIndex>=0 || doPlay === false) && !showContinueBtn" alignItems="center"
         orientation="horizontal" justifyContent="center" backgroundColor="#c0c0c0" class="Hind-Medium" width="100%"
         height="70">
