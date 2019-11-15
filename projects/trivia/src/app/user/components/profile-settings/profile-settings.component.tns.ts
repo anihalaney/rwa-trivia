@@ -26,6 +26,8 @@ import { userState } from '../../store';
 import { LocationResetDialogComponent } from './location-reset-dialog/location-reset-dialog.component';
 import { ProfileSettings } from './profile-settings';
 import { AuthenticationProvider } from 'shared-library/core/auth';
+import * as Platform from 'tns-core-modules/platform';
+
 declare var IQKeyboardManager;
 
 @Component({
@@ -46,7 +48,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
   private tagItems: ObservableArray<TokenModel>;
   SOCIAL_LABEL = 'CONNECT YOUR SOCIAL ACCOUNT';
   @ViewChildren('textField', { read: false }) textField: QueryList<ElementRef>;
-
+  platform = Platform;
   subscriptions = [];
   isValidDisplayName: boolean = null;
   isLocationEdit: boolean = false;

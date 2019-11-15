@@ -12,6 +12,8 @@ export class GameContinue implements OnInit {
   @Input() game: Game;
   @Input() userDict: { [key: string]: User };
   @Input() totalRound: number;
+  @Input() turnFlag: boolean;
+  @Input() threeConsecutiveAnswer: boolean;
   @Input() applicationSettings: ApplicationSettings;
   @Input() otherPlayer: User;
   user$: Observable<User>;

@@ -102,7 +102,24 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
     this.dialogOpen = false;
   }
 
+  closeAllPopOver() {
+    this.questionsArray.map((res) => {
+      res.openReport = false;
+    });
+  }
+
+  handlePopOver(row) {
+    this.questionsArray.map((res) => {
+      if (res.id === row.id) {
+        res.openReport = !res.openReport;
+      } else {
+        res.openReport = false;
+      }
+    });
+  }
+
   openDialog(question) {
+    this.handlePopOver(question);
     const options = {
       context: { 'question': question, 'user': this.user, 'game': this.game, 'userDict': this.userDict },
       fullscreen: false,
