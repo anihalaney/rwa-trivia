@@ -44,9 +44,10 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
     private modal: ModalDialogService, private vcRef: ViewContainerRef,
     public cd: ChangeDetectorRef, private routerExtensions: RouterExtensions, private page: Page) {
     super(store, userActions, utils, cd);
-  }
-  ngOnInit() {
     this.page.actionBarHidden = true;
+  }
+
+  ngOnInit() {
     this.subscriptions.push(this.store.select(gamePlayState).pipe(select(s => s.saveReportQuestion)).subscribe(state => {
       this.cd.markForCheck();
     }));
@@ -119,13 +120,13 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
   }
 
   closeDialogReport(closePopUp) {
-    this.openReportDialog = this.page.actionBarHidden = closePopUp;
+    this.openReportDialog = closePopUp;
   }
 
   openDialogReport(question) {
     this.reportQuestion = new Question();
     this.reportQuestion = question;
-    this.openReportDialog = this.page.actionBarHidden = true;
+    this.openReportDialog = true;
   }
 
   stackLoaded(args) {
