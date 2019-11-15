@@ -44,7 +44,6 @@ export class BottomBarComponent implements OnChanges, OnDestroy, OnInit {
         }));
 
         this.router.events.subscribe((val) => {
-            console.log('redirect');
             if (val instanceof NavigationEnd) {
                 const nav = val.url;
                 if (this.isDrawerOpenOrClosed === 'drawerClosed' || !this.isDrawerOpenOrClosed) {
@@ -56,7 +55,6 @@ export class BottomBarComponent implements OnChanges, OnDestroy, OnInit {
     }
 
     ngOnChanges() {
-        console.log('redirect 61 ')
         if (this.isDrawerOpenOrClosed === 'drawerClosed' || !this.isDrawerOpenOrClosed) {
             this.bottomBarNavigationOnRouting(this.router.url);
         } else {
