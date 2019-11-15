@@ -217,44 +217,43 @@
                   <label row="0" col="0" class="navigate-button-solid Hind-Medium"
                     [text]="game.gameOptions?.playerMode == PlayerMode.Single ? 'Play Again' : 'Invite to play again'"
                     (rippleTap)="reMatchGame()" stlRippleEffect></label>
+                  <GridLayout
+                    *ngIf="(game.gameOptions.opponentType == opponentType.Random || game.gameOptions.isChallenge )"
+                    row="1" col="0" rows="*" columns="auto,*" class="navigate-button" padding="10">
+                    <app-user-card row="0" col="0" [userId]="otherUserId"
+                      [type]="userCardType.USER_IMAGE_NAME_PROFILE_HORIZONTAL" [userType]="0">
+                    </app-user-card>
 
-                  <GridLayout 
-                  *ngIf="(game.gameOptions.opponentType == opponentType.Random || game.gameOptions.isChallenge )"
-                  row="1" col="0" rows="*" columns="auto,*" class="navigate-button" padding="10">
-                      <app-user-card row="0" col="0" [userId]="otherUserId"
-                        [type]="userCardType.USER_IMAGE_NAME_PROFILE_HORIZONTAL" [userType]="0">
-                      </app-user-card>
-  
-                      <GridLayout row="0" col="1" rows="*" columns="*,auto"
-                        *ngIf="(game.gameOptions.opponentType == opponentType.Random || game.gameOptions.isChallenge ) && 
+                    <GridLayout row="0" col="1" rows="*" columns="*,auto"
+                      *ngIf="(game.gameOptions.opponentType == opponentType.Random || game.gameOptions.isChallenge ) && 
                         otherUserInfo?.email && userInvitations &&  userInvitations[otherUserInfo?.email]?.status === 'add'">
-                        <FlexboxLayout row="0" col="0" class="flex-c p-r-20 connect">
-                          <Label *ngIf="otherUserInfo?.displayName" text="Connect with" class="connect_label"
-                            textWrap="true"></Label>
-                          <Label [text]="otherUserInfo?.displayName" class="connect_name" textWrap="true"></Label>
-                        </FlexboxLayout>
-                        <FlexboxLayout row="0" col="1" class="flex-c p-r-10">
-                          <GridLayout (rippleTap)="inviteAsFriend()" stlRippleEffect stlOpacity="0.5"
-                            stlBackgroundColorAfter="transparent" class="add-friend-border" padding="10">
-                            <Image src="res://addfriend"></Image>
-                          </GridLayout>
-                        </FlexboxLayout>
-                      </GridLayout>
-  
-                      <FlexboxLayout row="0" col="1" class="flex-c connect"
-                        *ngIf="(game.gameOptions.opponentType == opponentType.Random || game.gameOptions.isChallenge ) && 
+                      <FlexboxLayout row="0" col="0" class="flex-c p-r-20 connect">
+                        <Label *ngIf="otherUserInfo?.displayName" text="Connect with" class="connect_label"
+                          textWrap="true"></Label>
+                        <Label [text]="otherUserInfo?.displayName" class="connect_name" textWrap="true"></Label>
+                      </FlexboxLayout>
+                      <FlexboxLayout row="0" col="1" class="flex-c p-r-10">
+                        <GridLayout (rippleTap)="inviteAsFriend()" stlRippleEffect stlOpacity="0.5"
+                          stlBackgroundColorAfter="transparent" class="add-friend-border" padding="10">
+                          <Image src="res://addfriend"></Image>
+                        </GridLayout>
+                      </FlexboxLayout>
+                    </GridLayout>
+
+                    <FlexboxLayout row="0" col="1" class="flex-c connect"
+                      *ngIf="(game.gameOptions.opponentType == opponentType.Random || game.gameOptions.isChallenge ) && 
                                 otherUserInfo?.email && userInvitations && userInvitations[otherUserInfo?.email]?.status === 'pending'">
-                        <Label [text]="otherUserInfo?.displayName" class="connect_name" textWrap="true"></Label>
-                        <label class="navigate-button-green Hind-Medium" text="Friend Request Sent"></label>
-                      </FlexboxLayout>
-  
-                      <FlexboxLayout row="0" col="1" class="flex-c connect p-r-10"
-                        *ngIf="(game.gameOptions.opponentType == opponentType.Random || game.gameOptions.isChallenge ) && 
+                      <Label [text]="otherUserInfo?.displayName" class="connect_name" textWrap="true"></Label>
+                      <label class="navigate-button-green Hind-Medium" text="Friend Request Sent"></label>
+                    </FlexboxLayout>
+
+                    <FlexboxLayout row="0" col="1" class="flex-c connect p-r-10"
+                      *ngIf="(game.gameOptions.opponentType == opponentType.Random || game.gameOptions.isChallenge ) && 
                             otherUserInfo?.email  && userInvitations && userInvitations[otherUserInfo?.email]?.status === 'approved'">
-                        <Label [text]="otherUserInfo?.displayName" class="connect_name" textWrap="true"></Label>
-                        <label class="navigate-button Hind-Medium fa" text="Friends &#xf00c;">
-                        </label>
-                      </FlexboxLayout>
+                      <Label [text]="otherUserInfo?.displayName" class="connect_name" textWrap="true"></Label>
+                      <label class="navigate-button Hind-Medium fa" text="Friends &#xf00c;">
+                      </label>
+                    </FlexboxLayout>
                   </GridLayout>
                 </GridLayout>
               </StackLayout>
@@ -264,43 +263,43 @@
         </StackLayout>
       </ScrollView>
       <AbsoluteLayout verticalAlignment="bottom" margin="0 30" paddingBottom="15">
-          <FlexboxLayout justifyContent="space-around" width="100%">
-  
-            <StackLayout orientation="vertical">
-              <StackLayout orientation="vertical" verticalAlignment="center" width="45" height="45"
-                (rippleTap)="gotoDashboard()" stlRippleEffect stlOpacity="0.5" stlBackgroundColorAfter="transparent"
-                class="add-friend-border">
-                <Label horizontalAlignment="center" text="&#xe931;" fontSize="18" color="#3b5998"
-                  class="ico icon-home"></Label>
-              </StackLayout>
-              <Label horizontalAlignment="center" text="Home" fontSize="13" color="#3b5998" textWrap="true"></Label>
+        <FlexboxLayout justifyContent="space-around" width="100%">
+
+          <StackLayout orientation="vertical">
+            <StackLayout orientation="vertical" verticalAlignment="center" width="45" height="45"
+              (rippleTap)="gotoDashboard()" stlRippleEffect stlOpacity="0.5" stlBackgroundColorAfter="transparent"
+              class="add-friend-border">
+              <Label horizontalAlignment="center" text="&#xe931;" fontSize="18" color="#3b5998"
+                class="ico icon-home"></Label>
             </StackLayout>
-  
-            <StackLayout orientation="vertical">
-              <StackLayout orientation="vertical" verticalAlignment="center" width="45" height="45"
-                (rippleTap)="screenshot()" stlRippleEffect stlOpacity="0.5" stlBackgroundColorAfter="transparent"
-                class="add-friend-border">
-                <Label paddingTop="2" text="&#xf1e0;" fontSize="22" color="#3b5998" class="fa"
-                  horizontalAlignment="center"></Label>
-              </StackLayout>
-              <Label text="Share" horizontalAlignment="center" fontSize="13" color="#3b5998" textWrap="true"></Label>
+            <Label horizontalAlignment="center" text="Home" fontSize="13" color="#3b5998" textWrap="true"></Label>
+          </StackLayout>
+
+          <StackLayout orientation="vertical">
+            <StackLayout orientation="vertical" verticalAlignment="center" width="45" height="45"
+              (rippleTap)="screenshot()" stlRippleEffect stlOpacity="0.5" stlBackgroundColorAfter="transparent"
+              class="add-friend-border">
+              <Label paddingTop="2" text="&#xf1e0;" fontSize="22" color="#3b5998" class="fa"
+                horizontalAlignment="center"></Label>
             </StackLayout>
-            <StackLayout orientation="vertical">
-              <StackLayout orientation="vertical" verticalAlignment="center" width="45" height="45"
-                (rippleTap)="bindQuestions();showDialog();showQuesAndAnswer=!showQuesAndAnswer;" stlRippleEffect
-                stlOpacity="0.5" stlBackgroundColorAfter="transparent" class="add-friend-border">
-                <Label paddingTop="3" horizontalAlignment="center" text="&#xf03a;" fontSize="22" color="#3b5998"
-                  class="fa"></Label>
-              </StackLayout>
-              <Label text="Summary" horizontalAlignment="center" fontSize="13" color="#3b5998" textWrap="true"></Label>
+            <Label text="Share" horizontalAlignment="center" fontSize="13" color="#3b5998" textWrap="true"></Label>
+          </StackLayout>
+          <StackLayout orientation="vertical">
+            <StackLayout orientation="vertical" verticalAlignment="center" width="45" height="45"
+              (rippleTap)="bindQuestions();showDialog();showQuesAndAnswer=!showQuesAndAnswer;" stlRippleEffect
+              stlOpacity="0.5" stlBackgroundColorAfter="transparent" class="add-friend-border">
+              <Label paddingTop="3" horizontalAlignment="center" text="&#xf03a;" fontSize="22" color="#3b5998"
+                class="fa"></Label>
             </StackLayout>
-          </FlexboxLayout>
-        </AbsoluteLayout>
+            <Label text="Summary" horizontalAlignment="center" fontSize="13" color="#3b5998" textWrap="true"></Label>
+          </StackLayout>
+        </FlexboxLayout>
+      </AbsoluteLayout>
       <AbsoluteLayout verticalAlignment="center" horizontalAlignment="center">
         <ActivityIndicator *ngIf="disableRematchBtn" busy="true" ios:width="100" ios:height="50" android:width="50"
           android:height="50" class="activity-indicator"></ActivityIndicator>
       </AbsoluteLayout>
-    </GridLayout>        
+    </GridLayout>
   </StackLayout>
 
   <StackLayout height="100%" (tap)="preventEventPropogation()" class="dialog__wrapper">
