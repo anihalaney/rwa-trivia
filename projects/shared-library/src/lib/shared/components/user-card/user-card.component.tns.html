@@ -263,7 +263,10 @@
     </AbsoluteLayout>
   </GridLayout>
 
-  <Progress row="2" colSpan="2"  marginTop="15" marginBottom="5" col="0" [value]="otherInfo?.progressValue"  class="game-progress" maxValue="100"></Progress>
+  <Progress row="2" colSpan="2"  marginTop="15" marginBottom="5" col="0" [value]="otherInfo?.progressValue" 
+  [ngClass]="{'red-color': otherInfo?.progressValue >= 100,
+              'yellow-color': otherInfo?.progressValue <= 99}"
+  class="game-progress" maxValue="100"></Progress>
 </ng-container>
 
 <ng-container *ngIf="user && userCardType.USER_NAME_IMAGE_HORIZONTAL === type">
