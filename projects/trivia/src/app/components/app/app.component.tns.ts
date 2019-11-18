@@ -21,7 +21,7 @@ import { alert } from 'tns-core-modules/ui/dialogs/dialogs';
 import { projectMeta } from '../../../../../shared-library/src/lib/environments/environment';
 import * as appversion from 'nativescript-appversion';
 import { Utils } from 'shared-library/core/services';
-import { NavigationEnd, Router } from '@angular/router';
+import { NavigationEnd, Router, NavigationStart } from '@angular/router';
 import { FirebaseScreenNameConstants, User } from '../../../../../shared-library/src/lib/shared/model';
 import { registerElement } from "nativescript-angular/element-registry";
 import { Carousel, CarouselItem } from 'nativescript-carousel';
@@ -115,8 +115,12 @@ export class AppComponent implements OnInit, OnDestroy {
       if (!(evt instanceof NavigationEnd)) {
         return;
       }
+
+
       this.currentRouteUrl = evt.url;
+
       this.showBottomBar = this.hideBottomBarForSelectedRoutes(evt.url);
+
       switch (evt.urlAfterRedirects) {
         case '/login':
           this.utils.setScreenNameInFirebaseAnalytics(FirebaseScreenNameConstants.LOGIN);
@@ -165,7 +169,8 @@ export class AppComponent implements OnInit, OnDestroy {
 
   hideBottomBarForSelectedRoutes(url) {
     if (url === '/signup-extra-info' || url === '/select-category-tag' || url === '/first-question' ||
-      url.includes('user/my/profile') || url === '/login' ||
+      (url.includes('user/my/profile') && Platform.isIOS) ||
+      url === '/login' ||
       (!url.includes('game-play/game-options') && (url.includes('game-play')))) {
       return false;
     } else {
@@ -263,4 +268,3 @@ export class AppComponent implements OnInit, OnDestroy {
     }, this);
   }
 }
-

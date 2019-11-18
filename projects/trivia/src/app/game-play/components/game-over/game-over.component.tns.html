@@ -1,5 +1,5 @@
 <GridLayout [class.dialogOpen]="dialogOpen" [class.report__dialogOpen]="openReportDialog">
-  <StackLayout margin="0 12 0 12">
+  <StackLayout>
     <FlexboxLayout class="game-result">
       <Label text="Game result" class="game-result-title"></Label>
       <GridLayout rows="auto" columns="auto" width="100%" marginTop="7">
@@ -14,7 +14,7 @@
     </FlexboxLayout>
     <GridLayout *ngIf="user" height="100%">
       <ScrollView>
-        <StackLayout>
+        <StackLayout paddingBottom="100">
           <render-box>
             <StackLayout>
               <StackLayout (onloaded)="stackLoaded($event)">
@@ -81,7 +81,7 @@
                   <GridLayout rows="*,*" columns="*,auto,*" horizontalAlignment="center"
                     *ngIf="game.gameOptions.playerMode == PlayerMode.Opponent">
                     <StackLayout marginTop="10" row="0" col="0" class="game-continue">
-                      <app-user-card [userId]="user.userId" [otherInfo]="{ 'isScreenShot': isScreenShot ? 'true' : 'false','isWinner': (game.gameOptions?.playerMode != PlayerMode.Single && 
+                      <app-user-card [userId]="user.userId" [otherInfo]="{'isScreenShot': isScreenShot ? 'true' : 'false', 'isWinner': (game.gameOptions?.playerMode != PlayerMode.Single && 
                                             game.round < 16 &&
                                             game.stats[user.userId]?.score > game.stats[otherUserId]?.score)
                                            ||
@@ -258,18 +258,18 @@
     <AbsoluteLayout width="100%" height="100%">
       <GridLayout rows="200,*" height="100%" width="100%">
         <StackLayout row="1" class="main-dialog">
-          <FlexboxLayout class="dialog-title-container">
+          <FlexboxLayout (tap)="handlePopOver()" class="dialog-title-container" padding="0 20">
             <Label text="Game summary" class="dialog-title" textWrap="true"></Label>
             <Label text="&#xf00d;" class="fa close-tag" textWrap="true" (tap)="closeDialog()"></Label>
           </FlexboxLayout>
           <ScrollView height="100%">
-            <StackLayout>
+            <StackLayout padding="0 20">
               <GridLayout rows="*" columns="auto,*" class="question" *ngFor="let row  of questionsArray;let i=index;">
-                <Label row="0" col="0" *ngIf="row?.ansStatus" text="&#xf00c;" verticalAlignment="top"
-                  class="fa correct-icon" textWrap="true"></Label>
-                <Label row="0" col="0" *ngIf="!row?.ansStatus" text="&#xf00d;" verticalAlignment="top"
-                  class="fa wrong-icon" textWrap="true"></Label>
-                <StackLayout row="0" col="1" class="question-details" marginRight="20">
+                <Label (tap)="handlePopOver()" row="0" col="0" *ngIf="row?.ansStatus" text="&#xf00c;"
+                  verticalAlignment="top" class="fa correct-icon" textWrap="true"></Label>
+                <Label (tap)="handlePopOver()" row="0" col="0" *ngIf="!row?.ansStatus" text="&#xf00d;"
+                  verticalAlignment="top" class="fa wrong-icon" textWrap="true"></Label>
+                <StackLayout (tap)="handlePopOver()" row="0" col="1" class="question-details" marginRight="20">
                   <Label text="{{row.questionText}}" class="question-content" textWrap="true"></Label>
                   <GridLayout rows="*" columns="*,auto">
                     <StackLayout row="0" col="0">
@@ -288,15 +288,21 @@
                         text="Your Answer: {{row.userGivenAnswer ? row.userGivenAnswer : 'No answer' }}"
                         textWrap="true"></Label>
                     </StackLayout>
-                    <StackLayout row="0" col="1" horizontalAlignment="right" verticalAlignment="center">
-                      <Button col="3" rowSpan="3" verticalAlignment="center"
-                        style="color:#3b444f; border-width:2px; border-color:#f3f3f3; padding:10" text="Report"
-                        marginRight="10" *ngIf="!game.playerQnAs[i].isReported" (rippleTap)="openDialogReport(row)"
-                        stlRippleEffect></Button>
-                      <Label col="3" rowSpan="3" text="Reported" verticalAlignment="center" marginRight="10" color="red"
-                        fontWeight="600" textWrap="true" *ngIf="game.playerQnAs[i]?.isReported"></Label>
-                    </StackLayout>
                   </GridLayout>
+                </StackLayout>
+                <StackLayout row="0" col="1" orientation="horizontal" horizontalAlignment="right">
+                  <StackLayout orientation="vertical">
+                    <FlexboxLayout justifyContent="flex-end">
+                      <Label (tap)="handlePopOver(row)" stlRippleEffect stlBackgroundColorAfter="transparent"
+                        stlBackgroundColor="transparent" stlOpacity="0.5" text="&#xf142;" fontSize="22" padding="5 10"
+                        class="fa"></Label>
+                    </FlexboxLayout>
+                    <Button (rippleTap)="openDialogReport(row)" *ngIf="row.openReport && !game.playerQnAs[i].isReported"
+                      style="border-radius:5; height: 30; color:#000; border-width:2px; border-color:#f3f3f3; background: white"
+                      stlRippleEffect text="Report"></Button>
+                    <Button *ngIf="row.openReport && game.playerQnAs[i]?.isReported" style="border-radius:5;height: 30; color:red; border-width:2px; border-color:#f3f3f3; background: white;
+                          font-weight: 600" stlRippleEffect text="Reported"></Button>
+                  </StackLayout>
                 </StackLayout>
               </GridLayout>
             </StackLayout>
@@ -308,7 +314,7 @@
   <StackLayout *ngIf="reportQuestion" height="100%" class="dialog__wrapper--report">
     <AbsoluteLayout width="100%" height="100%">
       <GridLayout rows="25,*" height="100%" width="100%">
-        <StackLayout row="1" class="main-dialog" padding="30 0 5 0">
+        <StackLayout row="1" class="main-dialog">
           <report-game (closePopUp)="closeDialogReport($event)" [question]="reportQuestion" [user]="user" [game]="game"
             [userDict]="userDict">
           </report-game>
