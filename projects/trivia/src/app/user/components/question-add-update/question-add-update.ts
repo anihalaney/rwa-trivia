@@ -13,6 +13,7 @@ export class QuestionAddUpdate {
 
   tagsObs: Observable<string[]>;
   categoriesObs: Observable<Category[]>;
+  isMobile = false;
 
   // Properties
   categories: Category[];
@@ -82,7 +83,7 @@ export class QuestionAddUpdate {
             question.status = QuestionStatus.PENDING;
           }
 
-          if (question.isRichEditor) {
+          if (question.isRichEditor && !this.isMobile ) {
             question.questionText = this.quillObject.questionText ? this.quillObject.questionText : '';
             question.questionObject = this.quillObject.jsonObject ? this.quillObject.jsonObject : {};
           }

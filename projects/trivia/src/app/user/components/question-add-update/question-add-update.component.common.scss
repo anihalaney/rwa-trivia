@@ -96,3 +96,22 @@
   font-family: 'hindmedium';
 
 }
+
+.question-buttons {
+  border-radius: 3;
+  font-size: 20;
+  padding: 10;
+  font-weight: bold;
+  margin-right: 5;
+  background-color: grey;
+}
+
+.edit-label{
+  border-width:1;
+  border-color:#cccccc;
+  border-radius:4;
+  horizontal-align: center;
+  width: 98%;
+  text-align: center;
+  margin: 0 20;
+}

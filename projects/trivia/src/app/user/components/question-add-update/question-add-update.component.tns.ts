@@ -1,6 +1,7 @@
 import {
   Component, OnDestroy, ViewChild, Input, Output, EventEmitter, OnChanges, NgZone,
-  ViewChildren, QueryList, ElementRef, ChangeDetectionStrategy, ChangeDetectorRef, ViewContainerRef, AfterViewInit, OnInit, ɵConsole
+  ViewChildren, QueryList, ElementRef, ChangeDetectionStrategy, ChangeDetectorRef, ViewContainerRef, AfterViewInit, OnInit, ɵConsole, 
+  Renderer2
 } from '@angular/core';
 import { FormGroup, FormBuilder, FormArray, Validators } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
@@ -51,6 +52,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
   submitBtnTxt: string;
   actionBarTxt: string;
   oWebViewInterface;
+  webViewInterfaceObject;
 
   imagePath: string;
 
@@ -72,15 +74,19 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
   public selectedMaxTimeIndex = 0;
   public webViews = [];
   public playMaxTime = [];
+  showIds = [];
+  currentWebViewParentId: number;
 
   @Input() editQuestion: Question;
+  showEditQuestion = false;
   @Output() hideQuestion = new EventEmitter<boolean>();
   @ViewChild('autocomplete', { static: false }) autocomplete: RadAutoCompleteTextViewComponent;
   @ViewChildren('textField') textField: QueryList<ElementRef>;
-  @ViewChild('questionWebView', { static: false }) questionWebView: ElementRef;
-
-  @ViewChildren('webView') webView: QueryList<ElementRef>;
-
+  @ViewChild('webView', { static: false }) webView: ElementRef;
+  @ViewChild('questionStack', { static: false }) questionStack: ElementRef;
+  @ViewChildren('answerStack') answerStack: QueryList<ElementRef>;
+  @ViewChild('webViewParentStack', { static: false }) webViewParentStack: ElementRef;
+  isWebViewLoaded = false;
   get dataItems(): ObservableArray<TokenModel> {
     return this.tagItems;
   }
@@ -96,9 +102,12 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
     public questionService: QuestionService,
     private modal: ModalDialogService,
     private vcRef: ViewContainerRef,
-    private ngZone: NgZone) {
+    private ngZone: NgZone,
+    private renderer: Renderer2,
+    private el: ElementRef) {
 
     super(fb, store, utils, questionAction);
+    this.isMobile = true;
     requestPermissions();
 
     this.submitBtnTxt = 'SUBMIT';
@@ -194,24 +203,40 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
   }
 
   onLoadFinished(event, id) {
+    this.oWebViewInterface.emit('viewType', 'question');
+    setTimeout(() => {
+      this.isWebViewLoaded = true;
+      this.cd.markForCheck();
+    }, 2000);
     if (id === -1) {
-      if (this.oWebViewInterface) {
-        this.oWebViewInterface.emit('viewType', 'question');
-      }
       if (this.oWebViewInterface && this.editQuestion) {
         this.oWebViewInterface.emit('deltaObject', this.editQuestion.questionObject);
       }
+    }
+  }
+
+  showEditor(type: string, id = -1) {
+    this.moveWebView(type, id);
+    if (type === 'question') {
+      this.questionForm.patchValue({ isRichEditor: true });
 
     } else {
-      const webviews = this.webViews.filter(p => p.id === id);
-        if (webviews.length === 1 && webviews[0].element) {
-          webviews[0].element.emit('viewType', 'answer');
-        }
-        if (webviews.length === 1 && this.editQuestion) {
-          webviews[0].element.emit('deltaObject', this.editQuestion.answers[id].answerObject);
-        }
+      const questionForm =
+      (<FormArray>this.questionForm.controls['answers']).at(id);
+      questionForm['controls'].isRichEditor.setValue(true);
     }
+  }
 
+  moveWebView(type: string, id: number) {
+      const prevWebViewParent = this.currentWebViewParentId !== undefined ?
+      (this.currentWebViewParentId === -1 ? this.questionStack.nativeElement :
+      this.answerStack.filter((element, index) => index === this.currentWebViewParentId )[0].nativeElement) :
+      this.webViewParentStack.nativeElement;
+      const nextWebViewParent =  id === -1 ? this.questionStack.nativeElement :
+      this.answerStack.filter((element, index) => index === id )[0].nativeElement;
+      this.currentWebViewParentId = id;
+      this.renderer.removeChild(prevWebViewParent, this.webView.nativeElement);
+      this.renderer.appendChild(nextWebViewParent, this.webView.nativeElement);
   }
 
   public onchange(args: SelectedIndexChangedEventData) {
@@ -344,9 +369,9 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
     this.customTag = args.text;
   }
 
-  public onTextChanged(args) {
-    this.customTag = args.text;
-  }
+  // public onTextChanged(args) {
+  //   this.customTag = args.text;
+  // }
 
   submit() {
     this.hideKeyboard();
@@ -382,22 +407,26 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
   }
 
   questionLoaded(event) {
-
-    if (event.object) {
-
+    if ((this.currentWebViewParentId === -1  || this.currentWebViewParentId === undefined) && event.object) {
       const myWebViewInstance = event.object;
       if (!myWebViewInstance) {
       } else {
         this.oWebViewInterface = this.setWebInterface(myWebViewInstance,
           this.questionForm.get('questionText'),
           this.questionForm.get('questionObject'));  //  new webViewInterfaceModule.WebViewInterface(myWebViewInstance, CONFIG.editorUrl);
+          if (this.currentWebViewParentId !== undefined) {
+            this.oWebViewInterface.emit('viewType', 'question');
+          }
       }
+    } else if (this.currentWebViewParentId !== undefined) {
+      this.answerLoaded(event, this.currentWebViewParentId);
     }
+
   }
 
   setWebInterface(webViewInstace, quillText, quillObject) {
 
-    const webInterface = new webViewInterfaceModule.WebViewInterface(webViewInstace, CONFIG.editorUrl);
+    const webInterface = new webViewInterfaceModule.WebViewInterface(webViewInstace, 'http://192.168.0.103:4200/');
 
     webInterface.on('quillContent', (quillContent) => {
         quillText.patchValue(quillContent.html);
@@ -429,6 +458,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
     const webViewInterfaceObject = this.setWebInterface(event.object,
       this.answers.controls[elementId]['controls'].answerText,
       this.answers.controls[elementId]['controls'].answerObject);
+      webViewInterfaceObject.emit('viewType', 'answer');
 
     const webViewInterface = {
       id: i,
@@ -448,6 +478,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
     }
   }
 
+  // no need of this function
   answerUnloaded(event, id) {
     const webview = this.webViews.filter(webView => webView.id === id);
     if (webview.length === 1) {
