@@ -18,7 +18,9 @@
              <GridLayout rows="auto,auto,auto,auto,auto,auto" columns="*" (tap)="hideKeyboard()"
                 [formGroup]="questionForm" class="submit-question">
                 <StackLayout  #questionStack row="0" class="question-section"  iosOverflowSafeArea="false"> 
-                        <Label *ngIf="currentWebViewParentId != -1" height="125"  text="Click to add question" textWrap="true" (tap)="showEditor('question')" class="edit-label"></Label>
+                        <Label *ngIf="!questionForm.controls.isRichEditor.value && currentWebViewParentId != -1" height="125"  text="Click to add question" textWrap="true" (tap)="showEditor('question')" class="edit-label"></Label>
+                        <render-question *ngIf="questionForm.controls.isRichEditor.value && currentWebViewParentId != -1" 
+                        [question]="{questionText: questionForm.controls.questionText.value, isRichEditor: true}"></render-question>
                 </StackLayout>
                 <StackLayout row="1" class="answer-section" iosOverflowSafeArea="false">
                     <StackLayout formArrayName="answers">
@@ -27,7 +29,8 @@
                                 <CheckBox row="0" col="0" #elem formControlName="correct"
                                     class="checkbox checkbox-section" fillColor="#71b02f"></CheckBox>
                                 <StackLayout #answerStack row="0" col="1">
-                                        <Label  height="125"  class="edit-label"  text="Click to add option {{i+1}}" (tap)="showEditor('answer', i)" *ngIf="!answers.controls[i].controls.isRichEditor.value || currentWebViewParentId != i" ></Label>
+                                        <Label  height="125"  class="edit-label"  text="Click to add option {{i+1}}" (tap)="showEditor('answer', i)" *ngIf="!answers.controls[i].controls.isRichEditor.value && currentWebViewParentId != i" ></Label>
+                                        <render-answer  *ngIf="answers.controls[i].controls.isRichEditor.value && currentWebViewParentId != i" [answer]="{answerText: answers.controls[i].controls.answerText.value, isRichEditor: true}"></render-answer>
                                 </StackLayout>
                             </GridLayout>
                         </StackLayout>
@@ -81,8 +84,8 @@
      
     </ScrollView>
     <StackLayout height="1"  #webViewParentStack iosOverflowSafeArea="false">
-            <WebView height="125" #webView id="questionWebView" 
-                (loadFinished)="onLoadFinished($event,-1)"  (loaded)="questionLoaded($event)" (unloaded)="questionUnloaded($event)">
-            </WebView>
+        <WebView height="125" #webView id="questionWebView"
+        (loadFinished)="onLoadFinished($event,-1)"  (loaded)="wevViewLoaded($event)" (unloaded)="questionUnloaded($event)" (loadStarted)="questionLoadStarted($event)">
+        </WebView>
     </StackLayout>
 </GridLayout>

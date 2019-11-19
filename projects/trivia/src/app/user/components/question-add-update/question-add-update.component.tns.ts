@@ -203,7 +203,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
   }
 
   onLoadFinished(event, id) {
-    this.oWebViewInterface.emit('viewType', 'question');
+    // this.oWebViewInterface.emit('viewType', 'question');
     setTimeout(() => {
       this.isWebViewLoaded = true;
       this.cd.markForCheck();
@@ -404,35 +404,54 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
 
   ngOnDestroy() {
     this.renderView = false;
+    if (this.oWebViewInterface) {
+      this.oWebViewInterface.off('uploadImageStart');
+      this.oWebViewInterface.off('quillContent');
+    }
   }
 
-  questionLoaded(event) {
-    if ((this.currentWebViewParentId === -1  || this.currentWebViewParentId === undefined) && event.object) {
-      const myWebViewInstance = event.object;
-      if (!myWebViewInstance) {
+  questionLoadStarted(event) {
+    console.log('questionLoadStarted');
+  }
+
+  wevViewLoaded(event) {
+      if (!event.object) {
       } else {
-        this.oWebViewInterface = this.setWebInterface(myWebViewInstance,
-          this.questionForm.get('questionText'),
-          this.questionForm.get('questionObject'));  //  new webViewInterfaceModule.WebViewInterface(myWebViewInstance, CONFIG.editorUrl);
-          if (this.currentWebViewParentId !== undefined) {
-            this.oWebViewInterface.emit('viewType', 'question');
+        if (!this.oWebViewInterface) {
+          this.oWebViewInterface = this.setWebInterface(event.object);
+          //  new webViewInterfaceModule.WebViewInterface(event.object, CONFIG.editorUrl);
+        }
+        if (this.oWebViewInterface) {
+          const blankObj =  [{ insert: '' }];
+          event.object.initNativeView();
+          this.oWebViewInterface.emit('viewType', this.currentWebViewParentId >= 0 ? 'answer' : 'question');
+          if (this.currentWebViewParentId >= 0 ) {
+            this.answers.controls[this.currentWebViewParentId]['controls'].isRichEditor.patchValue(true);
+            this.oWebViewInterface.emit('deltaObject',
+            this.answers.controls[this.currentWebViewParentId].value.answerObject ?
+            this.answers.controls[this.currentWebViewParentId].value.answerObject : blankObj);
+          } else if (this.currentWebViewParentId === -1) {
+            this.questionForm.get('isRichEditor').patchValue(true);
+            this.oWebViewInterface.emit('deltaObject',
+            this.questionForm.controls.questionObject.value ? this.questionForm.controls.questionObject.value : blankObj);
           }
+        }
       }
-    } else if (this.currentWebViewParentId !== undefined) {
-      this.answerLoaded(event, this.currentWebViewParentId);
     }
 
-  }
+  setWebInterface(webViewInstace) {
 
-  setWebInterface(webViewInstace, quillText, quillObject) {
-
-    const webInterface = new webViewInterfaceModule.WebViewInterface(webViewInstace, 'http://192.168.0.103:4200/');
+    const webInterface = new webViewInterfaceModule.WebViewInterface(webViewInstace, 'http://192.168.0.111:4200/');
 
     webInterface.on('quillContent', (quillContent) => {
-        quillText.patchValue(quillContent.html);
-        quillObject.patchValue(quillContent.delta);
-        this.cd.markForCheck();
-      });
+      if (this.currentWebViewParentId === -1) {
+        this.questionForm.get('questionText').patchValue(quillContent.html);
+        this.questionForm.get('questionObject').patchValue(quillContent.delta);
+      } else if (this.currentWebViewParentId >= 0) {
+        this.answers.controls[this.currentWebViewParentId]['controls'].answerText.patchValue(quillContent.html);
+        this.answers.controls[this.currentWebViewParentId]['controls'].answerObject.patchValue(quillContent.delta);
+      }
+    });
 
     webInterface.on('uploadImageStart', (uploadImage) => {
       dialogs.action({
@@ -454,27 +473,27 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
 
 
   answerLoaded(event, i) {
-    const elementId = i;
-    const webViewInterfaceObject = this.setWebInterface(event.object,
-      this.answers.controls[elementId]['controls'].answerText,
-      this.answers.controls[elementId]['controls'].answerObject);
-      webViewInterfaceObject.emit('viewType', 'answer');
+    // const elementId = i;
+    // this.webViewInterfaceObject = this.setWebInterface(event.object,
+      // this.answers.controls[elementId]['controls'].answerText,
+      // this.answers.controls[elementId]['controls'].answerObject);
+      // this.webViewInterfaceObject.emit('viewType', 'answer');
 
-    const webViewInterface = {
-      id: i,
-      element: webViewInterfaceObject
-    };
-    const fIndex = this.webViews.findIndex(view => view.id === i);
-    if (fIndex >= 0) {
-      this.webViews.splice(fIndex, 1);
-    }
-    this.webViews.push(webViewInterface);
+    // const webViewInterface = {
+    //   id: i,
+    //   element: webViewInterfaceObject
+    // };
+    // const fIndex = this.webViews.findIndex(view => view.id === i);
+    // if (fIndex >= 0) {
+    //   this.webViews.splice(fIndex, 1);
+    // }
+    // this.webViews.push(webViewInterface);
   }
 
   questionUnloaded(event) {
     if (this.oWebViewInterface) {
-      this.oWebViewInterface.off('uploadImageStart');
-      this.oWebViewInterface.off('quillContent');
+      // this.oWebViewInterface.off('uploadImageStart');
+      // this.oWebViewInterface.off('quillContent');
     }
   }
 
@@ -482,8 +501,8 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
   answerUnloaded(event, id) {
     const webview = this.webViews.filter(webView => webView.id === id);
     if (webview.length === 1) {
-      webview[0].element.off('uploadImageStart');
-      webview[0].element.off('quillContent');
+      // webview[0].element.off('uploadImageStart');
+      // webview[0].element.off('quillContent');
     }
   }
 }
