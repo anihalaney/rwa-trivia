@@ -166,6 +166,7 @@ Button {
   justify-content: space-between;
   margin: 15;
   width: 100%;
+  padding: 0 12;
 }
 
 .game-result-title{
@@ -205,7 +206,7 @@ Button {
   background-color: #FFFFFF;
   border-top-left-radius: 20;
   border-top-right-radius: 20;
-  padding: 30 20 5 20;
+  padding: 30 0 5 0;
 }
 
 .dialog-title-container {
@@ -280,4 +281,18 @@ Button {
     width: 100%;
     z-index: 1;
   }
+}
+
+.dialog {
+    // visibility: collapse;
+    .report__dialogOpen &__wrapper--report {
+        visibility: visible;
+    }
+
+    &__wrapper--report {
+        background: rgba(0, 0, 0, 0.5);
+        visibility: collapse;
+        width: 100%;
+        z-index: 1;
+    }
 }
