@@ -166,7 +166,7 @@ button {
   justify-content: space-between;
   margin: 15;
   width: 100%;
-  padding: 0 12 0 12;
+  padding: 0 12;
 }
 
 .game-result-title {
@@ -269,12 +269,13 @@ button {
 }
 
 .dialog {
-  // visibility: collapse;
-  .dialogOpen &__wrapper {
+  .dialogOpen &__wrapper,
+  .report__dialogOpen &__wrapper--report {
     visibility: visible;
   }
 
-  &__wrapper {
+  &__wrapper,
+  &__wrapper--report {
     background: rgba(0, 0, 0, 0.5);
     visibility: collapse;
     width: 100%;
@@ -314,7 +315,6 @@ button {
 }
 
 .add-friend-border {
-  // padding: 10;
   border-width: 1;
   border-color: #3b5998;
   border-radius: 30;

@@ -1,193 +1,229 @@
-.cd-popup-container{border-radius:3px;box-shadow:0 0 20px rgba(0, 0, 0, 0.2);padding:5%;}
-.header,.question
-{ 
-    margin-bottom: 2%;
+.cd-popup-container {
+  border-radius: 3px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+  padding: 5%;
+}
+.header,
+.question {
+  margin-bottom: 2%;
 }
 
-.mat-card-content
-{
-    margin-bottom: 0;
+.mat-card-content {
+  margin-bottom: 0;
 }
-.question-text
-{
-   font-family: 'hindsemibold';
-   font-size:16px;
-   padding-bottom: 1%;
-   display: inline-block;
+.question-text {
+  font-family: "hindsemibold";
+  font-size: 16px;
+  padding-bottom: 1%;
+  display: inline-block;
 }
-.answer-text
-{ 
-   display: inline-block; 
-   font-size: 16px;
-   color: #282828
+.answer-text {
+  display: inline-block;
+  font-size: 16px;
+  color: #282828;
 }
-.report-question-section
-{
-    padding-bottom: 5%;
-    border-bottom-style: solid;
-    border-bottom-width: 2px;
+.report-question-section {
+  padding-bottom: 5%;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
 }
-.report-reason-section,.report-reasons,.report-footer
-{
-    padding-top: 3%;
+.report-reason-section,
+.report-reasons,
+.report-footer {
+  padding-top: 3%;
 }
-ul
-{
-    font-size: 16px;
-    font-family: 'hindmedium';
+ul {
+  font-size: 16px;
+  font-family: "hindmedium";
 }
-ul li
-{
-    padding-bottom: 1%;
+ul li {
+  padding-bottom: 1%;
 }
-.report-text
-{
-    font-family: 'hindmedium';
-    font-size: 16px;
+.report-text {
+  font-family: "hindmedium";
+  font-size: 16px;
 }
-textarea
-{
-    border-radius: 5px;
-    width: 100%;
+textarea {
+  border-radius: 5px;
+  width: 100%;
 }
 .container {
-    font-family: 'hindmedium';
-    font-size: 16px;
-    display: inline-block;
-    position: relative;
-    padding-left: 25px;
-    cursor: pointer;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
+  font-family: "hindmedium";
+  font-size: 16px;
+  display: inline-block;
+  position: relative;
+  padding-left: 25px;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 /* Hide the browser's default radio button */
 .container input {
-    position: absolute;
-    opacity: 0;
-    cursor: pointer;
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
 }
 
 /* custom radio button */
 .checkmark {
-    position: absolute;
-    top: 4px;
-    left: 0;
-    border-radius: 50%;
-    border-style: solid;
-    border-width: 1px;
-    border-color:  #aaadb5;
-    box-sizing: border-box;
-    background-color:  #f1f2f2;
-    /* Layer contains multiple layer styles that cannot be represented in CSS. Use the color picker or extract the layer as an image. */
-    width: 16px;
-    height: 16px;
+  position: absolute;
+  top: 4px;
+  left: 0;
+  border-radius: 50%;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #aaadb5;
+  box-sizing: border-box;
+  background-color: #f1f2f2;
+  /* Layer contains multiple layer styles that cannot be represented in CSS. Use the color picker or extract the layer as an image. */
+  width: 16px;
+  height: 16px;
 }
-
-
 
 /* When the radio button is checked, add a white background */
 .container input:checked ~ .checkmark {
-    background-color: #f1f2f2;
+  background-color: #f1f2f2;
 }
 
 /* Create the indicator (circle - hidden when not checked) */
 .checkmark:after {
-    content: "";
-    position: absolute;
-    display: none;
+  content: "";
+  position: absolute;
+  display: none;
 }
 
 /* Show the indicator (circle) when checked */
 .container input:checked ~ .checkmark:after {
-    display: block;
+  display: block;
 }
 
 /* Style the indicator (dot/circle) */
 .container .checkmark:after {
- 	top: 3px;
-    left: 3px;
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: #3b5998;
+  top: 3px;
+  left: 3px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #3b5998;
 }
-.cancelicon
-{
-    float: right;
-    cursor: pointer;
+.cancelicon {
+  float: right;
+  cursor: pointer;
 }
-.alignment
-{
-    text-align: right;
-} 
-.btn
-{
-    font-size: 16px;
-    padding: 10px 25px;
+.alignment {
+  text-align: right;
 }
-@media(max-width: 600px) {
-    .btn
-    {
-        width: 100%;
-    }
-    .author-div-spacing
-    {
-        margin-bottom: 5%;
-    }
+.btn {
+  font-size: 16px;
+  padding: 10px 25px;
+}
+@media (max-width: 600px) {
+  .btn {
+    width: 100%;
+  }
+  .author-div-spacing {
+    margin-bottom: 5%;
+  }
 }
 
-.textbox{
-    border-width: 1;
-    border-color: black;
-    padding: 5;
+.textbox {
+  border-width: 1;
+  border-color: black;
+  padding: 5;
+  border-radius: 5;
 }
 
-.close-icon{
-    color:#ffffff; 
-    font-size:25;
+.close-icon {
+  color: #ffffff;
+  font-size: 25;
 }
 
-.main-question{
-    color:#282828; 
-    font-size: 17; 
-    font-weight: 500; 
-    margin:10 0 10 0
+.main-question {
+  color: #282828;
+  font-size: 17;
+  font-weight: 500;
+  margin: 10 0 10 0;
 }
 
-.reported-details-title{
-    color:#282828; 
-    font-weight: 500; 
-    margin:0 0 10 0; 
-    font-size: 14;
+.reported-details-title {
+  color: #282828;
+  font-weight: 500;
+  margin: 0 0 10 0;
+  font-size: 14;
 }
 
-.reported-details-content{
-    color:#4b4b4b; 
-    margin:0 0 10 0; 
-    font-size: 14;
+.report-text-color {
+  margin: 0 0 10 0;
+  font-size: 14;
 }
 
-.problem-content{
-    color:#4b4b4b;
-    text-align: left;
-    padding:15;
+.reported-details-content {
+  color: #4b4b4b;
+  margin: 0 0 10 0;
+  font-size: 14;
+}
+.text-grey {
+  color: rgb(165, 165, 165);
 }
 
-.extra-content{
-    color:#282828;
-    padding: 5 15 5 15;
+.problem-content {
+  font-size: 16;
+  color: rgb(33, 33, 33);
+  text-align: left;
+  padding: 15;
 }
 
-.submit-btn{
-    background-color:#8ac541; 
-    color:#ffffff;
-    padding: 15;
-    margin: 5 15 5 15;
+.extra-content {
+  color: #282828;
+  padding: 5 15 5 15;
 }
 
-Button {
-    border-radius: 1;
+.submit-btn {
+  text-align: center;
+  width: 40%;
+  border-radius: 5;
+  margin:10;
+}
+
+button {
+  border-radius: 1;
+}
+
+.border-bottom {
+  padding: 15 20;
+  border-bottom-width: 1px;
+  border-bottom-color: #aaadb5;
+}
+
+.option-border {
+  border-width: 1;
+  border-color: rgb(165, 165, 165);
+  padding: 10;
+  margin: 10 0;
+  border-radius: 5;
+  font-size: 16;
+}
+
+.selected-report {
+  background: #48b24e;
+  color: white;
+}
+
+.dialog-title-container {
+  justify-content: space-between;
+  align-items: center;
+}
+
+.dialog-title {
+  font-size: 24;
+  font-weight: 600;
+  color: #000000;
+}
+
+.close-tag {
+  font-size: 22;
+  color: #505050;
 }
