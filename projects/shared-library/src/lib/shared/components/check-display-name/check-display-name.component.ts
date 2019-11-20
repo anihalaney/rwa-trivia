@@ -17,6 +17,7 @@ import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 export class CheckDisplayNameComponent implements ControlValueAccessor {
   @Input() placeholder;
   @Input() hint;
+  @Input() isProfilePage;
   myValue: any = null;
   disabled: boolean;
   propagateChange = (_: any) => { };

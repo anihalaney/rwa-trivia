@@ -41,11 +41,11 @@
 }
 
 .profileSettings  .display-name.text-field {
-  padding: 10 10 10 0;
-  border: none;
-  border-width: 0;
-  border-bottom-width: 1;
-  border-bottom-color: #d3d3d3;
+  padding: 0;
+  padding-right: 10;
+  border-width: 1;
+  margin: 0;
+  font-size: 24;
 }
 
 .feedbackForm {

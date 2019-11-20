@@ -33,7 +33,7 @@ declare var IQKeyboardManager;
 @Component({
   selector: 'profile-settings',
   templateUrl: './profile-settings.component.html',
-  styleUrls: ['./profile-settings.component.css'],
+  styleUrls: ['./profile-settings.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
@@ -64,6 +64,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
   private locations: ObservableArray<TokenModel>;
   private isLocationEnalbed: boolean;
   iqKeyboard: any;
+  isSavingUserName: boolean;
 
   @ViewChild('autocomplete', { static: false }) autocomplete: RadAutoCompleteTextViewComponent;
   @ViewChild('acLocation', { static: false }) acLocation: RadAutoCompleteTextViewComponent;
@@ -96,6 +97,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
         this.uUtils.showMessage('success', 'Profile is saved successfully');
         this.toggleLoader(false);
       }
+      this.isSavingUserName = false;
       this.cd.markForCheck();
     }));
     this.tabsTitles = ['Profile', 'Stats'];
@@ -346,6 +348,10 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
     // validations
     if (field === 'location') {
       this.editLocationField();
+    }
+console.log(field);
+    if (field === 'displayName') {
+      this.isSavingUserName = true;
     }
     this.userForm.updateValueAndValidity();
 

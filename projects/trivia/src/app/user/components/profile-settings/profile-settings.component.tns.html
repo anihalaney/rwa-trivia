@@ -7,7 +7,7 @@
       height="100" marginTop="225" class="activity-indicator"></ActivityIndicator>
     <ScrollView visibility="{{ !loaderBusy ? 'visible' : 'collapsed' }}" iosOverflowSafeArea="false">
       <PreviousNextView>
-        <StackLayout *ngIf="userForm" [formGroup]="userForm" iosOverflowSafeArea="false">
+        <!-- <StackLayout *ngIf="userForm" [formGroup]="userForm" iosOverflowSafeArea="false">
           <StackLayout (tap)="hideKeyboard()" class="profile-settings Roboto-Regular" iosOverflowSafeArea="false">
             <CardView class="profile-settings-card gameplay" margin="5" android:elevation="20" ios:elevation="40"
               radius="15" iosOverflowSafeArea="false">
@@ -129,7 +129,6 @@
                       textWrap="true" text="Name is required!"></Label>
                   </StackLayout>
 
-                  <!-- Email -->
                   <StackLayout
                     *ngIf="userType ===  0 && isEnableEditProfile && (currentAuthProvider===authProviderConstants.PHONE)"
                     class="input-field" iosOverflowSafeArea="false">
@@ -140,7 +139,6 @@
                       class="error" textWrap="true" text="Email is Invalid!"></Label>
                   </StackLayout>
 
-                  <!-- Phone No -->
                   <StackLayout
                     *ngIf="userType ===  0  && (currentAuthProvider===authProviderConstants.GOOGLE || currentAuthProvider===authProviderConstants.FACEBOOK || currentAuthProvider===authProviderConstants.PASSWORD )"
                     class="input-field" iosOverflowSafeArea="false">
@@ -151,7 +149,6 @@
                       class="error" textWrap="true" text="PhoneNo is Invalid!"></Label>
                   </StackLayout>
 
-                  <!-- Old Password -->
                   <StackLayout
                     *ngIf="userType ===  0 && isEnableEditProfile && (currentAuthProvider===authProviderConstants.PASSWORD)"
                     class="input-field" iosOverflowSafeArea="false">
@@ -166,7 +163,6 @@
                       class="error" textWrap="true" text="Old Password is required"></Label>
                   </StackLayout>
 
-                  <!-- New Password -->
                   <StackLayout
                     *ngIf="userType ===  0 && isEnableEditProfile && (currentAuthProvider===authProviderConstants.PASSWORD)"
                     class="input-field" iosOverflowSafeArea="false">
@@ -177,7 +173,6 @@
                       class="error" textWrap="true" text="Password must be atleast 6 characters!"></Label>
                   </StackLayout>
 
-                  <!-- Confirm New Password -->
                   <StackLayout
                     *ngIf="userType ===  0 && isEnableEditProfile && (currentAuthProvider===authProviderConstants.PASSWORD)"
                     class="input-field" iosOverflowSafeArea="false">
@@ -401,7 +396,56 @@
               </StackLayout>
             </CardView>
           </StackLayout>
-        </StackLayout>
+        </StackLayout> -->
+
+        <FlexboxLayout class="profile" (tap)="hideKeyboard()" flexDirection="column" *ngIf="userForm"
+          [formGroup]="userForm" iosOverflowSafeArea="false">
+          <StackLayout class="profile_image" iosOverflowSafeArea="false">
+            <AbsoluteLayout class="profile_image--center" iosOverflowSafeArea="false" horizontalAlignment="center">
+              <Image [src]="profileImage.image" stretch="aspectFill" (tap)="userType ===  0 ? onTakePhoto() : ''">
+              </Image>
+              <CardView *ngIf="userType === 0" class="profile_image--edit" verticalAlignment="center" top="60" left="65"
+                android:elevation="20" ios:elevation="40" radius="18" iosOverflowSafeArea="false">
+                <Label orientation="horizontal" horizontalAlignment="center" (tap)="onTakePhoto()" text="&#xe927;"
+                  class="ico icon-edit" textWrap="true"></Label>
+              </CardView>
+            </AbsoluteLayout>
+          </StackLayout>
+          <FlexboxLayout justifyContent="center" flexWrap="wrap">
+            <app-check-display-name formControlName="displayName"
+              hint="{{userType === 0 ? 'Display Name' : 'Undefined'}}" isProfilePage="true" >
+            </app-check-display-name>
+            <Label *ngIf="(!singleFieldEdit.displayName && userType === 0) && !isSavingUserName" (tap)="editSingleField('displayName')"
+              color="#14418B" fontSize="20" class="ico icon-edit" textWrap="true" text="&#xe927;"></Label>
+            <Label *ngIf="(singleFieldEdit.displayName && userForm.value.displayName !=='' && userType === 0) && !isSavingUserName"
+              (tap)="onSubmit(true, 'displayName')" color="#14418B" fontSize="24" class="fa" text="&#xf058;" style="padding:0 5"> </Label>
+              <ActivityIndicator *ngIf="isSavingUserName" color="#3b5998" ios:width="25" ios:height="25" android:width="25"
+              android:height="25" busy="true" class="activity-indicator">
+          </ActivityIndicator>
+          </FlexboxLayout>
+          <FlexboxLayout  justifyContent="center" flexWrap="wrap">
+            <Label
+            *ngIf="userForm.controls.displayName.errors && userForm.controls.displayName.errors.required && !userForm.controls.displayName.pristine"
+            class=" error" textWrap="true" text="Display Name is required!"></Label>
+          <Label *ngIf="userForm.controls.displayName.errors && userForm.controls.displayName.errors.exist"
+            class=" error" textWrap="true" text="Display Name is already taken by other user"></Label>
+          </FlexboxLayout>
+          
+            <FlexboxLayout justifyContent="space-between" orientation="horizontal" class="edit-field">
+                <FlexboxLayout flexDirection="column">
+                    <Label alignSelf="flex-start" text="Email tes" textWrap="true" class="label-field"></Label>
+                    <Label alignSelf="flex-start" [text]="user.email" textWrap="true" class="label-value"></Label>
+                </FlexboxLayout>
+                <Label (tap)="editSingleField('displayName')"
+                    color="#14418B" fontSize="20" class="ico icon-edit" textWrap="true" text="&#xe927;"></Label>
+            </FlexboxLayout>
+
+
+            <GridLayout rows="*" columns="*, auto" class="edit-box">
+                <TextField  row="0" col="0" alignSelf="stretch"  hint="Email" text="Email" class="email-text-field" width="auto" ></TextField>
+                <Label   row="0" col="1" color="#14418B" fontSize="24" class="fa" text="&#xf058;" style="padding:0 15"> </Label>
+            </GridLayout>
+        </FlexboxLayout>
       </PreviousNextView>
     </ScrollView>
   </StackLayout>
