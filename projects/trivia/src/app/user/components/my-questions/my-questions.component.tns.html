@@ -16,10 +16,10 @@
                             <Label text="Published" horizontalAlignment="center" textWrap="true"></Label>
                         </StackLayout>
                     </StackLayout>
-                    <StackLayout class="tab-container" (tap)="onSelectTab('draft')" row="0"
+                    <StackLayout class="tab-container" (tap)="onSelectTab('unpublished')" row="0"
                         col="1">
-                        <StackLayout padding="15" [ngClass]="{'active': tab === 'draft'}">
-                            <Label text="Draft" horizontalAlignment="center" textWrap="true"></Label>
+                        <StackLayout padding="15" [ngClass]="{'active': tab === 'unpublished'}">
+                            <Label text="Unpublished" horizontalAlignment="center" textWrap="true"></Label>
                         </StackLayout>
                     </StackLayout>
                 </GridLayout>
@@ -31,7 +31,7 @@
                         </question-table>
                     </StackLayout>
                 </StackLayout>
-                <StackLayout *ngIf="tab === 'draft'" row="1" col="0" stlRippleEffect fontSize="16" fontWeight="600">
+                <StackLayout *ngIf="tab === 'unpublished'" row="1" col="0" stlRippleEffect fontSize="16" fontWeight="600">
                     <StackLayout>
                         <question-table (editQuestion)="showUpdateQuestion(true);setSelectedQuestion($event)"
                             [questions]="unpublishedQuestions" [categoryDictionary]="categoriesObs | async"

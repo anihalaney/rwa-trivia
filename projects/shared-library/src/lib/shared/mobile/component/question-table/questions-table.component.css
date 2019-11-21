@@ -82,6 +82,10 @@
   animation-fill-mode: forwards;
 }
 
+.text-icon-field {
+  color: #283b66;
+}
+
 @keyframes animate-in {
   from {
     transform: translate(0, 9);

@@ -5,9 +5,11 @@
 
         <StackLayout class="question-container">
           <StackLayout>
-            <StackLayout class="question-text">
-              <render-question [textAlign]="'left'" [question]="question"></render-question>
-            </StackLayout>
+            <GridLayout class="question-text" columns="*,auto" rows="*">
+              <render-question row="0" col="0" [textAlign]="'left'" [question]="question"></render-question>
+              <Label (tap)="showEditQuestion(question)"  *ngIf="question?.is_draft == true" text="&#xf040;" class="fa text-icon-field" row="0" col="1" textWrap="true"></Label>
+              
+            </GridLayout>
             <GridLayout rows="*" columns="auto,auto" margin="3 0">
               <Label row="0" col="0" text="Category : " textWrap="true" class="label Roboto-Medium"
                 fontWeight="bold"></Label>

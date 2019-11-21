@@ -19,8 +19,10 @@
                 [formGroup]="questionForm" class="submit-question">
                 <StackLayout  #questionStack row="0" class="question-section"  iosOverflowSafeArea="false"> 
                         <Label *ngIf="!questionForm.controls.isRichEditor.value && currentWebViewParentId != -1" height="125"  text="Click to add question" textWrap="true" (tap)="showEditor('question')" class="edit-label"></Label>
-                        <render-question *ngIf="questionForm.controls.isRichEditor.value && currentWebViewParentId != -1" 
-                        [question]="{questionText: questionForm.controls.questionText.value, isRichEditor: true}"></render-question>
+                        <StackLayout (tap)="showEditor('question')" >
+                            <render-question  *ngIf="questionForm.controls.isRichEditor.value && currentWebViewParentId != -1" 
+                            [question]="{questionText: questionForm.controls.questionText.value, isRichEditor: true}"></render-question>
+                        </StackLayout>
                 </StackLayout>
                 <StackLayout row="1" class="answer-section" iosOverflowSafeArea="false">
                     <StackLayout formArrayName="answers">
@@ -30,7 +32,9 @@
                                     class="checkbox checkbox-section" fillColor="#71b02f"></CheckBox>
                                 <StackLayout #answerStack row="0" col="1">
                                         <Label  height="125"  class="edit-label"  text="Click to add option {{i+1}}" (tap)="showEditor('answer', i)" *ngIf="!answers.controls[i].controls.isRichEditor.value && currentWebViewParentId != i" ></Label>
-                                        <render-answer  *ngIf="answers.controls[i].controls.isRichEditor.value && currentWebViewParentId != i" [answer]="{answerText: answers.controls[i].controls.answerText.value, isRichEditor: true}"></render-answer>
+                                        <StackLayout (tap)="showEditor('answer', i)">
+                                            <render-answer  *ngIf="answers.controls[i].controls.isRichEditor.value && currentWebViewParentId != i" [answer]="{answerText: answers.controls[i].controls.answerText.value, isRichEditor: true}"></render-answer>
+                                        </StackLayout>
                                 </StackLayout>
                             </GridLayout>
                         </StackLayout>
@@ -43,7 +47,7 @@
 
                 <StackLayout row="2" class="max-time-input" iosOverflowSafeArea="false">
                     <GridLayout rows="*" columns="*">
-                        <DropDown row="0" [items]="playMaxTime" selectedIndex="{{selectedMaxTimeIndex}}"
+                        <DropDown itemsTextAlignment="center" row="0" [items]="playMaxTime" selectedIndex="{{selectedMaxTimeIndex}}"
                             (selectedIndexChanged)="onchange($event)"></DropDown>
                         <Image row="0" src="~/assets/images/dropdown_char.png" class="tick-icon"></Image>
                     </GridLayout>
@@ -52,7 +56,7 @@
                 <StackLayout row="3" class="category-input" iosOverflowSafeArea="false">
                     <GridLayout rows="*,*" columns="*">
                         <GridLayout row="0" rows="*" columns="*">
-                            <DropDown row="0" [items]="questionCategories"
+                            <DropDown itemsTextAlignment="center" row="0" [items]="questionCategories"
                                 selectedIndex="{{selectedQuestionCategoryIndex}}"
                                 (selectedIndexChanged)="selectCategory($event)"></DropDown>
                             <Image row="0" src="~/assets/images/dropdown_char.png" class="tick-icon"></Image>
@@ -85,7 +89,7 @@
     </ScrollView>
     <StackLayout height="1"  #webViewParentStack iosOverflowSafeArea="false">
         <WebView height="125" #webView id="questionWebView"
-        (loadFinished)="onLoadFinished($event,-1)"  (loaded)="wevViewLoaded($event)" (unloaded)="questionUnloaded($event)" (loadStarted)="questionLoadStarted($event)">
+        (loadFinished)="onLoadFinished($event,-1)"  (loaded)="wevViewLoaded($event)">
         </WebView>
     </StackLayout>
 </GridLayout>

@@ -87,6 +87,7 @@ export class EditorComponent implements OnInit, OnDestroy {
       this.oWebViewInterface.on('deltaObject', (deltaObject) => {
         this.ngZone.run(() => {
           this.editorContent = deltaObject;
+          this.cd.detectChanges();
         });
       });
 
