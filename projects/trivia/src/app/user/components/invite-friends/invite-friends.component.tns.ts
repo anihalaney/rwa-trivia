@@ -20,7 +20,7 @@ export class InviteFriendsComponent extends InviteFriends implements OnInit, OnD
   renderView = false;
 
   constructor(public store: Store<AppState>, public userActions: UserActions, public utils: Utils,
-    private routerExtension: RouterExtensions, private page: Page, public cd: ChangeDetectorRef) {
+    private page: Page, public cd: ChangeDetectorRef) {
     super(store, userActions, utils, cd);
   }
 

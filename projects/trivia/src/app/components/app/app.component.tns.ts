@@ -45,7 +45,7 @@ export class AppComponent implements OnInit, OnDestroy {
   isDrawerOpenOrClosed = '';
   showBottomBar: Boolean = true;
   currentRouteUrl: string;
-
+  bottomSafeArea: number;
   constructor(
     private store: Store<AppState>,
     private navigationService: NavigationService,
@@ -60,11 +60,16 @@ export class AppComponent implements OnInit, OnDestroy {
     private _modalService: ModalDialogService,
     private _vcRef: ViewContainerRef
   ) {
+    this.bottomSafeArea = 240;
     this.handleBackPress();
   }
 
   ngOnInit() {
     this.checkForceUpdate();
+    if (application.ios && application.ios.window.safeAreaInsets) {
+      const bottomSafeArea: number = application.ios.window.safeAreaInsets.bottom;
+      this.bottomSafeArea = bottomSafeArea > 0 ? this.bottomSafeArea + bottomSafeArea : this.bottomSafeArea;
+    }
     firebase.init({
       onMessageReceivedCallback: (message) => {
         console.log('message', message);
