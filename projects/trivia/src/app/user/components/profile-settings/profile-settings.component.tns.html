@@ -433,7 +433,7 @@
           
             <FlexboxLayout justifyContent="space-between" orientation="horizontal" class="edit-field">
                 <FlexboxLayout flexDirection="column">
-                    <Label alignSelf="flex-start" text="Email tes" textWrap="true" class="label-field"></Label>
+                    <Label alignSelf="flex-start" text="Email" textWrap="true" class="label-field"></Label>
                     <Label alignSelf="flex-start" [text]="user.email" textWrap="true" class="label-value"></Label>
                 </FlexboxLayout>
                 <Label (tap)="editSingleField('displayName')"
@@ -445,6 +445,16 @@
                 <TextField  row="0" col="0" alignSelf="stretch"  hint="Email" text="Email" class="email-text-field" width="auto" ></TextField>
                 <Label   row="0" col="1" color="#14418B" fontSize="24" class="fa" text="&#xf058;" style="padding:0 15"> </Label>
             </GridLayout>
+
+          <FlexboxLayout marginTop="10" justifyContent="space-between" orientation="horizontal" class="edit-field"  *ngIf="currentAuthProvider===authProviderConstants.PASSWORD">
+            <FlexboxLayout flexDirection="column">
+                <Label alignSelf="flex-start" text="Password" textWrap="true" class="label-field"></Label>
+                <Label alignSelf="flex-start" text="XXXXXX" textWrap="true" class="label-value"></Label>
+            </FlexboxLayout>
+            <Label (tap)="editSingleField('displayName')"
+                color="#14418B" fontSize="20" class="ico icon-edit" textWrap="true" text="&#xe927;" (tap)="redirectToChangePassword()"></Label>
+        </FlexboxLayout>
+
         </FlexboxLayout>
       </PreviousNextView>
     </ScrollView>

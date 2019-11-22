@@ -98,20 +98,24 @@ export class AuthenticationProvider {
   }
 
   async updatePassword(email: string, currentPassword: string, newPassword: string) {
-    await this.firebaseAuthService.updatePassword(email, currentPassword, newPassword);
-  }
-
-  logout() {
-    this.firebaseAuthService.signOut();
-  }
-
-  get isAuthenticated(): boolean {
-    let user: User;
-    this.store.select(coreState).pipe(take(1)).subscribe(s => user = s.user);
-    if (user) {
-      return true;
+    try {
+      await this.firebaseAuthService.updatePassword(email, currentPassword, newPassword);
+    } catch (error) {
+      throw error;
     }
-    return false;
+}
+
+logout() {
+  this.firebaseAuthService.signOut();
+}
+
+get isAuthenticated(): boolean {
+  let user: User;
+  this.store.select(coreState).pipe(take(1)).subscribe(s => user = s.user);
+  if (user) {
+    return true;
   }
+  return false;
+}
 
 }

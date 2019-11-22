@@ -6,6 +6,7 @@ import { InviteFriendsDialogComponent } from './invite-friends/invite-friends-di
 import { LocationResetDialogComponent } from './profile-settings/location-reset-dialog/location-reset-dialog.component';
 import { PreviewQuestionDialogComponent } from './question-add-update/preview-question-dialog/preview-question-dialog.component';
 import { GameProfileComponent } from './game-profile/game-profile.component.tns';
+import { ChangePasswordComponent } from 'shared-library/shared/mobile/component';
 
 export {
     ProfileSettingsComponent,
@@ -15,7 +16,8 @@ export {
     InviteFriendsDialogComponent,
     LocationResetDialogComponent,
     PreviewQuestionDialogComponent,
-    GameProfileComponent
+    GameProfileComponent,
+    ChangePasswordComponent
 };
 
 export default [
@@ -26,5 +28,6 @@ export default [
     InviteFriendsDialogComponent,
     LocationResetDialogComponent,
     PreviewQuestionDialogComponent,
-    GameProfileComponent
+    GameProfileComponent,
+    ChangePasswordComponent
 ];

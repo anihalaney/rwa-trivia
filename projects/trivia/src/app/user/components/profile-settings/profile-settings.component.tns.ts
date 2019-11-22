@@ -27,6 +27,7 @@ import { LocationResetDialogComponent } from './location-reset-dialog/location-r
 import { ProfileSettings } from './profile-settings';
 import { AuthenticationProvider } from 'shared-library/core/auth';
 import * as Platform from 'tns-core-modules/platform';
+import { RouterExtensions } from 'nativescript-angular/router';
 
 declare var IQKeyboardManager;
 
@@ -78,7 +79,8 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
     public router: Router,
     private modal: ModalDialogService,
     private vcRef: ViewContainerRef,
-    public authenticationProvider: AuthenticationProvider) {
+    public authenticationProvider: AuthenticationProvider,
+    private routerExtensions: RouterExtensions) {
 
     super(fb, store, userAction, uUtils, cd, route, router, authenticationProvider);
     this.initDataItems();
@@ -444,5 +446,9 @@ console.log(field);
       console.log("Error: " + (e.message || e));
 
     }
+  }
+
+  redirectToChangePassword() {
+    this.routerExtensions.navigate(['/user/my/profile/change-password'],{ clearHistory: false });
   }
 }
