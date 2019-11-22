@@ -103,15 +103,21 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
     this.dialogOpen = false;
   }
 
-  closeAllPopOver() {
-    this.questionsArray.map((res) => {
-      res.openReport = false;
-    });
+  closeDialogReport(closePopUp) {
+    this.openReportDialog = closePopUp;
+    this.handlePopOver();
   }
 
-  handlePopOver(row) {
+  openDialogReport(question) {
+    this.reportQuestion = new Question();
+    this.reportQuestion = question;
+    this.openReportDialog = true;
+  }
+
+  handlePopOver(row?) {
     this.questionsArray.map((res) => {
-      if (res.id === row.id) {
+      const checkIfIDExist = row && row.id;
+      if (checkIfIDExist && res.id === row.id) {
         res.openReport = !res.openReport;
       } else {
         res.openReport = false;
@@ -119,14 +125,8 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
     });
   }
 
-  closeDialogReport(closePopUp) {
-    this.openReportDialog = closePopUp;
-  }
-
-  openDialogReport(question) {
-    this.reportQuestion = new Question();
-    this.reportQuestion = question;
-    this.openReportDialog = true;
+  openDialog(question) {
+    this.handlePopOver(question);
   }
 
   stackLoaded(args) {

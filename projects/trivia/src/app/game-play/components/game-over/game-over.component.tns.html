@@ -225,8 +225,7 @@
                     </app-user-card>
 
                     <GridLayout row="0" col="1" rows="*" columns="*,auto"
-                      *ngIf="(game.gameOptions.opponentType == opponentType.Random || game.gameOptions.isChallenge ) && 
-                        otherUserInfo?.email && userInvitations &&  userInvitations[otherUserInfo?.email]?.status === 'add'">
+                      *ngIf="otherUserInfo?.email && userInvitations &&  userInvitations[otherUserInfo?.email]?.status === 'add'">
                       <FlexboxLayout row="0" col="0" class="flex-c p-r-20 connect">
                         <Label *ngIf="otherUserInfo?.displayName" text="Connect with" class="connect_label"
                           textWrap="true"></Label>
@@ -241,18 +240,16 @@
                     </GridLayout>
 
                     <FlexboxLayout row="0" col="1" class="flex-c connect"
-                      *ngIf="(game.gameOptions.opponentType == opponentType.Random || game.gameOptions.isChallenge ) && 
-                                otherUserInfo?.email && userInvitations && userInvitations[otherUserInfo?.email]?.status === 'pending'">
+                      *ngIf="otherUserInfo?.email && userInvitations && userInvitations[otherUserInfo?.email]?.status === 'pending'">
                       <Label [text]="otherUserInfo?.displayName" class="connect_name" textWrap="true"></Label>
-                      <label class="navigate-button-green Hind-Medium" text="Friend Request Sent"></label>
+                      <Label class="connect_name Hind-Medium" text="Friend Request Sent"></Label>
                     </FlexboxLayout>
 
                     <FlexboxLayout row="0" col="1" class="flex-c connect p-r-10"
-                      *ngIf="(game.gameOptions.opponentType == opponentType.Random || game.gameOptions.isChallenge ) && 
-                            otherUserInfo?.email  && userInvitations && userInvitations[otherUserInfo?.email]?.status === 'approved'">
+                      *ngIf="otherUserInfo?.email  && userInvitations && userInvitations[otherUserInfo?.email]?.status === 'approved'">
                       <Label [text]="otherUserInfo?.displayName" class="connect_name" textWrap="true"></Label>
-                      <label class="navigate-button Hind-Medium fa" text="Friends &#xf00c;">
-                      </label>
+                      <Label padding="5 0" class="connect_name Hind-Medium fa" text="Friends &#xf00c;">
+                      </Label>
                     </FlexboxLayout>
                   </GridLayout>
                 </GridLayout>
@@ -262,10 +259,10 @@
 
         </StackLayout>
       </ScrollView>
-      <AbsoluteLayout verticalAlignment="bottom" margin="0 30" paddingBottom="15">
-        <FlexboxLayout justifyContent="space-around" width="100%">
-
-          <StackLayout orientation="vertical">
+      <AbsoluteLayout verticalAlignment="bottom" width="100%">
+        <GridLayout padding="10 0" background="#fff" width="100%">
+        <FlexboxLayout justifyContent="center">
+          <StackLayout padding="0 20">
             <StackLayout orientation="vertical" verticalAlignment="center" width="45" height="45"
               (rippleTap)="gotoDashboard()" stlRippleEffect stlOpacity="0.5" stlBackgroundColorAfter="transparent"
               class="add-friend-border">
@@ -275,7 +272,7 @@
             <Label horizontalAlignment="center" text="Home" fontSize="13" color="#3b5998" textWrap="true"></Label>
           </StackLayout>
 
-          <StackLayout orientation="vertical">
+          <StackLayout padding="0 20">
             <StackLayout orientation="vertical" verticalAlignment="center" width="45" height="45"
               (rippleTap)="screenshot()" stlRippleEffect stlOpacity="0.5" stlBackgroundColorAfter="transparent"
               class="add-friend-border">
@@ -284,7 +281,8 @@
             </StackLayout>
             <Label text="Share" horizontalAlignment="center" fontSize="13" color="#3b5998" textWrap="true"></Label>
           </StackLayout>
-          <StackLayout orientation="vertical">
+
+          <StackLayout padding="0 20">
             <StackLayout orientation="vertical" verticalAlignment="center" width="45" height="45"
               (rippleTap)="bindQuestions();showDialog();showQuesAndAnswer=!showQuesAndAnswer;" stlRippleEffect
               stlOpacity="0.5" stlBackgroundColorAfter="transparent" class="add-friend-border">
@@ -294,6 +292,7 @@
             <Label text="Summary" horizontalAlignment="center" fontSize="13" color="#3b5998" textWrap="true"></Label>
           </StackLayout>
         </FlexboxLayout>
+      </GridLayout>
       </AbsoluteLayout>
       <AbsoluteLayout verticalAlignment="center" horizontalAlignment="center">
         <ActivityIndicator *ngIf="disableRematchBtn" busy="true" ios:width="100" ios:height="50" android:width="50"
@@ -303,22 +302,22 @@
   </StackLayout>
 
   <StackLayout height="100%" (tap)="preventEventPropogation()" class="dialog__wrapper">
-    <AbsoluteLayout  width="100%" height="100%">
-      <GridLayout  rows="200,*" height="100%" width="100%">
-        <StackLayout  row="1" class="main-dialog">
-          <FlexboxLayout (tap)="closeAllPopOver()" class="dialog-title-container" padding="0 20">
+    <AbsoluteLayout width="100%" height="100%">
+      <GridLayout rows="200,*" height="100%" width="100%">
+        <StackLayout row="1" class="main-dialog">
+          <FlexboxLayout (tap)="handlePopOver()" class="dialog-title-container" padding="0 20">
             <Label text="Game summary" class="dialog-title" textWrap="true"></Label>
             <Label text="&#xf00d;" class="fa close-tag" textWrap="true" (tap)="closeDialog()"></Label>
           </FlexboxLayout>
           <ScrollView height="100%">
             <StackLayout padding="0 20">
               <GridLayout rows="*" columns="auto,*" class="question" *ngFor="let row  of questionsArray;let i=index;">
-                <Label (tap)="closeAllPopOver()"  row="0" col="0" *ngIf="row?.ansStatus" text="&#xf00c;" verticalAlignment="top"
-                  class="fa correct-icon" textWrap="true"></Label>
-                <Label (tap)="closeAllPopOver()"  row="0" col="0" *ngIf="!row?.ansStatus" text="&#xf00d;" verticalAlignment="top"
-                  class="fa wrong-icon" textWrap="true"></Label>
-                <StackLayout (tap)="closeAllPopOver()" row="0" col="1" class="question-details" marginRight="20">
-                  <Label  text="{{row.questionText}}" class="question-content" textWrap="true"></Label>
+                <Label (tap)="handlePopOver()" row="0" col="0" *ngIf="row?.ansStatus" text="&#xf00c;"
+                  verticalAlignment="top" class="fa correct-icon" textWrap="true"></Label>
+                <Label (tap)="handlePopOver()" row="0" col="0" *ngIf="!row?.ansStatus" text="&#xf00d;"
+                  verticalAlignment="top" class="fa wrong-icon" textWrap="true"></Label>
+                <StackLayout (tap)="handlePopOver()" row="0" col="1" class="question-details" marginRight="20">
+                  <Label text="{{row.questionText}}" class="question-content" textWrap="true"></Label>
                   <GridLayout rows="*" columns="*,auto">
                     <StackLayout row="0" col="0">
                       <StackLayout *ngFor="let answer of row.answers">
@@ -337,6 +336,20 @@
                         textWrap="true"></Label>
                     </StackLayout>
                   </GridLayout>
+                </StackLayout>
+                <StackLayout row="0" col="1" orientation="horizontal" horizontalAlignment="right">
+                  <StackLayout orientation="vertical">
+                    <FlexboxLayout justifyContent="flex-end">
+                      <Label (tap)="handlePopOver(row)" stlRippleEffect stlBackgroundColorAfter="transparent"
+                        stlBackgroundColor="transparent" stlOpacity="0.5" text="&#xf142;" fontSize="22" padding="5 10"
+                        class="fa"></Label>
+                    </FlexboxLayout>
+                    <Button (rippleTap)="openDialogReport(row)" *ngIf="row.openReport && !game.playerQnAs[i].isReported"
+                      style="border-radius:5; height: 30; color:#000; border-width:2px; border-color:#f3f3f3; background: white"
+                      stlRippleEffect text="Report"></Button>
+                    <Button *ngIf="row.openReport && game.playerQnAs[i]?.isReported" style="border-radius:5;height: 30; color:red; border-width:2px; border-color:#f3f3f3; background: white;
+                          font-weight: 600" stlRippleEffect text="Reported"></Button>
+                  </StackLayout>
                 </StackLayout>
                 <StackLayout row="0" col="1" orientation="horizontal" horizontalAlignment="right">
                   <StackLayout orientation="vertical">

@@ -46,7 +46,8 @@ export class AppComponent implements OnInit, OnDestroy {
   showBottomBar: Boolean = true;
   currentRouteUrl: string;
   bottomSafeArea: number;
-  constructor(private store: Store<AppState>,
+  constructor(
+    private store: Store<AppState>,
     private navigationService: NavigationService,
     private ngZone: NgZone,
     private routerExtension: RouterExtensions,
@@ -57,7 +58,8 @@ export class AppComponent implements OnInit, OnDestroy {
     private cd: ChangeDetectorRef,
     private router: Router,
     private _modalService: ModalDialogService,
-    private _vcRef: ViewContainerRef) {
+    private _vcRef: ViewContainerRef
+  ) {
     this.bottomSafeArea = 240;
     this.handleBackPress();
   }
@@ -119,7 +121,6 @@ export class AppComponent implements OnInit, OnDestroy {
         return;
       }
 
-    
       this.currentRouteUrl = evt.url;
 
       this.showBottomBar = this.hideBottomBarForSelectedRoutes(evt.url);
@@ -172,7 +173,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   hideBottomBarForSelectedRoutes(url) {
     if (url === '/signup-extra-info' || url === '/select-category-tag' || url === '/first-question' ||
-      (url.includes('user/my/profile') && Platform.isIOS )|| 
+      (url.includes('user/my/profile') && Platform.isIOS) ||
       url === '/login' ||
       (!url.includes('game-play/game-options') && (url.includes('game-play')))) {
       return false;
@@ -271,4 +272,3 @@ export class AppComponent implements OnInit, OnDestroy {
     }, this);
   }
 }
-

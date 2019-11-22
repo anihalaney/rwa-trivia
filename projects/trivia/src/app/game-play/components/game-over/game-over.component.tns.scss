@@ -14,7 +14,7 @@
   text-align: center;
 }
 
-.user-image{
+.user-image {
   border-radius: 50%;
   width: 100;
   height: 100;
@@ -38,9 +38,9 @@
 }
 
 .gamestatus {
-//   background-color: #f1fff2;
-//   border-width: 3px;
-//   border-color: #d0f5d3;
+  //   background-color: #f1fff2;
+  //   border-width: 3px;
+  //   border-color: #d0f5d3;
   margin: 10 0 0 0;
 }
 
@@ -53,7 +53,7 @@
 .question-grid {
   border-bottom-width: 2px;
   border-color: #f3f3f3;
-  padding: 10 0 10 0
+  padding: 10 0 10 0;
 }
 
 .question-tag {
@@ -63,19 +63,19 @@
 
 .question-text {
   margin: 0 0 5 10;
-  color: #3b444f
+  color: #3b444f;
 }
 
 .answer-tag {
   vertical-align: top;
-  color: #3b444f
+  color: #3b444f;
 }
 
 .navigate-button:disabled {
   color: gainsboro;
 }
 
-Button {
+button {
   border-radius: 1;
 }
 
@@ -93,7 +93,7 @@ Button {
     color: #333;
   }
 
-// new 
+// new
 .navigate-button {
   color: #3b5998;
   background-color: #ffffff;
@@ -123,7 +123,7 @@ Button {
 }
 
 .navigate-button-green {
-  color: #FFFFFF;
+  color: #ffffff;
   background-color: #4caf50;
   padding: 5 20;
   margin: 5 3;
@@ -162,29 +162,28 @@ Button {
   margin-bottom: 30;
 }
 
-
-.game-result{
+.game-result {
   justify-content: space-between;
   margin: 15;
   width: 100%;
-  padding: 0 12 0 12;
+  padding: 0 12;
 }
 
-.game-result-title{
+.game-result-title {
   font-weight: 500;
   font-size: 24;
   width: 100%;
-  color:#000000;
+  color: #000000;
 }
 
-.game-round-info-container{
+.game-round-info-container {
   background-color: #4caf50;
   border-radius: 30;
   padding: 12;
   text-align: center;
   color: #ffffff;
 }
-.game-round-info-container-grey{
+.game-round-info-container-grey {
   background-color: #f9f9f9;
   border-radius: 30;
   // padding: 10;
@@ -192,11 +191,11 @@ Button {
   text-align: center;
 }
 
-.main-title{
-  z-index:10;
+.main-title {
+  z-index: 10;
   text-align: center;
-  color:#000000;
-  margin:3 0;
+  color: #000000;
+  margin: 3 0;
 }
 
 .transparent-back {
@@ -204,7 +203,7 @@ Button {
 }
 
 .main-dialog {
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   border-top-left-radius: 20;
   border-top-right-radius: 20;
   padding: 30 0 5 0;
@@ -270,13 +269,13 @@ Button {
 }
 
 .dialog {
-
-  // visibility: collapse;
-  .dialogOpen &__wrapper {
+  .dialogOpen &__wrapper,
+  .report__dialogOpen &__wrapper--report {
     visibility: visible;
   }
 
-  &__wrapper {
+  &__wrapper,
+  &__wrapper--report {
     background: rgba(0, 0, 0, 0.5);
     visibility: collapse;
     width: 100%;
@@ -284,19 +283,6 @@ Button {
   }
 }
 
-.dialog {
-    // visibility: collapse;
-    .report__dialogOpen &__wrapper--report {
-        visibility: visible;
-    }
-
-    &__wrapper--report {
-        background: rgba(0, 0, 0, 0.5);
-        visibility: collapse;
-        width: 100%;
-        z-index: 1;
-    }
-}
 .flex {
   &-c {
     flex-direction: column;
@@ -323,11 +309,12 @@ Button {
 
   &_name {
     font-size: 16;
+    color: #3b5998;
+    align-items: center;
   }
 }
 
 .add-friend-border {
-  // padding: 10;
   border-width: 1;
   border-color: #3b5998;
   border-radius: 30;
