@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef, NgZone, OnDestroy } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, NgZone, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { AppState, appState } from './../store';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
@@ -34,6 +34,10 @@ export class EditorComponent implements OnInit, OnDestroy {
     syntax: true
   };
   subscriptions: Subscription[] = [];
+  viewType = 'question';
+  bottomBarOptions = '';
+  text = '';
+  @ViewChild('bottomToolBar', { static: false }) bottomToolBar: ElementRef;
 
   constructor(private store: Store<AppState>,
     private cd: ChangeDetectorRef,
@@ -41,10 +45,23 @@ export class EditorComponent implements OnInit, OnDestroy {
     this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
       if (appSettings[0]) {
         this.applicationSettings = appSettings[0];
-        if(this.applicationSettings && this.applicationSettings.quill_options) {
-          this.quillConfig.toolbar.container.push(this.applicationSettings.quill_options.options);
+        if (this.applicationSettings && this.applicationSettings.quill_options) {
           this.quillConfig.toolbar.container.push(this.applicationSettings.quill_options.list);
           this.quillConfig.mathEditor = { mathOptions: this.applicationSettings };
+
+          if (this.applicationSettings.quill_options.custom_toolbar_position === 'bottom') {
+            if (this.viewType === 'question') {
+              this.bottomBarOptions = Object.values(this.applicationSettings.quill_options.web_view_question_options).join('');
+            } else {
+              this.bottomBarOptions = Object.values(this.applicationSettings.quill_options.web_view_answer_options).join('');
+            }
+          } else {
+            if (this.viewType === 'question') {
+              this.quillConfig.toolbar.container.push(this.applicationSettings.quill_options.web_view_question_options);
+            } else {
+              this.quillConfig.toolbar.container.push(this.applicationSettings.quill_options.web_view_answer_options);
+            }
+          }
           this.show = true;
         }
       }
@@ -70,6 +87,38 @@ export class EditorComponent implements OnInit, OnDestroy {
       this.oWebViewInterface.on('deltaObject', (deltaObject) => {
         this.ngZone.run(() => {
           this.editorContent = deltaObject;
+          this.cd.detectChanges();
+        });
+      });
+
+
+      this.oWebViewInterface.on('quillConfig', (quillConfig) => {
+        this.ngZone.run(() => {
+          this.applicationSettings.quill_options = JSON.parse(quillConfig);
+          this.quillConfig.toolbar.container = [];
+          this.quillConfig.mathEditor = {};
+          this.quillConfig.toolbar.container.push(this.applicationSettings.quill_options.options);
+          this.quillConfig.toolbar.container.push(this.applicationSettings.quill_options.list);
+          this.quillConfig.mathEditor = { mathOptions: this.applicationSettings };
+        });
+      });
+
+      this.oWebViewInterface.on('viewType', (viewType) => {
+        this.ngZone.run(() => {
+          this.viewType = viewType;
+          if (this.applicationSettings && this.applicationSettings.quill_options) {
+            const dispOptions = Object.keys(this.viewType === 'question' ?
+              this.applicationSettings.quill_options.web_view_question_options :
+              this.applicationSettings.quill_options.web_view_answer_options);
+              Array.from(this.bottomToolBar.nativeElement.children).forEach((ele: any) => {
+                const newele = ele as HTMLElement;
+                if (dispOptions.indexOf(ele.className) === -1) {
+                  newele.style.display = 'none';
+                } else {
+                  newele.style.display = 'block';
+                }
+              });
+          }
         });
       });
     }
@@ -80,6 +129,7 @@ export class EditorComponent implements OnInit, OnDestroy {
     this.ngZone.run(() => {
       text.answerIndex = this.answerIndex;
       this.oWebViewInterface.emit('quillContent', text);
+      this.text = text;
       this.cd.detectChanges();
     });
 
@@ -97,9 +147,11 @@ export class EditorComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    console.log('destroy called ======================================>');
     this.oWebViewInterface.off('answerIndex');
     this.oWebViewInterface.off('imageUrl');
     this.oWebViewInterface.off('deltaObject');
+    this.oWebViewInterface.off('viewType');
   }
 
 }

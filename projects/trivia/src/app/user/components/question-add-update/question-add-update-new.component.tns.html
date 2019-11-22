@@ -1,0 +1,136 @@
+<ns-action-bar [title]="actionBarTxt" class="Roboto-Regular" showAdd="true"></ns-action-bar>
+
+<StackLayout *ngIf="loaderBusy">
+    <ActivityIndicator [busy]="loaderBusy" width="100" height="100" marginTop="225" class="activity-indicator">
+    </ActivityIndicator>
+</StackLayout>
+<GridLayout [isUserInteractionEnabled]="isWebViewLoaded" rows="*" columns="*" *ngIf="!loaderBusy">
+        <AbsoluteLayout *ngIf="!isWebViewLoaded" row="0" col="0"  verticalAlignment="center">
+            <StackLayout width="100%">
+                <ActivityIndicator marginLeft="10" verticalAlignment="center" ios:width="500" ios:height="500"
+                    android:width="25" android:height="25" busy="true">
+                </ActivityIndicator>
+            </StackLayout>
+        </AbsoluteLayout>
+    <ScrollView>
+        
+        <PreviousNextView  row="0" col="0">
+             <GridLayout rows="*,auto,auto,auto,auto,auto" columns="*" (tap)="hideKeyboard()"
+                [formGroup]="questionForm" class="submit-question">
+                <StackLayout  #questionStack row="0" class="question-section"  iosOverflowSafeArea="false"> 
+                    <FlexboxLayout class="edit-label"  height="125" (tap)="showEditor('question')"  justifyContent="center" alignItems="center" *ngIf="!questionForm.controls.isRichEditor.value && currentWebViewParentId != -1">
+                        <Label   text="Click to add question" textWrap="true" ></Label>
+                    </FlexboxLayout>
+                        <StackLayout class="question-box"  *ngIf="questionForm.controls.isRichEditor.value && currentWebViewParentId != -1" (tap)="showEditor('question')" >
+                            <render-question  (tap)="showEditor('question')"
+                            [question]="{questionText: questionForm.controls.questionText.value, isRichEditor: true}"></render-question>
+                        </StackLayout>
+                </StackLayout>
+                <StackLayout row="1" class="answer-section" iosOverflowSafeArea="false">
+                    <StackLayout formArrayName="answers">
+                        <StackLayout *ngFor="let answer of answers.controls; let i=index" [formGroupName]="i">
+                            <GridLayout rows="125"  columns="auto,*" class="text-box-section">
+                                <CheckBox row="0" col="0" #elem formControlName="correct"
+                                    class="checkbox checkbox-section" fillColor="#71b02f"></CheckBox>
+                                <StackLayout #answerStack row="0" col="1">
+                                        <FlexboxLayout class="edit-label"  height="126" (tap)="showEditor('answer', i)" justifyContent="center" alignItems="center" *ngIf="!answers.controls[i].controls.isRichEditor.value && currentWebViewParentId != i"
+                                             [class.question-box-solid]="false">
+                                                <Label text="Click to add option {{i+1}}"   ></Label>
+                                        </FlexboxLayout>
+                                        <GridLayout rows="*" columns="*" class="question-box" (tap)="showEditor('answer', i)"  *ngIf="answers.controls[i].controls.isRichEditor.value && currentWebViewParentId != i">
+                                            <render-answer  [bgColor]="'#ffffff'" row="0" col="0" [isRight]="false" (tapEvent)="showEditor('answer', i)" [answer]="{answerText: answers.controls[i].controls.answerText.value, isRichEditor: true}"></render-answer>
+                                            <AbsoluteLayout (tap)="showEditor('answer', i)"  row="0" col="0" backgroundColor="transparent"> 
+                                            </AbsoluteLayout> 
+                                        </GridLayout>
+                                </StackLayout>
+                            </GridLayout>
+                        </StackLayout>
+                    </StackLayout>
+                    
+                    <Label *ngIf="!answers.valid && !answers.pristine" class="error-lbl " textWrap="true"
+                        text="All answers required !"></Label>
+                    <Label *ngIf="answers.valid && questionForm.hasError('correctAnswerCountInvalid')" class="error-lbl"
+                        textWrap="true" text="Pick one and only one correct answer !"></Label>
+                </StackLayout>
+
+                <StackLayout row="2" class="max-time-input" iosOverflowSafeArea="false">
+                    <GridLayout rows="*" columns="*">
+                        <DropDown itemsTextAlignment="center" row="0" [items]="playMaxTime" selectedIndex="{{selectedMaxTimeIndex}}"
+                            (selectedIndexChanged)="onchange($event)"></DropDown>
+                        <Image row="0" src="~/assets/images/dropdown_char.png" class="tick-icon"></Image>
+                    </GridLayout>
+                </StackLayout>
+
+                <StackLayout row="3" class="category-input" iosOverflowSafeArea="false">
+                    <GridLayout rows="*,*" columns="*">
+                        <GridLayout row="0" rows="*" columns="*">
+                            <DropDown itemsTextAlignment="center" row="0" [items]="questionCategories"
+                                selectedIndex="{{selectedQuestionCategoryIndex}}"
+                                (selectedIndexChanged)="selectCategory($event)"></DropDown>
+                            <Image row="0" src="~/assets/images/dropdown_char.png" class="tick-icon"></Image>
+                        </GridLayout>
+                        <StackLayout row="1" iosOverflowSafeArea="false"
+                            *ngIf="questionForm.valid  && (!categoryIds ||  categoryIds.length===0)">
+                            <Label text="Select a category !" textWrap="true" class="error-lbl"></Label>
+                        </StackLayout>
+                    </GridLayout>
+
+                </StackLayout>
+
+                <StackLayout row="4" iosOverflowSafeArea="false">
+                        <!-- <TextView #textField hint="Comma separated tags" class="tag-input"></TextView>
+                        <Label *ngIf="questionForm.valid  && enteredTags.length < 3" text="Must have atleast 3 tags !" textWrap="true" class="error-lbl"   ></Label> -->
+                    <StackLayout *ngIf="enteredTags.length>0" marginBottom="5">
+                            <FlexboxLayout *ngIf="enteredTags" flexWrap="wrap">
+                                <StackLayout *ngFor="let tags of let tag of enteredTags, let i = index">
+                                    <FlexboxLayout  alignItems="center" [style.backgroundColor]="theme === 'dark' ? '#405177':'#e2e2e2'"
+                                    [style.color]="theme === 'dark' ? '#a5a5a5' : '#808080'" borderRadius="22" margin="2.5 2.5" padding="5 10" >
+                                        <Label  [text]="tags" textWrap="true"></Label> 
+                                        <Label  color="#000000" text="&#xe922;" fontSize="10" class="ico icon-close" padding="7 5 7 7" (tap)="removeEnteredTag(tag)"></Label>  
+                                    </FlexboxLayout>
+                                </StackLayout>
+                            </FlexboxLayout>
+                    </StackLayout>
+                    <GridLayout rows="auto,auto" columns="*,85" paddingBottom="20" class="two-player-option">
+                        <StackLayout row="0" col="0" tkExampleTitle tkToggleNavButton ios:backgroundColor="#ffffff">
+                            <RadAutoCompleteTextView borderWidth="1" borderColor="#a5a5a5" color="black"  #autocomplete hint="Select Tag" [items]="dataItems" completionMode="Contains"
+                                showCloseButton="true" (didAutoComplete)="onDidAutoComplete($event)" (textChanged)="onTextChanged($event)"
+                                borderRadius="3" height="50" paddingLeft="10"
+                                ios:backgroundColor="#ffffff">
+                                <SuggestionView tkAutoCompleteSuggestionView>
+                                    <ng-template tkSuggestionItemTemplate let-item="item">
+                                        <StackLayout orientation="vertical" padding="20">
+                                            <Label [text]="item.text"></Label>
+                                        </StackLayout>
+                                    </ng-template>
+                                </SuggestionView>
+                            </RadAutoCompleteTextView>
+                        </StackLayout>
+                        <Button row="0" borderWidth="2" col="1" (tap)="addCustomTag()"  stlBackgroundColor="white"  text="Add" class="Roboto-Bold add-btn" android:padding="5"
+                            fontSize="16" android:fontSize="10" ios:padding="10" 
+                            marginLeft="10" fontWeight="700" borderRadius="2" stlRippleEffect></Button>
+                    </GridLayout>
+                </StackLayout>
+
+                <GridLayout row="5" rows="*" columns="*,50,*" iosOverflowSafeArea="false" class="button-section">
+                    <Button row="0" col="0" colspan="2" width="100%" [text]="submitBtnTxt" (tap)="submit()"
+                        [ngClass]="(questionForm.valid && categoryIds && categoryIds.length > 0 && enteredTags.length > 2) ? 'enable-btn' : 'disable-btn' "
+                        class="question-buttons"></Button>
+              
+                        <FlexboxLayout [ngClass]="(questionForm.valid && categoryIds && categoryIds.length > 0 && enteredTags.length > 2) ? 'enable-btn-preview' : 'disable-btn' "  (tap)="preview()"  row="0" col="2" orientation="horizontal" justifyContent="center" padding="12">
+                            <Label text="Preview" textWrap="true"></Label>
+                        </FlexboxLayout>
+                        
+                    
+                </GridLayout>
+
+            </GridLayout>
+        </PreviousNextView>
+     
+    </ScrollView>
+    <StackLayout height="0"  #webViewParentStack>
+        <WebView height="125" #webView id="questionWebView"
+        (loadFinished)="onLoadFinished($event,-1)"  (loaded)="wevViewLoaded($event)">
+        </WebView>
+    </StackLayout>
+</GridLayout>

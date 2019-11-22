@@ -8,7 +8,7 @@ import { Router } from '@angular/router';
 import { QuestionActions } from 'shared-library/core/store/actions/question.actions';
 import { QuestionAddUpdate } from './question-add-update';
 import { Question, Answer } from 'shared-library/shared/model';
-import { debounceTime, map, concatMap, mergeMap } from 'rxjs/operators';
+import { debounceTime, map, concatMap, mergeMap, take } from 'rxjs/operators';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { QuestionService } from 'shared-library/core/services';
 import { ImageCropperComponent } from 'ngx-img-cropper';
@@ -37,7 +37,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnI
   htmlText: any;
   jsonObject: any;
   quillImageUrl: string;
-  quillObject: any = {};
+
 
   quillConfig = {
     toolbar: {
@@ -68,7 +68,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnI
 
     this.question = new Question();
     this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
-      if (appSettings && this.applicationSettings.quill_options) {
+      if (appSettings && appSettings[0] && appSettings[0].quill_options) {
         this.applicationSettings = appSettings[0];
         // Add editor's options from app settings
         this.quillConfig.toolbar.container.push(this.applicationSettings.quill_options.options);
@@ -112,11 +112,6 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnI
     }));
   }
 
-  // Text change in quill editor
-  onTextChanged(text) {
-    this.quillObject.jsonObject = text.delta;
-    this.quillObject.questionText = text.html;
-  }
 
   // Image Upload
   fileUploaded(quillImageUpload: QuillImageUpload) {
@@ -180,6 +175,10 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnI
       maxTime: []
     }, { validator: questionFormValidator }
     );
+
+    this.subscriptions.push(this.questionForm.valueChanges.pipe(take(1)).subscribe(val => {
+          this.saveDraft();
+    }));
   }
 
 

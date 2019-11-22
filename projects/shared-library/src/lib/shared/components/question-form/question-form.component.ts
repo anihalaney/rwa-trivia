@@ -102,6 +102,18 @@ export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
           if (data) {
               this.questionForm.patchValue({ is_draft : true });
               const question = this.getQuestionFromFormValue(this.questionForm.value);
+
+              question.categoryIds = [];
+
+              if (Array.isArray(this.questionForm.get('category').value)) {
+                question.categoryIds = this.questionForm.get('category').value;
+              } else {
+                question.categoryIds.push(this.questionForm.get('category').value);
+              }
+              if (question.isRichEditor) {
+                question.questionText = this.quillObject.questionText;
+                question.questionObject = this.quillObject.jsonObject;
+              }
               this.store.dispatch(new userActions.AddQuestion({ question: question }));
           }
     }));
@@ -187,7 +199,9 @@ export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
     this.tags.forEach(tag => {
       const part = new RegExp('\\b(' + tag.replace('+', '\\+') + ')\\b', 'ig');
       if (wordString.match(part)) {
-        matchingTags.push(tag);
+        if (this.enteredTags.indexOf(tag) === -1 ) {
+          matchingTags.push(tag);
+        }
       }
     });
     this.autoTags = matchingTags;

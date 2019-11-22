@@ -16,6 +16,7 @@ export class RenderQuestionComponent implements OnInit, OnChanges {
     @Input() question: Question;
     @Input() questionIndex: number;
     @Input() theme: string;
+    @Input() textAlign: string;
     scriptToGetHeight: string;
     htmlStartTag: string;
     htmlEndTag: string;
@@ -24,19 +25,6 @@ export class RenderQuestionComponent implements OnInit, OnChanges {
     isAndroid = isAndroid;
 
     ngOnInit(): void {
-        if (isPlatformBrowser(this.platformId)) {
-            this.scriptToGetHeight = `<script> var body = document.body, html = document.documentElement;
-            var height = Math.max(body.scrollHeight, body.offsetHeight,
-            html.clientHeight, html.scrollHeight, html.offsetHeight);
-            document.location.href += "#" + height;
-            </script><style>pre.ql-syntax { background-color: #23241f;color: #f8f8f2;overflow: visible;}</style>`;
-
-            // tslint:disable-next-line:max-line-length
-            this.htmlStartTag = `<html><head><body style="font-size:18px;font-weight: bold !important;padding-top:10px;vertical-align: middle;text-align:left;"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"> `;
-            // tslint:disable-next-line:max-line-length
-            this.htmlEndTag = `</body><link rel="stylesheet" href="${externalUrl.katexCSS}" crossorigin="anonymous"><link rel="stylesheet" href="${externalUrl.hightlighCSS}" crossorigin="anonymous"></html>`;
-        }
-
 
         if (this.question) {
             this.qIndex = this.questionIndex ? `${this.questionIndex} . ` : '';
@@ -49,6 +37,18 @@ export class RenderQuestionComponent implements OnInit, OnChanges {
     }
 
     constructor(private cd: ChangeDetectorRef, @Inject(PLATFORM_ID) private platformId: Object) {
+        if (isPlatformBrowser(this.platformId) || isAndroid || isIOS) {
+            this.scriptToGetHeight = `<script> var body = document.body, html = document.documentElement;
+            var height = Math.max(body.scrollHeight, body.offsetHeight,
+            html.clientHeight, html.scrollHeight, html.offsetHeight);
+            document.location.href += "#" + height;
+            </script><style>pre.ql-syntax { background-color: #23241f;color: #f8f8f2;overflow: visible;}</style>`;
+
+            // tslint:disable-next-line:max-line-length
+            this.htmlStartTag = `<html><head><body style="font-size:18px;font-weight: bold !important;padding-top:10px;vertical-align: middle;text-align:left;"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"> `;
+            // tslint:disable-next-line:max-line-length
+            this.htmlEndTag = `</body><link rel="stylesheet" href="${externalUrl.katexCSS}" crossorigin="anonymous"><link rel="stylesheet" href="${externalUrl.hightlighCSS}" crossorigin="anonymous"></html>`;
+        }
         this.cd.markForCheck();
     }
 
