@@ -205,7 +205,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
     let version;
     try {
-      // version = await appversion.getVersionCode();
+      version = await appversion.getVersionCode();
     } catch (error) {
       this.utils.sendErrorToCrashlytics('appLog', error);
       console.error(error);
