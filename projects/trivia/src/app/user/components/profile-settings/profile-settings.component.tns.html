@@ -406,8 +406,8 @@
     </ScrollView>
   </StackLayout>
 
-  <Absolutelayout row="1" verticalAlignment="bottom">
-    <bottom-bar [screen]="'app'">
+  <Absolutelayout *ngIf="platform.isIOS" row="1" verticalAlignment="bottom">
+    <bottom-bar [screen]="'profile-settings'">
     </bottom-bar>
   </Absolutelayout>
 </GridLayout>

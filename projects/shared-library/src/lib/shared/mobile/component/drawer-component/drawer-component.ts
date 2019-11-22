@@ -242,37 +242,37 @@ export class DrawerComponent implements OnInit, OnDestroy {
     }
 
     navigateToRecentGames() {
-        this.routerExtension.navigate(['/recent-games'], { clearHistory: true });
+        this.routerExtension.navigate(['/recent-games']);
         this.closeDrawer();
     }
 
     navigateToProfileSettings() {
-        this.routerExtension.navigate(['/user/my/profile', this.user ? this.user.userId : ''], { clearHistory: true });
+        this.routerExtension.navigate(['/user/my/profile', this.user ? this.user.userId : '']);
         this.closeDrawer();
     }
 
     navigateToGameProfile() {
-        this.routerExtension.navigate(['/user/my/game-profile', this.user ? this.user.userId : ''], { clearHistory: true });
+        this.routerExtension.navigate(['/user/my/game-profile', this.user ? this.user.userId : '']);
         this.closeDrawer();
     }
 
     navigateToMyQuestion() {
-        this.routerExtension.navigate(['/user/my/questions'], { clearHistory: true });
+        this.routerExtension.navigate(['/user/my/questions']);
         this.closeDrawer();
     }
 
     navigateToPrivacyPolicy() {
-        this.routerExtension.navigate(['/privacy-policy'], { clearHistory: true });
+        this.routerExtension.navigate(['/privacy-policy']);
         this.closeDrawer();
     }
 
     navigateToTermsConditions() {
-        this.routerExtension.navigate(['/terms-and-conditions'], { clearHistory: true });
+        this.routerExtension.navigate(['/terms-and-conditions']);
         this.closeDrawer();
     }
 
     navigateToUserFeedback() {
-        this.routerExtension.navigate(['/user-feedback'], { clearHistory: true });
+        this.routerExtension.navigate(['/user-feedback']);
         this.closeDrawer();
     }
 
