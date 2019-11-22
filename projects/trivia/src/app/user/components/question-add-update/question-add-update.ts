@@ -32,6 +32,7 @@ export class QuestionAddUpdate {
   applicationSettings: ApplicationSettings;
   selectedQuestionCategoryIndex = 0;
   subscriptions = [];
+  isSaved = false;
   get answers(): FormArray {
     return this.questionForm.get('answers') as FormArray;
   }
@@ -87,9 +88,10 @@ export class QuestionAddUpdate {
             question.questionText = this.quillObject.questionText ? this.quillObject.questionText : '';
             question.questionObject = this.quillObject.jsonObject ? this.quillObject.jsonObject : {};
           }
-
           question.created_uid = this.user.userId;
-          this.store.dispatch(new userActions.AddQuestion({ question: question }));
+          if (!this.isSaved) {
+            this.store.dispatch(new userActions.AddQuestion({ question: question }));
+          }
         }
       }));
 
@@ -109,7 +111,7 @@ export class QuestionAddUpdate {
           Validators.compose([Validators.required])),
         correct: new FormControl(answer.correct),
         isRichEditor: new FormControl(answer.isRichEditor),
-        answerObject: new FormControl(),
+        answerObject: new FormControl(answer.answerObject),
       });
       return fg;
     });

@@ -1,5 +1,5 @@
 <div *ngIf="show">
-    <ng-quill-tex  [modules]="quillConfig" [(ngModel)]="editorContent" (textChanged)="onTextChanged($event)" 
+    <ng-quill-tex  [modules]="quillConfig" (textChanged)="onTextChanged($event)" 
     (fileUploaded)="fileUploaded($event)" [class.bottomToolbar]="applicationSettings?.quill_options?.custom_toolbar_position === 'bottom'" [customToolbarPosition]="applicationSettings?.quill_options?.custom_toolbar_position"  [imageUrl]="quillImageUrl" [content]="editorContent" [isMobile]="true">
         <span *ngIf="applicationSettings?.quill_options?.custom_toolbar_position === 'bottom'" class="ql-formats">
             <div #bottomToolBar [innerHtml]='bottomBarOptions | safeHtml'></div>

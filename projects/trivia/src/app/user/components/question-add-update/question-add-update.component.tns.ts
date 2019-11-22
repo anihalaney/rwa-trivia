@@ -15,7 +15,7 @@ import { debounceTime, take } from 'rxjs/operators';
 import { ObservableArray } from 'tns-core-modules/data/observable-array';
 import { TokenModel } from 'nativescript-ui-autocomplete';
 import { RadAutoCompleteTextViewComponent } from 'nativescript-ui-autocomplete/angular';
-import { Page, isIOS } from 'tns-core-modules/ui/page';
+import { Page, isIOS, isAndroid } from 'tns-core-modules/ui/page';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { WebView, LoadEventData } from 'tns-core-modules/ui/web-view';
 import * as webViewInterfaceModule from 'nativescript-webview-interface';
@@ -110,7 +110,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
     this.isMobile = true;
     requestPermissions();
 
-    this.submitBtnTxt = 'SUBMIT';
+    this.submitBtnTxt = 'Save';
     this.actionBarTxt = 'Add_Question';
     this.initDataItems();
     this.question = new Question();
@@ -157,21 +157,21 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
       this.cd.markForCheck();
     }));
 
-    this.subscriptions.push(this.questionForm.get('isRichEditor').valueChanges.subscribe(isRichEditor => {
-      this.cd.markForCheck();
-      this.questionForm.patchValue({ questionText: '' });
-      if (isRichEditor) {
-        this.questionForm.get('maxTime').setValidators(Validators.compose([Validators.required]));
-        this.questionForm.get('questionText').setValidators(Validators.compose([Validators.required]));
+    // this.subscriptions.push(this.questionForm.get('isRichEditor').valueChanges.subscribe(isRichEditor => {
+    //   this.cd.markForCheck();
+    //   this.questionForm.patchValue({ questionText: '' });
+    //   if (isRichEditor) {
+    //     this.questionForm.get('maxTime').setValidators(Validators.compose([Validators.required]));
+    //     this.questionForm.get('questionText').setValidators(Validators.compose([Validators.required]));
 
-      } else {
-        this.questionForm.get('maxTime').setValidators([]);
-        this.questionForm.get('questionText').setValidators(Validators.compose([Validators.required,
-        Validators.maxLength(this.applicationSettings.question_max_length)]));
-      }
-      this.questionForm.get('maxTime').updateValueAndValidity();
-      this.questionForm.get('questionText').updateValueAndValidity();
-    }));
+    //   } else {
+    //     this.questionForm.get('maxTime').setValidators([]);
+    //     this.questionForm.get('questionText').setValidators(Validators.compose([Validators.required,
+    //     Validators.maxLength(this.applicationSettings.question_max_length)]));
+    //   }
+    //   this.questionForm.get('maxTime').updateValueAndValidity();
+    //   this.questionForm.get('questionText').updateValueAndValidity();
+    // }));
 
     this.subscriptions.push(this.questionForm.get('answers').valueChanges.subscribe((changes) => {
       this.cd.markForCheck();
@@ -211,6 +211,13 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
       this.isWebViewLoaded = true;
       this.cd.markForCheck();
     }, 2000);
+    if (isAndroid && this.oWebViewInterface) {
+      this.oWebViewInterface.emit('viewType', this.currentWebViewParentId >= 0 ? 'answer' : 'question');
+      console.log('inside init value =======================>');
+      setTimeout(() => {
+        this.setInitialValue();
+      }, 10);
+    }
     if (id === -1) {
       if (this.oWebViewInterface && this.editQuestion) {
         this.oWebViewInterface.emit('deltaObject', this.editQuestion.questionObject);
@@ -218,7 +225,25 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
     }
   }
 
+
+  setInitialValue () {
+    const blankObj =  [{ insert: '' }];
+    if (this.currentWebViewParentId >= 0 ) {
+      const ansForm = (<FormArray>this.questionForm.controls['answers']).at(this.currentWebViewParentId);
+      ansForm['controls'].isRichEditor.patchValue(true);
+      this.oWebViewInterface.emit('deltaObject',
+      ansForm['controls'].answerObject.value ?
+      ansForm['controls'].answerObject.value : blankObj);
+      console.log(ansForm['controls'].answerObject.value, 'anwer == ====== = >');
+    } else if (this.currentWebViewParentId === -1) {
+      this.questionForm.get('isRichEditor').patchValue(true);
+      this.oWebViewInterface.emit('deltaObject',
+      this.questionForm.controls.questionObject.value ? this.questionForm.controls.questionObject.value : blankObj);
+      console.log(this.questionForm.controls.questionObject.value, 'q === = = = ');
+    }
+  }
   showEditor(type: string, id = -1) {
+    console.log('in show editor = = = = = =');
     this.moveWebView(type, id);
     if (type === 'question') {
       this.questionForm.patchValue({ isRichEditor: true });
@@ -244,7 +269,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
 
   public onchange(args: SelectedIndexChangedEventData) {
     this.selectedMaxTimeIndex = args.newIndex;
-    this.questionForm.patchValue({ maxTime: this.applicationSettings.game_play_max_time[args.newIndex] });
+    this.questionForm.patchValue({ maxTime: this.applicationSettings.game_play_max_time[(args.newIndex - 1)] });
   }
 
 
@@ -333,11 +358,18 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
 
 
   createForm(question: Question) {
-
+    console.log(question.id, 'question id =====================================');
     const answersFA: FormArray = super.createDefaultForm(question);
     if (question.categoryIds.length > 0) {
       this.selectedQuestionCategoryIndex = Number(question.categoryIds[0]);
     }
+
+    if ( question.maxTime  ) {
+      const maxTimeIndex = this.applicationSettings.game_play_max_time.findIndex(data => data === question.maxTime);
+      this.selectedMaxTimeIndex = maxTimeIndex + 1;
+    }
+
+    console.log(question.maxTime, 'MAXTIME');
     this.questionForm = this.fb.group({
       id: question.id ? question.id : '',
       is_draft: question.is_draft,
@@ -349,8 +381,8 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
       explanation: [question.explanation],
       isRichEditor: [question.isRichEditor],
       questionObject: [question.questionObject],
-      maxTime: [question.maxTime],
-      category: [(question.categories.length > 0 ? question.categories[0] : ''), Validators.required],
+      maxTime: [question.maxTime, Validators.required],
+      category: [(question.categoryIds.length > 0 ? question.categoryIds[0] : ''), Validators.required],
     }, { validator: questionFormValidator }
     );
   }
@@ -391,6 +423,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
       this.toggleLoader(true);
       // call saveQuestion
       this.saveQuestion(question);
+      this.isSaved = true;
     }
   }
 
@@ -421,24 +454,21 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
   wevViewLoaded(event) {
       if (!event.object) {
       } else {
-        if (!this.oWebViewInterface) {
+        if (!this.oWebViewInterface || isAndroid) {
+          if (this.oWebViewInterface && isAndroid) {
+            this.oWebViewInterface.off('uploadImageStart');
+            this.oWebViewInterface.off('quillContent');
+          }
           this.oWebViewInterface = this.setWebInterface(event.object);
           //  new webViewInterfaceModule.WebViewInterface(event.object, CONFIG.editorUrl);
         }
         if (this.oWebViewInterface) {
-          const blankObj =  [{ insert: '' }];
-          event.object.initNativeView();
+          if (isIOS) {
+            event.object.initNativeView();
+          }
           this.oWebViewInterface.emit('viewType', this.currentWebViewParentId >= 0 ? 'answer' : 'question');
-          if (this.currentWebViewParentId >= 0 ) {
-            const ansForm = (<FormArray>this.questionForm.controls['answers']).at(this.currentWebViewParentId);
-            ansForm['controls'].isRichEditor.patchValue(true);
-            this.oWebViewInterface.emit('deltaObject',
-            ansForm['controls'].answerObject.value ?
-            ansForm['controls'].answerObject.value : blankObj);
-          } else if (this.currentWebViewParentId === -1) {
-            this.questionForm.get('isRichEditor').patchValue(true);
-            this.oWebViewInterface.emit('deltaObject',
-            this.questionForm.controls.questionObject.value ? this.questionForm.controls.questionObject.value : blankObj);
+          if (isIOS) {
+            this.setInitialValue();
           }
         }
       }
@@ -446,9 +476,11 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
 
   setWebInterface(webViewInstace) {
 
-    const webInterface = new webViewInterfaceModule.WebViewInterface(webViewInstace, 'http://192.168.0.102:4200/');
+    const webInterface = new webViewInterfaceModule.WebViewInterface(webViewInstace, CONFIG.editorUrl);
+    // new webViewInterfaceModule.WebViewInterface(webViewInstace, CONFIG.editorUrl);
 
     webInterface.on('quillContent', (quillContent) => {
+      console.log('changes quillcontent =========================================');
       if (this.currentWebViewParentId === -1) {
         this.questionForm.get('questionText').patchValue(quillContent.html);
         this.questionForm.get('questionObject').patchValue(quillContent.delta);

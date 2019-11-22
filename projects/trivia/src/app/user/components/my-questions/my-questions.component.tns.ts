@@ -49,6 +49,7 @@ export class MyQuestionsComponent extends MyQuestions implements OnDestroy, OnIn
       this.cd.markForCheck();
     }));
     this.page.on('loaded', () => { this.renderView = true; this.cd.markForCheck(); });
+    // this.page.on('navigatedFrom', () => this.ngOnDestroy());
   }
 
   onSelectTab(args) {

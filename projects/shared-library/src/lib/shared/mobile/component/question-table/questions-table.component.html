@@ -7,8 +7,8 @@
           <StackLayout>
             <GridLayout class="question-text" columns="*,auto" rows="*">
               <render-question row="0" col="0" [textAlign]="'left'" [question]="question"></render-question>
+              <!-- <Label (tap)="showEditQuestion(question)"  *ngIf="question?.is_draft == true" text="&#xf040;" class="fa text-icon-field" row="0" col="1" textWrap="true"></Label> -->
               <Label (tap)="showEditQuestion(question)"  *ngIf="question?.is_draft == true" text="&#xf040;" class="fa text-icon-field" row="0" col="1" textWrap="true"></Label>
-              
             </GridLayout>
             <GridLayout rows="*" columns="auto,auto" margin="3 0">
               <Label row="0" col="0" text="Category : " textWrap="true" class="label Roboto-Medium"
@@ -40,28 +40,28 @@
             </ng-template>
             <GridLayout rows="*" columns="*,*,auto">
               <StackLayout row="0" col="0" horizontalAlignment="left">
-                <GridLayout rows="auto" columns="*,*" class="question-stat">
+                <GridLayout rows="auto" columns="70,*" class="question-stat">
                   <Label row="0" col="0" class="stat-tag" text="Appeared"></Label>
                   <Label row="0" col="1" class="stat-value"
                     text="{{question.appeared ? question.appeared: 0}} times"></Label>
                 </GridLayout>
-                <GridLayout rows="auto" columns="*,*" class="question-stat">
+                <GridLayout rows="auto" columns="70,*" class="question-stat">
                   <Label row="0" col="0" class="stat-tag" text="Likes"></Label>
                   <Label row="0" col="1" class="stat-value"
                     [text]="question.reactionsCount && question.reactionsCount.like ? question.reactionsCount.like: 0"></Label>
                 </GridLayout>
-                <GridLayout rows="auto" columns="*,*" class="question-stat">
+                <GridLayout rows="auto" columns="70,*" class="question-stat">
                   <Label row="0" col="0" class="stat-tag" text="Dislikes"></Label>
                   <Label row="0" col="1" class="stat-value"
                     [text]="question.reactionsCount && question.reactionsCount.dislike ? question.reactionsCount.dislike: 0"></Label>
                 </GridLayout>
               </StackLayout>
               <StackLayout row="0" col="1" marginLeft="15" horizontalAlignment="left">
-                <GridLayout rows="auto" columns="*,*" class="question-stat">
+                <GridLayout rows="auto" columns="70,*" class="question-stat">
                   <Label row="0" col="0" class="stat-tag" text="Correct"></Label>
                   <Label row="0" col="1" class="stat-value" [text]="question.correct ? question.correct: 0"></Label>
                 </GridLayout>
-                <GridLayout rows="auto" columns="*,*" class="question-stat">
+                <GridLayout rows="auto" columns="70,*" class="question-stat">
                   <Label row="0" col="0" class="stat-tag" text="Wrong"></Label>
                   <Label row="0" col="1" class="stat-value" [text]="question.wrong ? question.wrong: 0"></Label>
                 </GridLayout>
