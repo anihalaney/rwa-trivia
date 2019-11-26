@@ -1,0 +1,42 @@
+<ActionBar flat="true" background="#fff" title="" class="action-bar "
+  [ngClass]=" subTitle ? 'action-subtitle' : 'action-title' ">
+
+
+
+  <GridLayout ios:rows="auto" android:rows="auto" ios:columns="auto,*,auto,auto" android:columns="auto,*,auto,auto"
+    width="100%" padding="30 0">
+
+    <StackLayout col="0" verticalAlignment="center" horizontalAlignment="left" (tap)="back()">
+      <Label padding="5 10 5 0" color="#000000" text="&#xe906;" fontSize="20" class="ico icon-back"></Label>
+    </StackLayout>
+
+
+    <StackLayout col="2" marginRight="40" horizontalAlignment="left">
+      <Label fontWeight="800" color="#000000" text="Bulk Upload Request" fontSize="30"></Label>
+    </StackLayout>
+
+
+  </GridLayout>
+</ActionBar>
+
+
+ 
+  <!-- <StackLayout  >
+    <Button text="Select a .csv file" color="#616161" width="800" paddingRight="180" fontSize="20" height="80" backgroundColor="transparent"></Button>
+  </StackLayout> -->
+  <StackLayout width="70%" class="profile-buttons"
+  iosOverflowSafeArea="false">
+  <Label text="Bulk upload Request" textWrap="true" fontSize="20"></Label>
+  <Button *ngIf="(!user.bulkUploadPermissionStatus 
+  || user.bulkUploadPermissionStatus === NONE
+  || user.bulkUploadPermissionStatus === PENDING) 
+  && !user.isRequestedBulkUpload"  [text]="bulkUploadBtnText" backgroundColor="#ffffff" color="black"
+     (tap)="setBulkUploadRequest()" borderWidth="1" borderRadius="3"
+    stlRippleEffect></Button>
+  <Label class="sub-text" *ngIf="user.bulkUploadPermissionStatus === PENDING"
+    text="Bulk upload requested on {{user.bulkUploadPermissionStatusUpdateTime | date : 'medium' }}."
+    textWrap="true" fontSize="20"></Label>
+  <Label padding="14" fontSize="20" class="sub-text" *ngIf="user.bulkUploadPermissionStatus === APPROVED"
+    text="User has bulk upload privilege" textWrap="true" ></Label>
+</StackLayout>
+

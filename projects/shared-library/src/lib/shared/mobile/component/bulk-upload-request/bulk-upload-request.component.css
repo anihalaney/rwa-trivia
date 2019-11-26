@@ -1,0 +1,14 @@
+.profile-buttons{
+    
+    padding-left: 15;
+    padding-top: 20;
+    padding-bottom: 15;
+    padding-right: 2;
+    width: 325;
+    font-size: 16;
+    font-weight: 500;
+    color: black;
+}
+.profile-buttons>.sub-text {
+    font-size: 12;
+}
