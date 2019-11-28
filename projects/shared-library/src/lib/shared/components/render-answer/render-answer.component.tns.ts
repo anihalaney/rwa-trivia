@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, SimpleChanges, OnChanges, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, Input, OnInit, SimpleChanges, OnChanges, Inject, PLATFORM_ID, Output, EventEmitter } from '@angular/core';
 import { Answer } from "shared-library/shared/model";
 import { LoadEventData } from 'tns-core-modules/ui/web-view';
 import { isAndroid, isIOS } from 'tns-core-modules/platform';
@@ -21,6 +21,7 @@ export class RenderAnswerComponent implements OnInit, OnChanges {
     @Input() isWrong;
     @Input() doPlay;
     @Input() bgColor;
+    @Output() calAnsHeight = new EventEmitter<number>();
 
     currentAnswer: Answer;
     scriptToGetHeight: string;
@@ -73,6 +74,7 @@ export class RenderAnswerComponent implements OnInit, OnChanges {
             const height = event.url.split('#')[1];
             if (height) {
                 this.answerHeight = parseInt(height, 10);
+                this.calAnsHeight.emit(this.answerHeight);
             }
 
         }

@@ -1,13 +1,12 @@
 <GridLayout tkExampleTitle tkToggleNavButton>
   <RadListView  #listview [items]="questions">
-      <ng-template tkListItemTemplate let-question="item">
-
-        <StackLayout class="question-container">
+      <ng-template tkListItemTemplate let-question="item" let-qIndex="index">
+        <StackLayout   class="question-container">
           <StackLayout>
             <GridLayout class="question-text" columns="*,auto" rows="*">
-              <render-question row="0" col="0" [textAlign]="'left'" [question]="question"></render-question>
+                <render-question row="0" col="0" (calHeight)="setHeight($event, question.id)" row="0" col="0" [textAlign]="'left'" [question]="question"></render-question>
               <!-- <Label (tap)="showEditQuestion(question)"  *ngIf="question?.is_draft == true" text="&#xf040;" class="fa text-icon-field" row="0" col="1" textWrap="true"></Label> -->
-              <Label (tap)="showEditQuestion(question)"  *ngIf="question?.is_draft == true" text="&#xf040;" class="fa text-icon-field" row="0" col="1" textWrap="true"></Label>
+              <Label (tap)="showEditQuestion(question)" verticalAlignment="top" *ngIf="question?.is_draft == true" text="&#xf040;" class="fa text-icon-field" row="0" col="1" textWrap="true"></Label>
             </GridLayout>
             <GridLayout rows="*" columns="auto,auto" margin="3 0">
               <Label row="0" col="0" text="Category : " textWrap="true" class="label Roboto-Medium"
@@ -26,14 +25,14 @@
             <FlexboxLayout justifyContent="space-between" alignItems="center">
               <Label class="publish-question" text="Published on {{ question.createdOn | date:'dd MMM yyyy' }}"
                 textWrap="true"></Label>
-              <Label *ngIf="!question.show" text="&#xf078;" (tap)="onSelect(question.id)" class="fas"
+              <Label *ngIf="!question.show" text="&#xf078;" (tap)="onSelect(question.id, true)" class="fas"
                 fontSize="18" padding="5" color="#212121"></Label>
             </FlexboxLayout>
           </StackLayout>
-          <StackLayout [ngClass]="{'show': question.show}" class="hide">
-            <ng-template ngFor let-answer [ngForOf]="question.answers">
+          <StackLayout [ngClass]="{'show': question.show}" *ngIf="question.show" class="hide">
+            <ng-template ngFor let-answer let-i="index" [ngForOf]="question.answers">
               <StackLayout class="question-box" [class.question-box-solid]="answer.correct">
-                <render-answer [answer]="answer"  [bgColor]="answer.correct ? '#9ccc65': '#ffffff'" [isGameAnswer]="false">
+                <render-answer (calAnsHeight)="setAnsHeight($event, question.id, i, qIndex)" [answer]="answer"  [bgColor]="answer.correct ? '#9ccc65': '#ffffff'" [isGameAnswer]="false">
                 </render-answer>
               </StackLayout>
             </ng-template>
@@ -66,7 +65,7 @@
                 </GridLayout>
               </StackLayout>
               <StackLayout row="0" col="2" verticalAlignment="bottom">
-                <Label text="&#xf077;" (tap)="showQuestionId = ''" padding="5" class="fas" fontSize="18"
+                <Label text="&#xf077;" (tap)="onSelect(question.id, false, qIndex)" padding="5" class="fas" fontSize="18"
                   color="#212121"></Label>
               </StackLayout>
             </GridLayout>
