@@ -5,6 +5,7 @@ import { Question, QuestionStatus, Category, User, Answer } from '../../../../sh
 import { Observable } from 'rxjs';
 import { RadListViewComponent } from "nativescript-ui-listview/angular";
 import { ListViewItemSnapMode } from 'nativescript-ui-listview';
+import { isIOS } from 'tns-core-modules/ui/page/page';
 
 @Component({
   selector: 'question-table',
@@ -54,7 +55,7 @@ export class QuestionsTableComponent implements OnInit, OnChanges {
         data['show'] = isShow;
       }
     });
-    if (qIndex > -1) {
+    if (qIndex > -1 && isIOS) {
       this.questions = [...questionObj];
       setTimeout(() => {
         this.radListView.listView.scrollToIndex(qIndex, true, ListViewItemSnapMode.Start);
