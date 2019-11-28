@@ -1,7 +1,7 @@
 @import '../../../../app-variables';
 
 .submit-question {
-  padding: 15;
+  margin: 15;
 
   .question-section {
     margin-bottom: 10;
@@ -71,6 +71,9 @@
 
     .disable-btn {
       background-color: $gray-title;
+      color: white;
+      font-size: 16;
+      font-weight: bold;
     }
   }
 
@@ -125,10 +128,14 @@
 
 
 .add-btn{
-  border-color: #a9a9a9;
+  border-color: $btn-color;
   background-color: $white;
   color: $btn-color;
   border-width: 1;
+  margin-left:10;
+  font-weight:700;
+  border-radius:4;
+  border-width:1;
 }
 
 
@@ -139,4 +146,8 @@
   padding: 10;
   text-align: left;
   margin: 10 0;
+}
+
+.margin-main-stack{
+  margin: 0 -7 0 -7;
 }

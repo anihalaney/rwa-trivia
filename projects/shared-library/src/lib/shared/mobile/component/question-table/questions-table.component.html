@@ -1,7 +1,6 @@
-<GridLayout rows="*" columns="*">
-  <ScrollView height="100%" row="0" col="0">
-    <StackLayout>
-      <StackLayout *ngFor="let question of questions">
+<GridLayout tkExampleTitle tkToggleNavButton>
+  <RadListView  #listview [items]="questions">
+      <ng-template tkListItemTemplate let-question="item">
 
         <StackLayout class="question-container">
           <StackLayout>
@@ -13,7 +12,7 @@
             <GridLayout rows="*" columns="auto,auto" margin="3 0">
               <Label row="0" col="0" text="Category : " textWrap="true" class="label Roboto-Medium"
                 fontWeight="bold"></Label>
-              <StackLayout row="0" col="1" *ngFor="let id of question.categoryIds">
+              <StackLayout row="0" col="1" *ngFor="let id of question?.categoryIds">
                 <Label [text]="categoryDictionary[id]?.categoryName" textWrap="true" class="label Roboto-Regular"
                   color="#616161"></Label>
               </StackLayout>
@@ -27,11 +26,11 @@
             <FlexboxLayout justifyContent="space-between" alignItems="center">
               <Label class="publish-question" text="Published on {{ question.createdOn | date:'dd MMM yyyy' }}"
                 textWrap="true"></Label>
-              <Label *ngIf="showQuestionId !== question.id" text="&#xf078;" (tap)="onSelect(question.id)" class="fas"
+              <Label *ngIf="!question.show" text="&#xf078;" (tap)="onSelect(question.id)" class="fas"
                 fontSize="18" padding="5" color="#212121"></Label>
             </FlexboxLayout>
           </StackLayout>
-          <StackLayout [ngClass]="{'show': showQuestionId == question.id}" class="hide">
+          <StackLayout [ngClass]="{'show': question.show}" class="hide">
             <ng-template ngFor let-answer [ngForOf]="question.answers">
               <StackLayout class="question-box" [class.question-box-solid]="answer.correct">
                 <render-answer [answer]="answer"  [bgColor]="answer.correct ? '#9ccc65': '#ffffff'" [isGameAnswer]="false">
@@ -73,7 +72,6 @@
             </GridLayout>
           </StackLayout>
         </StackLayout>
-      </StackLayout>
-    </StackLayout>
-  </ScrollView>
+    </ng-template>
+  </RadListView>
 </GridLayout>
