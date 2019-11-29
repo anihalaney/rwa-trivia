@@ -20,7 +20,7 @@
                 <Label [text]="item" textWrap="true" class="label Roboto-Regular"></Label>
               </StackLayout>
             </WrapLayout>
-            <Label class="publish-question" text="Published on {{question.id}}{{ question.createdOn | date:'dd MMM yyyy' }}"
+            <Label class="publish-question" text="Published on {{ question.createdOn | date:'dd MMM yyyy' }}"
               textWrap="true"></Label>
             <StackLayout *ngIf="getDisplayStatus(question.status)==='REQUIRED_CHANGE' || getDisplayStatus(question.status)==='REJECTED'" orientation="horizontal" margin="0 0 10 0">
                 <Label textWrap="true"   fontSize="12" text="View Reason {{getDisplayStatus(question.status)==='REQUIRED_CHANGE' ? '& Resubmit Question':''}}" class="btn-transparent blue-border" stlRippleEffect (rippleTap)="showReason(question)"></Label>
