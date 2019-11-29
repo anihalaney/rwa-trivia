@@ -112,7 +112,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
     this.isMobile = true;
     requestPermissions();
 
-    this.submitBtnTxt = 'Save';
+    this.submitBtnTxt = 'Submit';
     this.actionBarTxt = 'Add_Question';
     this.initDataItems();
     this.question = new Question();
@@ -198,7 +198,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
 
       console.log('this.questionCategories', this.questionCategories);
       this.enteredTags = this.editQuestion.tags;
-      this.submitBtnTxt = this.editQuestion.is_draft === true && this.editQuestion.status !== 6 ? 'SUBMIT' : 'RESUBMIT';
+      this.submitBtnTxt = this.editQuestion.is_draft === true && this.editQuestion.status !== 6 ? 'Submit' : 'Resubmit';
       this.actionBarTxt = 'Update Question';
     }
 
@@ -485,11 +485,11 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
 
     webInterface.on('quillContent', (quillContent) => {
       if (this.currentWebViewParentId === -1) {
-        this.questionForm.get('questionText').patchValue(quillContent.html);
+        this.questionForm.get('questionText').patchValue(quillContent.html ? quillContent.html : '');
         this.questionForm.get('questionObject').patchValue(quillContent.delta);
       } else if (this.currentWebViewParentId >= 0) {
         const ansForm = (<FormArray>this.questionForm.controls['answers']).at(this.currentWebViewParentId);
-        ansForm['controls'].answerText.patchValue(quillContent.html);
+        ansForm['controls'].answerText.patchValue(quillContent.html ? quillContent.html : '');
         ansForm['controls'].answerObject.patchValue(quillContent.delta);
       }
     });

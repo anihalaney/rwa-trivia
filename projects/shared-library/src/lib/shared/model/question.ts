@@ -35,6 +35,7 @@ export class Question {
   appeared: number;
   correct: number;
   wrong: number;
+  height?: number;
 
 
 
@@ -130,6 +131,7 @@ export class Answer {
   renderedAnswer?: string;
   answerObject?: any;
   isRichEditor?: boolean = false;
+  height?: number;
 }
 
 export enum QuestionStatus {
