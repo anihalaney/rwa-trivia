@@ -33,7 +33,7 @@
                 'approve-btn': getDisplayStatus(question.status)==='APPROVED'}">
                       <Label  text="{{getDisplayStatus(question.status).replace('_',' ') | titlecase}}" textWrap="true"></Label>   
                 </StackLayout>
-                <StackLayout *ngIf="question?.is_draft === true && (getDisplayStatus(question.status)==='REQUIRED_CHANGE' || getDisplayStatus(question.status)==='PENDING')" margin="0 10 0 10" class="pending-btn status-containter">
+                <StackLayout *ngIf="question?.is_draft === true && (getDisplayStatus(question.status)==='REQUIRED_CHANGE' || getDisplayStatus(question.status)==='PENDING')" class="pending-btn status-containter">
                     <Label  text="Draft" textWrap="true"></Label>   
                 </StackLayout>
               </FlexboxLayout>

@@ -3,7 +3,7 @@
     <ActivityIndicator [busy]="loaderBusy" width="100" height="100" marginTop="225" class="activity-indicator">
     </ActivityIndicator>
 </StackLayout>
-<GridLayout [isUserInteractionEnabled]="isWebViewLoaded" rows="*" columns="*" *ngIf="!loaderBusy">
+<GridLayout [class.margin-50]="isPreviewClosed" [isUserInteractionEnabled]="isWebViewLoaded" rows="*" columns="*" *ngIf="!loaderBusy">
     <ScrollView>
         <PreviousNextView  row="0" col="0">
              <GridLayout  rows="*,auto,auto,auto,auto,auto" columns="*" (tap)="hideKeyboard()"

@@ -77,6 +77,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
   showIds = [];
   currentWebViewParentId: number;
   theme: string;
+  isPreviewClosed = false;
 
   @Input() editQuestion: Question;
   showEditQuestion = false;
@@ -189,7 +190,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
   }
 
   ngAfterViewInit() {
-    this.renderView = false;
+    // this.renderView = false;
     if (this.editQuestion && this.applicationSettings) {
       this.createForm(this.editQuestion);
       this.cd.markForCheck();
@@ -434,7 +435,8 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
       fullscreen: true,
       viewContainerRef: this.vcRef
     };
-    this.modal.showModal(PreviewQuestionDialogComponent, options);
+    this.modal.showModal(PreviewQuestionDialogComponent, options)
+      .then((dialogResult: string) => this.isPreviewClosed = true );
   }
 
   hideKeyboard() {
