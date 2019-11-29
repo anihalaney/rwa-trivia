@@ -29,7 +29,6 @@ export class GameQuestionComponent extends GameQuestion implements OnInit, OnDes
   public progressValue: number;
   stopProcessBar;
   doPlay = true;
-  
   actionText: string;
   theme: any;
 
@@ -39,7 +38,6 @@ export class GameQuestionComponent extends GameQuestion implements OnInit, OnDes
   elapsedTime: number;
   timerSub: Subscription;
   account: Account;
-  theme: string;
   constructor(private utils: Utils, public store: Store<GamePlayState>, private cd: ChangeDetectorRef) {
     super();
     this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
