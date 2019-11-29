@@ -56,15 +56,15 @@
               <FlexboxLayout col="0" flexDirection="column" justifyContent="center">
                 <Label *ngIf="(!singleFieldEdit.email) && !isSavingUserName" alignSelf="flex-start" text="Email"
                   textWrap="true" class="label-field"></Label>
-                <Label *ngIf="!singleFieldEdit.email" [text]="user.email" textWrap="true"
-                  class="label-value"></Label>
+                <Label *ngIf="!singleFieldEdit.email" [text]="user.email" textWrap="true" class="label-value"></Label>
                 <TextField *ngIf="singleFieldEdit.email" hint="Email" formControlName="email">
                 </TextField>
 
               </FlexboxLayout>
               <FlexboxLayout col="1" flexDirection="column" justifyContent="center">
-                <Label *ngIf="(!singleFieldEdit.email) && (currentAuthProvider===authProviderConstants.PHONE)" (tap)="editSingleField('email')" color="#14418B"
-                  fontSize="20" class="ico icon-edit" textWrap="true" text="&#xe927;" padding="5">
+                <Label *ngIf="(!singleFieldEdit.email) && (currentAuthProvider===authProviderConstants.PHONE)"
+                  (tap)="editSingleField('email')" color="#14418B" fontSize="20" class="ico icon-edit" textWrap="true"
+                  text="&#xe927;" padding="5">
                 </Label>
                 <Label *ngIf="(singleFieldEdit.email && userForm.value.email !=='')" (tap)="onSubmit(true, 'email')"
                   color="#14418B" fontSize="24" class="fa" text="&#xf058;" padding="5">
@@ -95,8 +95,10 @@
 
               </FlexboxLayout>
               <FlexboxLayout col="1" flexDirection="column" justifyContent="center">
-                <Label *ngIf="(!singleFieldEdit.phoneNo) && (currentAuthProvider===authProviderConstants.GOOGLE || currentAuthProvider===authProviderConstants.FACEBOOK || currentAuthProvider===authProviderConstants.PASSWORD )" (tap)="editSingleField('phoneNo')" color="#14418B"
-                  fontSize="20" class="ico icon-edit" textWrap="true" text="&#xe927;" padding="5" >
+                <Label
+                  *ngIf="(!singleFieldEdit.phoneNo) && (currentAuthProvider===authProviderConstants.GOOGLE || currentAuthProvider===authProviderConstants.FACEBOOK || currentAuthProvider===authProviderConstants.PASSWORD )"
+                  (tap)="editSingleField('phoneNo')" color="#14418B" fontSize="20" class="ico icon-edit" textWrap="true"
+                  text="&#xe927;" padding="5">
                 </Label>
                 <Label *ngIf="(singleFieldEdit.phoneNo && userForm.value.phoneNo !=='')"
                   (tap)="onSubmit(true, 'phoneNo')" color="#14418B" fontSize="24" class="fa" text="&#xf058;"
@@ -106,13 +108,13 @@
             </GridLayout>
             <StackLayout width="90%" row="1"
               *ngIf="userForm.controls.phoneNo.errors?.pattern && !userForm.controls.phoneNo.pristine">
-              <Label class="error" textWrap="true" text="phoneNo is Invalid!"></Label>
+              <Label class="error" textWrap="true" text="Enter valid phone number!"></Label>
             </StackLayout>
           </GridLayout>
 
           <!-- Password -->
           <FlexboxLayout margin="5 0" justifyContent="space-between" orientation="horizontal" borderRadius="5"
-            class="edit-field" *ngIf="currentAuthProvider===authProviderConstants.PASSWORD" >
+            class="edit-field" *ngIf="currentAuthProvider===authProviderConstants.PASSWORD">
             <FlexboxLayout flexDirection="column">
               <Label alignSelf="flex-start" text="Password" textWrap="true" class="label-field"></Label>
               <Label alignSelf="flex-start" text="XXXXXX" textWrap="true" class="label-value"></Label>
@@ -125,8 +127,7 @@
           <GridLayout rows="auto" columns="*" margin="5 0">
             <FlexboxLayout row="0" justifyContent="space-between" borderWidth="2" class="second-view"
               borderColor="#f2f2f2" borderRadius="5" padding="10"
-              [ngClass]="{'animate-ease-out': singleFieldEdit.location && activeEditField === 'location', 'animate-ease-in': !singleFieldEdit.location && activeEditField === 'location'}"
-              >
+              [ngClass]="{'animate-ease-out': singleFieldEdit.location && activeEditField === 'location', 'animate-ease-in': !singleFieldEdit.location && activeEditField === 'location'}">
               <FlexboxLayout flexDirection="column" justifyContent="center">
                 <Label *ngIf="(!singleFieldEdit.location) && !isSavingUserName" alignSelf="flex-start" text="Location"
                   textWrap="true" class="label-field"></Label>
