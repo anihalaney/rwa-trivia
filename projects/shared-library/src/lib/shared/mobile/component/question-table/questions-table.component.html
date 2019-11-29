@@ -37,7 +37,7 @@
                     <Label  text="Draft" textWrap="true"></Label>   
                 </StackLayout>
               </FlexboxLayout>
-              <Label *ngIf="!question.show" text="&#xf078;" (tap)="onSelect(question.id, true)" class="fas"
+              <Label *ngIf="!question.show" text="&#xf078;" (tap)="onSelect(question.id, true, qIndex)" class="fas"
                 fontSize="18" padding="5" color="#212121"></Label>
             </FlexboxLayout>
           <StackLayout [ngClass]="{'show': question.show}" *ngIf="question.show" class="hide">
