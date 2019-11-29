@@ -63,7 +63,7 @@
 
               </FlexboxLayout>
               <FlexboxLayout col="1" flexDirection="column" justifyContent="center">
-                <Label *ngIf="(!singleFieldEdit.email)" (tap)="editSingleField('email')" color="#14418B"
+                <Label *ngIf="(!singleFieldEdit.email) && (currentAuthProvider===authProviderConstants.PHONE)" (tap)="editSingleField('email')" color="#14418B"
                   fontSize="20" class="ico icon-edit" textWrap="true" text="&#xe927;" padding="5">
                 </Label>
                 <Label *ngIf="(singleFieldEdit.email && userForm.value.email !=='')" (tap)="onSubmit(true, 'email')"
@@ -95,8 +95,8 @@
 
               </FlexboxLayout>
               <FlexboxLayout col="1" flexDirection="column" justifyContent="center">
-                <Label *ngIf="(!singleFieldEdit.phoneNo)" (tap)="editSingleField('phoneNo')" color="#14418B"
-                  fontSize="20" class="ico icon-edit" textWrap="true" text="&#xe927;" padding="5">
+                <Label *ngIf="(!singleFieldEdit.phoneNo) && (currentAuthProvider===authProviderConstants.GOOGLE || currentAuthProvider===authProviderConstants.FACEBOOK || currentAuthProvider===authProviderConstants.PASSWORD )" (tap)="editSingleField('phoneNo')" color="#14418B"
+                  fontSize="20" class="ico icon-edit" textWrap="true" text="&#xe927;" padding="5" >
                 </Label>
                 <Label *ngIf="(singleFieldEdit.phoneNo && userForm.value.phoneNo !=='')"
                   (tap)="onSubmit(true, 'phoneNo')" color="#14418B" fontSize="24" class="fa" text="&#xf058;"
@@ -112,7 +112,7 @@
 
           <!-- Password -->
           <FlexboxLayout margin="5 0" justifyContent="space-between" orientation="horizontal" borderRadius="5"
-            class="edit-field" *ngIf="currentAuthProvider===authProviderConstants.PASSWORD">
+            class="edit-field" *ngIf="currentAuthProvider===authProviderConstants.PASSWORD" >
             <FlexboxLayout flexDirection="column">
               <Label alignSelf="flex-start" text="Password" textWrap="true" class="label-field"></Label>
               <Label alignSelf="flex-start" text="XXXXXX" textWrap="true" class="label-value"></Label>

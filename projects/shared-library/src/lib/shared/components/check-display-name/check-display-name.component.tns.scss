@@ -1,6 +1,4 @@
 .user-name {
-    border-bottom-width: 2;
-    border-color: #dddddd;
     margin: 5;
     padding-bottom: 5;
   }
@@ -12,4 +10,7 @@
     font-weight: bold;
   }
 
-  
+  .bottom-border{
+    border-bottom-width: 2;
+    border-color: #dddddd;
+  }

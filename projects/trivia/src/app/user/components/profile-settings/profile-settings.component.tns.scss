@@ -309,7 +309,7 @@ button {
   border-color: #f2f2f2;
 }
 
-.animate-ease-in {
+.profileSettings .animate-ease-in {
   animation-name: animate-in;
   animation-duration: 0.5s;
   animation-timing-function: ease-in;
@@ -327,7 +327,7 @@ button {
 }
 
 
-.animate-ease-out {
+.profileSettings .animate-ease-out {
   animation-name: animate-out;
   animation-duration: 0.5s;
   animation-timing-function: ease-out;

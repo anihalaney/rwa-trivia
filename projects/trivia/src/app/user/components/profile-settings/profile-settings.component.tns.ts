@@ -361,6 +361,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
       // this.singleFieldEdit[4].activeClass = '';
       // this.socialProfileSettings.map((res) => { return res.disable = false });
       // this.cd.markForCheck();
+      this.singleFieldEdit[field] = false;
     }
     console.log(field);
     if (field === 'displayName') {
