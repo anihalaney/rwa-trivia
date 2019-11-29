@@ -485,11 +485,11 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
 
     webInterface.on('quillContent', (quillContent) => {
       if (this.currentWebViewParentId === -1) {
-        this.questionForm.get('questionText').patchValue(quillContent.html);
+        this.questionForm.get('questionText').patchValue(quillContent.html ? quillContent.html : '');
         this.questionForm.get('questionObject').patchValue(quillContent.delta);
       } else if (this.currentWebViewParentId >= 0) {
         const ansForm = (<FormArray>this.questionForm.controls['answers']).at(this.currentWebViewParentId);
-        ansForm['controls'].answerText.patchValue(quillContent.html);
+        ansForm['controls'].answerText.patchValue(quillContent.html ? quillContent.html : '');
         ansForm['controls'].answerObject.patchValue(quillContent.delta);
       }
     });
