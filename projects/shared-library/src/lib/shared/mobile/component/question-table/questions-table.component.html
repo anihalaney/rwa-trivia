@@ -25,7 +25,7 @@
             <StackLayout *ngIf="getDisplayStatus(question.status)==='REQUIRED_CHANGE' || getDisplayStatus(question.status)==='REJECTED'" orientation="horizontal" margin="0 0 10 0">
                 <Label textWrap="true"   fontSize="12" text="View Reason {{getDisplayStatus(question.status)==='REQUIRED_CHANGE' ? '& Resubmit Question':''}}" class="btn-transparent blue-border" stlRippleEffect (rippleTap)="showReason(question)"></Label>
             </StackLayout>
-            <FlexboxLayout justifyContent="space-between" alignItems="center">
+            <FlexboxLayout *ngIf="getDisplayStatus(question.status)!=='APPROVED'" justifyContent="space-between" alignItems="center">
               <FlexboxLayout>                  
                 <StackLayout class="status-containter" *ngIf="!(question?.is_draft === true && getDisplayStatus(question.status)==='PENDING')" [ngClass]="{'pending-btn': getDisplayStatus(question.status)==='PENDING', 
                 'required-change-btn': getDisplayStatus(question.status)==='REQUIRED_CHANGE',
