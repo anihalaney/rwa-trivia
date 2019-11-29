@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, SimpleChanges, OnChanges, ChangeDetectorRef, Inject, PLATFORM_ID } from "@angular/core";
+import { Component, Input, OnInit, SimpleChanges, OnChanges, ChangeDetectorRef, Inject, PLATFORM_ID, Output, EventEmitter } from "@angular/core";
 import { Question } from "shared-library/shared/model";
 import { LoadEventData } from 'tns-core-modules/ui/web-view';
 import { isAndroid, isIOS } from 'tns-core-modules/platform';
@@ -17,6 +17,7 @@ export class RenderQuestionComponent implements OnInit, OnChanges {
     @Input() questionIndex: number;
     @Input() theme: string;
     @Input() textAlign: string;
+    @Output() calHeight = new EventEmitter<number>();
     scriptToGetHeight: string;
     htmlStartTag: string;
     htmlEndTag: string;
@@ -57,6 +58,8 @@ export class RenderQuestionComponent implements OnInit, OnChanges {
             const height = event.url.split('#')[1];
             if (height) {
                 this.questionHeight = parseInt(height, 10);
+                this.calHeight.emit(this.questionHeight);
+
             }
         }
         this.cd.markForCheck();
@@ -65,7 +68,6 @@ export class RenderQuestionComponent implements OnInit, OnChanges {
     ngOnChanges(changes: SimpleChanges) {
         if (this.question && this.question.isRichEditor) {
             if (changes.question) {
-                // tslint:disable-next-line:max-line-length
                 this.question.questionText = this.htmlStartTag + changes.question.currentValue.questionText + this.scriptToGetHeight + this.htmlEndTag;
             }
             this.cd.markForCheck();

@@ -76,6 +76,8 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
   public playMaxTime = [];
   showIds = [];
   currentWebViewParentId: number;
+  theme: string;
+  isPreviewClosed = false;
 
   @Input() editQuestion: Question;
   showEditQuestion = false;
@@ -188,7 +190,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
   }
 
   ngAfterViewInit() {
-    this.renderView = false;
+    // this.renderView = false;
     if (this.editQuestion && this.applicationSettings) {
       this.createForm(this.editQuestion);
       this.cd.markForCheck();
@@ -213,7 +215,6 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
     }, 2000);
     if (isAndroid && this.oWebViewInterface) {
       this.oWebViewInterface.emit('viewType', this.currentWebViewParentId >= 0 ? 'answer' : 'question');
-      console.log('inside init value =======================>');
       setTimeout(() => {
         this.setInitialValue();
       }, 10);
@@ -234,16 +235,13 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
       this.oWebViewInterface.emit('deltaObject',
       ansForm['controls'].answerObject.value ?
       ansForm['controls'].answerObject.value : blankObj);
-      console.log(ansForm['controls'].answerObject.value, 'anwer == ====== = >');
     } else if (this.currentWebViewParentId === -1) {
       this.questionForm.get('isRichEditor').patchValue(true);
       this.oWebViewInterface.emit('deltaObject',
       this.questionForm.controls.questionObject.value ? this.questionForm.controls.questionObject.value : blankObj);
-      console.log(this.questionForm.controls.questionObject.value, 'q === = = = ');
     }
   }
   showEditor(type: string, id = -1) {
-    console.log('in show editor = = = = = =');
     this.moveWebView(type, id);
     if (type === 'question') {
       this.questionForm.patchValue({ isRichEditor: true });
@@ -358,7 +356,6 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
 
 
   createForm(question: Question) {
-    console.log(question.id, 'question id =====================================');
     const answersFA: FormArray = super.createDefaultForm(question);
     if (question.categoryIds.length > 0) {
       this.selectedQuestionCategoryIndex = Number(question.categoryIds[0]);
@@ -373,7 +370,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
     this.questionForm = this.fb.group({
       id: question.id ? question.id : '',
       is_draft: question.is_draft,
-      questionText: [question.questionText,
+      questionText: [question.questionText ? question.questionText : '',
       Validators.compose([Validators.required])],
       tags: '',
       answers: answersFA,
@@ -400,9 +397,11 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
 
   addCustomTag() {
     this.hideKeyboard();
-    super.addTag(this.customTag);
-    this.customTag = '';
-    this.autocomplete.autoCompleteTextView.resetAutoComplete();
+    if (this.customTag && this.customTag !== '') {
+      super.addTag(this.customTag);
+      this.customTag = '';
+      this.autocomplete.autoCompleteTextView.resetAutoComplete();
+    }
   }
 
   public onDidAutoComplete(args) {
@@ -436,7 +435,8 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
       fullscreen: true,
       viewContainerRef: this.vcRef
     };
-    this.modal.showModal(PreviewQuestionDialogComponent, options);
+    this.modal.showModal(PreviewQuestionDialogComponent, options)
+      .then((dialogResult: string) => this.isPreviewClosed = true );
   }
 
   hideKeyboard() {
@@ -474,13 +474,16 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
       }
     }
 
-  setWebInterface(webViewInstace) {
+    preventEventPropogation() {
+
+    }
+
+    setWebInterface(webViewInstace) {
 
     const webInterface = new webViewInterfaceModule.WebViewInterface(webViewInstace, CONFIG.editorUrl);
     // new webViewInterfaceModule.WebViewInterface(webViewInstace, CONFIG.editorUrl);
 
     webInterface.on('quillContent', (quillContent) => {
-      console.log('changes quillcontent =========================================');
       if (this.currentWebViewParentId === -1) {
         this.questionForm.get('questionText').patchValue(quillContent.html);
         this.questionForm.get('questionObject').patchValue(quillContent.delta);
