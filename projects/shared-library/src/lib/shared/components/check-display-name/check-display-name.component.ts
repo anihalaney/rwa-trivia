@@ -1,4 +1,4 @@
-import { Component, forwardRef, Input } from '@angular/core';
+import { Component, forwardRef, Input, OnInit } from '@angular/core';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 
 @Component({
@@ -14,7 +14,8 @@ import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
   ],
 })
 
-export class CheckDisplayNameComponent implements ControlValueAccessor {
+export class CheckDisplayNameComponent implements OnInit, ControlValueAccessor {
+
   @Input() placeholder;
   @Input() hint;
   @Input() isProfilePage;
@@ -23,7 +24,10 @@ export class CheckDisplayNameComponent implements ControlValueAccessor {
   propagateChange = (_: any) => { };
 
   constructor() {
-    this.disabled = false;
+  }
+
+  ngOnInit(): void {
+    this.disabled = this.isProfilePage ? true : false;
   }
 
   writeValue(obj: any): void {
