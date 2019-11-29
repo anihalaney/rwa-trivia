@@ -261,21 +261,6 @@ export class DrawerComponent implements OnInit, OnDestroy {
         this.closeDrawer();
     }
 
-    navigateToPrivacyPolicy() {
-        this.routerExtension.navigate(['/privacy-policy']);
-        this.closeDrawer();
-    }
-
-    navigateToTermsConditions() {
-        this.routerExtension.navigate(['/terms-and-conditions']);
-        this.closeDrawer();
-    }
-
-    navigateToUserFeedback() {
-        this.routerExtension.navigate(['/user-feedback']);
-        this.closeDrawer();
-    }
-
     get isDrawerOpen() {
         const sideDrawer = <RadSideDrawer>app.getRootView();
         if (sideDrawer) {

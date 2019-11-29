@@ -1,0 +1,382 @@
+.profile-settings StackLayout {
+  padding-bottom: 25;
+}
+
+.view-profile {
+  background-color: #e50051;
+}
+.profile-settings button {
+  color: #ffffff;
+  background-color: #89c24f;
+  font-weight: bold;
+  border-radius: 3;
+}
+
+.new-game-btn {
+  background-color: #e50051;
+}
+
+.profile-settings > .profile-settings-card > .cardStyle > .input-field > GridLayout > .input,
+.profile-settings > .profile-settings-card > .cardStyle > .profile > .input-field > .input,
+.profile-settings > .profile-settings-card > .cardStyle > .profile > .list-view > .input-field > .input {
+  padding: 15;
+  width: 325;
+  border: none;
+  border-width: 0;
+  border-bottom-width: 1;
+  border-bottom-color: #d3d3d3;
+}
+
+.profile-settings > .profile-settings-card > .cardStyle > .input-field > .title {
+  font-weight: 500;
+  color: black;
+  font-size: 18;
+}
+
+.profile-settings > .profile-settings-card > .cardStyle > .profile > .list-view > .grid-label {
+  padding-left: 30;
+  padding-right: 25;
+  padding-top: 15;
+  padding-bottom: 15;
+  border-color: #d3d3d3;
+  border-top-width: 2;
+  border-bottom-width: 2;
+  font-size: 12;
+}
+
+.profile-settings > .profile-settings-card > .cardStyle > .profile > .list-view > .grid-label > .grid-label-text {
+  padding-top: 4;
+}
+
+.profile-settings > .profile-settings-card > .cardStyle > .profile > .list-view StackLayout > GridLayout,
+.profile-settings > .profile-settings-card > .cardStyle > .profile > .list-view > .sub-list-view,
+.profile-settings > .profile-settings-card > .cardStyle > .profile > .privacy-area,
+.profile-settings > .profile-settings-card > .cardStyle > .profile > .profile-buttons {
+  border-bottom-width: 1;
+  border-bottom-color: #d3d3d3;
+  padding-left: 15;
+  padding-top: 15;
+  padding-bottom: 15;
+  padding-right: 2;
+  width: 325;
+  font-size: 16;
+  font-weight: 500;
+  color: black;
+}
+
+.profile-settings > .profile-settings-card > .cardStyle > .profile > .list-view StackLayout > GridLayout .input-label {
+  padding-bottom: 10;
+  font-size: 16;
+}
+
+#cross-button {
+  padding: 8;
+  font-size: 20;
+  font-weight: 100;
+}
+
+.profile-settings > .profile-settings-card > .cardStyle > .profile > .list-view RadAutoCompleteTextView {
+  border-width: 1;
+  border-color: #d3d3d3;
+  border-radius: 3;
+  padding-bottom: 0;
+  padding-top: 0;
+}
+
+.profile-settings
+  > .profile-settings-card
+  > .cardStyle
+  > .profile
+  > .list-view
+  StackLayout
+  > GridLayout
+  > StackLayout
+  > button {
+  padding: 5;
+  margin-left: 10;
+}
+
+.profile-settings > .profile-settings-card > .cardStyle > .profile > .list-view > .sub-list-view > .sub-list-label {
+  font-size: 16;
+  padding-bottom: 5;
+}
+
+.profile-settings > .profile-settings-card > .cardStyle > .profile > .list-view > .sub-list-view {
+  padding-bottom: 5;
+}
+
+.profile-settings
+  > .profile-settings-card
+  > .cardStyle
+  > .profile
+  > .list-view
+  > .sub-list-view
+  StackLayout
+  > GridLayout {
+  border-bottom-width: 0;
+  padding-bottom: 0;
+  color: #a9a9a9;
+}
+
+.profile-settings > .privacy-area {
+  padding-top: 10;
+  padding-bottom: 10;
+}
+
+.profile-settings > .privacy-area > .sub-text,
+.profile-settings > .profile-buttons > .sub-text {
+  font-size: 12;
+}
+
+.profile-settings > .privacy-area > .sub-text label {
+  width: 300;
+  padding-left: 0;
+}
+
+.profile-settings > .profile-buttons {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.error {
+  color: red;
+  font-size: 12;
+  border: none;
+  text-align: center;
+  border-width: 0;
+}
+
+.profile-settings > .social-section StackLayout > GridLayout {
+  border-bottom-width: 0;
+}
+
+.profile-settings > .social-section StackLayout > GridLayout {
+  border-bottom-width: 0;
+}
+
+/* .profile-settings>.social-section StackLayout>GridLayout>Switch {     
+    background-color: #009fe8;
+    color: #ffffff;
+} */
+
+.profile-settings > .social-section > .input-field > .input {
+  border-width: 1;
+  border-color: #d3d3d3;
+  border-radius: 3;
+}
+
+.grey-label {
+  color: #d9d9d9;
+}
+
+.grey-back-label {
+  color: #b7b7b7;
+}
+
+.blue-back-label {
+  background-color: #009fe8;
+  color: #ffffff;
+}
+
+.label-link {
+  color: #b7b7b7;
+  margin-left: 5;
+}
+
+.input-box {
+  padding: 10 5 10 0;
+  width: 100%;
+  background-color: #ffffff;
+}
+
+.social-section StackLayout {
+  padding: 0;
+}
+
+.social-profile-error {
+  color: #ff0000;
+}
+
+.profile-settings > .social-section StackLayout > GridLayout {
+  padding-left: 0;
+  padding-top: 15;
+  padding-bottom: 15;
+  padding-right: 0;
+}
+
+.text-box {
+  margin-top: 10;
+  border-color: #b7b7b7;
+  border-width: 1;
+}
+
+.mt-30 {
+  margin-top: 30;
+}
+
+.padding-10 {
+  padding: 10;
+}
+
+.new-game-btn {
+  padding: 10 20;
+  border-radius: 4;
+  background-color: #e50051;
+  color: #fff;
+  width: auto;
+  font-size: 16;
+}
+.edit-profile-btn {
+  padding: 10 20;
+  border-radius: 4;
+  background-color: #3e5b95;
+  color: #fff;
+  width: auto;
+  font-size: 16;
+}
+
+.stats-main {
+  margin-top: 40;
+}
+
+.stats {
+  border-bottom-width: 1;
+  border-color: #c8c8c8;
+}
+
+.is-friend-span {
+  color: #71b02f;
+}
+.send-friend-request-span {
+  color: #f50057;
+}
+
+button {
+  border-radius: 0;
+}
+
+/* new css */
+.profile {
+  &_image {
+    padding: 26 0;
+
+    &--center {
+      image {
+        background-color: gray;
+        height: 97;
+        width: 97;
+        border-radius: 50;
+      }
+    }
+    &--edit {
+        height: 36;
+        width: 36;
+        background: #fff;
+        label {
+            font-size: 16;
+            color: #14418B;
+        }
+    }
+  }
+}
+
+.edit-field{
+  border-width: 2;
+  padding: 10;
+  border-color: #f2f2f2;
+}
+
+.label-field {
+  color: black;
+  font-size: 15;
+  // padding-bottom: 7;
+  line-height: 20;
+}
+
+.label-value{
+  color: #a5a5a5;
+  font-size: 15;
+  line-height: 20;
+}
+
+.email-text-field{
+  margin: 5;
+  border-color: #f2f2f2;
+  padding: 10;
+}
+.edit-box{
+  border-width: 2;
+  border-color: #f2f2f2;
+}
+
+.profileSettings .animate-ease-in {
+  animation-name: animate-in;
+  animation-duration: 0.5s;
+  animation-timing-function: ease-in;
+  animation-fill-mode: forwards;
+}
+
+@keyframes animate-in {
+  from {
+    width: 90%;
+  }
+
+  to {
+    width: 100%;
+  }
+}
+
+
+.profileSettings .animate-ease-out {
+  animation-name: animate-out;
+  animation-duration: 0.5s;
+  animation-timing-function: ease-out;
+  animation-fill-mode: forwards;
+}
+
+@keyframes animate-out {
+  from {
+    width: 100%;
+  }
+
+  to {
+    width: 90%;
+  }
+}
+
+.hide {
+  visibility: collapse;
+}
+
+.show {
+  animation-name: opacity;
+  animation-duration: 0.5;
+}
+
+@keyframes opacity {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.fhide {
+  animation-name: fopacity;
+  animation-duration: 0.7;
+  
+  
+}
+
+@keyframes fopacity {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    visibility: collapse;
+    opacity: 0;
+  }
+}
