@@ -27,14 +27,16 @@ import { LocationResetDialogComponent } from './location-reset-dialog/location-r
 import { ProfileSettings } from './profile-settings';
 import { AuthenticationProvider } from 'shared-library/core/auth';
 import * as Platform from 'tns-core-modules/platform';
+import { RouterExtensions } from 'nativescript-angular/router';
+import { thisTypeAnnotation } from '@babel/types';
 
 declare var IQKeyboardManager;
 
 @Component({
   selector: 'profile-settings',
   templateUrl: './profile-settings.component.html',
-  styleUrls: ['./profile-settings.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  styleUrls: ['./profile-settings.component.scss'],
+  // changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
@@ -57,13 +59,14 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
   public keepAspectRatio = true;
   public width = 200;
   public height = 200;
-
+  disableSocialProfileSettings: boolean = false;
   public items: Array<SegmentedBarItem>;
   public selectedIndex = 0;
   tabsTitles: Array<string>;
   private locations: ObservableArray<TokenModel>;
   private isLocationEnalbed: boolean;
   iqKeyboard: any;
+  isSavingUserName: boolean;
 
   @ViewChild('autocomplete', { static: false }) autocomplete: RadAutoCompleteTextViewComponent;
   @ViewChild('acLocation', { static: false }) acLocation: RadAutoCompleteTextViewComponent;
@@ -77,7 +80,8 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
     public router: Router,
     private modal: ModalDialogService,
     private vcRef: ViewContainerRef,
-    public authenticationProvider: AuthenticationProvider) {
+    public authenticationProvider: AuthenticationProvider,
+    private routerExtensions: RouterExtensions) {
 
     super(fb, store, userAction, uUtils, cd, route, router, authenticationProvider);
     this.initDataItems();
@@ -96,6 +100,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
         this.uUtils.showMessage('success', 'Profile is saved successfully');
         this.toggleLoader(false);
       }
+      this.isSavingUserName = false;
       this.cd.markForCheck();
     }));
     this.tabsTitles = ['Profile', 'Stats'];
@@ -343,21 +348,36 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
   }
 
   onSubmit(isEditSingleField = false, field = '') {
+    // this.singleFieldEdit.map((res) => {
+    //   res[field] = false;
+    //   res.activeClass = '';
+    // });
     // validations
     if (field === 'location') {
       this.editLocationField();
+    }
+    if (field === 'socialProfile') {
+      // this.singleFieldEdit[4].socialProfile = false;
+      // this.singleFieldEdit[4].activeClass = '';
+      // this.socialProfileSettings.map((res) => { return res.disable = false });
+      // this.cd.markForCheck();
+      this.singleFieldEdit[field] = false;
+    }
+    console.log(field);
+    if (field === 'displayName') {
+      this.isSavingUserName = true;
     }
     this.userForm.updateValueAndValidity();
 
     if (this.profileImageFile) {
       this.assignImageValues();
     }
-
+    console.log('In valid', this.userForm.invalid);
     if (this.userForm.invalid) {
       this.utils.showMessage('error', 'Please fill the mandatory fields');
       return;
     }
-
+    console.log('field', field);
     this.checkDisplayName(this.userForm.get('displayName').value);
 
     this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.checkDisplayName)).subscribe(status => {
@@ -365,10 +385,14 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
       if (this.isValidDisplayName !== null) {
         if (this.isValidDisplayName) {
           if (isEditSingleField) {
-            this.userForm.get(field).disable();
+            // this.userForm.get(field).disable();
+            // const index = this.singleFieldEdit.findIndex(res => res.id === field);
+            // this.singleFieldEdit[index][field] = false;
+            // this.singleFieldEdit[index].activeClass = '';
             this.singleFieldEdit[field] = false;
           }
 
+          console.log("386 >>>", this.singleFieldEdit);
           // get user object from the forms
           this.getUserFromFormValue(isEditSingleField, field);
           this.user.categoryIds = this.userCategories.filter(c => c.isSelected).map(c => c.id);
@@ -438,5 +462,21 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
       console.log("Error: " + (e.message || e));
 
     }
+  }
+
+  redirectToChangePassword() {
+    this.routerExtensions.navigate(['/user/my/profile/change-password'], { clearHistory: false });
+  }
+
+  navigateToPrivacyPolicy() {
+    this.routerExtensions.navigate(['/privacy-policy'], { clearHistory: true });
+  }
+
+  navigateToTermsConditions() {
+    this.routerExtensions.navigate(['/terms-and-conditions'], { clearHistory: true });
+  }
+
+  navigateToUserFeedback() {
+    this.routerExtensions.navigate(['/user-feedback'], { clearHistory: true });
   }
 }

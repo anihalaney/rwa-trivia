@@ -41,7 +41,7 @@ export class ProfileSettings {
     profileImageValidation: String;
     profileImageFile: File;
     userCopyForReset: User;
-    socialProfileShowLimit = 3;
+    socialProfileShowLimit = 5;
 
     tagsObs: Observable<string[]>;
     tags: string[];
@@ -62,9 +62,45 @@ export class ProfileSettings {
     isEnableEditProfile = false;
     socialProfileObj: any;
     singleFieldEdit = {
-        displayName: false,
-        location: false
-    };
+        displayName:false,
+        email:false,
+        phoneNo:false,
+        location:false,
+        socialProfile:false
+
+    }
+
+
+        // [
+        //     displayName:false,
+            
+        //     {
+        //         id: 'displayName',
+        //         displayName: false,
+        //         activeClass: ''
+        //     },
+        //     {
+        //         id: 'email',
+        //         email: false,
+        //         activeClass: ''
+        //     },
+        //     {
+        //         id: 'phoneNo',
+        //         phoneNo: false,
+        //         activeClass: ''
+        //     },
+        //     {
+        //         id: 'location',
+        //         location: false,
+        //         activeClass: ''
+        //     },
+        //     {
+        //         id: 'socialProfile',
+        //         socialProfile: false,
+        //         activeClass: ''
+        //     },
+        // ]
+    activeEditField = '';
     loggedInUser: User;
     gamePlayedAgainst: any;
     applicationSettings: any;
@@ -72,7 +108,7 @@ export class ProfileSettings {
     linkValidation = "^http(s?)\:\/\/[0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*(:(0-9)*)*(\/?)([a-zA-Z0-9\-\.\?\,\'\/\\\+&amp;%\$#_]*)?$";
     // tslint:disable-next-line:max-line-length
     emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    phoneNoRegex = /^\s*(?:\+?(\d{1,3}))?[- (]*(\d{3})[- )]*(\d{3})[- ]*(\d{4})(?: *[x/#]{1}(\d+))?\s*$/;
+    phoneNoRegex = /^\s*(?:\+?(\d{1,3}))?[- (]*(\d{3})[- )]*(\d{3})[- ]*(\d{4})(?: *[x#]{1}(\d+))?\s*$/;
     userInvitations: { [key: string]: Invitation };
     loggedInUserAccount: Account;
     authProviderConstants: any;
@@ -134,11 +170,13 @@ export class ProfileSettings {
                     if (appSettings[0]) {
                         this.applicationSettings = { ...appSettings[0] };
                         this.socialProfileObj = [...appSettings[0].social_profile];
+
                         this.socialProfileSettings = appSettings[0].social_profile
                             .filter(profile =>
                                 this.user &&
                                 this.user[profile.social_name]
                                 && this.user[profile.social_name] !== '');
+
                         this.enableSocialProfile = this.socialProfileSettings.filter(profile => profile.enable).length;
                     }
 
@@ -147,7 +185,12 @@ export class ProfileSettings {
 
     showAllSocialSetting() {
         this.socialProfileSettings = [...this.socialProfileObj];
+        this.socialProfileSettings.map((res) => { return res.disable = false });
         this.enableSocialProfile = this.socialProfileSettings.filter(profile => profile.enable).length;
+    }
+
+    getIcon(icon) {
+        return String.fromCharCode(parseInt(`0x${icon}`, 16));
     }
 
     initializeUserProfile() {
@@ -162,6 +205,7 @@ export class ProfileSettings {
             this.categoryDict = values[2] || {};
 
             this.userCopyForReset = { ...this.user };
+            console.log('Initilize uer');
             this.createForm(this.user);
 
             if (this.user.profilePictureUrl) {
@@ -298,7 +342,6 @@ export class ProfileSettings {
             password: [''],
             confirmPassword: ['']
         }, { validator: profileUpdateFormValidator });
-
         switch (this.currentAuthProvider) {
             case AuthProviderConstants.PASSWORD:
                 this.userForm.get('email').setValidators(Validators.pattern(this.emailRegex));
@@ -326,15 +369,25 @@ export class ProfileSettings {
                 break;
         }
 
+        this.onChanges();
 
-
-        this.filteredTags$ = this.userForm.get('tags').valueChanges
-            .pipe(map(val => val.length > 0 ? this.filter(val) : []));
+        // this.filteredTags$ = this.userForm.get('tags').valueChanges
+        //     .pipe(map(val => val.length > 0 ? this.filter(val) : []));
 
         this.createSocialProfileControl();
+        this.isEnableEditProfile = true;
+        this.showAllSocialSetting();
         if (!this.isEnableEditProfile) {
             this.disableForm(true);
         }
+    }
+
+    onChanges(): void {
+        // const data = field ? field : 'email';
+        this.userForm.get('email').valueChanges.subscribe(val => {
+            console.log('on change callled', this.singleFieldEdit);
+            this.cd.detectChanges();
+        });
     }
 
     createSocialProfileControl() {
@@ -390,8 +443,8 @@ export class ProfileSettings {
     resetUserProfile() {
         this.user = this.userCopyForReset; // cloneDeep(this.userCopyForReset);
         this.createForm(this.user);
-        this.filteredTags$ = this.userForm.get('tags').valueChanges
-            .pipe(map(val => val.length > 0 ? this.filter(val) : []));
+        // this.filteredTags$ = this.userForm.get('tags').valueChanges
+        //     .pipe(map(val => val.length > 0 ? this.filter(val) : []));
     }
 
     // store the user object
@@ -464,16 +517,41 @@ export class ProfileSettings {
     }
 
     editSingleField(field: string) {
-        this.singleFieldEdit[field] = !this.singleFieldEdit[field];
-        if (this.singleFieldEdit[field]) {
-            this.userForm.get(field).enable();
-            this.userForm.get(field).setValidators([Validators.required]);
-            this.userForm.updateValueAndValidity();
-        } else {
-            this.userForm.get(field).disable();
-            this.userForm.get(field).setValidators([]);
-            this.userForm.updateValueAndValidity();
+
+        if (this.activeEditField) {
+            this.singleFieldEdit[this.activeEditField] = !this.singleFieldEdit[this.activeEditField];
         }
+        // const index = this.singleFieldEdit.findIndex(res => res.id === field);
+        // this.singleFieldEdit[index][field] = !this.singleFieldEdit[index][field];
+        // this.singleFieldEdit[index].activeClass = field;
+        this.activeEditField = field;
+        this.singleFieldEdit[field] = !this.singleFieldEdit[field];
+        this.singleFieldEdit[this.activeEditField] = !this.singleFieldEdit[this.activeEditField];
+        console.log('THIS> SINGLE FIELD', this.singleFieldEdit)
+        if (field !== 'socialProfile' && field !== 'email' && field !== 'phoneNo') {
+
+            console.log(field);
+
+            if (this.singleFieldEdit[field]) {
+                this.userForm.get(field).enable();
+                this.userForm.get(field).setValidators([Validators.required]);
+                this.userForm.updateValueAndValidity();
+            } else {
+                this.userForm.get(field).disable();
+                this.userForm.get(field).setValidators([]);
+                this.userForm.updateValueAndValidity();
+            }
+        } else if (field === 'socialProfile') {
+            this.socialProfileSettings.map((res) => { return res.disable = true });
+            this.cd.markForCheck();
+        } else if (field === 'email') {
+            this.userForm.get('email').setValidators([Validators.required, Validators.email]);
+            // this.onChanges(field);
+        } else if (field === 'phoneNo') {
+            this.userForm.get('phoneNo').setValidators([Validators.required, Validators.pattern(this.phoneNoRegex)]);
+            // this.onChanges(field);
+        }
+        this.cd.markForCheck();
     }
 
     sendFriendRequest() {
