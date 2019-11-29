@@ -369,7 +369,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
     this.questionForm = this.fb.group({
       id: question.id ? question.id : '',
       is_draft: question.is_draft,
-      questionText: [question.questionText,
+      questionText: [question.questionText ? question.questionText : '',
       Validators.compose([Validators.required])],
       tags: '',
       answers: answersFA,

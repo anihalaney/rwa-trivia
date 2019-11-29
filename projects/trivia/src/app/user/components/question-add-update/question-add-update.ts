@@ -107,7 +107,7 @@ export class QuestionAddUpdate {
   createDefaultForm(question: Question, isRichEditor = false): FormArray {
     const fgs: FormGroup[] = question.answers.map(answer => {
       const fg = new FormGroup({
-        answerText: new FormControl(answer.answerText,
+        answerText: new FormControl(answer.answerText ? answer.answerText : '',
           Validators.compose([Validators.required])),
         correct: new FormControl(answer.correct),
         isRichEditor: new FormControl(answer.isRichEditor),

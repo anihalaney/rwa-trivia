@@ -1,5 +1,5 @@
 <GridLayout tkExampleTitle tkToggleNavButton>
-  <RadListView  #listview [items]="questions">
+  <RadListView loadOnDemandMode="auto" #listview [items]="questions">
       <ng-template tkListItemTemplate let-question="item" let-qIndex="index">
         <StackLayout   class="question-container">
             <GridLayout class="question-text" columns="*,auto" rows="*">
