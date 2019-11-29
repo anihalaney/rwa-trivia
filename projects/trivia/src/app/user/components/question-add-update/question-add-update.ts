@@ -80,6 +80,9 @@ export class QuestionAddUpdate {
         if (data) {
           this.questionForm.patchValue({ is_draft: true });
           const question = this.getQuestionFromFormValue(this.questionForm.value);
+          if (this.question.status) {
+              question.status = this.question.status;
+          }
           if (!question.status) {
             question.status = QuestionStatus.PENDING;
           }

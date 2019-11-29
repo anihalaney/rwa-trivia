@@ -203,6 +203,9 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
     }
 
     this.subscriptions.push(this.questionForm.valueChanges.pipe(take(1)).subscribe(val => {
+      if (this.editQuestion) {
+        this.question.status = this.editQuestion.status;
+      }
       this.saveDraft();
     }));
   }
