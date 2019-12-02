@@ -84,7 +84,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
   @Output() hideQuestion = new EventEmitter<boolean>();
   @ViewChild('autocomplete', { static: false }) autocomplete: RadAutoCompleteTextViewComponent;
   @ViewChildren('textField') textField: QueryList<ElementRef>;
-  @ViewChild('webView', { static: false }) webView: ElementRef;
+  @ViewChild('webView', { static: false }) webView: ElementRef<WebView>;
   @ViewChild('questionStack', { static: false }) questionStack: ElementRef;
   @ViewChildren('answerStack') answerStack: QueryList<ElementRef>;
   @ViewChild('webViewParentStack', { static: false }) webViewParentStack: ElementRef;
@@ -264,8 +264,15 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
       const nextWebViewParent =  id === -1 ? this.questionStack.nativeElement :
       this.answerStack.filter((element, index) => index === id )[0].nativeElement;
       this.currentWebViewParentId = id;
-      this.renderer.removeChild(prevWebViewParent, this.webView.nativeElement);
-      this.renderer.appendChild(nextWebViewParent, this.webView.nativeElement);
+      if (isAndroid) {
+        prevWebViewParent._removeViewFromNativeVisualTree(this.webView.nativeElement);
+        nextWebViewParent._addViewToNativeVisualTree(this.webView.nativeElement);
+        this.oWebViewInterface.emit('viewType', this.currentWebViewParentId >= 0 ? 'answer' : 'question');
+        this.setInitialValue();
+      } else if (isIOS) {
+          this.renderer.removeChild(prevWebViewParent, this.webView.nativeElement);
+          this.renderer.appendChild(nextWebViewParent, this.webView.nativeElement);
+      }
   }
 
   public onchange(args: SelectedIndexChangedEventData) {
@@ -457,20 +464,14 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
   wevViewLoaded(event) {
       if (!event.object) {
       } else {
-        if (!this.oWebViewInterface || isAndroid) {
-          if (this.oWebViewInterface && isAndroid) {
-            this.oWebViewInterface.off('uploadImageStart');
-            this.oWebViewInterface.off('quillContent');
-          }
+        if (!this.oWebViewInterface) {
           this.oWebViewInterface = this.setWebInterface(event.object);
           //  new webViewInterfaceModule.WebViewInterface(event.object, CONFIG.editorUrl);
         }
         if (this.oWebViewInterface) {
           if (isIOS) {
             event.object.initNativeView();
-          }
           this.oWebViewInterface.emit('viewType', this.currentWebViewParentId >= 0 ? 'answer' : 'question');
-          if (isIOS) {
             this.setInitialValue();
           }
         }
