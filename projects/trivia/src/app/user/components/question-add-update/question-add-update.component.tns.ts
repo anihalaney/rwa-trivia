@@ -159,21 +159,6 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
       this.cd.markForCheck();
     }));
 
-    // this.subscriptions.push(this.questionForm.get('isRichEditor').valueChanges.subscribe(isRichEditor => {
-    //   this.cd.markForCheck();
-    //   this.questionForm.patchValue({ questionText: '' });
-    //   if (isRichEditor) {
-    //     this.questionForm.get('maxTime').setValidators(Validators.compose([Validators.required]));
-    //     this.questionForm.get('questionText').setValidators(Validators.compose([Validators.required]));
-
-    //   } else {
-    //     this.questionForm.get('maxTime').setValidators([]);
-    //     this.questionForm.get('questionText').setValidators(Validators.compose([Validators.required,
-    //     Validators.maxLength(this.applicationSettings.question_max_length)]));
-    //   }
-    //   this.questionForm.get('maxTime').updateValueAndValidity();
-    //   this.questionForm.get('questionText').updateValueAndValidity();
-    // }));
 
     this.subscriptions.push(this.questionForm.get('answers').valueChanges.subscribe((changes) => {
       this.cd.markForCheck();
@@ -211,22 +196,11 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
   }
 
   onLoadFinished(event, id) {
-    // this.oWebViewInterface.emit('viewType', 'question');
+    // it takes 2 seconds to load the editor after the webview loads
     setTimeout(() => {
       this.isWebViewLoaded = true;
       this.cd.markForCheck();
     }, 2000);
-    if (isAndroid && this.oWebViewInterface) {
-      this.oWebViewInterface.emit('viewType', this.currentWebViewParentId >= 0 ? 'answer' : 'question');
-      setTimeout(() => {
-        this.setInitialValue();
-      }, 10);
-    }
-    if (id === -1) {
-      if (this.oWebViewInterface && this.editQuestion) {
-        this.oWebViewInterface.emit('deltaObject', this.editQuestion.questionObject);
-      }
-    }
   }
 
 
@@ -265,11 +239,15 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
       this.answerStack.filter((element, index) => index === id )[0].nativeElement;
       this.currentWebViewParentId = id;
       if (isAndroid) {
+        // for android this works as this method does not destroy the webview. do not change.
         prevWebViewParent._removeViewFromNativeVisualTree(this.webView.nativeElement);
         nextWebViewParent._addViewToNativeVisualTree(this.webView.nativeElement);
-        this.oWebViewInterface.emit('viewType', this.currentWebViewParentId >= 0 ? 'answer' : 'question');
-        this.setInitialValue();
+        setTimeout(() => {
+          this.oWebViewInterface.emit('viewType', this.currentWebViewParentId >= 0 ? 'answer' : 'question');
+          this.setInitialValue();
+        }, 1);
       } else if (isIOS) {
+         // for ios this works it calls destroy but still we can re initialize the communication by calling initNativeView(). do not change.
           this.renderer.removeChild(prevWebViewParent, this.webView.nativeElement);
           this.renderer.appendChild(nextWebViewParent, this.webView.nativeElement);
       }
@@ -468,12 +446,12 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
           this.oWebViewInterface = this.setWebInterface(event.object);
           //  new webViewInterfaceModule.WebViewInterface(event.object, CONFIG.editorUrl);
         }
-        if (this.oWebViewInterface) {
-          if (isIOS) {
+        if (this.oWebViewInterface && isIOS) {
             event.object.initNativeView();
-          this.oWebViewInterface.emit('viewType', this.currentWebViewParentId >= 0 ? 'answer' : 'question');
-            this.setInitialValue();
-          }
+            setTimeout(() => {
+              this.oWebViewInterface.emit('viewType', this.currentWebViewParentId >= 0 ? 'answer' : 'question');
+              this.setInitialValue();
+            }, 1);
         }
       }
     }

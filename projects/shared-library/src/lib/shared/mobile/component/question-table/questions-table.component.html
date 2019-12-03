@@ -4,7 +4,7 @@
         <StackLayout   class="question-container">
             <GridLayout class="question-text" columns="*,auto" rows="*">
                 <render-question row="0" col="0" (calHeight)="setHeight($event, question.id)" row="0" col="0" [textAlign]="'left'" [question]="question"></render-question>
-              <Label (tap)="showEditQuestion(question)" *ngIf="getDisplayStatus(question.status)==='REQUIRED_CHANGE' || (question?.is_draft === true && getDisplayStatus(question.status)==='PENDING' )" text="&#xf040;" class="fa text-icon-field" row="0" col="1" textWrap="true"></Label>
+              <Label (tap)="showEditQuestion(question)" *ngIf="getDisplayStatus(question?.status)==='REQUIRED_CHANGE' || (question?.is_draft === true && getDisplayStatus(question?.status)==='PENDING' )" text="&#xf040;" class="fa text-icon-field" row="0" col="1" textWrap="true"></Label>
             </GridLayout>
             <GridLayout rows="*" columns="auto,auto" margin="3 0">
               <Label row="0" col="0" text="Category : " textWrap="true" class="label Roboto-Medium"
@@ -22,18 +22,18 @@
             </WrapLayout>
             <Label class="publish-question" text="Published on {{ question.createdOn | date:'dd MMM yyyy' }}"
               textWrap="true"></Label>
-            <StackLayout *ngIf="getDisplayStatus(question.status)==='REQUIRED_CHANGE' || getDisplayStatus(question.status)==='REJECTED'" orientation="horizontal" margin="0 0 10 0">
-                <Label textWrap="true"   fontSize="12" text="View Reason {{getDisplayStatus(question.status)==='REQUIRED_CHANGE' ? '& Resubmit Question':''}}" class="btn-transparent blue-border" stlRippleEffect (rippleTap)="showReason(question)"></Label>
+            <StackLayout *ngIf="getDisplayStatus(question?.status)==='REQUIRED_CHANGE' || getDisplayStatus(question?.status)==='REJECTED'" orientation="horizontal" margin="0 0 10 0">
+                <Label textWrap="true"   fontSize="12" text="View Reason {{getDisplayStatus(question?.status)==='REQUIRED_CHANGE' ? '& Resubmit Question':''}}" class="btn-transparent blue-border" stlRippleEffect (rippleTap)="showReason(question)"></Label>
             </StackLayout>
-            <FlexboxLayout *ngIf="getDisplayStatus(question.status)!=='APPROVED'"  justifyContent="space-between" alignItems="center">
+            <FlexboxLayout *ngIf="getDisplayStatus(question?.status)!=='APPROVED'"  justifyContent="space-between" alignItems="center">
               <FlexboxLayout>                  
-                <StackLayout class="status-containter" *ngIf="!(question?.is_draft === true && getDisplayStatus(question.status)==='PENDING')" [ngClass]="{'pending-btn': getDisplayStatus(question.status)==='PENDING', 
-                'required-change-btn': getDisplayStatus(question.status)==='REQUIRED_CHANGE',
-                'reject-btn': getDisplayStatus(question.status)==='REJECTED',
-                'approve-btn': getDisplayStatus(question.status)==='APPROVED'}">
-                      <Label  text="{{getDisplayStatus(question.status).replace('_',' ') | titlecase}}" textWrap="true"></Label>   
+                <StackLayout class="status-containter" *ngIf="!(question?.is_draft === true && getDisplayStatus(question?.status)==='PENDING')" [ngClass]="{'pending-btn': getDisplayStatus(question?.status)==='PENDING', 
+                'required-change-btn': getDisplayStatus(question?.status)==='REQUIRED_CHANGE',
+                'reject-btn': getDisplayStatus(question?.status)==='REJECTED',
+                'approve-btn': getDisplayStatus(question?.status)==='APPROVED'}">
+                      <Label  text="{{getDisplayStatus(question?.status).replace('_',' ') | titlecase}}" textWrap="true"></Label>   
                 </StackLayout>
-                <StackLayout *ngIf="question?.is_draft === true && (getDisplayStatus(question.status)==='REQUIRED_CHANGE' || getDisplayStatus(question.status)==='PENDING')" class="pending-btn status-containter">
+                <StackLayout *ngIf="question?.is_draft === true && (getDisplayStatus(question?.status)==='REQUIRED_CHANGE' || getDisplayStatus(question?.status)==='PENDING')" class="pending-btn status-containter">
                     <Label  text="Draft" textWrap="true"></Label>   
                 </StackLayout>
               </FlexboxLayout>
