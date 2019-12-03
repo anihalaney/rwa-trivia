@@ -18,11 +18,22 @@ export class PreviewQuestionDialogComponent implements OnDestroy {
   ref: any;
   subscriptions = [];
   question: Question;
+  categoryDictionary: any;
+  categoryName = '';
 
   constructor(private params: ModalDialogParams,
     public cd: ChangeDetectorRef) {
     setTimeout(() => {
       this.question = params.context.question;
+      this.categoryDictionary = params.context.categoryDictionary;
+
+      this.categoryName = this.question.categoryIds.map(category => {
+        if (this.categoryDictionary[category]) {
+          return this.categoryDictionary[category].categoryName;
+        } else {
+          return '';
+        }
+      }).join(',');
       this.cd.markForCheck();
     }, 0);
   }

@@ -419,7 +419,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
     const question: Question = super.onSubmit();
 
     const options = {
-      context: { question: question },
+      context: { question: question, categoryDictionary: this.categories },
       fullscreen: true,
       viewContainerRef: this.vcRef
     };

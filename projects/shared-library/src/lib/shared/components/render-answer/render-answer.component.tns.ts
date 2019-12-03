@@ -84,10 +84,12 @@ export class RenderAnswerComponent implements OnInit, OnChanges {
     }
 
     ngOnChanges(changes: SimpleChanges) {
-        if (this.answer && this.answer.isRichEditor && this.bgColor && this.bgColor !== '') {
+        if (this.answer && this.answer.isRichEditor) {
+                const bgColor = this.bgColor && this.bgColor !== '' ?
+                `background:${this.bgColor}!important;` : `background:#fff!important;`;
                 this.answer.answerText =
                             `${this.htmlStartTag} ${this.answer.answerText}
-                        <style> html {background:` + this.bgColor + `!important;color:#212121 !important;font-size:17;}</style>
+                        <style> html {${bgColor}color:#212121 !important;font-size:17;}</style>
                          ${this.scriptToGetHeight}   ${this.htmlEndTag}`;
 
         }

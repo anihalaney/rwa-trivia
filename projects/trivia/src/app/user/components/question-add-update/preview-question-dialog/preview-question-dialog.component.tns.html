@@ -1,29 +1,41 @@
 <StackLayout orientation="horizontal" backgroundColor="white">
-    <ScrollView>
-        <GridLayout rows="60,auto,*,*" columns="*">
-            <GridLayout row="0" col="0" rows="auto" columns="auto,*" backgroundColor="#3e5b95" padding="15">
-                <Label row="0" col="0" text="Question Preview" horizontalAlignment="left" color="#ffffff" fontSize="20"
-                    textWrap="true"></Label>
-                <Label row="0" col="1" text="&#xf057;" horizontalAlignment="right" (tap)="onClose()" class="fa times-circle close-icon"></Label>
-            </GridLayout>
-
-            <StackLayout row="1" col="0" *ngIf="question" margin="10">
-                <render-question [question]="question" ></render-question>
+  <ScrollView>
+    <GridLayout rows="60,*" columns="*">
+      <GridLayout row="0" col="0" rows="auto" columns="auto,*" padding="15">
+        <StackLayout row="0" col="0" marginRight="10" (tap)="onClose()">
+          <Label verticalAlignment="center" color="#000000" text="&#xe906;" fontSize="20" class="ico icon-back"></Label>
+        </StackLayout>
+        <StackLayout row="0" col="1" ios:marginTop="-3" android:marginTop="-5">
+          <Label fontSize="20" color="black" text="Question Preview" textWrap="true"></Label>
+        </StackLayout>
+      </GridLayout>
+      <GridLayout padding="0 5" row="1" col="0" rows="*,*,*,*" columns="*">
+        <render-box margin="0 10" [theme]="'dark'" class="dark-theme">
+          <StackLayout row="0" col="0" *ngIf="question" margin="10">
+            <render-question [question]="question"></render-question>
+          </StackLayout>
+          <StackLayout row="1" col="0" color="black" orientation="horizontal" margin="5 10 10 10"
+            iosOverflowSafeArea="false">
+            <Label text="Categories:" marginRight="5" fontSize="15" fontWeight="500" textWrap="true"></Label>
+            <Label [text]="categoryName" class="Roboto-Regular" fontSize="15" textWrap="true"></Label>
+          </StackLayout>
+          <FlexboxLayout row="2" col="0" margin="0 7.5" flexWrap="wrap">
+            <StackLayout *ngFor="let tags of question?.tags, let i = index">
+              <Label [style.backgroundColor]="theme === 'dark' ? '#405177':'#e2e2e2'"
+                [style.color]="theme === 'dark' ? '#a5a5a5' : '#808080'" borderRadius="22" margin="2.5 2.5"
+                [text]="tags" padding="5 10" textWrap="true"></Label>
             </StackLayout>
-            <StackLayout row="2" col="0" orientation="horizontal" margin="10" *ngIf="question" iosOverflowSafeArea="false">
-                <Label text="Tags:" marginRight="5" color="#1B1C1C" fontSize="15" fontWeight="500" textWrap="true"></Label>
-                <Label text="{{question.tags?.toString()}}" class="Roboto-Regular" color="#1B1C1C" fontSize="15"
-                    textWrap="true"></Label>
-            </StackLayout>
-            <StackLayout row="3" col="0" *ngIf="question">
-                <ng-template ngFor let-answer [ngForOf]="question.answers">
-                    <StackLayout orientation="horizontal" class="question-answered" margin="10"  [style.padding]="answer.isRichEditor? 0 : 15">
-                        <render-answer [answer]="answer"></render-answer>
-                    </StackLayout>
-                </ng-template>
-            </StackLayout>
-        </GridLayout>
-    </ScrollView>
-
-
+          </FlexboxLayout>
+          <StackLayout row="3" col="0" *ngIf="question">
+            <ng-template ngFor let-answer [ngForOf]="question.answers">
+              <StackLayout orientation="horizontal" class="question-answered" margin="10"
+                [style.padding]="answer.isRichEditor? 0 : 15">
+                <render-answer [bgColor]="answer.correct === true ? '#9ccc65' : ''" [answer]="answer"></render-answer>
+              </StackLayout>
+            </ng-template>
+          </StackLayout>
+        </render-box>
+      </GridLayout>
+    </GridLayout>
+  </ScrollView>
 </StackLayout>
