@@ -49,6 +49,11 @@ export class RenderAnswerComponent implements OnInit, OnChanges {
             <link rel="stylesheet" href="${externalUrl.hightlighCSS}" crossorigin="anonymous"></html>`;
             // Created new local answer object because here I am modifing answer object
         }
+
+    }
+
+    ngOnInit(): void {
+
         if (this.answer) {
             this.currentAnswer = { ...this.answer };
         }
