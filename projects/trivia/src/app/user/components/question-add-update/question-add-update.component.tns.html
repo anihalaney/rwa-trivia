@@ -1,4 +1,4 @@
-<ns-action-bar [title]="actionBarTxt" class="Roboto-Regular" showAdd="true"></ns-action-bar>
+<ns-action-bar [title]="actionBarTxt" (isBackPress)="back($event)" [emitBackEvent]="editQuestion ? true : false" class="Roboto-Regular" showAdd="true"></ns-action-bar>
 <StackLayout *ngIf="loaderBusy">
     <ActivityIndicator [busy]="loaderBusy" width="100" height="100" marginTop="225" class="activity-indicator">
     </ActivityIndicator>

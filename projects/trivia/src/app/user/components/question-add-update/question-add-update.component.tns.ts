@@ -35,7 +35,7 @@ import { CONFIG } from 'shared-library/environments/environment';
 declare var IQKeyboardManager;
 @Component({
   selector: 'app-question-add-update',
-  templateUrl: './question-add-update-new.component.html',
+  templateUrl: './question-add-update.component.html',
   styleUrls: ['./question-add-update.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -492,6 +492,10 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
     });
 
     return webInterface;
+  }
+
+  back(event) {
+      this.hideQuestion.emit(true);
   }
 
 }
