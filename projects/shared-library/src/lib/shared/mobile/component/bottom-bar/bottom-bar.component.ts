@@ -25,7 +25,7 @@ export class BottomBarComponent implements OnChanges, OnDestroy, OnInit {
     animateMenu = '';
     prevMenu = '';
     @Input() isDrawerOpenOrClosed = 'drawerClosed';
-    @Input() screen = 'app';
+    @Input() screen =  undefined;
     @Output() open: EventEmitter<any> = new EventEmitter<any>();
 
 

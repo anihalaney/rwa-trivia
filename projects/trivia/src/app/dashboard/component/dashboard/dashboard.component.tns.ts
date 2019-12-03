@@ -100,5 +100,3 @@ export class DashboardComponent extends Dashboard implements OnInit, OnDestroy {
     this.renderView = false;
   }
 }
-
-

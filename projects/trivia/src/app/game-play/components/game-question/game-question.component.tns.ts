@@ -31,6 +31,7 @@ export class GameQuestionComponent extends GameQuestion implements OnInit, OnDes
   doPlay = true;
   
   actionText: string;
+  theme: any;
 
   photoUrl: String = `~/assets/icons/${projectMeta.projectName}/icon-192x192.png`;
   userDict$: Observable<{ [key: string]: User }>;

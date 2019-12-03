@@ -1,27 +1,31 @@
 <render-box [setBackgroundColor]="'#283b66'" [theme]="'dark'" class="{{theme}}-theme">
-    <WrapLayout padding="10">
-        <GridLayout rows="*,*" columns="auto,*">
+    <GridLayout rows="auto,auto,auto" padding="10">
+        <GridLayout row="0" rows="*,*" columns="auto,*">
             <AbsoluteLayout row="0" col="0" class="buddy-icon-container">
                 <Image src="~/assets/images/mobile/user-white.png" top="15" left="28" width="8" height="15"
                     class="buddy-icon"></Image>
                 <Image src="~/assets/images/mobile/user-white.png" top="18" left="12" width="18" height="18"
                     class="buddy-icon"></Image>
             </AbsoluteLayout>
-            <WrapLayout row="0" col="1" verticalAlignment="center" paddingLeft="20">
-                <Label text="Question of the day!" fontSize="20" fontWeight="bold" paddingTop="15" class="text-color" textWrap="true"></Label>
-                <Label class="invite-sub-title text-color" text="Answer daily an chance to win exciting prizes" textWrap="true"></Label>
-            </WrapLayout>
+            <FlexboxLayout flexDirection="column" row="0" col="1" verticalAlignment="center" paddingLeft="20">
+                <Label textAlignment="left" text="Question of the day!" fontSize="20" fontWeight="bold" paddingTop="15"
+                    class="text-color" textWrap="true"></Label>
+                <Label textAlignment="left" class="invite-sub-title text-color"
+                    text="Answer daily an chance to win exciting prizes" textWrap="true"></Label>
+            </FlexboxLayout>
         </GridLayout>
-        <app-question-card [question]="question" [categoryName]="categoryName" [answeredText]="answeredText"
-            [doPlay]="doPlay" [correctAnswerText]="correctAnswerText" (selectedAnswer)="selectedAnswer($event)"
-            [user]="user" [theme]="theme">
-        </app-question-card>
+        <GridLayout row="1">
+            <app-question-card [question]="question" [categoryName]="categoryName" [answeredText]="answeredText"
+                [doPlay]="doPlay" [correctAnswerText]="correctAnswerText" (selectedAnswer)="selectedAnswer($event)"
+                [user]="user" [theme]="theme">
+            </app-question-card>
+        </GridLayout>
 
-        <GridLayout iosOverflowSafeArea="false" orientation="vertical" *ngIf="question" margin="10"
+        <GridLayout row="2" iosOverflowSafeArea="false" orientation="vertical" *ngIf="question" margin="10"
             iosOverflowSafeArea="false">
             <Button class="Roboto-Regular" backgroundColor="#8ac541" color="white" margin="20"
                 (rippleTap)="getNextQuestion()" *ngIf="answeredText!==''" width="100%" text="Try Another" fontSize="17"
                 padding="15" stlRippleEffect stlBackgroundColor="#8ac541"></Button>
         </GridLayout>
-    </WrapLayout>
+    </GridLayout>
 </render-box>

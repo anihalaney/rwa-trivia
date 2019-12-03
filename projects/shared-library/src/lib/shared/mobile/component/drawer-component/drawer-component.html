@@ -12,7 +12,7 @@
                             android:fontSize="18" textWrap="true"></Label>
                     </FlexboxLayout>
                     <FlexboxLayout *ngIf="authProvider.isAuthenticated" class="padding-label" stlRippleEffect
-                        stlBackgroundColor="#10347f" stlBackgroundColorAfter="transparent" (rippleTap)="recentGames()">
+                        stlBackgroundColor="#10347f" stlBackgroundColorAfter="transparent" (rippleTap)="navigateToRecentGames()">
                         <Label text="Recently Completed Games"
                             [ngStyle]="{color: (activeMenu === 'Recently Completed Games' ? '#077ad6' : '#3b5998')}"
                             android:fontSize="18" textWrap="true"></Label>
@@ -59,7 +59,7 @@
                         <Label text="Logout"
                             [ngStyle]="{color: (activeMenu === 'login/signup' ? '#077ad6' : '#f44336')}"
                             android:fontSize="18"></Label>
-                        <ActivityIndicator *ngIf="loader" color="gray" ios:width="25" ios:height="25" android:width="25"
+                        <ActivityIndicator *ngIf="loader" color="#3b5998" ios:width="25" ios:height="25" android:width="25"
                             android:height="25" busy="true" class="activity-indicator">
                         </ActivityIndicator>
                     </FlexboxLayout>

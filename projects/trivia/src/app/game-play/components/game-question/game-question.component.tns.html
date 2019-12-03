@@ -1,8 +1,10 @@
 <GridLayout>
   <ScrollView id="scrollList">
-    <StackLayout marginLeft="10" marginRight="10" [class.m-b-70]="showContinueBtn" backgroundColor="#ffffff">
+    <StackLayout margin="0 10"
+      [class.m-b-70]="showContinueBtn || ((answeredIndex>=0 || doPlay === false) && !showContinueBtn)"
+      backgroundColor="#ffffff">
       <GridLayout *ngIf="user && user!==null && playerMode == PlayerMode.Single" rows="*,*,*,*" columns="*,*"
-        class="sideStackLayoutHeader" paddingTop="10" paddingBottom="10">
+        class="sideStackLayoutHeader" padding="10 0">
         <app-user-card [user]="user" [userId]="user.userId" [isGamePlay]=true
           [type]="userCardType.USER_IMAGE_NAME_WITH_SCORE_IN_GAME_PLAY_SINGLE_PLAYER"
           [otherInfo]="{bits: account.bits, bytes:account.bytes, progressValue: progressValue, correctCount:correctCount,questionRound:questionRound,totalRound:totalRound,actionText:actionText }">
@@ -15,21 +17,20 @@
           [otherInfo]="{progressValue: progressValue, correctCount:correctCount,questionRound:questionRound,totalRound:totalRound,otherPlayer:otherPlayer}">
         </app-user-card>
       </GridLayout>
-      <Label visibility="{{ turnFlag && threeConsecutiveAnswer ? 'visible'  : 'collapsed'}}" class="Roboto-Regular"
-        fontSize="17" marginLeft="15" color="#af3424"
-        text="You have reached the maximum number of correct answers you are allowed to give in the first round."
-        textWrap="true"></Label>
-      <!-- <Label
+    
+        <FlexboxLayout justifyContent="center">
+      <Label
             visibility="{{ (answeredIndex!==undefined && correctAnswerIndex === answeredIndex)  ? 'visible'  : 'collapsed' }}"
-            class="correct-text" text="CORRECT" textWrap="true" style.textAlignment="center"></Label>
+            class="correct-text green" text="CORRECT" textWrap="true" style.textAlignment="center"></Label>
 
-        <Label
-            visibility="{{(answeredIndex!==undefined && correctAnswerIndex !== answeredIndex) ? 'visible'  : 'collapsed' }}"
-            class="incorrect-text" text="INCORRECT" textWrap="true"
-            style.textAlignment="center"></Label> -->
+      <Label
+          visibility="{{(answeredIndex!==undefined && correctAnswerIndex !== answeredIndex) ? 'visible'  : 'collapsed' }}"
+          class="incorrect-text red" text="INCORRECT" textWrap="true"
+          style.textAlignment="center"></Label>
 
-      <Label *ngIf="continueNext" visibility="{{ answeredIndex===undefined  ? 'visible'  : 'collapsed' }}"
-        class="timeout-text" text="TIMEOUT" textWrap="true" style.textAlignment="center"></Label>
+      <Label *ngIf="continueNext && progressValue>=100" class="timeout-text yellow" text="TIMES UP" textWrap="true"
+        style.textAlignment="center"></Label>
+            </FlexboxLayout>
       <render-box [setBackgroundColor]="'#f7f7f7'">
         <StackLayout padding="20 10">
           <render-question [question]="question" [questionIndex]="questionIndex"></render-question>
@@ -76,7 +77,7 @@
   <AbsoluteLayout backgroundColor="#ffffff" verticalAlignment="bottom">
     <StackLayout width="100%" *ngIf="showContinueBtn || ((answeredIndex>=0 || doPlay === false) && !showContinueBtn)">
       <Button class="Hind-Medium btn-transparent" (rippleTap)="continueClicked.emit($event)"
-        *ngIf="answeredText!== null && showContinueBtn" text="Next Round"  stlRippleEffect></Button>
+        *ngIf="answeredText!== null && showContinueBtn" text="Next Round" stlRippleEffect></Button>
       <FlexboxLayout *ngIf="(answeredIndex>=0 || doPlay === false) && !showContinueBtn" alignItems="center"
         orientation="horizontal" justifyContent="center" backgroundColor="#c0c0c0" class="Hind-Medium" width="100%"
         height="70">

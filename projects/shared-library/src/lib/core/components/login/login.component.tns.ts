@@ -260,9 +260,7 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
 
   async googleLogin() {
     this.removeMessage();
-    if (isAndroid) {
-      this.loader = true;
-    }
+    this.loader = true;
     try {
       const result = await this.firebaseAuthService.googleLogin();
       if (result) {
@@ -279,9 +277,7 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
   async fbLogin() {
     try {
       this.removeMessage();
-      if (isAndroid) {
-        this.loader = true;
-      }
+      this.loader = true;
       const result = await this.firebaseAuthService.facebookLogin();
       this.redirectTo();
     } catch (error) {
@@ -338,10 +334,10 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
     if (mode === '/dashboard') {
       this.routerExtension.navigate([mode], { clearHistory: true });
     } else if (mode === 'email') {
-     this.signInMethod = mode;
-     super.changeMode(0);
-     this.removeMessage();
-    } else  {
+      this.signInMethod = mode;
+      super.changeMode(0);
+      this.removeMessage();
+    } else {
       super.changeMode(mode);
       this.removeMessage();
     }
