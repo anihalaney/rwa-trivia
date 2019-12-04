@@ -21,7 +21,7 @@
             <ng-template ngFor let-answer [ngForOf]="question.answers">
               <StackLayout orientation="horizontal" class="question-answered" margin="10"
                 [style.padding]="answer.isRichEditor? 0 : 15">
-                <render-answer [bgColor]="answer.correct === true ? '#9ccc65' : ''" [answer]="answer"></render-answer>
+                <render-answer  [answer]="answer" [bgColor]="'#9ccc65'"></render-answer>
               </StackLayout>
             </ng-template>
           </StackLayout>

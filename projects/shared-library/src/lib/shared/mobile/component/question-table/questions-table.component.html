@@ -43,7 +43,7 @@
           <StackLayout [ngClass]="{'show': question.show}" *ngIf="question.show" class="hide">
             <ng-template ngFor let-answer let-i="index" [ngForOf]="question.answers">
               <StackLayout class="question-box" [class.question-box-solid]="answer.correct">
-                <render-answer (calAnsHeight)="setAnsHeight($event, question.id, i, qIndex)" [answer]="answer"  [bgColor]="answer.correct ? '#9ccc65': '#ffffff'" [isGameAnswer]="false">
+                <render-answer (calAnsHeight)="setAnsHeight($event, question.id, i, qIndex)" [answer]="answer"  [bgColor]="'#9ccc65'" [isGameAnswer]="false">
                 </render-answer>
               </StackLayout>
             </ng-template>

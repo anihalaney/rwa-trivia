@@ -1,16 +1,16 @@
 <StackLayout *ngIf="question?.isRichEditor && question; else renderView" marginBottm="500" orientation="horizontal">
     <Label verticalAlignment="top" paddingLeft="10" text="{{questionIndex}} . " textAlign="left" textWrap="true"
         *ngIf="questionIndex"></Label>
-    <WebView width="100%" *ngIf="!isAndroid && question?.questionText" [src]="question?.questionText" ios:height="{{question?.height ? question?.height : questionHeight}}"
+    <WebView width="100%" *ngIf="!isAndroid && questionText" [src]="questionText" ios:height="{{question?.height ? question?.height : questionHeight}}"
         (loadFinished)="onLoadFinished($event)" [isUserInteractionEnabled]="false"></WebView>
 
-    <WebView width="100%" *ngIf="isAndroid && question?.questionText" [src]="question?.questionText" [isUserInteractionEnabled]="false"
+    <WebView width="100%" *ngIf="isAndroid && questionText" [src]="questionText" [isUserInteractionEnabled]="false"
         minHeight="50"></WebView>
 </StackLayout>
 
 <ng-template #renderView>
     <StackLayout orientation="horizontal" [horizontalAlignment]="textAlign ? textAlign : 'center'"  width="100%" class="{{theme}}-theme">
-        <Label lineHeight="10" class="text-color QA-text-align" text="{{question?.questionText}}" fontSize="17" 
+        <Label lineHeight="10" class="text-color QA-text-align" text="{{questionText}}" fontSize="17" 
             textWrap="true"></Label>
     </StackLayout>
 </ng-template>

@@ -22,7 +22,7 @@
                     </StackLayout>
                     <StackLayout row="1" class="answer-section" iosOverflowSafeArea="false">
                         <StackLayout formArrayName="answers">
-                            <StackLayout *ngFor="let answer of answers.controls; let i=index" [formGroupName]="i">
+                            <StackLayout *ngFor="let answer of answers?.controls; let i=index" [formGroupName]="i">
                                 <GridLayout rows="*"  columns="auto,*" class="text-box-section">
                                     <CheckBox row="0" col="0" #elem formControlName="correct"
                                         class="checkbox checkbox-section" fillColor="#71b02f"></CheckBox>

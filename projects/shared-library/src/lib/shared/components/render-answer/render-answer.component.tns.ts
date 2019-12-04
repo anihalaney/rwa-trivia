@@ -56,6 +56,14 @@ export class RenderAnswerComponent implements OnInit, OnChanges {
 
         if (this.answer) {
             this.currentAnswer = { ...this.answer };
+            if (this.bgColor && this.currentAnswer.isRichEditor) {
+                const bgColor = this.currentAnswer.correct ?
+                `background:${this.bgColor}!important;` : `background:#fff!important;`;
+                this.currentAnswer.answerText =
+                            `${this.htmlStartTag} ${this.currentAnswer.answerText}
+                        <style> html {${bgColor}color:#212121 !important;font-size:17;}</style>
+                         ${this.scriptToGetHeight}   ${this.htmlEndTag}`;
+            }
         }
         if (this.currentAnswer && this.currentAnswer.isRichEditor) {
             // tslint:disable-next-line:max-line-length
@@ -84,15 +92,6 @@ export class RenderAnswerComponent implements OnInit, OnChanges {
     }
 
     ngOnChanges(changes: SimpleChanges) {
-        if (this.answer && this.answer.isRichEditor) {
-                const bgColor = this.bgColor && this.bgColor !== '' ?
-                `background:${this.bgColor}!important;` : `background:#fff!important;`;
-                this.answer.answerText =
-                            `${this.htmlStartTag} ${this.answer.answerText}
-                        <style> html {${bgColor}color:#212121 !important;font-size:17;}</style>
-                         ${this.scriptToGetHeight}   ${this.htmlEndTag}`;
-
-        }
         // Change background color of webview after answer given
         if (this.currentAnswer) {
             if (this.currentAnswer.isRichEditor) {
