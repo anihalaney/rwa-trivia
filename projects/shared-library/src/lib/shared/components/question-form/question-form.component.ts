@@ -43,6 +43,7 @@ export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
   subscriptions = [];
   quillObject: any = {};
   dialogRef;
+  answerTexts = [];
   get answers(): FormArray {
     return this.questionForm.get('answers') as FormArray;
   }
@@ -126,7 +127,8 @@ export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   createForm(question: Question) {
-    const fgs: FormGroup[] = question.answers.map(answer => {
+    const fgs: FormGroup[] = question.answers.map((answer, index) => {
+      this.answerTexts[index] = answer.answerObject;
       const isRichEditor = (answer.isRichEditor) ? answer.isRichEditor : false;
       const answerText = (answer.isRichEditor) ? answer.answerObject : answer.answerText;
       const fg = new FormGroup({
