@@ -163,7 +163,7 @@ export class QuestionAddUpdate {
     question.is_draft = formValue.is_draft;
     question.questionText = formValue.questionText;
     question.answers = formValue.answers;
-    question.categoryIds = (formValue.category) ? [formValue.category] : [];
+    question.categoryIds = (formValue.category >= 0 ) ? [formValue.category] : [];
     question.tags = [...this.autoTags, ...this.enteredTags];
     question.ordered = formValue.ordered;
     question.explanation = formValue.explanation;

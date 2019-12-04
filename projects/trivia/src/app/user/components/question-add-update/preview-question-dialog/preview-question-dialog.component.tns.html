@@ -1,15 +1,6 @@
 <StackLayout orientation="horizontal" backgroundColor="white">
   <ScrollView>
-    <GridLayout rows="60,*" columns="*">
-      <GridLayout row="0" col="0" rows="auto" columns="auto,*" padding="15">
-        <StackLayout row="0" col="0" marginRight="10" (tap)="onClose()">
-          <Label verticalAlignment="center" color="#000000" text="&#xe906;" fontSize="20" class="ico icon-back"></Label>
-        </StackLayout>
-        <StackLayout row="0" col="1" ios:marginTop="-3" android:marginTop="-5">
-          <Label fontSize="20" color="black" text="Question Preview" textWrap="true"></Label>
-        </StackLayout>
-      </GridLayout>
-      <GridLayout padding="0 5" row="1" col="0" rows="*,*,*,*" columns="*">
+      <GridLayout padding="0 5" rows="*,*,*,*" columns="*">
         <render-box margin="0 10" [theme]="'dark'" class="dark-theme">
           <StackLayout row="0" col="0" *ngIf="question" margin="10">
             <render-question [question]="question"></render-question>
@@ -36,6 +27,5 @@
           </StackLayout>
         </render-box>
       </GridLayout>
-    </GridLayout>
   </ScrollView>
 </StackLayout>

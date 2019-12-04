@@ -155,3 +155,16 @@
 .margin-50 {
   margin-bottom:50; 
 }
+
+.dialog {
+  .dialogOpen &__wrapper {
+    visibility: visible;
+  }
+
+  &__wrapper {
+    background: #fff;
+    visibility: collapse;
+    width: 100%;
+    z-index: 1;
+  }
+}

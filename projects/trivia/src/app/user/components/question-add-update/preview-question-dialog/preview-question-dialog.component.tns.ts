@@ -1,5 +1,5 @@
-import { Component, OnDestroy, ChangeDetectorRef } from '@angular/core';
-import { User, Question } from 'shared-library/shared/model';
+import { Component, OnDestroy, ChangeDetectorRef, Input, SimpleChanges, OnChanges } from '@angular/core';
+import { User, Question, Category } from 'shared-library/shared/model';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { ModalDialogParams } from 'nativescript-angular/modal-dialog';
 
@@ -11,22 +11,21 @@ import { ModalDialogParams } from 'nativescript-angular/modal-dialog';
 })
 
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
-export class PreviewQuestionDialogComponent implements OnDestroy {
+export class PreviewQuestionDialogComponent implements OnChanges, OnDestroy {
 
   user: User;
   navLinks = [];
   ref: any;
   subscriptions = [];
-  question: Question;
-  categoryDictionary: any;
   categoryName = '';
+  @Input() question: Question;
+  @Input() categoryDictionary: Category[];
 
-  constructor(private params: ModalDialogParams,
-    public cd: ChangeDetectorRef) {
-    setTimeout(() => {
-      this.question = params.context.question;
-      this.categoryDictionary = params.context.categoryDictionary;
+  constructor(public cd: ChangeDetectorRef) {
 
+  }
+  ngOnChanges(changes: SimpleChanges): void {
+    if (this.categoryDictionary &&  this.question && this.question.categoryIds) {
       this.categoryName = this.question.categoryIds.map(category => {
         if (this.categoryDictionary[category]) {
           return this.categoryDictionary[category].categoryName;
@@ -34,17 +33,13 @@ export class PreviewQuestionDialogComponent implements OnDestroy {
           return '';
         }
       }).join(',');
-      this.cd.markForCheck();
-    }, 0);
+    }
   }
 
   ngOnDestroy() {
 
   }
 
-  onClose(): void {
-    this.params.closeCallback();
-  }
 
 
 }

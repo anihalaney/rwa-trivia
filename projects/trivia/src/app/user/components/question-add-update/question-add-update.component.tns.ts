@@ -28,7 +28,7 @@ import { isAvailable, requestPermissions, takePicture } from 'nativescript-camer
 import { ImageAsset } from 'tns-core-modules/image-asset';
 import { ImageSource } from 'tns-core-modules/image-source';
 import { QuestionService } from 'shared-library/core/services';
-import { SelectedIndexChangedEventData } from 'nativescript-drop-down';
+import { SelectedIndexChangedEventData, DropDown } from 'nativescript-drop-down';
 import { ModalDialogService } from 'nativescript-angular/directives/dialogs';
 import { PreviewQuestionDialogComponent } from './preview-question-dialog/preview-question-dialog.component';
 import { CONFIG } from 'shared-library/environments/environment';
@@ -58,7 +58,8 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
 
   demoQ: Question = new Question;
   renderView = false;
-
+  @ViewChild('categoryDropdown', { static: false }) categoryDropdown: ElementRef;
+  @ViewChild('timeDropdown', { static: false }) timeDropdown: ElementRef;
 
   public imageTaken: ImageAsset;
   public saveToGallery = true;
@@ -77,7 +78,8 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
   showIds = [];
   currentWebViewParentId: number;
   theme: string;
-  isPreviewClosed = false;
+  isShowPreview = false;
+  previewQuestion: Question;
 
   @Input() editQuestion: Question;
   showEditQuestion = false;
@@ -203,6 +205,15 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
     }, 2000);
   }
 
+  openCategoryDropdown() {
+    const categoryDropdown = <DropDown>this.categoryDropdown.nativeElement;
+    categoryDropdown.open();
+  }
+
+  openTimeDropdown() {
+    const timeDropdown = <DropDown>this.timeDropdown.nativeElement;
+    timeDropdown.open();
+  }
 
   setInitialValue () {
     const blankObj =  [{ insert: '' }];
@@ -354,7 +365,6 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
       this.selectedMaxTimeIndex = maxTimeIndex + 1;
     }
 
-    console.log(question.maxTime, 'MAXTIME');
     this.questionForm = this.fb.group({
       id: question.id ? question.id : '',
       is_draft: question.is_draft,
@@ -415,16 +425,12 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
   }
 
   preview() {
+    if (!(this.questionForm.valid && this.categoryIds && this.categoryIds.length > 0 && this.enteredTags.length > 2)) {
+        return false;
+    }
     this.hideKeyboard();
-    const question: Question = super.onSubmit();
-
-    const options = {
-      context: { question: question, categoryDictionary: this.categories },
-      fullscreen: true,
-      viewContainerRef: this.vcRef
-    };
-    this.modal.showModal(PreviewQuestionDialogComponent, options)
-      .then((dialogResult: string) => this.isPreviewClosed = true );
+    this.previewQuestion = super.onSubmit();
+    this.isShowPreview = true;
   }
 
   hideKeyboard() {
@@ -495,7 +501,11 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
   }
 
   back(event) {
+    if (this.isShowPreview) {
+      this.isShowPreview = false;
+    } else {
       this.hideQuestion.emit(true);
+    }
   }
 
 }
