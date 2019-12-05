@@ -40,7 +40,7 @@
         <StackLayout stlRippleEffect  backgroundColor="#6c63ff" (rippleTap)="navigateToBulkUpload()" width="25" height="25" borderRadius="20"   col="2" *ngIf="(user && user!== null && !showSkipBtn && title == 'Add_Question' || title == 'Update Question' )"
             ios:margin="3" ios:marginRight="30" android:margin="10" verticalAlignment="center"
             horizontalAlignment="center"  orientation="horizontal">
-            <Label  text="&#xf062;"  stlOpacity="0.5" class="fa fa-arrow-circle-up approve-btn"  color="#fff"  fontSize="14" margin="3"></Label>
+            <Label  text="&#xf062;"  stlOpacity="0.5" class="fa fa-arrow-circle-up approve-btn"  color="#fff"  fontSize="14"  ios:margin="3" android:margin="5 3 0 3"></Label>
         </StackLayout>
 
         <!-- <StackLayout *ngIf="((user && user!== null && !hideHomeIcon && !showSkipBtn))" col="3" stlRippleEffect
