@@ -14,7 +14,7 @@ import { NavigationService } from 'shared-library/core/services/mobile';
     selector: 'ns-bulk-upload-request',
     moduleId: module.id,
     templateUrl: 'bulk-upload-request.component.html',
-    styleUrls: ['bulk-upload-request.component.css']
+    styleUrls: ['bulk-upload-request.component.scss']
 })
 
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
@@ -46,16 +46,24 @@ export class BulkUploadRequestComponent implements OnDestroy, OnInit {
           this.store.dispatch(this.userAction.addUserProfile(this.user, false));
         }
       }
+
     ngOnInit(): void {
         this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.user)).subscribe(user => {
             this.user = user;
-            switch (this.user.bulkUploadPermissionStatus) {
-                case this.NONE: { this.bulkUploadBtnText = profileSettingsConstants.BULK_UPLOAD_REQUEST_BTN_TEXT; break; }
-                case this.PENDING: { this.bulkUploadBtnText = profileSettingsConstants.BULK_UPLOAD_SEND_REQUEST_AGAIN_BTN_TEXT; break; }
-                default: { this.bulkUploadBtnText = profileSettingsConstants.BULK_UPLOAD_REQUEST_BTN_TEXT; break; }
+            if (this.user) {
+                switch (this.user.bulkUploadPermissionStatus) {
+                    case this.NONE: { this.bulkUploadBtnText = profileSettingsConstants.BULK_UPLOAD_REQUEST_BTN_TEXT; break; }
+                    case this.PENDING: { this.bulkUploadBtnText = profileSettingsConstants.BULK_UPLOAD_SEND_REQUEST_AGAIN_BTN_TEXT; break; }
+                    default: { this.bulkUploadBtnText = profileSettingsConstants.BULK_UPLOAD_REQUEST_BTN_TEXT; break; }
+                }
             }
         }));
 
+    }
+
+    navigateToUserAccount() {
+        this.routerExtensions.navigate(['/user/my/profile', this.user ? this.user.userId : ''],
+        { queryParams: { backUrl: '/user/my/questions/bulk-upload-request' }});
     }
 
 

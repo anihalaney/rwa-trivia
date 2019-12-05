@@ -298,7 +298,7 @@
                       text="Show more" stlRippleEffect (tap)="showMoreSocialProfile()"></Button>
                   </StackLayout>
 
-                  <StackLayout *ngIf="(isEnableEditProfile && userType === 0)" class="profile-buttons"
+                  <!-- <StackLayout *ngIf="(isEnableEditProfile && userType === 0)" class="profile-buttons"
                     iosOverflowSafeArea="false">
                     <Label text="Bulk upload Request" textWrap="true" padding="8"></Label>
                     <Button *ngIf="(!user.bulkUploadPermissionStatus
@@ -312,7 +312,7 @@
                       textWrap="true" padding="8"></Label>
                     <Label class="sub-text" *ngIf="user.bulkUploadPermissionStatus === APPROVED"
                       text="User has bulk upload privilege" textWrap="true" padding="8"></Label>
-                  </StackLayout>
+                  </StackLayout> -->
 
                   <StackLayout *ngIf="isEnableEditProfile && userType ===  0" class="profile-buttons"
                     iosOverflowSafeArea="false">

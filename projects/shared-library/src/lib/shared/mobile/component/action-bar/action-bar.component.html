@@ -35,15 +35,12 @@
             android:width="23" ios:width="23" (rippleTap)="navigateToSubmitQuestion()">
             <Image src="res://addquestion" class="icon-add" width="28" height="28"></Image>
         </StackLayout>
-
+       
         <!-- For View All Icon in question-add-updates.component.tns.html screen -->
-        <StackLayout col="2" *ngIf="(user && user!== null && !showSkipBtn && title.includes('Add_Question'))"
+        <StackLayout stlRippleEffect  backgroundColor="#6c63ff" (rippleTap)="navigateToBulkUpload()" width="25" height="25" borderRadius="20"   col="2" *ngIf="(user && user!== null && !showSkipBtn && title == 'Add_Question' || title == 'Update Question' )"
             ios:margin="3" ios:marginRight="30" android:margin="10" verticalAlignment="center"
-            horizontalAlignment="right"  orientation="horizontal">
-            <Label stlRippleEffect stlBackgroundColor="#13284F" stlOpacity="0.5" stlBackgroundColorAfter="transparent"
-            class="fa approve-btn" fontSize="18" marginTop="5"></Label>
-            <Label stlRippleEffect stlBackgroundColor="#13284F" stlOpacity="0.5" stlBackgroundColorAfter="transparent"
-            text="BULK UPLOAD" (tap)="showDialog()" marginLeft="5" fontSize="20"></Label>
+            horizontalAlignment="center"  orientation="horizontal">
+            <Label  text="&#xf062;"  stlOpacity="0.5" class="fa fa-arrow-circle-up approve-btn"  color="#fff"  fontSize="14" margin="3"></Label>
         </StackLayout>
 
         <!-- <StackLayout *ngIf="((user && user!== null && !hideHomeIcon && !showSkipBtn))" col="3" stlRippleEffect
