@@ -2,13 +2,16 @@
 <GridLayout rows="*,auto" columns="*">
 
 
+
   <StackLayout row="0" iosOverflowSafeArea="false" class="profileSettings ">
+      <!-- <app-animation-box></app-animation-box> -->
+
     <ActivityIndicator visibility="{{ loaderBusy ? 'visible' : 'collapsed' }}" [busy]="loaderBusy" width="100"
       height="100" marginTop="225" class="activity-indicator"></ActivityIndicator>
     <ScrollView visibility="{{ !loaderBusy ? 'visible' : 'collapsed' }}" iosOverflowSafeArea="false">
       <PreviousNextView>
-        <FlexboxLayout class="profile" (tap)="hideKeyboard()" flexDirection="column" *ngIf="userForm"
-          [formGroup]="userForm" iosOverflowSafeArea="false">
+        <StackLayout class="profile" (tap)="hideKeyboard()" *ngIf="userForm" [formGroup]="userForm"
+          iosOverflowSafeArea="false">
 
           <!-- Profile Image -->
           <StackLayout class="profile_image" iosOverflowSafeArea="false">
@@ -24,49 +27,94 @@
           </StackLayout>
 
           <!-- displayName -->
-          <StackLayout marginBottom="40">
-            <FlexboxLayout justifyContent="center">
-              <app-check-display-name formControlName="displayName" hint="Display Name" isProfilePage="true">
-              </app-check-display-name>
-              <Label *ngIf="!singleFieldEdit.displayName && !isSavingUserName" (tap)="editSingleField('displayName')"
-                color="#14418B" fontSize="20" alignSelf="center" class="ico icon-edit" textWrap="true"
-                text="&#xe927;"></Label>
-              <Label *ngIf="(singleFieldEdit.displayName && userForm.value.displayName !=='') && !isSavingUserName"
-                (tap)="onSubmit(true, 'displayName')" alignSelf="center" color="#14418B" fontSize="24" class="fa"
-                text="&#xf058;" style="padding:0 5"> </Label>
-              <ActivityIndicator *ngIf="isSavingUserName" alignSelf="center" color="#3b5998" ios:width="25"
-                ios:height="25" android:width="25" android:height="25" busy="true" class="activity-indicator">
-              </ActivityIndicator>
-            </FlexboxLayout>
+          <GridLayout rows="auto,*" columns="*">
+            <FlexboxLayout justifyContent="center" row="0" col="0">
+              <StackLayout orientation="horizontal" justifyContent="center">
+                <GridLayout rows="*" columns="*,50">
+                  <StackLayout row="0" col="0" marginLeft="50" horizontalAlignment="center"
+                    [visibility]="singleFieldEdit.displayName ? 'visible' : 'collapsed'">
+                    <app-check-display-name formControlName="displayName" hint="Display Name" isProfilePage="true"
+                      disabled="singleFieldEdit.displayName" horizontalAlignment="center">
+                    </app-check-display-name>
+                  </StackLayout>
+                  <Label [text]="user.displayName" class="user-name-disabled" marginLeft="50"
+                    horizontalAlignment="center" margin="10 0" verticalAlignment="middle" row="0" col="0"
+                    textWrap="true" *ngIf="!singleFieldEdit.displayName"></Label>
 
-            <FlexboxLayout justifyContent="center" flexWrap="wrap">
+
+                    <FlexboxLayout row="0" col="1" col="1" flexDirection="column" justifyContent="center">
+                      <Label  *ngIf="!singleFieldEdit.displayName && !isSavingUserName"
+                      (tap)="editSingleField('displayName')" color="#14418B" fontSize="20" alignSelf="center"
+                      class="ico icon-edit" textWrap="true" text="&#xe927;"  verticalAlignment="middle"
+                      ios:marginBottom="10"></Label>
+                    <Label
+                      *ngIf="(singleFieldEdit.displayName && userForm.value.displayName !=='') && !isSavingUserName"
+                      (tap)="onSubmit(true, 'displayName')" alignSelf="center" color="#14418B" fontSize="26" class="fa"
+                      text="&#xf058;" verticalAlignment="middle" ios:marginBottom="10"> </Label>
+                    <ActivityIndicator *ngIf="isSavingUserName" alignSelf="center" color="#3b5998"
+                      ios:width="25" ios:height="25" android:width="25" android:height="25" busy="true"
+                      class="activity-indicator">
+                    </ActivityIndicator>
+                    </FlexboxLayout>
+
+                  
+                </GridLayout>
+              </StackLayout>
+
+            </FlexboxLayout>
+            <FlexboxLayout justifyContent="center" flexWrap="wrap" row="1" col="0">
               <Label
                 *ngIf="userForm.controls.displayName.errors && userForm.controls.displayName.errors.required && !userForm.controls.displayName.pristine"
                 class=" error" textWrap="true" text="Display Name is required!"></Label>
               <Label *ngIf="userForm.controls.displayName.errors && userForm.controls.displayName.errors.exist"
                 class=" error" textWrap="true" text="Display Name is already taken by other user"></Label>
             </FlexboxLayout>
-          </StackLayout>
+          </GridLayout>
 
-          <!-- Email -->
-          <GridLayout rows="auto,auto" columns="*" margin="5 0">
+          <!-- Name -->
+          <GridLayout #textBoxContainer rows="63,auto" columns="*" margin="5 0">
             <GridLayout row="0" rows="auto" columns="*,auto" borderWidth="2" borderColor="#f2f2f2" borderRadius="5"
-              padding="10"
-              [ngClass]="{'animate-ease-out': singleFieldEdit.email, 'animate-ease-in': !singleFieldEdit.email}">
+              padding="10" android:paddingBottom="11" ios:paddingBottom=0>
               <FlexboxLayout col="0" flexDirection="column" justifyContent="center">
-                <Label *ngIf="(!singleFieldEdit.email) && !isSavingUserName" alignSelf="flex-start" text="Email"
-                  textWrap="true" class="label-field"></Label>
-                <Label *ngIf="!singleFieldEdit.email" [text]="user.email" textWrap="true" class="label-value"></Label>
-                <TextField *ngIf="singleFieldEdit.email" hint="Email" formControlName="email">
-                </TextField>
-
+                <Label #nameLabelField alignSelf="flex-start" text="Name" textWrap="true" class="label-field"></Label>
+                <TextField #nameField [visibility]="'collapsed'" hint="Name" formControlName="name" paddingLeft="4"
+                  ios:marginTop="5" android:paddingBottom="10" android:marginTop="-5"></TextField>
+                <Label #namelabel [text]="user.name" textWrap="true" class="label-value"></Label>
               </FlexboxLayout>
               <FlexboxLayout col="1" flexDirection="column" justifyContent="center">
-                <Label *ngIf="(!singleFieldEdit.email) && (currentAuthProvider===authProviderConstants.PHONE)"
-                  (tap)="editSingleField('email')" color="#14418B" fontSize="20" class="ico icon-edit" textWrap="true"
-                  text="&#xe927;" padding="5">
+                <Label *ngIf="(!singleFieldEdit.name)" (tap)="editSingleFieldTns('name',0)" color="#14418B"
+                  fontSize="20" class="ico icon-edit" textWrap="true" text="&#xe927;" padding="5">
                 </Label>
-                <Label *ngIf="(singleFieldEdit.email && userForm.value.email !=='')" (tap)="onSubmit(true, 'email')"
+                <Label *ngIf="(singleFieldEdit.name && userForm.value.name !=='')" (tap)="onSubmit(true, 'name',0)"
+                  color="#14418B" fontSize="26" class="fa" text="&#xf058;" padding="5">
+                </Label>
+              </FlexboxLayout>
+            </GridLayout>
+            <StackLayout width="90%" row="1">
+              <Label *ngIf="userForm.controls.name.errors?.required && !userForm.controls.name.pristine" class=" error"
+                textWrap="true" text="Name is required!"></Label>
+
+              <Label *ngIf="userForm.controls.name.errors?.name && !userForm.controls.name.pristine" class="error"
+                textWrap="true" text="Name is Invalid!"></Label>
+            </StackLayout>
+          </GridLayout>
+
+
+          <!-- Email -->
+          <GridLayout #textBoxContainer rows="63,auto" columns="*" margin="5 0">
+            <GridLayout row="0" rows="auto" columns="*,auto" borderWidth="2" borderColor="#f2f2f2" borderRadius="5"
+              padding="10">
+              <FlexboxLayout col="0" flexDirection="column" justifyContent="center">
+                <Label #nameLabelField alignSelf="flex-start" text="Email" textWrap="true" class="label-field"></Label>
+                <TextField #nameField [visibility]="'collapsed'" hint="Email" formControlName="email" paddingLeft="4"
+                  ios:marginTop="5" android:paddingBottom="10" android:marginTop="-5"> </TextField>
+                <Label #namelabel [text]="user.email" textWrap="true" class="label-value"></Label>
+              </FlexboxLayout>
+              <FlexboxLayout col="1" flexDirection="column" justifyContent="center">
+                <Label *ngIf="(!singleFieldEdit.email)" (tap)="editSingleFieldTns('email',1)" color="#14418B"
+                  fontSize="20" class="ico icon-edit" textWrap="true" text="&#xe927;" padding="5">
+                </Label>
+                <Label *ngIf="(singleFieldEdit.email && userForm.value.email !=='')" (tap)="onSubmit(true, 'email',1)"
                   color="#14418B" fontSize="24" class="fa" text="&#xf058;" padding="5">
                 </Label>
               </FlexboxLayout>
@@ -81,27 +129,24 @@
           </GridLayout>
 
           <!-- Phone No -->
-          <GridLayout rows="auto,auto" columns="*" margin="5 0">
+          <GridLayout #textBoxContainer rows="63,auto" columns="*" margin="5 0">
             <GridLayout row="0" rows="auto" columns="*,auto" borderWidth="2" borderColor="#f2f2f2" borderRadius="5"
-              padding="10"
-              [ngClass]="{'animate-ease-out': singleFieldEdit.phoneNo, 'animate-ease-in': !singleFieldEdit.phoneNo}">
+              padding="10">
               <FlexboxLayout col="0" flexDirection="column" justifyContent="center">
-                <Label *ngIf="(!singleFieldEdit.phoneNo) && !isSavingUserName" alignSelf="flex-start" text="Phone"
-                  textWrap="true" class="label-field"></Label>
-                <Label *ngIf="!singleFieldEdit.phoneNo" [text]="user.phoneNo" textWrap="true"
-                  class="label-value"></Label>
-                <TextField *ngIf="singleFieldEdit.phoneNo" hint="Phone" formControlName="phoneNo">
+                <Label #nameLabelField alignSelf="flex-start" text="Phone" textWrap="true" class="label-field"></Label>
+                <TextField #nameField [visibility]="'collapsed'" hint="Phone" formControlName="phoneNo" paddingLeft="4"
+                  ios:marginTop="5" android:paddingBottom="10" android:marginTop="-5">
                 </TextField>
-
+                <Label #namelabel [text]="user.phoneNo" textWrap="true" class="label-value"></Label>
               </FlexboxLayout>
               <FlexboxLayout col="1" flexDirection="column" justifyContent="center">
                 <Label
                   *ngIf="(!singleFieldEdit.phoneNo) && (currentAuthProvider===authProviderConstants.GOOGLE || currentAuthProvider===authProviderConstants.FACEBOOK || currentAuthProvider===authProviderConstants.PASSWORD )"
-                  (tap)="editSingleField('phoneNo')" color="#14418B" fontSize="20" class="ico icon-edit" textWrap="true"
-                  text="&#xe927;" padding="5">
+                  (tap)="editSingleFieldTns('phoneNo',2)" color="#14418B" fontSize="20" class="ico icon-edit"
+                  textWrap="true" text="&#xe927;" padding="5">
                 </Label>
                 <Label *ngIf="(singleFieldEdit.phoneNo && userForm.value.phoneNo !=='')"
-                  (tap)="onSubmit(true, 'phoneNo')" color="#14418B" fontSize="24" class="fa" text="&#xf058;"
+                  (tap)="onSubmit(true, 'phoneNo',2)" color="#14418B" fontSize="24" class="fa" text="&#xf058;"
                   padding="5">
                 </Label>
               </FlexboxLayout>
@@ -124,19 +169,17 @@
           </FlexboxLayout>
 
           <!-- Location -->
-          <GridLayout rows="auto" columns="*" margin="5 0">
+          <GridLayout #textBoxContainer rows="63, auto" columns="*" margin="5 0">
             <FlexboxLayout row="0" justifyContent="space-between" borderWidth="2" class="second-view"
-              borderColor="#f2f2f2" borderRadius="5" padding="10"
-              [ngClass]="{'animate-ease-out': singleFieldEdit.location && activeEditField === 'location', 'animate-ease-in': !singleFieldEdit.location && activeEditField === 'location'}">
+              borderColor="#f2f2f2" borderRadius="5" padding="10">
               <FlexboxLayout flexDirection="column" justifyContent="center">
-                <Label *ngIf="(!singleFieldEdit.location) && !isSavingUserName" alignSelf="flex-start" text="Location"
-                  textWrap="true" class="label-field"></Label>
-                <Label *ngIf="!singleFieldEdit.location" [text]="user.location" textWrap="true"
-                  class="label-value"></Label>
-                <RadAutoCompleteTextView [visibility]="singleFieldEdit.location ? 'visible' : 'collapsed'" #acLocation
-                  [items]="dataLocation" suggestMode="Suggest" showCloseButton="false"
-                  (didAutoComplete)="onTextChangedLocation($event)" (textChanged)="onTextChangedLocation($event)"
-                  borderWidth="0 0 2 0" borderColor="#D3D3D3" width="280" (loaded)="onLoadedLoaction($event)">
+                <Label #nameLabelField alignSelf="flex-start" text="Location" textWrap="true"
+                  class="label-field"></Label>
+                <RadAutoCompleteTextView #nameField [visibility]="'collapsed'" #acLocation [items]="dataLocation"
+                  suggestMode="Suggest" showCloseButton="false" (didAutoComplete)="onTextChangedLocation($event)"
+                  (textChanged)="onTextChangedLocation($event)"  width="280"
+                  (loaded)="onLoadedLoaction($event)"  paddingLeft="4"
+                  ios:marginTop="5" android:paddingBottom="10" android:marginTop="-5">
                   <SuggestionView tkAutoCompleteSuggestionView marginTop="20">
                     <ng-template tkSuggestionItemTemplate let-item="item">
                       <StackLayout orientation="vertical" padding="10">
@@ -145,14 +188,15 @@
                     </ng-template>
                   </SuggestionView>
                 </RadAutoCompleteTextView>
+                <Label #namelabel [text]="user.location" textWrap="true" class="label-value"></Label>
 
               </FlexboxLayout>
               <FlexboxLayout flexDirection="column" justifyContent="center">
-                <Label *ngIf="(!singleFieldEdit.location)" (tap)="editLocationField()" color="#14418B" fontSize="20"
-                  class="ico icon-edit" textWrap="true" text="&#xe927;" padding="5">
+                <Label *ngIf="(!singleFieldEdit.location)" (tap)="editSingleFieldTns('location', 3)" color="#14418B"
+                  fontSize="20" class="ico icon-edit" textWrap="true" text="&#xe927;" padding="5">
                 </Label>
                 <Label *ngIf="(singleFieldEdit.location && userForm.value.location !=='')"
-                  (tap)="onSubmit(true, 'location')" color="#14418B" fontSize="24" class="fa" text="&#xf058;"
+                  (tap)="onSubmit(true, 'location',3)" color="#14418B" fontSize="24" class="fa" text="&#xf058;"
                   style="padding:0 5"> </Label>
               </FlexboxLayout>
             </FlexboxLayout>
@@ -204,7 +248,7 @@
           <Label text="TERMS & CONDITIONS" stlRippleEffect (rippleTap)="navigateToTermsConditions()" color="#14418B"
             fontSize="18" padding="10" textWrap="true"></Label>
 
-        </FlexboxLayout>
+        </StackLayout>
       </PreviousNextView>
     </ScrollView>
   </StackLayout>

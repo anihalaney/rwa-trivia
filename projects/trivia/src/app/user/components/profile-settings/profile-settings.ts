@@ -62,44 +62,14 @@ export class ProfileSettings {
     isEnableEditProfile = false;
     socialProfileObj: any;
     singleFieldEdit = {
-        displayName:false,
-        email:false,
-        phoneNo:false,
-        location:false,
-        socialProfile:false
-
+        displayName: false,
+        email: false,
+        phoneNo: false,
+        location: false,
+        socialProfile: false,
+        name: false
     }
 
-
-        // [
-        //     displayName:false,
-            
-        //     {
-        //         id: 'displayName',
-        //         displayName: false,
-        //         activeClass: ''
-        //     },
-        //     {
-        //         id: 'email',
-        //         email: false,
-        //         activeClass: ''
-        //     },
-        //     {
-        //         id: 'phoneNo',
-        //         phoneNo: false,
-        //         activeClass: ''
-        //     },
-        //     {
-        //         id: 'location',
-        //         location: false,
-        //         activeClass: ''
-        //     },
-        //     {
-        //         id: 'socialProfile',
-        //         socialProfile: false,
-        //         activeClass: ''
-        //     },
-        // ]
     activeEditField = '';
     loggedInUser: User;
     gamePlayedAgainst: any;
@@ -203,9 +173,7 @@ export class ProfileSettings {
             this.account = values[0] || new Account();
             this.categories = values[1] || [];
             this.categoryDict = values[2] || {};
-
             this.userCopyForReset = { ...this.user };
-            console.log('Initilize uer');
             this.createForm(this.user);
 
             if (this.user.profilePictureUrl) {
@@ -368,12 +336,6 @@ export class ProfileSettings {
                 this.userForm.get('email').updateValueAndValidity();
                 break;
         }
-
-        this.onChanges();
-
-        // this.filteredTags$ = this.userForm.get('tags').valueChanges
-        //     .pipe(map(val => val.length > 0 ? this.filter(val) : []));
-
         this.createSocialProfileControl();
         this.isEnableEditProfile = true;
         this.showAllSocialSetting();
@@ -382,13 +344,6 @@ export class ProfileSettings {
         }
     }
 
-    onChanges(): void {
-        // const data = field ? field : 'email';
-        this.userForm.get('email').valueChanges.subscribe(val => {
-            console.log('on change callled', this.singleFieldEdit);
-            this.cd.detectChanges();
-        });
-    }
 
     createSocialProfileControl() {
         if (this.socialProfileObj) {
@@ -403,8 +358,21 @@ export class ProfileSettings {
     }
 
     getUserFromFormValue(isEditSingleField, field): void {
+
+        if (field === 'socialProfile') {
+            this.socialProfileObj.map(profile => {
+                if (profile.enable) {
+                    this.user[profile.social_name] = this.userForm.get(profile.social_name).value;
+                }
+            });
+        }
+
         if (isEditSingleField) {
+            // if(this.user[field]){
             this.user[field] = this.userForm.get(field).value;
+            this.cd.markForCheck();
+            // }
+
         } else {
             this.user.name = this.userForm.get('name').value;
             this.user.categoryIds = [];
@@ -443,8 +411,6 @@ export class ProfileSettings {
     resetUserProfile() {
         this.user = this.userCopyForReset; // cloneDeep(this.userCopyForReset);
         this.createForm(this.user);
-        // this.filteredTags$ = this.userForm.get('tags').valueChanges
-        //     .pipe(map(val => val.length > 0 ? this.filter(val) : []));
     }
 
     // store the user object
@@ -518,20 +484,10 @@ export class ProfileSettings {
 
     editSingleField(field: string) {
 
-        if (this.activeEditField) {
-            this.singleFieldEdit[this.activeEditField] = !this.singleFieldEdit[this.activeEditField];
-        }
-        // const index = this.singleFieldEdit.findIndex(res => res.id === field);
-        // this.singleFieldEdit[index][field] = !this.singleFieldEdit[index][field];
-        // this.singleFieldEdit[index].activeClass = field;
         this.activeEditField = field;
-        this.singleFieldEdit[field] = !this.singleFieldEdit[field];
-        this.singleFieldEdit[this.activeEditField] = !this.singleFieldEdit[this.activeEditField];
-        console.log('THIS> SINGLE FIELD', this.singleFieldEdit)
+        this.singleFieldEdit[field] = this.singleFieldEdit[field] ? false : true;
+
         if (field !== 'socialProfile' && field !== 'email' && field !== 'phoneNo') {
-
-            console.log(field);
-
             if (this.singleFieldEdit[field]) {
                 this.userForm.get(field).enable();
                 this.userForm.get(field).setValidators([Validators.required]);
@@ -546,12 +502,48 @@ export class ProfileSettings {
             this.cd.markForCheck();
         } else if (field === 'email') {
             this.userForm.get('email').setValidators([Validators.required, Validators.email]);
-            // this.onChanges(field);
+            this.userForm.updateValueAndValidity();
         } else if (field === 'phoneNo') {
             this.userForm.get('phoneNo').setValidators([Validators.required, Validators.pattern(this.phoneNoRegex)]);
-            // this.onChanges(field);
+            this.userForm.updateValueAndValidity({ emitEvent: false, onlySelf: true });;
         }
         this.cd.markForCheck();
+    }
+
+
+    setValidation(field: string) {
+
+        for (const property in this.singleFieldEdit) {
+            if (property !== 'socialProfile') {
+                this.userForm.get(property).clearValidators();
+                this.userForm.get(property).updateValueAndValidity();
+            }
+        }
+
+        if (field !== 'socialProfile' && field !== 'email' && field !== 'phoneNo') {
+            if (this.singleFieldEdit[field]) {
+                this.userForm.get(field).enable();
+                this.userForm.controls[field].setValidators([Validators.required]);
+                this.userForm.controls[field].updateValueAndValidity()
+
+            } else {
+                this.userForm.get(field).disable();
+                this.userForm.get(field).clearValidators();
+                this.userForm.get(field).updateValueAndValidity();
+
+            }
+        } else if (field === 'socialProfile') {
+            this.socialProfileSettings.map((res) => { return res.disable = true });
+            this.cd.markForCheck();
+        } else if (field === 'email') {
+            this.userForm.controls["email"].setValidators([Validators.required, Validators.email]);
+            this.userForm.controls['email'].updateValueAndValidity()
+        } else if (field === 'phoneNo') {
+            this.userForm.controls["phoneNo"].setValidators([Validators.required, Validators.pattern(this.phoneNoRegex)]);
+            this.userForm.get('phoneNo').markAsTouched();
+            this.userForm.controls['phoneNo'].updateValueAndValidity()
+        }
+
     }
 
     sendFriendRequest() {

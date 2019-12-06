@@ -29,6 +29,7 @@ import { AuthenticationProvider } from 'shared-library/core/auth';
 import * as Platform from 'tns-core-modules/platform';
 import { RouterExtensions } from 'nativescript-angular/router';
 import { thisTypeAnnotation } from '@babel/types';
+import { device, screen, isAndroid } from "tns-core-modules/platform";
 
 declare var IQKeyboardManager;
 
@@ -68,8 +69,19 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
   iqKeyboard: any;
   isSavingUserName: boolean;
 
+
   @ViewChild('autocomplete', { static: false }) autocomplete: RadAutoCompleteTextViewComponent;
   @ViewChild('acLocation', { static: false }) acLocation: RadAutoCompleteTextViewComponent;
+  // @ViewChild("namelabel", { static: false }) namelabel: ElementRef;
+  // @ViewChild("nameField", { static: false }) nameField: ElementRef;
+  // @ViewChild("nameLabelField", { static: false }) nameLabelField: ElementRef;
+
+
+  @ViewChildren("namelabel") namelabel: QueryList<ElementRef>;
+  @ViewChildren("nameField") nameField: QueryList<ElementRef>;
+  @ViewChildren("nameLabelField") nameLabelField: QueryList<ElementRef>;
+
+  @ViewChildren('textBoxContainer') textBoxContainers: QueryList<ElementRef>;
 
   constructor(public fb: FormBuilder,
     public store: Store<AppState>,
@@ -93,6 +105,98 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
     }
 
   }
+
+  animateTextBox(position) {
+
+    const nativeElement = this.textBoxContainers.toArray()[position].nativeElement;
+    const nameField = this.nameField.toArray()[position];
+    const namelabel = this.namelabel.toArray()[position];
+    const nameLabelField = this.nameLabelField.toArray()[position];
+
+    const reduceSize = (screen.mainScreen.widthDIPs - 30);
+
+    if (nameField.nativeElement.text) {
+      if (nativeElement.width === reduceSize) {
+        nameField.nativeElement.visibility = 'collapsed';
+        namelabel.nativeElement.visibility = "visible";
+        nameLabelField.nativeElement.visibility = "visible";
+        namelabel.nativeElement.animate({
+          translate: { x: 0, y: 0 },
+          opacity: 1,
+          duration: 100
+        }).then(() => {
+          
+          nameLabelField.nativeElement.animate({
+            translate: { x: 0, y: 0 },
+            opacity: 1,
+            duration: 100
+          }).then(() => {
+  
+          });
+          namelabel.nativeElement.visibility = "visible";
+          nameLabelField.nativeElement.visibility = "visible";
+        });
+        nativeElement.animate({
+          width: 'auto',
+          duration: 100
+        }).then(() => { }, () => { });
+      } else {
+        nameLabelField.nativeElement.visibility = "hidden";
+        namelabel.nativeElement.animate({
+          translate: { x: 4, y: -7 },
+          opacity: .8,
+          duration: 100
+        }).then(() => {
+          namelabel.nativeElement.visibility = "collapsed";
+          nameLabelField.nativeElement.visibility = "collapsed";
+          nameField.nativeElement.visibility = 'visible';
+          this.cd.detectChanges();
+        });
+        nativeElement.animate({
+          width: reduceSize,
+          duration: 100
+        }).then(() => { }, () => { });
+      }
+
+    } else {
+      if (nativeElement.width === reduceSize) {
+        nameField.nativeElement.visibility = 'collapsed';
+        namelabel.nativeElement.visibility = "visible";
+        nameLabelField.nativeElement.visibility = "visible";
+        namelabel.nativeElement.animate({
+          translate: { x: 0, y: 0 },
+          opacity: 1,
+          duration: 100
+        }).then(() => {
+          // this.namelabel.nativeElement.visibility = "visible";
+          namelabel.nativeElement.visibility = "visible";
+          nameLabelField.nativeElement.visibility = "visible";
+        });
+        nativeElement.animate({
+          width: 'auto',
+          duration: 100
+        }).then(() => { }, () => { });
+      } else {
+        namelabel.nativeElement.visibility = "hidden";
+        nameLabelField.nativeElement.animate({
+          translate: { x: 4, y: 7 },
+          opacity: .8,
+          duration: 100
+        }).then(() => {
+          nameLabelField.nativeElement.visibility = "collapsed";
+          namelabel.nativeElement.visibility = "collapsed";
+          nameField.nativeElement.visibility = 'visible';
+          this.cd.detectChanges();
+        });
+        nativeElement.animate({
+          width: reduceSize,
+          duration: 100
+        }).then(() => { }, () => { });
+      }
+    }
+
+  }
+
 
   ngOnInit(): void {
     this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe(status => {
@@ -170,15 +274,17 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
 
   onLoadedLoaction(event) {
     if (this.userType === 1) {
-      event.object.text = this.user.location;
-      event.object.readOnly = true;
+      // event.object.text = this.user.location;
+      // event.object.readOnly = true;
     } else {
       if (this.userForm.value.location) {
         this.acLocation.nativeElement.text = this.userForm.value.location;
-        this.acLocation.nativeElement.readOnly = true;
+        // this.acLocation.nativeElement.readOnly = false;
         this.cd.markForCheck();
+        // this.cd.detectChanges();
       }
     }
+    // this.acLocation.nativeElement.text = 
   }
 
   onTextChangedLocation(location): void {
@@ -187,9 +293,10 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
   }
 
   editLocationField() {
-    this.acLocation.nativeElement.readOnly = !this.acLocation.nativeElement.readOnly;
-    this.isLocationEdit = !this.isLocationEdit;
+    // this.acLocation.nativeElement.readOnly = !this.acLocation.nativeElement.readOnly;
+    // this.isLocationEdit = !this.isLocationEdit;
     this.singleFieldEdit['location'] = !this.singleFieldEdit['location'];
+    this.cd.detectChanges();
   }
 
   onSelectedIndexChange(args) {
@@ -347,60 +454,62 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
 
   }
 
-  onSubmit(isEditSingleField = false, field = '') {
-    // this.singleFieldEdit.map((res) => {
-    //   res[field] = false;
-    //   res.activeClass = '';
-    // });
+  editSingleFieldTns(field: string, position) {
+    this.animateTextBox(position);
+    this.editSingleField(field);
+  }
+  onSubmit(isEditSingleField = false, field = '', position = -1) {
+
     // validations
     if (field === 'location') {
       this.editLocationField();
     }
     if (field === 'socialProfile') {
-      // this.singleFieldEdit[4].socialProfile = false;
-      // this.singleFieldEdit[4].activeClass = '';
-      // this.socialProfileSettings.map((res) => { return res.disable = false });
-      // this.cd.markForCheck();
       this.singleFieldEdit[field] = false;
     }
-    console.log(field);
+
+
     if (field === 'displayName') {
       this.isSavingUserName = true;
     }
+
+    this.setValidation(field);
+
     this.userForm.updateValueAndValidity();
 
     if (this.profileImageFile) {
       this.assignImageValues();
     }
-    console.log('In valid', this.userForm.invalid);
+
     if (this.userForm.invalid) {
+      this.isSavingUserName = false;
       this.utils.showMessage('error', 'Please fill the mandatory fields');
       return;
     }
-    console.log('field', field);
+
     this.checkDisplayName(this.userForm.get('displayName').value);
+    this.singleFieldEdit[field] = false;
+
+    if (position >= 0) {
+      this.animateTextBox(position);
+    }
 
     this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.checkDisplayName)).subscribe(status => {
       this.isValidDisplayName = status;
       if (this.isValidDisplayName !== null) {
         if (this.isValidDisplayName) {
-          if (isEditSingleField) {
-            // this.userForm.get(field).disable();
-            // const index = this.singleFieldEdit.findIndex(res => res.id === field);
-            // this.singleFieldEdit[index][field] = false;
-            // this.singleFieldEdit[index].activeClass = '';
-            this.singleFieldEdit[field] = false;
-          }
 
-          console.log("386 >>>", this.singleFieldEdit);
           // get user object from the forms
-          this.getUserFromFormValue(isEditSingleField, field);
+          this.getUserFromFormValue(true, field);
           this.user.categoryIds = this.userCategories.filter(c => c.isSelected).map(c => c.id);
 
+          console.log(this.user.location, "<< , >>", this.userCopyForReset.location);
           // call saveUser
           this.saveUser(this.user, (this.user.location !== this.userCopyForReset.location) ? true : false);
 
         } else {
+          this.isSavingUserName = false;
+          this.singleFieldEdit.displayName = true;
           this.userForm.controls['displayName'].setErrors({ 'exist': true });
           this.userForm.controls['displayName'].markAsTouched();
           this.cd.markForCheck();
@@ -411,7 +520,6 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
     }));
 
   }
-
 
   hideKeyboard() {
     this.utils.hideKeyboard(this.textField);
@@ -430,7 +538,6 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
     if (this.isLocationEnalbed) {
       try {
         const position = await geolocation.getCurrentLocation({});
-        console.log(position);
         if (position) {
           this.store.dispatch(this.userAction.loadAddressUsingLatLong(`${position.latitude},${position.longitude}`));
         }
