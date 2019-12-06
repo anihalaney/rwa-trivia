@@ -4,12 +4,12 @@
   "license": "MIT",
   "angular-cli": {},
   "nativescript": {
-    "id": "${packageName}",
-    "tns-ios": {
-      "version": "6.1.1"
-    },
+    "id": "io.bitwiser.trivia.dev",
     "tns-android": {
       "version": "6.1.2"
+    },
+    "tns-ios": {
+      "version": "6.2.0"
     }
   },
   "scripts": {

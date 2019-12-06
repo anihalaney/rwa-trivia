@@ -28,8 +28,7 @@ import { ProfileSettings } from './profile-settings';
 import { AuthenticationProvider } from 'shared-library/core/auth';
 import * as Platform from 'tns-core-modules/platform';
 import { RouterExtensions } from 'nativescript-angular/router';
-import { thisTypeAnnotation } from '@babel/types';
-import { device, screen, isAndroid } from "tns-core-modules/platform";
+import { screen } from "tns-core-modules/platform";
 
 declare var IQKeyboardManager;
 
@@ -168,7 +167,6 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
           opacity: 1,
           duration: 100
         }).then(() => {
-          // this.namelabel.nativeElement.visibility = "visible";
           namelabel.nativeElement.visibility = "visible";
           nameLabelField.nativeElement.visibility = "visible";
         });
@@ -483,7 +481,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
 
     if (this.userForm.invalid) {
       this.isSavingUserName = false;
-      this.utils.showMessage('error', 'Please fill the mandatory fields');
+      this.utils.showMessage('error', 'Please fill the field');
       return;
     }
 
