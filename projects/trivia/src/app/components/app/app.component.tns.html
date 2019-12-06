@@ -1,6 +1,6 @@
 <RadSideDrawer drawerLocation="Bottom" (drawerClosed)="drawerEvent($event)" (drawerOpened)="drawerEvent($event)"
-    drawerContentSize="{{user ? 300 : '120'}}">
-    <StackLayout tkDrawerContent class="sidedrawer sidedrawer-left">
+    drawerContentSize="{{user ? 300 : bottomSafeArea}}" >
+    <StackLayout tkDrawerContent class="sidedrawer sidedrawer-left" iosOverflowSafeArea="false">
         <ns-drawer-component></ns-drawer-component>
     </StackLayout>
     <GridLayout rows="*,auto" columns="*" tkMainContent>

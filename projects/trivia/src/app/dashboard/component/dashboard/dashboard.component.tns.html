@@ -55,6 +55,7 @@
                     </GridLayout>
                     <GridLayout row="1" rows="*, *, *, *, *, *" columns="*" iosOverflowSafeArea="false"
                         class="dashboard_body-grid">
+
                         <render-box row="0" col="0" [setBackgroundColor]="'#283b66'" [theme]="'dark'">
                             <GridLayout rows="auto,auto,auto,auto,auto" class="dashboard_body-grid0">
                                 <FlexboxLayout row="0" class="space-between dashboard_body-grid0-1">
@@ -188,7 +189,7 @@
                             <app-invite-to-play [userId]="user?.userId" *ngIf="user && user!==null">
                             </app-invite-to-play>
                         </GridLayout>
-                        <GridLayout rows="auto, auto" *ngIf="user && !yourQuestion" row="5" col="0"
+                        <GridLayout rows="auto, auto" *ngIf="!yourQuestion" row="5" col="0"
                             class="submit-question" iosOverflowSafeArea="false">
                             <GridLayout row="0" class="q-title" iosOverflowSafeArea="false">
                                 <Label text="You can also submit questions and get a chance to win cash prizes"
