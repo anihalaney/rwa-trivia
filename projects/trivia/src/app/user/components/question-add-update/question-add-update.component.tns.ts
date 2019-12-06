@@ -183,7 +183,6 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
       this.cd.markForCheck();
       this.categoryIds = this.editQuestion.categoryIds;
 
-      console.log('this.questionCategories', this.questionCategories);
       this.enteredTags = this.editQuestion.tags;
       this.submitBtnTxt = this.editQuestion.is_draft === true && this.editQuestion.status !== 6 ? 'Submit' : 'Resubmit';
       this.actionBarTxt = 'Update Question';
@@ -197,13 +196,6 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
     }));
   }
 
-  onLoadFinished(event, id) {
-    // it takes 2 seconds to load the editor after the webview loads
-    setTimeout(() => {
-      this.isWebViewLoaded = true;
-      this.cd.markForCheck();
-    }, 2000);
-  }
 
   openCategoryDropdown() {
     const categoryDropdown = <DropDown>this.categoryDropdown.nativeElement;
@@ -253,6 +245,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
         // for android this works as this method does not destroy the webview. do not change.
         prevWebViewParent._removeViewFromNativeVisualTree(this.webView.nativeElement);
         nextWebViewParent._addViewToNativeVisualTree(this.webView.nativeElement);
+        // need to wait for the load to be finished before emit the value.
         setTimeout(() => {
           this.oWebViewInterface.emit('viewType', this.currentWebViewParentId >= 0 ? 'answer' : 'question');
           this.setInitialValue();
@@ -442,10 +435,11 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
     if (this.oWebViewInterface) {
       this.oWebViewInterface.off('uploadImageStart');
       this.oWebViewInterface.off('quillContent');
+      this.oWebViewInterface.off('editorLoadFinished');
     }
   }
 
-  wevViewLoaded(event) {
+  webViewLoaded(event) {
       if (!event.object) {
       } else {
         if (!this.oWebViewInterface) {
@@ -454,6 +448,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
         }
         if (this.oWebViewInterface && isIOS) {
             event.object.initNativeView();
+            // need to wait for the load to be finished before emit the value.
             setTimeout(() => {
               this.oWebViewInterface.emit('viewType', this.currentWebViewParentId >= 0 ? 'answer' : 'question');
               this.setInitialValue();
@@ -467,9 +462,17 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
     }
 
     setWebInterface(webViewInstace) {
-
-    const webInterface = new webViewInterfaceModule.WebViewInterface(webViewInstace, CONFIG.editorUrl);
+    const webInterface = new webViewInterfaceModule.WebViewInterface(webViewInstace, 'http://192.168.0.104:4200/');
     // new webViewInterfaceModule.WebViewInterface(webViewInstace, CONFIG.editorUrl);
+    webInterface.on('editorLoadFinished', (quillContent) => {
+      if (quillContent) {
+          // change is not being detected.
+          this.ngZone.run(() => {
+            this.isWebViewLoaded = true;
+          this.cd.markForCheck();
+          });
+        }
+    });
 
     webInterface.on('quillContent', (quillContent) => {
       if (this.currentWebViewParentId === -1) {

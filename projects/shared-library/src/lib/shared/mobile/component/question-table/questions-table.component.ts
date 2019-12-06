@@ -34,9 +34,6 @@ export class QuestionsTableComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     this.cd.markForCheck();
-    setTimeout(() => {
-      this.cd.markForCheck();
-    }, 1000);
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -47,7 +44,7 @@ export class QuestionsTableComponent implements OnInit, OnChanges {
     }
   }
 
-  onSelect(args, isShow, qIndex = -1) {
+  expandQuestion(args: string, isShow: boolean, qIndex = -1) {
     const questionObj =  [...this.questions];
     questionObj.map(data => {
       data['show'] = false;
@@ -57,6 +54,7 @@ export class QuestionsTableComponent implements OnInit, OnChanges {
     });
     if (qIndex > -1 && isIOS) {
       this.questions = [...questionObj];
+       // wait for the UI to finish the loading
       setTimeout(() => {
         this.radListView.listView.scrollToIndex(qIndex, true, ListViewItemSnapMode.Start);
       }, 0);
@@ -64,7 +62,7 @@ export class QuestionsTableComponent implements OnInit, OnChanges {
     this.showQuestionId = args;
   }
 
-  setHeight(height, id) {
+  setHeight(height: number, id: string) {
     const index = this.questions.findIndex((data) => data.id === id);
     const questionObj = this.questions[index];
     if (!questionObj['height']) {
@@ -80,7 +78,7 @@ export class QuestionsTableComponent implements OnInit, OnChanges {
     }
   }
 
-  setAnsHeight(height, id, index, qIndex) {
+  setAnsHeight(height: number, id: string, index: number, qIndex: number) {
     const questionIndex = this.questions.findIndex((data) => data.id === id);
     if (this.questions[questionIndex].answers[index] && !this.questions[questionIndex].answers[index]['height']) {
       this.questions[questionIndex].answers[index]['height'] = height;
@@ -92,7 +90,8 @@ export class QuestionsTableComponent implements OnInit, OnChanges {
           },
           ...this.questions.slice( questionIndex + 1 ),
       ];
-      if (qIndex > -1) {
+      if (qIndex > -1 && isIOS) {
+        // wait for the UI to finish the loading
         setTimeout(() => {
           this.radListView.listView.scrollToIndex(qIndex, true, ListViewItemSnapMode.Start);
         }, 0);

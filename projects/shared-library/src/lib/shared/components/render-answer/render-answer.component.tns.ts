@@ -3,7 +3,6 @@ import { Answer } from "shared-library/shared/model";
 import { LoadEventData } from 'tns-core-modules/ui/web-view';
 import { isAndroid, isIOS } from 'tns-core-modules/platform';
 import { externalUrl } from './../../../environments/external-url';
-import { isPlatformBrowser } from '@angular/common';
 
 @Component({
     selector: 'render-answer',
@@ -30,8 +29,7 @@ export class RenderAnswerComponent implements OnInit, OnChanges {
     answerHeight = 0;
     isAndroid = isAndroid;
 
-    constructor(@Inject(PLATFORM_ID) private platformId: Object) {
-        if (isPlatformBrowser(this.platformId) || isAndroid || isIOS) {
+    constructor() {
             this.scriptToGetHeight = `<script> var body = document.body, html = document.documentElement;
             var height = Math.max(body.scrollHeight, body.offsetHeight,
             html.clientHeight, html.scrollHeight, html.offsetHeight);
@@ -48,7 +46,6 @@ export class RenderAnswerComponent implements OnInit, OnChanges {
             <link rel="stylesheet" href="${externalUrl.katexCSS}" crossorigin="anonymous">
             <link rel="stylesheet" href="${externalUrl.hightlighCSS}" crossorigin="anonymous"></html>`;
             // Created new local answer object because here I am modifing answer object
-        }
 
     }
 

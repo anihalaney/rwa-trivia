@@ -37,7 +37,7 @@
                     <Label  text="Draft" textWrap="true"></Label>   
                 </StackLayout>
               </FlexboxLayout>
-              <Label *ngIf="!question.show" text="&#xf078;" (tap)="onSelect(question.id, true, qIndex)" class="fas"
+              <Label *ngIf="!question.show" text="&#xf078;" (tap)="expandQuestion(question.id, true, qIndex)" class="fas"
                 fontSize="18" padding="5" color="#212121"></Label>
             </FlexboxLayout>
           <StackLayout [ngClass]="{'show': question.show}" *ngIf="question.show" class="hide">
@@ -75,7 +75,7 @@
                   <Label row="0" col="1" class="stat-value" [text]="question.wrong ? question.wrong: 0"></Label>
                 </GridLayout>
               </StackLayout>
-              <Label row="1" col="0" colSpan="2" horizontalAlignment="right" marginTop="-10" text="&#xf077;" (tap)="onSelect(question.id, false, qIndex)" padding="5" class="fas" fontSize="18"
+              <Label row="1" col="0" colSpan="2" horizontalAlignment="right" marginTop="-10" text="&#xf077;" (tap)="expandQuestion(question.id, false, qIndex)" padding="5" class="fas" fontSize="18"
                   color="#A5A5A5"></Label>
             </GridLayout>
           </StackLayout>

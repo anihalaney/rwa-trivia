@@ -120,7 +120,7 @@
     </StackLayout>
     <StackLayout  height="0"  #webViewParentStack>
         <WebView height="140" width="100%" #webView id="questionWebView"
-        (loadFinished)="onLoadFinished($event,-1)"  (loaded)="wevViewLoaded($event)">
+        (loaded)="webViewLoaded($event)">
         </WebView>
     </StackLayout>
     <StackLayout height="100%" class="dialog__wrapper">
