@@ -1,6 +1,6 @@
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
-import { Observable, Subscription, interval, of } from 'rxjs';
-import { debounceTime, take, map, switchMap } from 'rxjs/operators';
+import { Observable, of, Subject, merge } from 'rxjs';
+import { debounceTime, take, map, switchMap, multicast, skip } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 import { User, Category, Question, QuestionStatus, Answer, ApplicationSettings } from 'shared-library/shared/model';
 import { Utils } from 'shared-library/core/services';
@@ -71,14 +71,20 @@ export class QuestionAddUpdate {
       switchMap(appSettings => {
         if (appSettings && appSettings[0]) {
           if (appSettings[0]['auto_save']['is_enabled']) {
-            return interval(appSettings[0]['auto_save']['time']);
+            if (!this.questionForm.controls.is_draft.value) {
+              this.questionForm.patchValue({ is_draft: true });
+            }
+            return this.questionForm.valueChanges.pipe(
+              multicast(new Subject(), s => merge(
+                s.pipe(take(1)),
+                s.pipe(skip(1), debounceTime(appSettings[0]['auto_save']['time'])),
+              )));
           } else {
             return of();
           }
         }
       })).subscribe(data => {
         if (data) {
-          this.questionForm.patchValue({ is_draft: true });
           const question = this.getQuestionFromFormValue(this.questionForm.value);
           if (this.question.status) {
               question.status = this.question.status;
@@ -125,6 +131,7 @@ export class QuestionAddUpdate {
   addTag(tag: string) {
     if (this.enteredTags.indexOf(tag) < 0) {
       this.enteredTags.push(tag);
+      this.questionForm.patchValue({tags: this.enteredTags});
     }
   }
 

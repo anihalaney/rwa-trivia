@@ -74,6 +74,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnI
         this.quillConfig.toolbar.container.push(this.applicationSettings.quill_options.options);
         this.quillConfig.toolbar.container.push(this.applicationSettings.quill_options.list);
         this.createForm(this.question);
+        this.saveDraft();
         this.quillConfig.mathEditor = { mathOptions: this.applicationSettings };
       }
     }));
@@ -175,10 +176,6 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnI
       maxTime: []
     }, { validator: questionFormValidator }
     );
-
-    this.subscriptions.push(this.questionForm.valueChanges.pipe(take(1)).subscribe(val => {
-          this.saveDraft();
-    }));
   }
 
 

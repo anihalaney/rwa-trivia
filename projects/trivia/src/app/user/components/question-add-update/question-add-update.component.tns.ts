@@ -128,6 +128,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
         this.applicationSettings = appSettings[0];
         this.playMaxTime = ['Select a Max time', ...this.applicationSettings.game_play_max_time];
         this.createForm(this.question);
+        this.saveDraft();
         this.cd.markForCheck();
         this.answers = (<FormArray>this.questionForm.get('answers'));
       }
@@ -180,6 +181,8 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
     // this.renderView = false;
     if (this.editQuestion && this.applicationSettings) {
       this.createForm(this.editQuestion);
+      this.question.status = this.editQuestion.status;
+      this.saveDraft();
       this.cd.markForCheck();
       this.categoryIds = this.editQuestion.categoryIds;
 
@@ -188,12 +191,6 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
       this.actionBarTxt = 'Update Question';
     }
 
-    this.subscriptions.push(this.questionForm.valueChanges.pipe(take(1)).subscribe(val => {
-      if (this.editQuestion) {
-        this.question.status = this.editQuestion.status;
-      }
-      this.saveDraft();
-    }));
   }
 
 
