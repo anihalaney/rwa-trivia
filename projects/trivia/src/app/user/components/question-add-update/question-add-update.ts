@@ -131,12 +131,13 @@ export class QuestionAddUpdate {
   addTag(tag: string) {
     if (this.enteredTags.indexOf(tag) < 0) {
       this.enteredTags.push(tag);
-      this.questionForm.patchValue({tags: this.enteredTags});
+       this.questionForm.patchValue({tags: [] });
     }
   }
 
   removeEnteredTag(tag) {
     this.enteredTags = this.enteredTags.filter(t => t !== tag);
+    this.questionForm.patchValue({tags: [] });
   }
 
 
@@ -158,6 +159,7 @@ export class QuestionAddUpdate {
       }
     });
     this.autoTags = matchingTags;
+    this.questionForm.patchValue({tags: [] });
   }
 
 
