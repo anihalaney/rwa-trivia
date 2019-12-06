@@ -1,4 +1,4 @@
-import { Component, forwardRef, Input, OnInit } from '@angular/core';
+import { Component, forwardRef, Input, OnInit, SimpleChanges, OnChanges } from '@angular/core';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 
 @Component({
@@ -14,13 +14,13 @@ import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
   ],
 })
 
-export class CheckDisplayNameComponent implements OnInit, ControlValueAccessor {
+export class CheckDisplayNameComponent implements OnInit, ControlValueAccessor, OnChanges {
 
   @Input() placeholder;
   @Input() hint;
   @Input() isProfilePage;
   myValue: any = null;
-  disabled: boolean;
+  @Input() disabled: boolean;
   propagateChange = (_: any) => { };
 
   constructor() {
@@ -48,5 +48,14 @@ export class CheckDisplayNameComponent implements OnInit, ControlValueAccessor {
 
   setDisabledState(isDisabled: boolean): void {
     this.disabled = isDisabled;
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    //Called before any other lifecycle hook. Use it to inject dependencies, but avoid any serious work here.
+    //Add '${implements OnChanges}' to the class.
+      console.log('NG ON CHNAGED', changes.disabled);
+      if(changes.disabled){
+        this.disabled = changes.disabled.currentValue;
+      }
   }
 }
