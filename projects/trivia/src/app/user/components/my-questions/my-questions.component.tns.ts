@@ -78,6 +78,7 @@ export class MyQuestionsComponent extends MyQuestions implements OnDestroy, OnIn
   hideQuestion(displayEditQuestion: boolean) {
     this.displayEditQuestion = false;
     this.page.actionBarHidden = false;
+    this.cd.markForCheck();
   }
 
   getDisplayStatus(status: number): string {

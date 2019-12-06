@@ -4,7 +4,7 @@
         <StackLayout   class="question-container">
             <GridLayout class="question-text" columns="*,auto" rows="*">
                 <render-question row="0" col="0" (calHeight)="setHeight($event, question.id)" row="0" col="0" [textAlign]="'left'" [question]="question"></render-question>
-              <Label (tap)="showEditQuestion(question)" *ngIf="getDisplayStatus(question.status)==='REQUIRED_CHANGE' || (question?.is_draft === true && getDisplayStatus(question.status)==='PENDING' )" text="&#xf040;" class="fa text-icon-field" row="0" col="1" textWrap="true"></Label>
+              <Label (tap)="showEditQuestion(question)" *ngIf="getDisplayStatus(question?.status)==='REQUIRED_CHANGE' || (question?.is_draft === true && getDisplayStatus(question?.status)==='PENDING' )" text="&#xf040;" class="fa text-icon-field" row="0" col="1" textWrap="true"></Label>
             </GridLayout>
             <GridLayout rows="*" columns="auto,auto" margin="3 0">
               <Label row="0" col="0" text="Category : " textWrap="true" class="label Roboto-Medium"
@@ -22,28 +22,28 @@
             </WrapLayout>
             <Label class="publish-question" text="Published on {{ question.createdOn | date:'dd MMM yyyy' }}"
               textWrap="true"></Label>
-            <StackLayout *ngIf="getDisplayStatus(question.status)==='REQUIRED_CHANGE' || getDisplayStatus(question.status)==='REJECTED'" orientation="horizontal" margin="0 0 10 0">
-                <Label textWrap="true"   fontSize="12" text="View Reason {{getDisplayStatus(question.status)==='REQUIRED_CHANGE' ? '& Resubmit Question':''}}" class="btn-transparent blue-border" stlRippleEffect (rippleTap)="showReason(question)"></Label>
+            <StackLayout *ngIf="getDisplayStatus(question?.status)==='REQUIRED_CHANGE' || getDisplayStatus(question?.status)==='REJECTED'" orientation="horizontal" margin="0 0 10 0">
+                <Label textWrap="true"   fontSize="12" text="View Reason {{getDisplayStatus(question?.status)==='REQUIRED_CHANGE' ? '& Resubmit Question':''}}" class="btn-transparent blue-border" stlRippleEffect (rippleTap)="showReason(question)"></Label>
             </StackLayout>
-            <FlexboxLayout *ngIf="getDisplayStatus(question.status)!=='APPROVED'" justifyContent="space-between" alignItems="center">
+            <FlexboxLayout *ngIf="getDisplayStatus(question?.status)!=='APPROVED'"  justifyContent="space-between" alignItems="center">
               <FlexboxLayout>                  
-                <StackLayout class="status-containter" *ngIf="!(question?.is_draft === true && getDisplayStatus(question.status)==='PENDING')" [ngClass]="{'pending-btn': getDisplayStatus(question.status)==='PENDING', 
-                'required-change-btn': getDisplayStatus(question.status)==='REQUIRED_CHANGE',
-                'reject-btn': getDisplayStatus(question.status)==='REJECTED',
-                'approve-btn': getDisplayStatus(question.status)==='APPROVED'}">
-                      <Label  text="{{getDisplayStatus(question.status).replace('_',' ') | titlecase}}" textWrap="true"></Label>   
+                <StackLayout class="status-containter" *ngIf="!(question?.is_draft === true && getDisplayStatus(question?.status)==='PENDING')" [ngClass]="{'pending-btn': getDisplayStatus(question?.status)==='PENDING', 
+                'required-change-btn': getDisplayStatus(question?.status)==='REQUIRED_CHANGE',
+                'reject-btn': getDisplayStatus(question?.status)==='REJECTED',
+                'approve-btn': getDisplayStatus(question?.status)==='APPROVED'}">
+                      <Label  text="{{getDisplayStatus(question?.status).replace('_',' ') | titlecase}}" textWrap="true"></Label>   
                 </StackLayout>
-                <StackLayout *ngIf="question?.is_draft === true && (getDisplayStatus(question.status)==='REQUIRED_CHANGE' || getDisplayStatus(question.status)==='PENDING')" class="pending-btn status-containter">
+                <StackLayout *ngIf="question?.is_draft === true && (getDisplayStatus(question?.status)==='REQUIRED_CHANGE' || getDisplayStatus(question?.status)==='PENDING')" class="pending-btn status-containter">
                     <Label  text="Draft" textWrap="true"></Label>   
                 </StackLayout>
               </FlexboxLayout>
-              <Label *ngIf="!question.show" text="&#xf078;" (tap)="onSelect(question.id, true, qIndex)" class="fas"
+              <Label *ngIf="!question.show" text="&#xf078;" (tap)="expandQuestion(question.id, true, qIndex)" class="fas"
                 fontSize="18" padding="5" color="#212121"></Label>
             </FlexboxLayout>
           <StackLayout [ngClass]="{'show': question.show}" *ngIf="question.show" class="hide">
             <ng-template ngFor let-answer let-i="index" [ngForOf]="question.answers">
               <StackLayout class="question-box" [class.question-box-solid]="answer.correct">
-                <render-answer (calAnsHeight)="setAnsHeight($event, question.id, i, qIndex)" [answer]="answer"  [bgColor]="answer.correct ? '#9ccc65': '#ffffff'" [isGameAnswer]="false">
+                <render-answer (calAnsHeight)="setAnsHeight($event, question.id, i, qIndex)" [answer]="answer"  [bgColor]="'#9ccc65'" [isGameAnswer]="false">
                 </render-answer>
               </StackLayout>
             </ng-template>
@@ -75,7 +75,7 @@
                   <Label row="0" col="1" class="stat-value" [text]="question.wrong ? question.wrong: 0"></Label>
                 </GridLayout>
               </StackLayout>
-              <Label row="1" col="0" colSpan="2" horizontalAlignment="right" marginTop="-10" text="&#xf077;" (tap)="onSelect(question.id, false, qIndex)" padding="5" class="fas" fontSize="18"
+              <Label row="1" col="0" colSpan="2" horizontalAlignment="right" marginTop="-10" text="&#xf077;" (tap)="expandQuestion(question.id, false, qIndex)" padding="5" class="fas" fontSize="18"
                   color="#A5A5A5"></Label>
             </GridLayout>
           </StackLayout>

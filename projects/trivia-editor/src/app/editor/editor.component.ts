@@ -124,6 +124,14 @@ export class EditorComponent implements OnInit, OnDestroy {
     }
   }
 
+  // emit editor load finished event
+  editorLoadFinished(event) {
+    this.ngZone.run(() => {
+      this.oWebViewInterface.emit('editorLoadFinished', event);
+      this.cd.detectChanges();
+    });
+  }
+
   // Text change in quill editor
   onTextChanged(text) {
     this.ngZone.run(() => {
@@ -147,7 +155,6 @@ export class EditorComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    console.log('destroy called ======================================>');
     this.oWebViewInterface.off('answerIndex');
     this.oWebViewInterface.off('imageUrl');
     this.oWebViewInterface.off('deltaObject');

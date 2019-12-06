@@ -3,7 +3,6 @@ import { Answer } from "shared-library/shared/model";
 import { LoadEventData } from 'tns-core-modules/ui/web-view';
 import { isAndroid, isIOS } from 'tns-core-modules/platform';
 import { externalUrl } from './../../../environments/external-url';
-import { isPlatformBrowser } from '@angular/common';
 
 @Component({
     selector: 'render-answer',
@@ -30,8 +29,7 @@ export class RenderAnswerComponent implements OnInit, OnChanges {
     answerHeight = 0;
     isAndroid = isAndroid;
 
-    constructor(@Inject(PLATFORM_ID) private platformId: Object) {
-        if (isPlatformBrowser(this.platformId) || isAndroid || isIOS) {
+    constructor() {
             this.scriptToGetHeight = `<script> var body = document.body, html = document.documentElement;
             var height = Math.max(body.scrollHeight, body.offsetHeight,
             html.clientHeight, html.scrollHeight, html.offsetHeight);
@@ -48,7 +46,6 @@ export class RenderAnswerComponent implements OnInit, OnChanges {
             <link rel="stylesheet" href="${externalUrl.katexCSS}" crossorigin="anonymous">
             <link rel="stylesheet" href="${externalUrl.hightlighCSS}" crossorigin="anonymous"></html>`;
             // Created new local answer object because here I am modifing answer object
-        }
 
     }
 
@@ -56,6 +53,14 @@ export class RenderAnswerComponent implements OnInit, OnChanges {
 
         if (this.answer) {
             this.currentAnswer = { ...this.answer };
+            if (this.bgColor && this.currentAnswer.isRichEditor) {
+                const bgColor = this.currentAnswer.correct ?
+                `background:${this.bgColor}!important;` : `background:#fff!important;`;
+                this.currentAnswer.answerText =
+                            `${this.htmlStartTag} ${this.currentAnswer.answerText}
+                        <style> html {${bgColor}color:#212121 !important;font-size:17;}</style>
+                         ${this.scriptToGetHeight}   ${this.htmlEndTag}`;
+            }
         }
         if (this.currentAnswer && this.currentAnswer.isRichEditor) {
             // tslint:disable-next-line:max-line-length
@@ -84,13 +89,6 @@ export class RenderAnswerComponent implements OnInit, OnChanges {
     }
 
     ngOnChanges(changes: SimpleChanges) {
-        if (this.answer && this.answer.isRichEditor && this.bgColor && this.bgColor !== '') {
-                this.answer.answerText =
-                            `${this.htmlStartTag} ${this.answer.answerText}
-                        <style> html {background:` + this.bgColor + `!important;color:#212121 !important;font-size:17;}</style>
-                         ${this.scriptToGetHeight}   ${this.htmlEndTag}`;
-
-        }
         // Change background color of webview after answer given
         if (this.currentAnswer) {
             if (this.currentAnswer.isRichEditor) {

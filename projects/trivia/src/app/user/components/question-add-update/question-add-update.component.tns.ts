@@ -28,14 +28,14 @@ import { isAvailable, requestPermissions, takePicture } from 'nativescript-camer
 import { ImageAsset } from 'tns-core-modules/image-asset';
 import { ImageSource } from 'tns-core-modules/image-source';
 import { QuestionService } from 'shared-library/core/services';
-import { SelectedIndexChangedEventData } from 'nativescript-drop-down';
+import { SelectedIndexChangedEventData, DropDown } from 'nativescript-drop-down';
 import { ModalDialogService } from 'nativescript-angular/directives/dialogs';
 import { PreviewQuestionDialogComponent } from './preview-question-dialog/preview-question-dialog.component';
 import { CONFIG } from 'shared-library/environments/environment';
 declare var IQKeyboardManager;
 @Component({
   selector: 'app-question-add-update',
-  templateUrl: './question-add-update-new.component.html',
+  templateUrl: './question-add-update.component.html',
   styleUrls: ['./question-add-update.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -58,7 +58,8 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
 
   demoQ: Question = new Question;
   renderView = false;
-
+  @ViewChild('categoryDropdown', { static: false }) categoryDropdown: ElementRef;
+  @ViewChild('timeDropdown', { static: false }) timeDropdown: ElementRef;
 
   public imageTaken: ImageAsset;
   public saveToGallery = true;
@@ -77,14 +78,15 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
   showIds = [];
   currentWebViewParentId: number;
   theme: string;
-  isPreviewClosed = false;
+  isShowPreview = false;
+  previewQuestion: Question;
 
   @Input() editQuestion: Question;
   showEditQuestion = false;
   @Output() hideQuestion = new EventEmitter<boolean>();
   @ViewChild('autocomplete', { static: false }) autocomplete: RadAutoCompleteTextViewComponent;
   @ViewChildren('textField') textField: QueryList<ElementRef>;
-  @ViewChild('webView', { static: false }) webView: ElementRef;
+  @ViewChild('webView', { static: false }) webView: ElementRef<WebView>;
   @ViewChild('questionStack', { static: false }) questionStack: ElementRef;
   @ViewChildren('answerStack') answerStack: QueryList<ElementRef>;
   @ViewChild('webViewParentStack', { static: false }) webViewParentStack: ElementRef;
@@ -126,6 +128,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
         this.applicationSettings = appSettings[0];
         this.playMaxTime = ['Select a Max time', ...this.applicationSettings.game_play_max_time];
         this.createForm(this.question);
+        this.saveDraft();
         this.cd.markForCheck();
         this.answers = (<FormArray>this.questionForm.get('answers'));
       }
@@ -159,21 +162,6 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
       this.cd.markForCheck();
     }));
 
-    // this.subscriptions.push(this.questionForm.get('isRichEditor').valueChanges.subscribe(isRichEditor => {
-    //   this.cd.markForCheck();
-    //   this.questionForm.patchValue({ questionText: '' });
-    //   if (isRichEditor) {
-    //     this.questionForm.get('maxTime').setValidators(Validators.compose([Validators.required]));
-    //     this.questionForm.get('questionText').setValidators(Validators.compose([Validators.required]));
-
-    //   } else {
-    //     this.questionForm.get('maxTime').setValidators([]);
-    //     this.questionForm.get('questionText').setValidators(Validators.compose([Validators.required,
-    //     Validators.maxLength(this.applicationSettings.question_max_length)]));
-    //   }
-    //   this.questionForm.get('maxTime').updateValueAndValidity();
-    //   this.questionForm.get('questionText').updateValueAndValidity();
-    // }));
 
     this.subscriptions.push(this.questionForm.get('answers').valueChanges.subscribe((changes) => {
       this.cd.markForCheck();
@@ -193,39 +181,28 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
     // this.renderView = false;
     if (this.editQuestion && this.applicationSettings) {
       this.createForm(this.editQuestion);
+      this.question.status = this.editQuestion.status;
+      this.saveDraft();
       this.cd.markForCheck();
       this.categoryIds = this.editQuestion.categoryIds;
 
-      console.log('this.questionCategories', this.questionCategories);
       this.enteredTags = this.editQuestion.tags;
       this.submitBtnTxt = this.editQuestion.is_draft === true && this.editQuestion.status !== 6 ? 'Submit' : 'Resubmit';
       this.actionBarTxt = 'Update Question';
     }
 
-    this.subscriptions.push(this.questionForm.valueChanges.pipe(take(1)).subscribe(val => {
-      this.saveDraft();
-    }));
   }
 
-  onLoadFinished(event, id) {
-    // this.oWebViewInterface.emit('viewType', 'question');
-    setTimeout(() => {
-      this.isWebViewLoaded = true;
-      this.cd.markForCheck();
-    }, 2000);
-    if (isAndroid && this.oWebViewInterface) {
-      this.oWebViewInterface.emit('viewType', this.currentWebViewParentId >= 0 ? 'answer' : 'question');
-      setTimeout(() => {
-        this.setInitialValue();
-      }, 10);
-    }
-    if (id === -1) {
-      if (this.oWebViewInterface && this.editQuestion) {
-        this.oWebViewInterface.emit('deltaObject', this.editQuestion.questionObject);
-      }
-    }
+
+  openCategoryDropdown() {
+    const categoryDropdown = <DropDown>this.categoryDropdown.nativeElement;
+    categoryDropdown.open();
   }
 
+  openTimeDropdown() {
+    const timeDropdown = <DropDown>this.timeDropdown.nativeElement;
+    timeDropdown.open();
+  }
 
   setInitialValue () {
     const blankObj =  [{ insert: '' }];
@@ -261,8 +238,20 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
       const nextWebViewParent =  id === -1 ? this.questionStack.nativeElement :
       this.answerStack.filter((element, index) => index === id )[0].nativeElement;
       this.currentWebViewParentId = id;
-      this.renderer.removeChild(prevWebViewParent, this.webView.nativeElement);
-      this.renderer.appendChild(nextWebViewParent, this.webView.nativeElement);
+      if (isAndroid) {
+        // for android this works as this method does not destroy the webview. do not change.
+        prevWebViewParent._removeViewFromNativeVisualTree(this.webView.nativeElement);
+        nextWebViewParent._addViewToNativeVisualTree(this.webView.nativeElement);
+        // need to wait for the load to be finished before emit the value.
+        setTimeout(() => {
+          this.oWebViewInterface.emit('viewType', this.currentWebViewParentId >= 0 ? 'answer' : 'question');
+          this.setInitialValue();
+        }, 1);
+      } else if (isIOS) {
+         // for ios this works it calls destroy but still we can re initialize the communication by calling initNativeView(). do not change.
+          this.renderer.removeChild(prevWebViewParent, this.webView.nativeElement);
+          this.renderer.appendChild(nextWebViewParent, this.webView.nativeElement);
+      }
   }
 
   public onchange(args: SelectedIndexChangedEventData) {
@@ -366,7 +355,6 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
       this.selectedMaxTimeIndex = maxTimeIndex + 1;
     }
 
-    console.log(question.maxTime, 'MAXTIME');
     this.questionForm = this.fb.group({
       id: question.id ? question.id : '',
       is_draft: question.is_draft,
@@ -427,16 +415,12 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
   }
 
   preview() {
+    if (!(this.questionForm.valid && this.categoryIds && this.categoryIds.length > 0 && this.enteredTags.length > 2)) {
+        return false;
+    }
     this.hideKeyboard();
-    const question: Question = super.onSubmit();
-
-    const options = {
-      context: { question: question },
-      fullscreen: true,
-      viewContainerRef: this.vcRef
-    };
-    this.modal.showModal(PreviewQuestionDialogComponent, options)
-      .then((dialogResult: string) => this.isPreviewClosed = true );
+    this.previewQuestion = super.onSubmit();
+    this.isShowPreview = true;
   }
 
   hideKeyboard() {
@@ -448,28 +432,24 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
     if (this.oWebViewInterface) {
       this.oWebViewInterface.off('uploadImageStart');
       this.oWebViewInterface.off('quillContent');
+      this.oWebViewInterface.off('editorLoadFinished');
     }
   }
 
-  wevViewLoaded(event) {
+  webViewLoaded(event) {
       if (!event.object) {
       } else {
-        if (!this.oWebViewInterface || isAndroid) {
-          if (this.oWebViewInterface && isAndroid) {
-            this.oWebViewInterface.off('uploadImageStart');
-            this.oWebViewInterface.off('quillContent');
-          }
+        if (!this.oWebViewInterface) {
           this.oWebViewInterface = this.setWebInterface(event.object);
           //  new webViewInterfaceModule.WebViewInterface(event.object, CONFIG.editorUrl);
         }
-        if (this.oWebViewInterface) {
-          if (isIOS) {
+        if (this.oWebViewInterface && isIOS) {
             event.object.initNativeView();
-          }
-          this.oWebViewInterface.emit('viewType', this.currentWebViewParentId >= 0 ? 'answer' : 'question');
-          if (isIOS) {
-            this.setInitialValue();
-          }
+            // need to wait for the load to be finished before emit the value.
+            setTimeout(() => {
+              this.oWebViewInterface.emit('viewType', this.currentWebViewParentId >= 0 ? 'answer' : 'question');
+              this.setInitialValue();
+            }, 1);
         }
       }
     }
@@ -479,9 +459,17 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
     }
 
     setWebInterface(webViewInstace) {
-
     const webInterface = new webViewInterfaceModule.WebViewInterface(webViewInstace, CONFIG.editorUrl);
     // new webViewInterfaceModule.WebViewInterface(webViewInstace, CONFIG.editorUrl);
+    webInterface.on('editorLoadFinished', (quillContent) => {
+      if (quillContent) {
+          // change is not being detected.
+          this.ngZone.run(() => {
+            this.isWebViewLoaded = true;
+          this.cd.markForCheck();
+          });
+        }
+    });
 
     webInterface.on('quillContent', (quillContent) => {
       if (this.currentWebViewParentId === -1) {
@@ -510,6 +498,14 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
     });
 
     return webInterface;
+  }
+
+  back(event) {
+    if (this.isShowPreview) {
+      this.isShowPreview = false;
+    } else {
+      this.hideQuestion.emit(true);
+    }
   }
 
 }

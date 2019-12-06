@@ -1,4 +1,4 @@
-<ns-action-bar title="Questions" class="Roboto-Regular" showAdd="true"></ns-action-bar>
+<ns-action-bar *ngIf="!displayEditQuestion" title="Questions" class="Roboto-Regular" showAdd="true"></ns-action-bar>
 
 <StackLayout>
     <StackLayout *ngIf="loaderBusy">

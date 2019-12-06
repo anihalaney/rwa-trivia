@@ -2,8 +2,8 @@ import { Component, Input, Output, OnInit, OnChanges, OnDestroy, EventEmitter, C
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
 import { Question, QuestionStatus, Category, User, Answer, ApplicationSettings } from '../../model';
 import { QuestionService } from '../../../core/services';
-import { Observable, interval, of } from 'rxjs';
-import { debounceTime, switchMap, map} from 'rxjs/operators';
+import { Observable, interval, of, Subject, merge } from 'rxjs';
+import { debounceTime, switchMap, map, multicast, take, skip} from 'rxjs/operators';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 // import { QuillImageUpload } from 'ng-quill-tex/lib/models/quill-image-upload';
 import { CropImageDialogComponent } from './../crop-image-dialog/crop-image-dialog.component';
@@ -43,6 +43,7 @@ export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
   subscriptions = [];
   quillObject: any = {};
   dialogRef;
+  answerTexts = [];
   get answers(): FormArray {
     return this.questionForm.get('answers') as FormArray;
   }
@@ -92,19 +93,23 @@ export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
         map(appSettings => appSettings),
         switchMap(appSettings => {
           if (appSettings && appSettings[0]) {
+            if (!this.questionForm.controls.is_draft.value) {
+              this.questionForm.patchValue({ is_draft: true });
+            }
             if (appSettings[0]['auto_save']['is_enabled']) {
-              return interval(appSettings[0]['auto_save']['time']);
+              return this.questionForm.valueChanges.pipe(
+                multicast(new Subject(), s => merge(
+                  s.pipe(take(1)),
+                  s.pipe(skip(1), debounceTime(appSettings[0]['auto_save']['time'])),
+                )));
             } else {
               return of();
             }
         }
         })).subscribe(data => {
           if (data) {
-              this.questionForm.patchValue({ is_draft : true });
               const question = this.getQuestionFromFormValue(this.questionForm.value);
-
               question.categoryIds = [];
-
               if (Array.isArray(this.questionForm.get('category').value)) {
                 question.categoryIds = this.questionForm.get('category').value;
               } else {
@@ -126,7 +131,8 @@ export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   createForm(question: Question) {
-    const fgs: FormGroup[] = question.answers.map(answer => {
+    const fgs: FormGroup[] = question.answers.map((answer, index) => {
+      this.answerTexts[index] = answer.answerObject;
       const isRichEditor = (answer.isRichEditor) ? answer.isRichEditor : false;
       const answerText = (answer.isRichEditor) ? answer.answerObject : answer.answerText;
       const fg = new FormGroup({
@@ -180,7 +186,6 @@ export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
       if (this.enteredTags.indexOf(tag) < 0) {
         this.enteredTags.push(tag);
       }
-      this.questionForm.get('tags').setValue('');
     }
     this.setTagsArray();
   }
@@ -211,6 +216,7 @@ export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
   setTagsArray() {
     this.tagsArray.controls = [];
     [...this.autoTags, ...this.enteredTags].forEach(tag => this.tagsArray.push(new FormControl(tag)));
+    this.questionForm.patchValue({tags: [] });
   }
 
   onSubmit() {

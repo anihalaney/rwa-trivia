@@ -3,7 +3,6 @@ import { Question } from "shared-library/shared/model";
 import { LoadEventData } from 'tns-core-modules/ui/web-view';
 import { isAndroid, isIOS } from 'tns-core-modules/platform';
 import { externalUrl } from './../../../environments/external-url';
-import { isPlatformBrowser } from '@angular/common';
 
 @Component({
     selector: 'render-question',
@@ -24,6 +23,7 @@ export class RenderQuestionComponent implements OnInit, OnChanges {
     questionHeight = 0;
     qIndex = '';
     isAndroid = isAndroid;
+    questionText = '';
 
     ngOnInit(): void {
 
@@ -31,14 +31,13 @@ export class RenderQuestionComponent implements OnInit, OnChanges {
             this.qIndex = this.questionIndex ? `${this.questionIndex} . ` : '';
             if (this.question.isRichEditor) {
                 // tslint:disable-next-line:max-line-length
-                this.question.questionText = this.htmlStartTag + this.question.questionText + this.scriptToGetHeight + this.htmlEndTag;
+                this.questionText = this.htmlStartTag + this.question.questionText + this.scriptToGetHeight + this.htmlEndTag;
             }
 
         }
     }
 
-    constructor(private cd: ChangeDetectorRef, @Inject(PLATFORM_ID) private platformId: Object) {
-        if (isPlatformBrowser(this.platformId) || isAndroid || isIOS) {
+    constructor(private cd: ChangeDetectorRef) {
             this.scriptToGetHeight = `<script> var body = document.body, html = document.documentElement;
             var height = Math.max(body.scrollHeight, body.offsetHeight,
             html.clientHeight, html.scrollHeight, html.offsetHeight);
@@ -49,8 +48,7 @@ export class RenderQuestionComponent implements OnInit, OnChanges {
             this.htmlStartTag = `<html><head><body style="font-size:18px;font-weight: bold !important;padding-top:10px;vertical-align: middle;text-align:left;"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"> `;
             // tslint:disable-next-line:max-line-length
             this.htmlEndTag = `</body><link rel="stylesheet" href="${externalUrl.katexCSS}" crossorigin="anonymous"><link rel="stylesheet" href="${externalUrl.hightlighCSS}" crossorigin="anonymous"></html>`;
-        }
-        this.cd.markForCheck();
+            this.cd.markForCheck();
     }
 
     onLoadFinished(event: LoadEventData) {
@@ -68,7 +66,7 @@ export class RenderQuestionComponent implements OnInit, OnChanges {
     ngOnChanges(changes: SimpleChanges) {
         if (this.question && this.question.isRichEditor) {
             if (changes.question) {
-                this.question.questionText = this.htmlStartTag + changes.question.currentValue.questionText + this.scriptToGetHeight + this.htmlEndTag;
+                this.questionText = this.htmlStartTag + changes.question.currentValue.questionText + this.scriptToGetHeight + this.htmlEndTag;
             }
             this.cd.markForCheck();
         }

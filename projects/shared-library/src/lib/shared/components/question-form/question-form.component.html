@@ -67,7 +67,7 @@
               aria-label="answerText">
             <div class="mathseditor" *ngIf="answer.value.isRichEditor">
                 <ng-quill-tex  [modules]="quillConfig" (textChanged)="onAnswerChanged($event,i)" 
-                (fileUploaded)="fileUploaded($event)"  [content]="answer.value.answerText">
+                (fileUploaded)="fileUploaded($event)"  [content]="answerTexts[i]">
                 </ng-quill-tex> 
             </div>
            
