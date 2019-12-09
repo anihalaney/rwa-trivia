@@ -1,4 +1,4 @@
-<GridLayout>
+<!-- <GridLayout>
   <GridLayout [class.dialogOpen]="dialogOpen" rows="auto,*" columns="*"
     backgroundColor="#f1f2f2">
     <GridLayout style="z-index: 0;" height="auto" row="0" col="0">
@@ -250,4 +250,39 @@
       </FlexboxLayout>
     </AbsoluteLayout>
   </GridLayout>
+
+
+  
+  </GridLayout> -->
+<GridLayout rows="auto,auto,auto,*" columns="*">
+  <Label row="0" col="0" padding="20" color="#000000" text="&#xe906;" fontSize="30" class="ico icon-back" (tap)="back()"></Label>
+  <GridLayout  row="1" col="0"  rows="auto,auto" columns="*,50"padding="0 20 10 20">
+    <Label   text="Play as a" row="0" col="0" fontSize="35" fontWeight="900" color="black">
+    </Label>
+    <Label text="single player"  row="1" col="0" fontSize="35" fontWeight="900" color="#3b5998">
+    </Label>
+     <Label col="1" row="0" text="&#xe929;"  width="46pt" height="46pt" borderWidth="1" borderRadius="80"
+        color="#3b5998" borderColor="#3b5998" 
+       class="ico icon-friends" fontSize="20" 
+      horizontalAlignment="right" padding="10"></Label>
+   
   </GridLayout>
+  
+  <StackLayout  row="2" col="0" horizontalAlignment="left">
+    <Label fontSize="20" text="Based on your profile below are categories, you unselect and select categories. This won't effect your profile" textWrap="true" padding="20">
+
+    </Label>
+  </StackLayout>
+  <ScrollView  row="3" col="0">
+  <FlexboxLayout flexWrap="wrap" margin="0 10 0 10" 
+  horizontalAlignment="center">
+      <FlexboxLayout *ngFor="let item of categories, let i = index" stlRippleEffect flexDirection="column" justifyContent="center" alignItems="center"
+        (rippleTap)="selectTopic(i)" padding="20"
+        [ngStyle]="{background: (item.requiredForGamePlay ? '#48b24e' : '#fafafa'), color : (item.requiredForGamePlay ? '#fff' : '#9b92e7') }"
+        borderRadius="5" class="stats-box border">
+        <Label [text]="item.categoryName" padding="15 10" ></Label>
+      </FlexboxLayout>
+  </FlexboxLayout>
+</ScrollView>
+</GridLayout>
+
