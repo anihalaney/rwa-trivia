@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, QueryList, ViewChildren } from '@angular/core';
+import { ChangeDetectorRef, QueryList, ViewChildren, Inject, PLATFORM_ID } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
@@ -11,6 +11,7 @@ import { Account, Category, profileSettingsConstants, User, Invitation, AuthProv
 import { AppState, appState, categoryDictionary, getCategories, getTags } from '../../../store';
 import * as userActions from '../../store/actions';
 import { AuthenticationProvider } from 'shared-library/core/auth';
+import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 
 export enum UserType {
     userProfile,
@@ -92,7 +93,8 @@ export class ProfileSettings {
         public cd: ChangeDetectorRef,
         public route: ActivatedRoute,
         public router: Router,
-        public authenticationProvider: AuthenticationProvider) {
+        public authenticationProvider: AuthenticationProvider,
+        @Inject(PLATFORM_ID) public platformId: Object) {
         this.toggleLoader(true);
         this.fb = formBuilder;
         this.tagsObs = this.store.select(getTags);
@@ -175,6 +177,7 @@ export class ProfileSettings {
             this.categoryDict = values[2] || {};
             this.userCopyForReset = { ...this.user };
             this.createForm(this.user);
+            this.onValueChanges();
 
             if (this.user.profilePictureUrl) {
                 this.profileImage.image = this.user.profilePictureUrl;
@@ -337,8 +340,11 @@ export class ProfileSettings {
                 break;
         }
         this.createSocialProfileControl();
-        this.isEnableEditProfile = true;
+        if ((isPlatformBrowser(this.platformId) === false && isPlatformServer(this.platformId) === false)) {
+          this.isEnableEditProfile = true;
         this.showAllSocialSetting();
+        }
+      
         if (!this.isEnableEditProfile) {
             this.disableForm(true);
         }
@@ -358,7 +364,6 @@ export class ProfileSettings {
     }
 
     getUserFromFormValue(isEditSingleField, field): void {
-
         if (field === 'socialProfile') {
             this.socialProfileObj.map(profile => {
                 if (profile.enable) {
@@ -368,10 +373,10 @@ export class ProfileSettings {
         }
 
         if (isEditSingleField) {
-            // if(this.user[field]){
+            if(this.userForm.get(field)){
             this.user[field] = this.userForm.get(field).value;
             this.cd.markForCheck();
-            // }
+            }
 
         } else {
             this.user.name = this.userForm.get('name').value;
@@ -584,6 +589,14 @@ export class ProfileSettings {
             this.applicationSettings.lives.enable) || (!this.applicationSettings.lives.enable) ? true : false;
         return isEnable;
     }
+
+    onValueChanges(): void {
+        this.subscriptions.push(this.userForm.valueChanges.subscribe(val => {
+            this.cd.detectChanges();
+            this.cd.markForCheck();
+        }));
+    }
+
 }
 
 

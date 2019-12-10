@@ -1,43 +1,26 @@
-<!-- <StackLayout>
-    <Label text="THIS IS LABEL" textWrap="true"></Label>
-</StackLayout> -->
 <StackLayout class="profile">
-
-      
-        
     <GridLayout #textBoxContainer rows="63,auto" columns="*" margin="5 0">
         <GridLayout row="0" rows="auto" columns="*,auto" borderWidth="2" borderColor="#f2f2f2" borderRadius="5"
             padding="10" android:paddingBottom="11" ios:paddingBottom=0>
             <FlexboxLayout col="0" flexDirection="column" justifyContent="center">
-                <Label #nameLabelField alignSelf="flex-start" text="Name" textWrap="true" class="label-field"></Label>
-                <!-- <TextField #nameField [visibility]="'collapsed'" hint="Name" paddingLeft="4" ios:marginTop="5"
-                    android:paddingBottom="10" android:marginTop="-5"></TextField> -->
-                    <StackLayout #nameField [visibility]="'collapsed'">
-                            <ng-content  select="[header]"></ng-content>
-                    </StackLayout>
-                 
-                <Label #namelabel text="Jitendra" textWrap="true" class="label-value"></Label>
+                <Label #nameLabelField alignSelf="flex-start" text="{{ fieldName | titlecase }}" textWrap="true"
+                    class="label-field"></Label>
+                <StackLayout #nameField [visibility]="'collapsed'">
+                    <ng-content select="[header]"></ng-content>
+                </StackLayout>
+                <Label #nameLabel [text]="fieldValue" textWrap="true" class="label-value"></Label>
             </FlexboxLayout>
             <FlexboxLayout col="1" flexDirection="column" justifyContent="center">
-                <Label *ngIf="!showEdit" (tap)="editSingleFieldTns('name',0)" color="#14418B" fontSize="20" class="ico icon-edit"
-                    textWrap="true" text="&#xe927;" padding="5">
+                <Label *ngIf="!showEdit && isDisplay" (tap)="editSingleFieldTns()" color="#14418B" fontSize="20"
+                    class="ico icon-edit" textWrap="true" text="&#xe927;" padding="5">
                 </Label>
-                <Label *ngIf="showEdit" (tap)="onSubmit(true, 'name',0)" color="#14418B" fontSize="26" class="fa" text="&#xf058;"
-                    padding="5">
+                <Label *ngIf="showEdit && isValid" (tap)="onSubmit()" color="#14418B" fontSize="26" class="fa"
+                    text="&#xf058;" padding="5">
                 </Label>
             </FlexboxLayout>
         </GridLayout>
         <StackLayout row="1">
-                <ng-content  select="[footer]"></ng-content>
+            <ng-content select="[footer]"></ng-content>
         </StackLayout>
-        <!-- <StackLayout width="90%" row="1">
-          <Label *ngIf="userForm.controls.name.errors?.required && !userForm.controls.name.pristine" class=" error"
-            textWrap="true" text="Name is required!"></Label>
-    
-          <Label *ngIf="userForm.controls.name.errors?.name && !userForm.controls.name.pristine" class="error"
-            textWrap="true" text="Name is Invalid!"></Label>
-        </StackLayout> -->
     </GridLayout>
-   
-
 </StackLayout>

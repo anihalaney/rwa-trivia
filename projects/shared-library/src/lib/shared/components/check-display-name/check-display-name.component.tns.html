@@ -3,6 +3,6 @@
 </TextField>
 
 <!--  If component is called from profile page-->
-<TextField  *ngIf="isProfilePage" [hint]="hint" width="200" [disabled]="disabled" [(ngModel)]="myValue" (ngModelChange)="onTextChange($event)"></TextField>
+<TextField  #textField *ngIf="isProfilePage" [hint]="hint" width="200" #textField   [(ngModel)]="myValue" (ngModelChange)="onTextChange($event)"></TextField>
 
 

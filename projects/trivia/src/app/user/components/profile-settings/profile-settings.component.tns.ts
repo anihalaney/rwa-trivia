@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, ElementRef, OnDestroy, QueryList, ViewChild, ViewChildren, ViewContainerRef, Component, OnInit } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, ElementRef, OnDestroy, QueryList, ViewChild, ViewChildren, ViewContainerRef, Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
@@ -17,7 +17,7 @@ import { profileSettingsConstants } from 'shared-library/shared/model';
 import { ObservableArray } from 'tns-core-modules/data/observable-array';
 import { ImageAsset } from 'tns-core-modules/image-asset';
 import { fromAsset, ImageSource } from 'tns-core-modules/image-source';
-import { isIOS } from 'tns-core-modules/platform';
+import { isIOS, isAndroid } from 'tns-core-modules/platform';
 import * as dialogs from 'tns-core-modules/ui/dialogs';
 import { SegmentedBar, SegmentedBarItem } from 'tns-core-modules/ui/segmented-bar';
 import * as utils from 'tns-core-modules/utils/utils';
@@ -36,7 +36,7 @@ declare var IQKeyboardManager;
   selector: 'profile-settings',
   templateUrl: './profile-settings.component.html',
   styleUrls: ['./profile-settings.component.scss'],
-  // changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
@@ -71,17 +71,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
 
   @ViewChild('autocomplete', { static: false }) autocomplete: RadAutoCompleteTextViewComponent;
   @ViewChild('acLocation', { static: false }) acLocation: RadAutoCompleteTextViewComponent;
-  // @ViewChild("namelabel", { static: false }) namelabel: ElementRef;
-  // @ViewChild("nameField", { static: false }) nameField: ElementRef;
-  // @ViewChild("nameLabelField", { static: false }) nameLabelField: ElementRef;
-
-
-  @ViewChildren("namelabel") namelabel: QueryList<ElementRef>;
-  @ViewChildren("nameField") nameField: QueryList<ElementRef>;
-  @ViewChildren("nameLabelField") nameLabelField: QueryList<ElementRef>;
-
-  @ViewChildren('textBoxContainer') textBoxContainers: QueryList<ElementRef>;
-
+  @ViewChildren("socialField") socialField: QueryList<ElementRef>;
   constructor(public fb: FormBuilder,
     public store: Store<AppState>,
     public userAction: UserActions,
@@ -92,9 +82,10 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
     private modal: ModalDialogService,
     private vcRef: ViewContainerRef,
     public authenticationProvider: AuthenticationProvider,
-    private routerExtensions: RouterExtensions) {
+    private routerExtensions: RouterExtensions,
+    @Inject(PLATFORM_ID) public platformId: Object) {
 
-    super(fb, store, userAction, uUtils, cd, route, router, authenticationProvider);
+    super(fb, store, userAction, uUtils, cd, route, router, authenticationProvider, platformId);
     this.initDataItems();
     requestPermissions();
 
@@ -104,97 +95,6 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
     }
 
   }
-
-  animateTextBox(position) {
-
-    const nativeElement = this.textBoxContainers.toArray()[position].nativeElement;
-    const nameField = this.nameField.toArray()[position];
-    const namelabel = this.namelabel.toArray()[position];
-    const nameLabelField = this.nameLabelField.toArray()[position];
-
-    const reduceSize = (screen.mainScreen.widthDIPs - 30);
-
-    if (nameField.nativeElement.text) {
-      if (nativeElement.width === reduceSize) {
-        nameField.nativeElement.visibility = 'collapsed';
-        namelabel.nativeElement.visibility = "visible";
-        nameLabelField.nativeElement.visibility = "visible";
-        namelabel.nativeElement.animate({
-          translate: { x: 0, y: 0 },
-          opacity: 1,
-          duration: 100
-        }).then(() => {
-          
-          nameLabelField.nativeElement.animate({
-            translate: { x: 0, y: 0 },
-            opacity: 1,
-            duration: 100
-          }).then(() => {
-  
-          });
-          namelabel.nativeElement.visibility = "visible";
-          nameLabelField.nativeElement.visibility = "visible";
-        });
-        nativeElement.animate({
-          width: 'auto',
-          duration: 100
-        }).then(() => { }, () => { });
-      } else {
-        nameLabelField.nativeElement.visibility = "hidden";
-        namelabel.nativeElement.animate({
-          translate: { x: 4, y: -7 },
-          opacity: .8,
-          duration: 100
-        }).then(() => {
-          namelabel.nativeElement.visibility = "collapsed";
-          nameLabelField.nativeElement.visibility = "collapsed";
-          nameField.nativeElement.visibility = 'visible';
-          this.cd.detectChanges();
-        });
-        nativeElement.animate({
-          width: reduceSize,
-          duration: 100
-        }).then(() => { }, () => { });
-      }
-
-    } else {
-      if (nativeElement.width === reduceSize) {
-        nameField.nativeElement.visibility = 'collapsed';
-        namelabel.nativeElement.visibility = "visible";
-        nameLabelField.nativeElement.visibility = "visible";
-        namelabel.nativeElement.animate({
-          translate: { x: 0, y: 0 },
-          opacity: 1,
-          duration: 100
-        }).then(() => {
-          namelabel.nativeElement.visibility = "visible";
-          nameLabelField.nativeElement.visibility = "visible";
-        });
-        nativeElement.animate({
-          width: 'auto',
-          duration: 100
-        }).then(() => { }, () => { });
-      } else {
-        namelabel.nativeElement.visibility = "hidden";
-        nameLabelField.nativeElement.animate({
-          translate: { x: 4, y: 7 },
-          opacity: .8,
-          duration: 100
-        }).then(() => {
-          nameLabelField.nativeElement.visibility = "collapsed";
-          namelabel.nativeElement.visibility = "collapsed";
-          nameField.nativeElement.visibility = 'visible';
-          this.cd.detectChanges();
-        });
-        nativeElement.animate({
-          width: reduceSize,
-          duration: 100
-        }).then(() => { }, () => { });
-      }
-    }
-
-  }
-
 
   ngOnInit(): void {
     this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe(status => {
@@ -239,6 +139,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
         }
       }));
 
+    // this.editProfile();
   }
 
   ngAfterViewInit(): void {
@@ -272,17 +173,14 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
 
   onLoadedLoaction(event) {
     if (this.userType === 1) {
-      // event.object.text = this.user.location;
-      // event.object.readOnly = true;
+      event.object.text = this.user.location;
+      event.object.readOnly = true;
     } else {
       if (this.userForm.value.location) {
         this.acLocation.nativeElement.text = this.userForm.value.location;
-        // this.acLocation.nativeElement.readOnly = false;
         this.cd.markForCheck();
-        // this.cd.detectChanges();
       }
     }
-    // this.acLocation.nativeElement.text = 
   }
 
   onTextChangedLocation(location): void {
@@ -291,8 +189,6 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
   }
 
   editLocationField() {
-    // this.acLocation.nativeElement.readOnly = !this.acLocation.nativeElement.readOnly;
-    // this.isLocationEdit = !this.isLocationEdit;
     this.singleFieldEdit['location'] = !this.singleFieldEdit['location'];
     this.cd.detectChanges();
   }
@@ -452,10 +348,15 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
 
   }
 
-  editSingleFieldTns(field: string, position) {
-    this.animateTextBox(position);
-    this.editSingleField(field);
+
+  formEditOpen(fieldName: string) {
+    this.editSingleField(fieldName);
+    const socialField = this.socialField.toArray();
+    if (socialField.length) {
+      this.uUtils.focusTextField(socialField[0]);
+    }
   }
+
   onSubmit(isEditSingleField = false, field = '', position = -1) {
 
     // validations
@@ -487,21 +388,13 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
 
     this.checkDisplayName(this.userForm.get('displayName').value);
     this.singleFieldEdit[field] = false;
-
-    if (position >= 0) {
-      this.animateTextBox(position);
-    }
-
     this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.checkDisplayName)).subscribe(status => {
       this.isValidDisplayName = status;
       if (this.isValidDisplayName !== null) {
         if (this.isValidDisplayName) {
-
           // get user object from the forms
           this.getUserFromFormValue(true, field);
           this.user.categoryIds = this.userCategories.filter(c => c.isSelected).map(c => c.id);
-
-          console.log(this.user.location, "<< , >>", this.userCopyForReset.location);
           // call saveUser
           this.saveUser(this.user, (this.user.location !== this.userCopyForReset.location) ? true : false);
 
@@ -569,19 +462,23 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
     }
   }
 
+  formSubmitted(fieldName) {
+    this.onSubmit(true, fieldName);
+  }
+
   redirectToChangePassword() {
-    this.routerExtensions.navigate(['/user/my/profile/change-password'], { clearHistory: false });
+    this.routerExtensions.navigate(['/user/my/profile/change-password']);
   }
 
   navigateToPrivacyPolicy() {
-    this.routerExtensions.navigate(['/privacy-policy'], { clearHistory: true });
+    this.routerExtensions.navigate(['/privacy-policy']);
   }
 
   navigateToTermsConditions() {
-    this.routerExtensions.navigate(['/terms-and-conditions'], { clearHistory: true });
+    this.routerExtensions.navigate(['/terms-and-conditions']);
   }
 
   navigateToUserFeedback() {
-    this.routerExtensions.navigate(['/user-feedback'], { clearHistory: true });
+    this.routerExtensions.navigate(['/user-feedback']);
   }
 }

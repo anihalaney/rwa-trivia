@@ -244,6 +244,17 @@ export class Utils extends UtilsCore {
     }
   }
 
+  focusTextField(field) {
+    field.nativeElement.focus();
+    if (isAndroid) {
+      setTimeout(() => {
+        field.nativeElement.focus();
+        field.nativeElement.android.setSelection(
+          field.nativeElement.text.length);
+      }, 5);
+    }
+  }
+
   goToDashboard() {
     this.routerExtensions.navigate(['/dashboard'], { clearHistory: true });
   }
