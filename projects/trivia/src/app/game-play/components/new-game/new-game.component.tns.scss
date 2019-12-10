@@ -1,3 +1,4 @@
+@import '../../../../../../trivia/src/app-variables';
 .new-game {
   .selected-player {
     background-color: #89C24F;
@@ -140,10 +141,56 @@ Button {
 }
 
 .stats-box {
-  width: 40%;
-  height: 25%;
+  width: 45%;
+  height: 100%;
 }
 
 .border {
   margin: 0 10 10 0;
+}
+
+.back-btn{
+  padding-bottom:10;
+  color:#000000;
+}
+
+.main-title {
+  Label{
+    font-size:35;
+    font-weight:600;
+  }
+}
+
+.btn-player {
+  width:46;
+  height:46;
+  color:#3b5998; 
+  padding:10; 
+  border-width:1;
+  border-radius:40;
+  border-color:#3b5998;
+  font-size:20;
+}
+
+.btn-player-text{
+  font-size:14;
+  text-alignment:center;
+  margin-top:5;
+  color:#3b5998;
+}
+
+.info-text{
+  margin-right:10%;
+  color:#A5A5A5;
+  font-size:16;
+  padding:10 0 20 0;
+}
+
+.btn-blue {
+  font-size: 18;
+  background-color: $btn-color;
+  color: $font-color;
+  margin: 20 0 10 0;
+  padding: 15 0 15 0;
+  border-radius: 4;
 }

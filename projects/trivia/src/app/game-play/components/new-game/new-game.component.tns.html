@@ -1,17 +1,111 @@
-<!-- <GridLayout>
-  <GridLayout [class.dialogOpen]="dialogOpen" rows="auto,*" columns="*"
-    backgroundColor="#f1f2f2">
-    <GridLayout style="z-index: 0;" height="auto" row="0" col="0">
-      <FlexboxLayout padding="10 10" class="action-bar">
-        <StackLayout width="20">
-          <Label (rippleTap)="back()" text="&#xf104;" verticalAlignment="center" textAlign="center" class="fa"
-            textWrap="true" fontSize="40" stlRippleEffect></Label>
-        </StackLayout>
-        <Label verticalAlignment="center" alignSelf="center" textAlign="center" [text]="actionBarTitle"
-          marginLeft="10"></Label>
-      </FlexboxLayout>
-    </GridLayout>
-    <StackLayout  style="z-index: 0;" padding="0" marginTop="0" row="1" col="0">
+<GridLayout>
+  <GridLayout [class.dialogOpen]="dialogOpen"  rows="*" columns="*">
+      <GridLayout row="0" col="0" padding="15 15" rows="auto,auto,*" columns="*">
+          <Label row="0" col="0"  text="&#xe906;" fontSize="20" class="ico icon-back back-btn" (rippleTap)="back()" stlRippleEffect></Label>
+          <GridLayout row="1" col="0"  rows="auto" columns="*,80" marginBottom="10">
+            <FlexboxLayout class="main-title" flexDirection="column" row="0" col="0">
+              <Label text="Play as a"  color="#000000">
+              </Label>
+              <Label text="single player" color="#3b5998">
+              </Label>
+            </FlexboxLayout>
+            <StackLayout  col="1" row="0" >
+                <Label text="&#xe929;" class="ico icon-friends btn-player"></Label>
+                <Label class="btn-player-text" text="switch to two player" textWrap="true"></Label>
+            </StackLayout>
+          </GridLayout>
+          <ScrollView  row="2" col="0">
+              <GridLayout rows="auto,auto,auto,auto" columns="*">        
+                <Label class="info-text" row="0" col="0"  text="Based on your profile below are categories, you unselect and select categories. This won't effect your profile" textWrap="true"></Label>
+                <FlexboxLayout row="1" col="0" flexWrap="wrap" margin="0 -10 0 -5" horizontalAlignment="center">
+                    <FlexboxLayout *ngFor="let item of filteredCategories, let i = index" stlRippleEffect flexDirection="column" justifyContent="center" alignItems="center"
+                      (rippleTap)="selectCategory(i)"
+                      [ngStyle]="{background: (item.requiredForGamePlay || item.isSelected ? '#48b24e' : '#fafafa'), color : (item.requiredForGamePlay || item.isSelected ? '#fff' : '#9b92e7') }"
+                      borderRadius="5" class="stats-box border">
+                      <Label [text]="item.categoryName" padding="15 10" ></Label>
+                    </FlexboxLayout>
+                </FlexboxLayout>
+                <StackLayout marginTop="10" *ngIf="applicationSettings && applicationSettings.game_play_show_tags" row="2" col="0" iosOverflowSafeArea="false">
+                    <StackLayout *ngIf="selectedTags.length>0" marginBottom="5">
+                            <FlexboxLayout *ngIf="selectedTags" flexWrap="wrap">
+                                <StackLayout *ngFor="let tags of let tag of selectedTags, let i = index">
+                                    <FlexboxLayout  alignItems="center" [style.backgroundColor]="theme === 'dark' ? '#405177':'#e2e2e2'"
+                                    [style.color]="theme === 'dark' ? '#a5a5a5' : '#808080'" borderRadius="22" margin="2.5 2.5" padding="5 10" >
+                                        <Label  [text]="tags" textWrap="true"></Label> 
+                                        <Label  color="#000000" text="&#xe922;" fontSize="10" class="ico icon-close" padding="7 5 7 7" (tap)="removeEnteredTag(tag)"></Label>  
+                                    </FlexboxLayout>
+                                </StackLayout>
+                            </FlexboxLayout>
+                    </StackLayout>
+                    <GridLayout rows="auto" columns="*,85" paddingBottom="10" class="two-player-option">
+                        <StackLayout marginRight="5" row="0" col="0" tkExampleTitle tkToggleNavButton ios:backgroundColor="#ffffff">
+                            <RadAutoCompleteTextView borderWidth="1" borderColor="#a5a5a5" color="black"  #autocomplete hint="Select Tag" [items]="dataItems" completionMode="Contains"
+                                showCloseButton="true" (didAutoComplete)="onDidAutoComplete($event)" (textChanged)="onTextChanged($event)"
+                                borderRadius="3" height="60" paddingLeft="10"
+                                ios:backgroundColor="#ffffff">
+                                <SuggestionView tkAutoCompleteSuggestionView>
+                                    <ng-template tkSuggestionItemTemplate let-item="item">
+                                        <StackLayout orientation="vertical" padding="20">
+                                            <Label [text]="item.text"></Label>
+                                        </StackLayout>
+                                    </ng-template>
+                                </SuggestionView>
+                            </RadAutoCompleteTextView>
+                        </StackLayout>
+                        <Button marginRight="5" row="0" col="1" (tap)="addCustomTag()" stlBackgroundColor="white"  text="Add" class="Roboto-Bold btn-transparent blue-border" 
+                            fontSize="16" android:fontSize="10" borderRadius="4" stlRippleEffect></Button>
+                    </GridLayout>
+                </StackLayout>
+                <StackLayout marginRight="5" row="3" col="0">
+                    <Button text="START A NEW GAME" class="btn-blue Roboto-Medium"
+                      (rippleTap)="showDialog()" height="70" stlRippleEffect></Button>
+                  </StackLayout>
+    
+              <!-- <CardView margin="5 10" visibility="{{ !showSelectTag ? 'visible' : 'collapsed' }}" backgroundColor="white"
+                *ngIf="applicationSettings && applicationSettings.game_play_show_tags" iosOverflowSafeArea="false">
+                <StackLayout>
+                  <RadListView [items]="selectedTags" ios:height="{{tagsHeight}}" android:height="auto">
+                    <ng-template tkListItemTemplate let-item="item">
+                      <GridLayout rows="*" columns="*,auto" padding="10" borderBottomWidth="1" borderBottomColor="#e5e5e5"
+                        height="60" width="100%">
+                        <Label [text]="item" row="0" col="0" textWrap="true" fontSize="18" padding="8"></Label>
+                        <Label row="0" col="1" class="fa" text="&#xf00d;" fontSize="18" textWrap="true" padding="8"
+                          horizontalAlignment="right" (tap)="removeEnteredTag(item)"></Label>
+                      </GridLayout>
+                    </ng-template>
+                  </RadListView>
+                  <GridLayout rows="auto,auto" columns="*,auto" padding="10" class="two-player-option">
+                    <Label row="0" col="0" text="Add Tags" fontSize="18" textWrap="true" class="label"
+                      padding="2 0"></Label>
+                    <StackLayout row="1" col="0" tkExampleTitle tkToggleNavButton ios:backgroundColor="#CDCECE" padding="5">
+                      <RadAutoCompleteTextView #autocomplete hint="Select Tag" [items]="dataItems" completionMode="Contains"
+                        showCloseButton="true" (didAutoComplete)="onDidAutoComplete($event)"
+                        (textChanged)="onTextChanged($event)" border="none">
+                        <SuggestionView tkAutoCompleteSuggestionView>
+                          <ng-template tkSuggestionItemTemplate let-item="item">
+                            <StackLayout orientation="vertical" padding="10">
+                              <Label [text]="item.text"></Label>
+                            </StackLayout>
+                          </ng-template>
+                        </SuggestionView>
+                      </RadAutoCompleteTextView>
+                    </StackLayout>
+                    <Button row="1" col="1" text="Add" (tap)="addCustomTag()" padding="10" fontSize="18"
+                      backgroundColor="#89C24F" color="#ffffff" marginLeft="10" fontWeight="700" stlRippleEffect></Button>
+                  </GridLayout>
+                </StackLayout>
+              </CardView>
+              <CardView margin="5 10" visibility="{{ showSelectTag ? 'visible' : 'collapsed' }}" backgroundColor="white"
+                class="label" *ngIf="applicationSettings && applicationSettings.game_play_show_tags">
+                <Label padding="15" [text]="selectedTags.join(', ')" textWrap="true"></Label>
+              </CardView> -->
+    
+    
+              </GridLayout>
+          </ScrollView>
+      </GridLayout>
+    
+    <!-- <StackLayout  style="z-index: 0;" padding="0" marginTop="0" row="2" col="0">
       <ScrollView>
         <StackLayout class="new-game Roboto-Regular">
           <GridLayout *ngIf="!challengerUserId || (challengerUserId && routeType !== 'challenge')" rows="auto,auto"
@@ -222,7 +316,7 @@
           </StackLayout>
         </StackLayout>
       </ScrollView>
-    </StackLayout>
+    </StackLayout> -->
     <AbsoluteLayout (tap)="stopEventPropogation()" style="z-index: 1;" row="0" col="1" rowSpan="2" class="dialog__wrapper">
         <FlexboxLayout  width="100%" height="100%" style="z-index: 1;" justifyContent="space-around" alignItems="center">
             <StackLayout  class="main-dialog">
@@ -250,39 +344,33 @@
       </FlexboxLayout>
     </AbsoluteLayout>
   </GridLayout>
-
-
-  
-  </GridLayout> -->
-<GridLayout rows="auto,auto,auto,*" columns="*">
-  <Label row="0" col="0" padding="20" color="#000000" text="&#xe906;" fontSize="30" class="ico icon-back" (tap)="back()"></Label>
-  <GridLayout  row="1" col="0"  rows="auto,auto" columns="*,50"padding="0 20 10 20">
-    <Label   text="Play as a" row="0" col="0" fontSize="35" fontWeight="900" color="black">
-    </Label>
-    <Label text="single player"  row="1" col="0" fontSize="35" fontWeight="900" color="#3b5998">
-    </Label>
-     <Label col="1" row="0" text="&#xe929;"  width="46pt" height="46pt" borderWidth="1" borderRadius="80"
-        color="#3b5998" borderColor="#3b5998" 
-       class="ico icon-friends" fontSize="20" 
-      horizontalAlignment="right" padding="10"></Label>
-   
   </GridLayout>
-  
-  <StackLayout  row="2" col="0" horizontalAlignment="left">
-    <Label fontSize="20" text="Based on your profile below are categories, you unselect and select categories. This won't effect your profile" textWrap="true" padding="20">
-
-    </Label>
-  </StackLayout>
-  <ScrollView  row="3" col="0">
-  <FlexboxLayout flexWrap="wrap" margin="0 10 0 10" 
-  horizontalAlignment="center">
-      <FlexboxLayout *ngFor="let item of categories, let i = index" stlRippleEffect flexDirection="column" justifyContent="center" alignItems="center"
-        (rippleTap)="selectTopic(i)" padding="20"
-        [ngStyle]="{background: (item.requiredForGamePlay ? '#48b24e' : '#fafafa'), color : (item.requiredForGamePlay ? '#fff' : '#9b92e7') }"
-        borderRadius="5" class="stats-box border">
-        <Label [text]="item.categoryName" padding="15 10" ></Label>
+<!-- <GridLayout padding="15 15" rows="auto,auto,*" columns="*">
+  <Label row="0" col="0"  text="&#xe906;" fontSize="20" class="ico icon-back back-btn" (tap)="back()"></Label>
+  <GridLayout row="1" col="0"  rows="auto" columns="*,80">
+    <FlexboxLayout class="main-title" flexDirection="column" row="0" col="0">
+      <Label text="Play as a"  color="#000000">
+      </Label>
+      <Label text="single player" color="#3b5998">
+      </Label>
+    </FlexboxLayout>
+    <StackLayout  col="1" row="0" >
+        <Label text="&#xe929;" class="ico icon-friends btn-player"></Label>
+        <Label class="btn-player-text" text="switch to two player" textWrap="true"></Label>
+    </StackLayout>
+  </GridLayout>
+  <ScrollView  row="2" col="0">
+    <GridLayout rows="auto,auto" columns="*">        
+      <Label class="info-text" row="0" col="0"  text="Based on your profile below are categories, you unselect and select categories. This won't effect your profile" textWrap="true"></Label>
+      <FlexboxLayout row="1" col="0" flexWrap="wrap" margin="0 -10 0 -10" horizontalAlignment="center">
+          <FlexboxLayout *ngFor="let item of categories, let i = index" stlRippleEffect flexDirection="column" justifyContent="center" alignItems="center"
+            (rippleTap)="selectTopic(i)"
+            [ngStyle]="{background: (item.requiredForGamePlay ? '#48b24e' : '#fafafa'), color : (item.requiredForGamePlay ? '#fff' : '#9b92e7') }"
+            borderRadius="5" class="stats-box border">
+            <Label [text]="item.categoryName" padding="15 10" ></Label>
+          </FlexboxLayout>
       </FlexboxLayout>
-  </FlexboxLayout>
+    </GridLayout>
 </ScrollView>
-</GridLayout>
+</GridLayout> -->
 
