@@ -2,39 +2,37 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>AD_UNIT_ID_FOR_BANNER_TEST</key>
-	<string>ca-app-pub-3940256099942544/2934735716</string>
-	<key>AD_UNIT_ID_FOR_INTERSTITIAL_TEST</key>
-	<string>ca-app-pub-3940256099942544/4411468910</string>
 	<key>CLIENT_ID</key>
-	<string>701588063269-dor381go31bk90elf47kfbub5nq8v8pd.apps.googleusercontent.com</string>
+	<string>704157888306-c921rsjncge4fqqlm27c1bsuq6dc6u89.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.701588063269-dor381go31bk90elf47kfbub5nq8v8pd</string>
+	<string>com.googleusercontent.apps.704157888306-c921rsjncge4fqqlm27c1bsuq6dc6u89</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>704157888306-l0igpl9s2mt173212rg5t396na6p4br5.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
-	<string>AIzaSyC_sAg9yUS00keGXLkbHYK47osjpQZcsTI</string>
+	<string>AIzaSyCWCsESafctxxNcEWZlm8LOUwlAI-W54EM</string>
 	<key>GCM_SENDER_ID</key>
-	<string>701588063269</string>
+	<string>704157888306</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>io.bitwiser.trivia.dev</string>
+	<string>io.bitwiser.edu.dev</string>
 	<key>PROJECT_ID</key>
-	<string>rwa-trivia-dev-e57fc</string>
+	<string>bitwiser-edu</string>
 	<key>STORAGE_BUCKET</key>
-	<string>rwa-trivia-dev-e57fc.appspot.com</string>
+	<string>bitwiser-edu.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
-	<true></true>
+	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
 	<false></false>
 	<key>IS_APPINVITE_ENABLED</key>
-	<false></false>
+	<true></true>
 	<key>IS_GCM_ENABLED</key>
 	<true></true>
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:701588063269:ios:f852e63cad494f5f</string>
+	<string>1:704157888306:ios:8c66f9daa3493ca2</string>
 	<key>DATABASE_URL</key>
-	<string>https://rwa-trivia-dev-e57fc.firebaseio.com</string>
+	<string>https://bitwiser-edu.firebaseio.com</string>
 </dict>
 </plist>
