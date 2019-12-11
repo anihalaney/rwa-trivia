@@ -57,11 +57,11 @@
           <ScrollView *ngIf="gameOptions.playerMode === 0 || (chooseOptionsStep == 1 && gameOptions.playerMode === 1 && (gameOptions.opponentType == 0 || gameOptions.opponentType == 1))" row="3" col="0">
               <GridLayout rows="auto,auto,auto,auto" columns="*">        
                 <Label class="info-text" row="0" col="0"  text="Based on your profile below are categories, you unselect and select categories. This won't effect your profile" textWrap="true"></Label>
-                <FlexboxLayout row="1" col="0" flexWrap="wrap" margin="0 -10 0 -5" horizontalAlignment="center">
-                    <FlexboxLayout *ngFor="let item of filteredCategories, let i = index" stlRippleEffect flexDirection="column" justifyContent="center" alignItems="center"
+                <FlexboxLayout row="1" col="0" flexWrap="wrap" horizontalAlignment="center" flexDirection="row">
+                    <FlexboxLayout *ngFor="let item of filteredCategories, let i = index" stlRippleEffect  alignItems="center" justifyContent="center"
                       (rippleTap)="selectCategory(i)"
                       [ngStyle]="{background: (item.requiredForGamePlay || item.isSelected ? '#48b24e' : '#fafafa'), color : (item.requiredForGamePlay || item.isSelected ? '#fff' : '#6c63ff') }"
-                      borderRadius="5" class="stats-box border">
+                      borderRadius="5" class="stats-box" [class.border]="i%2 === 0" >
                       <Label [text]="item.categoryName" padding="15 10" ></Label>
                     </FlexboxLayout>
                 </FlexboxLayout>
