@@ -89,7 +89,7 @@
   </AbsoluteLayout>
   <FlexboxLayout row="0" col="1" flexDirection="column" marginLeft="10">
     <Label class="disp-name"  [text]="otherInfo?.isRandom === true ? 'Random User' : user?.displayName ? user?.displayName : 'unknown'"></Label>
-    <Label class="address" *ngIf="!otherInfo?.isRandom" [text]="otherInfo?.lastGamePlayed ? (otherInfo?.lastGamePlayed | date:'dd MMM yyyy')  : ' '"></Label>
+    <Label class="address" *ngIf="!otherInfo?.isRandom" [text]="otherInfo?.lastGamePlayed && otherInfo?.lastGamePlayed != '' ? (otherInfo?.lastGamePlayed | timeAgo)  : ' '"></Label>
   </FlexboxLayout>
 </GridLayout>
 

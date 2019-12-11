@@ -47,6 +47,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
   searchFriend = '';
   selectedTopFilter = 0;
   chooseOptionsStep = 0;
+  skipNavigation = false;
 
   @ViewChild('autocomplete', { static: false }) autocomplete: RadAutoCompleteTextViewComponent;
   @ViewChild('friendListView', { static: false }) listViewComponent: RadListViewComponent;
@@ -146,7 +147,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
   }
 
   back() {
-    if (this.chooseOptionsStep === 0) {
+    if (this.chooseOptionsStep === 0 || !this.skipNavigation) {
       this.navigationService.back();
     } else {
       this.chooseOptionsStep = 0;
@@ -256,6 +257,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
   selectFriendIdApp(friend: any) {
     this.friendUserId = friend.userId;
     this.chooseOptionsStep = 1;
+    this.skipNavigation = true;
     this.listViewComponent.listView.refresh();
   }
 
