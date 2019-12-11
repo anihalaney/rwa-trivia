@@ -1,0 +1,40 @@
+<ns-action-bar title="Edit Categories" class="Roboto-Regular" hideMenu="true"></ns-action-bar>
+<GridLayout rows="*,auto" columns="*">
+  <ScrollView>
+    <GridLayout rows="auto,auto,auto,auto,auto,auto" columns="*" row="0" class="profile-settings Roboto-Regular">
+      
+      <Label row="0" text="Edit Categories" margin="15 15 0 15" fontSize="30" fontWeight="bold" color="#2f3f6b" textWrap="true"></Label>
+
+      <Label row="1" padding="10 15 15 15"
+        text="Modify the categories from here"
+        fontSize="20" textWrap="true"></Label>
+
+      <Label row="2" fontSize="16" padding="0 15 15 15" class="font-weight-bold" text="Popular topics" textWrap="true"></Label>
+
+        <FlexboxLayout row="3" flexWrap="wrap" margin="0 10 0 10" horizontalAlignment="center">
+            <FlexboxLayout *ngFor="let item of categories, let i = index" stlRippleEffect flexDirection="column" justifyContent="center" alignItems="center"
+              (rippleTap)="selectTopic(i)"
+              [ngStyle]="{background: (item.requiredForGamePlay ? '#48b24e' : '#fafafa'), color : (item.requiredForGamePlay ? '#fff' : '#9b92e7') }"
+              borderRadius="5" class="stats-box border">
+              <Label [text]="item.categoryName" padding="15 10" ></Label>
+            </FlexboxLayout>
+        </FlexboxLayout>
+
+      <Label row="4" fontSize="16" padding="15" class="font-weight-bold" text="Popular tags" textWrap="true"></Label>
+
+        <FlexboxLayout row="5" flexWrap="wrap" margin="0 10 20 10" horizontalAlignment="center">
+            <FlexboxLayout *ngFor="let item of tags, let i = index" class="stats-box border" stlRippleEffect flexDirection="column" justifyContent="center" alignItems="center"
+              (rippleTap)="selectTags(i)"
+              [ngStyle]="{background: (item.requiredForGamePlay ? '#48b24e' : '#fafafa'), color : (item.requiredForGamePlay ? '#fff' : '#9b92e7') }"
+              borderRadius="5">
+              <Label [text]="item.key" padding="15 10" ></Label>
+            </FlexboxLayout>
+        </FlexboxLayout>
+
+    </GridLayout>
+  </ScrollView>
+  <GridLayout rows="auto" row="1" margin="15">
+    <Button row="0" [isEnabled]="selectedCategories >= 5" (tap)="continueToFirstQuestion()"
+      text="{{selectedCategories}}/{{categories.length}}" borderRadius="5" height="40"></Button>
+  </GridLayout>
+</GridLayout>
