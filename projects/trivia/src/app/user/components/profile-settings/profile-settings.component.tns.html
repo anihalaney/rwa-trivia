@@ -66,9 +66,9 @@
           <!-- Name -->
           <app-animation-box [fieldName]="'name'" (formSubmitted)='formSubmitted($event)'
             [fieldValue]="userForm.controls['name'].value" (formEditOpen)='formEditOpen($event)' [isValid]="!userForm.controls.name.errors">
-            <TextField header #textFieldContent hint="Name" formControlName="name" paddingLeft="4" ios:marginTop="5"
+            <TextField textField #textFieldContent hint="Name" formControlName="name" paddingLeft="4" ios:marginTop="5"
               android:paddingBottom="10" android:marginTop="-5"></TextField>
-            <StackLayout footer width="90%" row="1">
+            <StackLayout errorMsg width="90%" row="1">
               <Label *ngIf="userForm.controls.name.errors?.required && !userForm.controls.name.pristine" class=" error"
                 textWrap="true" text="Name is required!"></Label>
 
@@ -80,10 +80,10 @@
 
           <app-animation-box [fieldName]="'email'" (formSubmitted)='formSubmitted($event)' [fieldValue]="user.email"
             (formEditOpen)='formEditOpen($event)' [isValid]="!userForm.controls.email.errors" [isDisplay]="(currentAuthProvider===authProviderConstants.PHONE)">
-            <TextField  header #textFieldContent 
+            <TextField  textField #textFieldContent 
             hint="Email" formControlName="email" paddingLeft="4" ios:marginTop="5"
               android:paddingBottom="10" android:marginTop="-5"> </TextField>
-            <StackLayout footer width="90%" row="1">
+            <StackLayout errorMsg width="90%" row="1">
               <Label *ngIf="userForm.controls.email.errors?.required && !userForm.controls.email.pristine"
                 class=" error" textWrap="true" text="Email is required!"></Label>
 
@@ -94,11 +94,11 @@
 
           <app-animation-box [fieldName]="'phoneNo'" (formSubmitted)='formSubmitted($event)' [fieldValue]="user.phoneNo"
             (formEditOpen)='formEditOpen($event)' [isValid]="!userForm.controls.phoneNo.errors" [isDisplay]="(currentAuthProvider===authProviderConstants.GOOGLE || currentAuthProvider===authProviderConstants.FACEBOOK || currentAuthProvider===authProviderConstants.PASSWORD)">
-            <TextField header #textFieldContent hint="Phone" formControlName="phoneNo" paddingLeft="4" ios:marginTop="5"
+            <TextField textField #textFieldContent hint="Phone" formControlName="phoneNo" paddingLeft="4" ios:marginTop="5"
               android:paddingBottom="10" android:marginTop="-5">
             </TextField>
-            <StackLayout footer width="90%" row="1">
-              <Label footer *ngIf="userForm.controls.phoneNo.errors && !userForm.controls.phoneNo.pristine"
+            <StackLayout errorMsg width="90%" row="1">
+              <Label errorMsg *ngIf="userForm.controls.phoneNo.errors && !userForm.controls.phoneNo.pristine"
                 class="error" textWrap="true" text="Enter valid phone number!"></Label>
             </StackLayout>
           </app-animation-box>
@@ -116,9 +116,9 @@
 
           <app-animation-box [fieldName]="'location'" (formSubmitted)='formSubmitted($event)'
             [fieldValue]="user.location" (formEditOpen)='formEditOpen($event)' [isValid]="!userForm.controls.location.errors">
-            <RadAutoCompleteTextView header #textFieldContent #acLocation [items]="dataLocation" suggestMode="Suggest"
+            <RadAutoCompleteTextView textField #textFieldContent #acLocation [items]="dataLocation" suggestMode="Suggest"
               showCloseButton="false" (didAutoComplete)="onTextChangedLocation($event)"
-              (textChanged)="onTextChangedLocation($event)" (loaded)="onLoadedLoaction($event)" ios:marginTop="5"
+              (textChanged)="onTextChangedLocation($event)" (loaded)="onLoadedLocation($event)" ios:marginTop="0"
               android:paddingBottom="10" android:marginTop="-5">
               <SuggestionView tkAutoCompleteSuggestionView marginTop="20">
                 <ng-template tkSuggestionItemTemplate let-item="item">
@@ -128,7 +128,7 @@
                 </ng-template>
               </SuggestionView>
             </RadAutoCompleteTextView>
-            <StackLayout footer width="90%">
+            <StackLayout errorMsg width="90%">
               <Label *ngIf="(userForm.controls.location.errors)" class="error" textWrap="true"
                 text="Enter location number!"></Label>
             </StackLayout>

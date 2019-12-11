@@ -6,7 +6,7 @@
                 <Label #nameLabelField alignSelf="flex-start" text="{{ fieldName | titlecase }}" textWrap="true"
                     class="label-field"></Label>
                 <StackLayout #nameField [visibility]="'collapsed'">
-                    <ng-content select="[header]"></ng-content>
+                    <ng-content select="[textField]"></ng-content>
                 </StackLayout>
                 <Label #nameLabel [text]="fieldValue" textWrap="true" class="label-value"></Label>
             </FlexboxLayout>
@@ -20,7 +20,7 @@
             </FlexboxLayout>
         </GridLayout>
         <StackLayout row="1">
-            <ng-content select="[footer]"></ng-content>
+            <ng-content select="[errorMsg]"></ng-content>
         </StackLayout>
     </GridLayout>
 </StackLayout>
