@@ -32,6 +32,8 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
   showSelectTag = false;
   customTag: string;
   private tagItems: ObservableArray<TokenModel>;
+  private _filterFriendFunc: (item: any) => any;
+  // pagination: any;
   subscriptions = [];
   // This is magic variable
   // it delay complex UI show Router navigation can finish first to have smooth transition
@@ -42,6 +44,9 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
   showModal = false;
   showGameStartLoader = false;
   dialogOpen;
+  searchFriend = '';
+  selectedTopFilter = 0;
+  chooseOptionsStep = 0;
 
   @ViewChild('autocomplete', { static: false }) autocomplete: RadAutoCompleteTextViewComponent;
   @ViewChild('friendListView', { static: false }) listViewComponent: RadListViewComponent;
@@ -63,6 +68,13 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     this.initDataItems();
     this.modeAvailable = false;
     this.page.actionBarHidden = true;
+    this.filterFriendFunc = (item: any) => {
+      if (!this.searchFriend  || this.searchFriend === '') {
+        return true;
+      }
+      return ( item && item.userId && this.userDict[item.userId] &&
+        this.userDict[item.userId].displayName.toLowerCase().search(this.searchFriend.toLowerCase()) >= 0 ) ? true : false;
+    };
   }
   ngOnInit() {
 
@@ -73,7 +85,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
       // https://github.com/NativeScript/nativescript-ui-feedback/issues/753
       if (this.listViewComponent) {
         if (isIOS) {
-          this.listViewComponent.listView.refresh();
+          // this.listViewComponent.listView.refresh();
         }
       }
     }));
@@ -87,11 +99,13 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
           if (this.router.url.indexOf('challenge') > 0) {
             this.gameOptions.isChallenge = true;
           }
+          this.chooseOptionsStep = 1;
           this.friendUserId = data.userid;
         }
         if (this.router.url.indexOf('play-game-with-random-user') >= 0) {
           this.gameOptions.playerMode = 1;
           this.gameOptions.opponentType = 0;
+          this.chooseOptionsStep = 1;
         }
         if (data && data.mode) {
           this.modeAvailable = true;
@@ -100,7 +114,8 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
             this.actionBarTitle = 'Play as single player';
           } else {
             this.gameOptions.playerMode = 1;
-            this.gameOptions.opponentType = 0;
+            this.gameOptions.opponentType = 1;
+            this.chooseOptionsStep = 0;
             this.actionBarTitle = 'Play as two player';
           }
         }
@@ -113,6 +128,14 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     }));
   }
 
+  get filterFriendFunc(): (item: any) => any {
+    return this._filterFriendFunc;
+  }
+
+  set filterFriendFunc(value: (item: any) => any) {
+      this._filterFriendFunc = value;
+  }
+
   showDialog() {
     this.dialogOpen = true;
   }
@@ -123,7 +146,12 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
   }
 
   back() {
-    this.navigationService.back();
+    if (this.chooseOptionsStep === 0) {
+      this.navigationService.back();
+    } else {
+      this.chooseOptionsStep = 0;
+      this.gameOptions.opponentType = 1;
+    }
   }
 
   ngOnDestroy() {
@@ -147,6 +175,13 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     }
     this.customTag = '';
     this.autocomplete.autoCompleteTextView.resetAutoComplete();
+  }
+
+  onSearchFriendTextChange(event) {
+        this.searchFriend = event.value;
+        const listView = this.listViewComponent.listView;
+        listView.filteringFunction = undefined;
+        listView.filteringFunction = this.filterFriendFunc;
   }
 
   startGame() {
@@ -218,8 +253,9 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     this.customTag = args.text;
   }
 
-  selectFriendIdApp(friendId: string) {
-    this.friendUserId = friendId;
+  selectFriendIdApp(friend: any) {
+    this.friendUserId = friend.userId;
+    this.chooseOptionsStep = 1;
     this.listViewComponent.listView.refresh();
   }
 
@@ -250,6 +286,20 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     } else {
       this.actionBarTitle = 'Play as multi player';
     }
+  }
+
+  chooseRandomPlayer() {
+    this.gameOptions.opponentType = 0;
+    this.gameOptions.playerMode = 1;
+    this.chooseOptionsStep = 1;
+    this.friendUserId = null;
+  }
+
+  changePlayGameWith(playerMode = 1) {
+    this.gameOptions.playerMode = playerMode;
+    this.gameOptions.opponentType = 1;
+    this.chooseOptionsStep = 0;
+    this.friendUserId = null;
   }
 
 }

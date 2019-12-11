@@ -194,3 +194,14 @@ Button {
   padding: 15 0 15 0;
   border-radius: 4;
 }
+
+.text-field {
+  border: 0;
+  border-width: 1;
+  border-color: $border-color;
+  border-radius: 3;
+  // margin-bottom: 20;
+  padding: 10 20;
+  font-size: 18;
+  background-color: $white;
+}
