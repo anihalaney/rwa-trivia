@@ -45,7 +45,7 @@ export class AnimationBoxComponent implements OnInit, AfterContentInit {
     }
   }
 
-  async editSingleFieldTns() {
+  editField() {
     const nativeElement = this.textBoxContainers.nativeElement;
     const nameField = this.nameField;
     const nameLabel = this.nameLabel;
@@ -75,6 +75,7 @@ export class AnimationBoxComponent implements OnInit, AfterContentInit {
         width: "auto",
         duration: 100
       });
+      this.formSubmitted.emit(this.fieldName);
     } else {
       if (this.fieldValue) {
         nameLabelField.nativeElement.visibility = "hidden";
@@ -94,7 +95,6 @@ export class AnimationBoxComponent implements OnInit, AfterContentInit {
         nameField.nativeElement.visibility = "visible";
         this.utils.focusTextField(this.textFieldContent);
       } else {
-
         nameLabel.nativeElement.visibility = "hidden";
         nameLabelField.nativeElement.animate({
           translate: { x: 4, y: 7 },
@@ -111,15 +111,10 @@ export class AnimationBoxComponent implements OnInit, AfterContentInit {
           duration: 100
         });
       }
+      this.formEditOpen.emit(this.fieldName);
     }
 
     this.showEdit = !this.showEdit;
-    this.formEditOpen.emit(this.fieldName);
-  }
-
-  onSubmit() {
-    this.editSingleFieldTns();
-    this.formSubmitted.emit(this.fieldName);
   }
 
   ngAfterContentInit(): void {

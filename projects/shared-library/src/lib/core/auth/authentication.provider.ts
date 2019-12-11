@@ -98,11 +98,7 @@ export class AuthenticationProvider {
   }
 
   async updatePassword(email: string, currentPassword: string, newPassword: string) {
-    try {
-      await this.firebaseAuthService.updatePassword(email, currentPassword, newPassword);
-    } catch (error) {
-      throw error;
-    }
+    await this.firebaseAuthService.updatePassword(email, currentPassword, newPassword);
 }
 
 logout() {

@@ -11,10 +11,10 @@
                 <Label #nameLabel [text]="fieldValue" textWrap="true" class="label-value"></Label>
             </FlexboxLayout>
             <FlexboxLayout col="1" flexDirection="column" justifyContent="center">
-                <Label *ngIf="!showEdit && isDisplay" (tap)="editSingleFieldTns()" color="#14418B" fontSize="20"
+                <Label *ngIf="!showEdit && isDisplay" (tap)="editField()" color="#14418B" fontSize="20"
                     class="ico icon-edit" textWrap="true" text="&#xe927;" padding="5">
                 </Label>
-                <Label *ngIf="showEdit && isValid" (tap)="onSubmit()" color="#14418B" fontSize="26" class="fa"
+                <Label *ngIf="showEdit && isValid" (tap)="editField()" color="#14418B" fontSize="26" class="fa"
                     text="&#xf058;" padding="5">
                 </Label>
             </FlexboxLayout>
