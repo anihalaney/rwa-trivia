@@ -96,7 +96,7 @@
                             fontSize="16" android:fontSize="10" borderRadius="4" stlRippleEffect></Button>
                     </GridLayout>
                 </StackLayout>
-                <Button  marginRight="5" row="3" col="0" text="START A NEW GAME" class="btn-blue Roboto-Medium"
+                <Button  marginRight="5" row="3" col="0" [text]="gameOptions.playerMode === 1 ? 'Send Invite' : 'START A NEW GAME'" class="btn-blue Roboto-Medium"
                   (rippleTap)="showDialog()" height="70" stlRippleEffect></Button>
               </GridLayout>
           </ScrollView>
