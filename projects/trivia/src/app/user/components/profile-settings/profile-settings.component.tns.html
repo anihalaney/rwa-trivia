@@ -298,22 +298,6 @@
                       text="Show more" stlRippleEffect (tap)="showMoreSocialProfile()"></Button>
                   </StackLayout>
 
-                  <!-- <StackLayout *ngIf="(isEnableEditProfile && userType === 0)" class="profile-buttons"
-                    iosOverflowSafeArea="false">
-                    <Label text="Bulk upload Request" textWrap="true" padding="8"></Label>
-                    <Button *ngIf="(!user.bulkUploadPermissionStatus
-                    || user.bulkUploadPermissionStatus === NONE
-                    || user.bulkUploadPermissionStatus === PENDING)
-                    && !user.isRequestedBulkUpload" [text]="bulkUploadBtnText" backgroundColor="#ffffff" color="black"
-                      padding="10 0" (tap)="setBulkUploadRequest()" borderWidth="1" borderRadius="3"
-                      stlRippleEffect></Button>
-                    <Label class="sub-text" *ngIf="user.bulkUploadPermissionStatus === PENDING"
-                      text="Bulk upload requested on {{user.bulkUploadPermissionStatusUpdateTime | date : 'medium' }}."
-                      textWrap="true" padding="8"></Label>
-                    <Label class="sub-text" *ngIf="user.bulkUploadPermissionStatus === APPROVED"
-                      text="User has bulk upload privilege" textWrap="true" padding="8"></Label>
-                  </StackLayout> -->
-
                   <StackLayout *ngIf="isEnableEditProfile && userType ===  0" class="profile-buttons"
                     iosOverflowSafeArea="false">
                     <Button text="SAVE" class="Roboto-Medium" backgroundColor="#71b02f" color="#ffffff" padding="20 0"
