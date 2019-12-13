@@ -30,6 +30,7 @@ export class GameQuestionComponent extends GameQuestion implements OnInit, OnDes
   stopProcessBar;
   doPlay = true;
   actionText: string;
+  theme: string;
 
   photoUrl: String = `~/assets/icons/${projectMeta.projectName}/icon-192x192.png`;
   userDict$: Observable<{ [key: string]: User }>;
