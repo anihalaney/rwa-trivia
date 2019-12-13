@@ -48,6 +48,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
   selectedTopFilter = 0;
   chooseOptionsStep = 0;
   skipNavigation = false;
+  theme: string;
 
   @ViewChild('autocomplete', { static: false }) autocomplete: RadAutoCompleteTextViewComponent;
   @ViewChild('friendListView', { static: false }) listViewComponent: RadListViewComponent;
