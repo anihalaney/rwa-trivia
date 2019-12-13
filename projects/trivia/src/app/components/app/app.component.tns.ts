@@ -1,4 +1,5 @@
-import { Component, OnInit, NgZone, OnDestroy, ChangeDetectorRef, ViewContainerRef } from '@angular/core';
+import { Component, OnInit, NgZone, OnDestroy, ChangeDetectorRef, ViewContainerRef, ViewChild, AfterViewInit } from '@angular/core';
+
 import * as firebase from 'nativescript-plugin-firebase';
 import { Store, select } from '@ngrx/store';
 import { filter } from 'rxjs/operators';
@@ -29,6 +30,9 @@ import { ModalDialogOptions, ModalDialogService } from 'nativescript-angular/mod
 import { WelcomeScreenComponent } from '../../../../../shared-library/src/lib/shared/mobile/component';
 import * as appSettingsStorage from 'tns-core-modules/application-settings';
 
+import { RadSideDrawerComponent, SideDrawerType } from "nativescript-ui-sidedrawer/angular";
+import { RadSideDrawer } from 'nativescript-ui-sidedrawer';
+
 registerElement('Carousel', () => Carousel);
 registerElement('CarouselItem', () => CarouselItem);
 
@@ -38,7 +42,7 @@ registerElement('CarouselItem', () => CarouselItem);
 })
 
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
-export class AppComponent implements OnInit, OnDestroy {
+export class AppComponent implements OnInit, OnDestroy, AfterViewInit  {
   user: User;
   subscriptions = [];
   applicationSettings: ApplicationSettings;
@@ -46,6 +50,8 @@ export class AppComponent implements OnInit, OnDestroy {
   showBottomBar: Boolean = true;
   currentRouteUrl: string;
   bottomSafeArea: number;
+  @ViewChild(RadSideDrawerComponent, {static : true}) public drawerComponent: RadSideDrawerComponent;
+  private _drawer: SideDrawerType;
   constructor(
     private store: Store<AppState>,
     private navigationService: NavigationService,
@@ -167,6 +173,19 @@ export class AppComponent implements OnInit, OnDestroy {
       this.store.dispatch(this.applicationSettingsAction.loadApplicationSettings());
       this.store.dispatch(this.categoryActions.loadCategories());
     }));
+  }
+
+  ngAfterViewInit () {
+    this._drawer = this.drawerComponent.sideDrawer;
+    if (this._drawer.ios) {
+        this._drawer.ios.defaultSideDrawer.style.shadowMode = 2;
+        this._drawer.ios.defaultSideDrawer.style.shadowOpacity = 0.1; // 0-1, higher is darker
+        this._drawer.ios.defaultSideDrawer.style.shadowRadius = 15; // higher is more spread
+
+        // this._drawer.ios.defaultSideDrawer.style.shadowMode = 1;
+        // this._drawer.ios.defaultSideDrawer.style.shadowOpacity = 0.1; // 0-1, higher is darker
+        // this._drawer.ios.defaultSideDrawer.style.shadowRadius = 100; // higher is more spread
+    }
   }
 
   drawerEvent(args) {
