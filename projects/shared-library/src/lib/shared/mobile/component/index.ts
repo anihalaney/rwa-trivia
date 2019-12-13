@@ -13,3 +13,4 @@ export * from './render-box/render-box.component';
 export * from './change-password/change-password.component';
 export * from './animation-box/animation-box.component';
 export * from './update-category-tag/update-category-tag.component'
+export * from './bulk-upload-request/bulk-upload-request.component';

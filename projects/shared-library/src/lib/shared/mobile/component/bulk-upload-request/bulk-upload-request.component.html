@@ -1,0 +1,24 @@
+<ns-action-bar [title]="'Bulk Upload Request'" class="Roboto-Regular" showAdd="true"></ns-action-bar>
+<GridLayout rows="auto,auto,auto" columns="*" class="profile-buttons" iosOverflowSafeArea="false">
+    <FlexboxLayout marginBottom="20" *ngIf="user && !user?.name || !user?.displayName || !user?.location || !user?.profilePicture" row="0" col="0"  class="text-info info">
+      <StackLayout verticalAlignment="center">
+        <Label  maxHeight="30" text="&#xf129;" class="fa text-icon-field info badge"></Label>
+      </StackLayout>  
+        <Label padding = "0 30 0 10" class="sub-text " text="Please fill Name, Display Name, Location and Profile Picture to enable bulk upload request" textWrap="true"></Label>
+    </FlexboxLayout>
+    <Button (rippleTap)="navigateToUserAccount()" row="1" col="0" *ngIf="user && !user?.name || !user?.displayName || !user?.location || !user?.profilePicture; else bulkUploadBtn"  text="Go To User Account" class="btn-transparent blue-border"
+      stlRippleEffect></Button>
+    <ng-template #bulkUploadBtn>
+      <Button row="1" col="0" *ngIf="(!user.bulkUploadPermissionStatus 
+      || user.bulkUploadPermissionStatus === NONE
+      || user.bulkUploadPermissionStatus === PENDING) 
+      && !user.isRequestedBulkUpload" [text]="bulkUploadBtnText" class="btn-transparent blue-border"
+        (tap)="setBulkUploadRequest()" stlRippleEffect></Button>
+        <Label row="2" col="0" class="sub-text" *ngIf="user.bulkUploadPermissionStatus === PENDING"
+          text="Bulk upload requested on {{user.bulkUploadPermissionStatusUpdateTime | date : 'medium' }}." textWrap="true" ></Label>
+        <FlexboxLayout  *ngIf="user.bulkUploadPermissionStatus === APPROVED" row="1" col="0"  class="text-info success">
+            <Label  text="&#xe921;" class="ico icon-check-green success badge"></Label>
+            <Label class="sub-text " text="User has bulk upload privilege" textWrap="true"></Label>
+        </FlexboxLayout>
+    </ng-template>
+</GridLayout>

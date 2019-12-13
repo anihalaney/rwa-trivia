@@ -58,6 +58,9 @@ export class ActionBarComponent implements OnDestroy, OnInit {
             this.navigationService.back();
         }
     }
+    navigateToBulkUpload() {
+        this.routerExtensions.navigate(['/user/my/questions/bulk-upload-request']);
+    }
 
     openSidebar() {
         this.open.emit();

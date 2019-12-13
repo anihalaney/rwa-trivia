@@ -113,8 +113,6 @@ export class UserController {
                 }
             }
 
-            user.bulkUploadPermissionStatus =
-                (user.bulkUploadPermissionStatus) ? user.bulkUploadPermissionStatus : profileSettingsConstants.NONE;
 
             delete user[UserConstants.ROLES];
 
