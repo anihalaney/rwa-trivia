@@ -7,7 +7,7 @@
         <StackLayout row="0">
             <page-router-outlet class="page page-content"></page-router-outlet>
         </StackLayout>
-        <StackLayout *ngIf="showBottomBar" row="1">
+        <StackLayout *ngIf="showBottomBar" row="1" marginTop="-20" backgroundColor="#ffffff" borderRadius="18 18 0 0">
             <bottom-bar [isDrawerOpenOrClosed]="isDrawerOpenOrClosed" [screen]="'app'">
             </bottom-bar>
         </StackLayout>
