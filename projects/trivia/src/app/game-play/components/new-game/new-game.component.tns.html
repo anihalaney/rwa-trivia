@@ -3,7 +3,6 @@
       <GridLayout row="0" col="0" padding="15 15" rows="auto,auto,auto,*" columns="*">
         <StackLayout row="0" col="0" orientation="horizontal">
           <Label  text="&#xe906;"  ios:paddingTop="10" android:paddingTop="3" fontSize="20" class="ico icon-back back-btn" (rippleTap)="back()" stlRippleEffect></Label>
-          <Label  marginLeft="20" fontWeight="600" color="#000" fontSize="20" marginTop="0" text="Invite for play together" *ngIf="gameOptions.playerMode === 1 && chooseOptionsStep == 1" textWrap="true"></Label>
         </StackLayout>
           <GridLayout row="1" col="0"  rows="auto" columns="*,90" marginBottom="10">
             <FlexboxLayout class="main-title" flexDirection="column" row="0" col="0">
@@ -11,7 +10,7 @@
               </Label>
               <Label *ngIf="gameOptions.playerMode === 0" text="single player" color="#3b5998">
               </Label>
-              <Label  *ngIf="gameOptions.playerMode === 1 && chooseOptionsStep == 0" textWrap="true">
+              <Label  *ngIf="gameOptions.playerMode === 1" textWrap="true">
                 <FormattedString>
                   <Span text="Play" color="#000000" ></Span>
                   <Span text=" together" color="#3b5998"></Span>
@@ -47,7 +46,7 @@
                     </RadListView> 
               </GridLayout>
               <AbsoluteLayout backgroundColor="#fff" verticalAlignment="bottom" row="2"  col="0" >
-                <StackLayout width="100%">
+                <StackLayout marginBottom="10" width="100%">
                   <Label text="Play with a random friend" class="info-text" padding="10 0 10 0" textWrap="true"></Label>
                   <Button  text="Find a friend for me" borderRadius="4" class="btn-transparent Roboto-Medium"
                   (rippleTap)="chooseRandomPlayer()" height="70" stlRippleEffect></Button>
@@ -96,7 +95,7 @@
                             fontSize="16" android:fontSize="10" borderRadius="4" stlRippleEffect></Button>
                     </GridLayout>
                 </StackLayout>
-                <Button  marginRight="5" row="3" col="0" [text]="gameOptions.playerMode === 1 ? 'Send Invite' : 'START A NEW GAME'" class="btn-blue Roboto-Medium"
+                <Button  marginRight="5" row="3" col="0" text="START A NEW GAME" class="btn-blue Roboto-Medium"
                   (rippleTap)="showDialog()" height="70" stlRippleEffect></Button>
               </GridLayout>
           </ScrollView>
