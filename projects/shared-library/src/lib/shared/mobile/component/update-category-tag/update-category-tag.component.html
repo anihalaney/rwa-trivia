@@ -1,12 +1,12 @@
-<ns-action-bar title="Choose your desired topic" class="Roboto-Regular" hideMenu="true"></ns-action-bar>
+<ns-action-bar title="Edit Categories" class="Roboto-Regular" hideMenu="true"></ns-action-bar>
 <GridLayout rows="*,auto" columns="*" *ngIf="renderView">
   <ScrollView>
     <GridLayout rows="auto,auto,auto,auto,auto,auto" columns="*" row="0" class="profile-settings Roboto-Regular">
       
-      <Label row="0" text="Choose your desired topic" margin="15 15 0 15" fontSize="30" fontWeight="bold" color="#2f3f6b" textWrap="true"></Label>
+      <Label row="0" text="Edit Categories" margin="15 15 0 15" fontSize="30" fontWeight="bold" color="#2f3f6b" textWrap="true"></Label>
 
       <Label row="1" padding="10 15 15 15"
-        text="Select atleast five topics of your choice, this will help us show contents based on your topics"
+        text="Modify the categories from here"
         fontSize="20" textWrap="true"></Label>
 
       <Label row="2" fontSize="16" padding="0 15 15 15" class="font-weight-bold" text="Popular topics" textWrap="true"></Label>
@@ -21,7 +21,6 @@
         </FlexboxLayout>
 
       <Label row="4" fontSize="16" padding="15" class="font-weight-bold" text="Popular tags" textWrap="true"></Label>
-
         <FlexboxLayout row="5" flexWrap="wrap" margin="0 10 20 10" horizontalAlignment="center">
             <FlexboxLayout *ngFor="let item of tags, let i = index" class="stats-box border" stlRippleEffect flexDirection="column" justifyContent="center" alignItems="center"
               (rippleTap)="selectTags(i)"
@@ -34,7 +33,7 @@
     </GridLayout>
   </ScrollView>
   <GridLayout rows="auto" row="1" margin="15">
-    <Button row="0" [isEnabled]="selectedCategories >= 5" (tap)="continueToFirstQuestion()"
-      text="{{selectedCategories}}/{{categories.length}}" borderRadius="5" height="40"></Button>
+    <Button row="0" (tap)="continueToFirstQuestion()"
+      text="Update" borderRadius="5" height="40" stlRippleEffect (rippleTap)="continueToFirstQuestion()"></Button>
   </GridLayout>
 </GridLayout>

@@ -40,7 +40,8 @@ export class NavigationService {
       this.router.url === '/user/my/questions/add' ||
       this.router.url.includes('/user/game-profile') ||
       this.router.url.includes('app-invite-friends-dialog') ||
-      this.router.url.includes('/game-play/challenge')) {
+      this.router.url.includes('/game-play/challenge') ||
+      this.router.url.includes('/update-category-tag')) {
       this.routerExtensions.back();
     }
   }
