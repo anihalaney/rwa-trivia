@@ -1,5 +1,5 @@
 <ns-action-bar title="Edit Categories" class="Roboto-Regular" hideMenu="true"></ns-action-bar>
-<GridLayout rows="*,auto" columns="*">
+<GridLayout rows="*,auto" columns="*" *ngIf="renderView">
   <ScrollView>
     <GridLayout rows="auto,auto,auto,auto,auto,auto" columns="*" row="0" class="profile-settings Roboto-Regular">
       
@@ -21,7 +21,6 @@
         </FlexboxLayout>
 
       <Label row="4" fontSize="16" padding="15" class="font-weight-bold" text="Popular tags" textWrap="true"></Label>
-
         <FlexboxLayout row="5" flexWrap="wrap" margin="0 10 20 10" horizontalAlignment="center">
             <FlexboxLayout *ngFor="let item of tags, let i = index" class="stats-box border" stlRippleEffect flexDirection="column" justifyContent="center" alignItems="center"
               (rippleTap)="selectTags(i)"
@@ -34,7 +33,7 @@
     </GridLayout>
   </ScrollView>
   <GridLayout rows="auto" row="1" margin="15">
-    <Button row="0" [isEnabled]="selectedCategories >= 5" (tap)="continueToFirstQuestion()"
-      text="{{selectedCategories}}/{{categories.length}}" borderRadius="5" height="40"></Button>
+    <Button row="0" (tap)="continueToFirstQuestion()"
+      text="Update" borderRadius="5" height="40" stlRippleEffect (rippleTap)="continueToFirstQuestion()"></Button>
   </GridLayout>
 </GridLayout>
