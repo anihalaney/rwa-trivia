@@ -424,6 +424,7 @@ export class ProfileSettingsComponent extends ProfileSettings
   formEditOpen(fieldName: string) {
     this.editSingleField(fieldName);
     if (fieldName == "socialProfile") {
+      this.cd.markForCheck();
       const socialField = this.socialField.toArray();
       if (socialField.length) {
         this.uUtils.focusTextField(socialField[0]);

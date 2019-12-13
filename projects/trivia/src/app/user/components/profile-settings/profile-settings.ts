@@ -650,10 +650,12 @@ export class ProfileSettings {
         this.userForm.updateValueAndValidity();
       }
     } else if (field === "socialProfile") {
-      this.socialProfileSettings.map(res => {
-        return (res.disable = true);
+      this.socialProfileSettings =  this.socialProfileSettings.map(res => {
+        res.disable = true;
+        return res;
       });
       this.cd.markForCheck();
+      this.cd.detectChanges();
     } else if (field === "email") {
       this.userForm
         .get("email")
@@ -675,6 +677,7 @@ export class ProfileSettings {
   }
 
   setValidation(field: string) {
+
     for (const property in this.singleFieldEdit) {
       if (property !== "socialProfile") {
         this.userForm.get(property).clearValidators();

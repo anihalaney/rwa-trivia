@@ -157,8 +157,8 @@
                 <TextField #socialField row="0" col="1" width="100%" hint="username" [editable]="profile?.disable"
                   [formControlName]="profile.social_name">
                 </TextField>
-                <Label *ngIf="userForm.get(profile.social_name).errors" class="error"
-                  text="Please enter valid profile id" textWrap="true"></Label>
+                <!-- <Label *ngIf="userForm.get(profile.social_name).errors" class="error"
+                  text="Please enter valid profile id" textWrap="true"></Label> -->
               </GridLayout>
 
               <GridLayout *ngIf="userType !== 0 && profile.enable" rows="auto,*" columns="*"
