@@ -11,13 +11,13 @@
                             [ngStyle]="{color: (activeMenu === 'Game Profile' ? '#077ad6' : '#3b5998')}"
                             android:fontSize="18" textWrap="true"></Label>
                     </FlexboxLayout>
-                    <FlexboxLayout *ngIf="authProvider.isAuthenticated" class="padding-label" stlRippleEffect
+                    <!-- <FlexboxLayout *ngIf="authProvider.isAuthenticated" class="padding-label" stlRippleEffect
                         stlBackgroundColor="#10347f" stlBackgroundColorAfter="transparent"
                         (rippleTap)="navigateToRecentGames()">
                         <Label text="Recently Completed Games"
                             [ngStyle]="{color: (activeMenu === 'Recently Completed Games' ? '#077ad6' : '#3b5998')}"
                             android:fontSize="18" textWrap="true"></Label>
-                    </FlexboxLayout>
+                    </FlexboxLayout> -->
                     <FlexboxLayout *ngIf="authProvider.isAuthenticated" class="padding-label" stlRippleEffect
                         stlBackgroundColor="#10347f" stlBackgroundColorAfter="transparent"
                         (rippleTap)="navigateToMyQuestion()">
