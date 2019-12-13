@@ -416,7 +416,6 @@ export class ProfileSettingsComponent extends ProfileSettings
         "Please add name, display name, location and profile picture for bulk upload request"
       );
     } else {
-      this.user.bulkUploadPermissionStatus = profileSettingsConstants.NONE;
       this.onSubmit();
     }
   }
