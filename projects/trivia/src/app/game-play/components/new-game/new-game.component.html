@@ -47,11 +47,11 @@
                                                 <div *ngFor="let friendId of uFriends; let i=index"
                                                     class="swiper-slide">
                                                     <div>
-                                                        <input formControlName="friendUserId" type="radio" id="friend-{{i}}" [value]="friendId"
-                                                            (change)="selectFriendId(friendId)">
+                                                        <input formControlName="friendUserId" type="radio" id="friend-{{i}}" [value]="friendId.userId"
+                                                            (change)="selectFriendId(friendId.userId)">
                                                         <label for="friend-{{i}}">
 
-                                                            <app-user-card [userId]="friendId"
+                                                            <app-user-card [userId]="friendId.userId"
                                                                 [type]="userCardType.USER_WEB_IMAGE_70X60_NAME_LOCATION">
                                                             </app-user-card>
                                                         </label>

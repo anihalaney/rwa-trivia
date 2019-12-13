@@ -80,6 +80,19 @@
   </GridLayout>
 </ng-container>
 
+<GridLayout rows="*" columns="60, *" *ngIf="userCardType.USER_IMAGE_NAME_LAST_GAME_PLAYED_HORIZONTAL === type">
+  <Image row="0" col="0" [stlOpenUserProfile]="{userId: user?.userId, redirectTo: 'otherUserProfile'}"
+    [src]="getImageUrl(user,44,40)" stretch="aspectFill" class="friend-user-profile"></Image>
+  <AbsoluteLayout *ngIf="user?.online" horizontalAlignment="center"
+    [stlOpenUserProfile]="{userId: user?.userId, redirectTo: loggedInUserId === user?.userId ? 'userProfile': 'otherUserProfile'}">
+    <Label height="10" top="32" left="40" width="10" borderRadius="22" backgroundColor="#71b02f"></Label>
+  </AbsoluteLayout>
+  <FlexboxLayout row="0" col="1" flexDirection="column" marginLeft="10">
+    <Label class="disp-name"  [text]="otherInfo?.isRandom === true ? 'Random User' : user?.displayName ? user?.displayName : 'unknown'"></Label>
+    <Label class="address" *ngIf="!otherInfo?.isRandom" [text]="otherInfo?.lastGamePlayed && otherInfo?.lastGamePlayed != '' ? (otherInfo?.lastGamePlayed | timeAgo)  : ' '"></Label>
+  </FlexboxLayout>
+</GridLayout>
+
 <GridLayout rows="*" columns="60, *" *ngIf="userCardType.USER_IMAGE_NAME_HORIZONTAL === type">
   <Image row="0" col="0" [stlOpenUserProfile]="{userId: user?.userId, redirectTo: 'otherUserProfile'}"
     [src]="getImageUrl(user,44,40)" stretch="aspectFill" class="friend-user-profile"></Image>
