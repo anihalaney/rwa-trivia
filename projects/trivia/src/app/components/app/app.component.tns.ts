@@ -226,7 +226,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit  {
 
     let version;
     try {
-      version = await appversion.getVersionCode();
+       version = await appversion.getVersionCode();
     } catch (error) {
       this.utils.sendErrorToCrashlytics('appLog', error);
       console.error(error);
@@ -247,7 +247,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit  {
             this.displayForceUpdateDialog(projectMeta.appStoreUrl);
           }
           if (this.applicationSettings.show_welcome_screen) {
-            this.showWelcomeScreen();
+            // this.showWelcomeScreen();
           }
 
         }
