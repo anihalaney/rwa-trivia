@@ -5,11 +5,11 @@
   "angular-cli": {},
   "nativescript": {
     "id": "${packageName}",
-    "tns-ios": {
-      "version": "6.1.1"
-    },
     "tns-android": {
       "version": "6.1.2"
+    },
+    "tns-ios": {
+      "version": "6.2.0"
     }
   },
   "scripts": {

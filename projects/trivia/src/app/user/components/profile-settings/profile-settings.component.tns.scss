@@ -309,78 +309,6 @@ button {
   border-color: #f2f2f2;
 }
 
-.profileSettings .is-in-active .animate-ease-in {
-  animation-name: animate-in-profile;
-  animation-duration: 0.5s;
-  animation-timing-function: ease-in;
-  animation-fill-mode: forwards;
-}
-
-@keyframes animate-in-profile {
-  from {
-    width: 90%;
-  }
-
-  to {
-    width: 100%;
-  }
-}
-
-
-.profileSettings .is-active .animate-ease-out {
-  animation-name: animate-out-profile;
-  animation-duration: 0.5s;
-  animation-timing-function: ease-out;
-  animation-fill-mode: forwards;
-}
-
-@keyframes animate-out-profile {
-  from {
-    width: 100%;
-  }
-
-  to {
-    width: 90%;
-  }
-}
-
-.hide {
-  visibility: collapse;
-}
-
-.show {
-  animation-name: opacity;
-  animation-duration: 0.5;
-}
-
-@keyframes opacity {
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
-}
-
-.fhide {
-  animation-name: fopacity;
-  animation-duration: 0.7;
-  
-  
-}
-
-@keyframes fopacity {
-  from {
-    opacity: 1;
-  }
-
-  to {
-    visibility: collapse;
-    opacity: 0;
-  }
-}
-
 .profile .user-name-disabled {
   margin: 5 0 5 5;
   padding-bottom: 5;
@@ -391,10 +319,4 @@ button {
 TextField {
   border-bottom-width: 1;
   border-bottom-color: transparent;
-}
-
-
-RadAutoCompleteTextView {
-  // border-bottom-width: 1;
-  // border-bottom-color: transparent;
 }

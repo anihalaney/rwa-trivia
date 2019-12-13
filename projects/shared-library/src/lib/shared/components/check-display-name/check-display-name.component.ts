@@ -1,5 +1,7 @@
-import { Component, forwardRef, Input, OnInit, SimpleChanges, OnChanges } from '@angular/core';
-import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
+import { Component, forwardRef, Input } from '@angular/core';
+import { NG_VALUE_ACCESSOR } from '@angular/forms';
+import { CheckDisplayName } from './check-display-name';
+import { Utils } from 'shared-library/core/services';
 
 @Component({
   selector: 'app-check-display-name',
@@ -14,48 +16,10 @@ import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
   ],
 })
 
-export class CheckDisplayNameComponent implements OnInit, ControlValueAccessor, OnChanges {
+export class CheckDisplayNameComponent extends CheckDisplayName {
 
-  @Input() placeholder;
-  @Input() hint;
-  @Input() isProfilePage;
-  myValue: any = null;
-  @Input() disabled: boolean;
-  propagateChange = (_: any) => { };
-
-  constructor() {
+  constructor(public utils:Utils) {
+    super(utils);
   }
 
-  ngOnInit(): void {
-    this.disabled = this.isProfilePage ? true : false;
-  }
-
-  writeValue(obj: any): void {
-    this.myValue = obj;
-  }
-
-  onTextChange(event) {
-    this.propagateChange(event);
-  }
-
-  registerOnChange(fn: any): void {
-    this.propagateChange = fn;
-  }
-
-  registerOnTouched(fn: any): void {
-    // do nothing
-  }
-
-  setDisabledState(isDisabled: boolean): void {
-    this.disabled = isDisabled;
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    //Called before any other lifecycle hook. Use it to inject dependencies, but avoid any serious work here.
-    //Add '${implements OnChanges}' to the class.
-      console.log('NG ON CHNAGED', changes.disabled);
-      if(changes.disabled){
-        this.disabled = changes.disabled.currentValue;
-      }
-  }
 }
