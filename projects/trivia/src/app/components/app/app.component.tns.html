@@ -4,10 +4,10 @@
         <ns-drawer-component></ns-drawer-component>
     </StackLayout>
     <GridLayout rows="*,auto" columns="*" tkMainContent>
-        <StackLayout row="0" [marginBottom]="showBottomBar ? '20' : '0'">
+        <StackLayout row="0" [marginBottom]="showBottomBar ? '15' : '0'">
             <page-router-outlet class="page page-content"></page-router-outlet>
         </StackLayout>
-        <StackLayout *ngIf="showBottomBar" row="1" marginTop="-20" backgroundColor="#ffffff" borderRadius="18 18 0 0">
+        <StackLayout *ngIf="showBottomBar" row="1" marginTop="-26" backgroundColor="#ffffff" borderRadius="18 18 0 0">
             <bottom-bar [isDrawerOpenOrClosed]="isDrawerOpenOrClosed" [screen]="'app'">
             </bottom-bar>
         </StackLayout>
