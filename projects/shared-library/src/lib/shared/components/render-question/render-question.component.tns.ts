@@ -26,14 +26,15 @@ export class RenderQuestionComponent implements OnInit, OnChanges {
     questionText = '';
 
     ngOnInit(): void {
-
         if (this.question) {
             this.qIndex = this.questionIndex ? `${this.questionIndex} . ` : '';
             if (this.question.isRichEditor) {
                 // tslint:disable-next-line:max-line-length
                 this.questionText = this.htmlStartTag + this.question.questionText + this.scriptToGetHeight + this.htmlEndTag;
+            } else {
+                this.questionText = this.question.questionText;
             }
-
+            this.cd.markForCheck();
         }
     }
 
@@ -67,9 +68,11 @@ export class RenderQuestionComponent implements OnInit, OnChanges {
         if (this.question && this.question.isRichEditor) {
             if (changes.question) {
                 this.questionText = this.htmlStartTag + changes.question.currentValue.questionText + this.scriptToGetHeight + this.htmlEndTag;
-            }
-            this.cd.markForCheck();
+            } 
+        } else if(this.question) {
+            this.questionText = this.question.questionText;
         }
+        this.cd.markForCheck();
     }
 
 

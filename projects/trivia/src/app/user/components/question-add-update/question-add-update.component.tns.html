@@ -25,7 +25,7 @@
                             <StackLayout *ngFor="let answer of answers?.controls; let i=index" [formGroupName]="i">
                                 <GridLayout rows="*"  columns="auto,*" class="text-box-section">
                                     <CheckBox row="0" col="0" #elem formControlName="correct"
-                                        class="checkbox checkbox-section" fillColor="#71b02f"></CheckBox>
+                                        class="checkbox checkbox-section" fillColor="#71b02f" (checkedChange)="checkedChanged($event)"></CheckBox>
                                     <StackLayout  [class.margin-main-stack]="currentWebViewParentId == i"  #answerStack row="0" col="1">
                                             <FlexboxLayout  height="110" class="edit-label"  height="126" (tap)="showEditor('answer', i)" justifyContent="center" alignItems="center" *ngIf="!answers.controls[i].controls.isRichEditor.value && currentWebViewParentId != i"
                                                  [class.question-box-solid]="false">
@@ -40,9 +40,9 @@
                                 </GridLayout>
                             </StackLayout>
                         </StackLayout>
-                        <Label *ngIf="!answers.valid && !answers.pristine" class="error-lbl " textWrap="true"
+                        <Label *ngIf="!answers.valid && !answers.pristine" class="error-lbl error" textWrap="true"
                             text="All answers required !"></Label>
-                        <Label *ngIf="answers.valid && questionForm.hasError('correctAnswerCountInvalid')" class="error-lbl"
+                        <Label *ngIf="answers.valid && questionForm.hasError('correctAnswerCountInvalid')" class="error-lbl error"
                             textWrap="true" text="Pick one and only one correct answer !"></Label>
                     </StackLayout>
                     <StackLayout row="2" class="max-time-input" iosOverflowSafeArea="false">
