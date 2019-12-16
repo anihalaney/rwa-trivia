@@ -71,6 +71,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit  {
   }
 
   ngOnInit() {
+
     this.checkForceUpdate();
     if (application.ios && application.ios.window.safeAreaInsets) {
       const bottomSafeArea: number = application.ios.window.safeAreaInsets.bottom;
