@@ -80,6 +80,8 @@ export class RenderAnswerComponent implements OnInit, OnChanges {
             if (height) {
                 this.answerHeight = parseInt(height, 10);
                 this.calAnsHeight.emit(this.answerHeight);
+            } else if (this.currentAnswer.isRichEditor) {
+                this.calAnsHeight.emit(150);
             }
 
         }

@@ -59,6 +59,8 @@ export class RenderQuestionComponent implements OnInit, OnChanges {
                 this.questionHeight = parseInt(height, 10);
                 this.calHeight.emit(this.questionHeight);
 
+            } else if (this.question.isRichEditor) {
+                this.calHeight.emit(150);
             }
         }
         this.cd.markForCheck();

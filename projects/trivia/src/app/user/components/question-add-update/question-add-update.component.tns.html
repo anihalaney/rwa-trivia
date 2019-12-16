@@ -98,10 +98,10 @@
                         </GridLayout>
                     </StackLayout>
                     <GridLayout row="5" rows="*" columns="*,50,*" iosOverflowSafeArea="false" class="button-section">
-                        <Button row="0" col="0" colspan="2" width="100%" [text]="submitBtnTxt" (tap)="submit()"
+                        <Button row="0" col="0" colspan="2" [disabled]="!questionForm.valid" width="100%" [text]="submitBtnTxt" (tap)="submit()"
                             [ngClass]="(questionForm.valid && categoryIds && categoryIds.length > 0 && enteredTags.length > 2) ? 'enable-btn' : 'disable-btn' "
                             class="question-buttons"></Button>
-                            <FlexboxLayout borderRadius="3" [ngClass]="(questionForm.valid && categoryIds && categoryIds.length > 0 && enteredTags.length > 2) ? 'enable-btn-preview' : 'disable-btn' " (tap)="preview()"  row="0" col="2" orientation="horizontal" justifyContent="center" padding="12">
+                            <FlexboxLayout borderRadius="3" class="enable-btn-preview" (tap)="preview()"  row="0" col="2" orientation="horizontal" justifyContent="center" padding="12">
                                 <Label text="Preview" textWrap="true"></Label>
                             </FlexboxLayout>
                     </GridLayout>

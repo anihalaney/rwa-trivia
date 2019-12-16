@@ -196,7 +196,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit  {
     if (url === '/signup-extra-info' || url === '/select-category-tag' || url === '/first-question' ||
       (url.includes('user/my/profile') && Platform.isIOS) ||
       url === '/login' ||
-      (!url.includes('game-play/game-options') && (url.includes('game-play')))) {
+      url.includes('game-play')) {
       return false;
     } else {
       return true;
