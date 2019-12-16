@@ -485,6 +485,9 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate
   submit() {
     this.hideKeyboard();
     const question: Question = super.onSubmit();
+    if (!question) {
+      return false;
+    }
     // tslint:disable-next-line:no-unused-expression
     this.editQuestion ? (question.id = this.editQuestion.id) : "";
     if (
@@ -501,18 +504,8 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate
   }
 
   preview() {
-    if (
-      !(
-        this.questionForm.valid &&
-        this.categoryIds &&
-        this.categoryIds.length > 0 &&
-        this.enteredTags.length > 2
-      )
-    ) {
-      return false;
-    }
     this.hideKeyboard();
-    this.previewQuestion = super.onSubmit();
+    this.previewQuestion = super.onSubmit(true);
     this.isShowPreview = true;
   }
 
