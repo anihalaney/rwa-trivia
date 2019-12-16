@@ -144,8 +144,8 @@
                                     <Label row="0" [text]="yourQuestion?.questionText" class="your-question"
                                         textWrap="true"></Label>
                                     <FlexboxLayout row="1" class="space-between"
-                                        *ngIf="yourQuestion && yourQuestion?.submittedDays">
-                                        <Label text="Submitted {{yourQuestion?.submittedDays}} days ago"
+                                        *ngIf="yourQuestion && yourQuestion?.createdOn">
+                                        <Label text="Submitted {{ yourQuestion?.createdOn?.getTime() | timeAgo}}"
                                             class="submitted" textWrap="true"></Label>
                                         <Label *ngIf="!yourQuestion?.toggleButton" verticalAlignment="center"
                                             text="&#xf078;" class="fas icon" textWrap="true"></Label>
