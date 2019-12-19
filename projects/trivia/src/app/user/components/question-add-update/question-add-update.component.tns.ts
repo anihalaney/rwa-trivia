@@ -220,12 +220,10 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate
   }
 
   answerSelected(index) {
-
     const answer = <FormArray>this.questionForm.controls["answers"];
     setTimeout(() => {
       for (let counter = 0; counter < answer.length; counter++) {
-        if (counter === index) {
-        } else {
+        if (counter !== index) {
           const questionForm = (<FormArray>(
             this.questionForm.controls["answers"]
           )).at(counter);
@@ -234,7 +232,13 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate
           this.cd.detectChanges();
         }
       }
-    }, 0);
+    }, 1);
+  }
+
+  checkedChanged(event) {
+    setTimeout(() => {
+      this.cd.markForCheck();
+    }, 25);
   }
 
   ngAfterViewInit() {
