@@ -24,8 +24,11 @@
                         <StackLayout formArrayName="answers">
                             <StackLayout *ngFor="let answer of answers?.controls; let i=index" [formGroupName]="i">
                                 <GridLayout rows="*"  columns="auto,*" class="text-box-section">
-                                    <CheckBox row="0" col="0" #elem formControlName="correct"
-                                        class="checkbox checkbox-section" fillColor="#71b02f" (checkedChange)="checkedChanged($event)"></CheckBox>
+                                    <StackLayout row="0" col="0"  (tap)="answerSelected(i)" class="checkbox checkbox-section">
+                                            <CheckBox #elem formControlName="correct"
+                                            class="checkbox checkbox-section" fillColor="#71b02f" (tap)="answerSelected(i)"></CheckBox>
+                                    </StackLayout>
+                                 
                                     <StackLayout  [class.margin-main-stack]="currentWebViewParentId == i"  #answerStack row="0" col="1">
                                             <FlexboxLayout  height="110" class="edit-label"  height="126" (tap)="showEditor('answer', i)" justifyContent="center" alignItems="center" *ngIf="!answers.controls[i].controls.isRichEditor.value && currentWebViewParentId != i"
                                                  [class.question-box-solid]="false">
