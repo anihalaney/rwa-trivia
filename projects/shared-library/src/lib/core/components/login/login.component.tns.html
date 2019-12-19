@@ -10,13 +10,13 @@
             <GridLayout *ngIf="!loader"  rows="auto,*"  columns="*"  (tap)="hideKeyboard()">
                         
                 <Image *ngIf="mode === 1 || mode === 2"  src="~/assets/images/back_btn.png"  row="0"
-                      (tap)="changeMode(0)"  class="back-button">
+                      (rippleTap)="changeMode(0)" stlRippleEffect class="back-button">
                 </Image>          
                 <Image *ngIf="mode === 0"  src="~/assets/images/back_btn.png"  row="0"
-                      (tap)="changeMode('/dashboard')"  class="back-button">
+                      (rippleTap)="changeMode('/dashboard')" stlRippleEffect class="back-button">
                 </Image>    
                 <Image *ngIf="mode === 0 && signInMethod === 'phone'"  src="~/assets/images/back_btn.png"  row="0"
-                      (tap)="changeMode('email')"  class="back-button">
+                      (rippleTap)="changeMode('email')" stlRippleEffect class="back-button">
                 </Image>               
                 <!--SignIn & Forgot Password Form-->
                 <GridLayout *ngIf="mode === 0 || mode === 2" rows="auto,auto,*" columns="*" row="1" class="login-page"
@@ -27,9 +27,9 @@
                                     <Label *ngIf="mode === 0" row="1"  col="0"  text="using social" textWrap="true" class="title-2"></Label>
                                     
                         <GridLayout *ngIf="mode === 0" row="2"  col="0" rows="*" columns="auto,auto,auto,auto" class="logo-section">
-                                          <Image col="1" src="res://fblogo" (tap)="fbLogin()"> </Image>
-                                              <Image col="2"  src="res://googlelogo"  (tap)="googleLogin()"></Image>
-                                          <Image col="3" src="res://callicon" class="phone-icon"  (tap)="phoneSignIn()">
+                                          <Image col="1" src="res://fblogo" stlRippleEffect (rippleTap)="fbLogin()"> </Image>
+                                              <Image col="2"  src="res://googlelogo"  stlRippleEffect (rippleTap)="googleLogin()"></Image>
+                                          <Image col="3" src="res://callicon" class="phone-icon"  stlRippleEffect (rippleTap)="phoneSignIn()">
                             </Image>                     
                         </GridLayout>             
                         <Label *ngIf="mode === 0"  row="3"   col="0"   text="OR"  textWrap="true"
@@ -69,7 +69,7 @@
                         <!--End of Password-->
                           
                                     <StackLayout row="2" col="0" class="button-section">
-                                          <Button text="Sign in" [text]="mode === 0 ? 'Sign in' : 'Send Password'" (tap)="onSubmit()"
+                                          <Button text="Sign in" [text]="mode === 0 ? 'Sign in' : 'Send Password'" (rippleTap)="onSubmit()"
                                                 [disabled]="loginForm.invalid" stlRippleEffect></Button>
                                         </StackLayout>
                                   </GridLayout>
@@ -78,12 +78,12 @@
                               
                     <!-- Forgot Password Form-->
                               <GridLayout row="2"  col="0" rows="*,*,*" columns="*" class="section-3">
-                                    <Label row="0" col="0" [text]="mode === 0 ? 'FORGOT PASSWORD?' : 'No, I remember it now!'" textWrap="true"
-                                          class="text-1"  (tap)="changeMode(mode === 0? 2: 0)"></Label>
+                                        <Label row="0" col="0" [text]="mode === 0 ? 'FORGOT PASSWORD?' : 'No, I remember it now!'" textWrap="true"
+                                          class="text-1"   stlRippleEffect (rippleTap)="changeMode(mode === 0? 2: 0)" horizontalAlignment="left" ></Label>      
                                     <Label *ngIf="mode === 0" row="1" col="0" text="Not a member yet?" textWrap="true" class="text-2"></Label>
-                                    <StackLayout *ngIf="mode === 0" row="2" col="0" class="button-section">
-                                          <Button text="Sign up" (tap)="changeMode(1)" stlRippleEffect></Button>
-                                        </StackLayout>
+                                    <StackLayout class="btn-transparent blue-border button-section" stlRippleEffect (rippleTap)="changeMode(1)" *ngIf="mode === 0" row="2" col="0">
+                                            <Label horizontalAlignment="center" text="Sign up" ></Label>
+                                    </StackLayout>
                                   </GridLayout>
                               
                     <!--Forgot Password Form-->
@@ -166,7 +166,7 @@
                         <!--End of T&C-->
                           
                                     <StackLayout row="4" col="0" class="button-section">
-                                          <Button text="Sign up" (tap)="onSubmit()"
+                                          <Button text="Sign up" stlRippleEffect (rippleTap)="onSubmit()"
                                                 [disabled]="loginForm.invalid"></Button>
                                         </StackLayout>
                           
@@ -191,7 +191,7 @@
                                           
                             <!--Country Code-->
                                           
-                            <GridLayout row="0" col="0" rows="*" columns="*,*" class="flag-section" (tap)="onSelectCountry()">
+                            <GridLayout row="0" col="0" rows="*" columns="*,*" class="flag-section" stlRippleEffect (rippleTap)="onSelectCountry()">
                                                 <Image col="0" src="~/assets/flags/{{input?.country}}.png"> </Image>
                                                     <Label col="1"  text="{{input?.countryCode}}"  textWrap="true">
                                     </Label>
@@ -223,8 +223,8 @@
                                   </GridLayout>
                               <GridLayout row="2"  col="0" rows="*" columns="*" class="section-3">
                                     <StackLayout row="1" col="0" class="button-section">
-                                          <Button text="Verify" [disabled]="loginForm.invalid" (tap)="signInWithPhone()"></Button>
-                                        </StackLayout>
+                                          <Button text="Verify" [disabled]="loginForm.invalid" (rippleTap)="signInWithPhone()" stlRippleEffect ></Button>
+                                      </StackLayout>
                                   </GridLayout>
                             </GridLayout>
                         

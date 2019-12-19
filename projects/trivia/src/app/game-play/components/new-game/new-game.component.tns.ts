@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit, ViewChild, Inject, PLATFORM_ID } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit, ViewChild, Inject, PLATFORM_ID, QueryList, ElementRef, ViewChildren } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { RouterExtensions } from 'nativescript-angular/router';
@@ -52,6 +52,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
 
   @ViewChild('autocomplete', { static: false }) autocomplete: RadAutoCompleteTextViewComponent;
   @ViewChild('friendListView', { static: false }) listViewComponent: RadListViewComponent;
+  @ViewChildren("textField", { read: false }) textField: QueryList<ElementRef>;
   modeAvailable: boolean;
   constructor(public store: Store<AppState>,
     public gameActions: GameActions,
@@ -296,6 +297,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     this.gameOptions.playerMode = 1;
     this.chooseOptionsStep = 1;
     this.friendUserId = null;
+    this.skipNavigation = true;
   }
 
   changePlayGameWith(playerMode = 1) {
@@ -305,4 +307,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     this.friendUserId = null;
   }
 
+  hideKeyboard() {
+    this.utils.hideKeyboard(this.textField);
+  }
 }

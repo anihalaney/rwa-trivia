@@ -1,5 +1,5 @@
 <GridLayout>
-  <GridLayout [class.dialogOpen]="dialogOpen"  rows="*" columns="*">
+  <GridLayout  (tap)="hideKeyboard()" [class.dialogOpen]="dialogOpen"  rows="*" columns="*">
       <GridLayout row="0" col="0" padding="15 15" rows="auto,auto,auto,*" columns="*">
         <StackLayout row="0" col="0" orientation="horizontal">
           <Label  text="&#xe906;"  ios:paddingTop="10" android:paddingTop="3" fontSize="20" class="ico icon-back back-btn" (rippleTap)="back()" stlRippleEffect></Label>
@@ -33,7 +33,7 @@
           </GridLayout>
           <GridLayout *ngIf="gameOptions.opponentType === 1 && gameOptions.playerMode === 1 && chooseOptionsStep === 0" row="3" col="0" rows="auto,auto,*" columns="*">
             <Label text="Choose opponent" paddingBottom="15" color="#a5a5a5" row="0" col="0" textWrap="true"></Label>
-            <TextField  marginBottom="10" row="1"  col="0" hint="Search in your friend list" (textChange)="onSearchFriendTextChange($event)" returnKeyType="next" class="text-field"></TextField>
+            <TextField #textField marginBottom="10" row="1"  col="0" hint="Search in your friend list" (textChange)="onSearchFriendTextChange($event)" returnKeyType="next" class="text-field"></TextField>
               <GridLayout marginBottom="100" rows="*" columns="*" row="2" col="0">
                   <RadListView pullToRefresh="false" row="0" col="0" separatorColor="#00000000" [filteringFunction]="filterFriendFunc"  #friendListView [items]="uFriends" height="100%" ios:minHeight="100">
                       <ng-template  tkListItemTemplate  let-item="item">

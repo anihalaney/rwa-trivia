@@ -1,8 +1,8 @@
 <ns-action-bar [title]="'Bulk Upload Request'" class="Roboto-Regular" showAdd="true"></ns-action-bar>
 <GridLayout rows="auto,auto,auto" columns="*" class="profile-buttons" iosOverflowSafeArea="false">
     <FlexboxLayout marginBottom="20" *ngIf="user && !user?.name || !user?.displayName || !user?.location || !user?.profilePicture" row="0" col="0"  class="text-info info">
-      <StackLayout verticalAlignment="center">
-        <Label  maxHeight="30" text="&#xf129;" class="fa text-icon-field info badge"></Label>
+      <StackLayout  width="90" verticalAlignment="center">
+        <Label  maxHeight="30" text="&#xf129;" textAlign="center" class="fa text-icon-field info badge"></Label>
       </StackLayout>  
         <Label padding = "0 30 0 10" class="sub-text " text="Please fill Name, Display Name, Location and Profile Picture to enable bulk upload request" textWrap="true"></Label>
     </FlexboxLayout>
