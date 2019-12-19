@@ -185,9 +185,9 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate
         .subscribe(v => this.computeAutoTags())
     );
     this.subscriptions.push(
-      answerControl.valueChanges
-        .pipe(debounceTime(500))
-        .subscribe(v => this.computeAutoTags())
+      answerControl.valueChanges.pipe(debounceTime(500)).subscribe(v => {
+        this.computeAutoTags();
+      })
     );
 
     this.subscriptions.push(
@@ -219,11 +219,22 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate
     }
   }
 
-  checkedChanged(event) {
+  answerSelected(index) {
+
+    const answer = <FormArray>this.questionForm.controls["answers"];
     setTimeout(() => {
-      this.cd.markForCheck();
-      this.cd.detectChanges();
-    }, 25);
+      for (let counter = 0; counter < answer.length; counter++) {
+        if (counter === index) {
+        } else {
+          const questionForm = (<FormArray>(
+            this.questionForm.controls["answers"]
+          )).at(counter);
+          questionForm["controls"].correct.setValue(false);
+          this.cd.markForCheck();
+          this.cd.detectChanges();
+        }
+      }
+    }, 0);
   }
 
   ngAfterViewInit() {
