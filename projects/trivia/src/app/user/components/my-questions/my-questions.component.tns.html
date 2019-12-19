@@ -56,7 +56,7 @@
                         <Button col="0" colSpan="2" text="Reason" textWrap="true" fontSize="23" backgroundColor="white"
                             width="400"></Button>
                         <Button col="1" class="fa " horizontalAlignment="left" text="&#xf00d;" textWrap="true"
-                            fontSize="25" backgroundColor="white" width="80" (tap)="displayReason(false)"></Button>
+                            fontSize="25" backgroundColor="white" width="80" stlRippleEffect (rippleTap)="displayReason(false)"></Button>
                     </GridLayout>
                 </CardLayout>
                 <StackLayout class="Roboto-Medium" padding="30 20 30 20">
@@ -67,7 +67,7 @@
                     <Button text="RESUBMIT" class="Roboto-Regular"
                         *ngIf="getDisplayStatus(selectedQuestion.status)==='REQUIRED_CHANGE'" color="#ffffff"
                         backgroundColor="#71b02f" marginTop="10" padding="20" borderRadius="3" fontSize="20"
-                        fontWeight="bold" (tap)="showUpdateQuestion(true)"></Button>
+                        fontWeight="bold" stlRippleEffect (rippleTap)="showUpdateQuestion(true)"></Button>
                 </StackLayout>
             </StackLayout>
         </StackLayout>

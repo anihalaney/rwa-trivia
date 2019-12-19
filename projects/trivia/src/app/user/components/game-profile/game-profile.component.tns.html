@@ -58,7 +58,7 @@
                             </FormattedString>
                         </Label>
                     </FlexboxLayout>
-                    <Label *ngIf="userType === 0" (tap)="updateCategoryTag()" padding="0 10"
+                    <Label *ngIf="userType === 0" stlRippleEffect (rippleTap)="updateCategoryTag()" padding="0 10"
                         text="&#xe927;" class="ico icon-edit text-blue"  fontSize="18" textWrap="true"></Label>
                 </FlexboxLayout>
             </FlexboxLayout>

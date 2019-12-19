@@ -11,11 +11,11 @@
           <!-- Profile Image -->
           <StackLayout class="profile_image" iosOverflowSafeArea="false">
             <AbsoluteLayout class="profile_image--center" iosOverflowSafeArea="false" horizontalAlignment="center">
-              <Image [src]="profileImage.image" stretch="aspectFill" (tap)="userType ===  0 ? onTakePhoto() : ''">
+              <Image [src]="profileImage.image" stretch="aspectFill"  stlRippleEffect (rippleTap)="userType ===  0 ? onTakePhoto() : ''">
               </Image>
               <CardView class="profile_image--edit" top="60" left="65" android:elevation="5" ios:elevation="40"
-                android:radius="50" ios:radius="18" iosOverflowSafeArea="false">
-                <Label textAlignment="center" verticalAlignment="center" (tap)="onTakePhoto()" text="&#xe927;"
+                android:radius="50" ios:radius="18" iosOverflowSafeArea="false"  stlBackgroundColor="white" stlOpacity="0.9"   stlRippleEffect (rippleTap)="onTakePhoto()">
+                <Label textAlignment="center" verticalAlignment="center"  text="&#xe927;"
                   class="ico icon-edit" textWrap="true"></Label>
               </CardView>
             </AbsoluteLayout>
@@ -174,11 +174,11 @@
             </StackLayout>
           </StackLayout>
 
-          <Label text="PROVIDE FEEDBACK" stlRippleEffect (rippleTap)="navigateToUserFeedback()" color="#14418B"
+          <Label text="PROVIDE FEEDBACK" horizontalAlignment="left" stlRippleEffect (rippleTap)="navigateToUserFeedback()" color="#14418B"
             fontSize="18" padding="10" textWrap="true"></Label>
-          <Label text="PRIVACY POLICY" stlRippleEffect (rippleTap)="navigateToPrivacyPolicy()" color="#14418B"
+          <Label text="PRIVACY POLICY" horizontalAlignment="left" stlRippleEffect (rippleTap)="navigateToPrivacyPolicy()" color="#14418B"
             fontSize="18" padding="10" textWrap="true"></Label>
-          <Label text="TERMS & CONDITIONS" stlRippleEffect (rippleTap)="navigateToTermsConditions()" color="#14418B"
+          <Label text="TERMS & CONDITIONS" horizontalAlignment="left" stlRippleEffect (rippleTap)="navigateToTermsConditions()" color="#14418B"
             fontSize="18" padding="10" textWrap="true"></Label>
 
         </StackLayout>
