@@ -74,11 +74,9 @@ export class QuestionAddUpdate {
             if (!this.questionForm.controls.is_draft.value) {
               this.questionForm.patchValue({ is_draft: true });
             }
-            return this.questionForm.valueChanges.pipe(
-              multicast(new Subject(), s => merge(
-                s.pipe(take(1)),
-                s.pipe(skip(1), debounceTime(appSettings[0]['auto_save']['time'])),
-              )));
+            return merge(
+              this.questionForm.valueChanges.pipe(take(1)),
+              this.questionForm.valueChanges.pipe(debounceTime(appSettings[0]['auto_save']['time'])));
           } else {
             return of();
           }
