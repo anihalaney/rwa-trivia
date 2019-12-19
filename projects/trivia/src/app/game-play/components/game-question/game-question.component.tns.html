@@ -1,7 +1,6 @@
 <GridLayout>
-  <ScrollView id="scrollList">
+  <ScrollView [class.m-b-70]="showContinueBtn || ((answeredIndex>=0 || doPlay === false) && !showContinueBtn)" id="scrollList">
     <StackLayout margin="0 10"
-      [class.m-b-70]="showContinueBtn || ((answeredIndex>=0 || doPlay === false) && !showContinueBtn)"
       backgroundColor="#ffffff">
       <GridLayout *ngIf="user && user!==null && playerMode == PlayerMode.Single" rows="*,*,*,*" columns="*,*"
         class="sideStackLayoutHeader" padding="10 0">
