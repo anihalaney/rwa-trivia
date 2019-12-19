@@ -91,8 +91,7 @@
                                 </SuggestionView>
                             </RadAutoCompleteTextView>
                         </StackLayout>
-                        <Button marginRight="5" row="0" col="1" (tap)="addCustomTag()" stlBackgroundColor="white"  text="Add" class="Roboto-Bold btn-transparent blue-border" 
-                            fontSize="16" android:fontSize="10" borderRadius="4" stlRippleEffect></Button>
+                        <Label row="0" col="1" (rippleTap)="addCustomTag()" horizontalAlignment="center" paddingLeft="20" paddingRight="20"  text="Add" class="btn-transparent blue-border"  stlRippleEffect></Label>
                     </GridLayout>
                 </StackLayout>
                 <Button  marginRight="5" row="3" col="0" text="START A NEW GAME" class="btn-blue Roboto-Medium"

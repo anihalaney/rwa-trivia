@@ -97,11 +97,9 @@ export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
               this.questionForm.patchValue({ is_draft: true });
             }
             if (appSettings[0]['auto_save']['is_enabled']) {
-              return this.questionForm.valueChanges.pipe(
-                multicast(new Subject(), s => merge(
-                  s.pipe(take(1)),
-                  s.pipe(skip(1), debounceTime(appSettings[0]['auto_save']['time'])),
-                )));
+                return merge(
+                  this.questionForm.valueChanges.pipe(take(1)),
+                  this.questionForm.valueChanges.pipe(debounceTime(appSettings[0]['auto_save']['time'])));
             } else {
               return of();
             }
@@ -134,7 +132,7 @@ export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
     const fgs: FormGroup[] = question.answers.map((answer, index) => {
       this.answerTexts[index] = answer.answerObject;
       const isRichEditor = (answer.isRichEditor) ? answer.isRichEditor : false;
-      const answerText = (answer.isRichEditor) ? answer.answerObject : answer.answerText;
+      const answerText = (answer.isRichEditor) ? answer.answerText : answer.answerText;
       const fg = new FormGroup({
         answerText: new FormControl(answerText, Validators.required),
         correct: new FormControl(answer.correct),

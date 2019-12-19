@@ -25,7 +25,7 @@
                 </GridLayout>
                 <GridLayout *ngIf="user && user!==null" class="index-0" col="3" ios:margin="3" android:margin="10"
                     verticalAlignment="center" horizontalAlignment="center" android:width="40" ios:width="40"
-                    (tap)="gotToNotification()" orientation="horizontal">
+                    stlRippleEffect (rippleTap)="gotToNotification()" orientation="horizontal">
                     <Label horizontalAlignment="center" stlRippleEffect stlBackgroundColor="transparent"
                         stlOpacity="0.5" stlBackgroundColorAfter="transparent" verticalAlignment="center"
                         text="&#xee900;" class="ico icon-notification icon" fontSize="22" color="#3b5998"></Label>
@@ -140,7 +140,7 @@
                             <GridLayout rows="auto,auto,auto" class="q-title" iosOverflowSafeArea="false">
                                 <Label row="0" text="Your Questions" textWrap="true" class="active-game"></Label>
                                 <GridLayout rows="auto,auto,auto" row="1" class="box"
-                                    (tap)="yourQuestion.toggleButton = !yourQuestion.toggleButton">
+                                     (tap)="yourQuestion.toggleButton = !yourQuestion.toggleButton">
                                     <Label row="0" [text]="yourQuestion?.questionText" class="your-question"
                                         textWrap="true"></Label>
                                     <FlexboxLayout row="1" class="space-between"
@@ -178,8 +178,7 @@
                                     </FlexboxLayout>
                                 </GridLayout>
                                 <WrapLayout row="2">
-                                    <Button horizontaAlignment="left" class="btn-transparent blue-border"
-                                        text="SUBMIT A QUESTION" (tap)="navigateToMyQuestion()"></Button>
+                                    <Label text="SUBMIT A QUESTION" horizontaAlignment="left"  class="btn-transparent blue-border" stlRippleEffect (rippleTap)="navigateToMyQuestion()"></Label>
                                 </WrapLayout>
                             </GridLayout>
                         </GridLayout>
@@ -196,9 +195,7 @@
                             </GridLayout>
                             <GridLayout row="1" orientation="horizontal" horizontalAlignment="left"
                                 iosOverflowSafeArea="false">
-                                <Button class="btn-transparent blue-border" text="SUBMIT A QUESTION"
-                                    (tap)="navigateToMyQuestion()">
-                                </Button>
+                                <Label text="SUBMIT A QUESTION" class="btn-transparent blue-border" stlRippleEffect (rippleTap)="navigateToMyQuestion()"></Label>
                             </GridLayout>
                         </GridLayout>
                     </GridLayout>

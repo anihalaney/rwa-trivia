@@ -6,7 +6,7 @@
       </StackLayout>  
         <Label padding = "0 30 0 10" class="sub-text " text="Please fill Name, Display Name, Location and Profile Picture to enable bulk upload request" textWrap="true"></Label>
     </FlexboxLayout>
-    <Button (rippleTap)="navigateToUserAccount()" row="1" col="0" *ngIf="user && !user?.name || !user?.displayName || !user?.location || !user?.profilePicture; else bulkUploadBtn"  text="Go To User Account" class="btn-transparent blue-border"
+    <Button (rippleTap)="navigateToUserAccount()"  stlBackgroundColorAfter="white"    row="1" col="0" *ngIf="user && !user?.name || !user?.displayName || !user?.location || !user?.profilePicture; else bulkUploadBtn"  text="Go To User Account" class="btn-transparent blue-border"
       stlRippleEffect></Button>
     <ng-template #bulkUploadBtn>
       <Button row="1" col="0" *ngIf="(!user.bulkUploadPermissionStatus 

@@ -6,7 +6,7 @@
     <GridLayout ios:rows="auto" android:rows="auto" ios:columns="auto,*,auto,auto,auto"
         android:columns="auto,*,auto,auto,auto" width="100%">
 
-        <StackLayout col="0" verticalAlignment="center" horizontalAlignment="left" (tap)="back()">
+        <StackLayout col="0" verticalAlignment="center" stlRippleEffect horizontalAlignment="left" (rippleTap)="back()">
             <Label padding="5 10 5 0" color="#000000" text="&#xe906;" fontSize="20" class="ico icon-back"></Label>
         </StackLayout>
 
@@ -37,7 +37,7 @@
         </StackLayout>
        
         <!-- For View All Icon in question-add-updates.component.tns.html screen -->
-        <StackLayout stlRippleEffect  ios:marginRight="30" android:margin="10" (rippleTap)="navigateToBulkUpload()"    col="2" *ngIf="(user && user!== null && !showSkipBtn && title == 'Add_Question' || title == 'Update Question' )"
+        <StackLayout stlRippleEffect  ios:marginRight="30" android:margin="10" (rippleTap)="navigateToBulkUpload()" stlBackgroundColorAfter="transparent"   col="2" *ngIf="(user && user!== null && !showSkipBtn && title == 'Add_Question' || title == 'Update Question' )"
               verticalAlignment="center" horizontalAlignment="center"
               orientation="horizontal"
               android:width="28" ios:width="28" >

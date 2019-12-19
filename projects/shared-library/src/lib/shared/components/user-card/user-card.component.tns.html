@@ -162,7 +162,7 @@
 <ng-container *ngIf="user && userCardType.USER_IMAGE_NAME_WITH_SCORE_IN_GAME_PLAY_SINGLE_PLAYER === type">
   <FlexboxLayout row="0" col="0" colSpan="2" class="Roboto-Regular" class="play-now-container">
     <FlexboxLayout >
-      <StackLayout (tap)='goToDashboard()' class="back-icon" width="10" verticalAlignment="middle">
+      <StackLayout stlRippleEffect (rippleTap)='goToDashboard()' class="back-icon" width="10" verticalAlignment="middle">
         <Image src="~/assets/images/back-action.png" ></Image>
       </StackLayout>
       <Label text="{{otherInfo.actionText}}" textWrap="true"></Label>
@@ -209,7 +209,7 @@
   <GridLayout row="0" col="0" rows="*" columns="32,*,*">
     <!-- <Image (tap)='goToDashboard()' src="~/assets/images/back-action.png" class="back-icon"></Image> -->
 
-      <StackLayout marginTop="4" marginRight="15" row="0" col="0" width="20" (tap)='goToDashboard()' width="18" height="18" class="back-icon"  verticalAlignment="top">
+      <StackLayout marginTop="4" marginRight="15" row="0" col="0" width="20" stlRippleEffect (rippleTap)='goToDashboard()' width="18" height="18" class="back-icon"  verticalAlignment="top">
         <Image  width="24" height="24" src="~/assets/images/back-action.png" ></Image>
       </StackLayout>
     <!-- First Player-->

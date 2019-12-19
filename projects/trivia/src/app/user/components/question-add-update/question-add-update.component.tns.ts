@@ -297,10 +297,10 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate
     if (type === "question") {
       this.questionForm.patchValue({ isRichEditor: true });
     } else {
-      const questionForm = (<FormArray>(
+      const newQuestionForm = (<FormArray>(
         this.questionForm.controls["answers"]
       )).at(id);
-      questionForm["controls"].isRichEditor.setValue(true);
+      newQuestionForm["controls"].isRichEditor.setValue(true);
     }
   }
 
