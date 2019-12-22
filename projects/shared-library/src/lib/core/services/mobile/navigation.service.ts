@@ -20,10 +20,7 @@ export class NavigationService {
   //  console.log('this.router.url------>', this.router.url);
     if (this.router.url === '/dashboard/leaderboard' ||
       this.router.url === '/user/my/invite-friends' ||
-      this.router.url === '/privacy-policy' ||
-      this.router.url === '/terms-and-conditions' ||
       this.router.url === '/achievements' ||
-      this.router.url === '/user-feedback' ||
       this.router.url === '/notification' ||
       this.router.url === '/user/my/questions' ||
       this.router.url === '/game-play/play-game-with-random-user' ||
@@ -37,6 +34,9 @@ export class NavigationService {
       this.routerExtensions.navigate(['/dashboard'], { clearHistory: true });
       // this.routerExtensions.back();
     } else if (
+      this.router.url === '/privacy-policy' ||
+      this.router.url === '/terms-and-conditions' ||
+      this.router.url === '/user-feedback' ||
       this.router.url === '/user/my/questions/add' ||
       this.router.url.includes('/user/game-profile') ||
       this.router.url.includes('app-invite-friends-dialog') ||

@@ -8,6 +8,7 @@ import {
     GameProfileComponent
 } from '../components';
 import { InviteFriendsDialogComponent } from '../components/invite-friends/invite-friends-dialog/invite-friends-dialog.component';
+import { ChangePasswordComponent } from 'shared-library/shared/mobile/component';
 
 export const userRoutes: Routes = [
     {
@@ -22,6 +23,11 @@ export const userRoutes: Routes = [
     {
         path: 'my',
         children: [
+            {
+                path: 'profile/change-password',
+                component: ChangePasswordComponent,
+                canActivate: [AuthGuard],
+            },
             {
                 path: 'profile/:userid',
                 component: ProfileSettingsComponent,

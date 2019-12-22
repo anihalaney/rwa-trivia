@@ -1,0 +1,26 @@
+<StackLayout class="profile">
+    <GridLayout #textBoxContainer rows="63,auto" columns="*" margin="5 0">
+        <GridLayout row="0" rows="auto" columns="*,auto" borderWidth="2" borderColor="#f2f2f2" borderRadius="5"
+            padding="10" android:paddingBottom="11" ios:paddingBottom=0>
+            <FlexboxLayout col="0" flexDirection="column" justifyContent="center">
+                <Label #nameLabelField alignSelf="flex-start" text="{{ fieldName | titlecase }}" textWrap="true"
+                    class="label-field"></Label>
+                <StackLayout #nameField [visibility]="'collapsed'">
+                    <ng-content select="[textField]"></ng-content>
+                </StackLayout>
+                <Label #nameLabel [text]="fieldValue" textWrap="true" class="label-value"></Label>
+            </FlexboxLayout>
+            <FlexboxLayout col="1" flexDirection="column" justifyContent="center">
+                <Label *ngIf="!showEdit && isDisplay" (tap)="editField()" color="#14418B" fontSize="20"
+                    class="ico icon-edit" textWrap="true" text="&#xe927;" padding="5">
+                </Label>
+                <Label *ngIf="showEdit && isValid" (tap)="editField()" color="#14418B" fontSize="26" class="fa"
+                    text="&#xf058;" padding="5">
+                </Label>
+            </FlexboxLayout>
+        </GridLayout>
+        <StackLayout row="1">
+            <ng-content select="[errorMsg]"></ng-content>
+        </StackLayout>
+    </GridLayout>
+</StackLayout>

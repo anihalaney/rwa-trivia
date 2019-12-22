@@ -60,7 +60,7 @@ export class AppComponent implements OnInit, OnDestroy {
     private _modalService: ModalDialogService,
     private _vcRef: ViewContainerRef
   ) {
-    this.bottomSafeArea = 240;
+    this.bottomSafeArea = 120;
     this.handleBackPress();
   }
 
@@ -68,6 +68,8 @@ export class AppComponent implements OnInit, OnDestroy {
     this.checkForceUpdate();
     if (application.ios && application.ios.window.safeAreaInsets) {
       const bottomSafeArea: number = application.ios.window.safeAreaInsets.bottom;
+
+      console.log('safe are<>', bottomSafeArea);
       this.bottomSafeArea = bottomSafeArea > 0 ? this.bottomSafeArea + bottomSafeArea : this.bottomSafeArea;
     }
     firebase.init({
