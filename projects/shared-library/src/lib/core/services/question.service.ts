@@ -37,7 +37,8 @@ export class QuestionService {
   // Firestore
   getUserQuestions(userId: string, published: boolean): Observable<Question[]> {
     const collection = (published) ? 'questions' : 'unpublished_questions';
-    const queryParams = { condition: [{ name: 'created_uid', comparator: '==', value: userId }] };
+    const queryParams = { condition: [{ name: 'created_uid', comparator: '==', value: userId }],
+    orderBy: [{ name: 'createdOn', value: 'desc' }] };
     return this.dbService.valueChanges(collection, '', queryParams)
       .pipe(
         map(qs => qs.map(q => Question.getViewModelFromDb(q))),

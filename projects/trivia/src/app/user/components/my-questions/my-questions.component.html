@@ -15,19 +15,13 @@
     <mat-tab-group>
       <mat-tab label="Published">
         <question-table [showSort]="false" [showPaginator]="false"
-          [questions]="publishedQuestions" [totalCount]="10" [categoryDictionary]="categoryDictObs | async"
+          [questions]="publishedQuestions" [totalCount]="10" [categoryDictionary]="categoriesObs | async"
           [user]="user" [showApproveButton]="false" [categoriesObs]="categoriesObs"  [tagsObs]="tagsObs" [quillConfig]="quillConfig" [applicationSettings]="applicationSettings">
         </question-table>
       </mat-tab>
       <mat-tab label="Pending">
         <question-table [showSort]="false" [tagsObs]="tagsObs" [categoriesObs]="categoriesObs" [showPaginator]="false"
-          [questions]="unpublishedQuestions" [totalCount]="10" [categoryDictionary]="categoryDictObs | async"
-          [user]="user" [showApproveButton]="false" (updateUnpublishedQuestions)="updateUnpublishedQuestions($event)" [quillConfig]="quillConfig" [applicationSettings]="applicationSettings">
-        </question-table>
-      </mat-tab>
-      <mat-tab label="Draft">
-        <question-table [isDraft]="true" [showSort]="false" [tagsObs]="tagsObs" [categoriesObs]="categoriesObs" [showPaginator]="false"
-          [questions]="draftQuestions" [totalCount]="10" [categoryDictionary]="categoryDictObs | async"
+          [questions]="unpublishedQuestions" [totalCount]="10" [categoryDictionary]="categoriesObs | async"
           [user]="user" [showApproveButton]="false" (updateUnpublishedQuestions)="updateUnpublishedQuestions($event)" [quillConfig]="quillConfig" [applicationSettings]="applicationSettings">
         </question-table>
       </mat-tab>
