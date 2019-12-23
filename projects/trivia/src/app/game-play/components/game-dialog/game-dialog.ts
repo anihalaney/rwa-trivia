@@ -205,7 +205,6 @@ export class GameDialog {
             this.otherPlayer["score"] = this.game.stats[
               this.otherPlayer.userId
             ].score;
-            console.log("otherPlayerObj----->", this.otherPlayer);
           } else {
             this.initializeOtherUser();
           }

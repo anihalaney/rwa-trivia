@@ -14,7 +14,7 @@
                             <Label   text="Click to add question" textWrap="true" ></Label>
                         </FlexboxLayout>
                         <GridLayout minHeight="110" rows="*" columns="*" class="question-box"  *ngIf="questionForm.controls.isRichEditor.value && currentWebViewParentId != -1" stlRippleEffect (rippleTap)="showEditor('question')" >
-                            <render-question *ngIf="this.questionForm.controls.questionObject" row="0" col="0" stlRippleEffect (rippleTap)="showEditor('question')"
+                            <render-question *ngIf="questionForm.controls.questionObject" row="0" col="0" stlRippleEffect (rippleTap)="showEditor('question')"
                             [question]="{questionText: questionForm.controls.questionText.value, isRichEditor: true}"></render-question>
                             <AbsoluteLayout stlRippleEffect (rippleTap)="showEditor('question')"  row="0" col="0" backgroundColor="transparent"> 
                             </AbsoluteLayout> 
