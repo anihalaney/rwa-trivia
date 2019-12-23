@@ -99,11 +99,7 @@ export class ProfileSettings {
   socialProfileObj: any;
   singleFieldEdit = {
     displayName: false,
-    email: false,
-    phoneNo: false,
-    location: false,
-    socialProfile: false,
-    name: false
+    location: false
   };
 
   activeEditField = "";
@@ -464,6 +460,9 @@ export class ProfileSettings {
         this.userForm.get("email").updateValueAndValidity();
         break;
     }
+    this.filteredTags$ = this.userForm.get('tags').valueChanges
+    .pipe(map(val => val.length > 0 ? this.filter(val) : []));
+    
     this.createSocialProfileControl();
     if (
       isPlatformBrowser(this.platformId) === false &&
@@ -478,6 +477,7 @@ export class ProfileSettings {
     }
   }
 
+  
   createSocialProfileControl() {
     if (this.socialProfileObj) {
       this.socialProfileObj.map(profile => {
