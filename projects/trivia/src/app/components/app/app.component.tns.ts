@@ -76,12 +76,10 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit  {
     if (application.ios && application.ios.window.safeAreaInsets) {
       const bottomSafeArea: number = application.ios.window.safeAreaInsets.bottom;
 
-      console.log('safe are<>', bottomSafeArea);
       this.bottomSafeArea = bottomSafeArea > 0 ? this.bottomSafeArea + bottomSafeArea : this.bottomSafeArea;
     }
     firebase.init({
       onMessageReceivedCallback: (message) => {
-        console.log('message', message);
         if (message.foreground) {
           this.utils.showMessage('success', message.body);
         }

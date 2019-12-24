@@ -16,19 +16,19 @@
                             [formGroup]="questionForm" class="submit-question">
                             <StackLayout [class.margin-main-stack]="currentWebViewParentId === -1" #questionStack
                                 row="0" class="question-section" iosOverflowSafeArea="false">
-                                <FlexboxLayout class="edit-label" height="110" stlRippleEffect
-                                    (rippleTap)="showEditor('question')" justifyContent="center" alignItems="center"
+                                <FlexboxLayout class="edit-label" height="110" (tap)="showEditor('question')"
+                                    justifyContent="center" alignItems="center"
                                     *ngIf="!questionForm.controls.isRichEditor.value && currentWebViewParentId != -1">
                                     <Label text="Click to add question" textWrap="true"></Label>
                                 </FlexboxLayout>
                                 <GridLayout minHeight="110" rows="*" columns="*" class="question-box"
                                     *ngIf="questionForm.controls.isRichEditor.value && currentWebViewParentId != -1"
-                                    stlRippleEffect (rippleTap)="showEditor('question')">
+                                    (tap)="showEditor('question')">
                                     <render-question *ngIf="questionForm.controls.questionObject" row="0" col="0"
-                                        stlRippleEffect (rippleTap)="showEditor('question')"
+                                        (tap)="showEditor('question')"
                                         [question]="{questionText: questionForm.controls.questionText.value, isRichEditor: true}">
                                     </render-question>
-                                    <AbsoluteLayout stlRippleEffect (rippleTap)="showEditor('question')" row="0" col="0"
+                                    <AbsoluteLayout (tap)="showEditor('question')" row="0" col="0"
                                         backgroundColor="transparent">
                                     </AbsoluteLayout>
                                 </GridLayout>
@@ -49,21 +49,20 @@
                                             <StackLayout [class.margin-main-stack]="currentWebViewParentId == i"
                                                 #answerStack row="0" col="1">
                                                 <FlexboxLayout height="110" class="edit-label" height="126"
-                                                    stlRippleEffect (rippleTap)="showEditor('answer', i)"
-                                                    justifyContent="center" alignItems="center"
+                                                    (tap)="showEditor('answer', i)" justifyContent="center"
+                                                    alignItems="center"
                                                     *ngIf="!answers.controls[i].controls.isRichEditor.value && currentWebViewParentId != i"
                                                     [class.question-box-solid]="false">
                                                     <Label text="Click to add option {{i+1}}"></Label>
                                                 </FlexboxLayout>
                                                 <GridLayout minHeight="110" rows="*" columns="*" class="question-box"
-                                                    stlRippleEffect (rippleTap)="showEditor('answer', i)"
+                                                    (tap)="showEditor('answer', i)"
                                                     *ngIf="answers.controls[i].controls.isRichEditor.value && currentWebViewParentId != i">
                                                     <render-answer [bgColor]="'#ffffff'" row="0" col="0"
                                                         [isRight]="false" (tapEvent)="showEditor('answer', i)"
                                                         [answer]="{answerText: answers.controls[i].controls.answerText.value, isRichEditor: true}">
                                                     </render-answer>
-                                                    <AbsoluteLayout stlRippleEffect
-                                                        (rippleTap)="showEditor('answer', i)" row="0" col="0"
+                                                    <AbsoluteLayout (tap)="showEditor('answer', i)" row="0" col="0"
                                                         backgroundColor="transparent">
                                                     </AbsoluteLayout>
                                                 </GridLayout>

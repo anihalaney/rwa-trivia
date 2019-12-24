@@ -54,7 +54,7 @@ export class RenderQuestionComponent implements OnInit, OnChanges {
 
     onLoadFinished(event: LoadEventData) {
         if (isIOS && this.question) {
-            const height = event.url.split('#')[1];
+            const height = event.url ? decodeURIComponent(event.url).split('#')[1] : undefined;
             if (height) {
                 this.questionHeight = parseInt(height, 10);
                 this.calHeight.emit(this.questionHeight);
