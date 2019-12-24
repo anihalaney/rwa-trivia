@@ -119,11 +119,11 @@ export class ProfileSettingsComponent extends ProfileSettings
       platformId
     );
 
-    this.singleFieldEdit['phoneNo'] = false;
-    this.singleFieldEdit['email'] = false;
-    this.singleFieldEdit['location'] = false;
-    this.singleFieldEdit['socialProfile'] = false;
-    this.singleFieldEdit['name'] = false;
+    // this.singleFieldEdit['phoneNo'] = false;
+    // this.singleFieldEdit['email'] = false;
+    // this.singleFieldEdit['location'] = false;
+    // this.singleFieldEdit['socialProfile'] = false;
+    // this.singleFieldEdit['name'] = false;
 
     this.initDataItems();
     requestPermissions();

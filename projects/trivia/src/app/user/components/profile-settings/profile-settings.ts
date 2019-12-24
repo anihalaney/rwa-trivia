@@ -99,7 +99,11 @@ export class ProfileSettings {
   socialProfileObj: any;
   singleFieldEdit = {
     displayName: false,
-    location: false
+    location: false,
+    email: false,
+    phoneNo: false,
+    socialProfile: false,
+    name: false
   };
 
   activeEditField = "";
