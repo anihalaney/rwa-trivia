@@ -1,6 +1,6 @@
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
-import { Observable, Subscription, interval, of } from 'rxjs';
-import { debounceTime, take, map, switchMap } from 'rxjs/operators';
+import { Observable, of, Subject, merge } from 'rxjs';
+import { debounceTime, take, map, switchMap, multicast, skip } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 import { User, Category, Question, QuestionStatus, Answer, ApplicationSettings } from 'shared-library/shared/model';
 import { Utils } from 'shared-library/core/services';
@@ -13,13 +13,16 @@ export class QuestionAddUpdate {
 
   tagsObs: Observable<string[]>;
   categoriesObs: Observable<Category[]>;
+  isMobile = false;
 
   // Properties
   categories: Category[];
+  questionCategories: Array<string> = [];
   tags: string[];
 
   questionForm: FormGroup;
   question: Question;
+  quillObject: any = {};
 
   autoTags: string[] = []; // auto computed based on match within Q/A
   enteredTags: string[] = [];
@@ -27,7 +30,9 @@ export class QuestionAddUpdate {
   loaderBusy = false;
   user: User;
   applicationSettings: ApplicationSettings;
+  selectedQuestionCategoryIndex = 0;
   subscriptions = [];
+  isSaved = false;
   get answers(): FormArray {
     return this.questionForm.get('answers') as FormArray;
   }
@@ -43,48 +48,77 @@ export class QuestionAddUpdate {
     this.tagsObs = store.select(appState.coreState).pipe(select(s => s.tags));
 
     this.subscriptions.push(this.store.select(appState.coreState).pipe(take(1)).subscribe(s => this.user = s.user));
-    this.subscriptions.push(this.categoriesObs.subscribe(categories => this.categories = categories));
+    this.subscriptions.push(this.categoriesObs.subscribe(categories => {
+      this.categories = categories;
+      this.questionCategories = this.categories.map(category => category.categoryName);
+      this.questionCategories.push('Select Preferred Category');
+      this.selectedQuestionCategoryIndex = this.questionCategories.length - 1;
+    }
+    ));
     this.subscriptions.push(this.tagsObs.subscribe(tags => this.tags = tags));
 
     this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.questionDraftSaveStatus)).subscribe(status => {
-        if (status && status !== 'UPDATED') {
-          this.questionForm.patchValue({ id : status });
-        }
+      if (status && status !== 'UPDATED') {
+        this.questionForm.patchValue({ id: status });
+      }
     }));
-    this.subscriptions.push(this.store.select(appState.coreState).pipe(
-        select(s => s.applicationSettings),
-        map(appSettings => appSettings),
-        switchMap(appSettings => {
-          if (appSettings && appSettings[0]) {
-            if (appSettings[0]['auto_save']['is_enabled']) {
-              return interval(appSettings[0]['auto_save']['time']);
-            } else {
-              return of();
-            }
-        }
-        })).subscribe(data => {
-          if (data) {
-              this.questionForm.patchValue({ is_draft : true });
-              const question = this.getQuestionFromFormValue(this.questionForm.value);
-              if (!question.status) {
-                question.status = QuestionStatus.PENDING;
-              }
+  }
 
-              question.created_uid = this.user.userId;
-              this.store.dispatch(new userActions.AddQuestion({ question: question }));
+  saveDraft() {
+    this.subscriptions.push(this.store.select(appState.coreState).pipe(
+      select(s => s.applicationSettings),
+      map(appSettings => appSettings),
+      switchMap(appSettings => {
+        if (appSettings && appSettings[0]) {
+          if (appSettings[0]['auto_save']['is_enabled']) {
+            if (!this.questionForm.controls.is_draft.value) {
+              this.questionForm.patchValue({ is_draft: true });
+            }
+            return merge(
+              this.questionForm.valueChanges.pipe(take(1)),
+              this.questionForm.valueChanges.pipe(debounceTime(appSettings[0]['auto_save']['time'])));
+          } else {
+            return of();
           }
-    }));
+        }
+      })).subscribe(data => {
+        if (data) {
+          const question = this.getQuestionFromFormValue(this.questionForm.value);
+          if (this.question.status) {
+              question.status = this.question.status;
+          }
+          if (!question.status) {
+            question.status = QuestionStatus.PENDING;
+          }
+
+          if (question.isRichEditor && !this.isMobile ) {
+            question.questionText = this.quillObject.questionText ? this.quillObject.questionText : '';
+            question.questionObject = this.quillObject.jsonObject ? this.quillObject.jsonObject : {};
+          }
+          question.created_uid = this.user.userId;
+          if (!this.isSaved) {
+            this.store.dispatch(new userActions.AddQuestion({ question: question }));
+          }
+        }
+      }));
 
   }
 
-  createDefaultForm(question: Question): FormArray {
+
+  // Text change in quill editor
+  onTextChanged(text) {
+    this.quillObject.jsonObject = text.delta;
+    this.quillObject.questionText = text.html;
+  }
+
+  createDefaultForm(question: Question, isRichEditor = false): FormArray {
     const fgs: FormGroup[] = question.answers.map(answer => {
       const fg = new FormGroup({
-        answerText: new FormControl(answer.answerText,
+        answerText: new FormControl(answer.answerText ? answer.answerText : '',
           Validators.compose([Validators.required])),
         correct: new FormControl(answer.correct),
         isRichEditor: new FormControl(answer.isRichEditor),
-        answerObject: new FormControl(),
+        answerObject: new FormControl(answer.answerObject),
       });
       return fg;
     });
@@ -95,11 +129,13 @@ export class QuestionAddUpdate {
   addTag(tag: string) {
     if (this.enteredTags.indexOf(tag) < 0) {
       this.enteredTags.push(tag);
+       this.questionForm.patchValue({tags: [] });
     }
   }
 
   removeEnteredTag(tag) {
     this.enteredTags = this.enteredTags.filter(t => t !== tag);
+    this.questionForm.patchValue({tags: [] });
   }
 
 
@@ -115,10 +151,13 @@ export class QuestionAddUpdate {
     this.tags.forEach(tag => {
       const patt = new RegExp('\\b(' + tag.replace("+", "\\+") + ')\\b', "ig");
       if (wordString.match(patt)) {
-        matchingTags.push(tag);
+        if (this.enteredTags.indexOf(tag) === -1 ) {
+          matchingTags.push(tag);
+        }
       }
     });
     this.autoTags = matchingTags;
+    this.questionForm.patchValue({tags: [] });
   }
 
 
@@ -131,7 +170,7 @@ export class QuestionAddUpdate {
     question.is_draft = formValue.is_draft;
     question.questionText = formValue.questionText;
     question.answers = formValue.answers;
-    question.categoryIds = (formValue.category) ? [formValue.category] : [];
+    question.categoryIds = (formValue.category >= 0 ) ? [formValue.category] : [];
     question.tags = [...this.autoTags, ...this.enteredTags];
     question.ordered = formValue.ordered;
     question.explanation = formValue.explanation;
@@ -169,7 +208,7 @@ export class QuestionAddUpdate {
   }
 
   saveQuestion(question: Question) {
-   this.store.dispatch(new userActions.AddQuestion({ question: question }));
+    this.store.dispatch(new userActions.AddQuestion({ question: question }));
   }
 
 }

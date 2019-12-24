@@ -15,7 +15,8 @@ import {
   NotificationComponent,
   BottomBarComponent,
   GameProgressBarComponent,
-  RenderBoxComponent
+  RenderBoxComponent,
+  AnimationBoxComponent
 } from './mobile/component';
 import { NativeScriptCommonModule } from 'nativescript-angular/common';
 import { GameFilterPipe } from './pipe/game-filter.pipe';
@@ -64,7 +65,8 @@ import {TimeAgoPipe} from 'time-ago-pipe';
     RecentGameCardComponent,
     GameProgressBarComponent,
     RenderBoxComponent,
-    TimeAgoPipe
+    TimeAgoPipe,
+    AnimationBoxComponent
   ],
   imports: [
     CommonModule,
@@ -118,7 +120,8 @@ import {TimeAgoPipe} from 'time-ago-pipe';
     RecentGameCardComponent,
     GameProgressBarComponent,
     RenderBoxComponent,
-    TimeAgoPipe
+    TimeAgoPipe,
+    AnimationBoxComponent
   ],
   schemas: [NO_ERRORS_SCHEMA],
   entryComponents: [

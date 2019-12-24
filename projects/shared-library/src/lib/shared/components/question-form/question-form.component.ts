@@ -2,8 +2,8 @@ import { Component, Input, Output, OnInit, OnChanges, OnDestroy, EventEmitter, C
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
 import { Question, QuestionStatus, Category, User, Answer, ApplicationSettings } from '../../model';
 import { QuestionService } from '../../../core/services';
-import { Observable, interval, of } from 'rxjs';
-import { debounceTime, switchMap, map} from 'rxjs/operators';
+import { Observable, interval, of, Subject, merge } from 'rxjs';
+import { debounceTime, switchMap, map, multicast, take, skip} from 'rxjs/operators';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 // import { QuillImageUpload } from 'ng-quill-tex/lib/models/quill-image-upload';
 import { CropImageDialogComponent } from './../crop-image-dialog/crop-image-dialog.component';
@@ -43,6 +43,7 @@ export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
   subscriptions = [];
   quillObject: any = {};
   dialogRef;
+  answerTexts = [];
   get answers(): FormArray {
     return this.questionForm.get('answers') as FormArray;
   }
@@ -92,16 +93,30 @@ export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
         map(appSettings => appSettings),
         switchMap(appSettings => {
           if (appSettings && appSettings[0]) {
+            if (!this.questionForm.controls.is_draft.value) {
+              this.questionForm.patchValue({ is_draft: true });
+            }
             if (appSettings[0]['auto_save']['is_enabled']) {
-              return interval(appSettings[0]['auto_save']['time']);
+                return merge(
+                  this.questionForm.valueChanges.pipe(take(1)),
+                  this.questionForm.valueChanges.pipe(debounceTime(appSettings[0]['auto_save']['time'])));
             } else {
               return of();
             }
         }
         })).subscribe(data => {
           if (data) {
-              this.questionForm.patchValue({ is_draft : true });
               const question = this.getQuestionFromFormValue(this.questionForm.value);
+              question.categoryIds = [];
+              if (Array.isArray(this.questionForm.get('category').value)) {
+                question.categoryIds = this.questionForm.get('category').value;
+              } else {
+                question.categoryIds.push(this.questionForm.get('category').value);
+              }
+              if (question.isRichEditor) {
+                question.questionText = this.quillObject.questionText;
+                question.questionObject = this.quillObject.jsonObject;
+              }
               this.store.dispatch(new userActions.AddQuestion({ question: question }));
           }
     }));
@@ -114,9 +129,10 @@ export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   createForm(question: Question) {
-    const fgs: FormGroup[] = question.answers.map(answer => {
+    const fgs: FormGroup[] = question.answers.map((answer, index) => {
+      this.answerTexts[index] = answer.answerObject;
       const isRichEditor = (answer.isRichEditor) ? answer.isRichEditor : false;
-      const answerText = (answer.isRichEditor) ? answer.answerObject : answer.answerText;
+      const answerText = (answer.isRichEditor) ? answer.answerText : answer.answerText;
       const fg = new FormGroup({
         answerText: new FormControl(answerText, Validators.required),
         correct: new FormControl(answer.correct),
@@ -168,7 +184,6 @@ export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
       if (this.enteredTags.indexOf(tag) < 0) {
         this.enteredTags.push(tag);
       }
-      this.questionForm.get('tags').setValue('');
     }
     this.setTagsArray();
   }
@@ -187,7 +202,9 @@ export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
     this.tags.forEach(tag => {
       const part = new RegExp('\\b(' + tag.replace('+', '\\+') + ')\\b', 'ig');
       if (wordString.match(part)) {
-        matchingTags.push(tag);
+        if (this.enteredTags.indexOf(tag) === -1 ) {
+          matchingTags.push(tag);
+        }
       }
     });
     this.autoTags = matchingTags;
@@ -197,6 +214,7 @@ export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
   setTagsArray() {
     this.tagsArray.controls = [];
     [...this.autoTags, ...this.enteredTags].forEach(tag => this.tagsArray.push(new FormControl(tag)));
+    this.questionForm.patchValue({tags: [] });
   }
 
   onSubmit() {

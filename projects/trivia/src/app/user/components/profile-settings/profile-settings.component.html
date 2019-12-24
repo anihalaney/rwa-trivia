@@ -90,7 +90,8 @@
               <div class="cell">
 
                 <label class="m-r-51">Location {{userType === 0 ? '*': ''}}</label>
-                <div *ngIf="userType === 0" class="input-edit">
+                <div *ngIf="userType === 0" class="input-edit"
+                [ngClass]="{'animate-ease-out': (singleFieldEdit.location), 'animate-ease-in': (!singleFieldEdit.location)}">
                   <input formControlName="location" [placeholder]="userType === 0 ? 'Enter Location' : ''" type="text"
                     class="required" aria-label="location" list="locationList"
                     (ngModelChange)="locationChanged($event)">

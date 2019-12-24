@@ -52,8 +52,7 @@ export class MyQuestions {
     }));
     this.subscriptions.push(this.store.select(userState).pipe(select(s => s.userUnpublishedQuestions)).subscribe((questions) => {
       if (questions) {
-        this.unpublishedQuestions = questions.filter(question => !question.is_draft || (question.is_draft && (question.status === 6)));
-        this.draftQuestions = questions.filter(question => question.is_draft === true && question.status !== 6);
+        this.unpublishedQuestions = questions;
       }
 
       this.hideLoader();

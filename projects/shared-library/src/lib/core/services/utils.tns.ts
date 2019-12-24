@@ -1,45 +1,57 @@
-import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
-import { Feedback, FeedbackPosition, FeedbackType } from 'nativescript-feedback';
-import * as firebase from 'nativescript-plugin-firebase';
+import { Inject, Injectable, PLATFORM_ID } from "@angular/core";
 import {
-  Parameter, User, FirebaseAnalyticsKeyConstants, FirebaseAnalyticsEventConstants, GameOptions,
-  PlayerMode, GameConstant, OpponentType, GameMode, Game, GeneralConstants
-} from '../../shared/model';
-import { of, Observable } from 'rxjs';
-import { UtilsCore } from './utilsCore';
-import { isAndroid } from 'tns-core-modules/platform';
-import { RouterExtensions } from 'nativescript-angular/router';
+  Feedback,
+  FeedbackPosition,
+  FeedbackType
+} from "nativescript-feedback";
+import * as firebase from "nativescript-plugin-firebase";
+import {
+  Parameter,
+  User,
+  FirebaseAnalyticsKeyConstants,
+  FirebaseAnalyticsEventConstants,
+  GameOptions,
+  PlayerMode,
+  GameConstant,
+  OpponentType,
+  GameMode,
+  Game,
+  GeneralConstants
+} from "../../shared/model";
+import { of, Observable } from "rxjs";
+import { UtilsCore } from "./utilsCore";
+import { isAndroid } from "tns-core-modules/platform";
+import { RouterExtensions } from "nativescript-angular/router";
 
 @Injectable()
 export class Utils extends UtilsCore {
-
-
   private message: Feedback;
   private messageConfig = {
     position: FeedbackPosition.Bottom,
     duration: 3000,
     type: FeedbackType.Custom,
-    message: ''
+    message: ""
   };
 
-  constructor(@Inject(PLATFORM_ID) public platformId: Object,
-    private routerExtensions: RouterExtensions) {
+  constructor(
+    @Inject(PLATFORM_ID) public platformId: Object,
+    private routerExtensions: RouterExtensions
+  ) {
     super(platformId);
     this.message = new Feedback();
   }
 
   showMessage(type: string, message: string) {
     switch (type) {
-      case 'success':
+      case "success":
         this.messageConfig.type = FeedbackType.Success;
         break;
-      case 'error':
+      case "error":
         this.messageConfig.type = FeedbackType.Error;
         break;
     }
     this.messageConfig.message = message;
     this.message.show(this.messageConfig);
-
   }
 
   sendErrorToCrashlytics(type: any, error: any) {
@@ -47,61 +59,91 @@ export class Utils extends UtilsCore {
     firebase.crashlytics.sendCrashLog(error);
   }
 
-  setAnalyticsParameter(key: string, value: string, analyticsParameter: Array<Parameter>): Array<Parameter> {
+  setAnalyticsParameter(
+    key: string,
+    value: string,
+    analyticsParameter: Array<Parameter>
+  ): Array<Parameter> {
     analyticsParameter.push({ key: key, value: value });
     return analyticsParameter;
   }
 
-  sendFirebaseAnalyticsEvents(eventName: string, analyticsParameter: Array<Parameter>) {
-    firebase.analytics.logEvent({
-      key: eventName,
-      parameters: analyticsParameter
-    }).then(() => {
-      console.log(`${eventName} event slogged`);
-    });
+  sendFirebaseAnalyticsEvents(
+    eventName: string,
+    analyticsParameter: Array<Parameter>
+  ) {
+    firebase.analytics
+      .logEvent({
+        key: eventName,
+        parameters: analyticsParameter
+      })
+      .then(() => {
+        console.log(`${eventName} event slogged`);
+      });
   }
 
   setScreenNameInFirebaseAnalytics(screenName: string) {
-    firebase.analytics.setScreenName({
-      screenName: screenName
-    }).then(
-      function () {
+    firebase.analytics
+      .setScreenName({
+        screenName: screenName
+      })
+      .then(function() {
         console.log(`${screenName} Screen is added`);
-      }
-    );
+      });
   }
 
   setLoginFirebaseAnalyticsParameter(user: User): Observable<User> {
     let analyticsParameter: Parameter[] = [];
 
-    analyticsParameter = this.setAnalyticsParameter(FirebaseAnalyticsKeyConstants.USER_ID, user.userId, analyticsParameter);
+    analyticsParameter = this.setAnalyticsParameter(
+      FirebaseAnalyticsKeyConstants.USER_ID,
+      user.userId,
+      analyticsParameter
+    );
 
-    this.sendFirebaseAnalyticsEvents(FirebaseAnalyticsEventConstants.USER_LOGIN, analyticsParameter);
+    this.sendFirebaseAnalyticsEvents(
+      FirebaseAnalyticsEventConstants.USER_LOGIN,
+      analyticsParameter
+    );
 
     return of(user);
   }
 
-  setNewGameFirebaseAnalyticsParameter(gameOptions: GameOptions, userId: string, gameId: string): Observable<string> {
-
+  setNewGameFirebaseAnalyticsParameter(
+    gameOptions: GameOptions,
+    userId: string,
+    gameId: string
+  ): Observable<string> {
     let analyticsParameter: Parameter[] = [];
 
-    analyticsParameter = this.setAnalyticsParameter(FirebaseAnalyticsKeyConstants.USER_ID, userId, analyticsParameter);
+    analyticsParameter = this.setAnalyticsParameter(
+      FirebaseAnalyticsKeyConstants.USER_ID,
+      userId,
+      analyticsParameter
+    );
     analyticsParameter = this.setAnalyticsParameter(
       FirebaseAnalyticsKeyConstants.PLAYER_MODE,
-      gameOptions.playerMode === PlayerMode.Single ? GameConstant.SINGLE : GameConstant.OPPONENT,
+      gameOptions.playerMode === PlayerMode.Single
+        ? GameConstant.SINGLE
+        : GameConstant.OPPONENT,
       analyticsParameter
     );
 
     analyticsParameter = this.setAnalyticsParameter(
       FirebaseAnalyticsKeyConstants.OPPONENT_TYPE,
-      gameOptions.opponentType === OpponentType.Random ? GameConstant.RANDOM :
-        gameOptions.opponentType === OpponentType.Friend ? GameConstant.FRIEND : GameConstant.COMPUTER,
+      gameOptions.opponentType === OpponentType.Random
+        ? GameConstant.RANDOM
+        : gameOptions.opponentType === OpponentType.Friend
+        ? GameConstant.FRIEND
+        : GameConstant.COMPUTER,
       analyticsParameter
     );
 
     analyticsParameter = this.setAnalyticsParameter(
       FirebaseAnalyticsKeyConstants.GAME_MODE,
-      gameOptions.gameMode === GameMode.Normal ? GameConstant.NORMAL : GameConstant.OFFLINE,
+      gameOptions.gameMode === GameMode.Normal
+        ? GameConstant.NORMAL
+        : GameConstant.OFFLINE,
       analyticsParameter
     );
 
@@ -118,30 +160,47 @@ export class Utils extends UtilsCore {
       analyticsParameter
     );
 
-    this.sendFirebaseAnalyticsEvents(FirebaseAnalyticsEventConstants.START_NEW_GAME, analyticsParameter);
+    this.sendFirebaseAnalyticsEvents(
+      FirebaseAnalyticsEventConstants.START_NEW_GAME,
+      analyticsParameter
+    );
 
     return of(gameId);
   }
 
-
-  setEndGameFirebaseAnalyticsParameter(game: Game, userId: string, otherUserId: string): Observable<string> {
-
+  setEndGameFirebaseAnalyticsParameter(
+    game: Game,
+    userId: string,
+    otherUserId: string
+  ): Observable<string> {
     let analyticsParameter: Parameter[] = [];
 
-    analyticsParameter = this.setAnalyticsParameter(FirebaseAnalyticsKeyConstants.GAME_ID, game.gameId, analyticsParameter);
-    analyticsParameter = this.setAnalyticsParameter(FirebaseAnalyticsKeyConstants.USER_ID, userId, analyticsParameter);
+    analyticsParameter = this.setAnalyticsParameter(
+      FirebaseAnalyticsKeyConstants.GAME_ID,
+      game.gameId,
+      analyticsParameter
+    );
+    analyticsParameter = this.setAnalyticsParameter(
+      FirebaseAnalyticsKeyConstants.USER_ID,
+      userId,
+      analyticsParameter
+    );
     analyticsParameter = this.setAnalyticsParameter(
       FirebaseAnalyticsKeyConstants.PLAYER_MODE,
-      game.gameOptions.playerMode === PlayerMode.Single ? GameConstant.SINGLE : GameConstant.OPPONENT,
+      game.gameOptions.playerMode === PlayerMode.Single
+        ? GameConstant.SINGLE
+        : GameConstant.OPPONENT,
       analyticsParameter
     );
 
     if (game.gameOptions.playerMode === PlayerMode.Opponent) {
-
       analyticsParameter = this.setAnalyticsParameter(
         FirebaseAnalyticsKeyConstants.OPPONENT_TYPE,
-        game.gameOptions.opponentType === OpponentType.Random ? GameConstant.RANDOM :
-          game.gameOptions.opponentType === OpponentType.Friend ? GameConstant.FRIEND : GameConstant.COMPUTER,
+        game.gameOptions.opponentType === OpponentType.Random
+          ? GameConstant.RANDOM
+          : game.gameOptions.opponentType === OpponentType.Friend
+          ? GameConstant.FRIEND
+          : GameConstant.COMPUTER,
         analyticsParameter
       );
 
@@ -157,7 +216,10 @@ export class Utils extends UtilsCore {
         analyticsParameter
       );
 
-      if (game.round < 16 && game.stats[userId].score === game.stats[otherUserId].score) {
+      if (
+        game.round < 16 &&
+        game.stats[userId].score === game.stats[otherUserId].score
+      ) {
         analyticsParameter = this.setAnalyticsParameter(
           FirebaseAnalyticsKeyConstants.IS_TIE,
           GeneralConstants.TRUE,
@@ -165,7 +227,10 @@ export class Utils extends UtilsCore {
         );
       } else {
         let winPlayerId = otherUserId;
-        if (game.round < 16 && game.stats[userId].score > game.stats[otherUserId].score) {
+        if (
+          game.round < 16 &&
+          game.stats[userId].score > game.stats[otherUserId].score
+        ) {
           winPlayerId = userId;
         }
         analyticsParameter = this.setAnalyticsParameter(
@@ -175,13 +240,13 @@ export class Utils extends UtilsCore {
         );
       }
     } else {
-
       analyticsParameter = this.setAnalyticsParameter(
         FirebaseAnalyticsKeyConstants.GAME_STATUS,
-        (game.playerQnAs.length - game.stats[userId].score !== 4) ? GeneralConstants.WIN : GeneralConstants.LOST,
+        game.playerQnAs.length - game.stats[userId].score !== 4
+          ? GeneralConstants.WIN
+          : GeneralConstants.LOST,
         analyticsParameter
       );
-
     }
 
     analyticsParameter = this.setAnalyticsParameter(
@@ -192,7 +257,9 @@ export class Utils extends UtilsCore {
 
     analyticsParameter = this.setAnalyticsParameter(
       FirebaseAnalyticsKeyConstants.GAME_MODE,
-      game.gameOptions.gameMode === GameMode.Normal ? GameConstant.NORMAL : GameConstant.OFFLINE,
+      game.gameOptions.gameMode === GameMode.Normal
+        ? GameConstant.NORMAL
+        : GameConstant.OFFLINE,
       analyticsParameter
     );
 
@@ -215,37 +282,66 @@ export class Utils extends UtilsCore {
       analyticsParameter
     );
 
-    this.sendFirebaseAnalyticsEvents(FirebaseAnalyticsEventConstants.COMPLETED_GAME, analyticsParameter);
+    this.sendFirebaseAnalyticsEvents(
+      FirebaseAnalyticsEventConstants.COMPLETED_GAME,
+      analyticsParameter
+    );
 
-    return of('success');
+    return of("success");
   }
 
-  setUserLocationFirebaseAnalyticsParameter(user: User, isLocationChanged: boolean): Observable<string> {
-
+  setUserLocationFirebaseAnalyticsParameter(
+    user: User,
+    isLocationChanged: boolean
+  ): Observable<string> {
     if (isLocationChanged) {
       let analyticsParameter: Parameter[] = [];
 
-      analyticsParameter = this.setAnalyticsParameter(FirebaseAnalyticsKeyConstants.USER_ID, user.userId, analyticsParameter);
-      analyticsParameter = this.setAnalyticsParameter(FirebaseAnalyticsKeyConstants.LOCATION, user.location, analyticsParameter);
+      analyticsParameter = this.setAnalyticsParameter(
+        FirebaseAnalyticsKeyConstants.USER_ID,
+        user.userId,
+        analyticsParameter
+      );
+      analyticsParameter = this.setAnalyticsParameter(
+        FirebaseAnalyticsKeyConstants.LOCATION,
+        user.location,
+        analyticsParameter
+      );
 
-      this.sendFirebaseAnalyticsEvents(FirebaseAnalyticsEventConstants.USER_LOCATION, analyticsParameter);
+      this.sendFirebaseAnalyticsEvents(
+        FirebaseAnalyticsEventConstants.USER_LOCATION,
+        analyticsParameter
+      );
     }
 
-    return of('success');
+    return of("success");
   }
 
   hideKeyboard(field) {
     if (isAndroid) {
-      field.toArray()
-        .map((el) => {
-          el.nativeElement.android.clearFocus();
-          return el.nativeElement.dismissSoftInput();
-        });
+      field.toArray().map(el => {
+        el.nativeElement.android.clearFocus();
+        return el.nativeElement.dismissSoftInput();
+      });
     }
   }
 
-  goToDashboard() {
-    this.routerExtensions.navigate(['/dashboard'], { clearHistory: true });
+  focusTextField(field) {
+    setTimeout(() => {
+      // Focus on textfield and set cursor on last character.
+      field.nativeElement.focus();
+
+      // Android doesn't put cursor on last last character.
+      if (isAndroid) {
+        field.nativeElement.focus();
+        field.nativeElement.android.setSelection(
+          field.nativeElement.text.length
+        );
+      }
+    }, 5);
   }
 
+  goToDashboard() {
+    this.routerExtensions.navigate(["/dashboard"], { clearHistory: true });
+  }
 }

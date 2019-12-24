@@ -11,7 +11,7 @@
         </StackLayout>
 
         <Flexboxlayout col="1" verticalAlignment="center">
-            <Label (tap)="back()" [text]="title.replace('_',' ')" class="action-text-title" textWrap="true"></Label>
+            <Label padding="5 10 5 0"  (tap)="back()" [text]="title.replace('_',' ')" class="action-text-title" textWrap="true"></Label>
         </Flexboxlayout>
 
         <!-- game profile edit icon -->
@@ -36,21 +36,6 @@
             <Image src="res://addquestion" class="icon-add" width="28" height="28"></Image>
         </StackLayout>
 
-        <!-- For View All Icon in question-add-updates.component.tns.html screen -->
-        <StackLayout col="2" *ngIf="(user && user!== null && !showSkipBtn && title.includes('Add_Question'))"
-            ios:margin="3" ios:marginRight="30" android:margin="10" verticalAlignment="center"
-            horizontalAlignment="right" (tap)="navigateToMyQuestion()" orientation="horizontal">
-            <Label stlRippleEffect stlBackgroundColor="#13284F" stlOpacity="0.5" stlBackgroundColorAfter="transparent"
-                text="&#xf03a;" class="fa" fontSize="18" marginTop="5"></Label>
-            <Label stlRippleEffect stlBackgroundColor="#13284F" stlOpacity="0.5" stlBackgroundColorAfter="transparent"
-                text="View All" marginLeft="5" fontSize="18"></Label>
-        </StackLayout>
-
-        <!-- <StackLayout *ngIf="((user && user!== null && !hideHomeIcon && !showSkipBtn))" col="3" stlRippleEffect
-            stlBackgroundColor="#13284F" android:margin="10" stlOpacity="0.5" stlBackgroundColorAfter="transparent"
-            verticalAlignment="center" android:width="23" ios:width="23" ios:marginRight="20"
-            (rippleTap)="goToDashboard()">
-            <Label text="&#xf015;" class="fa" fontSize="23" ></Label> -->
         <StackLayout *ngIf="showSkipBtn" col="2" ios:margin="3" margin="10" android:margin="5"
             verticalAlignment="center" (tap)="goToDashboard()">
             <Label stlRippleEffect stlBackgroundColor="#13284F" stlOpacity="0.5" stlBackgroundColorAfter="transparent"
