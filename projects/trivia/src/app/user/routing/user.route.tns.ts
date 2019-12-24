@@ -9,6 +9,8 @@ import {
 } from '../components';
 import { InviteFriendsDialogComponent } from '../components/invite-friends/invite-friends-dialog/invite-friends-dialog.component';
 import { BulkUploadRequestComponent } from '../../../../../shared-library/src/lib/shared/mobile/component';
+import { ChangePasswordComponent } from 'shared-library/shared/mobile/component';
+
 export const userRoutes: Routes = [
     {
         path: 'profile/:userid',
@@ -22,6 +24,11 @@ export const userRoutes: Routes = [
     {
         path: 'my',
         children: [
+            {
+                path: 'profile/change-password',
+                component: ChangePasswordComponent,
+                canActivate: [AuthGuard],
+            },
             {
                 path: 'profile/:userid',
                 component: ProfileSettingsComponent,

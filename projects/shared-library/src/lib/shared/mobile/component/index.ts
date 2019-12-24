@@ -11,3 +11,5 @@ export * from './bottom-bar/bottom-bar.component';
 export * from './game-progress-bar/game-progress-bar.component';
 export * from './render-box/render-box.component';
 export * from './bulk-upload-request/bulk-upload-request.component';
+export * from './change-password/change-password.component';
+export * from './animation-box/animation-box.component';

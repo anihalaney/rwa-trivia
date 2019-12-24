@@ -50,9 +50,10 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnInit,
     public dialog: MatDialog,
     public route: ActivatedRoute,
     public router: Router,
-    public authenticationProvider: AuthenticationProvider) {
+    public authenticationProvider: AuthenticationProvider,
+    ) {
 
-    super(fb, store, userAction, utils, cd, route, router, authenticationProvider);
+    super(fb, store, userAction, utils, cd, route, router, authenticationProvider,platformId);
 
     // if (this.userType === 0) {
     this.setCropperSettings();

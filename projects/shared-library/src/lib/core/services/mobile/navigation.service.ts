@@ -37,6 +37,9 @@ export class NavigationService {
       this.routerExtensions.navigate(['/dashboard'], { clearHistory: true });
       // this.routerExtensions.back();
     } else if (
+      this.router.url === '/privacy-policy' ||
+      this.router.url === '/terms-and-conditions' ||
+      this.router.url === '/user-feedback' ||
       this.router.url === '/user/my/questions/add' ||
       this.router.url === '/user/my/questions/bulk-upload-request' ||
       this.router.url.includes('/user/game-profile') ||

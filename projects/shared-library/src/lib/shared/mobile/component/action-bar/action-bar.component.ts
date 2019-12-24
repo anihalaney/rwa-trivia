@@ -29,6 +29,8 @@ export class ActionBarComponent implements OnDestroy, OnInit {
     @Input() showSkipBtn;
     @Input() subTitle;
     @Input() showEdit;
+    @Input() emitBackEvent;
+    @Output() isBackPress: EventEmitter<any> = new EventEmitter<any>();
     @Output() open: EventEmitter<any> = new EventEmitter<any>();
     photoUrl: '';
 
@@ -50,7 +52,11 @@ export class ActionBarComponent implements OnDestroy, OnInit {
     }
 
     back() {
-        this.navigationService.back();
+        if (this.emitBackEvent) {
+            this.isBackPress.emit(true);
+        } else {
+            this.navigationService.back();
+        }
     }
     navigateToBulkUpload() {
         this.routerExtensions.navigate(['/user/my/questions/bulk-upload-request']);
