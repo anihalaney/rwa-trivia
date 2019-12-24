@@ -132,6 +132,18 @@ export class ProfileSettings {
     public authenticationProvider: AuthenticationProvider,
     @Inject(PLATFORM_ID) public platformId: Object
   ) {
+
+    // remove single field edit for mobile
+    if (!(
+      isPlatformBrowser(this.platformId) === false &&
+      isPlatformServer(this.platformId) === false
+    )) {
+      delete this.singleFieldEdit.email;
+      delete this.singleFieldEdit.phoneNo;
+      delete this.singleFieldEdit.socialProfile;
+      delete this.singleFieldEdit.name;
+    }
+
     this.toggleLoader(true);
     this.fb = formBuilder;
     this.tagsObs = this.store.select(getTags);
