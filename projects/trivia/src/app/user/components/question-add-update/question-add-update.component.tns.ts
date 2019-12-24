@@ -53,7 +53,10 @@ import {
 } from "nativescript-drop-down";
 import { ModalDialogService } from "nativescript-angular/directives/dialogs";
 import { CONFIG } from "shared-library/environments/environment";
+import * as Platform from "tns-core-modules/platform";
+
 declare var IQKeyboardManager;
+
 @Component({
   selector: "app-question-add-update",
   templateUrl: "./question-add-update.component.html",
@@ -74,6 +77,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate
   actionBarTxt: string;
   oWebViewInterface;
   webViewInterfaceObject;
+  platform = Platform;
 
   imagePath: string;
 
@@ -104,6 +108,8 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate
   previewQuestion: Question;
 
   @Input() editQuestion: Question;
+  @Input() displayBottomBar: Boolean = true;
+
   showEditQuestion = false;
   @Output() hideQuestion = new EventEmitter<boolean>();
   @ViewChild("autocomplete", { static: false })
@@ -138,7 +144,6 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate
     super(fb, store, utils, questionAction);
     this.isMobile = true;
     requestPermissions();
-
     this.submitBtnTxt = "Submit";
     this.actionBarTxt = "Add_Question";
     this.initDataItems();
@@ -216,6 +221,10 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate
       if (maxTimeIndex > 0) {
         this.selectedMaxTimeIndex = this.editQuestion.maxTime;
       }
+    }
+ 
+    if(!this.displayBottomBar){
+      this.displayBottomBar = false;
     }
   }
 

@@ -133,7 +133,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit  {
       this.currentRouteUrl = evt.url;
 
       this.showBottomBar = this.hideBottomBarForSelectedRoutes(evt.url);
-
+     
       switch (evt.urlAfterRedirects) {
         case '/login':
           this.utils.setScreenNameInFirebaseAnalytics(FirebaseScreenNameConstants.LOGIN);
@@ -194,8 +194,10 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit  {
   }
 
   hideBottomBarForSelectedRoutes(url) {
+
     if (url === '/signup-extra-info' || url === '/select-category-tag' || url === '/first-question' ||
-      (url.includes('user/my/profile') && Platform.isIOS) ||
+      ((url.includes('user/my/profile')) && Platform.isIOS) ||   
+      ((url.includes('user/my/questions')) && Platform.isIOS) ||
       url === '/login' ||
       url.includes('game-play')) {
       return false;
