@@ -12,7 +12,8 @@
                             android:fontSize="18" textWrap="true"></Label>
                     </FlexboxLayout>
                     <FlexboxLayout *ngIf="authProvider.isAuthenticated" class="padding-label" stlRippleEffect
-                        stlBackgroundColor="#10347f" stlBackgroundColorAfter="transparent" (rippleTap)="navigateToRecentGames()">
+                        stlBackgroundColor="#10347f" stlBackgroundColorAfter="transparent"
+                        (rippleTap)="navigateToRecentGames()">
                         <Label text="Recently Completed Games"
                             [ngStyle]="{color: (activeMenu === 'Recently Completed Games' ? '#077ad6' : '#3b5998')}"
                             android:fontSize="18" textWrap="true"></Label>
@@ -31,23 +32,6 @@
                             [ngStyle]="{color: (activeMenu === 'Profile' ? '#077ad6' : '#3b5998')}"
                             android:fontSize="18" textWrap="true"></Label>
                     </FlexboxLayout>
-                    <FlexboxLayout class="padding-label" stlRippleEffect stlBackgroundColor="#10347f"
-                        stlBackgroundColorAfter="transparent" (rippleTap)="navigateToPrivacyPolicy()">
-                        <Label text="Privacy Policy" android:fontSize="18"
-                            [ngStyle]="{color: (activeMenu === 'Privacy Policy' ? '#077ad6' : '#3b5998')}"
-                            textWrap="true"></Label>
-                    </FlexboxLayout>
-                    <FlexboxLayout class="padding-label" stlRippleEffect stlBackgroundColor="#10347f"
-                        stlBackgroundColorAfter="transparent" (rippleTap)="navigateToTermsConditions()">
-                        <Label text="Terms of Use" android:fontSize="18"
-                            [ngStyle]="{color: (activeMenu === 'T&C' ? '#077ad6' : '#3b5998')}" textWrap="true"></Label>
-                    </FlexboxLayout>
-                    <FlexboxLayout class="padding-label" stlRippleEffect stlBackgroundColor="#10347f"
-                        stlBackgroundColorAfter="transparent" (rippleTap)="navigateToUserFeedback()">
-                        <Label text="Feedback"
-                            [ngStyle]="{color: (activeMenu === 'User-Feedback' ? '#077ad6' : '#3b5998')}"
-                            android:fontSize="18" textWrap="true"></Label>
-                    </FlexboxLayout>
                     <FlexboxLayout *ngIf="!authProvider.isAuthenticated" class="padding-label" stlRippleEffect
                         stlBackgroundColor="#10347f" stlBackgroundColorAfter="transparent" (rippleTap)="login()">
                         <Label text="Login" [ngStyle]="{color: (activeMenu === 'login/signup' ? '#077ad6' : '#3b5998')}"
@@ -59,8 +43,8 @@
                         <Label text="Logout"
                             [ngStyle]="{color: (activeMenu === 'login/signup' ? '#077ad6' : '#f44336')}"
                             android:fontSize="18"></Label>
-                        <ActivityIndicator *ngIf="loader" color="#3b5998" ios:width="25" ios:height="25" android:width="25"
-                            android:height="25" busy="true" class="activity-indicator">
+                        <ActivityIndicator *ngIf="loader" color="#3b5998" ios:width="25" ios:height="25"
+                            android:width="25" android:height="25" busy="true" class="activity-indicator">
                         </ActivityIndicator>
                     </FlexboxLayout>
                 </FlexboxLayout>

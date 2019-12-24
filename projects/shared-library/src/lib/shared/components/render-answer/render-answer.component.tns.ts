@@ -1,9 +1,8 @@
-import { Component, Input, OnInit, SimpleChanges, OnChanges, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, Input, OnInit, SimpleChanges, OnChanges, Inject, PLATFORM_ID, Output, EventEmitter } from '@angular/core';
 import { Answer } from "shared-library/shared/model";
 import { LoadEventData } from 'tns-core-modules/ui/web-view';
 import { isAndroid, isIOS } from 'tns-core-modules/platform';
 import { externalUrl } from './../../../environments/external-url';
-import { isPlatformBrowser } from '@angular/common';
 
 @Component({
     selector: 'render-answer',
@@ -20,6 +19,8 @@ export class RenderAnswerComponent implements OnInit, OnChanges {
     @Input() isRight;
     @Input() isWrong;
     @Input() doPlay;
+    @Input() bgColor;
+    @Output() calAnsHeight = new EventEmitter<number>();
 
     currentAnswer: Answer;
     scriptToGetHeight: string;
@@ -28,12 +29,7 @@ export class RenderAnswerComponent implements OnInit, OnChanges {
     answerHeight = 0;
     isAndroid = isAndroid;
 
-    constructor(@Inject(PLATFORM_ID) private platformId: Object) {
-
-    }
-
-    ngOnInit(): void {
-        if (isPlatformBrowser(this.platformId)) {
+    constructor() {
             this.scriptToGetHeight = `<script> var body = document.body, html = document.documentElement;
             var height = Math.max(body.scrollHeight, body.offsetHeight,
             html.clientHeight, html.scrollHeight, html.offsetHeight);
@@ -50,9 +46,21 @@ export class RenderAnswerComponent implements OnInit, OnChanges {
             <link rel="stylesheet" href="${externalUrl.katexCSS}" crossorigin="anonymous">
             <link rel="stylesheet" href="${externalUrl.hightlighCSS}" crossorigin="anonymous"></html>`;
             // Created new local answer object because here I am modifing answer object
-        }
+
+    }
+
+    ngOnInit(): void {
+
         if (this.answer) {
             this.currentAnswer = { ...this.answer };
+            if (this.bgColor && this.currentAnswer.isRichEditor) {
+                const bgColor = this.currentAnswer.correct ?
+                `background:${this.bgColor}!important;` : `background:#fff!important;`;
+                this.currentAnswer.answerText =
+                            `${this.htmlStartTag} ${this.currentAnswer.answerText}
+                        <style> html {${bgColor}color:#212121 !important;font-size:17;}</style>
+                         ${this.scriptToGetHeight}   ${this.htmlEndTag}`;
+            }
         }
         if (this.currentAnswer && this.currentAnswer.isRichEditor) {
             // tslint:disable-next-line:max-line-length
@@ -71,6 +79,7 @@ export class RenderAnswerComponent implements OnInit, OnChanges {
             const height = event.url.split('#')[1];
             if (height) {
                 this.answerHeight = parseInt(height, 10);
+                this.calAnsHeight.emit(this.answerHeight);
             }
 
         }

@@ -16,7 +16,8 @@ import {
   BottomBarComponent,
   GameProgressBarComponent,
   RenderBoxComponent,
-  UpdateCategoryTagComponent
+  UpdateCategoryTagComponent,
+  AnimationBoxComponent
 } from './mobile/component';
 import { NativeScriptCommonModule } from 'nativescript-angular/common';
 import { GameFilterPipe } from './pipe/game-filter.pipe';
@@ -64,7 +65,8 @@ import { SafeHtmlPipe } from './pipe/safe-html.pipe';
     RecentGameCardComponent,
     GameProgressBarComponent,
     RenderBoxComponent,
-    UpdateCategoryTagComponent
+    UpdateCategoryTagComponent,
+    AnimationBoxComponent
   ],
   imports: [
     CommonModule,
@@ -118,7 +120,8 @@ import { SafeHtmlPipe } from './pipe/safe-html.pipe';
     RecentGameCardComponent,
     GameProgressBarComponent,
     RenderBoxComponent,
-    UpdateCategoryTagComponent
+    UpdateCategoryTagComponent,
+    AnimationBoxComponent
   ],
   schemas: [NO_ERRORS_SCHEMA],
   entryComponents: [

@@ -36,6 +36,11 @@ export class GameProfileComponent extends GameProfile implements OnDestroy, OnIn
         this.page.on('loaded', () => { this.renderView = true; this.cd.markForCheck(); });
     }
 
+
+    getIcon(icon) {
+        return String.fromCharCode(parseInt(`0x${icon}`, 16));
+    }
+
     ngOnDestroy() {
         this.page.off('loaded');
         this.renderView = false;

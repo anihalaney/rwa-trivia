@@ -74,7 +74,7 @@ export class DashboardComponent extends Dashboard implements OnInit, OnDestroy {
   }
 
   navigateToMyQuestion() {
-    this.routerExtension.navigate(['/user/my/questions']);
+    this.routerExtension.navigate(['/user/my/questions/add']);
   }
 
   gotToNotification() {
@@ -89,7 +89,8 @@ export class DashboardComponent extends Dashboard implements OnInit, OnDestroy {
 
   navigateToCategories() {
     if (this.user && this.user !== null) {
-      this.routerExtension.navigate(['/user/my/profile', this.user.userId]);
+      this.routerExtension.navigate(['/user/my/profile', this.user ? this.user.userId : ''], { clearHistory: true });
+      // this.routerExtension.navigate(['/user/my/profile', this.user.userId]);
     } else {
       this.routerExtension.navigate(['/login'], { clearHistory: true });
     }

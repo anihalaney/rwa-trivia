@@ -557,7 +557,7 @@
               "projects/trivia-editor/src/assets"
             ],
             "styles": [
-              "projects/trivia-editor/src/styles.css",
+              "projects/trivia-editor/src/styles.scss",
               "./node_modules/ng-quill-tex/assets/theme.css",
               "./node_modules/mathquill/formula/formula.css",
               "./node_modules/katex/dist/katex.css",
