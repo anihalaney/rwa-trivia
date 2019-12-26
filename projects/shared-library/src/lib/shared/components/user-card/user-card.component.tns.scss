@@ -27,19 +27,14 @@
   background-color:gray;
 }
 
+.friend-check{
+  color: #9c9c9c;
+}
 
 .home-btn {
   color: #3b5998;
 }
-.leaderboard-user-name{
-  color: #3b5998;
-}
 
-.total-bits{
-  color: #212121;
-  font-size: 14;
-  font-weight: 400;
-}
 .play-now-container {
    color: rgb(33, 33, 33);
    font-weight: bold;
@@ -251,9 +246,11 @@
   font-size: 14;
   margin-top: 10;
 }
-.small-image-container{
-  height: 25;
-  width: 25;
+.leaderboard-user-name{
+  color: #3b5998;
+}
+.user-info{
+  margin-top: 15;
 }
 
 .user-image{
@@ -261,4 +258,20 @@
   width: 100;
   height: 100;
   background-color: #808080;
+}
+
+.user-name{
+  margin-top: 15;
+  color: #283b66;
+}
+
+.small-image-container{
+  height: 25;
+  width: 25;
+}
+
+.total-bits{
+  color: #212121;
+  font-size: 14;
+  font-weight: 400;
 }

@@ -6,7 +6,7 @@
     <GridLayout ios:rows="auto" android:rows="auto" ios:columns="auto,*,auto,auto,auto"
         android:columns="auto,*,auto,auto,auto" width="100%">
 
-        <StackLayout col="0" verticalAlignment="center" horizontalAlignment="left" (tap)="back()">
+        <StackLayout col="0" verticalAlignment="center" stlRippleEffect horizontalAlignment="left" (rippleTap)="back()">
             <Label padding="5 10 5 0" color="#000000" text="&#xe906;" fontSize="20" class="ico icon-back"></Label>
         </StackLayout>
 
@@ -34,6 +34,14 @@
             stlBackgroundColorAfter="transparent" verticalAlignment="center" horizontalAlignment="right"
             android:width="23" ios:width="23" (rippleTap)="navigateToSubmitQuestion()">
             <Image src="res://addquestion" class="icon-add" width="28" height="28"></Image>
+        </StackLayout>
+       
+        <!-- For View All Icon in question-add-updates.component.tns.html screen -->
+        <StackLayout stlRippleEffect  ios:marginRight="30" android:margin="10" (rippleTap)="navigateToBulkUpload()" stlBackgroundColorAfter="transparent"   col="2" *ngIf="(user && user!== null && !showSkipBtn && title == 'Add_Question' || title == 'Update Question' )"
+              verticalAlignment="center" horizontalAlignment="center"
+              orientation="horizontal"
+              android:width="28" ios:width="28" >
+            <Label   text="&#xf0aa;"  color="#6c63ff"  stlOpacity="0.5" class="fa fa-arrow-circle-up approve-btn" fontSize="26"></Label>
         </StackLayout>
 
         <StackLayout *ngIf="showSkipBtn" col="2" ios:margin="3" margin="10" android:margin="5"

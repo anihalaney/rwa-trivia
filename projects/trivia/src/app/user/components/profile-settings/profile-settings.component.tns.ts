@@ -118,6 +118,8 @@ export class ProfileSettingsComponent extends ProfileSettings
       authenticationProvider,
       platformId
     );
+
+
     this.initDataItems();
     requestPermissions();
 
@@ -416,7 +418,6 @@ export class ProfileSettingsComponent extends ProfileSettings
         "Please add name, display name, location and profile picture for bulk upload request"
       );
     } else {
-      this.user.bulkUploadPermissionStatus = profileSettingsConstants.NONE;
       this.onSubmit();
     }
   }
@@ -424,6 +425,7 @@ export class ProfileSettingsComponent extends ProfileSettings
   formEditOpen(fieldName: string) {
     this.editSingleField(fieldName);
     if (fieldName == "socialProfile") {
+      this.cd.markForCheck();
       const socialField = this.socialField.toArray();
       if (socialField.length) {
         this.uUtils.focusTextField(socialField[0]);

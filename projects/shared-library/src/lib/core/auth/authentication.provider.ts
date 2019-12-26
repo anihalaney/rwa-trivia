@@ -4,7 +4,7 @@ import { AngularFireDatabase } from '@angular/fire/database';
 import { Store } from '@ngrx/store';
 import { defer, from, Observable, of, throwError } from 'rxjs';
 import { filter, map, mapTo, share, take, tap } from 'rxjs/operators';
-import { User, UserStatusConstants } from '../../shared/model';
+import { User } from '../../shared/model';
 import { CoreState, coreState } from '../store';
 import { UIStateActions, UserActions } from '../store/actions';
 import { FirebaseAuthService } from './firebase-auth.service';
@@ -81,8 +81,10 @@ export class AuthenticationProvider {
 
   refreshToken(): Observable<any> {
     return this.refreshTokenObserver.pipe(tap((tokenResponse) => {
-      this.user.idToken = tokenResponse;
-      this.store.dispatch(this.userActions.loginSuccess(this.user));
+      if(this.user){
+        this.user.idToken = tokenResponse;
+        this.store.dispatch(this.userActions.loginSuccess(this.user));
+      }
       return tokenResponse;
     },
       (err) => {

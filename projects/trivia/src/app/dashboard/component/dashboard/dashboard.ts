@@ -241,15 +241,7 @@ export class Dashboard implements OnDestroy {
             .pipe(select(s => s.userLatestPublishedQuestion)).subscribe((question) => {
                 if (!lodash.isEmpty(question)) {
                     this.yourQuestion = question;
-                    const today = new Date();
-                    if (this.yourQuestion && this.yourQuestion.createdOn) {
-                        // To calculate the time difference of two dates
-                        const difference_In_Time = today.getTime() - this.yourQuestion.createdOn.getTime();
-                        // To calculate the no. of days between two dates
-                        const difference_In_Days = difference_In_Time / (1000 * 3600 * 24);
-                        this.yourQuestion.submittedDays = Math.round(difference_In_Days);
-                        this.yourQuestion.toggleButton = false;
-                    }
+                    this.yourQuestion.toggleButton = false;
                 }
                 this.cd.markForCheck();
             }));

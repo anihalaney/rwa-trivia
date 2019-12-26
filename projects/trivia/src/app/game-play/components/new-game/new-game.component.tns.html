@@ -1,228 +1,104 @@
 <GridLayout>
-  <GridLayout [class.dialogOpen]="dialogOpen" rows="auto,*" columns="*"
-    backgroundColor="#f1f2f2">
-    <GridLayout style="z-index: 0;" height="auto" row="0" col="0">
-      <FlexboxLayout padding="10 10" class="action-bar">
-        <StackLayout width="20">
-          <Label (rippleTap)="back()" text="&#xf104;" verticalAlignment="center" textAlign="center" class="fa"
-            textWrap="true" fontSize="40" stlRippleEffect></Label>
+  <GridLayout  (tap)="hideKeyboard()" [class.dialogOpen]="dialogOpen"  rows="*" columns="*">
+      <GridLayout row="0" col="0" padding="15 15" rows="auto,auto,auto,*" columns="*">
+        <StackLayout row="0" col="0" orientation="horizontal">
+          <Label  text="&#xe906;"  ios:paddingTop="10" android:paddingTop="3" fontSize="20" class="ico icon-back back-btn" (rippleTap)="back()" stlRippleEffect></Label>
         </StackLayout>
-        <Label verticalAlignment="center" alignSelf="center" textAlign="center" [text]="actionBarTitle"
-          marginLeft="10"></Label>
-      </FlexboxLayout>
-    </GridLayout>
-    <StackLayout  style="z-index: 0;" padding="0" marginTop="0" row="1" col="0">
-      <ScrollView>
-        <StackLayout class="new-game Roboto-Regular">
-          <GridLayout *ngIf="!challengerUserId || (challengerUserId && routeType !== 'challenge')" rows="auto,auto"
-            columns="auto,*" padding="10 10 5 10">
-            <Label row="0" col="0" text="Select Player Mode" textWrap="true" class="main-label" fontSize="18"
-              color="#616161"></Label>
-            <Label row="0" col="1" class="fa expand-options" horizontalAlignment="right"
-              text="{{ showSelectPlayer ? '&#xf067;' : '&#xf068;' }}" textWrap="true" padding="7" borderWidth="2"
-              borderColor="#A9A9A9" (tap)="showSelectPlayer = !showSelectPlayer" background="#fff"></Label>
+          <GridLayout row="1" col="0"  rows="auto" columns="*,90" marginBottom="10">
+            <FlexboxLayout class="main-title" flexDirection="column" row="0" col="0">
+              <Label *ngIf="gameOptions.playerMode === 0" text="Play as a"  color="#000000">
+              </Label>
+              <Label *ngIf="gameOptions.playerMode === 0" text="single player" color="#3b5998">
+              </Label>
+              <Label  *ngIf="gameOptions.playerMode === 1" textWrap="true">
+                <FormattedString>
+                  <Span text="Play" color="#000000" ></Span>
+                  <Span text=" together" color="#3b5998"></Span>
+                </FormattedString>
+              </Label>
+            </FlexboxLayout>
+            <StackLayout (rippleTap)="changePlayGameWith(gameOptions.playerMode === 0 ? 1 : 0)" stlBackgroundColor="transparent" *ngIf="chooseOptionsStep == 0" col="1" row="0" stlRippleEffect>
+                <Label text="&#xe929;" class="ico icon-friends btn-player" *ngIf="gameOptions.playerMode === 0"></Label>
+                <Label paddingLeft="14" text="&#xf007;" class="fa fa-user  btn-player" *ngIf="gameOptions.playerMode === 1"></Label>
+                <Label  class="btn-player-text" [text]="gameOptions.playerMode === 0 ? 'Switch to two player' : 'Switch to single player'" textWrap="true" ></Label>
+            </StackLayout>
           </GridLayout>
-
-          <CardView *ngIf="!challengerUserId || (challengerUserId && routeType !== 'challenge')" margin="10"
-            android:elevation="20" ios:elevation="40" radius="1" width="95%" margin="15 0 15 0"
-            visibility="{{ !showSelectPlayer ? 'visible' : 'collapsed' }}">
-            <StackLayout orientation="horizontal" horizontalAlignment="center" backgroundColor="white" fontSize="17">
-
-              <StackLayout stlRippleEffect orientation="horizontal"
-                [class.selected-player]="gameOptions.playerMode === 0"
-                [ngStyle]="{'background-color': (gameOptions.playerMode === 0) ? '#89C24F' : '#ffffff' }"
-                [class.player-type]="gameOptions.playerMode !== 0" (rippleTap)="changePlayerMode(0, null)" width="50%"
-                height="60" [isUserInteractionEnabled]="gameOptions.playerMode !== 0">
-                <Image *ngIf="gameOptions.playerMode !== 0" src="~/assets/images/single_player.png" height="30"
-                  width="30" marginLeft="10" verticalAlignment="center" marginRight="5"></Image>
-                <Image *ngIf="gameOptions.playerMode === 0" src="~/assets/images/single_player_white.png" height="30"
-                  width="30" marginLeft="10" verticalAlignment="center" marginRight="5"></Image>
-                <Label text="SINGLE PLAYER" textWrap="true" height="50" android:padding="15 15 5 5"
-                  ios:padding="5 15 5 5" VerticalAlignment="center"></Label>
-              </StackLayout>
-
-              <StackLayout stlRippleEffect orientation="horizontal"
-                [class.selected-player]="gameOptions.playerMode === 1"
-                [class.player-type]="gameOptions.playerMode !== 1"
-                [ngStyle]="{'background-color': (gameOptions.playerMode === 1) ? '#89C24F' : '#ffffff' }"
-                (rippleTap)="changePlayerMode(1, 0)" width="50%"
-                [isUserInteractionEnabled]="gameOptions.playerMode !== 1">
-
-                <Image *ngIf="gameOptions.playerMode !== 1" src="~/assets/images/two_player.png" height="30" width="30"
-                  marginLeft="10" verticalAlignment="center" marginRight="5"></Image>
-                <Image *ngIf="gameOptions.playerMode === 1" src="~/assets/images/two_player_white.png" height="30"
-                  width="30" marginLeft="10" verticalAlignment="center" marginRight="5"></Image>
-
-                <Label text="TWO PLAYERS" textWrap="true" height="50" android:padding="15 15 5 5"
-                  ios:padding="5 15 5 5"></Label>
-              </StackLayout>
+          <GridLayout *ngIf="chooseOptionsStep == 1 && gameOptions.playerMode === 1" row="2" col="0" rows="auto,auto" columns="*, 70">
+            <Label text="Your opponent" paddingBottom="15" color="#a5a5a5" row="0" col="0" textWrap="true"></Label>
+            <StackLayout row="1" col="0"  >
+              <app-user-card [userId]="friendUserId" [otherInfo]="{lastGamePlayed: userDict[friendUserId]?.date, isRandom: gameOptions.opponentType === 0}"
+              [type]="userCardType.USER_IMAGE_NAME_LAST_GAME_PLAYED_HORIZONTAL"> </app-user-card>
             </StackLayout>
-          </CardView>
-
-          <CardView margin="10 0" android:elevation="20" ios:elevation="40" radius="1"
-            visibility="{{ showSelectPlayer && (!challengerUserId || (challengerUserId && routeType !== 'challenge')) ? 'visible' : 'collapsed' }}"
-            backgroundColor="white">
-            <StackLayout orientation="horizontal" horizontalAlignment="center" padding="10 0 10 10" class="player-type">
-              <StackLayout orientation="horizontal" width="50%">
-                <Image *ngIf="gameOptions.playerMode == 0" src="~/assets/images/single_player.png" height="30"
-                  width="30" verticalAlignment="center" marginRight="5"></Image>
-                <Image *ngIf="gameOptions.playerMode == 1" src="~/assets/images/two_player.png" height="30" width="30"
-                  verticalAlignment="center" marginRight="5"></Image>
-                <Label [text]="gameOptions.playerMode === 0 ? 'Single Player' : 'Two Player'" textWrap="true"
-                  height="50" padding="17 15 15 0"></Label>
-              </StackLayout>
-              <StackLayout orientation="horizontal" width="50%">
-                <Image *ngIf="gameOptions.opponentType == 0 && gameOptions.playerMode == 1"
-                  src="~/assets/images/two_player_random.png" height="30" width="30" verticalAlignment="center"
-                  marginRight="5"></Image>
-                <Image *ngIf="gameOptions.opponentType == 1 && gameOptions.playerMode == 1"
-                  src="~/assets/images/two_player_friend.png" height="30" width="30" verticalAlignment="center"
-                  marginRight="5"></Image>
-                <Label text="{{getGameMode()}}" textWrap="true" height="50" padding="17 0 15 5"></Label>
-
-              </StackLayout>
-            </StackLayout>
-          </CardView>
-
-          <CardView
-            visibility="{{ !showSelectPlayer && (!challengerUserId || (challengerUserId &&  routeType !== 'challenge'))? 'visible' : 'collapsed' }}"
-            *ngIf="gameOptions.playerMode === 1" margin="15 0 15 0" backgroundColor="white">
-            <StackLayout class="label">
-              <GridLayout rows="auto,auto" columns="auto,*,auto" (tap)="gameOptions.opponentType=0;"
-                padding="5 15 5 15">
-                <Image row="0" col="0" checked="true" horizontalAlignment="right"
-                  src="~/assets/images/two_player_random.png" height="30" width="30" marginLeft="10"
-                  verticalAlignment="center" marginRight="5"></Image>
-
-                <Label row="0" col="1" text="Random" textWrap="true" fontSize="18" padding="15"></Label>
-                <Image row="0" col="2" checked="true" horizontalAlignment="right" src="~/assets/images/check.png"
-                  height="25" width="25" marginLeft="10" verticalAlignment="center" marginRight="5"
-                  *ngIf="gameOptions.opponentType == 0"></Image>
-              </GridLayout>
-              <StackLayout class="hr-light"></StackLayout>
-              <GridLayout rows="*,*,*" columns="auto,*,auto" padding="5 15 5 15">
-                <Image row="0" col="0" checked="true" horizontalAlignment="right"
-                  src="~/assets/images/two_player_friend.png" height="30" width="30" marginLeft="10"
-                  verticalAlignment="center" marginRight="5" (tap)="gameOptions.opponentType=1;"></Image>
-
-                <Label row="0" col="1" text="With Friends" textWrap="true" fontSize="18" padding="15"
-                  (tap)="gameOptions.opponentType=1;"></Label>
-                <Image row="0" col="2" checked="true" horizontalAlignment="right" src="~/assets/images/check.png"
-                  height="25" width="25" marginLeft="10" verticalAlignment="center" marginRight="5"
-                  *ngIf="gameOptions.opponentType == 1" (tap)="gameOptions.opponentType=1;"></Image>
-
-                <StackLayout *ngIf="gameOptions.opponentType == 1" row="1" col="0" colSpan="3" class="hr-light">
-                </StackLayout>
-
-                <StackLayout row="2" col="0" colSpan="3" *ngIf="gameOptions.opponentType == 1" paddingBottom="0">
-                  <RadListView #friendListView [items]="uFriends" ios:height="130">
-                    <ng-template let-item="item">
-                      <GridLayout paddingTop="10" rows="auto,*" columns="*" (tap)="selectFriendIdApp(item)">
-                        <app-user-card row="0" col="0" horizontalAlignment="center" [userId]="item"
-                          [type]="userCardType.USER_IMAGE_NAME_VERTICAL_NO_REDIRECT"> </app-user-card>
-                        <Image row="1" col="0" visibility="{{ (item === friendUserId) ? 'visible' : 'collapsed'}}"
-                          src="~/assets/images/check.png" height="30" width="30" marginLeft="10"
-                          verticalAlignment="center" marginRight="5" horizontalAlignment="center"></Image>
-                      </GridLayout>
-                    </ng-template>
-                    <ListViewLinearLayout tkListViewLayout scrollDirection="Horizontal">
-                    </ListViewLinearLayout>
-                  </RadListView>
-                  <Label *ngIf="noFriendsStatus" margin="15"
-                    text="I do not have any friends, invite your friends using link" textWrap="true"></Label>
-                  <Button *ngIf="noFriendsStatus" text="Invite Friends" color="#FFFFFF" backgroundColor="#71b02f"
-                    (tap)="navigateToInvite()" stlRippleEffect></Button>
-                </StackLayout>
-              </GridLayout>
-            </StackLayout>
-          </CardView>
-
-          <GridLayout rows="auto,auto" columns="auto,*" padding="5" margin="10 5">
-            <Label row="0" col="0" text="Select Preferred Category" textWrap="true" fontSize="18" class="label"></Label>
-            <Label row="0" col="1" class="fa expand-options" horizontalAlignment="right"
-              text="{{ showSelectCategory ? '&#xf067;' : '&#xf068;' }}" textWrap="true" padding="7" borderWidth="2"
-              borderColor="#A9A9A9" (tap)="showSelectCategory = !showSelectCategory" background="#fff"></Label>
+            <Label text="CHANGE" (rippleTap)="changePlayGameWith()" color="#3b5998" fontWeight="600" fontSize="14" verticleAlignment="center" row="1" col="1"  rowSpan="2" textWrap="true" stlBackgroundColor="transparent" stlRippleEffect></Label>
           </GridLayout>
-
-          <CardView margin="5 10" visibility="{{ !showSelectCategory ? 'visible' : 'collapsed' }}"
-            backgroundColor="white">
-            <StackLayout>
-              <RadListView [items]="filteredCategories" [height]="categoryListHeight"
-                (itemTap)="selectCategory($event)">
-                <ng-template tkListItemTemplate let-item="item">
-                  <GridLayout rows="*" columns="*,auto" padding="10" borderBottomWidth="1" borderBottomColor="#e5e5e5"
-                    height="60">
-                    <Label [text]="item.categoryName" fontSize="18" row="0" col="0" textWrap="true" padding="8"
-                      class="label"></Label>
-                    <Image row="0" col="2" src="~/assets/images/check.png" height="25" width="25" marginLeft="10"
-                      marginRight="5"
-                      visibility="{{(item.requiredForGamePlay || item.isSelected) ? 'visible' : 'collapsed'}}"></Image>
-                  </GridLayout>
-                </ng-template>
-              </RadListView>
-            </StackLayout>
-          </CardView>
-
-          <CardView margin="5 10" visibility="{{ showSelectCategory ? 'visible' : 'collapsed' }}"
-            backgroundColor="white">
-            <Label padding="15" text="{{getSelectedCatName()}}" textWrap="true" class="label"></Label>
-          </CardView>
-
-          <GridLayout rows="auto,auto" columns="auto,*" padding="5" margin="10 5"
-            *ngIf="applicationSettings && applicationSettings.game_play_show_tags">
-            <Label row="0" col="0" text="Tags associated categories" fontSize="18" textWrap="true"
-              class="label"></Label>
-            <Label row="0" col="1" class="fa expand-options" horizontalAlignment="right"
-              text="{{ showSelectTag ? '&#xf067;' : '&#xf068;' }}" textWrap="true" padding="7" borderWidth="2"
-              borderColor="#A9A9A9" (tap)="showSelectTag = !showSelectTag" background="#fff"></Label>
-          </GridLayout>
-
-          <CardView margin="5 10" visibility="{{ !showSelectTag ? 'visible' : 'collapsed' }}" backgroundColor="white"
-            *ngIf="applicationSettings && applicationSettings.game_play_show_tags" iosOverflowSafeArea="false">
-            <StackLayout>
-              <RadListView [items]="selectedTags" ios:height="{{tagsHeight}}" android:height="auto">
-                <ng-template tkListItemTemplate let-item="item">
-                  <GridLayout rows="*" columns="*,auto" padding="10" borderBottomWidth="1" borderBottomColor="#e5e5e5"
-                    height="60" width="100%">
-                    <Label [text]="item" row="0" col="0" textWrap="true" fontSize="18" padding="8"></Label>
-                    <Label row="0" col="1" class="fa" text="&#xf00d;" fontSize="18" textWrap="true" padding="8"
-                      horizontalAlignment="right" (tap)="removeEnteredTag(item)"></Label>
-                  </GridLayout>
-                </ng-template>
-              </RadListView>
-              <GridLayout rows="auto,auto" columns="*,auto" padding="10" class="two-player-option">
-                <Label row="0" col="0" text="Add Tags" fontSize="18" textWrap="true" class="label"
-                  padding="2 0"></Label>
-                <StackLayout row="1" col="0" tkExampleTitle tkToggleNavButton ios:backgroundColor="#CDCECE" padding="5">
-                  <RadAutoCompleteTextView #autocomplete hint="Select Tag" [items]="dataItems" completionMode="Contains"
-                    showCloseButton="true" (didAutoComplete)="onDidAutoComplete($event)"
-                    (textChanged)="onTextChanged($event)" border="none">
-                    <SuggestionView tkAutoCompleteSuggestionView>
-                      <ng-template tkSuggestionItemTemplate let-item="item">
-                        <StackLayout orientation="vertical" padding="10">
-                          <Label [text]="item.text"></Label>
-                        </StackLayout>
+          <GridLayout *ngIf="gameOptions.opponentType === 1 && gameOptions.playerMode === 1 && chooseOptionsStep === 0" row="3" col="0" rows="auto,auto,*" columns="*">
+            <Label text="Choose opponent" paddingBottom="15" color="#a5a5a5" row="0" col="0" textWrap="true"></Label>
+            <TextField #textField marginBottom="10" row="1"  col="0" hint="Search in your friend list" (textChange)="onSearchFriendTextChange($event)" returnKeyType="next" class="text-field"></TextField>
+              <GridLayout marginBottom="100" rows="*" columns="*" row="2" col="0">
+                  <RadListView pullToRefresh="false" row="0" col="0" separatorColor="#00000000" [filteringFunction]="filterFriendFunc"  #friendListView [items]="uFriends" height="100%" ios:minHeight="100">
+                      <ng-template  tkListItemTemplate  let-item="item">
+                        <GridLayout paddingTop="20"  ios:marginBottom="20" rows="*,auto" columns="*" (tap)="selectFriendIdApp(item)">
+                          <app-user-card row="0" col="0" [userId]="item.userId" [otherInfo]="{lastGamePlayed: item?.date}"
+                          [type]="userCardType.USER_IMAGE_NAME_LAST_GAME_PLAYED_HORIZONTAL"> </app-user-card>
+                          <StackLayout row="1" col="0" marginTop="15" row="1" col="0" colSpan="3" ios:backgroundColor="#f2f2f2" android:backgroundColor="#e2e2e2" height="1"></StackLayout>
+                        </GridLayout>
                       </ng-template>
-                    </SuggestionView>
-                  </RadAutoCompleteTextView>
-                </StackLayout>
-                <Button row="1" col="1" text="Add" (tap)="addCustomTag()" padding="10" fontSize="18"
-                  backgroundColor="#89C24F" color="#ffffff" marginLeft="10" fontWeight="700" stlRippleEffect></Button>
+                    </RadListView> 
               </GridLayout>
-            </StackLayout>
-          </CardView>
-          <CardView margin="5 10" visibility="{{ showSelectTag ? 'visible' : 'collapsed' }}" backgroundColor="white"
-            class="label" *ngIf="applicationSettings && applicationSettings.game_play_show_tags">
-            <Label padding="15" [text]="selectedTags.join(', ')" textWrap="true"></Label>
-          </CardView>
-
-          <StackLayout margin="5 10">
-            <Button text="START A NEW GAME" class="btn-red Roboto-Medium" backgroundColor="#D4493D" color="#ffffff"
-              (rippleTap)="showDialog()" height="70" stlRippleEffect></Button>
-          </StackLayout>
-        </StackLayout>
-      </ScrollView>
-    </StackLayout>
+              <AbsoluteLayout backgroundColor="#fff" verticalAlignment="bottom" row="2"  col="0" >
+                <StackLayout marginBottom="10" width="100%">
+                  <Label text="Play with a random friend" class="info-text" padding="10 0 10 0" textWrap="true"></Label>
+                  <Button  text="Find a friend for me" borderRadius="4" class="btn-transparent Roboto-Medium"
+                  (rippleTap)="chooseRandomPlayer()" height="70" stlRippleEffect></Button>
+                </StackLayout>
+              </AbsoluteLayout>
+          </GridLayout>
+          <ScrollView *ngIf="gameOptions.playerMode === 0 || (chooseOptionsStep == 1 && gameOptions.playerMode === 1 && (gameOptions.opponentType == 0 || gameOptions.opponentType == 1))" row="3" col="0">
+              <GridLayout rows="auto,auto,auto,auto" columns="*">        
+                <Label class="info-text" row="0" col="0"  text="Based on your profile below are categories, you unselect and select categories. This won't effect your profile" textWrap="true"></Label>
+                <FlexboxLayout row="1" col="0" flexWrap="wrap" horizontalAlignment="center" flexDirection="row">
+                    <FlexboxLayout *ngFor="let item of filteredCategories, let i = index" stlRippleEffect  alignItems="center" justifyContent="center"
+                      (rippleTap)="selectCategory(i)"
+                      [ngStyle]="{background: (item.requiredForGamePlay || item.isSelected ? '#48b24e' : '#fafafa'), color : (item.requiredForGamePlay || item.isSelected ? '#fff' : '#6c63ff') }"
+                      borderRadius="5" class="stats-box" [class.border]="i%2 === 0" >
+                      <Label [text]="item.categoryName" padding="15 10" ></Label>
+                    </FlexboxLayout>
+                </FlexboxLayout>
+                <StackLayout marginTop="10" *ngIf="applicationSettings && applicationSettings.game_play_show_tags" row="2" col="0" iosOverflowSafeArea="false">
+                    <StackLayout *ngIf="selectedTags.length>0" marginBottom="5">
+                            <FlexboxLayout *ngIf="selectedTags" flexWrap="wrap">
+                                <StackLayout *ngFor="let tags of let tag of selectedTags, let i = index">
+                                    <FlexboxLayout  alignItems="center" [style.backgroundColor]="theme === 'dark' ? '#405177':'#e2e2e2'"
+                                    [style.color]="theme === 'dark' ? '#a5a5a5' : '#808080'" borderRadius="22" margin="2.5 2.5" padding="5 10" >
+                                        <Label  [text]="tags" textWrap="true"></Label> 
+                                        <Label  color="#000000" text="&#xe922;" fontSize="10" class="ico icon-close" padding="7 5 7 7" (tap)="removeEnteredTag(tag)"></Label>  
+                                    </FlexboxLayout>
+                                </StackLayout>
+                            </FlexboxLayout>
+                    </StackLayout>
+                    <GridLayout rows="auto" columns="*,85" paddingBottom="10" class="two-player-option">
+                        <StackLayout marginRight="5" row="0" col="0" tkExampleTitle tkToggleNavButton ios:backgroundColor="#ffffff">
+                            <RadAutoCompleteTextView borderWidth="1" borderColor="#a5a5a5" color="black"  #autocomplete hint="Select Tag" [items]="dataItems" completionMode="Contains"
+                                showCloseButton="true" (didAutoComplete)="onDidAutoComplete($event)" (textChanged)="onTextChanged($event)"
+                                borderRadius="3" height="60" paddingLeft="10"
+                                ios:backgroundColor="#ffffff">
+                                <SuggestionView tkAutoCompleteSuggestionView>
+                                    <ng-template tkSuggestionItemTemplate let-item="item">
+                                        <StackLayout orientation="vertical" padding="20">
+                                            <Label [text]="item.text"></Label>
+                                        </StackLayout>
+                                    </ng-template>
+                                </SuggestionView>
+                            </RadAutoCompleteTextView>
+                        </StackLayout>
+                        <Label row="0" col="1" (rippleTap)="addCustomTag()" horizontalAlignment="center" paddingLeft="20" paddingRight="20"  text="Add" class="btn-transparent blue-border"  stlRippleEffect></Label>
+                    </GridLayout>
+                </StackLayout>
+                <Button  marginRight="5" row="3" col="0" text="START A NEW GAME" class="btn-blue Roboto-Medium"
+                  (rippleTap)="showDialog()" height="70" stlRippleEffect></Button>
+              </GridLayout>
+          </ScrollView>
+      </GridLayout>
     <AbsoluteLayout (tap)="stopEventPropogation()" style="z-index: 1;" row="0" col="1" rowSpan="2" class="dialog__wrapper">
         <FlexboxLayout  width="100%" height="100%" style="z-index: 1;" justifyContent="space-around" alignItems="center">
             <StackLayout  class="main-dialog">

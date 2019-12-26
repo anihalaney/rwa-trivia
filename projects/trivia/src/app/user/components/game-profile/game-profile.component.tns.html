@@ -17,7 +17,7 @@
                         textWrap="true"></Label>
                     <Label text="&#xf041; {{user?.location}}" color="#000" class="fa" textWrap="true"></Label>
                 </FlexboxLayout>
-                <FlexboxLayout row="1" col="1">
+                <FlexboxLayout row="1" col="1" marginTop="10">
                     <FlexboxLayout *ngFor="let profile of socialProfileSettings">
                         <Label *ngIf="profile?.enable" [order]="profile?.position" text="{{getIcon(profile?.icon)}}"
                             fontSize="22" margin="0 5 0 5" class="fa text-black"
@@ -49,17 +49,17 @@
                             fontSize="15" textWrap="false"></Label>
                         <Label *ngIf="userType === 1">
                             <FormattedString *ngIf="tags && tags.comparison && tags.comparison.length > 0">
-                                <Span text="{{tags.comparison.length | number:'2.0-0'}} matching Tages"
+                                <Span text="{{tags.comparison.length | number:'2.0-0'}} matching Tags"
                                     style="font-style: italic" color="#ffc107" fontSize="12"></Span>
                             </FormattedString>
                             <FormattedString *ngIf="tags && tags.comparison && tags.comparison.length === 0">
-                                <Span text="no matching Tages"
+                                <Span text="no matching tags"
                                     style="font-style: italic" color="#ffc107" fontSize="12"></Span>
                             </FormattedString>
                         </Label>
                     </FlexboxLayout>
-                    <Label *ngIf="userType === 0" [nsRouterLink]="['/user/my/profile', user?.userId]" padding="0 10"
-                        text="&#xe927;" class="ico icon-edit text-blue" textWrap="true"></Label>
+                    <Label *ngIf="userType === 0" stlRippleEffect (rippleTap)="updateCategoryTag()" padding="0 10"
+                        text="&#xe927;" class="ico icon-edit text-blue"  fontSize="18" textWrap="true"></Label>
                 </FlexboxLayout>
             </FlexboxLayout>
 

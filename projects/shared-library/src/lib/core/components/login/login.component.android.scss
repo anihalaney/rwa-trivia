@@ -117,6 +117,12 @@
         border-radius: 3;
       }
 
+      >Label {
+        background-color: $white;
+        color: $btn-color;
+        font-size: 20;
+      }
+
     }
   }
 

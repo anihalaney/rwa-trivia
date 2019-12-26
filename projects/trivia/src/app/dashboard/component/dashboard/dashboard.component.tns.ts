@@ -100,4 +100,8 @@ export class DashboardComponent extends Dashboard implements OnInit, OnDestroy {
     this.page.off('loaded');
     this.renderView = false;
   }
+
+  asdasdAS() {
+    this.routerExtension.navigate(['signup-extra-info']);
+  }
 }

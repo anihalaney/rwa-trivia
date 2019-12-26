@@ -185,10 +185,10 @@ export class QuestionAddUpdate {
     this.loaderBusy = flag;
   }
 
-  onSubmit(): Question {
+  onSubmit(skipValidation = false): Question {
     // validations
     this.questionForm.updateValueAndValidity();
-    if (this.questionForm.invalid) {
+    if (this.questionForm.invalid && !skipValidation) {
       return;
     }
 

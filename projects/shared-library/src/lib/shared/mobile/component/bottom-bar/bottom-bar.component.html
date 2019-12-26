@@ -1,43 +1,45 @@
-<FlexboxLayout class="bottom_container">
-    <FlexboxLayout class="bottom_container-box" [class.activeMenu]="activeMenu === 'play'"
-        (tap)="bottomBarClick('play')">
-        <Label text="&#xe931;"
-            [ngClass]="{'animate-ease-out': prevMenu === 'play', 'animate-ease-in': animateMenu === 'play' && animateMenu === 'play'}"
-            fontSize="20" class="ico icon-home"></Label>
-        <Label text="Home"
-            [ngClass]="{'animate-ease-out': prevMenu === 'play', 'animate-ease-in': animateMenu === 'play', 'hide': (activeMenu !== 'play' && isDrawerOpenOrClosed !== 'drawerOpened')  , show: activeMenu === 'play'}"
-            fontSize="14" textWrap="true"></Label>
-    </FlexboxLayout>
-    <FlexboxLayout class="bottom_container-box" [class.activeMenu]="activeMenu === 'leaderboard'"
-        (tap)="bottomBarClick('leaderboard')">
-        <Label text="&#xe937;"
-            [ngClass]="{'animate-ease-out': prevMenu === 'leaderboard', 'animate-ease-in': animateMenu === 'leaderboard' && animateMenu === 'leaderboard'}"
-            fontSize="20" class="ico icon-leraderboard-icon"></Label>
-        <Label text="Leaderboard"
-            [ngClass]="{'animate-ease-out': prevMenu === 'leaderboard' ,'animate-ease-in': animateMenu === 'leaderboard' && animateMenu === 'leaderboard', 'hide': activeMenu !== 'leaderboard' && isDrawerOpenOrClosed !== 'drawerOpened', show: animateMenu === 'leaderboard'}"
-            fontSize="14" textWrap="true"></Label>
-    </FlexboxLayout>
-    <FlexboxLayout class="bottom_container-box" [class.activeMenu]="activeMenu === 'friends'"
-        (tap)="bottomBarClick('friends')">
-        <Label text="&#xe929;"
-            [ngClass]="{'animate-ease-out': prevMenu === 'friends', 'animate-ease-in': animateMenu === 'friends' && animateMenu === 'friends'}"
-            fontSize="20" class="ico icon-friends"></Label>
-        <Label text="Friends"
-            [ngClass]="{'animate-ease-out': prevMenu === 'friends' , 'animate-ease-in': animateMenu === 'friends', 'hide': activeMenu !== 'friends' && isDrawerOpenOrClosed !== 'drawerOpened', show: animateMenu === 'friends'}"
-            fontSize="14" textWrap="true"></Label>
-    </FlexboxLayout>
-    <FlexboxLayout *ngIf="isDrawerOpenOrClosed === 'drawerClosed' || !isDrawerOpenOrClosed" class="bottom_container-box"
-        [class.activeMenu]="activeMenu === 'more'" (tap)="bottomBarClick('more')">
-        <Label text="&#xe93c;"
-            [ngClass]="{'animate-ease-out': prevMenu === 'more', 'animate-ease-in': animateMenu === 'more' && animateMenu === 'more'}"
-            fontSize="20" class="ico icon-more-menu"></Label>
-        <Label text="More"
-            [ngClass]="{'animate-ease-out': prevMenu === 'more' , 'animate-ease-in': animateMenu === 'more', 'hide': activeMenu !== 'more', show: animateMenu === 'more'}"
-            fontSize="14" textWrap="true"></Label>
-    </FlexboxLayout>
-    <FlexboxLayout *ngIf="isDrawerOpenOrClosed === 'drawerOpened'" class="bottom_container-box"
-        [class.activeMenu]="activeMenu === 'more'" (tap)="bottomBarClick('less')">
-        <Label text="&#xe93c;" fontSize="20" class="ico icon-more-menu"></Label>
-        <Label text="Less" fontSize="14" textWrap="true"></Label>
-    </FlexboxLayout>
-</FlexboxLayout>
+<!-- <AbsoluteLayout opacity="0.1" backgroundColor="green"> -->
+        <FlexboxLayout  class="bottom_container" borderRadius="18 18 0 0">
+                <FlexboxLayout class="bottom_container-box" [class.activeMenu]="activeMenu === 'play'"
+                    (tap)="bottomBarClick('play')">
+                    <Label text="&#xe931;"
+                        [ngClass]="{'animate-ease-out': prevMenu === 'play', 'animate-ease-in': animateMenu === 'play' && animateMenu === 'play'}"
+                        fontSize="20" class="ico icon-home"></Label>
+                    <Label text="Home"
+                        [ngClass]="{'animate-ease-out': prevMenu === 'play', 'animate-ease-in': animateMenu === 'play', 'hide': (activeMenu !== 'play' && isDrawerOpenOrClosed !== 'drawerOpened')  , show: activeMenu === 'play'}"
+                        fontSize="14" textWrap="true"></Label>
+                </FlexboxLayout>
+                <FlexboxLayout class="bottom_container-box" [class.activeMenu]="activeMenu === 'leaderboard'"
+                    (tap)="bottomBarClick('leaderboard')">
+                    <Label text="&#xe937;"
+                        [ngClass]="{'animate-ease-out': prevMenu === 'leaderboard', 'animate-ease-in': animateMenu === 'leaderboard' && animateMenu === 'leaderboard'}"
+                        fontSize="20" class="ico icon-leraderboard-icon"></Label>
+                    <Label text="Leaderboard"
+                        [ngClass]="{'animate-ease-out': prevMenu === 'leaderboard' ,'animate-ease-in': animateMenu === 'leaderboard' && animateMenu === 'leaderboard', 'hide': activeMenu !== 'leaderboard' && isDrawerOpenOrClosed !== 'drawerOpened', show: animateMenu === 'leaderboard'}"
+                        fontSize="14" textWrap="true"></Label>
+                </FlexboxLayout>
+                <FlexboxLayout class="bottom_container-box" [class.activeMenu]="activeMenu === 'friends'"
+                    (tap)="bottomBarClick('friends')">
+                    <Label text="&#xe929;"
+                        [ngClass]="{'animate-ease-out': prevMenu === 'friends', 'animate-ease-in': animateMenu === 'friends' && animateMenu === 'friends'}"
+                        fontSize="20" class="ico icon-friends"></Label>
+                    <Label text="Friends"
+                        [ngClass]="{'animate-ease-out': prevMenu === 'friends' , 'animate-ease-in': animateMenu === 'friends', 'hide': activeMenu !== 'friends' && isDrawerOpenOrClosed !== 'drawerOpened', show: animateMenu === 'friends'}"
+                        fontSize="14" textWrap="true"></Label>
+                </FlexboxLayout>
+                <FlexboxLayout *ngIf="isDrawerOpenOrClosed === 'drawerClosed' || !isDrawerOpenOrClosed" class="bottom_container-box"
+                    [class.activeMenu]="activeMenu === 'more'" (tap)="bottomBarClick('more')">
+                    <Label text="&#xe93c;"
+                        [ngClass]="{'animate-ease-out': prevMenu === 'more', 'animate-ease-in': animateMenu === 'more' && animateMenu === 'more'}"
+                        fontSize="20" class="ico icon-more-menu"></Label>
+                    <Label text="More"
+                        [ngClass]="{'animate-ease-out': prevMenu === 'more' , 'animate-ease-in': animateMenu === 'more', 'hide': activeMenu !== 'more', show: animateMenu === 'more'}"
+                        fontSize="14" textWrap="true"></Label>
+                </FlexboxLayout>
+                <FlexboxLayout *ngIf="isDrawerOpenOrClosed === 'drawerOpened'" class="bottom_container-box"
+                    [class.activeMenu]="activeMenu === 'more'" (tap)="bottomBarClick('less')">
+                    <Label text="&#xe93c;" fontSize="20" class="ico icon-more-menu"></Label>
+                    <Label text="Less" fontSize="14" textWrap="true"></Label>
+                </FlexboxLayout>
+            </FlexboxLayout>
+<!-- </AbsoluteLayout> -->
