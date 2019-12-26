@@ -9,7 +9,7 @@ import { AuthenticationProvider } from 'shared-library/core/auth';
 import { Utils, WindowRef } from 'shared-library/core/services';
 import { coreState } from 'shared-library/core/store';
 import { User, UserStatus } from 'shared-library/shared/model';
-import { ApplicationSettingsActions, UserActions, CategoryActions } from 'shared-library/core/store/actions';
+import { ApplicationSettingsActions, UserActions, CategoryActions, TopicActions } from 'shared-library/core/store/actions';
 import * as gamePlayActions from '../../game-play/store/actions';
 import { AppState, appState } from '../../store';
 import { interval, Subscription } from 'rxjs';
@@ -41,7 +41,8 @@ export class AppComponent implements OnInit, OnDestroy {
     private windowRef: WindowRef,
     private userAction: UserActions,
     private applicationSettingsAction: ApplicationSettingsActions,
-    private categoryActions: CategoryActions) {
+    private categoryActions: CategoryActions,
+    private topicsActions: TopicActions) {
 
     this.store.dispatch(this.applicationSettingsAction.loadApplicationSettings());
     this.store.dispatch(this.categoryActions.loadCategories());
@@ -49,6 +50,8 @@ export class AppComponent implements OnInit, OnDestroy {
     this.subscriptions.push(store.select(appState.coreState).pipe(select(s => s.user), skip(1)).subscribe(user => {
       this.user = user;
       if (user) {
+        this.store.dispatch(this.topicsActions.loadTopics());
+        this.store.dispatch(this.topicsActions.loadTopTopics());
         let url: string;
         this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.invitationToken)).subscribe(status => {
           if (status !== 'NONE') {

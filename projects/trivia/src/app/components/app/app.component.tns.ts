@@ -28,6 +28,7 @@ import { Carousel, CarouselItem } from 'nativescript-carousel';
 import { ModalDialogOptions, ModalDialogService } from 'nativescript-angular/modal-dialog';
 import { WelcomeScreenComponent } from '../../../../../shared-library/src/lib/shared/mobile/component';
 import * as appSettingsStorage from 'tns-core-modules/application-settings';
+import { TopicActions } from 'shared-library/core/store/actions';
 
 registerElement('Carousel', () => Carousel);
 registerElement('CarouselItem', () => CarouselItem);
@@ -58,7 +59,8 @@ export class AppComponent implements OnInit, OnDestroy {
     private cd: ChangeDetectorRef,
     private router: Router,
     private _modalService: ModalDialogService,
-    private _vcRef: ViewContainerRef
+    private _vcRef: ViewContainerRef,
+    private topicsActions: TopicActions
   ) {
     this.bottomSafeArea = 120;
     this.handleBackPress();
@@ -96,6 +98,8 @@ export class AppComponent implements OnInit, OnDestroy {
     applicationOn(resumeEvent, (args: ApplicationEventData) => {
       firebase.getCurrentUser().then((user) => {
         this.firebaseAuthService.resumeState(user);
+        this.store.dispatch(this.topicsActions.loadTopics());
+        this.store.dispatch(this.topicsActions.loadTopTopics());
       });
     });
 

@@ -15,12 +15,12 @@ import { SharedRoutingModule } from './routing/shared-routing.module';
 import {
   AchievementService, ApplicationSettingsService,
   BulkService, CategoryService, GameService, QuestionService,
-  SocialService, StatsService, TagService, UserService, Utils, WindowRef
+  SocialService, StatsService, TagService, UserService, Utils, WindowRef, TopicService
 } from './services';
 import { NavigationService } from './services/mobile';
 import { reducer } from './store';
 import {
-  ApplicationSettingsActions, CategoryActions,
+  ApplicationSettingsActions, CategoryActions, TopicActions,
   GameActions, QuestionActions, TagActions, UIStateActions, UserActions
 } from './store/actions';
 import { effects } from './store/effects';
@@ -49,10 +49,10 @@ import { effects } from './store/effects';
     Utils, AuthenticationProvider,
     CategoryService, TagService, QuestionService,
     GameService, BulkService, UserService, SocialService, StatsService, NavigationService,
-    WindowRef, ApplicationSettingsService, AchievementService,
+    WindowRef, ApplicationSettingsService, AchievementService, TopicService,
 
     // Actions
-    UserActions, CategoryActions, TagActions, QuestionActions,
+    UserActions, CategoryActions, TopicActions, TagActions, QuestionActions,
     UIStateActions, GameActions,
     UserActions, ApplicationSettingsActions,
 

@@ -26,21 +26,23 @@ import {
   filter
 } from "rxjs/operators";
 import { Utils } from "shared-library/core/services";
-import { UserActions } from "shared-library/core/store";
+import { UserActions, getTopTopics, topicDictionary } from "shared-library/core/store";
 import {
   Account,
   Category,
   profileSettingsConstants,
   User,
   Invitation,
-  AuthProviderConstants
+  AuthProviderConstants,
+  Topic
 } from "shared-library/shared/model";
 import {
   AppState,
   appState,
   categoryDictionary,
   getCategories,
-  getTags
+  getTags,
+  getTopics
 } from "../../../store";
 import * as userActions from "../../store/actions";
 import { AuthenticationProvider } from "shared-library/core/auth";
@@ -64,6 +66,7 @@ export class ProfileSettings {
   userCategories: Category[];
   categoryDict: { [key: number]: Category };
   categoryDictObs: Observable<{ [key: number]: Category }>;
+  topics: Topic[];
   categoriesObs: Observable<Category[]>;
   userForm: FormGroup;
   userObs: Observable<User>;
@@ -120,6 +123,7 @@ export class ProfileSettings {
   loggedInUserAccount: Account;
   authProviderConstants: any;
   currentAuthProvider: string;
+  topicDictionary: any;
 
   constructor(
     public formBuilder: FormBuilder,
@@ -231,16 +235,20 @@ export class ProfileSettings {
       this.store.select(appState.coreState).pipe(select(s => s.account)),
       this.store.select(getCategories),
       this.store.select(categoryDictionary),
+      this.store.select(getTopTopics),
+      this.store.select(topicDictionary),
       this.initializeSocialSetting()
     ]).pipe(
       map(values => {
         this.account = values[0] || new Account();
         this.categories = values[1] || [];
         this.categoryDict = values[2] || {};
+        this.topics = values[3] || [];
+        this.topicDictionary = values[4] || {};
         this.userCopyForReset = { ...this.user };
         this.createForm(this.user);
         this.onValueChanges();
-
+        
         if (this.user.profilePictureUrl) {
           this.profileImage.image = this.user.profilePictureUrl;
         }
@@ -343,6 +351,10 @@ export class ProfileSettings {
     return this.userForm.get("categoryList") as FormArray;
   }
 
+  get topicList(): FormArray {
+    return this.userForm.get("topicList") as FormArray;
+  }
+
   get socialAccountList(): FormArray {
     return this.userForm.get("socialAccountList") as FormArray;
   }
@@ -369,7 +381,7 @@ export class ProfileSettings {
 
   // create the form based on user object
   createForm(user: User) {
-    let tagsFA, categoryFA;
+    let tagsFA, categoryFA, topicsFA;
 
     if (this.userType === 0) {
       const categoryIds: FormGroup[] = this.categories.map(category => {
@@ -380,6 +392,23 @@ export class ProfileSettings {
         const fg = new FormGroup({
           category: new FormControl(category.id),
           isSelected: new FormControl(status)
+        });
+        return fg;
+      });
+
+      const topics: FormGroup[] = this.topics.map(topic => {
+        const status =
+        topic.type === 'category' ?
+        (user.categoryIds && user.categoryIds.indexOf(topic.id) !== -1
+            ? true
+            : false) : 
+          (user.tags && user.tags.indexOf(topic.id) !== -1
+            ? true
+            : false);
+        const fg = new FormGroup({
+          topic: new FormControl(topic.id),
+          isSelected: new FormControl(status),
+          type: new FormControl(topic.type)
         });
         return fg;
       });
@@ -407,6 +436,9 @@ export class ProfileSettings {
       tagsFA = new FormArray(fcs);
 
       categoryFA = new FormArray(categoryIds);
+      topicsFA = new FormArray(topics);
+
+      
       this.enteredTags = user.tags;
     }
     this.userForm = this.fb.group(
@@ -415,6 +447,7 @@ export class ProfileSettings {
         displayName: [user.displayName],
         location: [user.location],
         categoryList: categoryFA ? categoryFA : [],
+        topicList: topicsFA ? topicsFA : [],
         tags: "",
         tagsArray: tagsFA ? tagsFA : [],
         profilePicture: [user.profilePicture],
@@ -514,10 +547,10 @@ export class ProfileSettings {
     } else {
       this.user.name = this.userForm.get("name").value;
       this.user.categoryIds = [];
-
-      for (const obj of this.userForm.get("categoryList").value) {
+      this.user.tags = [];
+      for (const obj of this.userForm.get("topicList").value) {
         if (obj["isSelected"]) {
-          this.user.categoryIds.push(obj["category"]);
+          obj['type'] === 'category' ? this.user.categoryIds.push(obj["topic"]) : this.user.tags.push(obj["topic"]);
         }
       }
       this.socialProfileObj.map(profile => {
@@ -527,7 +560,7 @@ export class ProfileSettings {
           ).value;
         }
       });
-      this.user.tags = [...this.enteredTags];
+      // this.user.tags = [...this.enteredTags];
       this.user.profilePicture = this.userForm.get("profilePicture").value
         ? this.userForm.get("profilePicture").value
         : "";
