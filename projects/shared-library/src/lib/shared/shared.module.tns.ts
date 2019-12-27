@@ -33,6 +33,7 @@ import {
 import { ShowHintWhenFocusOutDirective, OpenUserProfileDirective, RippleEffectDirective } from './directive';
 import { PhoneNumberValidationProvider } from './mobile/component/countryList/phone-number-validation.provider';
 import { SafeHtmlPipe } from './pipe/safe-html.pipe';
+import {TimeAgoPipe} from 'time-ago-pipe';
 @NgModule({
   declarations: [
     ActionBarComponent,
@@ -64,6 +65,7 @@ import { SafeHtmlPipe } from './pipe/safe-html.pipe';
     RecentGameCardComponent,
     GameProgressBarComponent,
     RenderBoxComponent,
+    TimeAgoPipe,
     AnimationBoxComponent
   ],
   imports: [
@@ -118,6 +120,7 @@ import { SafeHtmlPipe } from './pipe/safe-html.pipe';
     RecentGameCardComponent,
     GameProgressBarComponent,
     RenderBoxComponent,
+    TimeAgoPipe,
     AnimationBoxComponent
   ],
   schemas: [NO_ERRORS_SCHEMA],
