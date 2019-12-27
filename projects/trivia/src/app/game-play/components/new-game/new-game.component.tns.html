@@ -55,7 +55,7 @@
           </GridLayout>
           <ScrollView *ngIf="gameOptions.playerMode === 0 || (chooseOptionsStep == 1 && gameOptions.playerMode === 1 && (gameOptions.opponentType == 0 || gameOptions.opponentType == 1))" row="3" col="0">
               <GridLayout rows="auto,auto,auto,auto" columns="*">        
-                <Label class="info-text" row="0" col="0"  text="Based on your profile below are categories, you unselect and select categories. This won't effect your profile" textWrap="true"></Label>
+                <Label class="info-text" row="0" col="0"  text="Based on your profile below are topics, you unselect and select topics. This won't effect your profile" textWrap="true"></Label>
                 <FlexboxLayout row="1" col="0" flexWrap="wrap" horizontalAlignment="center">
                     <FlexboxLayout *ngFor="let item of filteredCategories, let i = index" stlRippleEffect  flexDirection="column"  alignItems="center" justifyContent="center"
                       (rippleTap)="selectCategory(i)"
