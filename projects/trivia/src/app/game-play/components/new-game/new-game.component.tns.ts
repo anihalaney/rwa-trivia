@@ -8,7 +8,7 @@ import { ListViewEventData } from 'nativescript-ui-listview';
 import { RadListViewComponent } from 'nativescript-ui-listview/angular';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { Utils, WindowRef } from 'shared-library/core/services';
-import { GameActions, UserActions } from 'shared-library/core/store/actions';
+import { GameActions, UserActions, TagActions } from 'shared-library/core/store/actions';
 import { Category, PlayerMode } from 'shared-library/shared/model';
 import { ObservableArray } from 'tns-core-modules/data/observable-array';
 import { Page, isIOS } from 'tns-core-modules/ui/page/page';
@@ -61,13 +61,14 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     public userActions: UserActions,
     public router: Router,
     public route: ActivatedRoute,
+    public tagActions: TagActions,
     public cd: ChangeDetectorRef,
     private page: Page,
     public windowRef: WindowRef,
     @Inject(PLATFORM_ID) public platformId: Object,
     private ngZone: NgZone,
     private navigationService: NavigationService) {
-    super(store, utils, gameActions, userActions, windowRef, platformId, cd, route, router);
+    super(store, utils, gameActions, userActions, windowRef, platformId, cd, route, router, tagActions);
     this.initDataItems();
     this.modeAvailable = false;
     this.page.actionBarHidden = true;
@@ -189,7 +190,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
 
   startGame() {
     this.showGameStartLoader = true;
-    this.gameOptions.tags = this.selectedTags;
+    this.gameOptions.tags = this.topTags.filter(c => c.requiredForGamePlay || c.isSelected).map(c => c.key);
     this.gameOptions.categoryIds = this.filteredCategories.filter(c => c.requiredForGamePlay || c.isSelected).map(c => c.id);
     if (this.validateGameOptions(true, this.gameOptions)) {
       if (this.gameOptions.playerMode === PlayerMode.Single) {

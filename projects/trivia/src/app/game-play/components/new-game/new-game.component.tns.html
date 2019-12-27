@@ -56,44 +56,22 @@
           <ScrollView *ngIf="gameOptions.playerMode === 0 || (chooseOptionsStep == 1 && gameOptions.playerMode === 1 && (gameOptions.opponentType == 0 || gameOptions.opponentType == 1))" row="3" col="0">
               <GridLayout rows="auto,auto,auto,auto" columns="*">        
                 <Label class="info-text" row="0" col="0"  text="Based on your profile below are categories, you unselect and select categories. This won't effect your profile" textWrap="true"></Label>
-                <FlexboxLayout row="1" col="0" flexWrap="wrap" horizontalAlignment="center" flexDirection="row">
-                    <FlexboxLayout *ngFor="let item of filteredCategories, let i = index" stlRippleEffect  alignItems="center" justifyContent="center"
+                <FlexboxLayout row="1" col="0" flexWrap="wrap" horizontalAlignment="center">
+                    <FlexboxLayout *ngFor="let item of filteredCategories, let i = index" stlRippleEffect  flexDirection="column"  alignItems="center" justifyContent="center"
                       (rippleTap)="selectCategory(i)"
                       [ngStyle]="{background: (item.requiredForGamePlay || item.isSelected ? '#48b24e' : '#fafafa'), color : (item.requiredForGamePlay || item.isSelected ? '#fff' : '#6c63ff') }"
-                      borderRadius="5" class="stats-box" [class.border]="i%2 === 0" >
+                      borderRadius="5" class="stats-box border" >
                       <Label [text]="item.categoryName" padding="15 10" ></Label>
                     </FlexboxLayout>
+                    <ng-template [ngIf]="applicationSettings && applicationSettings.game_play_show_tags && topTags && topTags.length > 0">
+                      <FlexboxLayout *ngFor="let item of topTags, let i = index" stlRippleEffect  flexDirection="column"  alignItems="center" justifyContent="center"
+                        (rippleTap)="selectTags(item.key)"
+                        [ngStyle]="{background: (item.requiredForGamePlay || item.isSelected === true ? '#48b24e' : '#fafafa'), color : (item.requiredForGamePlay || item.isSelected === true ? '#fff' : '#6c63ff') }"
+                        borderRadius="5" class="stats-box border" >
+                        <Label [text]="item.key" padding="15 10" ></Label>
+                      </FlexboxLayout>
+                   </ng-template>
                 </FlexboxLayout>
-                <StackLayout marginTop="10" *ngIf="applicationSettings && applicationSettings.game_play_show_tags" row="2" col="0" iosOverflowSafeArea="false">
-                    <StackLayout *ngIf="selectedTags.length>0" marginBottom="5">
-                            <FlexboxLayout *ngIf="selectedTags" flexWrap="wrap">
-                                <StackLayout *ngFor="let tags of let tag of selectedTags, let i = index">
-                                    <FlexboxLayout  alignItems="center" [style.backgroundColor]="theme === 'dark' ? '#405177':'#e2e2e2'"
-                                    [style.color]="theme === 'dark' ? '#a5a5a5' : '#808080'" borderRadius="22" margin="2.5 2.5" padding="5 10" >
-                                        <Label  [text]="tags" textWrap="true"></Label> 
-                                        <Label  color="#000000" text="&#xe922;" fontSize="10" class="ico icon-close" padding="7 5 7 7" (tap)="removeEnteredTag(tag)"></Label>  
-                                    </FlexboxLayout>
-                                </StackLayout>
-                            </FlexboxLayout>
-                    </StackLayout>
-                    <GridLayout rows="auto" columns="*,85" paddingBottom="10" class="two-player-option">
-                        <StackLayout marginRight="5" row="0" col="0" tkExampleTitle tkToggleNavButton ios:backgroundColor="#ffffff">
-                            <RadAutoCompleteTextView borderWidth="1" borderColor="#a5a5a5" color="black"  #autocomplete hint="Select Tag" [items]="dataItems" completionMode="Contains"
-                                showCloseButton="true" (didAutoComplete)="onDidAutoComplete($event)" (textChanged)="onTextChanged($event)"
-                                borderRadius="3" height="60" paddingLeft="10"
-                                ios:backgroundColor="#ffffff">
-                                <SuggestionView tkAutoCompleteSuggestionView>
-                                    <ng-template tkSuggestionItemTemplate let-item="item">
-                                        <StackLayout orientation="vertical" padding="20">
-                                            <Label [text]="item.text"></Label>
-                                        </StackLayout>
-                                    </ng-template>
-                                </SuggestionView>
-                            </RadAutoCompleteTextView>
-                        </StackLayout>
-                        <Label row="0" col="1" (rippleTap)="addCustomTag()" horizontalAlignment="center" paddingLeft="20" paddingRight="20"  text="Add" class="btn-transparent blue-border"  stlRippleEffect></Label>
-                    </GridLayout>
-                </StackLayout>
                 <Button  marginRight="5" row="3" col="0" text="START A NEW GAME" class="btn-blue Roboto-Medium"
                   (rippleTap)="showDialog()" height="70" stlRippleEffect></Button>
               </GridLayout>
