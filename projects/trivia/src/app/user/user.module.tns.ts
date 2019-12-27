@@ -15,10 +15,8 @@ import {
   PreviewQuestionDialogComponent,
   GameProfileComponent
 } from './components';
-
+import { BulkUploadRequestComponent } from '../../../../shared-library/src/lib/shared/mobile/component';
 import { ChangePasswordComponent } from 'shared-library/shared/mobile/component';
-
-
 import { DropDownModule } from 'nativescript-drop-down/angular';
 @NgModule({
   declarations: [
@@ -31,6 +29,7 @@ import { DropDownModule } from 'nativescript-drop-down/angular';
     LocationResetDialogComponent,
     PreviewQuestionDialogComponent,
     GameProfileComponent,
+    BulkUploadRequestComponent,
     ChangePasswordComponent
   ],
   imports: [
@@ -55,6 +54,7 @@ import { DropDownModule } from 'nativescript-drop-down/angular';
     InviteFriendsComponent,
     LocationResetDialogComponent,
     GameProfileComponent,
+    BulkUploadRequestComponent,
     ChangePasswordComponent
   ],
   entryComponents: [

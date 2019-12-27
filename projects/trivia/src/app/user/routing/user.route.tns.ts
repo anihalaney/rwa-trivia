@@ -8,6 +8,7 @@ import {
     GameProfileComponent
 } from '../components';
 import { InviteFriendsDialogComponent } from '../components/invite-friends/invite-friends-dialog/invite-friends-dialog.component';
+import { BulkUploadRequestComponent } from '../../../../../shared-library/src/lib/shared/mobile/component';
 import { ChangePasswordComponent } from 'shared-library/shared/mobile/component';
 
 export const userRoutes: Routes = [
@@ -47,6 +48,11 @@ export const userRoutes: Routes = [
             {
                 path: 'questions/add',
                 component: QuestionAddUpdateComponent,
+                canActivate: [AuthGuard]
+            },
+            {
+                path: 'questions/bulk-upload-request',
+                component: BulkUploadRequestComponent,
                 canActivate: [AuthGuard]
             },
             {
