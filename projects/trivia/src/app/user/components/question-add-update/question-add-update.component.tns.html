@@ -1,177 +1,129 @@
-<ns-action-bar [title]="actionBarTxt" class="Roboto-Regular" showAdd="true"></ns-action-bar>
-
-<StackLayout *ngIf="loaderBusy">
-    <ActivityIndicator [busy]="loaderBusy" width="100" height="100" marginTop="225" class="activity-indicator"></ActivityIndicator>
+<ns-action-bar [title]="isShowPreview ? 'Question Preview' : actionBarTxt" (isBackPress)="back($event)" [emitBackEvent]="editQuestion || isShowPreview ? true : false" class="Roboto-Regular" showAdd="true"></ns-action-bar>
+<StackLayout *ngIf="loaderBusy && !isShowPreview">
+    <ActivityIndicator [busy]="loaderBusy" width="100" height="100" marginTop="225" class="activity-indicator">
+    </ActivityIndicator>
 </StackLayout>
-
-<StackLayout *ngIf="!loaderBusy">
-    <ScrollView>
-        <PreviousNextView>
-        <StackLayout (tap)="hideKeyboard()" class="new-game Roboto-Regular" backgroundColor="#f1f2f2" [formGroup]="questionForm">
-
-            <GridLayout iosOverflowSafeArea="false" rows="auto,auto" columns="auto,*" padding="10" marginTop="5">
-                <Label row="0" col="0" text="Select Preferred Category" textWrap="true" class="label" fontSize="18"
-                    fontWeight="400" color="#616161"></Label>
-                <Label row="0" col="1" class="fa expand-options" horizontalAlignment="right" text="{{ showSelectCategory ? '&#xf067;' : '&#xf068;' }}"
-                    textWrap="true" padding="5" borderWidth="1" borderColor="#A9A9A9" (tap)="showSelectCategory = !showSelectCategory"
-                    background="#fff"></Label>
-            </GridLayout>
-
-            <CardView iosOverflowSafeArea="false" margin="5 10 5 10" visibility="{{ !showSelectCategory ? 'visible' : 'collapsed' }}"
-                backgroundColor="white">
-                <StackLayout>
-                    <GridLayout rows="auto,auto" columns="auto,*" padding="10" class="two-player-option" *ngFor="let category of categories"
-                        (tap)="selectCategory(category)" borderBottomWidth="1" borderBottomColor="#e5e5e5">
-                        <Label [text]="category.categoryName" row="0" col="0" textWrap="true" padding="8" class="label"
-                            fontSize="18" color="#616161"></Label>
-                        <Image row="0" col="2" checked="true" horizontalAlignment="right" src="~/assets/images/check.png"
-                            height="25" width="25" marginLeft="10" verticalAlignment="center" marginRight="5" *ngIf="category.isSelected"></Image>
-                    </GridLayout>
-
-                </StackLayout>
-            </CardView>
-
-            <StackLayout iosOverflowSafeArea="false" padding="10" *ngIf="questionForm.valid  && (!categoryIds ||  categoryIds.length===0)">
-                <Label text="Select a category !" textWrap="true" class="label error" fontSize="12"></Label>
-            </StackLayout>
-
-            <GridLayout rows="auto" columns="auto,*" marginBottom="20" margin="5 10 5 10" *ngIf="applicationSettings.enabled_rich_editor" [visibility]="!editQuestion ? 'visible' : 'collapsed'">
-                <Label row="0" col="0" text="Rich Editor" textWrap="true" class="label" fontSize="18" fontWeight="400"
-                    color="#616161" marginTop="10"></Label>
-                <CheckBox row="0" col="1" class="checkbox" marginLeft="20" fillColor="#71b02f" ios:marginTop="10"
-                    formControlName="isRichEditor"></CheckBox>
-            </GridLayout>
-
-            <StackLayout iosOverflowSafeArea="false" padding="10">
-                <Label text="Enter Your Question" textWrap="true" class="label" fontSize="18" fontWeight="400" color="#616161"></Label>
-            </StackLayout>
-
-            <CardView iosOverflowSafeArea="false" margin="5 10 5 10" backgroundColor="white">
-                <StackLayout>
-                    <StackLayout borderBottomWidth="1" borderColor="#e5e5e5" padding="10" *ngIf="!questionForm.value.isRichEditor">
-                        <TextView #textField hint="Enter Your Question" formControlName="questionText" class="input"
-                            height="150" borderWidth="1" borderRadius="3" borderColor="#a3a3a3" padding="10"></TextView>
-                        <StackLayout *ngIf="!questionForm.controls.questionText.pristine && questionForm.controls.questionText.errors">
-                            <Label *ngIf="questionForm.controls.questionText.errors.required" class="error" textWrap="true"
-                                text="Answer required !"></Label>
-                            <Label *ngIf="questionForm.controls.questionText.errors.maxlength" class="error" textWrap="true"
-                                text="{{this.applicationSettings.question_max_length}}  characters are allowed !"></Label>
-                        </StackLayout>
-                    </StackLayout>
-                    <StackLayout borderBottomWidth="1" borderColor="#e5e5e5" padding="10" *ngIf="questionForm.value.isRichEditor" >                        
-                        <WebView #questionWebView id="questionWebView" height="500" (loadFinished)="onLoadFinished($event,-1)" (loaded)="questionLoaded($event)" (unloaded)="questionUnloaded($event)" ></WebView>
-                    </StackLayout>
-
-                    <StackLayout *ngIf="questionForm.value.isRichEditor">
-                        <GridLayout rows="*,*" columns="auto, auto">
-                            <Label text="Select a Max time" row="0" col="0" textWrap="true" class="label" padding="10"
-                                fontSize="16" fontWeight="400" color="#616161" verticalAlignment="bottom"></Label>
-                            <DropDown backroundColor="red" [items]="playMaxTime" (selectedIndexChanged)="onchange($event)"
-                                selectedIndex="{{selectedMaxTimeIndex}}" row="0" col="1" paddingLeft="20" style="text-align: center; padding: 15px; font-size: 17px; color: black;padding-top: 10;"></DropDown>
-                            <Label row="1" col="0" *ngIf="questionForm.hasError('maxTimeNotSelected')" class="error"
-                                textWrap="true" text="Select max time" padding="10"></Label>
+<GridLayout [class.dialogOpen]="isShowPreview" [isUserInteractionEnabled]="isWebViewLoaded" rows="*" columns="*" *ngIf="!loaderBusy">
+    <StackLayout>
+        <ScrollView>
+            <PreviousNextView  row="0" col="0">
+                 <GridLayout  rows="*,auto,auto,auto,auto,auto" columns="*" (tap)="hideKeyboard()"
+                    [formGroup]="questionForm" class="submit-question">
+                    <StackLayout [class.margin-main-stack]="currentWebViewParentId === -1" #questionStack row="0" class="question-section"  iosOverflowSafeArea="false"> 
+                        <FlexboxLayout class="edit-label"  height="110" (tap)="showEditor('question')"  justifyContent="center" alignItems="center" *ngIf="!questionForm.controls.isRichEditor.value && currentWebViewParentId != -1">
+                            <Label   text="Click to add question" textWrap="true" ></Label>
+                        </FlexboxLayout>
+                        <GridLayout minHeight="110" rows="*" columns="*" class="question-box"  *ngIf="questionForm.controls.isRichEditor.value && currentWebViewParentId != -1" (tap)="showEditor('question')" >
+                            <render-question *ngIf="this.questionForm.controls.questionObject" row="0" col="0" (tap)="showEditor('question')"
+                            [question]="{questionText: questionForm.controls.questionText.value, isRichEditor: true}"></render-question>
+                            <AbsoluteLayout (tap)="showEditor('question')"  row="0" col="0" backgroundColor="transparent"> 
+                            </AbsoluteLayout> 
                         </GridLayout>
                     </StackLayout>
-
-                    <Label text="Enter your answers" textWrap="true" class="label" padding="10" fontSize="16"
-                        fontWeight="400" color="#616161"></Label>
-                    <StackLayout formArrayName="answers" padding="10">
-                        <StackLayout *ngFor="let answer of answers.controls; let i=index" [formGroupName]="i">
-                            <GridLayout rows="auto,auto" columns="auto,*" marginBottom="20" >
-                                <GridLayout row="0" col="0" colSpan="2" rows="auto" columns="auto,*" marginBottom="20" margin="5 10 5 10"
-                                    [visibility]="!editQuestion ? 'visible' : 'collapsed'" >
-                                    <Label row="0" col="0" text="Rich Editor" textWrap="true" class="label" fontSize="18"
-                                        fontWeight="400" color="#616161" marginTop="10" *ngIf="applicationSettings.enabled_rich_editor"></Label>
-                                    <CheckBox row="0" col="1" class="checkbox" marginLeft="20" fillColor="#71b02f"
-                                        ios:marginTop="10" formControlName="isRichEditor"  *ngIf="applicationSettings.enabled_rich_editor"></CheckBox>
-                                </GridLayout>
-                                <CheckBox row="1" col="0" #elem formControlName="correct" class="checkbox" marginRight="10"
-                                    fillColor="#71b02f" ios:marginTop="10"></CheckBox>
-                                <StackLayout row="1" col="1" *ngIf="!answers.controls[i].controls.isRichEditor.value">
-                                    <TextField #textField [hint]="'Enter Option ' + (i+1)" formControlName="answerText"
-                                        class="input" borderWidth="1" borderColor="#a3a3a3" borderRadius="3"
-                                        paddingLeft="10" ios:padding="10"></TextField>
-                                    <StackLayout *ngIf="!answers.controls[i].controls.answerText.pristine && answers.controls[i].controls.answerText.errors">
-                                        <Label *ngIf="answers.controls[i].controls.answerText.errors.required " class="error"
-                                            textWrap="true" text="Answer required !"></Label>
-                                        <Label *ngIf="answers.controls[i].controls.answerText.errors.maxlength " class="error"
-                                            textWrap="true" text="{{this.applicationSettings.answer_max_length}}  characters are allowed !"></Label>
+                    <StackLayout row="1" class="answer-section" iosOverflowSafeArea="false">
+                        <StackLayout formArrayName="answers">
+                            <StackLayout *ngFor="let answer of answers?.controls; let i=index" [formGroupName]="i">
+                                <GridLayout rows="*"  columns="auto,*" class="text-box-section">
+                                    <CheckBox row="0" col="0" #elem formControlName="correct"
+                                        class="checkbox checkbox-section" fillColor="#71b02f"></CheckBox>
+                                    <StackLayout  [class.margin-main-stack]="currentWebViewParentId == i"  #answerStack row="0" col="1">
+                                            <FlexboxLayout  height="110" class="edit-label"  height="126" (tap)="showEditor('answer', i)" justifyContent="center" alignItems="center" *ngIf="!answers.controls[i].controls.isRichEditor.value && currentWebViewParentId != i"
+                                                 [class.question-box-solid]="false">
+                                                    <Label text="Click to add option {{i+1}}"   ></Label>
+                                            </FlexboxLayout>
+                                            <GridLayout minHeight="110" rows="*" columns="*" class="question-box" (tap)="showEditor('answer', i)"  *ngIf="answers.controls[i].controls.isRichEditor.value && currentWebViewParentId != i">
+                                                <render-answer  [bgColor]="'#ffffff'" row="0" col="0" [isRight]="false" (tapEvent)="showEditor('answer', i)" [answer]="{answerText: answers.controls[i].controls.answerText.value, isRichEditor: true}"></render-answer>
+                                                <AbsoluteLayout (tap)="showEditor('answer', i)"  row="0" col="0" backgroundColor="transparent"> 
+                                                </AbsoluteLayout> 
+                                            </GridLayout>
                                     </StackLayout>
-                                </StackLayout>
-                                <StackLayout row="1" col="1" *ngIf="answers.controls[i].controls.isRichEditor.value" >
-                                    <WebView #webView [id]="i" height="500" (loadFinished)="onLoadFinished($event,i)" (loaded)="answerLoaded($event,i)" (unloaded)="answerUnloaded($event,i)"></WebView>
-                                </StackLayout>
-
-                            </GridLayout>
+                                </GridLayout>
+                            </StackLayout>
                         </StackLayout>
+                        <Label *ngIf="!answers.valid && !answers.pristine" class="error-lbl " textWrap="true"
+                            text="All answers required !"></Label>
+                        <Label *ngIf="answers.valid && questionForm.hasError('correctAnswerCountInvalid')" class="error-lbl"
+                            textWrap="true" text="Pick one and only one correct answer !"></Label>
                     </StackLayout>
-                    <Label *ngIf="!answers.valid && !answers.pristine" class="error" textWrap="true" text="All answers required !"
-                        padding="10"></Label>
-                    <Label *ngIf="answers.valid && questionForm.hasError('correctAnswerCountInvalid')" class="error"
-                        textWrap="true" text="Pick one and only one correct answer !" padding="10"></Label>
-                </StackLayout>
-            </CardView>
-
-
-            <GridLayout iosOverflowSafeArea="false" rows="auto,auto" columns="auto,*" padding="10">
-                <Label row="0" col="0" text="Tags Associated Categories" textWrap="true" class="label" fontSize="18"
-                    fontWeight="400" color="#616161">></Label>
-                <Label row="0" col="1" class="fa expand-options" horizontalAlignment="right" text="{{ showSelectTag ? '&#xf067;' : '&#xf068;' }}"
-                    textWrap="true" padding="5" borderWidth="1" borderColor="#A9A9A9" (tap)="showSelectTag = !showSelectTag"
-                    background="#fff"></Label>
-            </GridLayout>
-
-            <CardView iosOverflowSafeArea="false" margin="5 10 5 10" visibility="{{ !showSelectTag ? 'visible' : 'collapsed' }}"
-                backgroundColor="white">
-                <StackLayout>
-                    <StackLayout *ngIf="enteredTags.length>0" borderBottomWidth="2" borderBottomColor="#686868">
-                        <GridLayout rows="auto,auto" columns="auto,*" padding="10" borderBottomWidth="1"
-                            borderBottomColor="#e5e5e5" class=" two-player-option label" *ngFor="let tag of enteredTags">
-                            <Label [text]="tag" row="0" col="0" textWrap="true" padding="8" fontSize="18" color="#616161"></Label>
-                            <Label row="0" col="1" class="fa" text="&#xf00d;" fontSize="18" textWrap="true" padding="8"
-                                horizontalAlignment="right" (tap)="removeEnteredTag(tag)"></Label>
+                    <StackLayout row="2" class="max-time-input" iosOverflowSafeArea="false">
+                        <GridLayout rows="*" columns="*">
+                            <DropDown #timeDropdown itemsTextAlignment="center" row="0" [items]="playMaxTime" selectedIndex="{{selectedMaxTimeIndex}}"
+                                (selectedIndexChanged)="onchange($event)"></DropDown>
+                            <Image (tap)="openTimeDropdown()"  row="0" src="~/assets/images/dropdown_char.png" class="tick-icon"></Image>
                         </GridLayout>
                     </StackLayout>
-                    <StackLayout padding="10 20">
-                        <Label text="Add Tags" fontSize="16" color="#616161" textWrap="true" class="label"></Label>
+                    <StackLayout row="3" class="category-input" iosOverflowSafeArea="false">
+                        <GridLayout rows="*,*" columns="*">
+                            <GridLayout row="0" rows="*" columns="*">
+                                <DropDown #categoryDropdown itemsTextAlignment="center" row="0" [items]="questionCategories"
+                                    selectedIndex="{{selectedQuestionCategoryIndex}}"
+                                    (selectedIndexChanged)="selectCategory($event)"></DropDown>
+                                <Image (tap)="openCategoryDropdown()" row="0" src="~/assets/images/dropdown_char.png" class="tick-icon"></Image>
+                            </GridLayout>
+                        </GridLayout>
                     </StackLayout>
-                    <GridLayout rows="auto,auto" columns="*,auto" paddingLeft="20" paddingBottom="20" paddingRight="10"
-                        class="two-player-option">
-                        <StackLayout row="0" col="0" tkExampleTitle tkToggleNavButton ios:backgroundColor="#ffffff">
-                            <RadAutoCompleteTextView #autocomplete hint="Select Tag" [items]="dataItems" completionMode="Contains"
-                                showCloseButton="true" (didAutoComplete)="onDidAutoComplete($event)" (textChanged)="onTextChanged($event)"
-                                border="none" borderColor="#b7b7b7" borderWidth="1" borderRadius="3" paddingLeft="10"
-                                ios:backgroundColor="#ffffff">
-                                <SuggestionView tkAutoCompleteSuggestionView>
-                                    <ng-template tkSuggestionItemTemplate let-item="item">
-                                        <StackLayout orientation="vertical" padding="10">
-                                            <Label [text]="item.text"></Label>
-                                        </StackLayout>
-                                    </ng-template>
-                                </SuggestionView>
-                            </RadAutoCompleteTextView>
+                    <StackLayout iosOverflowSafeArea="false"
+                        *ngIf="questionForm.valid  && (!categoryIds || (categoryIds && categoryIds.length===0))">
+                        <Label color="red" text="Select a category !" textWrap="true" class="error-lbl"></Label>
+                    </StackLayout>
+                    <StackLayout row="4" iosOverflowSafeArea="false">
+                        <StackLayout *ngIf="enteredTags.length>0" marginBottom="5">
+                                <FlexboxLayout *ngIf="enteredTags" flexWrap="wrap">
+                                    <StackLayout *ngFor="let tags of let tag of enteredTags, let i = index">
+                                        <FlexboxLayout  alignItems="center" [style.backgroundColor]="theme === 'dark' ? '#405177':'#e2e2e2'"
+                                        [style.color]="theme === 'dark' ? '#a5a5a5' : '#808080'" borderRadius="22" margin="2.5 2.5" padding="5 10" >
+                                            <Label  [text]="tags" textWrap="true"></Label> 
+                                            <Label  color="#000000" text="&#xe922;" fontSize="10" class="ico icon-close" padding="7 5 7 7" (tap)="removeEnteredTag(tag)"></Label>  
+                                        </FlexboxLayout>
+                                    </StackLayout>
+                                </FlexboxLayout>
                         </StackLayout>
-                        <Button row="0" col="1" (tap)="addCustomTag()" text="Add" class="Roboto-Bold" android:padding="5"
-                            fontSize="16" android:fontSize="10" ios:padding="10" backgroundColor="#89C24F" color="#ffffff"
-                            marginLeft="10" fontWeight="700" borderRadius="2" stlRippleEffect></Button>
+                        <GridLayout rows="auto,auto" columns="*,85" paddingBottom="20" class="two-player-option">
+                            <StackLayout row="0" col="0" tkExampleTitle tkToggleNavButton ios:backgroundColor="#ffffff">
+                                <RadAutoCompleteTextView borderWidth="1" borderColor="#a5a5a5" color="black"  #autocomplete hint="Select Tag" [items]="dataItems" completionMode="Contains"
+                                    showCloseButton="true" (didAutoComplete)="onDidAutoComplete($event)" (textChanged)="onTextChanged($event)"
+                                    borderRadius="3" height="50" paddingLeft="10"
+                                    ios:backgroundColor="#ffffff">
+                                    <SuggestionView tkAutoCompleteSuggestionView>
+                                        <ng-template tkSuggestionItemTemplate let-item="item">
+                                            <StackLayout orientation="vertical" padding="20">
+                                                <Label [text]="item.text"></Label>
+                                            </StackLayout>
+                                        </ng-template>
+                                    </SuggestionView>
+                                </RadAutoCompleteTextView>
+                            </StackLayout>
+                            <Button row="0" col="1" (tap)="addCustomTag()"  stlBackgroundColor="white"  text="Add" class="Roboto-Bold add-btn" android:padding="5"
+                                fontSize="16" android:fontSize="10" ios:padding="10" stlRippleEffect></Button>
+                        </GridLayout>
+                    </StackLayout>
+                    <GridLayout row="5" rows="*" columns="*,50,*" iosOverflowSafeArea="false" class="button-section">
+                        <Button row="0" col="0" colspan="2" width="100%" [text]="submitBtnTxt" (tap)="submit()"
+                            [ngClass]="(questionForm.valid && categoryIds && categoryIds.length > 0 && enteredTags.length > 2) ? 'enable-btn' : 'disable-btn' "
+                            class="question-buttons"></Button>
+                            <FlexboxLayout borderRadius="3" [ngClass]="(questionForm.valid && categoryIds && categoryIds.length > 0 && enteredTags.length > 2) ? 'enable-btn-preview' : 'disable-btn' " (tap)="preview()"  row="0" col="2" orientation="horizontal" justifyContent="center" padding="12">
+                                <Label text="Preview" textWrap="true"></Label>
+                            </FlexboxLayout>
                     </GridLayout>
-                </StackLayout>
-            </CardView>
-
-            <StackLayout iosOverflowSafeArea="false" padding="10" *ngIf="questionForm.valid  && enteredTags.length < 3">
-                <Label text="Must have atleast 3 tags !" textWrap="true" class="label error" fontSize="12"></Label>
+                </GridLayout>
+            </PreviousNextView>
+        </ScrollView>
+    </StackLayout>
+    <StackLayout  *ngIf="!isWebViewLoaded">
+        <AbsoluteLayout (tap)="preventEventPropogation()" row="0" col="0" >
+            <StackLayout width="100%" verticalAlignment="center" height="100%" >
+                <ActivityIndicator marginLeft="10"  ios:width="500" ios:height="500"
+                android:width="50" android:height="50" busy="true">
+                </ActivityIndicator>
             </StackLayout>
-
-            <GridLayout iosOverflowSafeArea="false" padding="10" rows="auto" columns="*, *">
-                <Button row="0" col="0" text="Preview" (tap)="preview()" class="Roboto-Medium" backgroundColor="{{questionForm.valid && categoryIds && categoryIds.length > 0 && enteredTags.length > 2? '#71b02f' : 'silver' }}"
-                    color="#ffffff" borderRadius="3" fontSize="20" padding="10 10 10 10" fontWeight="bold"
-                    stlRippleEffect marginRight="5"></Button>
-                <Button row="0" col="1" width="100%" [text]="submitBtnTxt" (tap)="submit()" class="Roboto-Medium"
-                    backgroundColor="{{questionForm.valid && categoryIds && categoryIds.length > 0 && enteredTags.length > 2? '#71b02f' : 'silver' }}"
-                    color="#ffffff" borderRadius="3" fontSize="20" padding="10 10 10 0" fontWeight="bold"
-                    stlRippleEffect marginLeft="5"></Button>
-            </GridLayout>
-        </StackLayout>
-        </PreviousNextView>
-    </ScrollView>
-</StackLayout>
+        </AbsoluteLayout>
+    </StackLayout>
+    <StackLayout  height="0"  #webViewParentStack>
+        <WebView height="140" width="100%" #webView id="questionWebView"
+        (loaded)="webViewLoaded($event)">
+        </WebView>
+    </StackLayout>
+    <StackLayout height="100%" class="dialog__wrapper">
+        <app-preview-question-dialog  [question]="previewQuestion" [categoryDictionary]="categories"></app-preview-question-dialog>
+    </StackLayout>
+</GridLayout>

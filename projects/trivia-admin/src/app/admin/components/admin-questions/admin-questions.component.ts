@@ -68,7 +68,7 @@ export class AdminQuestionsComponent implements OnInit, OnDestroy {
 
     this.questionsSearchResultsObs = this.store.select(adminState).pipe(select(s => s.questionsSearchResults));
     this.unpublishedQuestionsObs = this.store.select(adminState).pipe(select(s => s.unpublishedQuestions), map((question) => {
-      const questionList = question;
+      const questionList = question.filter( data => ( data.is_draft === false || (data.is_draft === true && data.status !== 4)));
       if (questionList) {
         questionList.map((q) => {
           if (this.userDict[q.created_uid] === undefined) {

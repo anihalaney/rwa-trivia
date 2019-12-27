@@ -1,0 +1,66 @@
+/* new css */
+.profile {
+    &_image {
+      padding: 26 0;
+  
+      &--center {
+        image {
+          background-color: gray;
+          height: 97;
+          width: 97;
+          border-radius: 50;
+        }
+      }
+      &--edit {
+          height: 36;
+          width: 36;
+          background: #fff;
+          label {
+              font-size: 16;
+              color: #14418B;
+          }
+      }
+    }
+  }
+  
+  .edit-field{
+    border-width: 2;
+    padding: 10;
+    border-color: #f2f2f2;
+  }
+  
+  .label-field {
+    color: black;
+    font-size: 15;
+    // padding-bottom: 7;
+    line-height: 20;
+  }
+  
+  .label-value{
+    color: #a5a5a5;
+    font-size: 15;
+    line-height: 20;
+  }
+  
+  .email-text-field{
+    margin: 5;
+    border-color: #f2f2f2;
+    padding: 10;
+  }
+  .edit-box{
+    border-width: 2;
+    border-color: #f2f2f2;
+  }
+  
+  .profile .user-name-disabled {
+    margin: 5 0 5 5;
+    padding-bottom: 5;
+    font-size: 21;
+    font-weight: bold;
+  }
+  
+  TextField {
+    border-bottom-width: 1;
+    border-bottom-color: transparent;
+  }
+  
