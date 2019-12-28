@@ -16,6 +16,7 @@ import {
   BottomBarComponent,
   GameProgressBarComponent,
   RenderBoxComponent,
+  UpdateCategoryTagComponent,
   AnimationBoxComponent
 } from './mobile/component';
 import { NativeScriptCommonModule } from 'nativescript-angular/common';
@@ -65,6 +66,7 @@ import {TimeAgoPipe} from 'time-ago-pipe';
     RecentGameCardComponent,
     GameProgressBarComponent,
     RenderBoxComponent,
+    UpdateCategoryTagComponent,
     TimeAgoPipe,
     AnimationBoxComponent
   ],
@@ -120,6 +122,7 @@ import {TimeAgoPipe} from 'time-ago-pipe';
     RecentGameCardComponent,
     GameProgressBarComponent,
     RenderBoxComponent,
+    UpdateCategoryTagComponent,
     TimeAgoPipe,
     AnimationBoxComponent
   ],

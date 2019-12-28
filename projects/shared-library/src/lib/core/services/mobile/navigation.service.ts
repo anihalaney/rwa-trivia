@@ -45,8 +45,9 @@ export class NavigationService {
       this.router.url.includes('/user/game-profile') ||
       this.router.url.includes('app-invite-friends-dialog') ||
       this.router.url.includes('/game-play/challenge') ||
+      this.router.url.includes('/update-category-tag') ||
       this.router.url.includes('backUrl')) {
-          this.routerExtensions.back();
+      this.routerExtensions.back();
     }
   }
 
