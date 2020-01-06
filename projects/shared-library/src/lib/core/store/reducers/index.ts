@@ -6,7 +6,7 @@ import {
   addressUsingLongLat, addressSuggestions, userFriendInvitations, userUpdateStatus, firstQuestionBits, checkDisplayName
 } from './user.reducer';
 import { categories, topCategories } from './categories.reducer';
-import { topics, topTopics } from './topic.reducer';
+import { topTopics } from './topic.reducer';
 import { tags, topTags } from './tags.reducer';
 import { questionOfTheDay, questionSaveStatus, updateQuestion, firstQuestion, questionDraftSaveStatus } from './questions.reducer';
 import { loginRedirectUrl, resetPasswordLogs } from './ui-state.reducer';
@@ -32,7 +32,6 @@ export interface CoreState {
   userDict: { [key: string]: User };
   authInitialized: boolean;
   categories: Category[];
-  topics: Topic[];
   topTopics: Topic[];
   tags: string[];
   questionOfTheDay: Question;
@@ -75,7 +74,6 @@ export const reducer: ActionReducerMap<CoreState> = {
   authInitialized: authInitialized,
   categories: categories,
   tags: tags,
-  topics: topics,
   topTopics: topTopics,
   questionOfTheDay: questionOfTheDay,
   questionSaveStatus: questionSaveStatus,

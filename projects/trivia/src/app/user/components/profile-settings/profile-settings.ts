@@ -26,7 +26,7 @@ import {
   filter
 } from "rxjs/operators";
 import { Utils } from "shared-library/core/services";
-import { UserActions, getTopTopics, topicDictionary } from "shared-library/core/store";
+import { UserActions, getTopTopics } from "shared-library/core/store";
 import {
   Account,
   Category,
@@ -41,8 +41,7 @@ import {
   appState,
   categoryDictionary,
   getCategories,
-  getTags,
-  getTopics
+  getTags
 } from "../../../store";
 import * as userActions from "../../store/actions";
 import { AuthenticationProvider } from "shared-library/core/auth";
@@ -123,7 +122,6 @@ export class ProfileSettings {
   loggedInUserAccount: Account;
   authProviderConstants: any;
   currentAuthProvider: string;
-  topicDictionary: any;
 
   constructor(
     public formBuilder: FormBuilder,
@@ -248,7 +246,6 @@ export class ProfileSettings {
       this.store.select(getCategories),
       this.store.select(categoryDictionary),
       this.store.select(getTopTopics),
-      this.store.select(topicDictionary),
       this.initializeSocialSetting()
     ]).pipe(
       map(values => {
@@ -256,11 +253,10 @@ export class ProfileSettings {
         this.categories = values[1] || [];
         this.categoryDict = values[2] || {};
         this.topics = values[3] || [];
-        this.topicDictionary = values[4] || {};
         this.userCopyForReset = { ...this.user };
         this.createForm(this.user);
         this.onValueChanges();
-        
+
         if (this.user.profilePictureUrl) {
           this.profileImage.image = this.user.profilePictureUrl;
         }

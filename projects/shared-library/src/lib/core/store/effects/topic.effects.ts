@@ -9,22 +9,6 @@ import { ROUTER_NAVIGATION } from '@ngrx/router-store';
 @Injectable()
 export class TopicEffects {
 
-    // Load category based on url
-    @Effect()
-    // handle location update
-    loadRouteTopics$ = this.actions$
-        .pipe(ofType(TopicActions.LOAD_TOPIC))
-        .pipe(
-            switchMap(() => {
-                return this.svc.getTopics()
-                    .pipe(
-                        map((topics: Topic[]) => {
-                            return this.topicActions.loadTopicsSuccess(topics);
-                        })
-                    );
-            })
-        );
-
     @Effect()
     getTopTopics$ = this.actions$
         .pipe(ofType(TopicActions.LOAD_TOP_TOPICS))

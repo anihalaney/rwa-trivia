@@ -50,7 +50,6 @@ export class AppComponent implements OnInit, OnDestroy {
     this.subscriptions.push(store.select(appState.coreState).pipe(select(s => s.user), skip(1)).subscribe(user => {
       this.user = user;
       if (user) {
-        this.store.dispatch(this.topicsActions.loadTopics());
         this.store.dispatch(this.topicsActions.loadTopTopics());
         let url: string;
         this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.invitationToken)).subscribe(status => {
