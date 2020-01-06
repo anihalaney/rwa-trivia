@@ -15,12 +15,44 @@ export class LeaderBoardService {
     static async setLeaderBoardStatsById(id: any, leaderBoardStat: any): Promise<any> {
         try {
             return await LeaderBoardService.leaderBoardFireStoreClient
-                .doc(`/${CollectionConstants.LEADER_BOARD_STATS}/${id}`)
+                .doc(`/${CollectionConstants.LEADER_BOARD_STATS}/${id}/stat/${leaderBoardStat.userId}`)
                 .set(leaderBoardStat);
         } catch (error) {
             return Utils.throwError(error);
         }
     }
+
+
+    /**
+     * getAllCategories
+     * return category
+     */
+    static async getAllCategories(): Promise<any> {
+        try {
+            return Utils.getValesFromFirebaseSnapshot(
+                await LeaderBoardService.leaderBoardFireStoreClient
+                    .collection(CollectionConstants.CATEGORIES).get()
+            );
+        } catch (error) {
+            return Utils.throwError(error);
+        }
+    }
+
+
+    /**
+     * setLeaderBoardStatsData
+     * return any
+     */
+    static async setLeaderBoardStatsData(id: any, idHash: any): Promise<any> {
+        try {
+            return await LeaderBoardService.leaderBoardFireStoreClient
+                .doc(`/${CollectionConstants.LEADER_BOARD_STATS}/${idHash}`)
+                .set({id: id});
+        } catch (error) {
+            return Utils.throwError(error);
+        }
+    }
+
 
     /**
     * getLeaderBoardStats

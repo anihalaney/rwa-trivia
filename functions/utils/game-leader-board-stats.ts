@@ -6,7 +6,7 @@ import { LeaderBoardService } from '../services/leaderboard.service';
 import { QuestionService } from '../services/question.service';
 import { Utils } from '../utils/utils';
 import { AccountAtomic } from '../model';
-
+import * as stringHash from 'string-hash';
 export class GameLeaderBoardStats {
 
     static async generateGameStats(): Promise<any> {
@@ -18,15 +18,17 @@ export class GameLeaderBoardStats {
 
             const games: Game[] = await GameService.getCompletedGames();
             const questionDict = await GameLeaderBoardStats.loadQuestionDictionary();
+            const questionTagDict = await GameLeaderBoardStats.loadQuestionTagDictionary();
 
             for (const game of games) {
                 for (const userId of Object.keys(game.stats)) {
 
                     const account: AccountAtomic = (accountDicts[userId]) ?
                         accountDicts[userId] : new AccountAtomic();
-
+                    const categoryTagsObj =
+                    GameLeaderBoardStats.getGameQuestionCategoriesAndTags(game, questionDict, userId, questionTagDict);
                     accountDicts[userId] = GameLeaderBoardStats.calculateAllGameUsersStat(
-                        account, userId, game, GameLeaderBoardStats.getGameQuestionCategories(game, questionDict, userId)
+                        account, userId, game, categoryTagsObj.categoryIds, categoryTagsObj.tagIds
                     );
                 }
             }
@@ -56,37 +58,62 @@ export class GameLeaderBoardStats {
         }
     }
 
+    static async loadQuestionTagDictionary(): Promise<{ [key: string]: Array<string> }> {
+        const questionDict: { [key: string]: Array<string> } = {};
+        try {
+            const questions: Question[] = await QuestionService.getAllQuestions();
+            for (const question of questions) {
+                if (question.categoryIds.length > 0) {
+                    questionDict[question.id] = question.tags;
+                }
+            }
+            return questionDict;
+        } catch (error) {
+            return Utils.throwError(error);
+        }
+    }
 
-    private static getGameQuestionCategories(game: Game, questionDict: { [key: string]: Array<number> }, userId: string): Array<number> {
 
-        const questionCategories: Array<number> = [];
+    private static getGameQuestionCategoriesAndTags(game: Game, questionDict: { [key: string]: Array<number> }, userId: string,
+        questionTagDict: { [key: string]: Array<string> }): {categoryIds: Array<number>, tagIds: Array<string>} {
+
+        const questionCategoriesTags: { categoryIds: Array<number>, tagIds: Array<string> } = { categoryIds: [], tagIds: [] };
         const questions: PlayerQnA[] = game.playerQnAs.filter(playerQ => playerQ.playerId === userId && playerQ.answerCorrect === true);
 
         for (const question of questions) {
-            const categoryIds: Array<number> = questionDict[question.questionId];
+            const categoryIds: Array<any> = questionDict[question.questionId];
+            const tagsIds: Array<any> = questionTagDict[question.questionId];
             if (categoryIds) {
                 for (const categoryId of categoryIds) {
                     if (categoryId) {
-                        questionCategories.push(categoryId);
+                        questionCategoriesTags.categoryIds.push(categoryId);
+                    }
+                }
+            }
+
+            if (tagsIds) {
+                for (const tagId of tagsIds) {
+                    if (tagId) {
+                        questionCategoriesTags.tagIds.push(tagId);
                     }
                 }
             }
         }
-        return questionCategories;
+        return questionCategoriesTags;
     }
 
     private static calculateAllGameUsersStat(account: AccountAtomic, userId: string,
-        game: Game, categoryIds: Array<number>): AccountAtomic {
-        return AccountService.calculateAccountStat(account, game, categoryIds, userId, true);
+        game: Game, categoryIds: Array<number>, tagIds: Array<string>): AccountAtomic {
+        return AccountService.calculateAccountStat(account, game, categoryIds, userId, true, tagIds);
     }
 
     static async getGameUsers(game: Game): Promise<any> {
         const userPromises = [];
-        let categoryIds = [];
+        let categoryTagObj = {categoryIds: [], tagIds: []};
         try {
             for (const userId of Object.keys(game.stats)) {
-                categoryIds = await GameLeaderBoardStats.getUserQuestionCategoryIds(game.playerQnAs, userId);
-                userPromises.push(GameLeaderBoardStats.calculateUserStat(userId, game, categoryIds));
+                categoryTagObj = await GameLeaderBoardStats.getUserQuestionCategoryAndTagIds(game.playerQnAs, userId);
+                userPromises.push(GameLeaderBoardStats.calculateUserStat(userId, game, categoryTagObj.categoryIds, categoryTagObj.tagIds));
             }
             return await Promise.all(userPromises);
         } catch (error) {
@@ -94,9 +121,10 @@ export class GameLeaderBoardStats {
         }
     }
 
-    private static async getUserQuestionCategoryIds(gameQuestions: PlayerQnA[], userId: string): Promise<Array<number>> {
+    private static async getUserQuestionCategoryAndTagIds(gameQuestions: PlayerQnA[], userId: string):
+    Promise<{categoryIds: Array<number>, tagIds: Array<string>}> {
         try {
-            const categoryIds = [];
+            const categoryTagObj = {categoryIds : [], tagIds: []};
             const questionPromises = [];
 
             gameQuestions = gameQuestions.filter(gameQuestion => gameQuestion.playerId === userId && gameQuestion.answerCorrect === true);
@@ -109,24 +137,30 @@ export class GameLeaderBoardStats {
             for (const questionResult of questionResults) {
                 for (const categoryId of questionResult.categoryIds) {
                     if (categoryId) {
-                        categoryIds.push(categoryId);
+                        categoryTagObj.categoryIds.push(categoryId);
+                    }
+                }
+
+                for (const tagId of questionResult.tags) {
+                    if (tagId) {
+                        categoryTagObj.tagIds.push(tagId);
                     }
                 }
             }
-            return categoryIds;
+            return categoryTagObj;
         } catch (error) {
             return Utils.throwError(error);
         }
     }
 
-    private static async calculateUserStat(userId: string, game: Game, categoryIds: Array<number>): Promise<string> {
+    private static async calculateUserStat(userId: string, game: Game, categoryIds: Array<number>, tagIds: Array<string>): Promise<string> {
         try {
             const account: AccountAtomic = await AccountService.getAccountById(userId);
 
             if (account && account.id) {
 
                 return await AccountService.updateAccountData(
-                    AccountService.calculateAccountStat(account, game, categoryIds, userId, false));
+                    AccountService.calculateAccountStat(account, game, categoryIds, userId, false, tagIds));
             }
             return AccountConstants.ACCOUNT_DOES_NOT_EXIST;
         } catch (error) {
@@ -139,10 +173,14 @@ export class GameLeaderBoardStats {
             let leaderBoardDict: { [key: string]: LeaderBoardUsers } = {};
 
             const accounts: Account[] = await AccountService.getAccounts();
+            const category = await LeaderBoardService.getAllCategories();
+            const categoryIds = [];
+            for (const data of category) {
+                categoryIds.push(data.id);
+            }
             for (const account of accounts) {
                 leaderBoardDict = await LeaderBoardService.calculateLeaderBoardStats(account, leaderBoardDict);
             }
-
             return await GameLeaderBoardStats.setLeaderBoardStat(leaderBoardDict);
 
         } catch (error) {
@@ -154,13 +192,24 @@ export class GameLeaderBoardStats {
         try {
 
             const promises = [];
-
+            const category = await LeaderBoardService.getAllCategories();
+            const categoryIds = [];
+            for (const data of category) {
+                categoryIds.push(data.id.toString(10));
+            }
             for (const id of Object.keys(leaderBoardDict)) {
+                let idHash = id;
+                if (categoryIds.indexOf(id) < 0) {
+                   idHash = await stringHash(id);
+                }
                 const leaderBoardUsers: LeaderBoardUsers = leaderBoardDict[id];
-                promises.push(LeaderBoardService.setLeaderBoardStatsById(id, { ...leaderBoardUsers }));
+                for (const userData of leaderBoardUsers.users) {
+                   promises.push(LeaderBoardService.setLeaderBoardStatsById(idHash, { ...userData }));
+                }
+               promises.push(LeaderBoardService.setLeaderBoardStatsData(id, idHash));
             }
 
-            return await Promise.all(promises);
+           return await Promise.all(promises);
         } catch (error) {
             return Utils.throwError(error);
         }

@@ -12,7 +12,8 @@ import {
 } from "../../../store";
 import { dashboardState } from "../../store";
 import * as leaderBoardActions from "../../store/actions";
-import { UserActions } from "shared-library/core/store/actions";
+import { UserActions, TagActions, TopicActions } from "shared-library/core/store/actions";
+import { getTopTopics } from "shared-library/core/store";
 import {
   Category,
   LeaderBoardConstants,
@@ -29,9 +30,10 @@ export class Leaderboard implements OnDestroy {
   userDict: { [key: string]: User };
   leaderBoardStatDict: { [key: string]: Array<LeaderBoardUser> } = {};
   leaderBoardStatDictArray: LeaderBoardStats[] = [];
-  leaderBoardCat: Array<string>;
+  leaderBoardCat: Array<string> = [];
   categoryDict$: Observable<{ [key: number]: Category }>;
   categoryDict: { [key: number]: Category };
+  topicDict:  Category[] = [];
   lbsSliceStartIndex: number = -1;
   lbsSliceLastIndex: number;
   lbsUsersSliceStartIndex: number;
@@ -49,6 +51,7 @@ export class Leaderboard implements OnDestroy {
   public selectedCatList = [];
   user: User;
   userCardType = userCardType;
+  public items: Array<string>;
 
   constructor(
     protected store: Store<AppState>,
@@ -56,7 +59,9 @@ export class Leaderboard implements OnDestroy {
     protected utils: Utils,
     protected route: ActivatedRoute,
     protected cd: ChangeDetectorRef,
-    protected ngZone: NgZone
+    protected ngZone: NgZone,
+    protected tag: TagActions,
+    protected topic: TopicActions
   ) {
     this.route.params.subscribe(params => {
       this.category = params["category"];
@@ -80,16 +85,19 @@ export class Leaderboard implements OnDestroy {
         .subscribe(user => {
           if (user && user.userId) {
             this.loggedInUserId = user.userId;
+            this.store.dispatch(this.topic.loadTopTopics());
           }
         })
     );
-    this.store.dispatch(new leaderBoardActions.LoadLeaderBoard());
     this.maxLeaderBoardDisplay = 10;
     this.categoryDict$ = this.store.select(categoryDictionary);
-
     this.subscriptions.push(
-      this.store.select(getCategories).subscribe(categoryDictList => {
+      this.store.select(getTopTopics).subscribe(categoryDictList => {
+        categoryDictList.map((data: Category) => {
+         this.topicDict[data.id] = data;
+        });
         this.categoryDictList = categoryDictList;
+        this.store.dispatch(new leaderBoardActions.LoadLeaderBoard({data : categoryDictList}));
         this.cd.markForCheck();
       })
     );
@@ -122,12 +130,21 @@ export class Leaderboard implements OnDestroy {
         .subscribe(lbsStat => {
           if (lbsStat) {
             this.leaderBoardStatDictArray = lbsStat;
-            this.leaderBoardCat = this.leaderBoardStatDictArray.map(
-              leaderBoard => leaderBoard.id
-            );
+            this.items = [];
+            this.leaderBoardStatDictArray.map(
+              leaderBoard => {
+                if (leaderBoard.users.length > 0) {
+                  this.leaderBoardCat.push(leaderBoard.id);
+                }
+                this.items.push(leaderBoard['type'] === 'category' ?  this.categoryDict[leaderBoard.id].categoryName :
+                (`${leaderBoard.id.charAt(0).toUpperCase()}${leaderBoard.id.slice(1)}`));
+              }
+              );
 
             this.leaderBoardStatDictArray.filter(leaderBoardStatDict => {
-              this.leaderBoardStatDict[leaderBoardStatDict.id] =
+              this.leaderBoardStatDict[leaderBoardStatDict['type'] === 'category' ?
+              this.categoryDict[leaderBoardStatDict.id].categoryName :
+              `${leaderBoardStatDict.id.charAt(0).toUpperCase()}${leaderBoardStatDict.id.slice(1)}`] =
                 leaderBoardStatDict.users;
             });
 
@@ -140,7 +157,7 @@ export class Leaderboard implements OnDestroy {
                 this.lbsUsersSliceStartIndex = 0;
                 this.lbsUsersSliceLastIndex = 3;
               }
-              this.selectedCatList = this.leaderBoardStatDict[1];
+              this.selectedCatList = this.leaderBoardStatDict[this.items[0]];
               if (this.selectedCatList) {
                 this.selectedCatList.map((data, index) => {
                   data.index = index;
