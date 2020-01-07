@@ -180,10 +180,6 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit  {
         this._drawer.ios.defaultSideDrawer.style.shadowMode = 2;
         this._drawer.ios.defaultSideDrawer.style.shadowOpacity = 0.1; // 0-1, higher is darker
         this._drawer.ios.defaultSideDrawer.style.shadowRadius = 15; // higher is more spread
-
-        // this._drawer.ios.defaultSideDrawer.style.shadowMode = 1;
-        // this._drawer.ios.defaultSideDrawer.style.shadowOpacity = 0.1; // 0-1, higher is darker
-        // this._drawer.ios.defaultSideDrawer.style.shadowRadius = 100; // higher is more spread
     }
   }
 
