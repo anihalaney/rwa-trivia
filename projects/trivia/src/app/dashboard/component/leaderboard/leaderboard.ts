@@ -20,7 +20,8 @@ import {
   LeaderBoardUser,
   LeaderBoardStats,
   User,
-  userCardType
+  userCardType,
+  Topic
 } from "shared-library/shared/model";
 import { switchMap, map } from "rxjs/operators";
 
@@ -33,7 +34,7 @@ export class Leaderboard implements OnDestroy {
   leaderBoardCat: Array<string> = [];
   categoryDict$: Observable<{ [key: number]: Category }>;
   categoryDict: { [key: number]: Category };
-  topicDict:  Category[] = [];
+  topicDict:  Topic[] = [];
   lbsSliceStartIndex: number = -1;
   lbsSliceLastIndex: number;
   lbsUsersSliceStartIndex: number;
@@ -67,7 +68,7 @@ export class Leaderboard implements OnDestroy {
       this.category = params["category"];
     });
     this.loggedInUserId = "";
-
+    // this.store.dispatch(this.topic.loadTopTopics());
     this.userDict$ = this.store
       .select(appState.coreState)
       .pipe(select(s => s.userDict));
@@ -85,7 +86,6 @@ export class Leaderboard implements OnDestroy {
         .subscribe(user => {
           if (user && user.userId) {
             this.loggedInUserId = user.userId;
-            this.store.dispatch(this.topic.loadTopTopics());
           }
         })
     );
@@ -93,7 +93,7 @@ export class Leaderboard implements OnDestroy {
     this.categoryDict$ = this.store.select(categoryDictionary);
     this.subscriptions.push(
       this.store.select(getTopTopics).subscribe(categoryDictList => {
-        categoryDictList.map((data: Category) => {
+        categoryDictList.map((data: Topic) => {
          this.topicDict[data.id] = data;
         });
         this.categoryDictList = categoryDictList;
@@ -134,7 +134,8 @@ export class Leaderboard implements OnDestroy {
             this.leaderBoardStatDictArray.map(
               leaderBoard => {
                 if (leaderBoard.users.length > 0) {
-                  this.leaderBoardCat.push(leaderBoard.id);
+                  this.leaderBoardCat.push(leaderBoard['type'] === 'category' ?  this.categoryDict[leaderBoard.id].categoryName :
+                  (`${leaderBoard.id.charAt(0).toUpperCase()}${leaderBoard.id.slice(1)}`));
                 }
                 this.items.push(leaderBoard['type'] === 'category' ?  this.categoryDict[leaderBoard.id].categoryName :
                 (`${leaderBoard.id.charAt(0).toUpperCase()}${leaderBoard.id.slice(1)}`));
@@ -146,6 +147,7 @@ export class Leaderboard implements OnDestroy {
               this.categoryDict[leaderBoardStatDict.id].categoryName :
               `${leaderBoardStatDict.id.charAt(0).toUpperCase()}${leaderBoardStatDict.id.slice(1)}`] =
                 leaderBoardStatDict.users;
+                this.cd.markForCheck();
             });
 
             if (this.leaderBoardCat && this.leaderBoardCat.length > 0) {

@@ -1,8 +1,7 @@
 <div class="row" *ngIf="leaderBoardCat && leaderBoardCat.length>0">
   <div class="div-count" *ngFor="let cat of leaderBoardCat | slice:lbsSliceStartIndex:lbsSliceLastIndex; let i=index">
     <div class="col-md-4 col-xs-12 categorybox skyblue">
-      <h3 *ngIf="topicDict[cat]?.type === 'category'">{{categoryDict[cat]?.categoryName.charAt(0).toUpperCase() + categoryDict[cat]?.categoryName.slice(1)}}</h3>
-      <h3 *ngIf="topicDict[cat]?.type === 'tag'">{{cat.charAt(0).toUpperCase() + cat.slice(1)}}</h3>
+      <h3>{{cat.charAt(0).toUpperCase() + cat.slice(1)}}</h3>
       <ul>
         <li *ngFor="let user of leaderBoardStatDict[cat] | slice:lbsUsersSliceStartIndex:lbsUsersSliceLastIndex;let j=index; trackBy: trackByFn">
           <div class="row">

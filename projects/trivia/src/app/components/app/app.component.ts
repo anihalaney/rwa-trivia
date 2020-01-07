@@ -46,11 +46,11 @@ export class AppComponent implements OnInit, OnDestroy {
 
     this.store.dispatch(this.applicationSettingsAction.loadApplicationSettings());
     this.store.dispatch(this.categoryActions.loadCategories());
+    this.store.dispatch(this.topicsActions.loadTopTopics());
 
     this.subscriptions.push(store.select(appState.coreState).pipe(select(s => s.user), skip(1)).subscribe(user => {
       this.user = user;
       if (user) {
-        this.store.dispatch(this.topicsActions.loadTopTopics());
         let url: string;
         this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.invitationToken)).subscribe(status => {
           if (status !== 'NONE') {

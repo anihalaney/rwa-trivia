@@ -3,6 +3,7 @@ import {
 } from '../../projects/shared-library/src/lib/shared/model';
 import admin from '../db/firebase.client';
 import { Utils } from '../utils/utils';
+import * as stringHash from 'string-hash';
 
 export class LeaderBoardService {
 
@@ -122,6 +123,35 @@ export class LeaderBoardService {
             }
         }
         return leaderBoardDict;
+    }
+
+    static async setLeaderBoardStatForSingleUser(accountObj: Account): Promise<any> {
+        try {
+
+            const promises = [];
+            if (accountObj && accountObj.id) {
+                const leaderBoardStats = accountObj.leaderBoardStats;
+                if (leaderBoardStats) {
+                    const category = await LeaderBoardService.getAllCategories();
+                    const categoryIds = [];
+                    for (const data of category) {
+                        categoryIds.push(data.id.toString(10));
+                    }
+                    for (const id of Object.keys(leaderBoardStats)) {
+                        let idHash = id;
+                        if (categoryIds.indexOf(id) < 0) {
+                           idHash = await stringHash(id);
+                        }
+                        promises.push(LeaderBoardService.setLeaderBoardStatsById(idHash,
+                        { ...{userId: accountObj.id, score: leaderBoardStats[id]} }));
+                    }
+                }
+            }
+
+           return await Promise.all(promises);
+        } catch (error) {
+            return Utils.throwError(error);
+        }
     }
 
 }
