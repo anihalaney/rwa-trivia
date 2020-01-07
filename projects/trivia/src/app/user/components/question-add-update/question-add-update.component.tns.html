@@ -10,7 +10,7 @@
         <GridLayout [class.dialogOpen]="isShowPreview" [isUserInteractionEnabled]="isWebViewLoaded" rows="*" columns="*"
             *ngIf="!loaderBusy">
             <StackLayout>
-                <ScrollView>
+                <NestedScrollView orientation="vertical">
                     <PreviousNextView row="0" col="0">
                         <GridLayout rows="*,auto,auto,auto,auto,auto" columns="*" (tap)="hideKeyboard()"
                             [formGroup]="questionForm" class="submit-question">
@@ -73,7 +73,7 @@
                                 <Label *ngIf="!answers.valid && !answers.pristine" class="error-lbl error"
                                     textWrap="true" text="All answers required !"></Label>
                             </StackLayout>
-                            <StackLayout row="2" class="max-time-input" iosOverflowSafeArea="false">
+                             <StackLayout row="2" class="max-time-input" iosOverflowSafeArea="false">
                                 <GridLayout rows="*" columns="*">
                                     <DropDown #timeDropdown itemsTextAlignment="center" row="0" [items]="playMaxTime"
                                         selectedIndex="{{selectedMaxTimeIndex}}"
@@ -81,7 +81,7 @@
                                     <Image (tap)="openTimeDropdown()" row="0" src="~/assets/images/dropdown_char.png"
                                         class="tick-icon"></Image>
                                 </GridLayout>
-                            </StackLayout>
+                            </StackLayout> 
                             <StackLayout row="3" class="category-input" iosOverflowSafeArea="false">
                                 <GridLayout rows="*,*" columns="*">
                                     <GridLayout row="0" rows="*" columns="*">
@@ -152,7 +152,8 @@
                             </GridLayout>
                         </GridLayout>
                     </PreviousNextView>
-                </ScrollView>
+                </NestedScrollView>
+
             </StackLayout>
             <StackLayout *ngIf="!isWebViewLoaded">
                 <AbsoluteLayout (tap)="preventEventPropogation()" row="0" col="0">
@@ -164,9 +165,13 @@
                 </AbsoluteLayout>
             </StackLayout>
             <StackLayout height="0" #webViewParentStack>
-                <WebView height="140" width="100%" #webView id="questionWebView" (loaded)="webViewLoaded($event)">
-                </WebView>
+                    <!-- <NestedScrollView height="0" #webViewParentStack> -->
+                            <WebView height="215" width="100%" #webView id="questionWebView" (loaded)="webViewLoaded($event)" (touch)="onTouch($event)">   </WebView>
+                    <!-- </NestedScrollView> -->
+                  
+                 
             </StackLayout>
+
             <StackLayout height="100%" class="dialog__wrapper">
                 <app-preview-question-dialog [question]="previewQuestion" [categoryDictionary]="categories">
                 </app-preview-question-dialog>

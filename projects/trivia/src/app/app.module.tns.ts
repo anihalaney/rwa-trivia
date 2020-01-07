@@ -28,6 +28,7 @@ registerElement('PreviousNextView', () => require('nativescript-iqkeyboardmanage
 // registerElement('CardView', () => CardView);
 registerElement('CardView', () => require('nativescript-cardview').CardView);
 registerElement('Fab', () => require('nativescript-floatingactionbutton').Fab);
+registerElement("NestedScrollView", () => require("nativescript-nested-scrollview").NestedScrollView);
 
 @NgModule({
   declarations: [

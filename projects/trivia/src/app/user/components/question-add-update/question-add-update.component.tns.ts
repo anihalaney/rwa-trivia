@@ -56,6 +56,7 @@ import { CONFIG } from "shared-library/environments/environment";
 import * as Platform from "tns-core-modules/platform";
 
 declare var IQKeyboardManager;
+declare var android:any;
 
 @Component({
   selector: "app-question-add-update",
@@ -302,6 +303,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate
     }
   }
   showEditor(type: string, id = -1) {
+
     this.moveWebView(type, id);
     if (type === "question") {
       this.questionForm.patchValue({ isRichEditor: true });
@@ -328,11 +330,32 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate
         : this.answerStack.filter((element, index) => index === id)[0]
             .nativeElement;
     this.currentWebViewParentId = id;
+  
     if (isAndroid) {
+  
       // for android this works as this method does not destroy the webview. do not change.
       prevWebViewParent._removeViewFromNativeVisualTree(
         this.webView.nativeElement
       );
+    if(isAndroid){
+        this.webView.nativeElement.android.getSettings().setBuiltInZoomControls(false);
+        this.webView.nativeElement.android.setOnTouchListener(
+          new android.view.View.OnTouchListener({
+            onTouch: (view, motionEvent) => {
+              var action = motionEvent.getAction();
+                if (action === android.view.MotionEvent.ACTION_DOWN) {
+                  view.getParent().requestDisallowInterceptTouchEvent(true);
+                }
+                if (action === android.view.MotionEvent.ACTION_UP) {
+                  view.getParent().requestDisallowInterceptTouchEvent(false);
+                }
+              view.onTouchEvent(motionEvent);
+              return true;
+            }
+          })
+        );
+      }
+      this.webView.nativeElement.android.getSettings().setBuiltInZoomControls(false);
       nextWebViewParent._addViewToNativeVisualTree(this.webView.nativeElement);
       // need to wait for the load to be finished before emit the value.
       setTimeout(() => {
@@ -348,6 +371,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate
       this.renderer.appendChild(nextWebViewParent, this.webView.nativeElement);
     }
   }
+
 
   public onchange(args: SelectedIndexChangedEventData) {
     this.selectedMaxTimeIndex = args.newIndex;
@@ -553,6 +577,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate
         this.oWebViewInterface = this.setWebInterface(event.object);
         //  new webViewInterfaceModule.WebViewInterface(event.object, CONFIG.editorUrl);
       }
+  
       if (this.oWebViewInterface && isIOS) {
         event.object.initNativeView();
         // need to wait for the load to be finished before emit the value.
