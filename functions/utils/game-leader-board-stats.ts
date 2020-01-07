@@ -173,11 +173,6 @@ export class GameLeaderBoardStats {
             let leaderBoardDict: { [key: string]: LeaderBoardUsers } = {};
 
             const accounts: Account[] = await AccountService.getAccounts();
-            const category = await LeaderBoardService.getAllCategories();
-            const categoryIds = [];
-            for (const data of category) {
-                categoryIds.push(data.id);
-            }
             for (const account of accounts) {
                 leaderBoardDict = await LeaderBoardService.calculateLeaderBoardStats(account, leaderBoardDict);
             }

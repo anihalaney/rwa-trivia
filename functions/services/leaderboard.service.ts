@@ -110,15 +110,8 @@ export class LeaderBoardService {
                     (userIndex === -1) ? leaderBoardUsers.users.push({ ...leaderBoardUserData }) :
                         leaderBoardUsers.users[userIndex] = leaderBoardUserData;
 
-                    leaderBoardUsers.users.sort((a, b) => {
-                        return b.score - a.score;
-                    });
-
-                    if (leaderBoardUsers.users.length > UserStatConstants.maxUsers) {
-                        leaderBoardUsers.users.splice(leaderBoardUsers.users.length - 1, 1);
-                    }
-
                     leaderBoardDict[id] = leaderBoardUsers;
+
                 }
             }
         }

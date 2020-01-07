@@ -93,6 +93,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit  {
       () => {
         console.log('firebase.init done');
         this.store.dispatch(this.applicationSettingsAction.loadApplicationSettings());
+        this.store.dispatch(this.topicsActions.loadTopTopics());
       },
       error => {
         console.log(`firebase.init error: ${error}`);
@@ -103,8 +104,6 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit  {
     applicationOn(resumeEvent, (args: ApplicationEventData) => {
       firebase.getCurrentUser().then((user) => {
         this.firebaseAuthService.resumeState(user);
-        this.store.dispatch(this.topicsActions.loadTopics());
-        this.store.dispatch(this.topicsActions.loadTopTopics());
       });
     });
 
