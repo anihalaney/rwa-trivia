@@ -37,15 +37,15 @@
                 </FlexboxLayout>
             </GridLayout>
 
-            <FlexboxLayout *ngIf="tags.userTags || tags.otherUserTags" flexDirection="column" margin="10 20 10 20"
+            <FlexboxLayout *ngIf="tags.userTags || tags.otherUserTags || categoryText" flexDirection="column" margin="10 20 10 20"
                 iosOverflowSafeArea="false">
-                <Label *ngIf="userType === 0 && tags.userTags" text="Tags" color="#1B1C1C" fontSize="15"
+                <Label *ngIf="userType === 0 && ( tags.userTags || categoryText) " text="Topics" color="#1B1C1C" fontSize="15"
                     fontWeight="500" textWrap="true"></Label>
-                <Label *ngIf="userType === 1 && tags.otherUserTags" text="Tags" color="#1B1C1C" fontSize="15"
+                <Label *ngIf="userType === 1 && ( tags.otherUserTags || categoryText)" text="Topics" color="#1B1C1C" fontSize="15"
                     fontWeight="500" textWrap="true"></Label>
                 <FlexboxLayout justifyContent="space-between" orientation="horizontal">
                     <FlexboxLayout flexDirection="column">
-                        <Label text="{{(userType === 0 ? tags.userTags : tags.otherUserTags)}}" class="text-blue"
+                    <Label text="{{(userType === 0 ? tags.userTags : tags.otherUserTags)}}{{tags.userTags || tags.otherUserTags ? ', ': ''}}{{categoryText}}" minWidth="100%" class="text-blue"
                             fontSize="15" textWrap="false"></Label>
                         <Label *ngIf="userType === 1">
                             <FormattedString *ngIf="tags && tags.comparison && tags.comparison.length > 0">
