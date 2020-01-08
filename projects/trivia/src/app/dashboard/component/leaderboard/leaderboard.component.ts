@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Utils } from 'shared-library/core/services';
 import { AppState } from '../../../store';
-import { UserActions } from 'shared-library/core/store/actions';
+import { UserActions, TagActions, TopicActions } from 'shared-library/core/store/actions';
 import { Leaderboard } from './leaderboard';
 
 @Component({
@@ -21,8 +21,10 @@ export class LeaderboardComponent extends Leaderboard {
     protected  utils: Utils,
     protected  route: ActivatedRoute,
     protected  cd: ChangeDetectorRef,
-    protected ngZone: NgZone) {
-    super(store, userActions, utils, route, cd, ngZone);
+    protected ngZone: NgZone,
+    protected tag: TagActions,
+    protected topic: TopicActions) {
+    super(store, userActions, utils, route, cd, ngZone, tag, topic);
   }
 
   trackByFn(index, item) {

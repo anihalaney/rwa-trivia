@@ -13,8 +13,8 @@
                 <GridLayout rows="auto, auto" row="0" col="1" verticalAlignment="center" iosOverflowSafeArea="false"
                     class="dashboard_user">
                     <Label row="0" [text]="actionText" textWrap="true" class="dashboard_user-header"></Label>
-                    <FlexboxLayout row="1" *ngIf="actionSubText && actionSubText.length>0">
-                        <Label class="dashboard_user-subText" [text]="actionSubText" stlRippleEffect
+                    <FlexboxLayout row="1" *ngIf="actionSubText && actionSubText.length>0 || categoryText?.length > 0">
+                        <Label class="dashboard_user-subText" text="{{ actionSubText}}{{actionSubText ? ', ': ''}}{{categoryText}}" stlRippleEffect
                             (rippleTap)="navigateToCategories()"></Label>
                     </FlexboxLayout>
                 </GridLayout>

@@ -11,7 +11,7 @@ import {
 } from 'shared-library/shared/model';
 import { AppState, appState } from '../../../store';
 import { map, flatMap, filter } from 'rxjs/operators';
-import { coreState } from 'shared-library/core/store';
+import { coreState, categoryDictionary } from 'shared-library/core/store';
 import * as lodash from 'lodash';
 
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
@@ -71,6 +71,7 @@ export class Dashboard implements OnDestroy {
     photoUrl: '';
     notifications = [];
     userCardType = userCardType;
+    categoryText = '';
 
     constructor(public store: Store<AppState>,
         private questionActions: QuestionActions,
@@ -117,6 +118,11 @@ export class Dashboard implements OnDestroy {
                     this.cd.markForCheck();
                 });
             }),
+            flatMap(() => this.store.select(categoryDictionary).pipe(
+                map(categoryDict => {
+                    this.categoryText = '';
+                    this.user.categoryIds.map((data) =>  this.categoryText = this.categoryText + this.categoryText ? ', ': '' + categoryDict[data].categoryName) ;
+                }))),
             flatMap(() => this.store.select(appState.coreState).pipe(select(s => s.questionOfTheDay),
                 map(questionOfTheDay => {
                     if (questionOfTheDay) {

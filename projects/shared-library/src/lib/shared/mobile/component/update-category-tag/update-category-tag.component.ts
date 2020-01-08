@@ -128,7 +128,7 @@ export class UpdateCategoryTagComponent implements OnInit, OnDestroy {
           if (status === "SUCCESS") {
             this.utils.showMessage(
               "success",
-              "Categories/tags updated successfully"
+              "Topics updated successfully"
             );
           }
           this.cd.markForCheck();

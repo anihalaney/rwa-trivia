@@ -29,6 +29,7 @@ import { Carousel, CarouselItem } from 'nativescript-carousel';
 import { ModalDialogOptions, ModalDialogService } from 'nativescript-angular/modal-dialog';
 import { WelcomeScreenComponent } from '../../../../../shared-library/src/lib/shared/mobile/component';
 import * as appSettingsStorage from 'tns-core-modules/application-settings';
+import { TopicActions } from 'shared-library/core/store/actions';
 
 import { RadSideDrawerComponent, SideDrawerType } from "nativescript-ui-sidedrawer/angular";
 import { RadSideDrawer } from 'nativescript-ui-sidedrawer';
@@ -64,7 +65,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit  {
     private cd: ChangeDetectorRef,
     private router: Router,
     private _modalService: ModalDialogService,
-    private _vcRef: ViewContainerRef
+    private _vcRef: ViewContainerRef,
+    private topicsActions: TopicActions
   ) {
     this.bottomSafeArea = 120;
     this.handleBackPress();
@@ -91,6 +93,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit  {
       () => {
         console.log('firebase.init done');
         this.store.dispatch(this.applicationSettingsAction.loadApplicationSettings());
+        this.store.dispatch(this.topicsActions.loadTopTopics());
       },
       error => {
         console.log(`firebase.init error: ${error}`);

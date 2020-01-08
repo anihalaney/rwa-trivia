@@ -8,7 +8,7 @@ import { SwiperConfigInterface, SwiperDirective } from 'ngx-swiper-wrapper';
 import { Observable } from 'rxjs';
 import { flatMap, map } from 'rxjs/operators';
 import { Utils, WindowRef } from 'shared-library/core/services';
-import { GameActions, UserActions } from 'shared-library/core/store/actions';
+import { GameActions, UserActions, TagActions } from 'shared-library/core/store/actions';
 import { Category, GameMode, GameOptions } from 'shared-library/shared/model';
 import { AppState } from '../../../store';
 import { NewGame } from './new-game';
@@ -64,8 +64,9 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     public userActions: UserActions,
     public utils: Utils,
     public snackBar: MatSnackBar,
-    public cd: ChangeDetectorRef) {
-    super(store, utils, gameActions, userActions, windowRef, platformId, cd, route, router);
+    public cd: ChangeDetectorRef,
+    public tagActions: TagActions) {
+    super(store, utils, gameActions, userActions, windowRef, platformId, cd, route, router, tagActions);
   }
 
   ngOnInit() {
@@ -210,7 +211,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     gameOptions.opponentType = (formValue.opponentType) ? formValue.opponentType : null;
     gameOptions.categoryIds = this.selectedCategories;
     gameOptions.gameMode = GameMode.Normal;
-    gameOptions.tags = this.selectedTags;
+    gameOptions.tags = this.topTags.filter(c => c.requiredForGamePlay || c.isSelected).map(c => c.key);
     gameOptions.isChallenge = formValue.isChallenge;
 
     return gameOptions;

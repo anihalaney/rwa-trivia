@@ -4,7 +4,7 @@ import { Store, select } from '@ngrx/store';
 import { AppState, appState } from '../../../store';
 import { User, userCardType, Account, Invitation } from 'shared-library/shared/model';
 import { Observable, Subject } from 'rxjs';
-import { UserActions } from 'shared-library/core/store';
+import { UserActions, categoryDictionary } from 'shared-library/core/store';
 import { ChangeDetectorRef } from '@angular/core';
 import { Utils } from 'shared-library/core/services';
 import * as lodash from 'lodash';
@@ -37,6 +37,7 @@ export class GameProfile {
     tags: any = {};
     tagsArray: any = {};
     loader: Boolean = false;
+    categoryText = ' ';
     constructor(
         public route: ActivatedRoute,
         public router: Router,
@@ -54,7 +55,7 @@ export class GameProfile {
                     if (user && user.tags && user.tags.length > 0) {
                         this.tagsArray.userTags = user.tags;
                         const userTags = user.tags.join(', ');
-                        this.tags.userTags = userTags;
+                        this.tags.userTags = userTags ? userTags : '';
 
                     }
                     if (user && user.userId === this.userId) {
@@ -91,7 +92,7 @@ export class GameProfile {
                     this.tagsArray.otherUserTags = this.user.tags;
                     this.tags.comparison = lodash.intersection(this.tagsArray.userTags, this.tagsArray.otherUserTags);
                     const userTags = this.user.tags.join(', ');
-                    this.tags.otherUserTags = userTags;
+                    this.tags.otherUserTags = userTags ? userTags : '';
                 }
                 this.userProfileImageUrl = this.getImageUrl(this.user);
                 if (this.socialProfileObj) {
@@ -113,6 +114,11 @@ export class GameProfile {
                 }),
             )),
             flatMap(() => this.initializeSocialSetting()),
+            flatMap(() => this.store.select(categoryDictionary).pipe(
+                map(categoryDict => {
+                this.user.categoryIds.map((data) => this.categoryText = `${this.categoryText}${this.categoryText === ' ' ? '' : ', '}${categoryDict[data].categoryName}` );
+                this.cd.markForCheck();
+            }))),
             map(() => this.cd.markForCheck()),
         );
     }

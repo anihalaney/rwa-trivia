@@ -216,11 +216,7 @@ export class FirebaseFunctions {
 
             if (afterEventData !== beforeEventData) {
                 const account: Account = afterEventData;
-
-                const leaderBoardDict: { [key: string]: LeaderBoardUsers } = await LeaderBoardService.getLeaderBoardStats();
-
-                await GameLeaderBoardStats.setLeaderBoardStat(await LeaderBoardService.calculateLeaderBoardStats(account, leaderBoardDict));
-
+                await LeaderBoardService.setLeaderBoardStatForSingleUser(account);
                 await AchievementMechanics.updateAchievement(account);
             }
             return true;

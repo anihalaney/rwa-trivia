@@ -1,0 +1,14 @@
+import { Observable } from 'rxjs';
+import { Action } from '@ngrx/store';
+
+import { ActionWithPayload, TopicActions } from '../actions';
+import { Topic } from '../../../shared/model';
+
+export function topTopics(state: any = [], action: ActionWithPayload<any[]>): Topic[] {
+  switch (action.type) {
+    case TopicActions.LOAD_TOP_TOPICS_SUCEESS:
+      return action.payload;
+    default:
+      return state;
+  }
+}
