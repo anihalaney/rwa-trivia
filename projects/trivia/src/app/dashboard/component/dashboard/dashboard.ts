@@ -241,6 +241,7 @@ export class Dashboard implements OnDestroy {
             .pipe(select(s => s.userLatestPublishedQuestion)).subscribe((question) => {
                 if (!lodash.isEmpty(question)) {
                     this.yourQuestion = question;
+                    console.log(this.yourQuestion);
                     const today = new Date();
                     if (this.yourQuestion && this.yourQuestion.createdOn) {
                         // To calculate the time difference of two dates

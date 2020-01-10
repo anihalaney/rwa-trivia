@@ -83,21 +83,21 @@ export class FirebaseFunctions {
                 // for update
                 if (beforeData && afterData) {
                     if (beforeData.status != afterData.status) {
-                        question.reactionsCount[afterData.status] = question.reactionsCount
-                            && question.reactionsCount[afterData.status] ? Utils.changeFieldValue(1) : 1; // increase current status
-                        question.reactionsCount[beforeData.status] = question.reactionsCount &&
-                            question.reactionsCount[beforeData.status] ? Utils.changeFieldValue(-1) : 0; // decrease before status
+                        question.stats.reactionsCount[afterData.status] = question.stats.reactionsCount
+                            && question.stats.reactionsCount[afterData.status] ? Utils.changeFieldValue(1) : 1; // increase current status
+                        question.reactionsCount[beforeData.status] = question.stats.reactionsCount &&
+                            question.stats.reactionsCount[beforeData.status] ? Utils.changeFieldValue(-1) : 0; // decrease before status
                     } else {
                         return true;
                     }
                 } else if (!beforeData && afterData) {
                     // for create
-                    question.reactionsCount[afterData.status] = question.reactionsCount
-                        && question.reactionsCount[afterData.status] ? Utils.changeFieldValue(1) : 1; // increase current status
+                    question.stats.reactionsCount[afterData.status] = question.stats.reactionsCount
+                        && question.stats.reactionsCount[afterData.status] ? Utils.changeFieldValue(1) : 1; // increase current status
                 } else if (beforeData && !afterData) {
                     // delete
-                    question.reactionsCount[beforeData.status] = question.reactionsCount &&
-                        question.reactionsCount[beforeData.status] ? Utils.changeFieldValue(-1) : 0; // decrease current status
+                    question.stats.reactionsCount[beforeData.status] = question.stats.reactionsCount &&
+                        question.stats.reactionsCount[beforeData.status] ? Utils.changeFieldValue(-1) : 0; // decrease current status
                 } else {
                     return true;
                 }

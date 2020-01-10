@@ -157,24 +157,24 @@
                                     <FlexboxLayout row="2" class="toggle-screen" *ngIf="yourQuestion?.toggleButton">
                                         <FlexboxLayout class="content">
                                             <Label text="Appeared: " textWrap="true"></Label>
-                                            <Label text="{{yourQuestion?.appeared}} times" textWrap="true"></Label>
+                                            <Label text="{{yourQuestion?.stats.appeared}} times" textWrap="true"></Label>
                                         </FlexboxLayout>
                                         <FlexboxLayout class="content">
                                             <Label text="Correct: " textWrap="true"></Label>
-                                            <Label text="{{yourQuestion?.correct || 0}}" textWrap="true"></Label>
+                                            <Label text="{{yourQuestion?.stats?.correct || 0}}" textWrap="true"></Label>
                                         </FlexboxLayout>
                                         <FlexboxLayout class="content">
                                             <Label text="Likes: " textWrap="true"></Label>
-                                            <Label text="{{yourQuestion?.reactionsCount?.like || 0}}"
+                                            <Label text="{{yourQuestion?.stats?.reactionsCount?.like || 0}}"
                                                 textWrap="true"></Label>
                                         </FlexboxLayout>
                                         <FlexboxLayout class="content">
                                             <Label text="Wrong: " textWrap="true"></Label>
-                                            <Label text="{{yourQuestion?.wrong || 0}}" textWrap="true"></Label>
+                                            <Label text="{{yourQuestion?.stats?.wrong || 0}}" textWrap="true"></Label>
                                         </FlexboxLayout>
                                         <FlexboxLayout class="content">
                                             <Label text="Dislikes: " textWrap="true"></Label>
-                                            <Label text="{{yourQuestion?.reactionsCount?.dislike || 0}}"
+                                            <Label text="{{yourQuestion?.stats?.reactionsCount?.dislike || 0}}"
                                                 textWrap="true"></Label>
                                         </FlexboxLayout>
                                     </FlexboxLayout>

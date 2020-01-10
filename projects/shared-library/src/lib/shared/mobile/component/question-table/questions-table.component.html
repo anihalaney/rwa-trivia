@@ -52,17 +52,17 @@
                 <GridLayout rows="auto" columns="70,*" class="question-stat">
                   <Label row="0" col="0" class="stat-tag" text="Appeared"></Label>
                   <Label row="0" col="1" class="stat-value"
-                    text="{{question.appeared ? question.appeared: 0}} times"></Label>
+                    text="{{question.stats.appeared ? question.stats.appeared: 0}} times"></Label>
                 </GridLayout>
                 <GridLayout rows="auto" columns="70,*" class="question-stat">
                   <Label row="0" col="0" class="stat-tag" text="Likes"></Label>
                   <Label row="0" col="1" class="stat-value"
-                    [text]="question.reactionsCount && question.reactionsCount.like ? question.reactionsCount.like: 0"></Label>
+                    [text]="question.stats.reactionsCount && question.stats.reactionsCount.like ? question.stats.reactionsCount.like: 0"></Label>
                 </GridLayout>
                 <GridLayout rows="auto" columns="70,*" class="question-stat">
                   <Label row="0" col="0" class="stat-tag" text="Dislikes"></Label>
                   <Label row="0" col="1" class="stat-value"
-                    [text]="question.reactionsCount && question.reactionsCount.dislike ? question.reactionsCount.dislike: 0"></Label>
+                    [text]="question.stats.reactionsCount && question.stats.reactionsCount.dislike ? question.stats.reactionsCount.dislike: 0"></Label>
                 </GridLayout>
               </StackLayout>
               <StackLayout row="0" col="1" marginLeft="15" horizontalAlignment="left">
