@@ -80,10 +80,16 @@ export class GameMechanics {
                     remainedTime = schedulerConstants.beforeGameExpireDuration - playedMinutes;
                 }
                 if ((Number(game.gameOptions.opponentType) === OpponentType.Random) ||
-                    (Number(game.gameOptions.opponentType) === OpponentType.Friend)) {
+                    (Number(game.gameOptions.opponentType) === OpponentType.Friend) ||
+                    (Number(game.gameOptions.playerMode) === PlayerMode.Single)) {
                     if ((remainedTime) <= schedulerConstants.notificationInterval) {
                         PushNotification.sendGamePlayPushNotifications(game, game.nextTurnPlayerId,
-                            pushNotificationRouteConstants.GAME_REMAINING_TIME_NOTIFICATIONS);
+                            pushNotificationRouteConstants.GAME_REMAINING_TIME_NOTIFICATIONS, remainedTime);
+                    }
+
+                    if ((remainedTime) <= schedulerConstants.reminderNotificationInterval) {
+                        PushNotification.sendGamePlayPushNotifications(game, game.nextTurnPlayerId,
+                            pushNotificationRouteConstants.GAME_REMAINING_TIME_NOTIFICATIONS, remainedTime);
                     }
                 }
                 if (playedHours >= schedulerConstants.gamePlayDuration) {

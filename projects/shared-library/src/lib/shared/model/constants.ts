@@ -4,6 +4,7 @@ export enum schedulerConstants {
     notificationInterval = 32, // 32 Minutes
     gameInvitationDuration = 192,   // 8 days
     DESCRIPTION = 'description',
+    reminderNotificationInterval = 480 // 8 hours
 }
 
 
