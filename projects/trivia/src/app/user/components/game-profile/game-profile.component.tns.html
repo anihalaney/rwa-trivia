@@ -46,7 +46,7 @@
                 <GridLayout rows="*" columns="*,auto" orientation="horizontal" margin="0 -10 0 0"> 
                     <Label row="0" col="0" maxWidth="80%" [text]="(userType === 0 ? topicList : otherUserTopicList)" class="text-blue"
                     fontSize="15" textWrap="false"></Label>
-                    <Label row="0" col="1" *ngIf="userType === 0" stlRippleEffect (rippleTap)="updateCategoryTag()" padding="0 5 0 5"
+                    <Label row="0" col="1" *ngIf="userType === 0" stlRippleEffect (rippleTap)="updateCategoryTag()" android:padding="0 10 0 5" ios:padding="0 5 0 5"
                         text="&#xe927;" class="ico icon-edit text-blue"  fontSize="18" textWrap="true"></Label>
                 </GridLayout>
 
