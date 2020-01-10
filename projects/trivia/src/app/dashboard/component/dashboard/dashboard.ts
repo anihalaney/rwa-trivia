@@ -120,8 +120,17 @@ export class Dashboard implements OnDestroy {
             }),
             flatMap(() => this.store.select(categoryDictionary).pipe(
                 map(categoryDict => {
-                    this.categoryText = '';
-                    this.user.categoryIds.map((data) =>  this.categoryText = this.categoryText + this.categoryText ? ', ': '' + categoryDict[data].categoryName) ;
+                    this.actionSubText = '';
+                    let topicsList = [];
+                    this.actionSubText = '';
+                    if (this.user.tags && this.user.tags.length > 0) {
+                       topicsList = [...this.user.tags];
+                    }
+
+                    if (this.user.categoryIds && this.user.categoryIds.length > 0) {
+                        topicsList = [...topicsList, ...this.user.categoryIds.map((data) => categoryDict[data].categoryName)] ;
+                    }
+                    this.actionSubText = topicsList.join(', ');
                 }))),
             flatMap(() => this.store.select(appState.coreState).pipe(select(s => s.questionOfTheDay),
                 map(questionOfTheDay => {

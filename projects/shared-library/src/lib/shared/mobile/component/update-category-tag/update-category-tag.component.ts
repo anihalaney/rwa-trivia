@@ -114,6 +114,14 @@ export class UpdateCategoryTagComponent implements OnInit, OnDestroy {
                 );
               });
               this.tags = this.topTags;
+
+              const filteredTags = [...this.user.tags];
+              this.tags.map(data => {
+                  if (filteredTags.indexOf(data.key) >= 0) {
+                      filteredTags.splice(filteredTags.indexOf(data.key), 1);
+                  }
+              });
+              this.tags = [...this.tags, ...filteredTags.map(data => { const newid = {key: data, requiredForGamePlay: true}; return newid; }) ];
             })
           )
         )

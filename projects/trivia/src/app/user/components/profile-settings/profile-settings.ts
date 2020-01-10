@@ -404,7 +404,15 @@ export class ProfileSettings {
         return fg;
       });
 
-      const topics: FormGroup[] = this.topics.map(topic => {
+      const filteredTags = [...this.user.tags];
+      this.topics.forEach(data => {
+        if (filteredTags.indexOf(data.id) >= 0) {
+          filteredTags.splice(filteredTags.indexOf(data.id), 1);
+        }
+      });
+
+      const topicsList = [...this.topics,  ...filteredTags.map(data => { const newid = {id: data, type: 'tag'}; return newid; })];
+      const topics: FormGroup[] = topicsList.map(topic => {
         const status =
         topic.type === 'category' ?
         (user.categoryIds && user.categoryIds.indexOf(topic.id) !== -1
