@@ -255,7 +255,7 @@ export class FirebaseFunctions {
             if (data) {
                 const question: Question = data;
 
-                const message = `Your Question ${question.questionText} is approved `;
+                const message = `Yay! Your submitted question has been approved for the bitWiser question bank. You earned 8 bytes!!`;
                 console.log('Notification sent on question approved');
                 PushNotification.sendGamePlayPushNotifications(message, question.created_uid,
                     pushNotificationRouteConstants.QUESTION_NOTIFICATIONS);

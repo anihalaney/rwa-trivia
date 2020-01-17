@@ -1,7 +1,7 @@
 import {
     Game, GameOperations, GameOptions, GameStatus,
     OpponentType, PlayerMode, PlayerQnA,
-    pushNotificationRouteConstants, schedulerConstants, User, GeneralConstants
+    pushNotificationRouteConstants, schedulerConstants, User, GeneralConstants, CalenderConstants
 } from '../../projects/shared-library/src/lib/shared/model';
 import { AccountService } from '../services/account.service';
 import { GameService } from '../services/game.service';
@@ -24,7 +24,7 @@ export class GameMechanics {
                         console.log('CALCULATE_SCORE----------->', currentTurnPlayerId);
                         console.log('CALCULATE_SCORE  game----------->', game);
                         PushNotification.sendGamePlayPushNotifications(game, currentTurnPlayerId,
-                            pushNotificationRouteConstants.GAME_PLAY_NOTIFICATIONS);
+                            pushNotificationRouteConstants.GAME_PLAY_NOTIFICATIONS, playerQnA);
                     }
                     game.turnAt = Utils.getUTCTimeStamp();
                     game.calculateStat(playerQnA.playerId);
@@ -80,17 +80,25 @@ export class GameMechanics {
                     remainedTime = schedulerConstants.beforeGameExpireDuration - playedMinutes;
                 }
                 if ((Number(game.gameOptions.opponentType) === OpponentType.Random) ||
-                    (Number(game.gameOptions.opponentType) === OpponentType.Friend)) {
-                    if ((remainedTime) <= schedulerConstants.notificationInterval) {
+                    (Number(game.gameOptions.opponentType) === OpponentType.Friend) ||
+                    (Number(game.gameOptions.playerMode) === PlayerMode.Single)) {
+                    if ((remainedTime) <= schedulerConstants.notificationInterval && game.nextTurnPlayerId) {
                         PushNotification.sendGamePlayPushNotifications(game, game.nextTurnPlayerId,
-                            pushNotificationRouteConstants.GAME_REMAINING_TIME_NOTIFICATIONS);
+                            pushNotificationRouteConstants.GAME_REMAINING_TIME_NOTIFICATIONS, schedulerConstants.notificationInterval);
+                    } else if (
+                        ((schedulerConstants.gamePlayDuration * 60) - playedMinutes) === schedulerConstants.reminderNotificationInterval
+                        && game.nextTurnPlayerId) {
+                        PushNotification.sendGamePlayPushNotifications(game, game.nextTurnPlayerId,
+                            pushNotificationRouteConstants.GAME_REMAINING_TIME_NOTIFICATIONS,
+                            schedulerConstants.reminderNotificationInterval);
                     }
                 }
                 if (playedHours >= schedulerConstants.gamePlayDuration) {
                     GameMechanics.setGameOverParams(true, GameStatus.TIME_EXPIRED, Utils.getUTCTimeStamp(), game);
                     game.winnerPlayerId = game.playerIds.filter(playerId => playerId !== game.nextTurnPlayerId)[0];
                     if ((Number(game.gameOptions.opponentType) === OpponentType.Random) ||
-                        (Number(game.gameOptions.opponentType) === OpponentType.Friend)) {
+                        (Number(game.gameOptions.opponentType) === OpponentType.Friend) ||
+                        (Number(game.gameOptions.playerMode) === PlayerMode.Single)) {
                         PushNotification.sendGamePlayPushNotifications(game, game.winnerPlayerId,
                             pushNotificationRouteConstants.GAME_PLAY_NOTIFICATIONS);
                     }
@@ -109,6 +117,16 @@ export class GameMechanics {
                 }
             }
 
+            const timeStamp = Utils.getUTCTimeStamp();
+            const startTime = timeStamp - (CalenderConstants.DAYS_CALCULATIONS * schedulerConstants.gamePlayLagDuration); // 32 days
+            const endTime = startTime + CalenderConstants.MINUTE_CALCULATIONS; // 32 days plus one minute
+            const accounts: Account[] = await AccountService.getAccountsWithLagInGamePlay(startTime, endTime);
+            for (const account of accounts) {
+                PushNotification.sendGamePlayPushNotifications(
+                    ` - we have added new questions to bitWiser! Come back and challenge your friends to a new game.`,
+                    account.id,
+                    pushNotificationRouteConstants.GAME_PLAY_LAG_NOTIFICATION);
+            }
             return true;
 
         } catch (error) {
@@ -129,6 +147,10 @@ export class GameMechanics {
                         gameId = await GameMechanics.joinGame(userId, gameOptions);
                     } else if (Number(gameOptions.opponentType) === OpponentType.Friend) {
                         gameId = await GameMechanics.createFriendUserGame(gameOptions.friendId, GameStatus.STARTED, userId, gameOptions);
+                        PushNotification.sendGamePlayPushNotifications(
+                            ' started a new bitWiser game with you! Stay tuned for your turn!',
+                            userId,
+                            pushNotificationRouteConstants.NEW_GAME_START_WITH_OPPONENT, gameOptions.friendId);
                     }
                 }
             } else {

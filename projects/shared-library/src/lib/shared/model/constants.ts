@@ -4,6 +4,8 @@ export enum schedulerConstants {
     notificationInterval = 32, // 32 Minutes
     gameInvitationDuration = 192,   // 8 days
     DESCRIPTION = 'description',
+    reminderNotificationInterval = 480, // 8 hours
+    gamePlayLagDuration = 32, // 32 days;
 }
 
 
@@ -89,7 +91,9 @@ export enum pushNotificationRouteConstants {
     FRIEND_NOTIFICATIONS = 'friend-notifications',
     QUESTION_NOTIFICATIONS = 'my/questions',
     ACHIEVEMENT_NOTIFICATION = 'achievement-notification',
-    TOKEN_IS_NOT_REGISTERED = 'messaging/registration-token-not-registered'
+    TOKEN_IS_NOT_REGISTERED = 'messaging/registration-token-not-registered',
+    NEW_GAME_START_WITH_OPPONENT = 'new-game-start-with-opponent',
+    GAME_PLAY_LAG_NOTIFICATION = 'game-play-lag-notification'
 }
 
 
@@ -200,6 +204,7 @@ export enum GameConstants {
 export enum AccountConstants {
     NEXT_LIVE_UPDATE = 'nextLiveUpdate',
     ACCOUNT_DOES_NOT_EXIST = 'account does not exist',
+    LAST_GAME_PLAYED = 'lastGamePlayed'
 }
 
 export enum LeaderBoardConstants {
