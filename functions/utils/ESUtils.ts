@@ -5,6 +5,7 @@ import { Question, SearchCriteria, SearchResults } from '../../projects/shared-l
 import { Utils } from './utils';
 import { AppSettings } from './../services/app-settings.service';
 import { QuestionService } from '../services/question.service';
+import { StatsService } from '../services/stats.service';
 const elasticSearchConfig = JSON.parse(readFileSync(resolve(__dirname, '../../../config/elasticsearch.config.json'), 'utf8'));
 
 export class ESUtils {
@@ -171,10 +172,11 @@ export class ESUtils {
     const seed = date.getUTCFullYear().toString() + date.getUTCMonth().toString() + date.getUTCDate().toString();
     const hits = await ESUtils.getRandomItems(ESUtils.QUESTIONS_INDEX, 1, (isNextQuestion) ? '' : seed);
     hits[0]['_source'].serverTimeQCreated = Utils.getUTCTimeStamp();
-
       const question = await QuestionService.getQuestionById(hits[0]._id);
+      await StatsService.updateQuestionStats(hits[0]._id, 'CREATED');
       const modifiedQuestion =  Question.getViewModelFromES(hits[0]);
       modifiedQuestion.stats = question.stats ? question.stats : {};
+
     // convert hit to Question
     return modifiedQuestion;
   }

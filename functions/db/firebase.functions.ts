@@ -79,13 +79,14 @@ export class FirebaseFunctions {
             if (context.params.reactions === 'reactions') {
                 const afterData = change.after.exists ? change.after.data() : null;
                 const beforeData = change.before.exists ? change.before.data() : null;
+                
                 const question: Question = await QuestionService.getQuestionById(context.params.questionId);
                 // for update
                 if (beforeData && afterData) {
                     if (beforeData.status != afterData.status) {
                         question.stats.reactionsCount[afterData.status] = question.stats.reactionsCount
                             && question.stats.reactionsCount[afterData.status] ? Utils.changeFieldValue(1) : 1; // increase current status
-                        question.reactionsCount[beforeData.status] = question.stats.reactionsCount &&
+                        question.stats.reactionsCount[beforeData.status] = question.stats.reactionsCount &&
                             question.stats.reactionsCount[beforeData.status] ? Utils.changeFieldValue(-1) : 0; // decrease before status
                     } else {
                         return true;

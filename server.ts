@@ -17,7 +17,9 @@ global['document'] = win.document;
 global['Node'] = win['Node'];
 global['navigator'] = win.navigator;
 global['XMLHttpRequest'] = XMLHttpRequest;
-
+global['componentHandler'] = {
+    register: () => {}
+  }
 
 const app = express();
 

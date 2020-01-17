@@ -102,6 +102,7 @@ export class Question {
     question.appeared = source.appeared ? source.appeared : 0;
     question.correct = source.correct ? source.correct : 0;
     question.wrong = source.wrong ? source.wrong : 0;
+    question.stats = source.stats ? source.stats : {};
 
     question.totalQALength = this.countQALength(source);
     return question;
