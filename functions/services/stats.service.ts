@@ -161,6 +161,9 @@ export class StatsService {
                             afterEventData.playerQnAs[afterEventData.playerQnAs.length - 1].questionId,
                             'UPDATED',
                             afterEventData.playerQnAs[afterEventData.playerQnAs.length - 1].answerCorrect);
+                            // udpate last game played stat
+
+                            AccountService.setLastGamePlayedStat(afterEventData.playerQnAs[afterEventData.playerQnAs.length - 1].playerId);
                             if (afterEventData.playerQnAs[afterEventData.playerQnAs.length - 1].answerCorrect) {
                                 AccountService.setBits(afterEventData.playerQnAs[afterEventData.playerQnAs.length - 1].playerId);
                             }

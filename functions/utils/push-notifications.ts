@@ -68,10 +68,23 @@ export class PushNotification {
                         msg_data = { 'messageType': pushNotificationRouteConstants.GAME_PLAY, 'gameId': game.gameId };
                         switch (game.GameStatus) {
                             case GameStatus.WAITING_FOR_NEXT_Q:
-                                result = await PushNotification.sendNotificationToDevices(game.nextTurnPlayerId, 'bitwiser Game Play',
-                                    `${dbUser.displayName} did not answer correctly. It's your turn now!!`, msg_data);
-                                console.log('result', result);
-                                console.log(`${dbUser.displayName} did not answer correctly. It's your turn now!!`);
+                                if ( extData.playerAnswerId) {
+                                    result = await PushNotification.sendNotificationToDevices(game.nextTurnPlayerId, 'bitwiser Game Play',
+                                        `${dbUser.displayName} did not answer correctly. It's your turn now!!`, msg_data);
+                                    console.log('result', result);
+                                    console.log(`${dbUser.displayName} did not answer correctly. It's your turn now!!`);
+                                } else {
+                                    result = await PushNotification.sendNotificationToDevices(game.nextTurnPlayerId, 'bitwiser Game Play',
+                                        `${dbUser.displayName} did not answer in time. It’s your turn to play and win bitWiser!`, msg_data);
+                                    console.log('result', result);
+                                    console.log(`${dbUser.displayName} did not answer in time. It’s your turn to play and win bitWiser!`);
+
+                                    const nextTurnDbUser = await UserService.getUserById(game.nextTurnPlayerId);
+                                    result = await PushNotification.sendNotificationToDevices(currentTurnPlayerId, 'bitwiser Game Play',
+                                    `${nextTurnDbUser.displayName}’s turn to play bitWiser.`, msg_data);
+                                    console.log('result', result);
+                                    console.log(`${nextTurnDbUser.displayName}’s turn to play bitWiser.`);
+                                }
                                 break;
                             case GameStatus.WAITING_FOR_RANDOM_PLAYER_INVITATION_ACCEPTANCE:
                                 result = await PushNotification.sendNotificationToDevices(game.nextTurnPlayerId, 'bitwiser Game Play',
@@ -95,9 +108,10 @@ export class PushNotification {
                             case GameStatus.TIME_EXPIRED:
                                 looserPlayerId = game.playerIds.filter((playerId) => playerId !== currentTurnPlayerId)[0];
                                 result = await PushNotification.sendNotificationToDevices(looserPlayerId, 'bitwiser Game Play',
-                                `You snooze you lose! sorry, your bitWiser game ended with ${dbUser.displayName}. Take another shot now!`,
+                                `You snooze you lose! sorry, your bitWiser game ended. Take another shot now!`,
                                 msg_data);
                                 console.log('result', result);
+                                console.log(`You snooze you lose! sorry, your bitWiser game ended. Take another shot now!`);
                                 dbUser = await UserService.getUserById(looserPlayerId);
                                 result = await PushNotification.sendNotificationToDevices(currentTurnPlayerId, 'bitwiser Game Play',
                                 `${dbUser.displayName} did not answer in time. You have won this bitWiser game! You are on a roll, start another game.`,
@@ -112,7 +126,7 @@ export class PushNotification {
                 case pushNotificationRouteConstants.GAME_REMAINING_TIME_NOTIFICATIONS:
                     const gameObj: Game = data;
                     msg_data = { 'messageType': pushNotificationRouteConstants.GAME_PLAY, 'gameId': gameObj.gameId };
-                    switch(extData) {
+                    switch ( extData ) {
                         case schedulerConstants.notificationInterval:
                             result = await PushNotification
                             .sendNotificationToDevices(gameObj.nextTurnPlayerId, 'bitwiser Game Play',
@@ -127,7 +141,7 @@ export class PushNotification {
                                     'Your bitWiser game will expire in 8 hours, play now!', msg_data);
                                 console.log('result', result);
                                 console.log(`Your bitWiser game will expire in 8 hours, play now!`);
-                                break;  
+                                break;
                     }
                     break;
 
@@ -164,6 +178,24 @@ export class PushNotification {
                     console.log('result', result);
                     console.log(`${msg_data} `);
                     break;
+                case pushNotificationRouteConstants.NEW_GAME_START_WITH_OPPONENT:
+                    msg_data = { 'messageType': pushNotificationRouteConstants.GAME_PLAY };
+                    result = await PushNotification
+                        .sendNotificationToDevices(extData, 'bitwiser Game Play',
+                            `${dbUser.displayName}${data}`, msg_data);
+                    console.log('msg', `${dbUser.displayName}${data}`);
+                    console.log('result', result);
+                    console.log(`${msg_data} `);
+                    break;
+                case pushNotificationRouteConstants.GAME_PLAY_LAG_NOTIFICATION:
+                        msg_data = { 'messageType': pushNotificationRouteConstants.GAME_PLAY };
+                        result = await PushNotification
+                            .sendNotificationToDevices(currentTurnPlayerId, 'bitwiser Game Play',
+                                `${dbUser.displayName}${data}`, msg_data);
+                        console.log('msg', `${dbUser.displayName}${data}`);
+                        console.log('result', result);
+                        console.log(`${msg_data} `);
+                        break;
 
             }
         } catch (error) {
