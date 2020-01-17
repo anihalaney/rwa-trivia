@@ -82,14 +82,15 @@ export class GameMechanics {
                 if ((Number(game.gameOptions.opponentType) === OpponentType.Random) ||
                     (Number(game.gameOptions.opponentType) === OpponentType.Friend) ||
                     (Number(game.gameOptions.playerMode) === PlayerMode.Single)) {
-                    if ((remainedTime) <= schedulerConstants.notificationInterval) {
+                    if ((remainedTime) <= schedulerConstants.notificationInterval && game.nextTurnPlayerId) {
                         PushNotification.sendGamePlayPushNotifications(game, game.nextTurnPlayerId,
-                            pushNotificationRouteConstants.GAME_REMAINING_TIME_NOTIFICATIONS, remainedTime);
-                    }
-
-                    if ((remainedTime) <= schedulerConstants.reminderNotificationInterval) {
+                            pushNotificationRouteConstants.GAME_REMAINING_TIME_NOTIFICATIONS, schedulerConstants.notificationInterval);
+                    } else if (
+                        ((schedulerConstants.gamePlayDuration * 60) - playedMinutes) === schedulerConstants.reminderNotificationInterval
+                        && game.nextTurnPlayerId) {
                         PushNotification.sendGamePlayPushNotifications(game, game.nextTurnPlayerId,
-                            pushNotificationRouteConstants.GAME_REMAINING_TIME_NOTIFICATIONS, remainedTime);
+                            pushNotificationRouteConstants.GAME_REMAINING_TIME_NOTIFICATIONS,
+                            schedulerConstants.reminderNotificationInterval);
                     }
                 }
                 if (playedHours >= schedulerConstants.gamePlayDuration) {

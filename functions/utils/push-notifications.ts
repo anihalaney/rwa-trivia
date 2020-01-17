@@ -129,7 +129,7 @@ export class PushNotification {
                     switch ( extData ) {
                         case schedulerConstants.notificationInterval:
                             result = await PushNotification
-                            .sendNotificationToDevices(gameObj.nextTurnPlayerId, 'bitwiser Game Play',
+                            .sendNotificationToDevices(currentTurnPlayerId, 'bitwiser Game Play',
                                 'You have only 32 minutes left to be a bitWiser! Play now!', msg_data);
                             console.log('result', result);
                             console.log(`You have only 32 minutes left to be a bitWiser! Play now!`);
@@ -137,7 +137,7 @@ export class PushNotification {
 
                         case schedulerConstants.reminderNotificationInterval:
                                 result = await PushNotification
-                                .sendNotificationToDevices(gameObj.nextTurnPlayerId, 'bitwiser Game Play',
+                                .sendNotificationToDevices(currentTurnPlayerId, 'bitwiser Game Play',
                                     'Your bitWiser game will expire in 8 hours, play now!', msg_data);
                                 console.log('result', result);
                                 console.log(`Your bitWiser game will expire in 8 hours, play now!`);
