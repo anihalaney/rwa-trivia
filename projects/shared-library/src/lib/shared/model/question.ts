@@ -30,12 +30,19 @@ export class Question {
   questionObject?: any;
   isRichEditor?: boolean = false;
   maxTime?: number;
-  reactionsCount?: { [key: string]: number };
   is_draft: boolean;
   appeared: number;
   correct: number;
   wrong: number;
   height?: number;
+  reactionsCount?: { [key: string]: number };
+  stats:  {
+    appeared: number;
+    correct: number;
+    wrong: number;
+    reactionsCount?: { [key: string]: number };
+  }
+
 
 
 
@@ -66,6 +73,7 @@ export class Question {
     question.appeared = db.appeared ? db.appeared : 0;
     question.correct = db.correct ? db.correct : 0;
     question.wrong = db.wrong ? db.wrong : 0;
+    question.stats = db.stats ? db.stats : {};
     db.answers = db.answers.map(answer => {
       answer.isRichEditor = answer.isRichEditor ? answer.isRichEditor : false;
       return answer;
@@ -94,6 +102,7 @@ export class Question {
     question.appeared = source.appeared ? source.appeared : 0;
     question.correct = source.correct ? source.correct : 0;
     question.wrong = source.wrong ? source.wrong : 0;
+    question.stats = source.stats ? source.stats : {};
 
     question.totalQALength = this.countQALength(source);
     return question;
