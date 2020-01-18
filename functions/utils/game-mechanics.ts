@@ -68,6 +68,7 @@ export class GameMechanics {
         try {
             const games: Game[] = await GameService.checkGameOver();
             for (const game of games) {
+            if (game.gameId) {
                 const millis = Utils.getUTCTimeStamp();
                 const noPlayTimeBound = (millis > game.turnAt) ? millis - game.turnAt : game.turnAt - millis;
                 const playedHours = Math.floor((noPlayTimeBound) / (1000 * 60 * 60));
@@ -99,7 +100,8 @@ export class GameMechanics {
                     if ((Number(game.gameOptions.opponentType) === OpponentType.Random) ||
                         (Number(game.gameOptions.opponentType) === OpponentType.Friend) ||
                         (Number(game.gameOptions.playerMode) === PlayerMode.Single)) {
-                        PushNotification.sendGamePlayPushNotifications(game, game.winnerPlayerId,
+                        PushNotification.sendGamePlayPushNotifications(game,
+                           game.gameOptions.playerMode  == PlayerMode.Opponent ? game.winnerPlayerId  : game.nextTurnPlayerId,
                             pushNotificationRouteConstants.GAME_PLAY_NOTIFICATIONS);
                     }
                     const dbGame = game.getDbModel();
@@ -117,6 +119,7 @@ export class GameMechanics {
                 }
             }
 
+        }
             const timeStamp = Utils.getUTCTimeStamp();
             const startTime = timeStamp - (CalenderConstants.DAYS_CALCULATIONS * schedulerConstants.gamePlayLagDuration); // 32 days
             const endTime = startTime + CalenderConstants.MINUTE_CALCULATIONS; // 32 days plus one minute
