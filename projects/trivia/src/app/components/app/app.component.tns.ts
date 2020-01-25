@@ -84,8 +84,11 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit  {
       onMessageReceivedCallback: (message) => {
         if (message.foreground) {
           this.utils.showMessage('success', message.body);
-        }
+        } else {
+        // only redirect to dashboard when notification is clicked from background
+        // While app is foreground user may be playing game
         this.ngZone.run(() => this.navigationService.redirectPushRoutes(message.data));
+        }
       },
       showNotifications: true,
       showNotificationsWhenInForeground: true
