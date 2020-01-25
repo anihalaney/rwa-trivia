@@ -23,12 +23,14 @@ import { ValueList } from "nativescript-drop-down";
 import { AppState, appState } from "../../../store";
 import { User } from "shared-library/shared/model";
 import { RadListViewComponent } from "nativescript-ui-listview/angular";
+import { AutoUnsubscribe } from "ngx-auto-unsubscribe";
 @Component({
   selector: "leaderboard",
   templateUrl: "./leaderboard.component.html",
   styleUrls: ["./leaderboard.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
+@AutoUnsubscribe({ arrayName: "subscriptions" })
 export class LeaderboardComponent extends Leaderboard
   implements OnDestroy, OnInit {
   @ViewChild("dropdown", { static: false }) dropdown: ElementRef;
