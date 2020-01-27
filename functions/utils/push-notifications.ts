@@ -1,7 +1,7 @@
 import { PushNotificationService } from '../services/push-notification.service';
 import { UserService } from '../services/user.service';
 import {
-    User, Game, GameStatus, pushNotificationRouteConstants, schedulerConstants
+    User, Game, GameStatus, pushNotificationRouteConstants, schedulerConstants, PlayerMode
 } from '../../projects/shared-library/src/lib/shared/model';
 import { Utils } from './utils';
 
@@ -28,7 +28,11 @@ export class PushNotification {
                 }
             }
 
-            return await Promise.all(notificationPromises);
+            return await Promise.all(notificationPromises)
+            .catch(function(err) {
+                console.log('promise failed to resolve in push notification', err);
+                return notificationPromises;
+            });
         } catch (error) {
             return Utils.throwError(error);
         }
@@ -106,18 +110,21 @@ export class PushNotification {
                                 console.log(`${dbUser.displayName} won this bitWiser game. Play again, to get even!`);
                                 break;
                             case GameStatus.TIME_EXPIRED:
-                                looserPlayerId = game.playerIds.filter((playerId) => playerId !== currentTurnPlayerId)[0];
+                                looserPlayerId = game.gameOptions.playerMode  == PlayerMode.Opponent ?
+                                game.playerIds.filter((playerId) => playerId !== currentTurnPlayerId)[0] : game.nextTurnPlayerId;
                                 result = await PushNotification.sendNotificationToDevices(looserPlayerId, 'bitwiser Game Play',
                                 `You snooze you lose! sorry, your bitWiser game ended. Take another shot now!`,
                                 msg_data);
                                 console.log('result', result);
                                 console.log(`You snooze you lose! sorry, your bitWiser game ended. Take another shot now!`);
+                            if (Number(game.gameOptions.playerMode  === PlayerMode.Opponent)) {
                                 dbUser = await UserService.getUserById(looserPlayerId);
                                 result = await PushNotification.sendNotificationToDevices(currentTurnPlayerId, 'bitwiser Game Play',
                                 `${dbUser.displayName} did not answer in time. You have won this bitWiser game! You are on a roll, start another game.`,
                                 msg_data);
                                 console.log('result', result);
                                 console.log(`Your time has expired. ${dbUser.displayName} has won the game.`);
+                            }
                                 break;
                         }
                     }
@@ -156,7 +163,7 @@ export class PushNotification {
                         result = await PushNotification
                             .sendNotificationToDevices(currentTurnPlayerId, 'Friend Request',
                             `${otherUser.displayName}  wants to friend you on bitWiser! Accept or Deny. Let the bitWiser battles begin!`,
-                            data);
+                             msg_data);
                         console.log('result', result);
                         console.log(
                             `${otherUser.displayName}  wants to friend you on bitWiser! Accept or Deny. Let the bitWiser battles begin!`);
