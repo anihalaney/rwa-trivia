@@ -10,7 +10,7 @@ import {
     OpponentType, PlayerMode, User, userCardType
 } from 'shared-library/shared/model';
 import { AppState, appState } from '../../../store';
-import { map, flatMap, filter } from 'rxjs/operators';
+import { map, flatMap, filter, switchMap, tap } from 'rxjs/operators';
 import { coreState, categoryDictionary } from 'shared-library/core/store';
 import * as lodash from 'lodash';
 
@@ -60,7 +60,7 @@ export class Dashboard implements OnDestroy {
     yourQuestion;
     public remainingHours: string;
     public remainingMinutes: string;
-    public remaningSeconds: string;
+    public remainingSeconds: string;
     public timeoutLive: string;
     gamePlayBtnDisabled = true;
     applicationSettings: ApplicationSettings;
@@ -90,6 +90,10 @@ export class Dashboard implements OnDestroy {
         this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
         this.photoUrl = this.utils.getImageUrl(this.user, 70, 60, '70X60');
 
+        let categoryDict;
+
+        this.subscriptions.push(this.store.select(categoryDictionary).subscribe(dict => categoryDict = dict));
+
         this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.user),
             filter(u => {
                 if (u === null) {
@@ -103,81 +107,78 @@ export class Dashboard implements OnDestroy {
                 if (!this.user && this.timerSub) {
                     this.timerSub.unsubscribe();
                 }
-                this.gamePlayBtnDisabled = false; return u !== null;
-            }),
-            map(user => {
+                this.gamePlayBtnDisabled = false;
+                return u !== null;
+            })).subscribe(user => {
                 this.ngZone.run(() => {
                     this.user = user;
                     this.photoUrl = this.utils.getImageUrl(this.user, 70, 60, '70X60');
                     this.actionText = `Hi ${this.user.displayName}`;
                     this.actionSubText = '';
-                    if (this.user.tags && this.user.tags.length > 0) {
-                        const userTags = this.user.tags.join(', ');
-                        this.actionSubText = userTags;
-                    }
-                    this.cd.markForCheck();
-                });
-            }),
-            flatMap(() => this.store.select(categoryDictionary).pipe(
-                map(categoryDict => {
-                    this.actionSubText = '';
+
                     let topicsList = [];
                     this.actionSubText = '';
                     if (this.user.tags && this.user.tags.length > 0) {
                        topicsList = [...this.user.tags];
                     }
 
-                    if (this.user.categoryIds && this.user.categoryIds.length > 0) {
-                        topicsList = [...topicsList, ...this.user.categoryIds.map((data) => categoryDict[data].categoryName)] ;
+                    if (this.user.categoryIds && this.user.categoryIds.length > 0 && categoryDict ) {
+                        topicsList = [...topicsList,
+                            ...this.user.categoryIds.map(id => categoryDict[id] ? categoryDict[id].categoryName : '')
+                            .filter( name => name !== '' )] ;
                     }
                     this.actionSubText = topicsList.join(', ');
-                }))),
-            flatMap(() => this.store.select(appState.coreState).pipe(select(s => s.questionOfTheDay),
-                map(questionOfTheDay => {
-                    if (questionOfTheDay) {
-                        this.serverCreatedTime = questionOfTheDay.serverTimeQCreated;
-                    }
-                }))),
-            flatMap(() => this.store.select(appState.coreState).pipe(select(s => s.applicationSettings),
-                map(appSettings => {
-                    if (appSettings) {
-                        this.applicationSettings = appSettings[0];
-                    }
-                }))),
-            flatMap(() => this.store.select(appState.coreState).pipe(select(s => s.account)))
-        ).subscribe(userAccount => {
-            if (this.user) {
-                this.account = userAccount;
-                this.cd.markForCheck();
-                if (this.account && !this.account.enable) {
-                    this.timeoutLive = '';
-                    if (this.account && this.account.lives === 0 && this.isLivesEnable) {
-                        this.gamePlayBtnDisabled = true;
-                    } else {
-                        this.gamePlayBtnDisabled = false;
-                    }
-                } else {
-                    this.gamePlayBtnDisabled = false;
-                }
-                if (this.timerSub) {
-                    this.timerSub.unsubscribe();
-                }
-                this.gameLives();
-            }
 
-            if (this.applicationSettings && !this.applicationSettings.lives.enable) {
-                this.gamePlayBtnDisabled = false;
-                if (this.timerSub) {
-                    this.timeoutLive = '';
-                    this.timerSub.unsubscribe();
-                }
-            }
-            this.store.dispatch(this.gameActions.getActiveGames(this.user));
-            this.store.dispatch(this.userActions.loadGameInvites(this.user));
-            this.showNewsCard = this.user && this.user.isSubscribed ? false : true;
-        })
-        );
+                    this.showNewsCard = this.user && this.user.isSubscribed ? false : true;
+                    this.store.dispatch(this.gameActions.getActiveGames(this.user));
+                    this.store.dispatch(this.userActions.loadGameInvites(this.user));
+                    this.cd.markForCheck();
+                });
+            }));
 
+            const applicationSettings$ = this.store.select(appState.coreState).pipe(select(s => s.applicationSettings));
+            const account$ = this.store.select(appState.coreState).pipe(select(s => s.account));
+
+            this.subscriptions.push(
+                combineLatest([applicationSettings$, account$])
+                .subscribe( ([applicationSettings, account]) => {
+                    if (applicationSettings && applicationSettings.length > 0) {
+                        this.applicationSettings = applicationSettings[0];
+                        if (this.applicationSettings && !this.applicationSettings.lives.enable) {
+                            this.gamePlayBtnDisabled = false;
+                            if (this.timerSub) {
+                                this.timeoutLive = '';
+                                this.timerSub.unsubscribe();
+                            }
+                        }
+                    }
+                    if (account) {
+                        this.account = account;
+                        if (this.account && !this.account.enable) {
+                            this.timeoutLive = '';
+                            if (this.account && this.account.lives === 0 && this.isLivesEnable) {
+                                this.gamePlayBtnDisabled = true;
+                            } else {
+                                this.gamePlayBtnDisabled = false;
+                            }
+                        } else {
+                            this.gamePlayBtnDisabled = false;
+                        }
+                        if (this.timerSub) {
+                            this.timerSub.unsubscribe();
+                        }
+                    this.gameLives();
+                    this.cd.markForCheck();
+                }
+            }));
+
+        this.subscriptions.push(this.store.select(appState.coreState)
+        .pipe(select(s => s.questionOfTheDay))
+        .subscribe(questionOfTheDay => {
+            if (questionOfTheDay) {
+                this.serverCreatedTime = questionOfTheDay.serverTimeQCreated;
+            }
+        }));
         this.subscriptions.push(this.userDict$.subscribe(userDict => this.userDict = userDict));
         this.subscriptions.push(this.activeGames$.subscribe(games => {
             this.activeGames = games;
@@ -246,8 +247,8 @@ export class Dashboard implements OnDestroy {
         this.friendInviteSliceLastIndex = 3;
 
 
-        this.subscriptions.push(combineLatest(store.select(coreState).pipe(select(s => s.friendInvitations)),
-            store.select(coreState).pipe(select(s => s.gameInvites))).subscribe((notify: any) => {
+        this.subscriptions.push(combineLatest([store.select(coreState).pipe(select(s => s.friendInvitations)),
+            store.select(coreState).pipe(select(s => s.gameInvites))]).subscribe((notify: any) => {
                 this.notifications = notify[0].concat(notify[1]);
                 this.cd.markForCheck();
             }));
@@ -304,7 +305,6 @@ export class Dashboard implements OnDestroy {
 
     gameLives() {
         if (this.applicationSettings) {
-
             const maxMiliSecond = this.utils.convertMilliSIntoMinutes(this.applicationSettings.lives.lives_after_add_millisecond) - 1;
             if (this.account) {
                 if (this.account.lives <= this.applicationSettings.lives.max_lives) {
@@ -321,9 +321,9 @@ export class Dashboard implements OnDestroy {
                             this.remainingMinutes = (this.utils.convertIntoDoubleDigit(maxMiliSecond));
                         }
                         if (second > 0) {
-                            this.remaningSeconds = (this.utils.convertIntoDoubleDigit(59 - second));
+                            this.remainingSeconds = (this.utils.convertIntoDoubleDigit(59 - second));
                         } else {
-                            this.remaningSeconds = (this.utils.convertIntoDoubleDigit(59 - second));
+                            this.remainingSeconds = (this.utils.convertIntoDoubleDigit(59 - second));
                         }
 
                         if (timeStamp >= this.account.nextLiveUpdate) {
@@ -336,7 +336,7 @@ export class Dashboard implements OnDestroy {
                         } else {
                             let timeOut = '';
                             if (this.account.lives !== this.applicationSettings.lives.max_lives) {
-                                timeOut = (this.remainingMinutes) + ':' + (this.remaningSeconds);
+                                timeOut = (this.remainingMinutes) + ':' + (this.remainingSeconds);
                             }
                             this.timeoutLive = timeOut;
                             this.cd.markForCheck();
@@ -349,7 +349,7 @@ export class Dashboard implements OnDestroy {
     }
 
     ngOnDestroy(): void {
-
+        console.log('on destroy');
     }
 
 

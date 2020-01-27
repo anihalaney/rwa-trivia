@@ -4,7 +4,7 @@ import { RouterExtensions } from 'nativescript-angular/router';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { Utils, WindowRef } from 'shared-library/core/services';
 import { GameActions, QuestionActions, UserActions } from 'shared-library/core/store/actions';
-import { FirebaseScreenNameConstants, Game, GameStatus, PlayerMode } from 'shared-library/shared/model';
+import {  GameStatus } from 'shared-library/shared/model';
 import { Page } from 'tns-core-modules/ui/page/page';
 import { AppState, appState } from '../../../store';
 import { Dashboard } from './dashboard';
@@ -20,7 +20,6 @@ import { Dashboard } from './dashboard';
 export class DashboardComponent extends Dashboard implements OnInit, OnDestroy {
 
   gameStatus: any;
-  subscriptions = [];
   // This is magic variable
   // it delay complex UI show Router navigation can finish first to have smooth transition
   renderView = false;
@@ -99,9 +98,5 @@ export class DashboardComponent extends Dashboard implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.page.off('loaded');
     this.renderView = false;
-  }
-
-  asdasdAS() {
-    this.routerExtension.navigate(['signup-extra-info']);
   }
 }

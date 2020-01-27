@@ -5,6 +5,7 @@ import { Utils } from 'shared-library/core/services';
 import { AppState } from '../../../store';
 import { UserActions, TagActions, TopicActions } from 'shared-library/core/store/actions';
 import { Leaderboard } from './leaderboard';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
 @Component({
   selector: 'leaderboard',
@@ -13,7 +14,7 @@ import { Leaderboard } from './leaderboard';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-
+@AutoUnsubscribe({ arrayName: "subscriptions" })
 export class LeaderboardComponent extends Leaderboard {
 
   constructor(protected store: Store<AppState>,
