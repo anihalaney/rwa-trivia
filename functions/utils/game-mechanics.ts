@@ -150,11 +150,15 @@ export class GameMechanics {
                         gameId = await GameMechanics.joinGame(userId, gameOptions);
                     } else if (Number(gameOptions.opponentType) === OpponentType.Friend) {
                         gameId = await GameMechanics.createFriendUserGame(gameOptions.friendId, GameStatus.STARTED, userId, gameOptions);
-                        PushNotification.sendGamePlayPushNotifications(
-                            ' started a new bitWiser game with you! Stay tuned for your turn!',
-                            userId,
-                            pushNotificationRouteConstants.NEW_GAME_START_WITH_OPPONENT, gameOptions.friendId);
                     }
+                }
+
+                if ((Number(gameOptions.opponentType) === OpponentType.Random ||
+                Number(gameOptions.opponentType) === OpponentType.Friend) && gameOptions.friendId && gameOptions.friendId !== '') {
+                    PushNotification.sendGamePlayPushNotifications(
+                        ' started a new bitWiser game with you! Stay tuned for your turn!',
+                        userId,
+                        pushNotificationRouteConstants.NEW_GAME_START_WITH_OPPONENT, gameOptions.friendId);
                 }
             } else {
                 gameId = (gameOptions.rematch) ?
