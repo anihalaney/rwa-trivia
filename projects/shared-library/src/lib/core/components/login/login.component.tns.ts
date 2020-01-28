@@ -39,7 +39,7 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
     type: '',
     text: ''
   };
-  subscriptions = [];
+  
   @ViewChild('phoneNumber', { static: false }) phoneNumber: NgModel;
   isCountryListOpened = false;
   isCountryCodeError;

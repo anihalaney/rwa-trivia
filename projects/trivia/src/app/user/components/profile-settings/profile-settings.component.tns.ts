@@ -71,7 +71,6 @@ export class ProfileSettingsComponent extends ProfileSettings
   SOCIAL_LABEL = "CONNECT YOUR SOCIAL ACCOUNT";
   @ViewChildren("textField", { read: false }) textField: QueryList<ElementRef>;
   platform = Platform;
-  subscriptions = [];
   isValidDisplayName: boolean = null;
   isLocationEdit: boolean = false;
   public imageTaken: ImageAsset;
@@ -504,7 +503,8 @@ export class ProfileSettingsComponent extends ProfileSettings
     utils.openUrl(fullUrl);
   }
 
-  ngOnDestroy() {}
+  ngOnDestroy() {
+  }
 
   async getLocation() {
     await this.getLocationPermission();

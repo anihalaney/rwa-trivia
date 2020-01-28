@@ -45,7 +45,6 @@ export class TNSDbService extends DbService {
     }
 
     public valueChanges(collectionName: string, path?: any, queryParams?: any): Observable<any> {
-        console.log(`Requesting listener for ${path ? collectionName + '/' + path : collectionName}`);
         let query = firebaseApp.firestore().collection(collectionName);
 
         if (queryParams) {
@@ -66,7 +65,7 @@ export class TNSDbService extends DbService {
         }
         return Observable.create(observer => {
             const unsubscribe = query.onSnapshot((snapshot: any) => {
-                console.log(`Received Data for ${path ? collectionName + '/' + path : collectionName}`);
+     
                 let results = [];
                 if (snapshot && snapshot.forEach) {
                     snapshot.forEach(doc => results.push({
@@ -85,7 +84,7 @@ export class TNSDbService extends DbService {
                 });
             });
             return () => {
-                console.log(`Unsubscribed Listener for ${path ? collectionName + '/' + path : collectionName}`);
+
                 unsubscribe();
             };
         });

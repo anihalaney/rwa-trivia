@@ -332,12 +332,12 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate
     this.currentWebViewParentId = id;
   
     if (isAndroid) {
-  
+      this.webView.nativeElement.android.getSettings().setBuiltInZoomControls(false);
       // for android this works as this method does not destroy the webview. do not change.
       prevWebViewParent._removeViewFromNativeVisualTree(
         this.webView.nativeElement
       );
-    if(isAndroid){
+
         this.webView.nativeElement.android.getSettings().setBuiltInZoomControls(false);
         this.webView.nativeElement.android.setOnTouchListener(
           new android.view.View.OnTouchListener({
@@ -354,7 +354,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate
             }
           })
         );
-      }
+
       this.webView.nativeElement.android.getSettings().setBuiltInZoomControls(false);
       nextWebViewParent._addViewToNativeVisualTree(this.webView.nativeElement);
       // need to wait for the load to be finished before emit the value.

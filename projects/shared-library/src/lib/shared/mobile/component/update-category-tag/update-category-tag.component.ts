@@ -14,12 +14,14 @@ import { map, flatMap } from "rxjs/operators";
 import { Utils } from "./../../../../core/services/utils";
 import { AutoUnsubscribe } from "ngx-auto-unsubscribe";
 
-@AutoUnsubscribe({ arrayName: "subscriptions" })
+
 @Component({
   selector: "app-update-category-tag",
   templateUrl: "./update-category-tag.component.html",
   styleUrls: ["./update-category-tag.component.scss"]
 })
+
+@AutoUnsubscribe({ arrayName: "subscriptions" })
 export class UpdateCategoryTagComponent implements OnInit, OnDestroy {
   user: User;
   subscriptions = [];

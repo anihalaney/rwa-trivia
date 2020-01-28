@@ -4,7 +4,6 @@ import { select, Store } from '@ngrx/store';
 import { RouterExtensions } from 'nativescript-angular/router';
 import { TokenModel } from 'nativescript-ui-autocomplete';
 import { RadAutoCompleteTextViewComponent } from 'nativescript-ui-autocomplete/angular';
-import { ListViewEventData } from 'nativescript-ui-listview';
 import { RadListViewComponent } from 'nativescript-ui-listview/angular';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { Utils, WindowRef } from 'shared-library/core/services';
@@ -34,7 +33,6 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
   private tagItems: ObservableArray<TokenModel>;
   private _filterFriendFunc: (item: any) => any;
   // pagination: any;
-  subscriptions = [];
   // This is magic variable
   // it delay complex UI show Router navigation can finish first to have smooth transition
   renderView = false;

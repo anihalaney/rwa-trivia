@@ -411,16 +411,16 @@ export class ProfileSettings {
         }
       });
 
-      const topicsList = [...this.topics,  ...filteredTags.map(data => { const newid = {id: data, type: 'tag'}; return newid; })];
+      const topicsList = [...this.topics, ...filteredTags.map(data => { const newid = { id: data, type: 'tag' }; return newid; })];
       const topics: FormGroup[] = topicsList.map(topic => {
         const status =
-        topic.type === 'category' ?
-        (user.categoryIds && user.categoryIds.indexOf(topic.id) !== -1
-            ? true
-            : false) : 
-          (user.tags && user.tags.indexOf(topic.id) !== -1
-            ? true
-            : false);
+          topic.type === 'category' ?
+            (user.categoryIds && user.categoryIds.indexOf(topic.id) !== -1
+              ? true
+              : false) :
+            (user.tags && user.tags.indexOf(topic.id) !== -1
+              ? true
+              : false);
         const fg = new FormGroup({
           topic: new FormControl(topic.id),
           isSelected: new FormControl(status),
@@ -454,7 +454,7 @@ export class ProfileSettings {
       categoryFA = new FormArray(categoryIds);
       topicsFA = new FormArray(topics);
 
-      
+
       this.enteredTags = user.tags;
     }
     this.userForm = this.fb.group(
@@ -514,8 +514,8 @@ export class ProfileSettings {
         break;
     }
     this.filteredTags$ = this.userForm.get('tags').valueChanges
-    .pipe(map(val => val.length > 0 ? this.filter(val) : []));
-    
+      .pipe(map(val => val.length > 0 ? this.filter(val) : []));
+
     this.createSocialProfileControl();
     if (
       isPlatformBrowser(this.platformId) === false &&
@@ -530,7 +530,7 @@ export class ProfileSettings {
     }
   }
 
-  
+
   createSocialProfileControl() {
     if (this.socialProfileObj) {
       this.socialProfileObj.map(profile => {
@@ -703,7 +703,7 @@ export class ProfileSettings {
         this.userForm.updateValueAndValidity();
       }
     } else if (field === "socialProfile") {
-      this.socialProfileSettings =  this.socialProfileSettings.map(res => {
+      this.socialProfileSettings = this.socialProfileSettings.map(res => {
         res.disable = true;
         return res;
       });
@@ -815,7 +815,7 @@ export class ProfileSettings {
         this.loggedInUserAccount &&
         this.loggedInUserAccount.lives > 0 &&
         this.applicationSettings.lives.enable) ||
-      !this.applicationSettings.lives.enable
+        !this.applicationSettings.lives.enable
         ? true
         : false;
     return isEnable;

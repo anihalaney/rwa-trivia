@@ -25,7 +25,6 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
 
   sortedCategories: Category[];
   tags: string[];
-  subscriptions = [];
   selectedTags: string[];
 
 

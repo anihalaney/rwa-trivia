@@ -12,9 +12,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { isPlatformBrowser } from '@angular/common';
 
 
-
-@AutoUnsubscribe({ 'arrayName': 'subscriptions' })
-export class NewGame implements OnDestroy {
+export class NewGame {
   categoriesObs: Observable<Category[]>;
   categories: Category[];
   tagsObs: Observable<string[]>;
@@ -269,7 +267,4 @@ export class NewGame implements OnDestroy {
     this.errMsg = undefined;
   }
 
-  ngOnDestroy() {
-
-  }
 }

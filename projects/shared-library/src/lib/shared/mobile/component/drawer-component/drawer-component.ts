@@ -133,7 +133,6 @@ export class DrawerComponent implements OnInit, OnDestroy {
                                 .findIndex((androidPushToken) =>
                                     (androidPushToken === token ||
                                         (androidPushToken && androidPushToken.token && androidPushToken.token === token))) === -1) {
-                                console.log('Android token', token);
                                 user.androidPushTokens.push(deviceToken);
                                 this.updateUser(user, DrawerConstants.UPDATE_TOKEN_STATUS);
                             } else {
@@ -146,7 +145,6 @@ export class DrawerComponent implements OnInit, OnDestroy {
                                 .findIndex((iosPushToken) =>
                                     (iosPushToken === token ||
                                         (iosPushToken && iosPushToken.token && iosPushToken.token === token))) === -1) {
-                                console.log('ios token', token);
                                 user.iosPushTokens.push(deviceToken);
                                 this.updateUser(user, DrawerConstants.UPDATE_TOKEN_STATUS);
                             } else {
@@ -218,13 +216,10 @@ export class DrawerComponent implements OnInit, OnDestroy {
         };
         analyticsParameter.push(userId);
 
-        console.log('analyticsParameter ==> ', analyticsParameter);
-
         firebase.analytics.logEvent({
             key: 'user_logout',
             parameters: analyticsParameter
         }).then(() => {
-            console.log('user_logout event slogged');
         });
 
     }
