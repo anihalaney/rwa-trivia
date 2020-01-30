@@ -1,5 +1,5 @@
 import {
-    Game, Blog, interceptorConstants, ResponseMessagesConstants, schedulerConstants
+    Game, Blog, interceptorConstants, ResponseMessagesConstants, schedulerConstants, GameStatus
 } from '../../projects/shared-library/src/lib/shared/model';
 import { BlogService } from '../services/blog.service';
 import { GameService } from '../services/game.service';
@@ -11,12 +11,12 @@ const Feed = require('feed-to-json');
 
 export class SchedulerController {
 
-    /* checkGameOver
+    /* checkGameExpiredAndSetGameOver
     * return status
     */
-    static async checkGameOver(req, res) {
+    static async checkGameExpiredAndSetGameOver(req, res) {
         try {
-            await GameMechanics.doGameOverOperations();
+            await GameMechanics.checkGameExpiredAndSetGameOver();
             Utils.sendResponse(res, interceptorConstants.SUCCESS, ResponseMessagesConstants.SCHEDULER_CHECK_GAME_OVER_IS_COMPLETED);
         } catch (error) {
             Utils.sendError(res, error);
@@ -112,4 +112,47 @@ export class SchedulerController {
             Utils.sendError(res, error);
         }
     }
+
+    /* gameTimeReminderNotification
+    * return status
+    */
+   static async gameTimeReminderNotification(req, res) {
+        try {
+            const reminderBeforeTime = Number(req.params.reminderBeforeTime);
+            if (!reminderBeforeTime) {
+                Utils.sendResponse(res, interceptorConstants.BAD_REQUEST, ResponseMessagesConstants.REMIND_BEFORE_TIME_NOT_FOUND);
+            }
+            await GameMechanics.doSendGameReminderNotification(reminderBeforeTime);
+            Utils.sendResponse(res, interceptorConstants.SUCCESS, ResponseMessagesConstants.REMAINING_TIME_NOTIFICATION_SENT_SUCCESSFULLY);
+        } catch (error) {
+            Utils.sendError(res, error);
+        }
+    }
+
+    /* checkGameNotPlayedFor32DaysNotification
+    * return status
+    */
+   static async noGamePlayFor32Days(req, res) {
+        try {
+            await GameMechanics.doSendGameNotPlayedNotification();
+            Utils.sendResponse(res, interceptorConstants.SUCCESS,
+                ResponseMessagesConstants.SEND_NO_GAME_ACTIVITY_NOTIFICATION_SUCCESSFULLY);
+        } catch (error) {
+            Utils.sendError(res, error);
+        }
+    }
+
+    /* checkGameInvitationExpire
+    * return status
+    */
+   static async checkGameInvitationExpire(req, res) {
+        try {
+            await GameMechanics.checkGameInvitationExpire();
+            Utils.sendResponse(res, interceptorConstants.SUCCESS,
+                ResponseMessagesConstants.SCHEDULER_CHECK_GAME_INVITATION_EXPIRE_IS_COMPLETED);
+        } catch (error) {
+            Utils.sendError(res, error);
+        }
+    }
+
 }

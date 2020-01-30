@@ -199,6 +199,8 @@ export class FirebaseFunctions {
                     const accountObj: any = {};
                     accountObj.id = data.userId;
                     accountObj.lives = appSetting.lives.max_lives;
+                    accountObj.lastGamePlayed = Utils.getUTCTimeStamp();
+                    accountObj.lastGamePlayedNotification = false;
                     await AccountService.setAccount(accountObj);
                 }
             }

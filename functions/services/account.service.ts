@@ -73,14 +73,13 @@ export class AccountService {
      * getAccountsWithLagInGamePlay
      * return accounts
      */
-    static async getAccountsWithLagInGamePlay(startTime, endTime): Promise<any> {
+    static async getAccountsWithLagInGamePlay(startTime): Promise<any> {
         try {
             return Utils.getValesFromFirebaseSnapshot(
                 await AccountService.accountFireStoreClient
                     .collection(CollectionConstants.ACCOUNTS)
-                    .orderBy(AccountConstants.LAST_GAME_PLAYED)
-                    .startAt(startTime)
-                    .endAt(endTime)
+                    .where(AccountConstants.LAST_GAME_PLAYED, GeneralConstants.LESS_THAN_OR_EQUAL, startTime)
+                    .where(AccountConstants.LAST_GAME_PLAYED_NOTIFICATION, GeneralConstants.DOUBLE_EQUAL, false)
                     .get()
             );
         } catch (error) {
@@ -384,6 +383,7 @@ export class AccountService {
         try {
             const accountData = await AccountService.getAccountById(userId);
             accountData.lastGamePlayed = Utils.getUTCTimeStamp();
+            accountData.lastGamePlayedNotification = false;
             await AccountService.updateAccountData(accountData);
         } catch (error) {
             return Utils.throwError(error);

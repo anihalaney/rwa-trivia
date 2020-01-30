@@ -109,6 +109,13 @@ export class PushNotification {
                                 console.log('result', result);
                                 console.log(`${dbUser.displayName} won this bitWiser game. Play again, to get even!`);
                                 break;
+                            case GameStatus.INVITATION_TIMEOUT:
+                                    const inviteeUserId = game.playerIds.filter((playerId) => playerId !== currentTurnPlayerId)[0];
+                                    result = await PushNotification.sendNotificationToDevices(inviteeUserId, 'bitwiser Game Play',
+                                        `${dbUser.displayName} did not accept your game play invitation, start a new game`, msg_data);
+                                    console.log('result', result);
+                                    console.log(`${dbUser.displayName} did not accept your game play invitation, start a new game`);
+                                    break;
                             case GameStatus.TIME_EXPIRED:
                                 looserPlayerId = game.gameOptions.playerMode  == PlayerMode.Opponent ?
                                 game.playerIds.filter((playerId) => playerId !== currentTurnPlayerId)[0] : game.nextTurnPlayerId;
@@ -117,13 +124,13 @@ export class PushNotification {
                                 msg_data);
                                 console.log('result', result);
                                 console.log(`You snooze you lose! sorry, your bitWiser game ended. Take another shot now!`);
-                            if (Number(game.gameOptions.playerMode  === PlayerMode.Opponent)) {
+                            if (Number(game.gameOptions.playerMode)  === PlayerMode.Opponent) {
                                 dbUser = await UserService.getUserById(looserPlayerId);
                                 result = await PushNotification.sendNotificationToDevices(currentTurnPlayerId, 'bitwiser Game Play',
                                 `${dbUser.displayName} did not answer in time. You have won this bitWiser game! You are on a roll, start another game.`,
                                 msg_data);
                                 console.log('result', result);
-                                console.log(`Your time has expired. ${dbUser.displayName} has won the game.`);
+                                console.log(`${dbUser.displayName} did not answer in time. You have won this bitWiser game! You are on a roll, start another game.`);
                             }
                                 break;
                         }
@@ -143,11 +150,19 @@ export class PushNotification {
                             break;
 
                         case schedulerConstants.reminderNotificationInterval:
+                                let msgText = '';
+                                const userId = gameObj.nextTurnPlayerId;
+                                if (gameObj.GameStatus === GameStatus.WAITING_FOR_FRIEND_INVITATION_ACCEPTANCE
+                                    || gameObj.GameStatus === GameStatus.WAITING_FOR_RANDOM_PLAYER_INVITATION_ACCEPTANCE) {
+                                        msgText =
+                                        `Your bitwiser game Invitation from ${dbUser.displayName} will expire in 8 hours, Accept Invite!`;
+                                } else {
+                                        msgText = 'Your bitWiser game will expire in 8 hours, play now!';
+                                }
                                 result = await PushNotification
-                                .sendNotificationToDevices(currentTurnPlayerId, 'bitwiser Game Play',
-                                    'Your bitWiser game will expire in 8 hours, play now!', msg_data);
+                                .sendNotificationToDevices(userId, 'bitwiser Game Play', msgText, msg_data);
                                 console.log('result', result);
-                                console.log(`Your bitWiser game will expire in 8 hours, play now!`);
+                                console.log(msgText);
                                 break;
                     }
                     break;

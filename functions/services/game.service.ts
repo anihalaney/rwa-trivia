@@ -54,6 +54,8 @@ export class GameService {
                 }
 
                 const date = new Date(new Date().toUTCString());
+                game.reminder8Hr = false;
+                game.reminder32Min = false;
                 game.turnAt = date.getTime() + (date.getTimezoneOffset() * 60000);
 
                 const dbGame = game.getDbModel();
@@ -159,6 +161,57 @@ export class GameService {
                     .where(GameConstants.GAME_OVER, GeneralConstants.DOUBLE_EQUAL, false)
                     .get()
             );
+        } catch (error) {
+            return Utils.throwError(error);
+        }
+    }
+
+    /**
+     * GetAllLaggedGames
+     * return status
+     */
+    static async getAllLaggedGames(timeStamp: number, type: string, gameStatus = []): Promise<any> {
+        try {
+            if (gameStatus.length > 0) {
+                return GameService.getGames(
+                    await GameService.gameFireStoreClient
+                        .collection(`/${CollectionConstants.GAMES}`)
+                        .where(GameConstants.GAME_OVER, GeneralConstants.DOUBLE_EQUAL, false)
+                        .where(GameConstants.TURN_AT, GeneralConstants.LESS_THAN_OR_EQUAL, timeStamp)
+                        .where(type, GeneralConstants.DOUBLE_EQUAL, false)
+                        .where(GameConstants.GAME_STATUS, GeneralConstants.IN, gameStatus)
+                        .get()
+                    );
+            } else {
+                return GameService.getGames(
+                    await GameService.gameFireStoreClient
+                        .collection(`/${CollectionConstants.GAMES}`)
+                        .where(GameConstants.GAME_OVER, GeneralConstants.DOUBLE_EQUAL, false)
+                        .where(GameConstants.TURN_AT, GeneralConstants.LESS_THAN_OR_EQUAL, timeStamp)
+                        .where(type, GeneralConstants.DOUBLE_EQUAL, false)
+                        .get()
+                    );
+            }
+        } catch (error) {
+            return Utils.throwError(error);
+        }
+    }
+
+
+    /**
+     * GetAllExpiredGames
+     * return status
+     */
+    static async getAllExpiredGames(timeStamp: number, type: string[]): Promise<any> {
+        try {
+            return GameService.getGames(
+                await GameService.gameFireStoreClient
+                    .collection(`/${CollectionConstants.GAMES}`)
+                    .where(GameConstants.GAME_OVER, GeneralConstants.DOUBLE_EQUAL, false)
+                    .where(GameConstants.GAME_STATUS , GeneralConstants.IN , type)
+                    .where(GameConstants.TURN_AT, GeneralConstants.LESS_THAN_OR_EQUAL, timeStamp)
+                    .get()
+                );
         } catch (error) {
             return Utils.throwError(error);
         }
