@@ -97,7 +97,7 @@ export class GameMechanics {
     }
 
 
-    static async checkGameInvitationExpire(): Promise<boolean> {
+    static async checkGameInvitationIsExpired(): Promise<boolean> {
         try {
             const millis = Utils.getUTCTimeStamp();
             const noPlayTime = (CalenderConstants.HOURS_CALCULATIONS * schedulerConstants.gameInvitationDuration);
@@ -139,7 +139,7 @@ export class GameMechanics {
             const millis = Utils.getUTCTimeStamp();
             const noPlayTime = (CalenderConstants.HOURS_CALCULATIONS * schedulerConstants.gamePlayLagDuration);
             const notificationDuration = millis - ( noPlayTime -  (timeBefore * 60 * 1000));
-            const games: Game[] = await GameService.getAllLaggedGames(notificationDuration, type, gameStatus);
+            const games: Game[] = await GameService.getAllGameForReminder(notificationDuration, type, gameStatus);
             for (const game of games) {
                 if (game.gameId) {
                     PushNotification.sendGamePlayPushNotifications(game,

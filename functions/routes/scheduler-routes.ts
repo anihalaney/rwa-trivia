@@ -39,7 +39,7 @@ class SchedulerRoutes {
 
         //  '/game-invitation-expire'
         this.schedulerRoutes.post(`/${RoutesConstants.GAME_DASH_INVITATION_DASH_EXPIRE}`,
-        AuthMiddleware.authTokenOnly, SchedulerController.checkGameInvitationExpire);
+        AuthMiddleware.authTokenOnly, SchedulerController.checkGameInvitationIsExpired);
 
     }
 }

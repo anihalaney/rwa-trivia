@@ -142,12 +142,12 @@ export class SchedulerController {
         }
     }
 
-    /* checkGameInvitationExpire
+    /* checkGameInvitationIsExpired
     * return status
     */
-   static async checkGameInvitationExpire(req, res) {
+   static async checkGameInvitationIsExpired(req, res) {
         try {
-            await GameMechanics.checkGameInvitationExpire();
+            await GameMechanics.checkGameInvitationIsExpired();
             Utils.sendResponse(res, interceptorConstants.SUCCESS,
                 ResponseMessagesConstants.SCHEDULER_CHECK_GAME_INVITATION_EXPIRE_IS_COMPLETED);
         } catch (error) {
