@@ -30,7 +30,7 @@
           style.textAlignment="center"></Label>
       </FlexboxLayout>
       <render-box [setBackgroundColor]="'#f7f7f7'">
-        <StackLayout padding="20 10">
+        <StackLayout padding="20 10" class="game-question">
           <render-question [question]="question" [questionIndex]="questionIndex"></render-question>
           <FlexboxLayout *ngIf="question && question.tags" margin="7 0 7 -2.5" flexWrap="wrap">
             <Label *ngIf="categoryName" text="{{categoryName}}"
@@ -41,7 +41,7 @@
               [style.color]="theme === 'dark' ? '#a5a5a5' : '#808080'" borderRadius="22" margin="2.5 2.5" [text]="tags"
               padding="5 10" textWrap="true"></Label>
             <GridLayout marginTop="15" marginLeft="2.5">
-              <Label [style.color]="theme === 'dark' ? '#a5a5a5' : '#000000'" fontSize="17" text="choose any one"
+              <Label [style.color]="theme === 'dark' ? '#a5a5a5' : '#000000'" fontSize="17" text="Choose any one"
                 textWrap="true"></Label>
             </GridLayout>
           </FlexboxLayout>
