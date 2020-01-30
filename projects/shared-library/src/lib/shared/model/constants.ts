@@ -182,7 +182,8 @@ export enum GeneralConstants {
     DISPLAY_NAME = 'displayName',
     USER_ID = 'userId',
     WIN = 'Win',
-    LOST = 'Lost'
+    LOST = 'Lost',
+    IN = 'in'
 }
 
 export enum SocialShareConstants {
@@ -198,13 +199,15 @@ export enum GameConstants {
     NORMAL = 'Normal',
     OFFLINE = 'Offline',
     SINGLE = 'Single',
-    OPPONENT = 'Opponent'
+    OPPONENT = 'Opponent',
+    TURN_AT = 'turnAt'
 }
 
 export enum AccountConstants {
     NEXT_LIVE_UPDATE = 'nextLiveUpdate',
     ACCOUNT_DOES_NOT_EXIST = 'account does not exist',
-    LAST_GAME_PLAYED = 'lastGamePlayed'
+    LAST_GAME_PLAYED = 'lastGamePlayed',
+    LAST_GAME_PLAYED_NOTIFICATION = 'lastGamePlayedNotification'
 }
 
 export enum LeaderBoardConstants {
@@ -284,6 +287,10 @@ export enum ResponseMessagesConstants {
     ACHIEVEMENT_RULES_ADDED_SUCCESSFULLY = 'Achievement rules added successfully',
     DISPLAY_NAME_NOT_FOUND = 'displayName is not added in request',
     BITS_ADDED = 'Bits added successfully !!',
+    REMAINING_TIME_NOTIFICATION_SENT_SUCCESSFULLY = 'Remaining time notification sent successfully',
+    SEND_NO_GAME_ACTIVITY_NOTIFICATION_SUCCESSFULLY = 'Notification for no game activity in 32 days sent successfully',
+    SCHEDULER_CHECK_GAME_INVITATION_EXPIRE_IS_COMPLETED = 'scheduler check game invitation expire is completed',
+    REMIND_BEFORE_TIME_NOT_FOUND = 'Reminder before time not found',
 }
 
 export enum FriendConstants {
@@ -371,6 +378,7 @@ export enum RoutesConstants {
     SCHEDULER = 'scheduler',
     FRIEND = 'friend',
     GAME_DASH_OVER = 'game-over',
+    CHECK_DASH_GAME_DASH_EXPIRED_DASH_AND_DASH_SET_DASH_GAME_DASH_OVER = 'check-game-expired-and-set-game-over',
     TURN = 'turn',
     ADD_LIVES = 'add-lives',
     BLOG = 'blog',
@@ -397,7 +405,11 @@ export enum RoutesConstants {
     ADD_BITS_FIRST_QUESTION = 'add-bits-first-question',
     TOP_CATEGORIES_COUNT = 'getTopCategories',
     TOP_TAGS_COUNT = 'getTopTags',
-    GAME_DASH_STAT_DASH_UPDATE = 'question-stat-update'
+    GAME_DASH_STAT_DASH_UPDATE = 'question-stat-update',
+    NO_DASH_GAME_DASH_PLAY_DASH_32DAYS = 'no-game-play-32days',
+    GAME_DASH_INVITATION_DASH_EXPIRE = 'game-invitation-expire',
+    GAME_DASH_TIME_DASH_REMINDER_NOTIFICATION = 'game-time-reminder-notification',
+    REMINDER_DASH_BEFORE_DASH_TIME = 'reminderBeforeTime'
 }
 
 export enum TermsAndPrivacyUrlConstant {

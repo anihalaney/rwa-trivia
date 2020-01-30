@@ -71,17 +71,11 @@
     </StackLayout>
   </ScrollView>
   <AbsoluteLayout backgroundColor="#ffffff" verticalAlignment="bottom">
-    <StackLayout width="100%" *ngIf="showContinueBtn || ((answeredIndex>=0 || doPlay === false) && !showContinueBtn)">
-      <Button class="Hind-Medium btn-transparent" (rippleTap)="continueClicked.emit($event)"
-        *ngIf="answeredText!== null && showContinueBtn" text="Next Round" stlRippleEffect></Button>
-      <FlexboxLayout *ngIf="(answeredIndex>=0 || doPlay === false) && !showContinueBtn" alignItems="center"
-        orientation="horizontal" justifyContent="center" backgroundColor="#c0c0c0" class="Hind-Medium" width="100%"
-        height="70">
-        <!-- <Label verticalAlignment="center" text="SAVING GAME STAT" color="#ffffff"></Label> -->
-        <ActivityIndicator marginLeft="10" verticalAlignment="center" color="gray" ios:width="25" ios:height="25"
+    <FlexboxLayout *ngIf="(answeredIndex>=0 || doPlay === false)" (rippleTap)="continueButtonClicked($event)" width="100%" class="Hind-Medium btn-transparent" justifyContent="center" stlRippleEffect>
+        <Label verticleAlignment="center" text="Next Round" ></Label>
+        <ActivityIndicator  *ngIf="showLoader" marginLeft="10" verticalAlignment="center" color="blue" ios:width="25" ios:height="25"
           android:width="25" android:height="25" busy="true" class="activity-indicator">
         </ActivityIndicator>
-      </FlexboxLayout>
-    </StackLayout>
+    </FlexboxLayout>
   </AbsoluteLayout>
 </GridLayout>

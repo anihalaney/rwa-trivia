@@ -71,8 +71,8 @@
           <user-reaction *ngIf="(user && question && showContinueBtn) || answeredIndex>=0 || doPlay === false" [user]='user' [question]='question'></user-reaction>
         </div>
         <div class="col-md-2 col-xs-2 continue-btn-div">  
-          <button mat-button *ngIf="showContinueBtn" (click)="continueClicked.emit($event)" class="startgame continue-btn">Continue</button>
-          <button mat-button *ngIf="(answeredIndex>=0 || doPlay === false) && !showContinueBtn" class="startgame continue-btn small" disabled><span class="loader"></span></button>
+          <button mat-button *ngIf="(answeredIndex>=0 || doPlay === false)" (click)="continueButtonClicked($event)" class="startgame continue-btn">Continue 
+            <span *ngIf="showLoader" class="loader"></span> </button>
         </div>
       </div>
     </ng-container>
