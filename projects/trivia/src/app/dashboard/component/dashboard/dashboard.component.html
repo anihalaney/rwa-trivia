@@ -21,7 +21,7 @@
 
     <!-- <div class="lives" *ngIf="user && account && account?.lives >=0 && isLivesEnable" > <span class="lives-text">{{account && account?.lives}}</span> </div> -->
     <div class="col-md-6 col-xs-12 col-md-12 align-right play-game-div-container">
-      <div *ngIf="user && account && account.lives >=0 && isLivesEnable" class="flex-div">
+      <div *ngIf="user && account && account?.lives >=0 && isLivesEnable" class="flex-div">
         <span style="font-size: 22px;" class="icon icon-life-icon"></span>
         <div  class="lives-text lives-div">
           <span> {{ (account && account?.lives / 10 < 1) && (account && account?.lives / 10 > 0)  ? '0' : '' }}{{account && account?.lives}} </span>

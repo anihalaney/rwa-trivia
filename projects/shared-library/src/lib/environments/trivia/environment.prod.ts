@@ -13,7 +13,7 @@ export const CONFIG: IConfig = {
     storageBucket: 'rwa-trivia.appspot.com',
     messagingSenderId: '479350787602'
   },
-  'functionsUrl': `https://bitwiser.io`,
+  'functionsUrl': `https://bitwiser.io/${appConstants.API_VERSION}`,
   'editorUrl': 'https://bitwiser.io/editor',
   'termsAndConditionsUrl': 'https://bitwiser.io/terms-and-conditions',
   'privacyUrl': 'https://bitwiser.io/privacy-policy',

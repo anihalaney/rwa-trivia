@@ -1,4 +1,5 @@
-import { Component, OnInit, NgZone, OnDestroy, ChangeDetectorRef, ViewContainerRef } from '@angular/core';
+import { Component, OnInit, NgZone, OnDestroy, ChangeDetectorRef, ViewContainerRef, ViewChild, AfterViewInit } from '@angular/core';
+
 import * as firebase from 'nativescript-plugin-firebase';
 import { Store, select } from '@ngrx/store';
 import { filter } from 'rxjs/operators';
@@ -29,6 +30,9 @@ import { ModalDialogOptions, ModalDialogService } from 'nativescript-angular/mod
 import { WelcomeScreenComponent } from '../../../../../shared-library/src/lib/shared/mobile/component';
 import * as appSettingsStorage from 'tns-core-modules/application-settings';
 
+import { RadSideDrawerComponent, SideDrawerType } from "nativescript-ui-sidedrawer/angular";
+import { RadSideDrawer } from 'nativescript-ui-sidedrawer';
+
 registerElement('Carousel', () => Carousel);
 registerElement('CarouselItem', () => CarouselItem);
 
@@ -38,7 +42,7 @@ registerElement('CarouselItem', () => CarouselItem);
 })
 
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
-export class AppComponent implements OnInit, OnDestroy {
+export class AppComponent implements OnInit, OnDestroy, AfterViewInit  {
   user: User;
   subscriptions = [];
   applicationSettings: ApplicationSettings;
@@ -46,6 +50,8 @@ export class AppComponent implements OnInit, OnDestroy {
   showBottomBar: Boolean = true;
   currentRouteUrl: string;
   bottomSafeArea: number;
+  @ViewChild(RadSideDrawerComponent, {static : true}) public drawerComponent: RadSideDrawerComponent;
+  private _drawer: SideDrawerType;
   constructor(
     private store: Store<AppState>,
     private navigationService: NavigationService,
@@ -65,16 +71,15 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+
     this.checkForceUpdate();
     if (application.ios && application.ios.window.safeAreaInsets) {
       const bottomSafeArea: number = application.ios.window.safeAreaInsets.bottom;
 
-      console.log('safe are<>', bottomSafeArea);
       this.bottomSafeArea = bottomSafeArea > 0 ? this.bottomSafeArea + bottomSafeArea : this.bottomSafeArea;
     }
     firebase.init({
       onMessageReceivedCallback: (message) => {
-        console.log('message', message);
         if (message.foreground) {
           this.utils.showMessage('success', message.body);
         }
@@ -123,11 +128,10 @@ export class AppComponent implements OnInit, OnDestroy {
         return;
       }
 
-
       this.currentRouteUrl = evt.url;
 
       this.showBottomBar = this.hideBottomBarForSelectedRoutes(evt.url);
-
+     
       switch (evt.urlAfterRedirects) {
         case '/login':
           this.utils.setScreenNameInFirebaseAnalytics(FirebaseScreenNameConstants.LOGIN);
@@ -170,15 +174,26 @@ export class AppComponent implements OnInit, OnDestroy {
     }));
   }
 
+  ngAfterViewInit () {
+    this._drawer = this.drawerComponent.sideDrawer;
+    if (this._drawer.ios) {
+        this._drawer.ios.defaultSideDrawer.style.shadowMode = 2;
+        this._drawer.ios.defaultSideDrawer.style.shadowOpacity = 0.1; // 0-1, higher is darker
+        this._drawer.ios.defaultSideDrawer.style.shadowRadius = 15; // higher is more spread
+    }
+  }
+
   drawerEvent(args) {
     this.isDrawerOpenOrClosed = args.eventName;
   }
 
   hideBottomBarForSelectedRoutes(url) {
+
     if (url === '/signup-extra-info' || url === '/select-category-tag' || url === '/first-question' ||
-      (url.includes('user/my/profile') && Platform.isIOS) ||
+      ((url.includes('user/my/profile')) && Platform.isIOS) ||   
+      ((url.includes('user/my/questions')) && Platform.isIOS) ||
       url === '/login' ||
-      (!url.includes('game-play/game-options') && (url.includes('game-play')))) {
+      url.includes('game-play')) {
       return false;
     } else {
       return true;
@@ -208,7 +223,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
     let version;
     try {
-      version = await appversion.getVersionCode();
+       version = await appversion.getVersionCode();
     } catch (error) {
       this.utils.sendErrorToCrashlytics('appLog', error);
       console.error(error);
@@ -229,7 +244,7 @@ export class AppComponent implements OnInit, OnDestroy {
             this.displayForceUpdateDialog(projectMeta.appStoreUrl);
           }
           if (this.applicationSettings.show_welcome_screen) {
-            this.showWelcomeScreen();
+            // this.showWelcomeScreen();
           }
 
         }

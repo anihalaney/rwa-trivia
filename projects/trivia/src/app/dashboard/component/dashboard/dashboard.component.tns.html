@@ -25,7 +25,7 @@
                 </GridLayout>
                 <GridLayout *ngIf="user && user!==null" class="index-0" col="3" ios:margin="3" android:margin="10"
                     verticalAlignment="center" horizontalAlignment="center" android:width="40" ios:width="40"
-                    (tap)="gotToNotification()" orientation="horizontal">
+                    stlRippleEffect (rippleTap)="gotToNotification()" orientation="horizontal">
                     <Label horizontalAlignment="center" stlRippleEffect stlBackgroundColor="transparent"
                         stlOpacity="0.5" stlBackgroundColorAfter="transparent" verticalAlignment="center"
                         text="&#xee900;" class="ico icon-notification icon" fontSize="22" color="#3b5998"></Label>
@@ -42,7 +42,6 @@
                     <GridLayout row="0" horizontalAlignment="left" rows="auto" columns="auto, *"
                         class="dashboard_body-bits" *ngIf="user && applicationSettings?.tokens?.enable">
                         <FlexboxLayout col="0" *ngIf="account && user" iosOverflowSafeArea="false">
-
                             <Image src="~/assets/images/mobile/bits.png" row="0" col="1"></Image>
                             <Label class="dashboard_body-text Roboto-Medium" [text]="account.bits || 0"
                                 textWrap="true"></Label>
@@ -55,7 +54,6 @@
                     </GridLayout>
                     <GridLayout row="1" rows="*, *, *, *, *, *" columns="*" iosOverflowSafeArea="false"
                         class="dashboard_body-grid">
-
                         <render-box row="0" col="0" [setBackgroundColor]="'#283b66'" [theme]="'dark'">
                             <GridLayout rows="auto,auto,auto,auto,auto" class="dashboard_body-grid0">
                                 <FlexboxLayout row="0" class="space-between dashboard_body-grid0-1">
@@ -142,12 +140,12 @@
                             <GridLayout rows="auto,auto,auto" class="q-title" iosOverflowSafeArea="false">
                                 <Label row="0" text="Your Questions" textWrap="true" class="active-game"></Label>
                                 <GridLayout rows="auto,auto,auto" row="1" class="box"
-                                    (tap)="yourQuestion.toggleButton = !yourQuestion.toggleButton">
+                                     (tap)="yourQuestion.toggleButton = !yourQuestion.toggleButton">
                                     <Label row="0" [text]="yourQuestion?.questionText" class="your-question"
                                         textWrap="true"></Label>
                                     <FlexboxLayout row="1" class="space-between"
-                                        *ngIf="yourQuestion && yourQuestion?.submittedDays">
-                                        <Label text="Submitted {{yourQuestion?.submittedDays}} days ago"
+                                        *ngIf="yourQuestion && yourQuestion?.createdOn">
+                                        <Label text="Submitted {{ yourQuestion?.createdOn?.getTime() | timeAgo}}"
                                             class="submitted" textWrap="true"></Label>
                                         <Label *ngIf="!yourQuestion?.toggleButton" verticalAlignment="center"
                                             text="&#xf078;" class="fas icon" textWrap="true"></Label>
@@ -180,8 +178,7 @@
                                     </FlexboxLayout>
                                 </GridLayout>
                                 <WrapLayout row="2">
-                                    <Button horizontaAlignment="left" class="btn-transparent blue-border"
-                                        text="SUBMIT A QUESTION" (tap)="navigateToMyQuestion()"></Button>
+                                    <Label text="SUBMIT A QUESTION" horizontaAlignment="left"  class="btn-transparent blue-border" stlRippleEffect (rippleTap)="navigateToMyQuestion()"></Label>
                                 </WrapLayout>
                             </GridLayout>
                         </GridLayout>
@@ -198,9 +195,7 @@
                             </GridLayout>
                             <GridLayout row="1" orientation="horizontal" horizontalAlignment="left"
                                 iosOverflowSafeArea="false">
-                                <Button class="btn-transparent blue-border" text="SUBMIT A QUESTION"
-                                    (tap)="navigateToMyQuestion()">
-                                </Button>
+                                <Label text="SUBMIT A QUESTION" class="btn-transparent blue-border" stlRippleEffect (rippleTap)="navigateToMyQuestion()"></Label>
                             </GridLayout>
                         </GridLayout>
                     </GridLayout>

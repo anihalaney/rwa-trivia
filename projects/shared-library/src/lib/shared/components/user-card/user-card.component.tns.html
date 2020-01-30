@@ -47,11 +47,10 @@
 
     <GridLayout row="0" col="1" rows="*, *, *" columns="*" class="padding-10">
       <StackLayout row="0" col="0">
-        <Label *ngIf="user?.displayName" [text]="user?.displayName" fontSize="16" class="leaderboard-user-name"></Label>
-        <Label *ngIf="!user?.displayName" [text]="'unknown'" class="leaderboard-user-name" fontSize="16"></Label>
-        <Label *ngIf="user?.isFriend && loggedInUserId"
-        text="is your friend" textWrap="true" class="friend-check"
+        <Label class="leaderboard-user-name"  [text]="user?.displayName ? user?.displayName : 'unknown'"></Label>
+        <Label [text]="(user?.isFriend) ?  'is your friend' : '' " textWrap="true"  [visibility]="user?.isFriend ? 'visible' : 'collapsed'" textWrap="true" class="friend-check"
         fontSize="14"> </Label>
+    
         <FlexboxLayout>
           <Image src="~/assets/images/bits.png" marginRight="5" width="22" height="22"></Image>
           <Label class="total-bits" text="{{user?.bits}}" fontWeight="400" textWrap="true"></Label>
@@ -163,7 +162,7 @@
 <ng-container *ngIf="user && userCardType.USER_IMAGE_NAME_WITH_SCORE_IN_GAME_PLAY_SINGLE_PLAYER === type">
   <FlexboxLayout row="0" col="0" colSpan="2" class="Roboto-Regular" class="play-now-container">
     <FlexboxLayout >
-      <StackLayout (tap)='goToDashboard()' class="back-icon" width="10" verticalAlignment="middle">
+      <StackLayout stlRippleEffect (rippleTap)='goToDashboard()' class="back-icon" width="10" verticalAlignment="middle">
         <Image src="~/assets/images/back-action.png" ></Image>
       </StackLayout>
       <Label text="{{otherInfo.actionText}}" textWrap="true"></Label>
@@ -210,7 +209,7 @@
   <GridLayout row="0" col="0" rows="*" columns="32,*,*">
     <!-- <Image (tap)='goToDashboard()' src="~/assets/images/back-action.png" class="back-icon"></Image> -->
 
-      <StackLayout marginTop="4" marginRight="15" row="0" col="0" width="20" (tap)='goToDashboard()' width="18" height="18" class="back-icon"  verticalAlignment="top">
+      <StackLayout marginTop="4" marginRight="15" row="0" col="0" width="20" stlRippleEffect (rippleTap)='goToDashboard()' width="18" height="18" class="back-icon"  verticalAlignment="top">
         <Image  width="24" height="24" src="~/assets/images/back-action.png" ></Image>
       </StackLayout>
     <!-- First Player-->

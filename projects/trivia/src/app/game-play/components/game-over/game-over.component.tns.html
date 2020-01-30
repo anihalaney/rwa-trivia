@@ -351,6 +351,22 @@
                           font-weight: 600" stlRippleEffect text="Reported"></Button>
                   </StackLayout>
                 </StackLayout>
+                <StackLayout row="0" col="1" orientation="horizontal" horizontalAlignment="right">
+                  <StackLayout orientation="vertical">
+                      <FlexboxLayout justifyContent="flex-end">
+                          <Label (tap)="handlePopOver(row)" stlRippleEffect
+                              stlBackgroundColorAfter="transparent" stlBackgroundColor="transparent"
+                              stlOpacity="0.5" text="&#xf142;" fontSize="22" padding="5 10"
+                              class="fa"></Label>
+                      </FlexboxLayout>
+                      <Button (rippleTap)="openDialogReport(row)"
+                          *ngIf="row.openReport && !game.playerQnAs[i].isReported"
+                          style="border-radius:5; height: 30; color:#000; border-width:2px; border-color:#f3f3f3; background: white"
+                          stlRippleEffect text="Report"></Button>
+                      <Button *ngIf="row.openReport && game.playerQnAs[i]?.isReported" style="border-radius:5;height: 30; color:red; border-width:2px; border-color:#f3f3f3; background: white;
+                          font-weight: 600" stlRippleEffect text="Reported"></Button>
+                  </StackLayout>
+              </StackLayout>
               </GridLayout>
             </StackLayout>
           </ScrollView>

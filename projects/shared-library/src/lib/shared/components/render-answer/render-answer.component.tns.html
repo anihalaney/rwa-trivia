@@ -9,10 +9,10 @@
         [isEnabled]="doPlay"></WebView>
 </GridLayout>
 <ng-template #renderView>
-    <GridLayout class="{{theme}}-theme">
+    <GridLayout>
         <AbsoluteLayout>
-            <Label top="2" left="10" *ngIf="isRight" text="&#xf00c;" color="#fff" class="fas" textWrap="true"></Label>
-            <Label top="2" left="10" *ngIf="isWrong" text="&#xf00d;" color="#fff" class="fas" textWrap="true"></Label>
+            <Label top="2" zIndex="9999" left="10" *ngIf="isRight" class="zIndex" text="&#xf00c;" color="#fff" class="fas"></Label>
+            <Label top="2" zIndex="9999" left="10" *ngIf="isWrong" text="&#xf00d;" color="#fff" class="fas"></Label>
         </AbsoluteLayout>
         <Label class="report-text-color QA-text-align" text="{{ currentAnswer?.answerText }}" [class.wrong]="isWrong"
             [class.right]="isRight" [ngClass]="{'answer': isGameAnswer}" [ngClass]="{'display-answer': !isGameAnswer}"

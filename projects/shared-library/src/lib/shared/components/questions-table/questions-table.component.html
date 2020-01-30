@@ -30,7 +30,7 @@
   <ng-container cdkColumnDef="questionText">
     <mat-header-cell class="col-question" *cdkHeaderCellDef> Question </mat-header-cell>
     <mat-cell *cdkCellDef="let row;let i = index" class="col-question" fxLayout="column" fxLayoutAlign="space-between">
-      <div *ngIf="row !== editQuestion && row !== viewReasonArray[i]"  [ngStyle]="{backgroundColor: row.is_draft === true && isAdmin != true ? '#dddddd': ''}">
+      <div *ngIf="row !== editQuestion && row !== viewReasonArray[i]">
         <!-- <div *ngIf="getDisplayStatus(row.status)==='REQUIRED_CHANGE' || showButtons" class="col-xs-12 textrigth">
           <mat-icon class="cursor" (click)="editQuestions(row)">edit</mat-icon>
         </div> -->
@@ -62,9 +62,11 @@
                     class="status-btn">
                     <button class="view-reason-btn" type="button" (click)='showReason(row,i)'>View Reason</button>
                   </div>
+                  <div> <label  *ngIf="row.is_draft" ><b>Draft</b></label></div>
                   <div *ngIf="getDisplayStatus(row.status)==='REQUIRED_CHANGE' || (row.is_draft && (getDisplayStatus(row.status)==='REQUIRED_CHANGE' || getDisplayStatus(row.status)==='PENDING')) || showButtons" class="status-btn">
-                    <button class="edit-btn" type="button" (click)="editQuestions(row)">Edit it</button>
+                    <button class="edit-btn" type="button" (click)="editQuestions(row)">Edit</button>
                   </div>
+              
                 </div>
               </div>
             </li>

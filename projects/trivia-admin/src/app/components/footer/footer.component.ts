@@ -16,7 +16,6 @@ export class FooterComponent implements OnInit, OnDestroy {
 
   constructor(private router: Router, private windowRef: WindowRef) {
     this.hostname = `${windowRef.nativeWindow.location.protocol}//${windowRef.nativeWindow.location.hostname}`;
-   // console.log('hostname---->', this.hostname);
   }
 
   ngOnInit() {

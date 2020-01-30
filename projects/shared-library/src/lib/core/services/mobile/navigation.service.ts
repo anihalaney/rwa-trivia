@@ -19,10 +19,7 @@ export class NavigationService {
   back() {
     if (this.router.url === '/dashboard/leaderboard' ||
     this.router.url === '/user/my/invite-friends' ||
-    this.router.url === '/privacy-policy' ||
-    this.router.url === '/terms-and-conditions' ||
     this.router.url === '/achievements' ||
-    this.router.url === '/user-feedback' ||
     this.router.url === '/notification' ||
     this.router.url === '/user/my/questions' ||
     this.router.url.includes('/user/my/questions?backUrl') ||

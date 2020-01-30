@@ -131,7 +131,7 @@ const commandList = {
             const project = args.argv.productVariant;
             args.options(
                 {
-                    'setConfig': { 'default': env === 'production' ? `npm run firebase -P ${project} functions:config:set environment.production=true` : '' }
+                    'setConfig': { 'default': env === 'production' ? `firebase -P ${project}-production  functions:config:set environment.production=true && ` : '' }
                 }
             );
             replaceVariableInIndex(['trivia', 'trivia-admin'], args.argv.productVariant);

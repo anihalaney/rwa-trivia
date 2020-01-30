@@ -242,22 +242,22 @@ export class DrawerComponent implements OnInit, OnDestroy {
     }
 
     navigateToRecentGames() {
-        this.routerExtension.navigate(['/recent-games'], { clearHistory: true });
+        this.routerExtension.navigate(['/recent-games']);
         this.closeDrawer();
     }
 
     navigateToProfileSettings() {
-        this.routerExtension.navigate(['/user/my/profile', this.user ? this.user.userId : ''], { clearHistory: true });
+        this.routerExtension.navigate(['/user/my/profile', this.user ? this.user.userId : '']);
         this.closeDrawer();
     }
 
     navigateToGameProfile() {
-        this.routerExtension.navigate(['/user/my/game-profile', this.user ? this.user.userId : ''], { clearHistory: true });
+        this.routerExtension.navigate(['/user/my/game-profile', this.user ? this.user.userId : '']);
         this.closeDrawer();
     }
 
     navigateToMyQuestion() {
-        this.routerExtension.navigate(['/user/my/questions'], { clearHistory: true });
+        this.routerExtension.navigate(['/user/my/questions']);
         this.closeDrawer();
     }
 

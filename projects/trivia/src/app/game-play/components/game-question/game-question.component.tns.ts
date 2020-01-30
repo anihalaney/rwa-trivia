@@ -29,8 +29,8 @@ export class GameQuestionComponent extends GameQuestion implements OnInit, OnDes
   public progressValue: number;
   stopProcessBar;
   doPlay = true;
-  
   actionText: string;
+  theme: string;
 
   photoUrl: String = `~/assets/icons/${projectMeta.projectName}/icon-192x192.png`;
   userDict$: Observable<{ [key: string]: User }>;
@@ -38,7 +38,6 @@ export class GameQuestionComponent extends GameQuestion implements OnInit, OnDes
   elapsedTime: number;
   timerSub: Subscription;
   account: Account;
-  theme: string;
   constructor(private utils: Utils, public store: Store<GamePlayState>, private cd: ChangeDetectorRef) {
     super();
     this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
