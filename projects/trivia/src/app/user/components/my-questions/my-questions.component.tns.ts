@@ -10,6 +10,7 @@ import { Page } from 'tns-core-modules/ui/page';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { FirebaseScreenNameConstants } from 'shared-library/shared/model';
 import { Utils } from 'shared-library/core/services';
+import * as Platform from "tns-core-modules/platform";
 
 @Component({
   selector: 'my-questions',
@@ -29,6 +30,10 @@ export class MyQuestionsComponent extends MyQuestions implements OnDestroy, OnIn
   tabIndex = 0;
   renderView = false;
   tab = 'published';
+  platform = Platform;
+
+
+
 
   constructor(public store: Store<AppState>,
     public questionActions: QuestionActions,
@@ -80,6 +85,7 @@ export class MyQuestionsComponent extends MyQuestions implements OnDestroy, OnIn
     this.page.actionBarHidden = false;
     this.cd.markForCheck();
   }
+
 
   getDisplayStatus(status: number): string {
     return QuestionStatus[status];

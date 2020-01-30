@@ -5,8 +5,8 @@
         [otherInfo]="otherInfo(game)" [isGame]="true">
     </app-user-card>
     <Button  row="0" col="1" text="&#xf00c;" class="fa text-icon-field" verticalAlignment="middle" backgroundColor="#71b02b" stlRippleEffect color="#fff"
-        (tap)="acceptGameInvitation(game?.gameId)" width="28" height="28" borderRadius="15">
+        (rippleTap)="acceptGameInvitation(game?.gameId)" width="28" height="28" borderRadius="15">
     </Button>
     <Button  row="0" col="2" text="&#xf00d;" class="fa text-icon-field" verticalAlignment="middle" backgroundColor="#f50057" stlRippleEffect color="#fff" 
-        (tap)="rejectGameInvitation()"  width="28" height="28" borderRadius="15"></Button>
+        (rippleTap)="rejectGameInvitation()"  width="28" height="28" borderRadius="15"></Button>
 </GridLayout>

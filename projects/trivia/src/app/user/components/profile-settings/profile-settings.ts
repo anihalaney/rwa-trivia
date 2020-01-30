@@ -99,9 +99,9 @@ export class ProfileSettings {
   socialProfileObj: any;
   singleFieldEdit = {
     displayName: false,
+    location: false,
     email: false,
     phoneNo: false,
-    location: false,
     socialProfile: false,
     name: false
   };
@@ -132,6 +132,18 @@ export class ProfileSettings {
     public authenticationProvider: AuthenticationProvider,
     @Inject(PLATFORM_ID) public platformId: Object
   ) {
+
+    // remove single field edit for mobile
+    if (!(
+      isPlatformBrowser(this.platformId) === false &&
+      isPlatformServer(this.platformId) === false
+    )) {
+      delete this.singleFieldEdit.email;
+      delete this.singleFieldEdit.phoneNo;
+      delete this.singleFieldEdit.socialProfile;
+      delete this.singleFieldEdit.name;
+    }
+
     this.toggleLoader(true);
     this.fb = formBuilder;
     this.tagsObs = this.store.select(getTags);
@@ -464,6 +476,9 @@ export class ProfileSettings {
         this.userForm.get("email").updateValueAndValidity();
         break;
     }
+    this.filteredTags$ = this.userForm.get('tags').valueChanges
+    .pipe(map(val => val.length > 0 ? this.filter(val) : []));
+    
     this.createSocialProfileControl();
     if (
       isPlatformBrowser(this.platformId) === false &&
@@ -478,6 +493,7 @@ export class ProfileSettings {
     }
   }
 
+  
   createSocialProfileControl() {
     if (this.socialProfileObj) {
       this.socialProfileObj.map(profile => {
@@ -650,10 +666,12 @@ export class ProfileSettings {
         this.userForm.updateValueAndValidity();
       }
     } else if (field === "socialProfile") {
-      this.socialProfileSettings.map(res => {
-        return (res.disable = true);
+      this.socialProfileSettings =  this.socialProfileSettings.map(res => {
+        res.disable = true;
+        return res;
       });
       this.cd.markForCheck();
+      this.cd.detectChanges();
     } else if (field === "email") {
       this.userForm
         .get("email")
@@ -675,6 +693,7 @@ export class ProfileSettings {
   }
 
   setValidation(field: string) {
+
     for (const property in this.singleFieldEdit) {
       if (property !== "socialProfile") {
         this.userForm.get(property).clearValidators();

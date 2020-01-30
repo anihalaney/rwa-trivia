@@ -40,6 +40,7 @@ export class User {
   phoneNumber?: string;
   totalFriends?: number;
   bits?: number;
+  date?: any;
 
   constructor(authState?: firebase.User & { name: string }) {
     this.totalFriends = 0;

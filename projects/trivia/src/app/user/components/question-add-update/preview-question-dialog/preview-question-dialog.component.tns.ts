@@ -18,6 +18,7 @@ export class PreviewQuestionDialogComponent implements OnChanges, OnDestroy {
   ref: any;
   subscriptions = [];
   categoryName = '';
+  theme: string;
   @Input() question: Question;
   @Input() categoryDictionary: Category[];
 

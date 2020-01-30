@@ -2,7 +2,7 @@
   <ScrollView>
       <GridLayout padding="0 5" rows="*,*,*,*" columns="*">
         <render-box margin="0 10" [theme]="'dark'" class="dark-theme">
-          <StackLayout row="0" col="0" *ngIf="question" margin="10">
+          <StackLayout row="0" col="0" margin="10">
             <render-question [question]="question"></render-question>
           </StackLayout>
           <StackLayout row="1" col="0" color="black" orientation="horizontal" margin="5 10 10 10"
@@ -17,10 +17,10 @@
                 [text]="tags" padding="5 10" textWrap="true"></Label>
             </StackLayout>
           </FlexboxLayout>
-          <StackLayout row="3" col="0" *ngIf="question">
-            <ng-template ngFor let-answer [ngForOf]="question.answers">
-              <StackLayout orientation="horizontal" class="question-answered" margin="10"
-                [style.padding]="answer.isRichEditor? 0 : 15">
+          <StackLayout row="3" col="0">
+            <ng-template ngFor let-answer [ngForOf]="question?.answers">
+              <StackLayout orientation="horizontal" class="question-answered question-box" margin="10"
+                [style.padding]="answer?.isRichEditor? 0 : 15">
                 <render-answer  [answer]="answer" [bgColor]="'#9ccc65'"></render-answer>
               </StackLayout>
             </ng-template>

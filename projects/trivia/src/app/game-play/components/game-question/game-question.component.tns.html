@@ -1,7 +1,6 @@
 <GridLayout>
-  <ScrollView id="scrollList">
+  <ScrollView [class.m-b-70]="showContinueBtn || ((answeredIndex>=0 || doPlay === false) && !showContinueBtn)" id="scrollList">
     <StackLayout margin="0 10"
-      [class.m-b-70]="showContinueBtn || ((answeredIndex>=0 || doPlay === false) && !showContinueBtn)"
       backgroundColor="#ffffff">
       <GridLayout *ngIf="user && user!==null && playerMode == PlayerMode.Single" rows="*,*,*,*" columns="*,*"
         class="sideStackLayoutHeader" padding="10 0">
@@ -10,7 +9,7 @@
           [otherInfo]="{bits: account.bits, bytes:account.bytes, progressValue: progressValue, correctCount:correctCount,questionRound:questionRound,totalRound:totalRound,actionText:actionText }">
         </app-user-card>
       </GridLayout>
-      <GridLayout *ngIf="user && user!==null && playerMode == PlayerMode.Opponent" rows="*,*,*" columns="*"
+      <GridLayout margin="0 10" *ngIf="user && user!==null && playerMode == PlayerMode.Opponent" rows="*,*,*" columns="*"
         class="sideStackLayoutHeader" paddingTop="10">
         <app-user-card [user]="user" [userId]="user.userId" [isGamePlay]=true
           [type]="userCardType.USER_IMAGE_NAME_WITH_SCORE_IN_GAME_PLAY_TWO_PLAYER"

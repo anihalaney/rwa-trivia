@@ -82,7 +82,7 @@ export class QuestionsTableComponent implements OnInit, OnChanges {
     const questionIndex = this.questions.findIndex((data) => data.id === id);
     if (this.questions[questionIndex].answers[index] && !this.questions[questionIndex].answers[index]['height']) {
       this.questions[questionIndex].answers[index]['height'] = height;
-      if (!this.questions[questionIndex].answers.some(data => data.answerText && !data['height'])) {
+      if (!this.questions[questionIndex].answers.some(data => !data['height'])) {
         this.questions = [
           ...this.questions.slice( 0, questionIndex ),
           {
@@ -93,7 +93,7 @@ export class QuestionsTableComponent implements OnInit, OnChanges {
       if (qIndex > -1 && isIOS) {
         // wait for the UI to finish the loading
         setTimeout(() => {
-          this.radListView.listView.scrollToIndex(qIndex, true, ListViewItemSnapMode.Start);
+          // this.radListView.listView.scrollToIndex(qIndex, true, ListViewItemSnapMode.Start);
         }, 0);
       }
       }
