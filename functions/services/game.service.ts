@@ -167,10 +167,10 @@ export class GameService {
     }
 
     /**
-     * GetAllLaggedGames
+     * getAllGameForReminder
      * return status
      */
-    static async getAllLaggedGames(timeStamp: number, type: string, gameStatus = []): Promise<any> {
+    static async getAllGameForReminder(timeStamp: number, type: string, gameStatus = []): Promise<any> {
         try {
             if (gameStatus.length > 0) {
                 return GameService.getGames(
@@ -202,13 +202,13 @@ export class GameService {
      * GetAllExpiredGames
      * return status
      */
-    static async getAllExpiredGames(timeStamp: number, type: string[]): Promise<any> {
+    static async getAllExpiredGames(timeStamp: number, gameStatus: string[]): Promise<any> {
         try {
             return GameService.getGames(
                 await GameService.gameFireStoreClient
                     .collection(`/${CollectionConstants.GAMES}`)
                     .where(GameConstants.GAME_OVER, GeneralConstants.DOUBLE_EQUAL, false)
-                    .where(GameConstants.GAME_STATUS , GeneralConstants.IN , type)
+                    .where(GameConstants.GAME_STATUS , GeneralConstants.IN , gameStatus)
                     .where(GameConstants.TURN_AT, GeneralConstants.LESS_THAN_OR_EQUAL, timeStamp)
                     .get()
                 );
