@@ -244,7 +244,6 @@ export class Dashboard implements OnDestroy {
     );
     this.subscriptions.push(
       this.activeGames$.subscribe(games => {
-          console.log('Active Games>>>', games.length);
         this.activeGames = games;
         this.cd.markForCheck();
         this.singlePlayerCount = 0;
