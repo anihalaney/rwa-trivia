@@ -123,14 +123,14 @@ export class GameMechanics {
 
     static async doSendGameReminderNotification(timeBefore: number): Promise<boolean> {
         try {
-            let type = '';
+            let reminderInterval = '';
             let gameStatus = [];
             if (timeBefore === schedulerConstants.notificationInterval) {
-                type = 'reminder32Min';
+                reminderInterval = 'reminder32Min';
                 gameStatus = [GameStatus.STARTED, GameStatus.RESTARTED, GameStatus.WAITING_FOR_NEXT_Q,
                     GameStatus.AVAILABLE_FOR_OPPONENT, GameStatus.JOINED_GAME];
             } else if (timeBefore === schedulerConstants.reminderNotificationInterval) {
-                type = 'reminder8Hr';
+                reminderInterval = 'reminder8Hr';
                 gameStatus = [];
             } else {
                 return true;
@@ -139,13 +139,13 @@ export class GameMechanics {
             const millis = Utils.getUTCTimeStamp();
             const noPlayTime = (CalenderConstants.HOURS_CALCULATIONS * schedulerConstants.gamePlayLagDuration);
             const notificationDuration = millis - ( noPlayTime -  (timeBefore * 60 * 1000));
-            const games: Game[] = await GameService.getAllGameForReminder(notificationDuration, type, gameStatus);
+            const games: Game[] = await GameService.getAllGameForReminder(notificationDuration, reminderInterval, gameStatus);
             for (const game of games) {
                 if (game.gameId) {
                     PushNotification.sendGamePlayPushNotifications(game,
                         game.playerIds.filter((playerId) => playerId !== game.nextTurnPlayerId)[0],
                     pushNotificationRouteConstants.GAME_REMAINING_TIME_NOTIFICATIONS, timeBefore);
-                    game[type] = true;
+                    game[reminderInterval] = true;
                     const dbGame = game.getDbModel();
                     if (dbGame.id) {
                         await GameService.setGame(dbGame);
