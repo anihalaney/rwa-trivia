@@ -31,7 +31,7 @@
       </FlexboxLayout>
       <render-box [setBackgroundColor]="'#f7f7f7'">
         <StackLayout padding="20 10" class="game-question">
-          <render-question [question]="question" [questionIndex]="questionIndex"></render-question>
+          <render-question [question]="question" [questionIndex]="questionIndex" [theme]="'light'"></render-question>
           <FlexboxLayout *ngIf="question && question.tags" margin="7 0 7 -2.5" flexWrap="wrap">
             <Label *ngIf="categoryName" text="{{categoryName}}"
               [style.backgroundColor]="theme === 'dark' ? '#405177':'#e2e2e2'"
@@ -56,7 +56,7 @@
 
               <render-answer [answer]="answer" [isWrong]="answeredIndex === i && correctAnswerIndex !== i"
                 [isRight]="correctAnswerIndex === i" [doPlay]="doPlay" [isUserInteractionEnabled]="doPlay"
-                [isGameAnswer]="true"></render-answer>
+                [isGameAnswer]="true" [theme]="'light'"></render-answer>
             </StackLayout>
           </StackLayout>
           <StackLayout orientation="horizontal" horizontalAlignment="left">
