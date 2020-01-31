@@ -155,7 +155,7 @@ export class PushNotification {
                                 if (gameObj.GameStatus === GameStatus.WAITING_FOR_FRIEND_INVITATION_ACCEPTANCE
                                     || gameObj.GameStatus === GameStatus.WAITING_FOR_RANDOM_PLAYER_INVITATION_ACCEPTANCE) {
                                         msgText =
-                                        `Your bitwiser game Invitation from ${dbUser.displayName} will expire in 8 hours, Accept Invite!`;
+                                        `Your game play invitation from ${dbUser.displayName} will expire in 8 hours. Accept the challenge and play now!`;
                                 } else {
                                         msgText = 'Your bitWiser game will expire in 8 hours, play now!';
                                 }
