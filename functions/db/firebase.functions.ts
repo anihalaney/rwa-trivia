@@ -199,6 +199,8 @@ export class FirebaseFunctions {
                     const accountObj: any = {};
                     accountObj.id = data.userId;
                     accountObj.lives = appSetting.lives.max_lives;
+                    accountObj.lastGamePlayed = Utils.getUTCTimeStamp();
+                    accountObj.lastGamePlayedNotification = false;
                     await AccountService.setAccount(accountObj);
                 }
             }
@@ -258,7 +260,7 @@ export class FirebaseFunctions {
             if (data) {
                 const question: Question = data;
 
-                const message = `Your Question ${question.questionText} is approved `;
+                const message = `Yay! Your submitted question has been approved for the bitWiser question bank. You earned 8 bytes!!`;
                 console.log('Notification sent on question approved');
                 PushNotification.sendGamePlayPushNotifications(message, question.created_uid,
                     pushNotificationRouteConstants.QUESTION_NOTIFICATIONS);

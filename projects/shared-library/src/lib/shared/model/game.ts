@@ -44,10 +44,12 @@ export class Game {
   public turnAt: number;
   public gameOverAt: number;
   public round: number;
+  public reminder32Min: boolean;
+  public reminder8Hr: boolean;
 
   constructor(gameOptions: GameOptions, player1UUId: string, gameId?: string, playerQnAs?: any, gameOver?: boolean,
     nextTurnPlayerId?: string, player2UUId?: string, winnerPlayerId?: string, gameStatus?: string, createdAt?: number, turnAt?: number,
-    gameOverAt?: number, round?: number) {
+    gameOverAt?: number, round?: number, reminder32Min?: boolean, reminder8Hr?: boolean) {
     //defaults
     this._gameOptions = gameOptions;
     this._playerIds = [player1UUId];
@@ -95,6 +97,19 @@ export class Game {
 
     if (gameOverAt) {
       this.gameOverAt = gameOverAt;
+    }
+
+    if (reminder32Min) {
+      this.reminder32Min = reminder32Min;
+    } else {
+      this.reminder32Min = false;
+    }
+
+
+    if (reminder8Hr) {
+      this.reminder8Hr = reminder8Hr;
+    } else {
+      this.reminder8Hr = false;
     }
 
     this.stats = {};
@@ -258,7 +273,9 @@ export class Game {
       'playerQnAs': this.playerQnAs,
       'nextTurnPlayerId': (this.nextTurnPlayerId) ? this.nextTurnPlayerId : '',
       'GameStatus': (this.GameStatus) ? this.GameStatus : GameStatus.STARTED,
-      'round': this.round
+      'round': this.round,
+      'reminder32Min': this.reminder32Min,
+      'reminder8Hr': this.reminder8Hr
     };
 
     if (this.winnerPlayerId) {
@@ -274,6 +291,14 @@ export class Game {
 
     if (this.turnAt) {
       dbModel['turnAt'] = this.turnAt;
+    }
+
+    if (this.reminder32Min) {
+      dbModel['reminder32Min'] = this.reminder32Min;
+    }
+
+    if (this.reminder8Hr) {
+      dbModel['reminder8Hr'] = this.reminder8Hr;
     }
 
     if (this.gameOverAt) {
@@ -298,7 +323,8 @@ export class Game {
     const game: Game = new Game(dbModel['gameOptions'], dbModel['playerIds'][0], dbModel['id'],
       dbModel['playerQnAs'], dbModel['gameOver'], dbModel['nextTurnPlayerId'],
       (dbModel['playerIds'].length > 1) ? dbModel['playerIds'][1] : undefined, dbModel['winnerPlayerId'],
-      dbModel['GameStatus'], dbModel['createdAt'], dbModel['turnAt'],dbModel['gameOverAt'],  dbModel['round']);
+      dbModel['GameStatus'], dbModel['createdAt'], dbModel['turnAt'],dbModel['gameOverAt'],  dbModel['round'], dbModel['reminder32Min'],
+      dbModel['reminder8Hr']);
     if (dbModel['playerIds'].length > 1) {
       game.addPlayer(dbModel['playerIds'][1]);  //2 players
     }
