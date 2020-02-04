@@ -23,12 +23,6 @@ export class GameDialogComponent extends GameDialog implements OnDestroy {
     super(store, userActions, utils, cd, router);
   }
 
-  continueClicked($event) {
-    this.continueGame();
-    if (this.showLoader) {
-      this.cd.markForCheck();
-    }
-  }
 
 
   ngOnDestroy() {

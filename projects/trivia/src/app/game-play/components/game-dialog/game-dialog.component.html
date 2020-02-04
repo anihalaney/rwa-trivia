@@ -62,10 +62,11 @@
     </div>
   </div>
   
-  <game-question *ngIf="currentQuestion && !showLoader && !showBadge && !showWinBadge && !showContinueScreen" [categoryName]="categoryName"
-    [question]="currentQuestion" [questionIndex]="questionIndex" [timer]="timer" [MAX_TIME_IN_SECONDS]="MAX_TIME_IN_SECONDS"
+  <game-question *ngIf="showCurrentQuestion && !showLoader && !showBadge && !showWinBadge && !showContinueScreen" [categoryName]="categoryName"
+    [question]="currentQuestion" [gameOver]="gameOver" [questionIndex]="questionIndex" [timer]="timer" [MAX_TIME_IN_SECONDS]="MAX_TIME_IN_SECONDS"
     [continueNext]="continueNext" [correctCount]="correctAnswerCount" [noOfQuestions]="questionIndex" [showContinueBtn]="showContinueBtn"
-    [otherPlayer]="otherPlayer" (answerClicked)="answerClicked($event)" (okClick)="okClick($event)" (continueClicked)="continueClicked($event)"
+    [otherPlayer]="otherPlayer" [showCurrentQuestion]="showCurrentQuestion" (gameOverButtonClicked)="gameOverButtonClicked($event)" 
+    (answerClicked)="answerClicked($event)" (okClick)="okClick($event)" (continueClicked)="continueClicked($event)"
      [userDict]="userDict" [questionRound]="game.round" [totalRound]="totalRound"
     [turnFlag]="turnFlag" [threeConsecutiveAnswer]="threeConsecutiveAnswer" [applicationSettings]="applicationSettings" [user]="user">
   </game-question>
@@ -74,7 +75,7 @@
     (continueClicked)="continueClicked($event)">
   </game-question-continue>
 
-  <game-over *ngIf="gameOver && !showContinueScreen" class="overlay" [userDict]="userDict" [game]="game" [categoryName]="categoryName"
+  <game-over *ngIf="gameOver && !showCurrentQuestion  && !showContinueScreen && !currentQuestion" class="overlay" [userDict]="userDict" [game]="game" [categoryName]="categoryName"
     [correctCount]="correctAnswerCount" [noOfQuestions]="questionIndex" [totalRound]="totalRound"
     (gameOverContinueClicked)="gameOverContinueClicked()">
   </game-over>

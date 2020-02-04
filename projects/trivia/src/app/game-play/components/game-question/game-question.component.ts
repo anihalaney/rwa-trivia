@@ -63,5 +63,25 @@ export class GameQuestionComponent extends GameQuestion implements OnInit, OnDes
       const elapsedTime = this.MAX_TIME_IN_SECONDS - changes.timer.currentValue;
       this.alpha = (360 * elapsedTime) / this.MAX_TIME_IN_SECONDS;
     }
+
+    if (changes.showContinueBtn && changes.showContinueBtn.currentValue && changes.showContinueBtn.currentValue === true) {
+        if (this.showLoader && !this.gameOver) {
+            super.continueButtonClicked('');
+        } else if (this.showLoader && this.gameOver) {
+          this.gameOverButtonClicked.emit('');
+        }
+    }
+
+    if (changes.showCurrentQuestion && changes.showCurrentQuestion.currentValue && changes.showCurrentQuestion.currentValue === true) {
+      if (this.showLoader) {
+        this.gameOverButtonClicked.emit('');
+      }
+    }
+
+    if (changes.gameOver && changes.gameOver.currentValue && changes.gameOver.currentValue === true) {
+      if (this.showLoader) {
+        this.gameOverButtonClicked.emit('');
+      }
+    }
   }
 }
