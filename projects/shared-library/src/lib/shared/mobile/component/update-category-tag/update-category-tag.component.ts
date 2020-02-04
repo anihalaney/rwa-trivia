@@ -14,12 +14,14 @@ import { map, flatMap } from "rxjs/operators";
 import { Utils } from "./../../../../core/services/utils";
 import { AutoUnsubscribe } from "ngx-auto-unsubscribe";
 
-@AutoUnsubscribe({ arrayName: "subscriptions" })
+
 @Component({
   selector: "app-update-category-tag",
   templateUrl: "./update-category-tag.component.html",
   styleUrls: ["./update-category-tag.component.scss"]
 })
+
+@AutoUnsubscribe({ arrayName: "subscriptions" })
 export class UpdateCategoryTagComponent implements OnInit, OnDestroy {
   user: User;
   subscriptions = [];
@@ -114,6 +116,14 @@ export class UpdateCategoryTagComponent implements OnInit, OnDestroy {
                 );
               });
               this.tags = this.topTags;
+
+              const filteredTags = [...this.user.tags];
+              this.tags.map(data => {
+                  if (filteredTags.indexOf(data.key) >= 0) {
+                      filteredTags.splice(filteredTags.indexOf(data.key), 1);
+                  }
+              });
+              this.tags = [...this.tags, ...filteredTags.map(data => { const newid = {key: data, requiredForGamePlay: true}; return newid; }) ];
             })
           )
         )
@@ -128,7 +138,7 @@ export class UpdateCategoryTagComponent implements OnInit, OnDestroy {
           if (status === "SUCCESS") {
             this.utils.showMessage(
               "success",
-              "Categories/tags updated successfully"
+              "Topics updated successfully"
             );
           }
           this.cd.markForCheck();

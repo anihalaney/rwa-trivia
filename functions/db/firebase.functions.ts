@@ -79,25 +79,26 @@ export class FirebaseFunctions {
             if (context.params.reactions === 'reactions') {
                 const afterData = change.after.exists ? change.after.data() : null;
                 const beforeData = change.before.exists ? change.before.data() : null;
+                
                 const question: Question = await QuestionService.getQuestionById(context.params.questionId);
                 // for update
                 if (beforeData && afterData) {
                     if (beforeData.status != afterData.status) {
-                        question.reactionsCount[afterData.status] = question.reactionsCount
-                            && question.reactionsCount[afterData.status] ? Utils.changeFieldValue(1) : 1; // increase current status
-                        question.reactionsCount[beforeData.status] = question.reactionsCount &&
-                            question.reactionsCount[beforeData.status] ? Utils.changeFieldValue(-1) : 0; // decrease before status
+                        question.stats.reactionsCount[afterData.status] = question.stats.reactionsCount
+                            && question.stats.reactionsCount[afterData.status] ? Utils.changeFieldValue(1) : 1; // increase current status
+                        question.stats.reactionsCount[beforeData.status] = question.stats.reactionsCount &&
+                            question.stats.reactionsCount[beforeData.status] ? Utils.changeFieldValue(-1) : 0; // decrease before status
                     } else {
                         return true;
                     }
                 } else if (!beforeData && afterData) {
                     // for create
-                    question.reactionsCount[afterData.status] = question.reactionsCount
-                        && question.reactionsCount[afterData.status] ? Utils.changeFieldValue(1) : 1; // increase current status
+                    question.stats.reactionsCount[afterData.status] = question.stats.reactionsCount
+                        && question.stats.reactionsCount[afterData.status] ? Utils.changeFieldValue(1) : 1; // increase current status
                 } else if (beforeData && !afterData) {
                     // delete
-                    question.reactionsCount[beforeData.status] = question.reactionsCount &&
-                        question.reactionsCount[beforeData.status] ? Utils.changeFieldValue(-1) : 0; // decrease current status
+                    question.stats.reactionsCount[beforeData.status] = question.stats.reactionsCount &&
+                        question.stats.reactionsCount[beforeData.status] ? Utils.changeFieldValue(-1) : 0; // decrease current status
                 } else {
                     return true;
                 }
@@ -218,11 +219,7 @@ export class FirebaseFunctions {
 
             if (afterEventData !== beforeEventData) {
                 const account: Account = afterEventData;
-
-                const leaderBoardDict: { [key: string]: LeaderBoardUsers } = await LeaderBoardService.getLeaderBoardStats();
-
-                await GameLeaderBoardStats.setLeaderBoardStat(await LeaderBoardService.calculateLeaderBoardStats(account, leaderBoardDict));
-
+                await LeaderBoardService.setLeaderBoardStatForSingleUser(account);
                 await AchievementMechanics.updateAchievement(account);
             }
             return true;

@@ -108,7 +108,7 @@ export class AccountService {
      * return account
      */
     static calculateAccountStat(account: AccountAtomic, game: Game, categoryIds: Array<number>,
-        userId: string, isMigration: boolean): AccountAtomic {
+        userId: string, isMigration: boolean, tagIds: Array<string>): AccountAtomic {
 
         const score = game.stats[userId].score;
 
@@ -129,6 +129,12 @@ export class AccountService {
             account.leaderBoardStats = (account.leaderBoardStats) ? account.leaderBoardStats : {};
             account.leaderBoardStats[id] = (account.leaderBoardStats && account.leaderBoardStats[id]) ?
                 account.leaderBoardStats[id] + 1 : 1;
+        }
+
+        for (const tagId of tagIds) {
+            account.leaderBoardStats = (account.leaderBoardStats) ? account.leaderBoardStats : {};
+            account.leaderBoardStats[tagId] = (account.leaderBoardStats && account.leaderBoardStats[tagId]) ?
+                account.leaderBoardStats[tagId] + 1 : 1;
         }
 
         account[LeaderBoardConstants.LEADER_BOARD_STATS] = { ...account.leaderBoardStats };

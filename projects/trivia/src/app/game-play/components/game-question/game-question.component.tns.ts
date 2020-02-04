@@ -88,5 +88,10 @@ export class GameQuestionComponent extends GameQuestion implements OnInit, OnDes
           });
       this.subscriptions.push(this.timerSub);
     }
+    if (changes.showContinueBtn && changes.showContinueBtn.currentValue && changes.showContinueBtn.currentValue === true) {
+      if (this.showLoader) {
+          super.continueButtonClicked('');
+      }
+    }
   }
 }

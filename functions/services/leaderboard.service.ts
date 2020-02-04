@@ -3,6 +3,7 @@ import {
 } from '../../projects/shared-library/src/lib/shared/model';
 import admin from '../db/firebase.client';
 import { Utils } from '../utils/utils';
+import * as stringHash from 'string-hash';
 
 export class LeaderBoardService {
 
@@ -15,12 +16,44 @@ export class LeaderBoardService {
     static async setLeaderBoardStatsById(id: any, leaderBoardStat: any): Promise<any> {
         try {
             return await LeaderBoardService.leaderBoardFireStoreClient
-                .doc(`/${CollectionConstants.LEADER_BOARD_STATS}/${id}`)
+                .doc(`/${CollectionConstants.LEADER_BOARD_STATS}/${id}/stat/${leaderBoardStat.userId}`)
                 .set(leaderBoardStat);
         } catch (error) {
             return Utils.throwError(error);
         }
     }
+
+
+    /**
+     * getAllCategories
+     * return category
+     */
+    static async getAllCategories(): Promise<any> {
+        try {
+            return Utils.getValesFromFirebaseSnapshot(
+                await LeaderBoardService.leaderBoardFireStoreClient
+                    .collection(CollectionConstants.CATEGORIES).get()
+            );
+        } catch (error) {
+            return Utils.throwError(error);
+        }
+    }
+
+
+    /**
+     * setLeaderBoardStatsData
+     * return any
+     */
+    static async setLeaderBoardStatsData(id: any, idHash: any): Promise<any> {
+        try {
+            return await LeaderBoardService.leaderBoardFireStoreClient
+                .doc(`/${CollectionConstants.LEADER_BOARD_STATS}/${idHash}`)
+                .set({id: id});
+        } catch (error) {
+            return Utils.throwError(error);
+        }
+    }
+
 
     /**
     * getLeaderBoardStats
@@ -77,19 +110,41 @@ export class LeaderBoardService {
                     (userIndex === -1) ? leaderBoardUsers.users.push({ ...leaderBoardUserData }) :
                         leaderBoardUsers.users[userIndex] = leaderBoardUserData;
 
-                    leaderBoardUsers.users.sort((a, b) => {
-                        return b.score - a.score;
-                    });
-
-                    if (leaderBoardUsers.users.length > UserStatConstants.maxUsers) {
-                        leaderBoardUsers.users.splice(leaderBoardUsers.users.length - 1, 1);
-                    }
-
                     leaderBoardDict[id] = leaderBoardUsers;
+
                 }
             }
         }
         return leaderBoardDict;
+    }
+
+    static async setLeaderBoardStatForSingleUser(accountObj: Account): Promise<any> {
+        try {
+
+            const promises = [];
+            if (accountObj && accountObj.id) {
+                const leaderBoardStats = accountObj.leaderBoardStats;
+                if (leaderBoardStats) {
+                    const category = await LeaderBoardService.getAllCategories();
+                    const categoryIds = [];
+                    for (const data of category) {
+                        categoryIds.push(data.id.toString(10));
+                    }
+                    for (const id of Object.keys(leaderBoardStats)) {
+                        let idHash = id;
+                        if (categoryIds.indexOf(id) < 0) {
+                           idHash = await stringHash(id);
+                        }
+                        promises.push(LeaderBoardService.setLeaderBoardStatsById(idHash,
+                        { ...{userId: accountObj.id, score: leaderBoardStats[id]} }));
+                    }
+                }
+            }
+
+           return await Promise.all(promises);
+        } catch (error) {
+            return Utils.throwError(error);
+        }
     }
 
 }

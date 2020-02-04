@@ -6,7 +6,7 @@
             <Image width="60" height="60" *ngIf="userReactionStatus?.status === 'like'"
                 stlRippleEffect (rippleTap) ="userReaction('like')" src="res://thumbsupactive"></Image>
             <Label [style.color]="theme === 'dark' ? '#fff' : '#000'" marginLeft="10" verticalAlignment="center"
-                [text]="question?.reactionsCount?.like ? question?.reactionsCount?.like : 0"
+                [text]="question?.stats?.reactionsCount?.like ? question?.stats?.reactionsCount?.like : 0"
                 horizontalAlignment="center" textWrap="true"></Label>
         </StackLayout>
         <StackLayout orientation="horizontal" marginLeft="15">
@@ -15,7 +15,7 @@
             <Image width="60" height="60" *ngIf="userReactionStatus?.status === 'dislike'"
                 stlRippleEffect (rippleTap) ="userReaction('dislike')" src="res://thumbsdownactive"></Image>
             <Label [style.color]="theme === 'dark' ? '#fff' : '#000'" marginLeft="10" verticalAlignment="center"
-                [text]="question?.reactionsCount?.dislike ? question?.reactionsCount?.dislike : 0"
+                [text]="question?.stats?.reactionsCount?.dislike ? question?.stats?.reactionsCount?.dislike : 0"
                 horizontalAlignment="center" textWrap="true"></Label>
         </StackLayout>
     </StackLayout>

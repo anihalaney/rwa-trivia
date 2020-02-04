@@ -26,6 +26,7 @@ export class SelectCategoryTagComponent implements OnInit, OnDestroy {
   topTags = [];
   tags = [];
   selectedCategories: number = 0;
+  selectedTags: number = 0;
   renderView = false;
   constructor(
     private routerExtension: RouterExtensions,
@@ -86,6 +87,7 @@ export class SelectCategoryTagComponent implements OnInit, OnDestroy {
     const tags = this.tags[index];
     tags.requiredForGamePlay = !tags.requiredForGamePlay;
     this.tags = [... this.tags];
+    this.selectedTags = this.returnSelectedTagsOrCategories(this.tags).length;
   }
 
   continueToFirstQuestion() {

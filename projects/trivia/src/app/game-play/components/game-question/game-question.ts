@@ -24,6 +24,7 @@ export class GameQuestion {
   @Input() applicationSettings: ApplicationSettings;
   @Input() user: User;
   @Input() playerMode: any;
+  showLoader = false;
 
   answeredIndex: number;
   correctAnswerIndex: number;
@@ -53,6 +54,14 @@ export class GameQuestion {
   disableQuestions(correctAnswerIndex: number) {
     this.doPlay = false;
     this.correctAnswerIndex = correctAnswerIndex;
+  }
+
+  continueButtonClicked(event) {
+    if (this.showContinueBtn) {
+      this.continueClicked.emit(event);
+    } else {
+      this.showLoader = true;
+    }
   }
 
   fillTimer() { }

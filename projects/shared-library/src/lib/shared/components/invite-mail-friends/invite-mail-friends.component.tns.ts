@@ -5,6 +5,7 @@ import { Utils } from 'shared-library/core/services';
 import { CoreState, UserActions } from 'shared-library/core/store';
 import { isIOS } from 'tns-core-modules/ui/page';
 import { InviteMailFriends } from './invite-mail-friends';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 declare var IQKeyboardManager;
 
 @Component({
@@ -14,6 +15,7 @@ declare var IQKeyboardManager;
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 
+@AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class InviteMailFriendsComponent extends InviteMailFriends implements OnDestroy {
     iqKeyboard: any;
     constructor(fb: FormBuilder, store: Store<CoreState>, userAction: UserActions, cd: ChangeDetectorRef,

@@ -7,7 +7,6 @@ import { AppState, appState } from './../../../../../../../trivia/src/app/store'
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { isIOS } from 'tns-core-modules/platform';
 import { Utils } from 'shared-library/core/services';
-import { FirebaseScreenNameConstants } from 'shared-library/shared/model';
 declare var IQKeyboardManager;
 @Component({
   selector: 'user-feedback',

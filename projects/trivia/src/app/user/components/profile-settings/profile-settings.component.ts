@@ -34,7 +34,6 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnInit,
   cropperSettings: CropperSettings;
   notificationMsg: string;
   errorStatus: boolean;
-  subscriptions = [];
   checkUserSubscriptions: Subscription;
   isValidDisplayName: boolean = null;
   locationTerm$ = new Subject<string>();
