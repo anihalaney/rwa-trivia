@@ -7,6 +7,7 @@ import { AuthenticationProvider } from 'shared-library/core/auth';
 import { User } from 'shared-library/shared/model';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { ApplicationSettingsActions } from 'shared-library/core/store/actions';
+import { CategoryActions } from 'shared-library/core/store/actions';
 
 @Component({
   selector: 'app-root',
@@ -26,7 +27,10 @@ export class AppComponent implements OnInit, OnDestroy {
     private store: Store<AppState>,
     public router: Router,
     private applicationSettingsAction: ApplicationSettingsActions,
+    private categoryActions: CategoryActions
   ) {
+
+    this.store.dispatch(this.categoryActions.loadCategories());
 
     this.store.dispatch(this.applicationSettingsAction.loadApplicationSettings());
     this.subscriptions.push(store.select(appState.coreState).pipe(select(s => s.user), skip(1)).subscribe(user => {

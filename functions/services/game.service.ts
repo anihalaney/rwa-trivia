@@ -170,7 +170,7 @@ export class GameService {
      * getAllGameForReminder
      * return status
      */
-    static async getAllGameForReminder(timeStamp: number, type: string, gameStatus = []): Promise<any> {
+    static async getAllGameForReminder(timeStamp: number, reminderInterval: string, gameStatus = []): Promise<any> {
         try {
             if (gameStatus.length > 0) {
                 return GameService.getGames(
@@ -178,7 +178,7 @@ export class GameService {
                         .collection(`/${CollectionConstants.GAMES}`)
                         .where(GameConstants.GAME_OVER, GeneralConstants.DOUBLE_EQUAL, false)
                         .where(GameConstants.TURN_AT, GeneralConstants.LESS_THAN_OR_EQUAL, timeStamp)
-                        .where(type, GeneralConstants.DOUBLE_EQUAL, false)
+                        .where(reminderInterval, GeneralConstants.DOUBLE_EQUAL, false)
                         .where(GameConstants.GAME_STATUS, GeneralConstants.IN, gameStatus)
                         .get()
                     );
@@ -188,7 +188,7 @@ export class GameService {
                         .collection(`/${CollectionConstants.GAMES}`)
                         .where(GameConstants.GAME_OVER, GeneralConstants.DOUBLE_EQUAL, false)
                         .where(GameConstants.TURN_AT, GeneralConstants.LESS_THAN_OR_EQUAL, timeStamp)
-                        .where(type, GeneralConstants.DOUBLE_EQUAL, false)
+                        .where(reminderInterval, GeneralConstants.DOUBLE_EQUAL, false)
                         .get()
                     );
             }
