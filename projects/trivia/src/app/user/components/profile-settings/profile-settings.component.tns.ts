@@ -564,4 +564,8 @@ export class ProfileSettingsComponent extends ProfileSettings
   navigateToUserFeedback() {
     this.routerExtensions.navigate(["/user-feedback"]);
   }
+
+  getCurrentLocation($event){
+    this.getLocation();
+  }
 }

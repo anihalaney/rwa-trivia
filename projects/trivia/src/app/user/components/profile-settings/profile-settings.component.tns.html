@@ -114,8 +114,8 @@
               text="&#xe927;" (tap)="redirectToChangePassword()" padding="5"></Label>
           </FlexboxLayout>
 
-          <app-animation-box [fieldName]="'location'" (formSubmitted)='formSubmitted($event)'
-            [fieldValue]="user.location" (formEditOpen)='formEditOpen($event)' [isValid]="!userForm.controls.location.errors">
+          <app-animation-box [fieldName]="'location'" (formSubmitted)='formSubmitted($event)' (getCurrentLocation)="getCurrentLocation($event)"
+            [fieldValue]="user.location" (formEditOpen)='formEditOpen($event)' [isValid]="!userForm.controls.location.errors" [type]="'location'">
             <RadAutoCompleteTextView textField #textFieldContent #acLocation [items]="dataLocation" suggestMode="Suggest"
               showCloseButton="false" (didAutoComplete)="onTextChangedLocation($event)"
               (textChanged)="onTextChangedLocation($event)" (loaded)="onLoadedLocation($event)" ios:marginTop="0"
@@ -130,7 +130,7 @@
             </RadAutoCompleteTextView>
             <StackLayout errorMsg width="90%">
               <Label *ngIf="(userForm.controls.location.errors)" class="error" textWrap="true"
-                text="Enter location number!"></Label>
+                text="Enter location!"></Label>
             </StackLayout>
           </app-animation-box>
 

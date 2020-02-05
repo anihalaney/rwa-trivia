@@ -10,7 +10,11 @@
                 </StackLayout>
                 <Label #nameLabel [text]="fieldValue" textWrap="true" class="label-value"></Label>
             </FlexboxLayout>
-            <FlexboxLayout col="1" flexDirection="column" justifyContent="center">
+            <FlexboxLayout col="1" flexDirection="row" justifyContent="center">
+                <Label *ngIf="type=== 'location' &&  showEdit" (tap)="location()" color="#14418B" fontSize="26" class="fa fas" text="&#xf3c5;"
+                    padding="5">
+                </Label>
+
                 <Label *ngIf="!showEdit && isDisplay" (tap)="editField()" color="#14418B" fontSize="20"
                     class="ico icon-edit" textWrap="true" text="&#xe927;" padding="5">
                 </Label>
