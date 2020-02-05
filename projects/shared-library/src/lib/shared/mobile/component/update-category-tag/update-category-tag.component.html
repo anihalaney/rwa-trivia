@@ -1,7 +1,7 @@
-<ns-action-bar title="Edit Topics" class="Roboto-Regular" hideMenu="true"></ns-action-bar>
+<ns-action-bar title="Edit Topics" class="SF-Pro-Regular" hideMenu="true"></ns-action-bar>
 <GridLayout rows="*,auto" columns="*" *ngIf="renderView">
   <ScrollView>
-    <GridLayout rows="auto,auto,auto,auto,auto,auto" columns="*" row="0" class="profile-settings Roboto-Regular">
+    <GridLayout rows="auto,auto,auto,auto,auto,auto" columns="*" row="0" class="profile-settings SF-Pro-Regular">
       
       <Label row="0" text="Edit Topics" margin="15 15 0 15" fontSize="30" fontWeight="bold" color="#2f3f6b" textWrap="true"></Label>
 
@@ -28,6 +28,6 @@
   </ScrollView>
   <GridLayout rows="auto" row="1" margin="15">
     <Button row="0" (tap)="continueToFirstQuestion()"
-      text="Update" borderRadius="5" height="40" stlRippleEffect (rippleTap)="continueToFirstQuestion()" marginBottom="15"></Button>
+      text="Update" class="SF-Pro-Regular" borderRadius="5" height="40" stlRippleEffect (rippleTap)="continueToFirstQuestion()" marginBottom="15"></Button>
   </GridLayout>
 </GridLayout>
