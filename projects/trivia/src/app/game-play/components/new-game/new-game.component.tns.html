@@ -48,7 +48,7 @@
               <AbsoluteLayout backgroundColor="#fff" verticalAlignment="bottom" row="2"  col="0" >
                 <StackLayout marginBottom="10" width="100%">
                   <Label text="Play with a random friend" class="info-text" padding="10 0 10 0" textWrap="true"></Label>
-                  <Button  text="Find a friend for me" borderRadius="4" class="btn-transparent Roboto-Medium"
+                  <Button  text="Find a friend for me" borderRadius="4" class="btn-transparent SF-Pro-Medium"
                   (rippleTap)="chooseRandomPlayer()" height="70" stlRippleEffect></Button>
                 </StackLayout>
               </AbsoluteLayout>
@@ -72,7 +72,7 @@
                       </FlexboxLayout>
                    </ng-template>
                 </FlexboxLayout>
-                <Button  marginRight="5" row="3" col="0" text="START A NEW GAME" class="btn-blue Roboto-Medium"
+                <Button  marginRight="5" row="3" col="0" text="START A NEW GAME" class="btn-blue SF-Pro-Medium"
                   (rippleTap)="showDialog()" height="70" stlRippleEffect></Button>
               </GridLayout>
           </ScrollView>
@@ -95,7 +95,7 @@
             <Image src="res://badge5" class="badges"></Image>
           </FlexboxLayout>
 
-          <FlexboxLayout (rippleTap)="startGame()" class="Hind-Medium continue-btn" stlRippleEffect>
+          <FlexboxLayout (rippleTap)="startGame()" class="SF-Pro-Medium continue-btn" stlRippleEffect>
             <Label text="Start Game" color="white"></Label>
             <ActivityIndicator *ngIf="showGameStartLoader" marginRight="-30"   marginRight="-30" ios:width="25" ios:height="25" android:width="25"
               android:height="25" busy="true" class="activity-indicator"></ActivityIndicator>

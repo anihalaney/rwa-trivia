@@ -38,7 +38,7 @@
                         horizontalAlignment="center">
                         <Image src="~/assets/images/win.png" width="80" height="80" marginBottom="10">
                         </Image>
-                        <Label class="gamestatus-username Roboto-Bold" text="{{playerUserName}} Won" textWrap="true"
+                        <Label class="gamestatus-username SF-Pro-Bold" text="{{playerUserName}} Won" textWrap="true"
                           marginLeft="10"></Label>
                       </StackLayout>
                       <StackLayout *ngIf="
@@ -51,7 +51,7 @@
                         horizontalAlignment="center">
                         <Image src="~/assets/images/gamelost.png" width="80" height="80" marginBottom="10">
                         </Image>
-                        <Label class="gamestatus-username Roboto-Bold" color="#F44336" text="{{playerUserName}} Lost"
+                        <Label class="gamestatus-username SF-Pro-Bold" color="#F44336" text="{{playerUserName}} Lost"
                           textWrap="true" marginLeft="10"></Label>
                       </StackLayout>
                     </StackLayout>
@@ -152,7 +152,7 @@
                                     (game.gameOptions?.playerMode == PlayerMode.Single &&
                                      game.playerQnAs?.length - game.stats[user.userId]?.score !== 4)"
                         orientation="horizontal" margin="15" horizontalAlignment="center">
-                        <Label class="gamestatus-username-color Roboto-Bold" text="{{playerUserName}} Won!"
+                        <Label class="gamestatus-username-color SF-Pro-Bold" text="{{playerUserName}} Won!"
                           textWrap="true" marginLeft="10" horizontalAlignment="center"></Label>
                       </StackLayout>
                       <StackLayout *ngIf="
@@ -163,7 +163,7 @@
                                     (game.gameOptions?.playerMode == PlayerMode.Single &&
                                      game.playerQnAs?.length - game.stats[user.userId]?.score === 4)"
                         orientation="horizontal" margin="15" horizontalAlignment="center">
-                        <Label class="gamestatus-username-color Roboto-Bold" color="#F44336"
+                        <Label class="gamestatus-username-color SF-Pro-Bold" color="#F44336"
                           text="{{playerUserName}} Lost" textWrap="true" marginLeft="10"
                           horizontalAlignment="center"></Label>
                       </StackLayout>
@@ -173,7 +173,7 @@
                                      game.round < 16 &&
                                      game.stats[user.userId]?.score == game.stats[otherUserId]?.score)"
                         orientation="horizontal" margin="15" horizontalAlignment="center">
-                        <Label class="gamestatus-username-color Roboto-Bold" text="It's a Tie" textWrap="true"
+                        <Label class="gamestatus-username-color SF-Pro-Bold" text="It's a Tie" textWrap="true"
                           marginLeft="10"></Label>
                       </StackLayout>
 
@@ -181,7 +181,7 @@
                                     game.gameOptions?.playerMode != PlayerMode.Single &&
                                      game.round === 16" orientation="horizontal" margin="15"
                         horizontalAlignment="center">
-                        <Label class="gamestatus-username-color Roboto-Bold" text="It's a Draw" textWrap="true"
+                        <Label class="gamestatus-username-color SF-Pro-Bold" text="It's a Draw" textWrap="true"
                           marginLeft="10"></Label>
                       </StackLayout>
 
@@ -214,7 +214,7 @@
               <StackLayout padding="10">
                 <GridLayout rows="auto,auto,auto,auto,auto" columns="auto" horizontalAlignment="center">
 
-                  <label row="0" col="0" class="navigate-button-solid Hind-Medium"
+                  <label row="0" col="0" class="navigate-button-solid SF-Pro-Medium"
                     [text]="game.gameOptions?.playerMode == PlayerMode.Single ? 'Play Again' : 'Invite to play again'"
                     (rippleTap)="reMatchGame()" stlRippleEffect></label>
                   <GridLayout
@@ -242,13 +242,13 @@
                     <FlexboxLayout row="0" col="1" class="flex-c connect"
                       *ngIf="otherUserInfo?.email && userInvitations && userInvitations[otherUserInfo?.email]?.status === 'pending'">
                       <Label [text]="otherUserInfo?.displayName" class="connect_name" textWrap="true"></Label>
-                      <Label class="connect_name Hind-Medium" text="Friend Request Sent"></Label>
+                      <Label class="connect_name SF-Pro-Medium" text="Friend Request Sent"></Label>
                     </FlexboxLayout>
 
                     <FlexboxLayout row="0" col="1" class="flex-c connect p-r-10"
                       *ngIf="otherUserInfo?.email  && userInvitations && userInvitations[otherUserInfo?.email]?.status === 'approved'">
                       <Label [text]="otherUserInfo?.displayName" class="connect_name" textWrap="true"></Label>
-                      <Label padding="5 0" class="connect_name Hind-Medium fa" text="Friends &#xf00c;">
+                      <Label padding="5 0" class="connect_name SF-Pro-Medium fa" text="Friends &#xf00c;">
                       </Label>
                     </FlexboxLayout>
                   </GridLayout>

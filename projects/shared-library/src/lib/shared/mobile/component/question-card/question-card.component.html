@@ -16,7 +16,7 @@
   </FlexboxLayout>
 
   <StackLayout *ngIf="question" iosOverflowSafeArea="false">
-    <StackLayout iosOverflowSafeArea="false" class="question-answered Hind-Medium" margin="10"
+    <StackLayout iosOverflowSafeArea="false" class="question-answered SF-Pro-Medium" margin="10"
       *ngFor="let answer of question.answers" [class.players-answer]="answeredText === answer.answerText"
       [class.wrong]="answeredText === answer.answerText && correctAnswerText !== answer.answerText"
       [class.right]="answeredText !== '' && correctAnswerText === answer.answerText" [isUserInteractionEnabled]="doPlay"
