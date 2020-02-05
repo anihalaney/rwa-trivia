@@ -1,4 +1,4 @@
-<ns-action-bar title="Feedback" class="Roboto-Regular" showAdd="true"></ns-action-bar>
+<ns-action-bar title="Feedback" class="SF-Pro-Regular" showAdd="true"></ns-action-bar>
 
 <GridLayout rows="*" columns="*">
 
@@ -8,7 +8,7 @@
 
   <ScrollView row="0" *ngIf="renderView">
       <PreviousNextView> 
-        <StackLayout (tap)="hideKeyboard()" [formGroup]="feedbackForm" class="feedbackForm profile-settings Roboto-Regular">
+        <StackLayout (tap)="hideKeyboard()" [formGroup]="feedbackForm" class="feedbackForm profile-settings SF-Pro-Regular">
               <StackLayout padding="5 0" class="input-field">
                 <TextField  #textField hint="Email" formControlName="email" class="text-field" [editable]="!(user && user.email)">
                 </TextField>
@@ -32,7 +32,7 @@
                 </StackLayout>
               </StackLayout>
             <StackLayout class="button-section" margin="15" >
-              <Button stlRippleEffect text="SEND"  (rippleTap)="onSubmit()" class="Roboto-Medium" margin="10"></Button>
+              <Button stlRippleEffect text="SEND"  (rippleTap)="onSubmit()" class="SF-Pro-Medium" margin="10"></Button>
             </StackLayout>
           </StackLayout>
     </PreviousNextView>

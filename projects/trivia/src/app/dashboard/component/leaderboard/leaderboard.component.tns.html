@@ -29,7 +29,7 @@
       <RadListView #radListView separatorColor="#00000000" height="100%"  [filteringFunction]="paginationFunc" [items]="selectedCatList">
         <ng-template  tkListItemTemplate let-user="item" let-j="index">
           <GridLayout  [ngClass]="{'login-user-hightlight': (loggedInUserId === user.userId)}" class="data-div" rows="*,16" columns="auto,*,60">
-            <Label marginTop="10" text="{{j+1}}" row="0" col="0" class="profile-no Hind-Bold" verticalAlignment="top"></Label>
+            <Label marginTop="10" text="{{j+1}}" row="0" col="0" class="profile-no SF-Pro-Bold" verticalAlignment="top"></Label>
             <StackLayout row="0" col="1" class="padding-10">
               <app-user-card [userId]="user.userId" [type]="userCardType.USER_IMAGE_NAME_LOCATION_HORIZONTAL">
               </app-user-card>

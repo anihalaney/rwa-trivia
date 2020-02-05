@@ -7,17 +7,17 @@
               <Label (tap)="showEditQuestion(question)" *ngIf="getDisplayStatus(question?.status)==='REQUIRED_CHANGE' || (question?.is_draft === true && getDisplayStatus(question?.status)==='PENDING' )" text="&#xf040;" class="fa text-icon-field" row="0" col="1" textWrap="true"></Label>
             </GridLayout>
             <GridLayout rows="*" columns="auto,auto" margin="3 0">
-              <Label row="0" col="0" text="Category : " textWrap="true" class="label Roboto-Medium"
+              <Label row="0" col="0" text="Category : " textWrap="true" class="label SF-Pro-Medium"
                 fontWeight="bold"></Label>
               <StackLayout row="0" col="1" *ngFor="let id of question?.categoryIds">
-                <Label [text]="categoryDictionary[id]?.categoryName" textWrap="true" class="label Roboto-Regular"
+                <Label [text]="categoryDictionary[id]?.categoryName" textWrap="true" class="label SF-Pro-Regular"
                   color="#616161"></Label>
               </StackLayout>
             </GridLayout>
             <WrapLayout alignItems="top" margin="3 0">
-              <Label text="Tags : " textWrap="true" class="label Roboto-Medium" fontWeight="bold"></Label>
+              <Label text="Tags : " textWrap="true" class="label SF-Pro-Medium" fontWeight="bold"></Label>
               <StackLayout *ngFor="let item of question.tags" class="tag" lineHeight="10">
-                <Label [text]="item" textWrap="true" class="label Roboto-Regular"></Label>
+                <Label [text]="item" textWrap="true" class="label SF-Pro-Regular"></Label>
               </StackLayout>
             </WrapLayout>
             <Label *ngIf="getDisplayStatus(question?.status)==='APPROVED'" class="publish-question" text="Published on {{ question.createdOn | date:'dd MMM yyyy' }}"

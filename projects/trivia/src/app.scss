@@ -22,6 +22,35 @@ refer to http://docs.nativescript.org/ui/theme.
 @import './styles/icon-moon.scss';
 @import './app-variables';
 
+Page {
+  font-family: 'SF-Pro-Display-Regular', 'SF Pro Display', 'SF Pro Display Regular';
+}
+
+.SF-Pro-Regular {
+  font-family: 'SF-Pro-Display-Regular', 'SF Pro Display', 'SF Pro Display Regular';
+  font-weight: 400;
+}
+
+.SF-Pro-Bold {
+  font-family: 'SF-Pro-Display-Bold', 'SF Pro Display', 'SF Pro Display Bold';
+  font-weight: 700;
+}
+
+.SF-Pro-Light {
+  font-family: 'SF-Pro-Display-Light', 'SF Pro Display', 'SF Pro Display Light';
+  font-weight: 300;
+}
+
+.SF-Pro-Semi-Bold {
+  font-family: 'SF-Pro-Display-Semibold', 'SF Pro Display', 'SF Pro Display Semibold';
+  font-weight: 600;
+}
+
+.SF-Pro-Medium {
+  font-family: 'SF-Pro-Display-Medium', 'SF Pro Display', 'SF Pro Display Medium';
+  font-weight: 500;
+}
+
 .new-btn {
   color: map-get($light-theme-text-color, primary-light);
 }

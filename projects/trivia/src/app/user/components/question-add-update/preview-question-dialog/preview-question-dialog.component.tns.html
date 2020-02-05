@@ -8,7 +8,7 @@
           <StackLayout row="1" col="0" color="black" orientation="horizontal" margin="5 10 10 10"
             iosOverflowSafeArea="false">
             <Label text="Categories:" marginRight="5" fontSize="15" fontWeight="500" textWrap="true"></Label>
-            <Label [text]="categoryName" class="Roboto-Regular" fontSize="15" textWrap="true"></Label>
+            <Label [text]="categoryName" class="SF-Pro-Regular" fontSize="15" textWrap="true"></Label>
           </StackLayout>
           <FlexboxLayout row="2" col="0" margin="0 7.5" flexWrap="wrap">
             <StackLayout *ngFor="let tags of question?.tags, let i = index">
