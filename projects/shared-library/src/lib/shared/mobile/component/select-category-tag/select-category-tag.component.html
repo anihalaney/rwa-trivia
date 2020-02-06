@@ -18,23 +18,17 @@
               borderRadius="5" class="stats-box border">
               <Label [text]="item.categoryName" padding="15 10" ></Label>
             </FlexboxLayout>
-        </FlexboxLayout>
-
-      <Label row="4" fontSize="16" padding="15" class="font-weight-bold" text="Popular tags" textWrap="true"></Label>
-
-        <FlexboxLayout row="5" flexWrap="wrap" margin="0 10 20 10" horizontalAlignment="center">
             <FlexboxLayout *ngFor="let item of tags, let i = index" class="stats-box border" stlRippleEffect flexDirection="column" justifyContent="center" alignItems="center"
-              (rippleTap)="selectTags(i)"
-              [ngStyle]="{background: (item.requiredForGamePlay ? '#48b24e' : '#fafafa'), color : (item.requiredForGamePlay ? '#fff' : '#9b92e7') }"
-              borderRadius="5">
-              <Label [text]="item.key" padding="15 10" ></Label>
-            </FlexboxLayout>
+            (rippleTap)="selectTags(i)"
+            [ngStyle]="{background: (item.requiredForGamePlay ? '#48b24e' : '#fafafa'), color : (item.requiredForGamePlay ? '#fff' : '#9b92e7') }"
+            borderRadius="5">
+            <Label [text]="item.key" padding="15 10" ></Label>
+          </FlexboxLayout>
         </FlexboxLayout>
-
     </GridLayout>
   </ScrollView>
   <GridLayout rows="auto" row="1" margin="15">
-    <Button row="0" [isEnabled]="selectedCategories >= 5" (tap)="continueToFirstQuestion()"
-      text="{{selectedCategories}}/{{categories.length}}" borderRadius="5" height="40"></Button>
+    <Button row="0" [isEnabled]="(selectedCategories + selectedTags) >= 5" (tap)="continueToFirstQuestion()"
+      text="{{selectedCategories + selectedTags}}/{{categories.length + tags.length}}" borderRadius="5" height="40"></Button>
   </GridLayout>
 </GridLayout>

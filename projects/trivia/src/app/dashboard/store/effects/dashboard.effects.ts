@@ -83,7 +83,7 @@ export class DashboardEffects {
         .pipe(ofType(DashboardActionTypes.LOAD_LEADERBOARD))
         .pipe(
             switchMap((action: dashboardActions.LoadLeaderBoard) =>
-                this.statsService.loadLeaderBoardStat().pipe(
+                this.statsService.loadLeaderBoardStat(action.payload.data).pipe(
                     map((score: any) => {
                         return new dashboardActions.LoadLeaderBoardSuccess(score);
                     }

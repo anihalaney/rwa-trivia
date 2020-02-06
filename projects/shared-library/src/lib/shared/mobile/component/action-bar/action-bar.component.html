@@ -49,19 +49,19 @@
         </StackLayout>
 
         <!-- For Search Icon in invite-friends.component.tns.html screen -->
-        <StackLayout *ngIf="((user && user!== null && !showSkipBtn && title.includes('Friends')))" col="4"
+        <!-- <StackLayout *ngIf="((user && user!== null && !showSkipBtn && title.includes('Friends')))" col="4"
             ios:margin="3" android:margin="10" verticalAlignment="center" horizontalAlignment="right" marginRight="10"
             android:width="23" ios:width="40">
             <Label stlRippleEffect stlBackgroundColor="transparent" stlOpacity="0.5" stlBackgroundColorAfter="transparent"
                 color="#3b5998" text="&#xe942;" fontSize="20" class="ico icon-search"></Label>
-        </StackLayout>
+        </StackLayout> -->
 
-        <StackLayout stlRippleEffect stlOpacity="0.5" stlBackgroundColorAfter="transparent"
+        <!-- <StackLayout stlRippleEffect stlOpacity="0.5" stlBackgroundColorAfter="transparent"
             *ngIf="((user && user!== null && !showSkipBtn && title.includes('Notifications')))" col="4" stlRippleEffect
             ios:margin="3" android:margin="10" stlOpacity="0.5" stlBackgroundColorAfter="" verticalAlignment="center"
             horizontalAlignment="right" marginRight="10" android:width="23" ios:width="40">
             <Image src="res://readall" width="28" height="28"></Image>
-        </StackLayout>
+        </StackLayout> -->
 
         <StackLayout *ngIf="showSkipBtn" col="2" ios:margin="3" margin="10" android:margin="5"
             verticalAlignment="center" (tap)="goToDashboard()">

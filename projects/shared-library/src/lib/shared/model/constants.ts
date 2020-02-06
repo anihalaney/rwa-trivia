@@ -409,7 +409,9 @@ export enum RoutesConstants {
     NO_DASH_GAME_DASH_PLAY_DASH_32DAYS = 'no-game-play-32days',
     GAME_DASH_INVITATION_DASH_EXPIRE = 'game-invitation-expire',
     GAME_DASH_TIME_DASH_REMINDER_NOTIFICATION = 'game-time-reminder-notification',
-    REMINDER_DASH_BEFORE_DASH_TIME = 'reminderBeforeTime'
+    REMINDER_DASH_BEFORE_DASH_TIME = 'reminderBeforeTime',
+    UPDATE_DASH_QUESTION_DASH_STATS = 'updateQuestionStats',    
+    
 }
 
 export enum TermsAndPrivacyUrlConstant {

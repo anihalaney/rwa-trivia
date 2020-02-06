@@ -37,29 +37,30 @@
                 </FlexboxLayout>
             </GridLayout>
 
-            <FlexboxLayout *ngIf="tags.userTags || tags.otherUserTags" flexDirection="column" margin="10 20 10 20"
+            <FlexboxLayout *ngIf="tags.userTags || tags.otherUserTags || categoryText" flexDirection="column" margin="10 20 10 20"
                 iosOverflowSafeArea="false">
-                <Label *ngIf="userType === 0 && tags.userTags" text="Tags" color="#1B1C1C" fontSize="15"
+                <Label *ngIf="userType === 0 && ( tags.userTags || categoryText) " text="Topics" color="#1B1C1C" fontSize="15"
                     fontWeight="500" textWrap="true"></Label>
-                <Label *ngIf="userType === 1 && tags.otherUserTags" text="Tags" color="#1B1C1C" fontSize="15"
+                <Label *ngIf="userType === 1 && ( tags.otherUserTags || categoryText)" text="Topics" color="#1B1C1C" fontSize="15"
                     fontWeight="500" textWrap="true"></Label>
-                <FlexboxLayout justifyContent="space-between" orientation="horizontal">
-                    <FlexboxLayout flexDirection="column">
-                        <Label text="{{(userType === 0 ? tags.userTags : tags.otherUserTags)}}" class="text-blue"
-                            fontSize="15" textWrap="false"></Label>
-                        <Label *ngIf="userType === 1">
-                            <FormattedString *ngIf="tags && tags.comparison && tags.comparison.length > 0">
-                                <Span text="{{tags.comparison.length | number:'2.0-0'}} matching Tags"
-                                    style="font-style: italic" color="#ffc107" fontSize="12"></Span>
-                            </FormattedString>
-                            <FormattedString *ngIf="tags && tags.comparison && tags.comparison.length === 0">
-                                <Span text="no matching tags"
-                                    style="font-style: italic" color="#ffc107" fontSize="12"></Span>
-                            </FormattedString>
-                        </Label>
-                    </FlexboxLayout>
-                    <Label *ngIf="userType === 0" stlRippleEffect (rippleTap)="updateCategoryTag()" padding="0 10"
+                <GridLayout rows="*" columns="*,auto" orientation="horizontal" margin="0 -10 0 0"> 
+                    <Label row="0" col="0" maxWidth="80%" [text]="(userType === 0 ? topicList : otherUserTopicList)" class="text-blue"
+                    fontSize="15" textWrap="false"></Label>
+                    <Label row="0" col="1" *ngIf="userType === 0" stlRippleEffect (rippleTap)="updateCategoryTag()" android:padding="0 10 0 5" ios:padding="0 5 0 5"
                         text="&#xe927;" class="ico icon-edit text-blue"  fontSize="18" textWrap="true"></Label>
+                </GridLayout>
+
+                <FlexboxLayout row="0" col="0" *ngIf="userType === 1" flexDirection="column">
+                    <Label>
+                        <FormattedString *ngIf="topicsArray && topicsArray.comparison && topicsArray.comparison.length > 0">
+                            <Span text="{{topicsArray.comparison.length | number:'2.0-0'}} matching Topics"
+                                style="font-style: italic" color="#ffc107" fontSize="12"></Span>
+                        </FormattedString>
+                        <FormattedString *ngIf="topicsArray && topicsArray.comparison && topicsArray.comparison.length === 0">
+                            <Span text="no matching topics"
+                                style="font-style: italic" color="#ffc107" fontSize="12"></Span>
+                        </FormattedString>
+                    </Label>
                 </FlexboxLayout>
             </FlexboxLayout>
 

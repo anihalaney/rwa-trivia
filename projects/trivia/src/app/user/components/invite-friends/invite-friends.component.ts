@@ -24,7 +24,6 @@ export class InviteFriendsComponent extends InviteFriends implements OnInit, OnD
     'won', 'lost'];
   uFriends: Array<any>;
   dataSource: any;
-  subscriptions = [];
   defaultAvatar = 'assets/images/default-avatar.png';
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;

@@ -21,74 +21,29 @@ export class GameService {
 
   getActiveGames(user: User): Observable<Game[]> {
     if (user && user.userId) {
+      // in query only support up to 10 values
       const queryParams1 = {
         condition: [{ name: 'playerId_0', comparator: '==', value: user.userId },
         { name: 'gameOver', comparator: '==', value: false },
-        { name: 'GameStatus', comparator: '==', value: GameStatus.STARTED }
+        { name: 'GameStatus', comparator: 'in',
+        value: [ GameStatus.STARTED, GameStatus.RESTARTED, GameStatus.WAITING_FOR_NEXT_Q,
+                GameStatus.AVAILABLE_FOR_OPPONENT, GameStatus.WAITING_FOR_FRIEND_INVITATION_ACCEPTANCE,
+                GameStatus.WAITING_FOR_RANDOM_PLAYER_INVITATION_ACCEPTANCE, GameStatus.JOINED_GAME ]}
         ]
       };
-      const userGames1 = this.dbService.valueChanges('games', '', queryParams1);
+
+      const userGames = this.dbService.valueChanges('games', '', queryParams1);
+
       const queryParams2 = {
-        condition: [{ name: 'playerId_0', comparator: '==', value: user.userId },
-        { name: 'gameOver', comparator: '==', value: false },
-        { name: 'GameStatus', comparator: '==', value: GameStatus.RESTARTED }
-        ]
-      };
-      const userGames2 = this.dbService.valueChanges('games', '', queryParams2);
-      const queryParams3 = {
-        condition: [{ name: 'playerId_0', comparator: '==', value: user.userId },
-        { name: 'gameOver', comparator: '==', value: false },
-        { name: 'GameStatus', comparator: '==', value: GameStatus.WAITING_FOR_NEXT_Q }
-        ]
-      };
-      const userGames3 = this.dbService.valueChanges('games', '', queryParams3);
-      const queryParams4 = {
-        condition: [{ name: 'playerId_0', comparator: '==', value: user.userId },
-        { name: 'gameOver', comparator: '==', value: false },
-        { name: 'GameStatus', comparator: '==', value: GameStatus.AVAILABLE_FOR_OPPONENT }
-        ]
-      };
-      const userGames4 = this.dbService.valueChanges('games', '', queryParams4);
-      const queryParams5 = {
-        condition: [{ name: 'playerId_0', comparator: '==', value: user.userId },
-        { name: 'gameOver', comparator: '==', value: false },
-        { name: 'GameStatus', comparator: '==', value: GameStatus.WAITING_FOR_FRIEND_INVITATION_ACCEPTANCE }
-        ]
-      };
-
-      const userGames5 = this.dbService.valueChanges('games', '', queryParams5);
-      const queryParams6 = {
-        condition: [{ name: 'playerId_0', comparator: '==', value: user.userId },
-        { name: 'gameOver', comparator: '==', value: false },
-        { name: 'GameStatus', comparator: '==', value: GameStatus.WAITING_FOR_RANDOM_PLAYER_INVITATION_ACCEPTANCE }
-        ]
-      };
-
-      const userGames6 = this.dbService.valueChanges('games', '', queryParams6);
-      const queryParams7 = {
-        condition: [{ name: 'playerId_0', comparator: '==', value: user.userId },
-        { name: 'gameOver', comparator: '==', value: false },
-        { name: 'GameStatus', comparator: '==', value: GameStatus.JOINED_GAME }
-        ]
-      };
-
-      const userGames7 = this.dbService.valueChanges('games', '', queryParams7);
-      const queryParams8 = {
         condition: [{ name: 'playerId_1', comparator: '==', value: user.userId },
         { name: 'gameOver', comparator: '==', value: false },
-        { name: 'GameStatus', comparator: '==', value: GameStatus.JOINED_GAME }
+        { name: 'GameStatus', comparator: 'in', value: [ GameStatus.JOINED_GAME, GameStatus.WAITING_FOR_NEXT_Q] }
         ]
       };
 
-      const OtherGames2 = this.dbService.valueChanges('games', '', queryParams8);
-      const queryParams9 = {
-        condition: [{ name: 'playerId_1', comparator: '==', value: user.userId },
-        { name: 'gameOver', comparator: '==', value: false },
-        { name: 'GameStatus', comparator: '==', value: GameStatus.WAITING_FOR_NEXT_Q }
-        ]
-      };
-      const OtherGames3 = this.dbService.valueChanges('games', '', queryParams9);
-      return combineLatest(userGames1, userGames2, userGames3, userGames4, userGames5, userGames6, userGames7, OtherGames2, OtherGames3)
+      const OtherGames = this.dbService.valueChanges('games', '', queryParams2);
+
+      return combineLatest([userGames, OtherGames])
         .pipe(
           map(games => [].concat.apply([], games)),
           map(gs => gs.map(g => Game.getViewModel(g))),

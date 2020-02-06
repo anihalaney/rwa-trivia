@@ -10,7 +10,7 @@ import * as Platform from 'tns-core-modules/platform';
 import * as application from 'tns-core-modules/application';
 import { isAndroid } from 'tns-core-modules/platform';
 import { android, AndroidActivityBackPressedEventData, AndroidApplication } from 'tns-core-modules/application';
-import { NavigationService } from 'shared-library/core/services/mobile'
+import { NavigationService } from 'shared-library/core/services/mobile';
 import { coreState } from 'shared-library/core/store';
 import { ApplicationSettings } from 'shared-library/shared/model';
 import { on as applicationOn, resumeEvent, ApplicationEventData } from 'tns-core-modules/application';
@@ -24,14 +24,15 @@ import * as appversion from 'nativescript-appversion';
 import { Utils } from 'shared-library/core/services';
 import { NavigationEnd, Router, NavigationStart } from '@angular/router';
 import { FirebaseScreenNameConstants, User } from '../../../../../shared-library/src/lib/shared/model';
-import { registerElement } from "nativescript-angular/element-registry";
+import { registerElement } from 'nativescript-angular/element-registry';
 import { Carousel, CarouselItem } from 'nativescript-carousel';
 import { ModalDialogOptions, ModalDialogService } from 'nativescript-angular/modal-dialog';
 import { WelcomeScreenComponent } from '../../../../../shared-library/src/lib/shared/mobile/component';
 import * as appSettingsStorage from 'tns-core-modules/application-settings';
+import { TopicActions } from 'shared-library/core/store/actions';
 
-import { RadSideDrawerComponent, SideDrawerType } from "nativescript-ui-sidedrawer/angular";
-import { RadSideDrawer } from 'nativescript-ui-sidedrawer';
+import { RadSideDrawerComponent, SideDrawerType } from 'nativescript-ui-sidedrawer/angular';
+
 
 registerElement('Carousel', () => Carousel);
 registerElement('CarouselItem', () => CarouselItem);
@@ -64,7 +65,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit  {
     private cd: ChangeDetectorRef,
     private router: Router,
     private _modalService: ModalDialogService,
-    private _vcRef: ViewContainerRef
+    private _vcRef: ViewContainerRef,
+    private topicsActions: TopicActions
   ) {
     this.bottomSafeArea = 120;
     this.handleBackPress();
@@ -82,8 +84,11 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit  {
       onMessageReceivedCallback: (message) => {
         if (message.foreground) {
           this.utils.showMessage('success', message.body);
-        }
+        } else {
+        // only redirect to dashboard when notification is clicked from background
+        // While app is foreground user may be playing game
         this.ngZone.run(() => this.navigationService.redirectPushRoutes(message.data));
+        }
       },
       showNotifications: true,
       showNotificationsWhenInForeground: true
@@ -91,6 +96,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit  {
       () => {
         console.log('firebase.init done');
         this.store.dispatch(this.applicationSettingsAction.loadApplicationSettings());
+        this.store.dispatch(this.topicsActions.loadTopTopics());
       },
       error => {
         console.log(`firebase.init error: ${error}`);
@@ -131,7 +137,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit  {
       this.currentRouteUrl = evt.url;
 
       this.showBottomBar = this.hideBottomBarForSelectedRoutes(evt.url);
-     
+
       switch (evt.urlAfterRedirects) {
         case '/login':
           this.utils.setScreenNameInFirebaseAnalytics(FirebaseScreenNameConstants.LOGIN);
@@ -190,7 +196,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit  {
   hideBottomBarForSelectedRoutes(url) {
 
     if (url === '/signup-extra-info' || url === '/select-category-tag' || url === '/first-question' ||
-      ((url.includes('user/my/profile')) && Platform.isIOS) ||   
+      ((url.includes('user/my/profile')) && Platform.isIOS) ||
       ((url.includes('user/my/questions')) && Platform.isIOS) ||
       url === '/login' ||
       url.includes('game-play')) {

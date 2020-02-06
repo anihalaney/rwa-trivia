@@ -1,34 +1,23 @@
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  NgZone,
-  OnDestroy,
-  ViewChild,
-  ElementRef,
-  OnInit
-} from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
-import { Store, select } from "@ngrx/store";
-import { Utils } from "shared-library/core/services";
-import { UserActions } from "shared-library/core/store/actions";
-import { Page } from "tns-core-modules/ui/page";
-// import { AppState } from '../../../store';
-import { Leaderboard } from "./leaderboard";
-import {
-  SelectedIndexChangedEventData,
-  DropDown
-} from "nativescript-drop-down";
-import { ValueList } from "nativescript-drop-down";
-import { AppState, appState } from "../../../store";
-import { User } from "shared-library/shared/model";
-import { RadListViewComponent } from "nativescript-ui-listview/angular";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, NgZone, OnDestroy, ViewChild, ElementRef, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { Utils } from 'shared-library/core/services';
+import { UserActions, TagActions, TopicActions } from 'shared-library/core/store/actions';
+import { Page } from 'tns-core-modules/ui/page';
+import { Leaderboard } from './leaderboard';
+import { SelectedIndexChangedEventData, DropDown } from 'nativescript-drop-down';
+import { ValueList } from 'nativescript-drop-down';
+import { AppState } from '../../../store';
+import { User } from 'shared-library/shared/model';
+import { RadListViewComponent } from 'nativescript-ui-listview/angular';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 @Component({
-  selector: "leaderboard",
-  templateUrl: "./leaderboard.component.html",
-  styleUrls: ["./leaderboard.component.scss"],
+  selector: 'leaderboard',
+  templateUrl: './leaderboard.component.html',
+  styleUrls: ['./leaderboard.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
+@AutoUnsubscribe({ arrayName: 'subscriptions' })
 export class LeaderboardComponent extends Leaderboard
   implements OnDestroy, OnInit {
   @ViewChild("dropdown", { static: false }) dropdown: ElementRef;
@@ -38,7 +27,6 @@ export class LeaderboardComponent extends Leaderboard
   renderView = false;
   public selectedIndex = 0;
   public categoryItem: ValueList<string>;
-  public items: Array<string>;
   filterTopList = ["Top 10", "Top 20", "Top 30"];
   selectedTopFilter = 0;
   private _paginationFunc: (item: any) => any;
@@ -51,13 +39,12 @@ export class LeaderboardComponent extends Leaderboard
     protected route: ActivatedRoute,
     protected cd: ChangeDetectorRef,
     private page: Page,
-    protected ngZone: NgZone
+    protected ngZone: NgZone,
+    protected tag: TagActions,
+    protected topic: TopicActions
   ) {
-    super(store, userActions, utils, route, cd, ngZone);
-    this.items = [];
-    this.categoryDictList.map((category, index) => {
-      this.items.push(category.categoryName);
-    });
+    super(store, userActions, utils, route, cd, ngZone, tag, topic);
+
     this.cd.markForCheck();
 
     this.paginationFunc = (item: any) => {
@@ -94,7 +81,7 @@ export class LeaderboardComponent extends Leaderboard
   }
 
   onchange(args: SelectedIndexChangedEventData) {
-    this.selectedCatList = this.leaderBoardStatDict[args.newIndex + 1];
+    this.selectedCatList = this.leaderBoardStatDict[this.items[args.newIndex]];
     if (this.selectedCatList) {
       this.selectedCatList.map((data, index) => {
         data.index = index;

@@ -73,7 +73,7 @@
             verticalAlignment="center"></Label>
     </StackLayout>
 
-    <game-question *ngIf="currentQuestion && !showLoader && !showBadge && !showWinBadge && !showContinueScreen"
+    <game-question *ngIf="currentQuestion && !showLoader && !showBadge && !showWinBadge && !showContinueScreen && !threeConsecutiveAnswer"
         [categoryName]="categoryName" [question]="currentQuestion" [questionIndex]="questionIndex" [timer]="timer"
         [MAX_TIME_IN_SECONDS]="MAX_TIME_IN_SECONDS" [continueNext]="continueNext" [correctCount]="correctAnswerCount"
         [noOfQuestions]="questionIndex" [showContinueBtn]="showContinueBtn" [otherPlayer]="otherPlayer"
