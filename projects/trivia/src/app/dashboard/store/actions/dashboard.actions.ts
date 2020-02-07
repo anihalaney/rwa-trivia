@@ -110,7 +110,7 @@ export class LoadBlogsError implements Action {
 // Load Score
 export class LoadLeaderBoard implements Action {
     readonly type = DashboardActionTypes.LOAD_LEADERBOARD;
-    constructor() { }
+    constructor(public payload: { data: Array<{id: string, type: string}> }) { }
 }
 
 // Load Score

@@ -3,19 +3,15 @@
     <render-question [question]="question" [theme]="theme"></render-question>
   </StackLayout>
 
-  <StackLayout *ngIf="question" orientation="horizontal" margin="5 10 5 10" iosOverflowSafeArea="false">
-    <Label class="text-color" text="Categories:" marginRight="5" fontSize="15" fontWeight="500" textWrap="true"></Label>
-    <Label text="{{categoryName}}" class="text-color Roboto-Regular" fontSize="15" textWrap="true"></Label>
-  </StackLayout>
-
   <FlexboxLayout *ngIf="question && question.tags" margin="0 10" flexWrap="wrap">
-    <StackLayout *ngFor="let tags of question.tags, let i = index">
-      <Label [style.backgroundColor]="theme === 'dark' ? '#405177':'#e2e2e2'"
+       <Label *ngIf="categoryName" [style.backgroundColor]="theme === 'dark' ? '#405177':'#e2e2e2'"
+        [style.color]="theme === 'dark' ? '#a5a5a5' : '#808080'" borderRadius="22" margin="2.5 2.5"
+        [text]="categoryName" padding="5 10" textWrap="true"></Label> 
+      <Label  *ngFor="let tags of question.tags" [style.backgroundColor]="theme === 'dark' ? '#405177':'#e2e2e2'"
         [style.color]="theme === 'dark' ? '#a5a5a5' : '#808080'" borderRadius="22" margin="2.5 2.5" [text]="tags"
-        padding="5 10" textWrap="true"></Label>        
-    </StackLayout>
+        padding="5 10" textWrap="true"></Label>
     <GridLayout marginTop="15">
-      <Label [style.color]="theme === 'dark' ? '#a5a5a5' : '#808080'" text="choose any one"  textWrap="true"></Label>
+      <Label [style.color]="theme === 'dark' ? '#a5a5a5' : '#808080'" text="Choose any one" textWrap="true"></Label>
     </GridLayout>
   </FlexboxLayout>
 

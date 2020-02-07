@@ -1,11 +1,10 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit, Input } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { UserActions } from 'shared-library/core/store/actions';
 import { Page } from 'tns-core-modules/ui/page';
 import { CoreState } from 'shared-library/core/store';
 import { RecentGames } from './recent-games';
-import { Utils } from 'shared-library/core/services';
-import { FirebaseScreenNameConstants } from 'shared-library/shared/model';
+import { AutoUnsubscribe } from "ngx-auto-unsubscribe";
 
 @Component({
   selector: 'recent-games',
@@ -14,7 +13,7 @@ import { FirebaseScreenNameConstants } from 'shared-library/shared/model';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-
+@AutoUnsubscribe({ arrayName: "subscriptions" })
 export class RecentGamesComponent extends RecentGames implements OnInit, OnDestroy {
 
   // This is magic variable
@@ -25,8 +24,7 @@ export class RecentGamesComponent extends RecentGames implements OnInit, OnDestr
     cd: ChangeDetectorRef,
     userActions: UserActions,
     private ngZone: NgZone,
-    private page: Page,
-    private utils: Utils
+    private page: Page
   ) {
     super(store, cd, userActions);
   }

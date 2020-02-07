@@ -1,11 +1,12 @@
 import { ActionReducerMap, createSelector, createFeatureSelector } from '@ngrx/store';
-import { User, Category, Question, Game, Friends, Invitation, Account } from 'shared-library/shared/model';
+import { User, Category, Question, Game, Friends, Invitation, Account, Topic } from 'shared-library/shared/model';
 import {
   user, authInitialized, invitationToken, userDict,
   gameInvites, userFriends, friendInvitations, userProfileSaveStatus, feedback, account, getGameResult, countries,
   addressUsingLongLat, addressSuggestions, userFriendInvitations, userUpdateStatus, firstQuestionBits, checkDisplayName
 } from './user.reducer';
 import { categories, topCategories } from './categories.reducer';
+import { topTopics } from './topic.reducer';
 import { tags, topTags } from './tags.reducer';
 import { questionOfTheDay, questionSaveStatus, updateQuestion, firstQuestion, questionDraftSaveStatus } from './questions.reducer';
 import { loginRedirectUrl, resetPasswordLogs } from './ui-state.reducer';
@@ -18,6 +19,7 @@ import { Country } from 'shared-library/shared/mobile/component/countryList/mode
 
 export * from './user.reducer';
 export * from './categories.reducer';
+export * from './topic.reducer';
 export * from './tags.reducer';
 export * from './questions.reducer';
 export * from './ui-state.reducer';
@@ -30,6 +32,7 @@ export interface CoreState {
   userDict: { [key: string]: User };
   authInitialized: boolean;
   categories: Category[];
+  topTopics: Topic[];
   tags: string[];
   questionOfTheDay: Question;
   loginRedirectUrl: string;
@@ -71,6 +74,7 @@ export const reducer: ActionReducerMap<CoreState> = {
   authInitialized: authInitialized,
   categories: categories,
   tags: tags,
+  topTopics: topTopics,
   questionOfTheDay: questionOfTheDay,
   questionSaveStatus: questionSaveStatus,
   questionDraftSaveStatus: questionDraftSaveStatus,

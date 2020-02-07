@@ -7,16 +7,15 @@ import { Utils } from 'shared-library/core/services';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { GameActions } from 'shared-library/core/store/actions';
 import { skipWhile, map, switchMap } from 'rxjs/operators';
+
 @Component({
   selector: 'question',
   templateUrl: './question.component.html',
   styleUrls: ['./question.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-
-@AutoUnsubscribe({ 'arrayName': 'subscriptions' })
+@AutoUnsubscribe({ arrayName: 'subscriptions' })
 export class QuestionComponent implements OnDestroy {
-
   question: Question;
   categoryName: string;
 
@@ -46,14 +45,15 @@ export class QuestionComponent implements OnDestroy {
         }
       }));
     this.subscriptions.push(this.store.select(categoryDictionary)
-    .pipe(skipWhile( categories => Object.entries(categories).length === 0 && categories.constructor === Object ),
-    map(categories => this.categoryDictionary = categories),
-    switchMap(() => this.store.select(appState.coreState).pipe(select(s => s.questionOfTheDay)))
-    ).subscribe(questionOfTheDay => {
+      .pipe(skipWhile(categories => Object.entries(categories).length === 0 && categories.constructor === Object),
+        map(categories => (this.categoryDictionary = categories)),
+        switchMap(() => { return this.store.select(appState.coreState).pipe(select(s => s.questionOfTheDay)); })
+      ).subscribe(questionOfTheDay => {
         if (questionOfTheDay) {
+
           this.question = questionOfTheDay;
           this.cd.markForCheck();
-          this.store.dispatch(this.gameActions.UpdateQuestionStat(this.question.id, 'CREATED'));
+
           this.question.answers = utils.changeAnswerOrder(questionOfTheDay.answers);
           if (this.question.answers) {
             this.question.answers.forEach((item, index) => {
@@ -69,25 +69,27 @@ export class QuestionComponent implements OnDestroy {
               } else {
                 return '';
               }
-            }).join(',');
+            })
+              .join(',');
           }
           this.cd.markForCheck();
         }
-      this.cd.markForCheck();
-    }));
-
-
+        this.cd.markForCheck();
+      })
+    );
   }
 
   answerButtonClicked(answer: Answer) {
     if (this.doPlay) {
       this.answeredText = answer.answerText;
       this.doPlay = false;
-      const index = this.question.answers.findIndex(x => x.answerText === answer.answerText);
+      const index = this.question.answers.findIndex(
+        x => x.answerText === answer.answerText
+      );
       if (this.answeredText === this.correctAnswerText) {
-        this.store.dispatch(this.gameActions.UpdateQuestionStat(this.question.id, 'CORRECT'));
+        this.store.dispatch(this.gameActions.UpdateQuestionStat(this.question.id, "CORRECT"));
       } else {
-        this.store.dispatch(this.gameActions.UpdateQuestionStat(this.question.id, 'WRONG'));
+        this.store.dispatch(this.gameActions.UpdateQuestionStat(this.question.id, "WRONG"));
       }
       this.answerClicked.emit(index);
       this.cd.markForCheck();
@@ -99,20 +101,17 @@ export class QuestionComponent implements OnDestroy {
     this.correctAnswerText = '';
     this.doPlay = true;
     this.store.dispatch(this.questionAction.getQuestionOfTheDay());
-
   }
 
   rippleTap(answer) {
     this.answerButtonClicked(answer);
   }
 
-  selectedAnswer(answeredText) {
-    this.answeredText = answeredText;
+  selectedAnswer(answer: Answer) {
+    this.answeredText = answer.answerText;
+    this.answerButtonClicked(answer);
     this.cd.markForCheck();
   }
 
-  ngOnDestroy(): void {
-
-  }
-
+  ngOnDestroy(): void { }
 }

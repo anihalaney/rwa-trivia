@@ -4,7 +4,7 @@ import { Store, select } from '@ngrx/store';
 import { AppState, appState } from '../../../store';
 import { User, userCardType, Account, Invitation } from 'shared-library/shared/model';
 import { Observable, Subject } from 'rxjs';
-import { UserActions } from 'shared-library/core/store';
+import { UserActions, categoryDictionary } from 'shared-library/core/store';
 import { ChangeDetectorRef } from '@angular/core';
 import { Utils } from 'shared-library/core/services';
 import * as lodash from 'lodash';
@@ -37,6 +37,13 @@ export class GameProfile {
     tags: any = {};
     tagsArray: any = {};
     loader: Boolean = false;
+    categoryText = ' ';
+    categoryDictionary = {};
+    topics = [];
+    otherUserTopics = [];
+    topicList = '';
+    otherUserTopicList = '';
+    topicsArray = {userTopics : [], otherUserTopics: [], comparison: ''};
     constructor(
         public route: ActivatedRoute,
         public router: Router,
@@ -49,14 +56,22 @@ export class GameProfile {
             this.route.params.pipe(
                 skipWhile(params => !params.userid),
                 map(params => this.userId = params.userid),
+                switchMap(() => this.store.select(categoryDictionary).pipe(map(categoryDict => this.categoryDictionary = categoryDict))),
                 flatMap(() => this.store.select(appState.coreState).pipe(select(s => s.user))),
                 switchMap(user => {
+                    this.topics = [];
                     if (user && user.tags && user.tags.length > 0) {
                         this.tagsArray.userTags = user.tags;
                         const userTags = user.tags.join(', ');
-                        this.tags.userTags = userTags;
-
+                        this.tags.userTags = userTags ? userTags : '';
+                        this.topics = [...user.tags];
+                        this.topicsArray.userTopics = [...user.tags, ...user.categoryIds];
                     }
+
+                    this.topics = [...this.topics, user.categoryIds.map((data) => this.categoryDictionary[data].categoryName)];
+
+                    this.topicList = this.topics.join(', ');
+
                     if (user && user.userId === this.userId) {
                         this.user = user;
                         this.userType = UserType.userProfile;
@@ -68,7 +83,7 @@ export class GameProfile {
                                 this.loggedInUserAccount = accountInfo;
                             });
                     }
-
+                    this.cd.markForCheck();
                     return this.initializeProfile();
                 })
             ).subscribe());
@@ -81,6 +96,7 @@ export class GameProfile {
             skipWhile(userDict => !userDict || !userDict[this.userId] || !userDict[this.userId].account),
             take(1),
             map(userDict => {
+                this.topics = [];
                 this.user = userDict[this.userId];
                 this.account = this.user.account;
                 this.gamePlayedAgainst = this.user.gamePlayed;
@@ -89,10 +105,16 @@ export class GameProfile {
                 }
                 if (this.user && this.user.tags && this.user.tags.length > 0) {
                     this.tagsArray.otherUserTags = this.user.tags;
-                    this.tags.comparison = lodash.intersection(this.tagsArray.userTags, this.tagsArray.otherUserTags);
+                    this.topicsArray.otherUserTopics = [...this.user.tags, ...this.user.categoryIds];
+                    this.topicsArray.comparison = lodash.intersection(this.topicsArray.userTopics, this.topicsArray.otherUserTopics);
                     const userTags = this.user.tags.join(', ');
-                    this.tags.otherUserTags = userTags;
+                    this.tags.otherUserTags = userTags ? userTags : '';
+                    this.otherUserTopics = [...this.user.tags];
                 }
+                this.otherUserTopics = [...this.otherUserTopics,
+                    this.user.categoryIds.map((data) => this.categoryDictionary[data].categoryName)];
+
+                this.otherUserTopicList = this.otherUserTopics.join(', ');
                 this.userProfileImageUrl = this.getImageUrl(this.user);
                 if (this.socialProfileObj) {
                     this.socialProfileObj.map(profile => {

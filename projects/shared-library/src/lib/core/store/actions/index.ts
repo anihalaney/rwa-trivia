@@ -6,6 +6,7 @@ import {QuestionActions} from './question.actions';
 import {UIStateActions} from './ui-state.actions';
 import {GameActions} from './game.actions';
 import {ActionWithPayload} from './action-with-payload';
+import { TopicActions } from './topic.actions';
 
 
 export {
@@ -16,7 +17,8 @@ export {
     TagActions,
     QuestionActions,
     UIStateActions,
-    GameActions
+    GameActions,
+    TopicActions
 };
 
 export default [
@@ -26,5 +28,6 @@ export default [
     TagActions,
     QuestionActions,
     UIStateActions,
-    GameActions
+    GameActions,
+    TopicActions
 ];
