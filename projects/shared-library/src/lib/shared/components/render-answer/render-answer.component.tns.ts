@@ -1,23 +1,13 @@
-import {
-  Component,
-  Input,
-  OnInit,
-  SimpleChanges,
-  OnChanges,
-  Inject,
-  PLATFORM_ID,
-  Output,
-  EventEmitter
-} from "@angular/core";
-import { Answer } from "shared-library/shared/model";
-import { LoadEventData } from "tns-core-modules/ui/web-view";
-import { isAndroid, isIOS } from "tns-core-modules/platform";
-import { externalUrl } from "./../../../environments/external-url";
+import { Component, Input, OnInit, SimpleChanges, OnChanges, Output, EventEmitter } from '@angular/core';
+import { Answer } from 'shared-library/shared/model';
+import { LoadEventData } from 'tns-core-modules/ui/web-view';
+import { isAndroid, isIOS } from 'tns-core-modules/platform';
+import { externalUrl } from './../../../environments/external-url';
 
 @Component({
-  selector: "render-answer",
-  templateUrl: "render-answer.component.html",
-  styleUrls: ["render-answer.component.css"]
+  selector: 'render-answer',
+  templateUrl: 'render-answer.component.html',
+  styleUrls: ['render-answer.component.css']
 })
 export class RenderAnswerComponent implements OnInit, OnChanges {
   @Input() answer: Answer;
@@ -49,28 +39,17 @@ export class RenderAnswerComponent implements OnInit, OnChanges {
             ${this.isGameAnswer ? "font-weight: bold !important;" : ""}
         padding:10px 0;vertical-align: middle;text-align:center;"><meta name="viewport" content="width=device-width,
         initial-scale=1, maximum-scale=1.0, user-scalable=no"><script src="${
-          externalUrl.hightlighJs
-        }"></script>`;
-    this.htmlEndTag = `<style> html {background:${
-      this.theme === "dark" ? "#283b66" : "#f7f7f7"
-    };color:red}
-            </style></body>
-            <link rel="stylesheet" href="${
-              externalUrl.katexCSS
-            }" crossorigin="anonymous">
-            <link rel="stylesheet" href="${
-              externalUrl.hightlighCSS
-            }" crossorigin="anonymous"></html>`;
-    // Created new local answer object because here I am modifing answer object
+      externalUrl.hightlighJs
+      }"></script>`;
+    this.htmlEndTag = `<style> html {background:${this.theme === "dark" ? "#283b66" : "#f7f7f7"};color:red}</style></body><link rel="stylesheet" href="${externalUrl.katexCSS}" crossorigin="anonymous"><link rel="stylesheet" href="${externalUrl.hightlighCSS}" crossorigin="anonymous"></html>`;
+
   }
 
   ngOnInit(): void {
     if (this.answer) {
       this.currentAnswer = { ...this.answer };
       if (this.bgColor && this.currentAnswer.isRichEditor) {
-        const bgColor = this.currentAnswer.correct
-          ? `background:${this.bgColor}!important;`
-          : `background:#fff!important;`;
+        const bgColor = this.currentAnswer.correct ? `background:${this.bgColor}!important;` : `background:#fff!important;`;
         this.currentAnswer.answerText = `${this.htmlStartTag} ${this.currentAnswer.answerText}
                         <style> html {${bgColor}color:#212121 !important;font-size:18;}</style>
                          ${this.scriptToGetHeight}   ${this.htmlEndTag}`;
@@ -112,7 +91,7 @@ export class RenderAnswerComponent implements OnInit, OnChanges {
     }
   }
 
-  answerButtonClicked(answer: Answer) {}
+  answerButtonClicked(answer: Answer) { }
 
   ngOnChanges(changes: SimpleChanges) {
     // Change background color of webview after answer given
