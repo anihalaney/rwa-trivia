@@ -72,9 +72,9 @@
         </div>
         <div class="col-md-2 col-xs-2 continue-btn-div">  
           <button mat-button *ngIf="!gameOver && (answeredIndex>=0 || doPlay === false)" (click)="continueButtonClicked($event)" class="startgame continue-btn">
-            {{threeConsecutiveAnswer ? 'Continue' : 'Next Round' }} 
+            Next Round
             <span *ngIf="showLoader" class="loader"></span> </button>
-          <button mat-button  *ngIf="gameOver" (click)="gameOverButtonClicked.emit($event)" class="startgame continue-btn">Continue</button>
+          <button mat-button  *ngIf="gameOver" (click)="gameOverButtonClicked.emit($event)" class="startgame continue-btn">Next Round</button>
         </div>
       </div>
     </ng-container>
