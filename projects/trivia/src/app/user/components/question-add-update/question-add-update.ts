@@ -1,14 +1,18 @@
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
 import { Observable, of, Subject, merge } from 'rxjs';
-import { debounceTime, take, map, switchMap, multicast, skip } from 'rxjs/operators';
+import { debounceTime, take, map, switchMap, multicast, skip, filter } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 import { User, Category, Question, QuestionStatus, Answer, ApplicationSettings } from 'shared-library/shared/model';
 import { Utils } from 'shared-library/core/services';
 import { AppState, appState } from '../../../store';
 import * as userActions from '../../store/actions';
 import { QuestionActions } from 'shared-library/core/store/actions/question.actions';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { OnDestroy } from '@angular/core';
+import * as lodash from 'lodash';
 
-export class QuestionAddUpdate {
+@AutoUnsubscribe({ arrayName: 'subscriptions' })
+export class QuestionAddUpdate implements OnDestroy {
 
 
   tagsObs: Observable<string[]>;
@@ -18,7 +22,7 @@ export class QuestionAddUpdate {
   // Properties
   categories: Category[];
   questionCategories: Array<string> = [];
-  tags: string[];
+  tags: string[] = [];
 
   questionForm: FormGroup;
   question: Question;
@@ -67,9 +71,9 @@ export class QuestionAddUpdate {
   saveDraft() {
     this.subscriptions.push(this.store.select(appState.coreState).pipe(
       select(s => s.applicationSettings),
-      map(appSettings => appSettings),
+      filter(applicationSettings => { return !lodash.isEmpty(applicationSettings); }),
       switchMap(appSettings => {
-        if (appSettings && appSettings[0]) {
+        if (!lodash.isEmpty(appSettings)) {
           if (appSettings[0]['auto_save']['is_enabled']) {
             if (!this.questionForm.controls.is_draft.value) {
               this.questionForm.patchValue({ is_draft: true });
@@ -209,6 +213,10 @@ export class QuestionAddUpdate {
 
   saveQuestion(question: Question) {
     this.store.dispatch(new userActions.AddQuestion({ question: question }));
+  }
+
+  ngOnDestroy(): void {
+
   }
 
 }
