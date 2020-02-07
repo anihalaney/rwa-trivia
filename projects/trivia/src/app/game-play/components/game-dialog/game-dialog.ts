@@ -69,6 +69,7 @@ export class GameDialog {
   showContinueDialogueForThreeConsecutiveAnswers = false;
 
   private genQuestionComponent: GameQuestionComponent;
+  isMobile = false;
 
   @ViewChild(GameQuestionComponent, { static: false }) set questionComponent(
     questionComponent: GameQuestionComponent
@@ -594,7 +595,10 @@ export class GameDialog {
       this.store.dispatch(
         new gameplayactions.UpdateGameRound(this.game.gameId)
       );
+      this.showContinueScreen = true;
+      if (!this.isMobile) {
       this.router.navigate(["/dashboard"]);
+      }
     } else {
       this.questionAnswered = false;
       this.showContinueBtn = false;
