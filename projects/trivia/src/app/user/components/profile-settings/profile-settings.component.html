@@ -89,7 +89,7 @@
             <div class="formfield">
               <div class="cell">
 
-                <label class="m-r-51">Location {{userType === 0 ? '*': ''}}</label>
+                <label class="m-r-51">Location  </label>
                 <div *ngIf="userType === 0" class="input-edit"
                 [ngClass]="{'animate-ease-out': (singleFieldEdit.location), 'animate-ease-in': (!singleFieldEdit.location)}">
                   <input formControlName="location" [placeholder]="userType === 0 ? 'Enter Location' : ''" type="text"
@@ -101,7 +101,7 @@
                   <span class="field-edit-icon" *ngIf="!singleFieldEdit.location  && userType === 0"
                     (click)="editSingleField('location')"></span>
                   <span class="field-save-icon"
-                    *ngIf="singleFieldEdit.location && userForm.value.location !==''  && userType === 0"
+                    *ngIf="singleFieldEdit.location && userType === 0"
                     (click)="onSubmit(true, 'location')"></span>
                 </div>
                 <button *ngIf="singleFieldEdit.location" (click)="getLocation()" class="get-location btn save"> Get
@@ -110,10 +110,10 @@
 
                   Where in the world you are
                 </p>
-                <p *ngIf="userForm.controls.location.errors && !userForm.controls.location.pristine"
+                <!-- <p *ngIf="userForm.controls.location.errors && !userForm.controls.location.pristine"
                   class="error location-error">
                   Location
-                  is required!</p>
+                  is required!</p> -->
               </div>
             </div>
           </div>

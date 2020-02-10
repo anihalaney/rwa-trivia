@@ -115,7 +115,7 @@
           </FlexboxLayout>
 
           <app-animation-box [fieldName]="'location'" (formSubmitted)='formSubmitted($event)' (getCurrentLocation)="getCurrentLocation($event)"
-            [fieldValue]="user.location" (formEditOpen)='formEditOpen($event)' [isValid]="!userForm.controls.location.errors" [type]="'location'">
+            [fieldValue]="user.location" (formEditOpen)='formEditOpen($event)' [isValid]="true" [type]="'location'">
             <RadAutoCompleteTextView textField #textFieldContent #acLocation [items]="dataLocation" suggestMode="Suggest"
               showCloseButton="false" (didAutoComplete)="onTextChangedLocation($event)"
               (textChanged)="onTextChangedLocation($event)" (loaded)="onLoadedLocation($event)" ios:marginTop="0"
