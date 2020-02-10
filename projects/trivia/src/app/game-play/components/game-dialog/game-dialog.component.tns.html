@@ -81,7 +81,7 @@
         (answerClicked)="answerClicked($event)" (okClick)="okClick($event)" (continueClicked)="continueClicked($event)"
          [userDict]="userDict" [totalRound]="totalRound"
         [turnFlag]="turnFlag" [threeConsecutiveAnswer]="threeConsecutiveAnswer"  [user]="user"
-        (btnClickedAfterThreeConsecutiveAnswers)="btnClickedAfterThreeConsecutiveAnswers(event)"
+        (btnClickedAfterThreeConsecutiveAnswers)="btnClickedAfterThreeConsecutiveAnswers($event)"
         [questionRound]="game.round" [applicationSettings]="applicationSettings" [playerMode]="playerMode"
         >
     </game-question>

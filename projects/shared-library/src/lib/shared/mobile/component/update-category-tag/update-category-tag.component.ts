@@ -1,27 +1,22 @@
-import { Component, OnInit, ChangeDetectorRef, OnDestroy } from "@angular/core";
-import { RouterExtensions } from "nativescript-angular/router";
-import { Page } from "tns-core-modules/ui/page/page";
+import { Component, OnInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
+import { RouterExtensions } from 'nativescript-angular/router';
+import { Page } from 'tns-core-modules/ui/page/page';
 import { Store, select } from "@ngrx/store";
-import {
-  UserActions,
-  CategoryActions,
-  TagActions,
-  coreState
-} from "shared-library/core/store";
-import { User, Category } from "shared-library/shared/model";
-import { Observable } from "rxjs";
-import { map, flatMap } from "rxjs/operators";
-import { Utils } from "./../../../../core/services/utils";
-import { AutoUnsubscribe } from "ngx-auto-unsubscribe";
+import { UserActions, CategoryActions, TagActions, coreState } from 'shared-library/core/store';
+import { User, Category } from 'shared-library/shared/model';
+import { Observable } from 'rxjs';
+import { map, flatMap, filter } from 'rxjs/operators';
+import { Utils } from './../../../../core/services/utils';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
 
 @Component({
-  selector: "app-update-category-tag",
-  templateUrl: "./update-category-tag.component.html",
-  styleUrls: ["./update-category-tag.component.scss"]
+  selector: 'app-update-category-tag',
+  templateUrl: './update-category-tag.component.html',
+  styleUrls: ['./update-category-tag.component.scss']
 })
 
-@AutoUnsubscribe({ arrayName: "subscriptions" })
+@AutoUnsubscribe({ arrayName: 'subscriptions' })
 export class UpdateCategoryTagComponent implements OnInit, OnDestroy {
   user: User;
   subscriptions = [];
@@ -45,95 +40,83 @@ export class UpdateCategoryTagComponent implements OnInit, OnDestroy {
     private tag: TagActions,
     public cd: ChangeDetectorRef,
     private utils: Utils
-  ) {}
+  ) { }
 
   ngOnInit() {
-  
+
     this.page.on("loaded", () => {
       this.renderView = true;
       this.cd.markForCheck();
     });
 
-    this.categoriesObs = this.store
-      .select(coreState)
-      .pipe(select(s => s.categories));
+    this.categoriesObs = this.store.select(coreState).pipe(select(s => s.categories));
+
+
 
     this.store.dispatch(this.category.loadTopCategories());
-    this.topCategoriesObs = this.store
-      .select(coreState)
-      .pipe(select(s => s.getTopCategories));
-
+    this.topCategoriesObs = this.store.select(coreState).pipe(select(s => s.getTopCategories));
 
     this.store.dispatch(this.tag.loadTopTags());
-    this.topTagsObs = this.store
-      .select(coreState)
-      .pipe(select(s => s.getTopTags));
+    this.topTagsObs = this.store.select(coreState).pipe(select(s => s.getTopTags));
 
+    this.store.select(coreState).pipe(select(s => s.user),
+      filter(u => { return u !== null;
+      }),
+      map(user => { this.user = user; }),
+      flatMap(() =>
+        this.categoriesObs.pipe(map(categories => {
+          this.categories = categories;
+          this.tempCategories = categories;
+        })
+        )
+      ),
+      flatMap(() =>
+        this.topCategoriesObs.pipe(
+          map(topCategories => {
+            this.topCategories = topCategories;
+            let categoryData = [];
+            this.topCategories.map(topCategories => {
+              this.tempCategories.map(category => {
+                if (topCategories.key === category.id) {
+                  categoryData.push(category);
+                }
+              });
+            });
+            categoryData.map((category: any) => {
+              category.requiredForGamePlay = this.user.categoryIds.some(
+                categoryIds => categoryIds == category.id
+              );
+            });
+            this.categories = categoryData;
+          })
+        )
+      ),
+      flatMap(() =>
+        this.topTagsObs.pipe(
+          map(topTags => {
+            this.topTags = topTags;
+            this.topTags.map((tag: any) => {
+              tag.requiredForGamePlay = this.user.tags.some(
+                t => t == tag.key
+              );
+            });
+            this.tags = this.topTags;
 
-    this.store
-      .select(coreState)
-      .pipe(
-        select(s => s.user),
-        map(user => {
-          this.user = user;
-        }),
-        flatMap(() =>
-          this.categoriesObs.pipe(
-            map(categories => {
-              this.categories = categories;
-              this.tempCategories = categories;
-            })
-          )
-        ),
-        flatMap(() =>
-          this.topCategoriesObs.pipe(
-            map(topCategories => {
-              this.topCategories = topCategories;
-              let categoryData = [];
-              this.topCategories.map(topCategories => {
-                this.tempCategories.map(category => {
-                  if (topCategories.key === category.id) {
-                    categoryData.push(category);
-                  }
-                });
-              });
-              categoryData.map((category: any) => {
-                category.requiredForGamePlay = this.user.categoryIds.some(
-                  categoryIds => categoryIds == category.id
-                );
-              });
-              this.categories = categoryData;
-            })
-          )
-        ),
-        flatMap(() =>
-          this.topTagsObs.pipe(
-            map(topTags => {
-              this.topTags = topTags;
-              this.topTags.map((tag: any) => {
-                tag.requiredForGamePlay = this.user.tags.some(
-                  t => t == tag.key
-                );
-              });
-              this.tags = this.topTags;
-
-              const filteredTags = [...this.user.tags];
-              this.tags.map(data => {
-                  if (filteredTags.indexOf(data.key) >= 0) {
-                      filteredTags.splice(filteredTags.indexOf(data.key), 1);
-                  }
-              });
-              this.tags = [...this.tags, ...filteredTags.map(data => { const newid = {key: data, requiredForGamePlay: true}; return newid; }) ];
-            })
-          )
+            const filteredTags = [...this.user.tags];
+            this.tags.map(data => {
+              if (filteredTags.indexOf(data.key) >= 0) {
+                filteredTags.splice(filteredTags.indexOf(data.key), 1);
+              }
+            });
+            this.tags = [...this.tags, ...filteredTags.map(data => { const newid = { key: data, requiredForGamePlay: true }; return newid; })];
+          })
         )
       )
+    )
       .subscribe();
 
     this.subscriptions.push(
-      this.store
-        .select(coreState)
-        .pipe(select(s => s.userProfileSaveStatus))
+      this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus))
         .subscribe(status => {
           if (status === "SUCCESS") {
             this.utils.showMessage(
