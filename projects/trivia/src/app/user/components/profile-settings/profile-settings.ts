@@ -171,6 +171,7 @@ export class ProfileSettings {
           switchMap(user => {
             if (user && user.userId === this.userId) {
               this.user = user;
+              this.cd.markForCheck();
               if (
                 user.authState &&
                 user.authState.providerData &&
