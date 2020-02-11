@@ -180,8 +180,8 @@
                         
                 <GridLayout *ngIf="signInMethod === 'phone'" row="1" rows="auto,auto,auto" columns="*" class="verify-phone">
                               <GridLayout row="0" rows="*,*" columns="*" class="section-1">
-                                    <Label row="0"  col="0"  text="Verify phone number" textWrap="true" class="title-1"></Label>
-                                    <Label row="1"  col="0"  text="one time password has been send to below phone number" textWrap="true"
+                                    <Label row="0"  col="0"  text="Verify phone" textWrap="true" class="title-1"></Label>
+                                    <Label row="1"  col="0"  text="one time password has been send to below phone" textWrap="true"
                                           class="title-2"></Label>
                                   </GridLayout>
                               <GridLayout row="1"  col="0" rows="auto,auto" columns="*" class="section-2">
@@ -202,7 +202,7 @@
                             <!--Phone No-->
                                           <GridLayout row="0" col="1" rows="*" columns="*">
                                                 
-                                <TextField col="0" #textField hint="Your phone no." #phoneNumber="ngModel" [(ngModel)]="input.phoneNumber"
+                                <TextField col="0" #textField hint="Your phone" #phoneNumber="ngModel" [(ngModel)]="input.phoneNumber"
                                                       keyboardType="number"  returnKeyType="next"  class="text-field"
                                      maxlength="10"  required phoneNumber                   >
                                                     </TextField>
@@ -215,10 +215,10 @@
                                                 text="Country code is required"></Label>
                                           <Label marginTop="6" textWrap="true" class="error-text"
                                                 *ngIf="phoneNumber.dirty && phoneNumber.errors && phoneNumber.errors.required"
-                                                text="Phone number is required"></Label>
+                                                text="Phone is required"></Label>
                                           <Label marginTop="6" textWrap="true" class="error-text"
                                                 *ngIf="phoneNumber.errors && !phoneNumber.errors.required"
-                                 text="Invalid Phone number"></Label>
+                                 text="Invalid Phone"></Label>
                                         </StackLayout>  
                                   </GridLayout>
                               <GridLayout row="2"  col="0" rows="*" columns="*" class="section-3">

@@ -186,12 +186,12 @@
                           <div class="clearfix namefield"
                             *ngIf="isEnableEditProfile && (currentAuthProvider===authProviderConstants.GOOGLE || currentAuthProvider===authProviderConstants.FACEBOOK || currentAuthProvider===authProviderConstants.PASSWORD )">
                             <div class="formfield">
-                              <label id="nameLableField">Phone No</label>
+                              <label id="nameLableField">Phone</label>
                               <input formControlName="phoneNo" type="text"
-                                [placeholder]="userType === 0 ? 'Enter Phone No' : ''" class="required"
+                                [placeholder]="userType === 0 ? 'Enter Phone' : ''" class="required"
                                 aria-label="name">
                               <p *ngIf="userForm.controls.phoneNo.errors?.pattern && !userForm.controls.phoneNo.pristine"
-                                class="error">Phone No is Invalid!</p>
+                                class="error">Phone is Invalid!</p>
                             </div>
                           </div>
 
