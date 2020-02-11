@@ -792,10 +792,10 @@ export class ProfileSettings {
         if (cityList.length > 0) {
           userLocation.push(component.long_name);
         }
-        const countryList = component.types.filter(
-          typeName => typeName === "country"
+        const stateList = component.types.filter(
+          typeName => typeName === "administrative_area_level_1"
         );
-        if (countryList.length > 0) {
+        if (stateList.length > 0) {
           userLocation.push(component.long_name);
         }
       });
