@@ -317,12 +317,15 @@ export class GameMechanics {
                     lastAddedQuestion.answerCorrect = false;
                     lastAddedQuestion.playerAnswerInSeconds = 16;
                     game.playerQnAs[index] = lastAddedQuestion;
+                    const currentTurnPlayerId = game.nextTurnPlayerId;
                     if (Number(game.gameOptions.playerMode) === PlayerMode.Opponent) {
                         game.nextTurnPlayerId = game.playerIds.filter((playerId) => playerId !== game.nextTurnPlayerId)[0];
                     }
                     game.reminder32Min = false;
                     game.reminder8Hr = false;
                     game.turnAt = Utils.getUTCTimeStamp();
+                    PushNotification.sendGamePlayPushNotifications(game, currentTurnPlayerId,
+                        pushNotificationRouteConstants.GAME_PLAY_NOTIFICATIONS, lastAddedQuestion);
                     game.calculateStat(lastAddedQuestion.playerId);
                     await GameService.setGame(game.getDbModel());
                     return false;

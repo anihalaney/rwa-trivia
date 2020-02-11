@@ -29,7 +29,7 @@
       [stlOpenUserProfile]="{userId: user?.userId, redirectTo: loggedInUserId === user?.userId ? 'userProfile': 'otherUserProfile'}">
       <Label height="12" top="45" left="43" width="12" borderRadius="22" backgroundColor="#71b02f"></Label>
     </AbsoluteLayout>
-    <Label text="{{user?.displayName}}" textWrap="true" class="user-name"
+    <Label text="{{ user?.userId === loggedInUserId ? 'You' : user?.displayName}}" textWrap="true" class="user-name"
       horizontalAlignment="center" row="1" col="0"></Label>
   </GridLayout>
 </ng-container>
@@ -146,13 +146,13 @@
   <AbsoluteLayout *ngIf="user?.online" horizontalAlignment="center" [stlOpenUserProfile]="{userId: user?.userId, redirectTo: loggedInUserId === user?.userId ? 'userProfile': 'otherUserProfile'}">
     <Label height="15" top="50" left="42" width="15" borderRadius="22" backgroundColor="#71b02f"></Label>
   </AbsoluteLayout>
-  <StackLayout row="0" col="1" class="Roboto-Regular">
+  <StackLayout row="0" col="1" class="SF-Pro-Regular">
     <Label text="{{ (loggedInUserId === user.userId) ? 'You' : user?.displayName}}" textWrap="true" fontSize="18" color="#616161"
       class="main-title"></Label>
     <Label text="Score {{otherInfo.correctCount}} | Round {{otherInfo.questionRound}} / {{otherInfo.totalRound}}"
       textWrap="true" class="sub-title" color="#8c8c8c"></Label>
     <Label text="{{otherInfo.category}}" *ngIf="otherInfo.category" textWrap="true" class="tagging"></Label>
-    <StackLayout orientation="vertical" class="Hind-Regular">
+    <StackLayout orientation="vertical" class="SF-Pro-Regular">
       <Label *ngIf="otherInfo?.otherPlayer?.displayName" text="Playing with {{otherInfo?.otherPlayer?.displayName}}"
         textWrap="true" class="sub-title" color="#3b5998" fontWeight="500"></Label>
     </StackLayout>
@@ -160,7 +160,7 @@
 </ng-container>
 
 <ng-container *ngIf="user && userCardType.USER_IMAGE_NAME_WITH_SCORE_IN_GAME_PLAY_SINGLE_PLAYER === type">
-  <FlexboxLayout row="0" col="0" colSpan="2" class="Roboto-Regular" class="play-now-container">
+  <FlexboxLayout row="0" col="0" colSpan="2" class="SF-Pro-Regular" class="play-now-container">
     <FlexboxLayout >
       <StackLayout stlRippleEffect (rippleTap)='goToDashboard()' class="back-icon" width="10" verticalAlignment="middle">
         <Image src="~/assets/images/back-action.png" ></Image>
@@ -221,7 +221,7 @@
       <!-- <AbsoluteLayout *ngIf="user?.online">
           <Label height="10" top="38" left="32" width="10" borderRadius="22" backgroundColor="#71b02f"></Label>
         </AbsoluteLayout> -->
-      <StackLayout row="0" col="1" class="Roboto-Regular">
+      <StackLayout row="0" col="1" class="SF-Pro-Regular">
         <Label text="{{ (loggedInUserId === user.userId) ? 'You' : user?.displayName}}"  class="main-title first-player"></Label>
       </StackLayout>
 
@@ -248,7 +248,7 @@
       <AbsoluteLayout row="0" col="0" >
           <Label  class="online-status"></Label>
       </AbsoluteLayout>
-      <StackLayout row="0" col="1" class="Roboto-Regular" marginLeft="0" paddingRight="10">
+      <StackLayout row="0" col="1" class="SF-Pro-Regular" marginLeft="0" paddingRight="10">
           <Label text="{{otherInfo.otherPlayer?.displayName}}" class="second-player-title"></Label>
       </StackLayout>
       <StackLayout  row="1" col="0" colSpan="2"  android:backgroundColor="#f1f1f1" class="background-score">
