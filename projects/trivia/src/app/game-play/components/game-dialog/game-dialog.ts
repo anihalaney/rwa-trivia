@@ -65,6 +65,8 @@ export class GameDialog {
   currentUTC: number;
   applicationSettings: ApplicationSettings;
   showContinueScreen = false;
+  showCurrentQuestion = false;
+  showContinueDialogueForThreeConsecutiveAnswers = false;
 
   private genQuestionComponent: GameQuestionComponent;
 
@@ -157,8 +159,6 @@ export class GameDialog {
 
           if (!game.gameOver) {
             this.setTurnStatusFlag();
-          } else {
-            this.resetValues();
           }
         }
       })
@@ -343,16 +343,25 @@ export class GameDialog {
     this.getNextQuestion();
     this.showBadgeScreen();
   }
+  setCurrentQuestion(value?: Question) {
+    if (value) {
+      this.currentQuestion = value;
+      this.showCurrentQuestion = true;
+    } else {
+      this.currentQuestion = undefined;
+      this.showCurrentQuestion = false;
+    }
+  }
 
   subscribeQuestion() {
     this.questionSub = this.gameQuestionObs.subscribe(question => {
       if (!question) {
         this.cd.markForCheck();
-        this.currentQuestion = undefined;
+        this.setCurrentQuestion();
         return;
       }
       this.originalAnswers = Object.assign({}, question.answers);
-      this.currentQuestion = question;
+      this.setCurrentQuestion(question);
 
       if (this.currentQuestion) {
         this.currentQuestion.answers.forEach((ans, index) => {
@@ -465,7 +474,8 @@ export class GameDialog {
         playerId => playerId !== this.user.userId
       )[0];
       if (this.correctAnswerCount >= 5 || this.game.round >= 16) {
-        this.gameOverContinueClicked();
+        // this.gameOverContinueClicked();
+        this.setGameOver();
         this.cd.detectChanges();
       }
     } else if (
@@ -473,16 +483,21 @@ export class GameDialog {
       this.correctAnswerCount >= 5 ||
       this.questionIndex >= this.game.gameOptions.maxQuestions
     ) {
-      this.gameOverContinueClicked();
+      this.setGameOver();
+      // this.gameOverContinueClicked();
       this.cd.markForCheck();
     }
   }
 
   gameOverContinueClicked() {
-    this.currentQuestion = undefined;
     this.originalAnswers = undefined;
     this.questionAnswered = false;
     this.showContinueBtn = false;
+    this.setCurrentQuestion();
+  }
+
+  setGameOver() {
+
     this.continueNext = false;
     this.isGameLoaded = false;
     this.gameOver = true;
@@ -568,8 +583,8 @@ export class GameDialog {
   }
 
   continueGame() {
-    this.currentQuestion = undefined;
     this.originalAnswers = undefined;
+    this.setCurrentQuestion();
     if (this.turnFlag) {
       this.continueNext = false;
       this.store.dispatch(new gameplayactions.ResetCurrentGame());
@@ -590,12 +605,27 @@ export class GameDialog {
     }
   }
 
+
+  continueClicked($event) {
+    this.continueGame();
+    if (this.showLoader) {
+      this.cd.markForCheck();
+    }
+  }
+
+  gameOverButtonClicked($event) {
+    this.showCurrentQuestion = false;
+    this.resetValues();
+    this.gameOverContinueClicked();
+  }
+
   destroy() {
     this.user = undefined;
     this.gameObs = undefined;
     this.game = undefined;
     this.gameQuestionObs = undefined;
     this.currentQuestion = undefined;
+    this.showCurrentQuestion = false;
     this.originalAnswers = [];
     this.correctAnswerCount = undefined;
     this.totalRound = undefined;
@@ -628,7 +658,7 @@ export class GameDialog {
     this.applicationSettings = undefined;
 
     this.genQuestionComponent = undefined;
-
+    this.showContinueDialogueForThreeConsecutiveAnswers = undefined;
     this.store.dispatch(new gameplayactions.ResetCurrentGame());
     this.utils.unsubscribe([this.timerSub, this.questionSub]);
   }

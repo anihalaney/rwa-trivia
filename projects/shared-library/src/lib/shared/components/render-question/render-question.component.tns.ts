@@ -1,24 +1,13 @@
-import {
-  Component,
-  Input,
-  OnInit,
-  SimpleChanges,
-  OnChanges,
-  ChangeDetectorRef,
-  Inject,
-  PLATFORM_ID,
-  Output,
-  EventEmitter
-} from "@angular/core";
-import { Question } from "shared-library/shared/model";
-import { LoadEventData } from "tns-core-modules/ui/web-view";
-import { isAndroid, isIOS } from "tns-core-modules/platform";
-import { externalUrl } from "./../../../environments/external-url";
+import { Component, Input, OnInit, SimpleChanges, OnChanges, ChangeDetectorRef, Output, EventEmitter } from "@angular/core";
+import { Question } from 'shared-library/shared/model';
+import { LoadEventData } from 'tns-core-modules/ui/web-view';
+import { isAndroid, isIOS } from 'tns-core-modules/platform';
+import { externalUrl } from './../../../environments/external-url';
 
 @Component({
-  selector: "render-question",
-  templateUrl: "render-question.component.html",
-  styleUrls: ["render-question.component.css"]
+  selector: 'render-question',
+  templateUrl: 'render-question.component.html',
+  styleUrls: ['render-question.component.css']
 })
 export class RenderQuestionComponent implements OnInit, OnChanges {
   @Input() question: Question;
@@ -37,7 +26,7 @@ export class RenderQuestionComponent implements OnInit, OnChanges {
   textColor = "black";
 
   ngOnInit(): void {
-    if (this.question) {      
+    if (this.question) {
       this.qIndex = this.questionIndex ? `${this.questionIndex} . ` : "";
       if (this.question.isRichEditor) {
         this.setStartTag();
@@ -86,7 +75,7 @@ export class RenderQuestionComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges) {
     if (this.question && this.question.isRichEditor) {
       if (changes.question) {
-          this.setStartTag();
+        this.setStartTag();
         this.questionText =
           this.htmlStartTag +
           changes.question.currentValue.questionText +

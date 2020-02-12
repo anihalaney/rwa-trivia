@@ -71,8 +71,15 @@
     </StackLayout>
   </ScrollView>
   <AbsoluteLayout backgroundColor="#ffffff" verticalAlignment="bottom">
-    <FlexboxLayout *ngIf="(answeredIndex>=0 || doPlay === false)" (rippleTap)="continueButtonClicked($event)" width="100%" class="Hind-Medium btn-transparent" justifyContent="center" stlRippleEffect>
+    <FlexboxLayout *ngIf="!gameOver && !threeConsecutiveAnswer && (answeredIndex>=0 || doPlay === false)" (rippleTap)="continueButtonClicked($event)" width="100%" class="Hind-Medium btn-transparent" justifyContent="center" stlRippleEffect>
         <Label verticleAlignment="center" text="Next Round" ></Label>
+        <ActivityIndicator  *ngIf="showLoader" marginLeft="10" verticalAlignment="center" color="blue" ios:width="25" ios:height="25"
+          android:width="25" android:height="25" busy="true" class="activity-indicator">
+        </ActivityIndicator>
+    </FlexboxLayout>
+
+    <FlexboxLayout *ngIf="gameOver || threeConsecutiveAnswer" (rippleTap)="checkRoundOver($event)" width="100%" class="Hind-Medium btn-transparent" justifyContent="center" stlRippleEffect>
+        <Label verticleAlignment="center" text="Continue" ></Label>
         <ActivityIndicator  *ngIf="showLoader" marginLeft="10" verticalAlignment="center" color="blue" ios:width="25" ios:height="25"
           android:width="25" android:height="25" busy="true" class="activity-indicator">
         </ActivityIndicator>
