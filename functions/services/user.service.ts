@@ -4,6 +4,10 @@ import { Utils } from '../utils/utils';
 import { AccountService } from './account.service';
 import { AppSettings } from '../services/app-settings.service';
 import { FriendService } from './friend.service';
+import * as requestPromise from 'request-promise';
+import { externalUrl } from '../../projects/shared-library/src/lib/environments/external-url';
+import * as firebase from 'firebase-admin';
+
 export class UserService {
 
     private static fireStoreClient: any = admin.firestore();
@@ -363,4 +367,24 @@ export class UserService {
         }
     }
 
+
+    static async getGeoCode(location): Promise<any> {
+        try {
+            const apiKey = Utils.getApiKey();
+            const option = {
+                url: `${externalUrl.geocodeUrl}?address=${location}&key=${apiKey}`,
+                json: true
+            };
+            const response = await requestPromise(option);
+
+            if (response['results'][0].geometry.location) {
+                return new firebase.firestore.GeoPoint(response['results'][0].geometry.location.lat, response['results'][0].geometry.location.lng);
+            } else {
+                '';
+            }
+
+        } catch (error) {
+            return Utils.throwError(error);
+        }
+    }
 }

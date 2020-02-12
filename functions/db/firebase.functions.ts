@@ -23,6 +23,8 @@ import { UserService } from '../services/user.service';
 import { QuestionService } from '../services/question.service';
 import { Utils } from '../utils/utils';
 import { UserStatusService } from '../services/user-status.service';
+
+
 const mailConfig = JSON.parse(readFileSync(resolve(__dirname, '../../../config/mail.config.json'), 'utf8'));
 
 export class FirebaseFunctions {
@@ -79,7 +81,7 @@ export class FirebaseFunctions {
             if (context.params.reactions === 'reactions') {
                 const afterData = change.after.exists ? change.after.data() : null;
                 const beforeData = change.before.exists ? change.before.data() : null;
-                
+
                 const question: Question = await QuestionService.getQuestionById(context.params.questionId);
                 // for update
                 if (beforeData && afterData) {
@@ -300,8 +302,8 @@ export class FirebaseFunctions {
                 const realTimeUserStatus = await UserService.getUserById(userDataStatus.userId);
                 userDataStatus.status = realTimeUserStatus.status;
 
-               // console.log('realTimeUserStatus---->', realTimeUserStatus);
-             //   console.log('userDataStatus---->', userDataStatus);
+                // console.log('realTimeUserStatus---->', realTimeUserStatus);
+                //   console.log('userDataStatus---->', userDataStatus);
 
 
                 if (userDataStatus.device === TriggerConstants.ANDROID) {
@@ -322,17 +324,17 @@ export class FirebaseFunctions {
                         user.iosPushTokens[deviceTokenIndex].online = onlineStatus;
                     }
                 }
-               // console.log('user', user);
+                // console.log('user', user);
                 await UserService.updateUser({ ...user });
 
             }
 
             const onlineOnAndroid = user.androidPushTokens && user.androidPushTokens.length > 0
-                                    ? user.androidPushTokens.some((androidPushToken) =>
-                                                                    androidPushToken.token && androidPushToken.online) : false;
+                ? user.androidPushTokens.some((androidPushToken) =>
+                    androidPushToken.token && androidPushToken.online) : false;
             const onlineOnIos = user.iosPushTokens && user.iosPushTokens.length > 0
-                                         ? user.iosPushTokens.some((iosPushToken) =>
-                                                                    iosPushToken.token && iosPushToken.online) : false;
+                ? user.iosPushTokens.some((iosPushToken) =>
+                    iosPushToken.token && iosPushToken.online) : false;
 
             userStatus.online = (onlineOnAndroid || onlineOnIos
                 || userDataStatus.status === UserStatusConstants.ONLINE) ? true : false;
@@ -348,6 +350,35 @@ export class FirebaseFunctions {
             throw error;
         }
     }
+
+
+    static async doUserUpdateOperation(change: any, context: any): Promise<boolean> {
+        try {
+
+            const afterUser: User = change.after.exists ? change.after.data() : null;
+            const beforeUser: User = change.before.exists ? change.before.data() : null;
+            let location = ''
+            if (beforeUser) {
+                location = afterUser.location;
+            } else if (afterUser.location !== beforeUser.location) {
+                location = afterUser.location;
+            }
+            if (location) {
+                const geoPoint = await UserService.getGeoCode(location);
+                if (geoPoint) {
+                    afterUser.geoPoint = geoPoint;
+                    UserService.updateUser(afterUser);
+                } else {
+                    console.log('location not found');
+                }
+            }
+            return true;
+        } catch (error) {
+            console.error('Error :', error);
+            throw error;
+        }
+    }
+
 }
 
 exports.onQuestionWrite = functions.firestore.document('/questions/{questionId}')
@@ -382,3 +413,7 @@ exports.onQuestionCreate = functions.firestore.document('/questions/{questionId}
 // update user's status based on realtime updates
 exports.onUserStatusWrite = functions.database.ref('/users/{tokenId}')
     .onWrite(async (change, context) => await FirebaseFunctions.doUserStatusUpdateOperation(change, context));
+
+// update user account
+exports.onUserUpdate = functions.firestore.document('/users/{userId}')
+    .onWrite(async (snap, context) => await FirebaseFunctions.doUserUpdateOperation(snap, context));
