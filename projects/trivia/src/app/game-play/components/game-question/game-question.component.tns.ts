@@ -89,9 +89,39 @@ export class GameQuestionComponent extends GameQuestion implements OnInit, OnDes
       this.subscriptions.push(this.timerSub);
     }
     if (changes.showContinueBtn && changes.showContinueBtn.currentValue && changes.showContinueBtn.currentValue === true) {
+      if (this.showLoader && !this.gameOver) {
+        super.continueButtonClicked('');
+      } else if (this.showLoader && this.gameOver) {
+        this.gameOverButtonClicked.emit('');
+      }
+    }
+
+    if (changes.showCurrentQuestion && changes.showCurrentQuestion.currentValue && changes.showCurrentQuestion.currentValue === true) {
       if (this.showLoader) {
-          super.continueButtonClicked('');
+        this.gameOverButtonClicked.emit('');
+      }
+    }
+
+    if (changes.threeConsecutiveAnswer && changes.threeConsecutiveAnswer.currentValue &&
+      changes.threeConsecutiveAnswer.currentValue === true) {
+        if (this.showLoader) {
+          this.btnClickedAfterThreeConsecutiveAnswers.emit('');
+        }
+    }
+
+    if (changes.gameOver && changes.gameOver.currentValue && changes.gameOver.currentValue === true) {
+      if (this.showLoader) {
+        this.gameOverButtonClicked.emit('');
       }
     }
   }
+
+  checkRoundOver(event) {
+    if (this.gameOver) {
+      this.gameOverButtonClicked.emit(event);
+    } else if (this.threeConsecutiveAnswer) {
+      this.btnClickedAfterThreeConsecutiveAnswers.emit(event);
+    }
+  }
+
 }

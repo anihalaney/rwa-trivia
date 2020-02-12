@@ -1,11 +1,11 @@
-import { Injectable } from "@angular/core";
-import { Effect, Actions, ofType } from "@ngrx/effects";
-import { Question, RouterStateUrl } from "../../../shared/model";
-import { QuestionActions, UserActions, ActionWithPayload } from "../actions";
-import { QuestionService } from "../../services";
-import { switchMap, map, filter, catchError } from "rxjs/operators";
-import { of, empty } from "rxjs";
-import { ROUTER_NAVIGATION } from "@ngrx/router-store";
+import { Injectable } from '@angular/core';
+import { Effect, Actions, ofType } from '@ngrx/effects';
+import { Question, RouterStateUrl } from '../../../shared/model';
+import { QuestionActions, UserActions, ActionWithPayload } from '../actions';
+import { QuestionService } from '../../services';
+import { switchMap, map, filter, catchError } from 'rxjs/operators';
+import { of, empty } from 'rxjs';
+import { ROUTER_NAVIGATION } from '@ngrx/router-store';
 
 @Injectable()
 export class QuestionEffects {
@@ -23,15 +23,8 @@ export class QuestionEffects {
     .pipe(
       switchMap(() =>
         this.svc.getQuestionOfTheDay(false).pipe(
-          map((question: Question) =>
-            this.questionActions.getQuestionOfTheDaySuccess(question)
-          ),
-          catchError(err =>
-            of(this.questionActions.getQuestionOfTheDayError(err))
-          )
-        )
-      )
-    );
+          map((question: Question) => this.questionActions.getQuestionOfTheDaySuccess(question)),
+          catchError(err => of(this.questionActions.getQuestionOfTheDayError(err))))));
 
   @Effect()
   // handle location update
@@ -39,16 +32,12 @@ export class QuestionEffects {
     .pipe(ofType(QuestionActions.GET_QUESTION_OF_THE_DAY))
     .pipe(
       switchMap(action =>
-        this.svc.getQuestionOfTheDay(true).pipe(
-          map((question: Question) =>
-            this.questionActions.getQuestionOfTheDaySuccess(question)
-          ),
-          catchError(err =>
-            of(this.questionActions.getQuestionOfTheDayError(err))
+        this.svc.getQuestionOfTheDay(true)
+          .pipe(
+            map((question: Question) => this.questionActions.getQuestionOfTheDaySuccess(question)),
+            catchError(err => of(this.questionActions.getQuestionOfTheDayError(err)))
           )
-        )
-      )
-    );
+      ));
 
   // Update Question
   @Effect()
@@ -73,19 +62,15 @@ export class QuestionEffects {
       )
     )
     .pipe(
-      switchMap(() =>
-        this.svc.getQuestionOfTheDay(true).pipe(
-          map((question: Question) =>
-            this.questionActions.getFirstQuestionSuccess(question)
-          ),
-          catchError(err => of(this.questionActions.getFirstQuestionError(err)))
-        )
-      )
-    );
+      switchMap(() => this.svc.getQuestionOfTheDay(true)
+
+        .pipe(
+          map((question: Question) => this.questionActions.getFirstQuestionSuccess(question)),
+          catchError(err => of(this.questionActions.getFirstQuestionError(err))))));
 
   constructor(
     private actions$: Actions,
     private questionActions: QuestionActions,
     private svc: QuestionService
-  ) {}
+  ) { }
 }

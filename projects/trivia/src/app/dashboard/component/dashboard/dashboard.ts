@@ -1,38 +1,20 @@
-import { isPlatformBrowser, isPlatformServer } from "@angular/common";
+import { isPlatformBrowser, isPlatformServer } from '@angular/common';
+import { ChangeDetectorRef, Inject, NgZone, OnDestroy, PLATFORM_ID } from '@angular/core';
+import { select, Store } from '@ngrx/store';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { Observable, Subscription, timer, combineLatest } from 'rxjs';
+import { Utils, WindowRef } from 'shared-library/core/services';
+import { GameActions, QuestionActions, UserActions } from 'shared-library/core/store/actions';
 import {
-  ChangeDetectorRef,
-  Inject,
-  NgZone,
-  OnDestroy,
-  PLATFORM_ID
-} from "@angular/core";
-import { select, Store } from "@ngrx/store";
-import { AutoUnsubscribe } from "ngx-auto-unsubscribe";
-import { Observable, Subscription, timer, combineLatest } from "rxjs";
-import { Utils, WindowRef } from "shared-library/core/services";
-import {
-  GameActions,
-  QuestionActions,
-  UserActions
-} from "shared-library/core/store/actions";
-import {
-  Account,
-  ApplicationSettings,
-  CalenderConstants,
-  Game,
-  GameStatus,
-  Invitation,
-  OpponentType,
-  PlayerMode,
-  User,
-  userCardType
-} from "shared-library/shared/model";
-import { AppState, appState } from "../../../store";
-import { filter } from "rxjs/operators";
-import { coreState, categoryDictionary } from "shared-library/core/store";
-import * as lodash from "lodash";
+  Account, ApplicationSettings, CalenderConstants, Game, GameStatus, Invitation,
+  OpponentType, PlayerMode, User, userCardType
+} from 'shared-library/shared/model';
+import { AppState, appState } from '../../../store';
+import { map, flatMap, filter } from 'rxjs/operators';
+import { coreState, categoryDictionary } from 'shared-library/core/store';
+import * as lodash from 'lodash';
 
-@AutoUnsubscribe({ arrayName: "subscriptions" })
+@AutoUnsubscribe({ arrayName: 'subscriptions' })
 export class Dashboard implements OnDestroy {
   START_A_NEW_GAME = "Start New Game";
   NEW_GAME_IN = "New Game In";
@@ -265,7 +247,7 @@ export class Dashboard implements OnDestroy {
 
             if (
               Number(game.gameOptions.playerMode) ===
-                Number(PlayerMode.Single) &&
+              Number(PlayerMode.Single) &&
               game.playerIds.length === 1
             ) {
               this.singlePlayerCount++;
@@ -280,7 +262,7 @@ export class Dashboard implements OnDestroy {
 
             if (
               Number(game.gameOptions.playerMode) ===
-                Number(PlayerMode.Opponent) &&
+              Number(PlayerMode.Opponent) &&
               game.nextTurnPlayerId === this.user.userId
             ) {
               this.twoPlayerCount++;
@@ -290,9 +272,9 @@ export class Dashboard implements OnDestroy {
               game.GameStatus === GameStatus.AVAILABLE_FOR_OPPONENT ||
               game.GameStatus === GameStatus.JOINED_GAME ||
               game.GameStatus ===
-                GameStatus.WAITING_FOR_FRIEND_INVITATION_ACCEPTANCE ||
+              GameStatus.WAITING_FOR_FRIEND_INVITATION_ACCEPTANCE ||
               game.GameStatus ===
-                GameStatus.WAITING_FOR_RANDOM_PLAYER_INVITATION_ACCEPTANCE
+              GameStatus.WAITING_FOR_RANDOM_PLAYER_INVITATION_ACCEPTANCE
             ) {
               this.waitingForOpponentCount++;
             }
@@ -437,7 +419,7 @@ export class Dashboard implements OnDestroy {
             );
             const minute = Math.floor(
               (diff % CalenderConstants.HOURS_CALCULATIONS) /
-                CalenderConstants.MINUTE_CALCULATIONS
+              CalenderConstants.MINUTE_CALCULATIONS
             );
             const second = Math.floor(diff / 1000) % 60;
             const timeStamp = this.serverCreatedTime;
@@ -488,15 +470,15 @@ export class Dashboard implements OnDestroy {
   }
 
   ngOnDestroy(): void {
- 
+
   }
 
   get isLivesEnable(): Boolean {
     const isEnable =
       this.user &&
-      this.account &&
-      this.applicationSettings &&
-      this.applicationSettings.lives.enable
+        this.account &&
+        this.applicationSettings &&
+        this.applicationSettings.lives.enable
         ? true
         : false;
     return isEnable;

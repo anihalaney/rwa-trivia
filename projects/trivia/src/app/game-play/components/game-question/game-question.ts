@@ -24,6 +24,10 @@ export class GameQuestion {
   @Input() applicationSettings: ApplicationSettings;
   @Input() user: User;
   @Input() playerMode: any;
+  @Input() showCurrentQuestion: boolean;
+  @Output() gameOverButtonClicked = new EventEmitter();
+  @Input() gameOver: boolean;
+  @Output() btnClickedAfterThreeConsecutiveAnswers = new EventEmitter();
   showLoader = false;
 
   answeredIndex: number;
@@ -59,9 +63,8 @@ export class GameQuestion {
   continueButtonClicked(event) {
     if (this.showContinueBtn) {
       this.continueClicked.emit(event);
-    } else {
-      this.showLoader = true;
     }
+      this.showLoader = true;
   }
 
   fillTimer() { }
