@@ -12,19 +12,25 @@ export class PushNotification {
         try {
 
             const dbUser: User = await UserService.getUserById(userId);
-
+            console.log('userId --------->', userId);
             const notificationPromises = [];
             if (dbUser.androidPushTokens && dbUser.androidPushTokens.length > 0) {
                 for (const androidPushToken of dbUser.androidPushTokens) {
-                    const token = (androidPushToken.token) ? androidPushToken.token : androidPushToken;
-                    notificationPromises.push(PushNotification.sendNotification(token, title, body, data, dbUser));
+                    if (androidPushToken.token) {
+                        const token = androidPushToken.token;
+                        console.log('Android ----->', token, title, body, data);
+                        notificationPromises.push(PushNotification.sendNotification(token, title, body, data, dbUser));
+                    }
                 }
             }
 
             if (dbUser.iosPushTokens && dbUser.iosPushTokens.length > 0) {
                 for (const iosPushToken of dbUser.iosPushTokens) {
-                    const token = (iosPushToken.token) ? iosPushToken.token : iosPushToken;
-                    notificationPromises.push(PushNotification.sendNotification(token, title, body, data, dbUser));
+                    if (iosPushToken.token) {
+                        const token = iosPushToken.token;
+                        console.log('IOS ------>', token, title, body, data);
+                        notificationPromises.push(PushNotification.sendNotification(token, title, body, data, dbUser));
+                    }
                 }
             }
 
@@ -140,10 +146,11 @@ export class PushNotification {
                 case pushNotificationRouteConstants.GAME_REMAINING_TIME_NOTIFICATIONS:
                     const gameObj: Game = data;
                     msg_data = { 'messageType': pushNotificationRouteConstants.GAME_PLAY, 'gameId': gameObj.gameId };
+                    const userId = gameObj.nextTurnPlayerId;
                     switch ( extData ) {
                         case schedulerConstants.notificationInterval:
                             result = await PushNotification
-                            .sendNotificationToDevices(currentTurnPlayerId, 'bitwiser Game Play',
+                            .sendNotificationToDevices(userId, 'bitwiser Game Play',
                                 'You have only 32 minutes left to be a bitWiser! Play now!', msg_data);
                             console.log('result', result);
                             console.log(`You have only 32 minutes left to be a bitWiser! Play now!`);
@@ -151,7 +158,6 @@ export class PushNotification {
 
                         case schedulerConstants.reminderNotificationInterval:
                                 let msgText = '';
-                                const userId = gameObj.nextTurnPlayerId;
                                 if (gameObj.GameStatus === GameStatus.WAITING_FOR_FRIEND_INVITATION_ACCEPTANCE
                                     || gameObj.GameStatus === GameStatus.WAITING_FOR_RANDOM_PLAYER_INVITATION_ACCEPTANCE) {
                                         msgText =
