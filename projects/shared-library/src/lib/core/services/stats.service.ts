@@ -15,7 +15,7 @@ export class StatsService {
         const queryParams = {
             condition: [],
             orderBy: [{ name: 'score', value: 'desc' }],
-            limit: 10
+            limit: 30
         };
         const gamesPlayedWithObs = categoryList.map(catObj => {
             const id = catObj.type === 'tag' ? stringHash(catObj.id) : catObj.id;
