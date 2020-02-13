@@ -180,7 +180,7 @@ export class ProfileSettings {
                 if (user.authState["providers"].length > 1) {
                   this.currentAuthProvider =
                     user.authState["providers"][1]["id"];
-                } else {
+                } else if (user.authState["providers"].length === 1) {
                   this.currentAuthProvider =
                     user.authState["providers"][0]["id"];
                 }
@@ -469,6 +469,13 @@ export class ProfileSettings {
           .setValidators(Validators.pattern(this.phoneNoRegex));
         this.userForm.get("phoneNo").updateValueAndValidity();
         break;
+      case AuthProviderConstants.APPLE:
+        this.userForm
+          .get("phoneNo")
+          .setValidators(Validators.pattern(this.phoneNoRegex));
+        this.userForm.get("phoneNo").updateValueAndValidity();
+        break;
+
       case AuthProviderConstants.PHONE:
         this.userForm
           .get("email")
@@ -477,8 +484,8 @@ export class ProfileSettings {
         break;
     }
     this.filteredTags$ = this.userForm.get('tags').valueChanges
-    .pipe(map(val => val.length > 0 ? this.filter(val) : []));
-    
+      .pipe(map(val => val.length > 0 ? this.filter(val) : []));
+
     this.createSocialProfileControl();
     if (
       isPlatformBrowser(this.platformId) === false &&
@@ -493,7 +500,7 @@ export class ProfileSettings {
     }
   }
 
-  
+
   createSocialProfileControl() {
     if (this.socialProfileObj) {
       this.socialProfileObj.map(profile => {
@@ -559,6 +566,9 @@ export class ProfileSettings {
         case AuthProviderConstants.FACEBOOK:
           this.user.phoneNo = this.userForm.get("phoneNo").value;
           break;
+          case AuthProviderConstants.APPLE:
+            this.user.phoneNo = this.userForm.get("phoneNo").value;
+            break;
         case AuthProviderConstants.PHONE:
           this.user.email = this.userForm.get("email").value;
           break;
@@ -666,7 +676,7 @@ export class ProfileSettings {
         this.userForm.updateValueAndValidity();
       }
     } else if (field === "socialProfile") {
-      this.socialProfileSettings =  this.socialProfileSettings.map(res => {
+      this.socialProfileSettings = this.socialProfileSettings.map(res => {
         res.disable = true;
         return res;
       });
@@ -778,7 +788,7 @@ export class ProfileSettings {
         this.loggedInUserAccount &&
         this.loggedInUserAccount.lives > 0 &&
         this.applicationSettings.lives.enable) ||
-      !this.applicationSettings.lives.enable
+        !this.applicationSettings.lives.enable
         ? true
         : false;
     return isEnable;

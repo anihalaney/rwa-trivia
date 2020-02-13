@@ -108,7 +108,9 @@ export class WebFirebaseAuthService implements FirebaseAuthService {
     }
 
     public appleLogin(): Promise<any>{
-        return this.afAuth.auth.signInWithPopup(new firebase.auth.GithubAuthProvider()  );
+        const auth = firebase.auth();
+        const provider = new firebase.auth.OAuthProvider('apple.com');
+        return auth.signInWithPopup(provider);
     }
 
     public sendPasswordResetEmail(email: string) {

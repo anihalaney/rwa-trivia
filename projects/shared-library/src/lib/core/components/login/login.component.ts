@@ -132,6 +132,15 @@ export class LoginComponent extends Login implements  OnDestroy {
       });
   }
 
+  async appleSignIn() {
+      const result = await this.firebaseAuthService.appleLogin().catch((error: Error) => {
+        this.notificationMsg = error.message;
+        this.errorStatus = true;
+         this.cd.detectChanges();
+      });
+  
+  }
+
   twitterLogin() {
     this.firebaseAuthService.twitterLogin()
       .catch((error: Error) => {
