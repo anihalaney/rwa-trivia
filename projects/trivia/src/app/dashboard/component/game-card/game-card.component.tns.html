@@ -1,7 +1,6 @@
 <StackLayout class="active-container">
     <GridLayout rows="36" columns="*,auto,auto">
-        <Label text="{{categoryDict[game.gameOptions?.categoryIds[randomCategoryId]]?.categoryName?.charAt(0)?.toUpperCase()
-                + categoryDict[game.gameOptions?.categoryIds[randomCategoryId]]?.categoryName?.slice(1)}}"
+        <Label *ngIf="categoryList" text="{{categoryList.join(', ')}}"
             row="0" col="0" class="cat-title"></Label>
 
         <StackLayout row="0" col="1" horizontalAlignment="right">
