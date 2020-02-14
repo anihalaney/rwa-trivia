@@ -59,7 +59,7 @@ export class QuestionCardComponent implements OnInit, OnDestroy, OnChanges {
 
   rippleTap(answer) {
     this.answerButtonClicked(answer);
-    this.selectedAnswer.emit(answer.answerText);
+    this.selectedAnswer.emit(answer);
   }
 
   ngOnDestroy(): void {

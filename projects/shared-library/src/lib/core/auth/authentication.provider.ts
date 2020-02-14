@@ -39,7 +39,16 @@ export class AuthenticationProvider {
 
 
     this.refreshTokenObserver = defer(() => {
-      return from(this.generateToken(true));
+      return from(this.generateToken(true)).pipe(tap((tokenResponse) => {
+        if (this.user) {
+          this.user.idToken = tokenResponse;
+          this.store.dispatch(this.userActions.loginSuccess(this.user));
+        }
+        return tokenResponse;
+      },
+        (err) => {
+          return throwError(err);
+        }));
     }).pipe(share());
 
 
@@ -80,16 +89,7 @@ export class AuthenticationProvider {
 
 
   refreshToken(): Observable<any> {
-    return this.refreshTokenObserver.pipe(tap((tokenResponse) => {
-      if(this.user){
-        this.user.idToken = tokenResponse;
-        this.store.dispatch(this.userActions.loginSuccess(this.user));
-      }
-      return tokenResponse;
-    },
-      (err) => {
-        return throwError(err);
-      }));
+    return this.refreshTokenObserver;
   }
 
 

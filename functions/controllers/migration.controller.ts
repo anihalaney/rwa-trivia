@@ -408,4 +408,13 @@ export class MigrationController {
         }
     }
 
+
+    static async updateQuestionStats(req, res) {
+        try {
+            await QuestionService.migrateStats();
+            Utils.sendResponse(res, interceptorConstants.SUCCESS, ResponseMessagesConstants.MIGRATED_COLLECTION);
+        } catch (error) {
+            Utils.sendError(res, error);
+        }
+    }
 }

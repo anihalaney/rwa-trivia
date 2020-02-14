@@ -14,7 +14,6 @@ import { Router } from '@angular/router';
   styleUrls: ['./signup-extra-info.component.scss']
 })
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
-
 export class SignupExtraInfoComponent implements OnInit, OnDestroy {
   user: User;
   phoneEditable: Boolean = true;

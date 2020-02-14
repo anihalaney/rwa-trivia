@@ -3,6 +3,7 @@ import { TagEffects } from './tag.effects';
 import { QuestionEffects } from './question.effects';
 import { UserEffects } from './user.effects';
 import { GameEffects } from './game.effects';
+import { TopicEffects } from './topic.effects';
 import { ApplicationSettingsEffects } from './application-settings.effects';
 
 export const effects = [
@@ -11,10 +12,12 @@ export const effects = [
   TagEffects,
   QuestionEffects,
   GameEffects,
-  ApplicationSettingsEffects
+  ApplicationSettingsEffects,
+  TopicEffects
 ];
 
 export * from './category.effects';
+export * from './topic.effects';
 export * from './tag.effects';
 export * from './question.effects';
 export * from './user.effects';

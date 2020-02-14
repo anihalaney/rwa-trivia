@@ -283,25 +283,27 @@
                             </div>
                           </div>
                           <!-- Social Accounts end -->
-                          <!-- Categories -->
+                          <!-- Topics -->
                           <div *ngIf="userType === 0 && isEnableEditProfile" class="row pcategories">
                             <div class="col-sm-3 add-space">
-                              <h3>Preferred Categories</h3>
+                              <h3>Preferred Topics</h3>
                             </div>
-                            <div class="col-sm-9" formArrayName="categoryList">
-                              <div class="formfield" *ngFor="let category of categoryList.controls; let i=index"
+
+                            <div class="col-sm-9" formArrayName="topicList">
+                              <div class="formfield" *ngFor="let topic of topicList?.controls; let i=index"
                                 [formGroupName]="i">
                                 <label>
                                   <input formControlName="isSelected" type="checkbox"
-                                    name="">{{categoryDict[category.value['category']].categoryName}}
-                                </label>
+                                    name="">
+                                    {{topic.value['type'] === 'category' ?  categoryDict[topic.value['topic']].categoryName : topic.value['topic'] }}
+                                  </label>
                               </div>
                             </div>
                           </div>
-                          <!-- Categories end -->
+                          <!-- Topics end -->
 
                           <!-- Tags -->
-                          <div *ngIf="userType === 0 && isEnableEditProfile" class="row pcategories">
+                          <!-- <div *ngIf="userType === 0 && isEnableEditProfile" class="row pcategories">
                             <div class="col-sm-3 add-space">
                               <h3>Preferred Tags</h3>
                             </div>
@@ -330,11 +332,6 @@
                             </div>
 
                             <div class="col-xs-12 text-center">
-
-                              <!-- <div class="row"> -->
-                              <!-- Bulk Uploader Request -->
-
-                              <!-- <div class="col-md-9 col-sm-9 bulk-upload-request"> -->
                               <label>
                                 <button *ngIf="(!user.bulkUploadPermissionStatus
                                             || user.bulkUploadPermissionStatus === NONE
@@ -347,10 +344,8 @@
                                   privilege</p>
 
                               </label>
-                              <!-- </div> -->
-                              <!-- </div> -->
                             </div>
-                          </div>
+                          </div> -->
                         </div>
                       </div>
                       <div *ngIf="userType === 0" class="col-lg-2 col-sm-12 col-md-3 col-xs-12">

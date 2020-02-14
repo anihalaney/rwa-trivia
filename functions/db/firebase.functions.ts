@@ -79,25 +79,26 @@ export class FirebaseFunctions {
             if (context.params.reactions === 'reactions') {
                 const afterData = change.after.exists ? change.after.data() : null;
                 const beforeData = change.before.exists ? change.before.data() : null;
+                
                 const question: Question = await QuestionService.getQuestionById(context.params.questionId);
                 // for update
                 if (beforeData && afterData) {
                     if (beforeData.status != afterData.status) {
-                        question.reactionsCount[afterData.status] = question.reactionsCount
-                            && question.reactionsCount[afterData.status] ? Utils.changeFieldValue(1) : 1; // increase current status
-                        question.reactionsCount[beforeData.status] = question.reactionsCount &&
-                            question.reactionsCount[beforeData.status] ? Utils.changeFieldValue(-1) : 0; // decrease before status
+                        question.stats.reactionsCount[afterData.status] = question.stats.reactionsCount
+                            && question.stats.reactionsCount[afterData.status] ? Utils.changeFieldValue(1) : 1; // increase current status
+                        question.stats.reactionsCount[beforeData.status] = question.stats.reactionsCount &&
+                            question.stats.reactionsCount[beforeData.status] ? Utils.changeFieldValue(-1) : 0; // decrease before status
                     } else {
                         return true;
                     }
                 } else if (!beforeData && afterData) {
                     // for create
-                    question.reactionsCount[afterData.status] = question.reactionsCount
-                        && question.reactionsCount[afterData.status] ? Utils.changeFieldValue(1) : 1; // increase current status
+                    question.stats.reactionsCount[afterData.status] = question.stats.reactionsCount
+                        && question.stats.reactionsCount[afterData.status] ? Utils.changeFieldValue(1) : 1; // increase current status
                 } else if (beforeData && !afterData) {
                     // delete
-                    question.reactionsCount[beforeData.status] = question.reactionsCount &&
-                        question.reactionsCount[beforeData.status] ? Utils.changeFieldValue(-1) : 0; // decrease current status
+                    question.stats.reactionsCount[beforeData.status] = question.stats.reactionsCount &&
+                        question.stats.reactionsCount[beforeData.status] ? Utils.changeFieldValue(-1) : 0; // decrease current status
                 } else {
                     return true;
                 }
@@ -199,6 +200,8 @@ export class FirebaseFunctions {
                     const accountObj: any = {};
                     accountObj.id = data.userId;
                     accountObj.lives = appSetting.lives.max_lives;
+                    accountObj.lastGamePlayed = Utils.getUTCTimeStamp();
+                    accountObj.lastGamePlayedNotification = false;
                     await AccountService.setAccount(accountObj);
                 }
             }
@@ -216,11 +219,7 @@ export class FirebaseFunctions {
 
             if (afterEventData !== beforeEventData) {
                 const account: Account = afterEventData;
-
-                const leaderBoardDict: { [key: string]: LeaderBoardUsers } = await LeaderBoardService.getLeaderBoardStats();
-
-                await GameLeaderBoardStats.setLeaderBoardStat(await LeaderBoardService.calculateLeaderBoardStats(account, leaderBoardDict));
-
+                await LeaderBoardService.setLeaderBoardStatForSingleUser(account);
                 await AchievementMechanics.updateAchievement(account);
             }
             return true;
@@ -258,7 +257,7 @@ export class FirebaseFunctions {
             if (data) {
                 const question: Question = data;
 
-                const message = `Your Question ${question.questionText} is approved `;
+                const message = `Yay! Your submitted question has been approved for the bitWiser question bank. You earned 8 bytes!!`;
                 console.log('Notification sent on question approved');
                 PushNotification.sendGamePlayPushNotifications(message, question.created_uid,
                     pushNotificationRouteConstants.QUESTION_NOTIFICATIONS);

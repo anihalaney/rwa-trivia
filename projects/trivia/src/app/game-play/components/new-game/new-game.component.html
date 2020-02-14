@@ -74,7 +74,7 @@
                 <div class="row" [class.pcategories]="challengerUserId ? false: true">
                     <div class="col-sm-3">
                         <h2>Preferred
-                            <span>Categories</span>
+                            <span>Topics</span>
                         </h2>
                     </div>
                     <div class="col-sm-9">
@@ -91,6 +91,15 @@
                                                 {{category.categoryName}}
                                             </mat-checkbox>
                                         </div>
+                                        <div class="checkbox-group"
+                                            *ngFor="let tag of topTags; let i=index">
+                                            <mat-checkbox [disableRipple]="true" [value]="tag.key"
+                                                [disabled]="tag.requiredForGamePlay"
+                                                [checked]="tag?.isSelected"
+                                                (change)="selectTags(tag.key)">
+                                                {{tag.key}}
+                                            </mat-checkbox>
+                                        </div>
                                     </ng-container>
                                 </div>
                             </div>
@@ -102,32 +111,6 @@
                                     <!--<span class="chancat-text" [class.hide]="!showUncheckedCategories">Close</span>-->
                                 </div>
                             </div>
-                        </div>
-                        <div class="tags" *ngIf="applicationSettings && applicationSettings.game_play_show_tags">
-                            <p>Tags associated categories</p>
-                            <div data-tags-input-name="tag" id="tagBox" class="tagging">
-                                <mat-chip-list>
-                                    <mat-basic-chip *ngIf="selectedTags.length === 0" class="tag">
-                                        None
-                                    </mat-basic-chip>
-                                    <mat-basic-chip *ngFor="let tag of selectedTags" class="tag">
-                                        {{tag}}
-                                        <span (click)="removeEnteredTag(tag)" class="remove-tag">x</span>
-                                    </mat-basic-chip>
-                                </mat-chip-list>
-                                <!-- <input type="text" placeholder="Tag" matInput formControlName="tagControl"
-                                    [matAutocomplete]="tagAuto" (change)="autoOptionClick($event)" aria-label="tag"> -->
-                                <input type="text" placeholder="Tag" matInput formControlName="tagControl"
-                                    [matAutocomplete]="tagAuto" aria-label="tag">
-                                <mat-autocomplete #tagAuto="matAutocomplete">
-                                    <mat-option *ngFor="let tag of filteredTags$ | async" [value]="tag">
-                                        {{ tag }}
-                                    </mat-option>
-                                </mat-autocomplete>
-                                <a mat-button class="add-tag-button" color="primary" (click)="addTag()"
-                                    [disabled]="newGameForm.controls.tagControl.value === ''">ADD</a>
-                            </div>
-
                         </div>
                     </div>
                 </div>

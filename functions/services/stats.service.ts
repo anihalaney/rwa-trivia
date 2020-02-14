@@ -126,11 +126,11 @@ export class StatsService {
         try {
             let question: Question = await QuestionService.getQuestionById(questionId);
             if (type === 'CREATED') {
-                question.appeared = question.appeared ? Utils.changeFieldValue(1) : 1;
+                question.stats.appeared = question.stats.appeared ? Utils.changeFieldValue(1) : 1;
             } else if (type === 'UPDATED' && update) {
-                question.correct = question.correct ? Utils.changeFieldValue(1) : 1;
+                question.stats.correct = question.stats.correct ? Utils.changeFieldValue(1) : 1;
             } else if (type === 'UPDATED' && !update) {
-                question.wrong = question.wrong ? Utils.changeFieldValue(1) : 1;
+                question.stats.wrong = question.stats.wrong ? Utils.changeFieldValue(1) : 1;
             }
             return await QuestionService.updateQuestion('questions', { ...question } );
         } catch (error) {
@@ -161,6 +161,9 @@ export class StatsService {
                             afterEventData.playerQnAs[afterEventData.playerQnAs.length - 1].questionId,
                             'UPDATED',
                             afterEventData.playerQnAs[afterEventData.playerQnAs.length - 1].answerCorrect);
+                            // udpate last game played stat
+
+                            AccountService.setLastGamePlayedStat(afterEventData.playerQnAs[afterEventData.playerQnAs.length - 1].playerId);
                             if (afterEventData.playerQnAs[afterEventData.playerQnAs.length - 1].answerCorrect) {
                                 AccountService.setBits(afterEventData.playerQnAs[afterEventData.playerQnAs.length - 1].playerId);
                             }

@@ -331,6 +331,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate
     this.currentWebViewParentId = id;
 
     if (isAndroid) {
+      this.webView.nativeElement.android.getSettings().setBuiltInZoomControls(false);
       // for android this works as this method does not destroy the webview. do not change.
       this.webView.nativeElement.android
         .getSettings()
@@ -339,25 +340,24 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate
         this.webView.nativeElement
       );
 
-      this.webView.nativeElement.android.setOnTouchListener(
-        new android.view.View.OnTouchListener({
-          onTouch: (view, motionEvent) => {
-            var action = motionEvent.getAction();
-            if (action === android.view.MotionEvent.ACTION_DOWN) {
-              view.getParent().requestDisallowInterceptTouchEvent(true);
+        this.webView.nativeElement.android.getSettings().setBuiltInZoomControls(false);
+        this.webView.nativeElement.android.setOnTouchListener(
+          new android.view.View.OnTouchListener({
+            onTouch: (view, motionEvent) => {
+              var action = motionEvent.getAction();
+                if (action === android.view.MotionEvent.ACTION_DOWN) {
+                  view.getParent().requestDisallowInterceptTouchEvent(true);
+                }
+                if (action === android.view.MotionEvent.ACTION_UP) {
+                  view.getParent().requestDisallowInterceptTouchEvent(false);
+                }
+              view.onTouchEvent(motionEvent);
+              return true;
             }
-            if (action === android.view.MotionEvent.ACTION_UP) {
-              view.getParent().requestDisallowInterceptTouchEvent(false);
-            }
-            view.onTouchEvent(motionEvent);
-            return true;
-          }
-        })
-      );
+          })
+        );
 
-      this.webView.nativeElement.android
-        .getSettings()
-        .setBuiltInZoomControls(false);
+      this.webView.nativeElement.android.getSettings().setBuiltInZoomControls(false);
       nextWebViewParent._addViewToNativeVisualTree(this.webView.nativeElement);
       // need to wait for the load to be finished before emit the value.
       setTimeout(() => {

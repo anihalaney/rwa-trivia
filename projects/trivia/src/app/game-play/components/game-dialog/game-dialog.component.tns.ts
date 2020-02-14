@@ -29,6 +29,7 @@ export class GameDialogComponent extends GameDialog implements OnDestroy {
   suspendTime: number;
   resumeTime: number;
 
+
   constructor(public store: Store<GamePlayState>, public gameActions: GameActions, public router: Router,
     public userActions: UserActions, public utils: Utils, public cd: ChangeDetectorRef) {
     super(store, userActions, utils, cd, router);
@@ -63,10 +64,13 @@ export class GameDialogComponent extends GameDialog implements OnDestroy {
   }
 
 
-  continueClicked($event) {
-    this.continueGame();
-    this.cd.markForCheck();
+
+  btnClickedAfterThreeConsecutiveAnswers($event) {
+    this.showContinueDialogueForThreeConsecutiveAnswers = true;
+    console.log('show continue screen ', this.showContinueDialogueForThreeConsecutiveAnswers);
   }
+
+
 
 
   ngOnDestroy() {

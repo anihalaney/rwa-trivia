@@ -79,7 +79,6 @@ export class BottomBarComponent implements OnChanges, OnDestroy, OnInit {
         if (menu === 'play') {
             this.activeMenu = menu;
             this.routerExtensions.navigate(['/dashboard'], { clearHistory: true });
-            // this.routerExtensions.locationStrategy.replaceState('', '', '/dashboard/leaderboard', '');
             sideDrawer.closeDrawer();
         } else if (menu === 'leaderboard') {
             this.activeMenu = menu;
@@ -87,8 +86,6 @@ export class BottomBarComponent implements OnChanges, OnDestroy, OnInit {
             sideDrawer.closeDrawer();
         } else if (menu === 'friends') {
             this.routerExtensions.navigate(['/user/my/invite-friends'], { clearHistory: true });
-            // console.log('this.location.getState();', this.location.getState());
-            // this.location.replaceState(this.location.getState(), '', '/dashboard');
             if (this.router.url === '/user/my/invite-friends') {
                 this.activeMenu = menu;
             }
