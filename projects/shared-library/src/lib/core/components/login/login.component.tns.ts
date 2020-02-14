@@ -325,7 +325,6 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
       const result = await this.firebaseAuthService.appleLogin();
       this.redirectTo();
     } catch (error) {
-      console.log('error>>>', error);
       this.loader = false;
       this.utils.showMessage("error", error);
       this.cd.markForCheck();

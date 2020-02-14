@@ -107,7 +107,7 @@ export class TNSFirebaseAuthService implements FirebaseAuthService {
         return firebase.login({
             type: firebase.LoginType.APPLE,
             appleOptions: {
-                locale: "nl", // for Android
+                locale: "en", // for Android
                 scopes: ["email"] // default ["email", "name"]
               }
         });
