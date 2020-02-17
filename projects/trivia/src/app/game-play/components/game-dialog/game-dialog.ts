@@ -159,8 +159,6 @@ export class GameDialog {
 
           if (!game.gameOver) {
             this.setTurnStatusFlag();
-          } else {
-            // this.resetValues();
           }
         }
       })
@@ -345,7 +343,7 @@ export class GameDialog {
     this.getNextQuestion();
     this.showBadgeScreen();
   }
-  setCurrentQuestion(value: any) {
+  setCurrentQuestion(value?: Question) {
     if (value) {
       this.currentQuestion = value;
       this.showCurrentQuestion = true;
@@ -359,7 +357,7 @@ export class GameDialog {
     this.questionSub = this.gameQuestionObs.subscribe(question => {
       if (!question) {
         this.cd.markForCheck();
-        this.setCurrentQuestion(null);
+        this.setCurrentQuestion();
         return;
       }
       this.originalAnswers = Object.assign({}, question.answers);
@@ -495,7 +493,7 @@ export class GameDialog {
     this.originalAnswers = undefined;
     this.questionAnswered = false;
     this.showContinueBtn = false;
-    this.setCurrentQuestion(null);
+    this.setCurrentQuestion();
   }
 
   setGameOver() {
@@ -586,7 +584,7 @@ export class GameDialog {
 
   continueGame() {
     this.originalAnswers = undefined;
-    this.setCurrentQuestion(null);
+    this.setCurrentQuestion();
     if (this.turnFlag) {
       this.continueNext = false;
       this.store.dispatch(new gameplayactions.ResetCurrentGame());
