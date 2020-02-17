@@ -15,7 +15,14 @@
                 <FlexboxLayout flexDirection="column" row="0" col="1">
                     <Label [text]="user?.displayName" color="#3c5a98" fontSize="20" paddingBottom="10"
                         textWrap="true"></Label>
-                    <Label text="&#xf041; {{user?.location}}" color="#000" class="fa" textWrap="true"></Label>
+                    <Label color="#000" class="fa" textWrap="true">
+                        <FormattedString>
+                            <Span text="&#xf041;">
+                            </Span>
+                            <Span [text]="user?.location" class="SF-Pro-Regular">
+                            </Span>
+                        </FormattedString>
+                    </Label>
                 </FlexboxLayout>
                 <FlexboxLayout row="1" col="1" marginTop="10">
                     <FlexboxLayout *ngFor="let profile of socialProfileSettings">

@@ -1,4 +1,4 @@
-<ns-action-bar *ngIf="!displayEditQuestion" title="Questions" class="Roboto-Regular" showAdd="true"></ns-action-bar>
+<ns-action-bar *ngIf="!displayEditQuestion" title="Questions" class="SF-Pro-Regular" showAdd="true"></ns-action-bar>
 <GridLayout rows="*,auto" columns="*">
 <StackLayout>
     <StackLayout *ngIf="loaderBusy">
@@ -59,12 +59,12 @@
                             fontSize="25" backgroundColor="white" width="80" stlRippleEffect (rippleTap)="displayReason(false)"></Button>
                     </GridLayout>
                 </CardLayout>
-                <StackLayout class="Roboto-Medium" padding="30 20 30 20">
+                <StackLayout class="SF-Pro-Medium" padding="30 20 30 20">
                     <TextView hint="Reason" [text]="selectedQuestion.reason" class="input" border="none"
                         borderBottomWidth="1" borderColor="#f3f3f3" [editable]="false"></TextView>
                     <Label text="Please do the needful edits and resubmit the question." textWrap="true" class="label"
                         fontWeight="400" color="#989898" marginTop="20"></Label>
-                    <Button text="RESUBMIT" class="Roboto-Regular"
+                    <Button text="RESUBMIT" class="SF-Pro-Regular"
                         *ngIf="getDisplayStatus(selectedQuestion.status)==='REQUIRED_CHANGE'" color="#ffffff"
                         backgroundColor="#71b02f" marginTop="10" padding="20" borderRadius="3" fontSize="20"
                         fontWeight="bold" stlRippleEffect (rippleTap)="showUpdateQuestion(true)"></Button>

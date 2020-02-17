@@ -95,10 +95,10 @@
                     </FlexboxLayout>
                     <Button *ngIf="!(turnFlag && threeConsecutiveAnswer)" android:elevation="20" ios:elevation="20" android:paddingTop="15" ios:paddingTop="10"
                         android:paddingBottom="15" ios:paddingBottom="10" row="4" col="0" verticalAlignment="middle"
-                        marginBottom="30" class="Hind-Medium continue-btn" width="55%" text="Continue"
+                        marginBottom="30" class="SF-Pro-Medium continue-btn" width="55%" text="Continue"
                         (rippleTap)="continueClicked()" stlRippleEffect></Button>
                     <Label row="4" col="0" *ngIf="turnFlag && threeConsecutiveAnswer"
-                        class="Roboto-Regular" fontSize="17" marginLeft="15" color="#af3424"
+                        class="SF-Pro-Regular" fontSize="17" marginLeft="15" color="#af3424"
                         text="You have reached the maximum number of correct answers you are allowed to give in the first round."
                         textWrap="true">
                     </Label>
