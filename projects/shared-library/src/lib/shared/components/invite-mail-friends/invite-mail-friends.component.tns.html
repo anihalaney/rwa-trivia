@@ -3,17 +3,17 @@
         <PreviousNextView>
             <StackLayout>
                 <StackLayout marginTop="25" horizontalAlignment="center">
-                    <Label class="Lato invite-title Roboto-Bold" text="Invite your friends by Email"
+                    <Label class="Lato invite-title SF-Pro-Bold" text="Invite your friends by Email"
                         textWrap="true"></Label>
-                    <Label class="invite-subtitle Roboto-Regular" text="Ask your friends to join you on bitwiser"
+                    <Label class="invite-subtitle SF-Pro-Regular" text="Ask your friends to join you on bitwiser"
                         textWrap="true"></Label>
                     <Image src="~/assets/images/mail-icon-invite.png" width="70" height="70"></Image>
                 </StackLayout>
                 <GridLayout #formDir="ngForm" [formGroup]="invitationForm" margin="30 10 10 10" rows="auto"
                     columns="*,auto">
-                    <TextField #textField row="0" col="0" formControlName="email" class="email-textfield Roboto-Regular"
+                    <TextField #textField row="0" col="0" formControlName="email" class="email-textfield SF-Pro-Regular"
                         hint="Email address" returnKeyType="done"></TextField>
-                    <label row="0" col="1" (rippleTap)="onSubscribe()" marginLeft="5" class="btn-blue Hind-Bold" text="Send Invite"
+                    <label row="0" col="1" (rippleTap)="onSubscribe()" marginLeft="5" class="btn-blue SF-Pro-Bold" text="Send Invite"
                         stlRippleEffect></label>
                 </GridLayout>
                 <Label margin="0 10 0 10"
