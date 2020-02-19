@@ -84,9 +84,9 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate
 
   demoQ: Question = new Question();
   renderView = false;
-  @ViewChild("categoryDropdown", { static: false })
+  // @ViewChild("categoryDropdown", { static: false })
   categoryDropdown: ElementRef;
-  @ViewChild("timeDropdown", { static: false }) timeDropdown: ElementRef;
+  // @ViewChild("timeDropdown", { static: false }) timeDropdown: ElementRef;
 
   public imageTaken: ImageAsset;
   public saveToGallery = true;
@@ -113,14 +113,14 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate
 
   showEditQuestion = false;
   @Output() hideQuestion = new EventEmitter<boolean>();
-  @ViewChild("autocomplete", { static: false })
-  autocomplete: RadAutoCompleteTextViewComponent;
-  @ViewChildren("textField") textField: QueryList<ElementRef>;
-  @ViewChild("webView", { static: false }) webView: ElementRef<WebView>;
-  @ViewChild("questionStack", { static: false }) questionStack: ElementRef;
-  @ViewChildren("answerStack") answerStack: QueryList<ElementRef>;
-  @ViewChild("webViewParentStack", { static: false })
-  webViewParentStack: ElementRef;
+  // @ViewChild("autocomplete", { static: false })
+  // autocomplete: RadAutoCompleteTextViewComponent;
+  // @ViewChildren("textField") textField: QueryList<ElementRef>;
+  // @ViewChild("webView", { static: false }) webView: ElementRef<WebView>;
+  // @ViewChild("questionStack", { static: false }) questionStack: ElementRef;
+  // @ViewChildren("answerStack") answerStack: QueryList<ElementRef>;
+  // @ViewChild("webViewParentStack", { static: false })
+  // webViewParentStack: ElementRef;
   isWebViewLoaded = false;
   get dataItems(): ObservableArray<TokenModel> {
     return this.tagItems;
@@ -147,239 +147,239 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate
     requestPermissions();
     this.submitBtnTxt = "Submit";
     this.actionBarTxt = "Add_Question";
-    this.initDataItems();
+    // this.initDataItems();
     this.question = new Question();
 
     if (isIOS) {
       this.iqKeyboard = IQKeyboardManager.sharedManager();
       this.iqKeyboard.shouldResignOnTouchOutside = true;
     }
-    this.subscriptions.push(
-      this.store
-        .select(appState.coreState)
-        .pipe(select(s => s.applicationSettings))
-        .subscribe(appSettings => {
-          if (appSettings) {
-            this.applicationSettings = appSettings[0];
-            this.playMaxTime = [
-              "Select a Max time",
-              ...this.applicationSettings.game_play_max_time
-            ];
-            this.createForm(this.question);
-            this.saveDraft();
-            this.cd.markForCheck();
-            this.answers = <FormArray>this.questionForm.get("answers");
-          }
-          this.cd.markForCheck();
-        })
-    );
+    // this.subscriptions.push(
+    //   this.store
+    //     .select(appState.coreState)
+    //     .pipe(select(s => s.applicationSettings))
+    //     .subscribe(appSettings => {
+    //       if (appSettings) {
+    //         this.applicationSettings = appSettings[0];
+    //         this.playMaxTime = [
+    //           "Select a Max time",
+    //           ...this.applicationSettings.game_play_max_time
+    //         ];
+    //         this.createForm(this.question);
+    //         this.saveDraft();
+    //         this.cd.markForCheck();
+    //         this.answers = <FormArray>this.questionForm.get("answers");
+    //       }
+    //       this.cd.markForCheck();
+    //     })
+    // );
   }
 
   ngOnInit(): void {
-    this.renderView = true;
-    this.page.on("navigatedFrom", () =>
-      this.ngZone.run(() => {
-        this.ngOnDestroy();
-      })
-    );
-    const questionControl = this.questionForm.get("questionText");
-    const answerControl = <FormArray>this.questionForm.controls["answers"];
+    // this.renderView = true;
+    // this.page.on("navigatedFrom", () =>
+    //   this.ngZone.run(() => {
+    //     this.ngOnDestroy();
+    //   })
+    // );
+    // const questionControl = this.questionForm.get("questionText");
+    // const answerControl = <FormArray>this.questionForm.controls["answers"];
 
-    this.subscriptions.push(
-      questionControl.valueChanges
-        .pipe(debounceTime(500))
-        .subscribe(v => this.computeAutoTags())
-    );
-    this.subscriptions.push(
-      answerControl.valueChanges.pipe(debounceTime(500)).subscribe(v => {
-        this.computeAutoTags();
-      })
-    );
+    // this.subscriptions.push(
+    //   questionControl.valueChanges
+    //     .pipe(debounceTime(500))
+    //     .subscribe(v => this.computeAutoTags())
+    // );
+    // this.subscriptions.push(
+    //   answerControl.valueChanges.pipe(debounceTime(500)).subscribe(v => {
+    //     this.computeAutoTags();
+    //   })
+    // );
 
-    this.subscriptions.push(
-      this.store
-        .select(appState.coreState)
-        .pipe(select(s => s.questionSaveStatus))
-        .subscribe(status => {
-          if (status === "SUCCESS") {
-            this.store.dispatch(this.questionAction.resetQuestionSuccess());
-            this.utils.showMessage("success", "Question saved!");
-            this.routerExtension.navigate(["/user/my/questions"]);
-            this.actionBarTxt = "My Question";
-            setTimeout(() => {
-              this.hideQuestion.emit(false);
-              this.toggleLoader(false);
-            }, 0);
-          }
-          this.cd.markForCheck();
-        })
-    );
+    // this.subscriptions.push(
+    //   this.store
+    //     .select(appState.coreState)
+    //     .pipe(select(s => s.questionSaveStatus))
+    //     .subscribe(status => {
+    //       if (status === "SUCCESS") {
+    //         this.store.dispatch(this.questionAction.resetQuestionSuccess());
+    //         this.utils.showMessage("success", "Question saved!");
+    //         this.routerExtension.navigate(["/user/my/questions"]);
+    //         this.actionBarTxt = "My Question";
+    //         setTimeout(() => {
+    //           this.hideQuestion.emit(false);
+    //           this.toggleLoader(false);
+    //         }, 0);
+    //       }
+    //       this.cd.markForCheck();
+    //     })
+    // );
 
-    if (this.editQuestion) {
-      const maxTimeIndex = this.playMaxTime.findIndex(maxTime => {
-        return maxTime === this.editQuestion.maxTime;
-      });
-      if (maxTimeIndex > 0) {
-        this.selectedMaxTimeIndex = this.editQuestion.maxTime;
-      }
-    }
+    // if (this.editQuestion) {
+    //   const maxTimeIndex = this.playMaxTime.findIndex(maxTime => {
+    //     return maxTime === this.editQuestion.maxTime;
+    //   });
+    //   if (maxTimeIndex > 0) {
+    //     this.selectedMaxTimeIndex = this.editQuestion.maxTime;
+    //   }
+    // }
 
-    if (!this.displayBottomBar) {
-      this.displayBottomBar = false;
-    }
+    // if (!this.displayBottomBar) {
+    //   this.displayBottomBar = false;
+    // }
   }
 
-  answerSelected(index) {
-    const answer = <FormArray>this.questionForm.controls["answers"];
-    setTimeout(() => {
-      for (let counter = 0; counter < answer.length; counter++) {
-        if (counter !== index) {
-          const questionForm = (<FormArray>(
-            this.questionForm.controls["answers"]
-          )).at(counter);
-          questionForm["controls"].correct.setValue(false);
-          this.cd.markForCheck();
-          this.cd.detectChanges();
-        }
-      }
-    }, 1);
-  }
+  // answerSelected(index) {
+  //   const answer = <FormArray>this.questionForm.controls["answers"];
+  //   setTimeout(() => {
+  //     for (let counter = 0; counter < answer.length; counter++) {
+  //       if (counter !== index) {
+  //         const questionForm = (<FormArray>(
+  //           this.questionForm.controls["answers"]
+  //         )).at(counter);
+  //         questionForm["controls"].correct.setValue(false);
+  //         this.cd.markForCheck();
+  //         this.cd.detectChanges();
+  //       }
+  //     }
+  //   }, 1);
+  // }
 
-  checkedChanged(event) {
-    setTimeout(() => {
-      this.cd.markForCheck();
-    }, 25);
-  }
+  // checkedChanged(event) {
+  //   setTimeout(() => {
+  //     this.cd.markForCheck();
+  //   }, 25);
+  // }
 
   ngAfterViewInit() {
     // this.renderView = false;
-    if (this.editQuestion && this.applicationSettings) {
-      this.createForm(this.editQuestion);
-      this.question.status = this.editQuestion.status;
-      this.saveDraft();
-      this.cd.markForCheck();
-      this.categoryIds = this.editQuestion.categoryIds;
+    // if (this.editQuestion && this.applicationSettings) {
+    //   this.createForm(this.editQuestion);
+    //   this.question.status = this.editQuestion.status;
+    //   this.saveDraft();
+    //   this.cd.markForCheck();
+    //   this.categoryIds = this.editQuestion.categoryIds;
 
-      this.enteredTags = this.editQuestion.tags;
-      this.submitBtnTxt =
-        this.editQuestion.is_draft === true && this.editQuestion.status !== 6
-          ? "Submit"
-          : "Resubmit";
-      this.actionBarTxt = "Update Question";
-    }
+    //   this.enteredTags = this.editQuestion.tags;
+    //   this.submitBtnTxt =
+    //     this.editQuestion.is_draft === true && this.editQuestion.status !== 6
+    //       ? "Submit"
+    //       : "Resubmit";
+    //   this.actionBarTxt = "Update Question";
+    // }
   }
 
-  openCategoryDropdown() {
-    const categoryDropdown = <DropDown>this.categoryDropdown.nativeElement;
-    categoryDropdown.open();
-  }
+  // openCategoryDropdown() {
+  //   const categoryDropdown = <DropDown>this.categoryDropdown.nativeElement;
+  //   categoryDropdown.open();
+  // }
 
-  openTimeDropdown() {
-    const timeDropdown = <DropDown>this.timeDropdown.nativeElement;
-    timeDropdown.open();
-  }
+  // openTimeDropdown() {
+  //   const timeDropdown = <DropDown>this.timeDropdown.nativeElement;
+  //   timeDropdown.open();
+  // }
 
-  setInitialValue() {
-    const blankObj = [{ insert: "" }];
-    if (this.currentWebViewParentId >= 0) {
-      const ansForm = (<FormArray>this.questionForm.controls["answers"]).at(
-        this.currentWebViewParentId
-      );
-      ansForm["controls"].isRichEditor.patchValue(true);
-      this.oWebViewInterface.emit(
-        "deltaObject",
-        ansForm["controls"].answerObject.value
-          ? ansForm["controls"].answerObject.value
-          : blankObj
-      );
-    } else if (this.currentWebViewParentId === -1) {
-      this.questionForm.get("isRichEditor").patchValue(true);
-      this.oWebViewInterface.emit(
-        "deltaObject",
-        this.questionForm.controls.questionObject.value
-          ? this.questionForm.controls.questionObject.value
-          : blankObj
-      );
-    }
-  }
-  showEditor(type: string, id = -1) {
-    this.moveWebView(type, id);
-    if (type === "question") {
-      this.questionForm.patchValue({ isRichEditor: true });
-    } else {
-      const newQuestionForm = (<FormArray>(
-        this.questionForm.controls["answers"]
-      )).at(id);
-      newQuestionForm["controls"].isRichEditor.setValue(true);
-    }
-  }
+  // setInitialValue() {
+  //   const blankObj = [{ insert: "" }];
+  //   if (this.currentWebViewParentId >= 0) {
+  //     const ansForm = (<FormArray>this.questionForm.controls["answers"]).at(
+  //       this.currentWebViewParentId
+  //     );
+  //     ansForm["controls"].isRichEditor.patchValue(true);
+  //     this.oWebViewInterface.emit(
+  //       "deltaObject",
+  //       ansForm["controls"].answerObject.value
+  //         ? ansForm["controls"].answerObject.value
+  //         : blankObj
+  //     );
+  //   } else if (this.currentWebViewParentId === -1) {
+  //     this.questionForm.get("isRichEditor").patchValue(true);
+  //     this.oWebViewInterface.emit(
+  //       "deltaObject",
+  //       this.questionForm.controls.questionObject.value
+  //         ? this.questionForm.controls.questionObject.value
+  //         : blankObj
+  //     );
+  //   }
+  // }
+  // showEditor(type: string, id = -1) {
+  //   this.moveWebView(type, id);
+  //   if (type === "question") {
+  //     this.questionForm.patchValue({ isRichEditor: true });
+  //   } else {
+  //     const newQuestionForm = (<FormArray>(
+  //       this.questionForm.controls["answers"]
+  //     )).at(id);
+  //     newQuestionForm["controls"].isRichEditor.setValue(true);
+  //   }
+  // }
 
-  moveWebView(type: string, id: number) {
-    const prevWebViewParent =
-      this.currentWebViewParentId !== undefined
-        ? this.currentWebViewParentId === -1
-          ? this.questionStack.nativeElement
-          : this.answerStack.filter(
-              (element, index) => index === this.currentWebViewParentId
-            )[0].nativeElement
-        : this.webViewParentStack.nativeElement;
-    const nextWebViewParent =
-      id === -1
-        ? this.questionStack.nativeElement
-        : this.answerStack.filter((element, index) => index === id)[0]
-            .nativeElement;
-    this.currentWebViewParentId = id;
+  // moveWebView(type: string, id: number) {
+  //   const prevWebViewParent =
+  //     this.currentWebViewParentId !== undefined
+  //       ? this.currentWebViewParentId === -1
+  //         ? this.questionStack.nativeElement
+  //         : this.answerStack.filter(
+  //             (element, index) => index === this.currentWebViewParentId
+  //           )[0].nativeElement
+  //       : this.webViewParentStack.nativeElement;
+  //   const nextWebViewParent =
+  //     id === -1
+  //       ? this.questionStack.nativeElement
+  //       : this.answerStack.filter((element, index) => index === id)[0]
+  //           .nativeElement;
+  //   this.currentWebViewParentId = id;
 
-    if (isAndroid) {
-      this.webView.nativeElement.android.getSettings().setBuiltInZoomControls(false);
-      // for android this works as this method does not destroy the webview. do not change.
-      this.webView.nativeElement.android
-        .getSettings()
-        .setBuiltInZoomControls(false);
-      prevWebViewParent._removeViewFromNativeVisualTree(
-        this.webView.nativeElement
-      );
+  //   if (isAndroid) {
+  //     this.webView.nativeElement.android.getSettings().setBuiltInZoomControls(false);
+  //     // for android this works as this method does not destroy the webview. do not change.
+  //     this.webView.nativeElement.android
+  //       .getSettings()
+  //       .setBuiltInZoomControls(false);
+  //     prevWebViewParent._removeViewFromNativeVisualTree(
+  //       this.webView.nativeElement
+  //     );
 
-        this.webView.nativeElement.android.getSettings().setBuiltInZoomControls(false);
-        this.webView.nativeElement.android.setOnTouchListener(
-          new android.view.View.OnTouchListener({
-            onTouch: (view, motionEvent) => {
-              var action = motionEvent.getAction();
-                if (action === android.view.MotionEvent.ACTION_DOWN) {
-                  view.getParent().requestDisallowInterceptTouchEvent(true);
-                }
-                if (action === android.view.MotionEvent.ACTION_UP) {
-                  view.getParent().requestDisallowInterceptTouchEvent(false);
-                }
-              view.onTouchEvent(motionEvent);
-              return true;
-            }
-          })
-        );
+  //       this.webView.nativeElement.android.getSettings().setBuiltInZoomControls(false);
+  //       this.webView.nativeElement.android.setOnTouchListener(
+  //         new android.view.View.OnTouchListener({
+  //           onTouch: (view, motionEvent) => {
+  //             var action = motionEvent.getAction();
+  //               if (action === android.view.MotionEvent.ACTION_DOWN) {
+  //                 view.getParent().requestDisallowInterceptTouchEvent(true);
+  //               }
+  //               if (action === android.view.MotionEvent.ACTION_UP) {
+  //                 view.getParent().requestDisallowInterceptTouchEvent(false);
+  //               }
+  //             view.onTouchEvent(motionEvent);
+  //             return true;
+  //           }
+  //         })
+  //       );
 
-      this.webView.nativeElement.android.getSettings().setBuiltInZoomControls(false);
-      nextWebViewParent._addViewToNativeVisualTree(this.webView.nativeElement);
-      // need to wait for the load to be finished before emit the value.
-      setTimeout(() => {
-        this.oWebViewInterface.emit(
-          "viewType",
-          this.currentWebViewParentId >= 0 ? "answer" : "question"
-        );
-        this.setInitialValue();
-      }, 1);
-    } else if (isIOS) {
-      // for ios this works it calls destroy but still we can re initialize the communication by calling initNativeView(). do not change.
-      this.renderer.removeChild(prevWebViewParent, this.webView.nativeElement);
-      this.renderer.appendChild(nextWebViewParent, this.webView.nativeElement);
-    }
-  }
+  //     this.webView.nativeElement.android.getSettings().setBuiltInZoomControls(false);
+  //     nextWebViewParent._addViewToNativeVisualTree(this.webView.nativeElement);
+  //     // need to wait for the load to be finished before emit the value.
+  //     setTimeout(() => {
+  //       this.oWebViewInterface.emit(
+  //         "viewType",
+  //         this.currentWebViewParentId >= 0 ? "answer" : "question"
+  //       );
+  //       this.setInitialValue();
+  //     }, 1);
+  //   } else if (isIOS) {
+  //     // for ios this works it calls destroy but still we can re initialize the communication by calling initNativeView(). do not change.
+  //     this.renderer.removeChild(prevWebViewParent, this.webView.nativeElement);
+  //     this.renderer.appendChild(nextWebViewParent, this.webView.nativeElement);
+  //   }
+  // }
 
-  public onchange(args: SelectedIndexChangedEventData) {
-    this.selectedMaxTimeIndex = args.newIndex;
-    this.questionForm.patchValue({
-      maxTime: this.applicationSettings.game_play_max_time[args.newIndex - 1]
-    });
-  }
+  // public onchange(args: SelectedIndexChangedEventData) {
+  //   this.selectedMaxTimeIndex = args.newIndex;
+  //   this.questionForm.patchValue({
+  //     maxTime: this.applicationSettings.game_play_max_time[args.newIndex - 1]
+  //   });
+  // }
 
   async uploadImageFromCamera(webviewElement) {
     const options = {
@@ -423,6 +423,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate
                   const imageName =
                     this.utils.getQuestionUrl(imageObject.name) +
                     `?d=${new Date().getTime()}`;
+                    // console.log('image url>>>', imageName);
                   webviewElement.emit("imageUrl", imageName);
                 }
               }
@@ -433,6 +434,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate
       console.error(error);
     }
   }
+
 
   async uploadImageFromGallery(webviewElement) {
     try {
@@ -459,117 +461,109 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate
 
   ngOnChanges() {}
 
-  private initDataItems() {
-    this.tagItems = new ObservableArray<TokenModel>();
+  // private initDataItems() {
+  //   this.tagItems = new ObservableArray<TokenModel>();
 
-    for (let i = 0; i < this.tags.length; i++) {
-      this.tagItems.push(new TokenModel(this.tags[i], undefined));
-    }
-  }
+  //   for (let i = 0; i < this.tags.length; i++) {
+  //     this.tagItems.push(new TokenModel(this.tags[i], undefined));
+  //   }
+  // }
 
-  createForm(question: Question) {
-    const answersFA: FormArray = super.createDefaultForm(question);
-    if (question.categoryIds.length > 0) {
-      this.selectedQuestionCategoryIndex = Number(question.categoryIds[0]);
-    }
+  // createForm(question: Question) {
+  //   const answersFA: FormArray = super.createDefaultForm(question);
+  //   if (question.categoryIds.length > 0) {
+  //     this.selectedQuestionCategoryIndex = Number(question.categoryIds[0]);
+  //   }
 
-    if (question.maxTime) {
-      const maxTimeIndex = this.applicationSettings.game_play_max_time.findIndex(
-        data => data === question.maxTime
-      );
-      this.selectedMaxTimeIndex = maxTimeIndex + 1;
-    }
+  //   if (question.maxTime) {
+  //     const maxTimeIndex = this.applicationSettings.game_play_max_time.findIndex(
+  //       data => data === question.maxTime
+  //     );
+  //     this.selectedMaxTimeIndex = maxTimeIndex + 1;
+  //   }
 
-    this.questionForm = this.fb.group(
-      {
-        id: question.id ? question.id : "",
-        is_draft: question.is_draft,
-        questionText: [
-          question.questionText ? question.questionText : "",
-          Validators.compose([Validators.required])
-        ],
-        tags: "",
-        answers: answersFA,
-        ordered: [question.ordered],
-        explanation: [question.explanation],
-        isRichEditor: [question.isRichEditor],
-        questionObject: [question.questionObject],
-        maxTime: [question.maxTime, Validators.required],
-        category: [
-          question.categoryIds.length > 0 ? question.categoryIds[0] : "",
-          Validators.required
-        ]
-      },
-      { validator: questionFormValidator }
-    );
-  }
+  //   this.questionForm = this.fb.group(
+  //     {
+  //       id: question.id ? question.id : "",
+  //       is_draft: question.is_draft,
+  //       questionText: [
+  //         question.questionText ? question.questionText : "",
+  //         Validators.compose([Validators.required])
+  //       ],
+  //       tags: "",
+  //       answers: answersFA,
+  //       ordered: [question.ordered],
+  //       explanation: [question.explanation],
+  //       isRichEditor: [question.isRichEditor],
+  //       questionObject: [question.questionObject],
+  //       maxTime: [question.maxTime, Validators.required],
+  //       category: [
+  //         question.categoryIds.length > 0 ? question.categoryIds[0] : "",
+  //         Validators.required
+  //       ]
+  //     },
+  //     { validator: questionFormValidator }
+  //   );
+  // }
 
-  selectCategory(args: SelectedIndexChangedEventData) {
-    this.selectedQuestionCategoryIndex = args.newIndex;
-    this.categoryIds = [];
-    const category: Category = this.categories[args.newIndex];
-    this.questionForm.controls.category.patchValue(args.newIndex);
-    if (category) {
-      this.categoryIds.push(category.id);
-    }
-  }
+  // selectCategory(args: SelectedIndexChangedEventData) {
+  //   this.selectedQuestionCategoryIndex = args.newIndex;
+  //   this.categoryIds = [];
+  //   const category: Category = this.categories[args.newIndex];
+  //   this.questionForm.controls.category.patchValue(args.newIndex);
+  //   if (category) {
+  //     this.categoryIds.push(category.id);
+  //   }
+  // }
 
-  addCustomTag() {
-    this.hideKeyboard();
-    if (this.customTag && this.customTag !== "") {
-      super.addTag(this.customTag);
-      this.customTag = "";
-      this.autocomplete.autoCompleteTextView.resetAutoComplete();
-    }
-  }
+  // addCustomTag() {
+  //   this.hideKeyboard();
+  //   if (this.customTag && this.customTag !== "") {
+  //     super.addTag(this.customTag);
+  //     this.customTag = "";
+  //     this.autocomplete.autoCompleteTextView.resetAutoComplete();
+  //   }
+  // }
 
-  public onDidAutoComplete(args) {
-    this.customTag = args.text;
-  }
+  // public onDidAutoComplete(args) {
+  //   this.customTag = args.text;
+  // }
 
-  public onTextChanged(args) {
-    this.customTag = args.text;
-  }
+  // public onTextChanged(args) {
+  //   this.customTag = args.text;
+  // }
 
-  submit() {
-    this.hideKeyboard();
-    const question: Question = super.onSubmit();
-    if (!question) {
-      return false;
-    }
-    // tslint:disable-next-line:no-unused-expression
-    this.editQuestion ? (question.id = this.editQuestion.id) : "";
-    if (
-      question &&
-      this.categoryIds.length > 0 &&
-      this.enteredTags.length > 2
-    ) {
-      question.categoryIds = this.categoryIds;
-      this.toggleLoader(true);
-      // call saveQuestion
-      this.saveQuestion(question);
-      this.isSaved = true;
-    }
-  }
+  // submit() {
+  //   this.hideKeyboard();
+  //   const question: Question = super.onSubmit();
+  //   if (!question) {
+  //     return false;
+  //   }
+  //   // tslint:disable-next-line:no-unused-expression
+  //   this.editQuestion ? (question.id = this.editQuestion.id) : "";
+  //   if (
+  //     question &&
+  //     this.categoryIds.length > 0 &&
+  //     this.enteredTags.length > 2
+  //   ) {
+  //     question.categoryIds = this.categoryIds;
+  //     this.toggleLoader(true);
+  //     // call saveQuestion
+  //     this.saveQuestion(question);
+  //     this.isSaved = true;
+  //   }
+  // }
 
-  preview() {
-    this.hideKeyboard();
-    this.previewQuestion = super.onSubmit(true);
-    this.isShowPreview = true;
-  }
+  // preview() {
+  //   this.hideKeyboard();
+  //   this.previewQuestion = super.onSubmit(true);
+  //   this.isShowPreview = true;
+  // }
 
-  hideKeyboard() {
-    this.utils.hideKeyboard(this.textField);
-  }
+  // hideKeyboard() {
+  //   this.utils.hideKeyboard(this.textField);
+  // }
 
-  ngOnDestroy() {
-    this.renderView = false;
-    if (this.oWebViewInterface) {
-      this.oWebViewInterface.off("uploadImageStart");
-      this.oWebViewInterface.off("quillContent");
-      this.oWebViewInterface.off("editorLoadFinished");
-    }
-  }
 
   webViewLoaded(event) {
     if (!event.object) {
@@ -587,13 +581,13 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate
             "viewType",
             this.currentWebViewParentId >= 0 ? "answer" : "question"
           );
-          this.setInitialValue();
+          // this.setInitialValue();
         }, 1);
       }
     }
   }
 
-  preventEventPropogation() {}
+  // preventEventPropogation() {}
 
   setWebInterface(webViewInstace) {
     const webInterface = new webViewInterfaceModule.WebViewInterface(
@@ -654,6 +648,16 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate
     } else {
       this.hideQuestion.emit(true);
     }
+  }
+
+
+  ngOnDestroy() {
+  //   this.renderView = false;
+  //   if (this.oWebViewInterface) {
+  //     this.oWebViewInterface.off("uploadImageStart");
+  //     this.oWebViewInterface.off("quillContent");
+  //     this.oWebViewInterface.off("editorLoadFinished");
+  //   }
   }
 }
 

@@ -7,7 +7,7 @@
             <ActivityIndicator [busy]="loaderBusy" width="100" height="100" marginTop="225" class="activity-indicator">
             </ActivityIndicator>
         </StackLayout>
-        <GridLayout [class.dialogOpen]="isShowPreview" [isUserInteractionEnabled]="isWebViewLoaded" rows="*" columns="*"
+        <!-- <GridLayout [class.dialogOpen]="isShowPreview" [isUserInteractionEnabled]="isWebViewLoaded" rows="*" columns="*"
             *ngIf="!loaderBusy">
             <StackLayout>
                 <NestedScrollView orientation="vertical">
@@ -165,10 +165,7 @@
                 </AbsoluteLayout>
             </StackLayout>
             <StackLayout height="0" #webViewParentStack>
-                    <!-- <NestedScrollView height="0" #webViewParentStack> -->
-                            <WebView height="215" width="100%" #webView id="questionWebView" (loaded)="webViewLoaded($event)">   </WebView>
-                    <!-- </NestedScrollView> -->
-                  
+                            <WebView height="215" width="100%" #webView id="questionWebView" (loaded)="webViewLoaded($event)">   </WebView>                  
                  
             </StackLayout>
 
@@ -176,6 +173,35 @@
                 <app-preview-question-dialog [question]="previewQuestion" [categoryDictionary]="categories">
                 </app-preview-question-dialog>
             </StackLayout>
+        </GridLayout> -->
+
+
+
+        <GridLayout rows="*,auto" columns="*">
+
+            <!-- <WebView row="0" col="0" src="http://192.168.0.108:4200/" height="auto"></WebView> -->
+
+            <WebView row="0" col="0" width="100%" height="auto" #webView id="questionWebView"
+                (loaded)="webViewLoaded($event)"></WebView>
+                <!-- <StackLayout row="1" col="0" orientation="horizontal" class="button-section">
+                    <Button text="Save" class="question-buttons"></Button>
+                    <Button text="Preview"  class="enable-btn-preview"></Button>
+
+                </StackLayout> -->
+
+
+                <GridLayout row="1" col="0"columns="*,50,*" iosOverflowSafeArea="false"
+                                class="button-section">
+                                <Button stlRippleEffect row="0" col="0" colspan="2" 
+                                    width="100%" [text]="submitBtnTxt" 
+                                    ngClass="enable-btn"
+                                    class="question-buttons"></Button>
+                                <FlexboxLayout stlRippleEffect borderRadius="3" class="enable-btn-preview"
+                                     row="0" col="2" orientation="horizontal"
+                                    justifyContent="center" padding="12">
+                                    <Label text="Preview" textWrap="true"></Label>
+                                </FlexboxLayout>
+                            </GridLayout>
         </GridLayout>
 
     </StackLayout>

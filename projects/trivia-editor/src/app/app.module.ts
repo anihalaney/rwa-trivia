@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 
 import { AppComponent } from './app.component';
 import { EditorComponent } from './editor/editor.component';
+import { AddQuestionComponent } from './add-question/add-question.component';
 
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
@@ -24,7 +25,8 @@ import { NgQuillTexModule } from 'ng-quill-tex';
 @NgModule({
   declarations: [
     AppComponent,
-    EditorComponent
+    EditorComponent,
+    AddQuestionComponent
   ],
   imports: [
     CommonModule,

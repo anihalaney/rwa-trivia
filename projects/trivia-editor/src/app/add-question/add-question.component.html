@@ -1,0 +1,75 @@
+<!-- <label> THIS is labe dd3</label> -->
+
+ <form class="question-form"  *ngIf="show"  [formGroup]="questionForm" novalidate>
+
+    <div class="optionbox">
+  
+        <div class="pcategories">
+            <h2><span>Select the category for bulk upload:</span></h2>
+            <div class="row">
+                <div class="formfield">
+                    <select placeholder="Select Category" class="required" formControlName="category">
+                        <option value="">
+                            Select a Category
+                        </option>
+                        <option *ngFor="let category of categories" [value]="category.id">
+                            {{category.categoryName}}
+                        </option>
+                    </select>
+                    <p *ngIf="questionForm.controls.category.errors && !questionForm.controls.category.pristine"
+                        class="error">
+                        Select a category
+                    </p>
+                </div>
+            </div>
+        </div>        
+    </div>
+
+    <h3>Question</h3>
+    <ng-quill-tex  (editorLoadFinished)="editorLoadFinished($event)" [modules]="quillConfig" (textChanged)="onTextChanged($event)" 
+    (fileUploaded)="fileUploaded($event)" [class.bottomToolbar]="applicationSettings?.quill_options?.custom_toolbar_position === 'bottom'" [customToolbarPosition]="applicationSettings?.quill_options?.custom_toolbar_position"  [isMobile]="true" [imageUrl]="quillImageUrl" [content]="editorContent">
+        <span *ngIf="applicationSettings?.quill_options?.custom_toolbar_position === 'bottom'" class="ql-formats">
+            <div #bottomToolBar [innerHtml]='bottomBarOptions | safeHtml'></div>
+        </span>
+    </ng-quill-tex>  
+
+
+    <h3>Answers</h3>
+    <ng-container formArrayName="answers">
+      <div *ngFor="let answer of answers.controls; let i=index" [formGroupName]="i" class="formfield">
+
+        <label>
+          <input type="checkbox" formControlName="correct">
+        </label>
+
+        <input *ngIf="!answer.value.isRichEditor" [placeholder]="'Enter Option ' + (i+1)" formControlName="answerText"
+          type="text" class="required" aria-label="answer-text">
+
+        <div class="mathseditor" *ngIf="answer.value.isRichEditor">
+          <!-- <ng-quill-tex [modules]="quillConfigAnswer" (textChanged)="onAnswerChanged($event,i)" (fileUploaded)="fileUploaded($event)"
+            [imageUrl]="quillImageUrlAnswer" [controlName]="'answerText'"  [isMobile]="true">
+          </ng-quill-tex> -->
+
+          <ng-quill-tex  (editorLoadFinished)="editorLoadFinished($event)" [modules]="quillConfigAnswer" (textChanged)="onTextChanged($event)" 
+            (fileUploaded)="fileUploaded($event)" [class.bottomToolbar]="applicationSettings?.quill_options?.custom_toolbar_position === 'bottom'" [customToolbarPosition]="applicationSettings?.quill_options?.custom_toolbar_position"  [isMobile]="true" [imageUrl]="quillImageUrlAnswer" [content]="editorContent">
+                <span *ngIf="applicationSettings?.quill_options?.custom_toolbar_position === 'bottom'" class="ql-formats">
+                    <div #bottomToolBar [innerHtml]='bottomBarOptions | safeHtml'></div>
+                </span>
+            </ng-quill-tex>  
+        </div>
+
+
+        <p [ngClass]="(!answer.controls.answerText.valid
+        && answer.controls.answerText.errors 
+        &&  answer.controls.answerText.errors.maxlength) ? 'show-answer-text' : 'hide-answer-text'"
+       class="error">
+       {{applicationSettings.answer_max_length}} characters are allowed</p>
+      </div>
+    </ng-container>
+    <div class="error" *ngIf="!answers.valid && answers.touched">
+      All answers required
+    </div>
+    <div class="error" *ngIf="answers.valid && questionForm.hasError('correctAnswerCountInvalid')">
+      Pick one and only one correct answer
+    </div>
+</form>
