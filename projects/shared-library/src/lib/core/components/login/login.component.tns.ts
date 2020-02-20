@@ -1,7 +1,4 @@
-import {
-  ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, QueryList,
-  ViewChild, ViewChildren, ViewContainerRef
-} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren, ViewContainerRef } from '@angular/core';
 import { FormBuilder, NgModel } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import * as application from 'application';
@@ -11,7 +8,7 @@ import { setString } from 'nativescript-plugin-firebase/crashlytics/crashlytics'
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { Subject } from 'rxjs';
 import { filter, map, take } from 'rxjs/operators';
-import { android, AndroidActivityBackPressedEventData, AndroidApplication, } from 'tns-core-modules/application';
+import { android, AndroidActivityBackPressedEventData, AndroidApplication } from 'tns-core-modules/application';
 import { isAndroid, isIOS } from 'tns-core-modules/platform';
 import { Page } from 'tns-core-modules/ui/page';
 import { CountryListComponent } from '../../../shared/mobile/component/countryList/countryList.component';
@@ -27,8 +24,7 @@ declare var IQKeyboardManager;
   styleUrls: ['./login.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-
-@AutoUnsubscribe({ 'arrayName': 'subscriptions' })
+@AutoUnsubscribe({ arrayName: 'subscriptions' })
 export class LoginComponent extends Login implements OnInit, OnDestroy {
   iqKeyboard: any;
   @ViewChildren('textField') textField: QueryList<ElementRef>;
@@ -39,7 +35,7 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
     type: '',
     text: ''
   };
-  
+
   @ViewChild('phoneNumber', { static: false }) phoneNumber: NgModel;
   isCountryListOpened = false;
   isCountryCodeError;
@@ -47,7 +43,6 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
   country: any;
   dialogCloseSubject = new Subject();
   dialogCloseObservable = this.dialogCloseSubject.asObservable();
-
 
   constructor(
     private modalDialogService: ModalDialogService,
@@ -60,10 +55,10 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
     private utils: Utils,
     public cd: ChangeDetectorRef,
     private viewContainerRef: ViewContainerRef,
-    private phonenumber: PhoneNumberValidationProvider) {
+    private phonenumber: PhoneNumberValidationProvider
+  ) {
     super(fb, store, cd);
     this.page.actionBarHidden = true;
-
 
     this.input = {
       selectedCountry: 'United States',
@@ -77,11 +72,9 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
     }
   }
 
-
   private validateNumber(): boolean {
     return this.phonenumber.isValidMobile(this.input.phoneNumber, this.input.country);
   }
-
 
   async signInWithPhone() {
     if (this.input.selectedCountry === '') {
@@ -102,7 +95,6 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
         JSON.stringify(result);
         this.redirectTo();
       }
-
     } catch (errorMessage) {
       console.error(errorMessage);
       this.utils.showMessage('error', errorMessage);
@@ -134,7 +126,6 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
     } catch (error) {
       console.error(error);
     }
-
   }
 
   ngOnInit() {
@@ -157,8 +148,6 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
       }
       this.loginForm.get('password').updateValueAndValidity();
     }));
-
-
   }
 
   handleBackButtonPress() {
@@ -227,9 +216,7 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
           this.errorStatus = false;
           this.notificationLogs.push(this.loginForm.get('email').value);
           this.store.dispatch(this.uiStateActions.saveResetPasswordNotificationLogs([this.loginForm.get('email').value]));
-
       }
-
     } catch (error) {
       this.loader = false;
       switch (this.mode) {
@@ -251,11 +238,9 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
           break;
       }
       this.cd.markForCheck();
-
     } finally {
       this.cd.markForCheck();
     }
-
   }
 
   async googleLogin() {
@@ -271,7 +256,6 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
       this.utils.showMessage('error', error);
       this.cd.markForCheck();
     }
-
   }
 
   async fbLogin() {
@@ -287,11 +271,24 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
     }
   }
 
+  async appleSignIn() {
+    try {
+      this.removeMessage();
+      this.loader = true;
+      const result = await this.firebaseAuthService.appleLogin();
+      this.redirectTo();
+    } catch (error) {
+      this.loader = false;
+      this.utils.showMessage('error', error);
+      this.cd.markForCheck();
+    }
+  }
+
   redirectTo() {
     this.subscriptions.push(this.store.select(coreState).pipe(
       map(s => s.user),
-      filter(u => (u !== null && u.userId !== '')),
-      take(1)).subscribe((user) => {
+      filter(u => u !== null && u.userId !== ''),
+      take(1)).subscribe(user => {
         this.loader = false;
         this.subscriptions.push(this.store.select(coreState).pipe(
           map(s => s.loginRedirectUrl), take(1)).subscribe(url => {
@@ -306,9 +303,10 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
               this.navigateTo(redirectUrl, this.mode);
             }
             this.cd.markForCheck();
-          }));
-      }
-      ));
+          })
+        );
+      })
+    );
   }
 
   navigateTo(redirectUrl, mode) {
@@ -319,8 +317,6 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
     }
     this.routerExtension.navigate([redirectUrl], { clearHistory: true });
   }
-
-
 
   showMessage(type: string, text: string) {
     this.message = {
@@ -351,7 +347,6 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
     };
   }
 
-
   ngOnDestroy() {
     if (isAndroid) {
       android.off(AndroidApplication.activityBackPressedEvent, this.handleBackButtonPressCallBack);
@@ -361,6 +356,4 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
   hideKeyboard() {
     this.utils.hideKeyboard(this.textField);
   }
-
 }
-
