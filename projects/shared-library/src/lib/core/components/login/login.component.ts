@@ -18,7 +18,7 @@ import { CONFIG } from 'shared-library/environments/environment';
 })
 
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
-export class LoginComponent extends Login implements  OnDestroy {
+export class LoginComponent extends Login implements OnDestroy {
   ui: any;
   uiConfig: any;
 
@@ -35,27 +35,27 @@ export class LoginComponent extends Login implements  OnDestroy {
       callbacks: {
         // used this function to return false for do not redirect after success
         signInSuccessWithAuthResult: (authResult, redirectUrl) => false
-        },
+      },
       autoUpgradeAnonymousUsers: false,
       signInOptions: [
         firebase.auth.PhoneAuthProvider.PROVIDER_ID,
       ],
       signInFlow: 'popup',
       tosUrl: CONFIG.termsAndConditionsUrl,
-      privacyPolicyUrl: () =>  windowsRef.nativeWindow.open(CONFIG.privacyUrl, '_blank')
+      privacyPolicyUrl: () => windowsRef.nativeWindow.open(CONFIG.privacyUrl, '_blank')
     };
   }
 
   phoneSignIn() {
     super.phoneSignIn();
-      if (!this.ui) {
-        this.ui = new firebaseui.auth.AuthUI(firebase.auth());
-      }
-      this.ui.start('#firebaseui-auth-container', this.uiConfig);
+    if (!this.ui) {
+      this.ui = new firebaseui.auth.AuthUI(firebase.auth());
+    }
+    this.ui.start('#firebaseui-auth-container', this.uiConfig);
   }
 
   emailSignIn() {
-    if ( this.ui  && this.signInMethod === 'phone') {
+    if (this.ui && this.signInMethod === 'phone') {
       this.ui.reset();
     }
     super.emailSignIn();
@@ -105,7 +105,7 @@ export class LoginComponent extends Login implements  OnDestroy {
           }
       }
 
-    } catch ( error ) {
+    } catch (error) {
       console.error(error);
       this.notificationMsg = error.message;
       this.errorStatus = true;
@@ -115,48 +115,54 @@ export class LoginComponent extends Login implements  OnDestroy {
     }
   }
 
-  googleLogin() {
-    this.firebaseAuthService.googleLogin().catch((error: Error) => {
+  async googleLogin() {
+    try {
+      await this.firebaseAuthService.googleLogin();
+    } catch (error) {
       this.notificationMsg = error.message;
       this.errorStatus = true;
       this.cd.detectChanges();
-    });
+    }
   }
 
-  fbLogin() {
-    this.firebaseAuthService.facebookLogin()
-      .catch((error: Error) => {
-        this.notificationMsg = error.message;
-        this.errorStatus = true;
-         this.cd.detectChanges();
-      });
+  async fbLogin() {
+    try {
+      await this.firebaseAuthService.facebookLogin();
+    } catch (error) {
+      this.notificationMsg = error.message;
+      this.errorStatus = true;
+      this.cd.detectChanges();
+    }
   }
 
   async appleSignIn() {
-      const result = await this.firebaseAuthService.appleLogin().catch((error: Error) => {
-        this.notificationMsg = error.message;
-        this.errorStatus = true;
-         this.cd.detectChanges();
-      });
-  
+    try {
+      await this.firebaseAuthService.appleLogin();
+    } catch (error) {
+      this.notificationMsg = error.message;
+      this.errorStatus = true;
+      this.cd.detectChanges();
+    }
   }
 
-  twitterLogin() {
-    this.firebaseAuthService.twitterLogin()
-      .catch((error: Error) => {
-        this.notificationMsg = error.message;
-        this.errorStatus = true;
-        this.cd.detectChanges();
-      });
+  async twitterLogin() {
+    try {
+      await this.firebaseAuthService.twitterLogin();
+    } catch (error) {
+      this.notificationMsg = error.message;
+      this.errorStatus = true;
+      this.cd.detectChanges();
+    }
   }
 
-  githubLogin() {
-    this.firebaseAuthService.githubLogin()
-      .catch((error: Error) => {
-        this.notificationMsg = error.message;
-        this.errorStatus = true;
-        this.cd.detectChanges();
-      });
+  async githubLogin() {
+    try {
+      await this.firebaseAuthService.githubLogin();
+    } catch (error) {
+      this.notificationMsg = error.message;
+      this.errorStatus = true;
+      this.cd.detectChanges();
+    }
   }
 
   validateLogs() {
