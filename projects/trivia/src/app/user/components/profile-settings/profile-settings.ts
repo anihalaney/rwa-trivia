@@ -182,7 +182,7 @@ export class ProfileSettings {
                 if (user.authState["providers"].length > 1) {
                   this.currentAuthProvider =
                     user.authState["providers"][1]["id"];
-                } else {
+                } else if (user.authState["providers"].length === 1) {
                   this.currentAuthProvider =
                     user.authState["providers"][0]["id"];
                 }
@@ -506,6 +506,13 @@ export class ProfileSettings {
           .setValidators(Validators.pattern(this.phoneNoRegex));
         this.userForm.get("phoneNo").updateValueAndValidity();
         break;
+      case AuthProviderConstants.APPLE:
+        this.userForm
+          .get("phoneNo")
+          .setValidators(Validators.pattern(this.phoneNoRegex));
+        this.userForm.get("phoneNo").updateValueAndValidity();
+        break;
+
       case AuthProviderConstants.PHONE:
         this.userForm
           .get("email")
@@ -596,6 +603,9 @@ export class ProfileSettings {
         case AuthProviderConstants.FACEBOOK:
           this.user.phoneNo = this.userForm.get("phoneNo").value;
           break;
+          case AuthProviderConstants.APPLE:
+            this.user.phoneNo = this.userForm.get("phoneNo").value;
+            break;
         case AuthProviderConstants.PHONE:
           this.user.email = this.userForm.get("email").value;
           break;
