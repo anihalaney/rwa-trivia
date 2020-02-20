@@ -54,7 +54,7 @@ import {
 import { ModalDialogService } from "nativescript-angular/directives/dialogs";
 import { CONFIG } from "shared-library/environments/environment";
 import * as Platform from "tns-core-modules/platform";
-import * as lodash from 'lodash';
+import { isEmpty } from 'lodash';
 
 declare var IQKeyboardManager;
 declare var android: any;
@@ -160,9 +160,9 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate
       this.store
         .select(appState.coreState)
         .pipe(select(s => s.applicationSettings),
-          filter(u => { return !lodash.isEmpty(u); }))
+          filter(u => { return !isEmpty(u); }))
         .subscribe(appSettings => {
-          if (!lodash.isEmpty(appSettings)) {
+          if (!isEmpty(appSettings)) {
             this.applicationSettings = appSettings[0];
             this.playMaxTime = [
               "Select a Max time",
