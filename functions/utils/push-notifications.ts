@@ -112,9 +112,9 @@ export class PushNotification {
                             case GameStatus.INVITATION_TIMEOUT:
                                     const inviteeUserId = game.playerIds.filter((playerId) => playerId !== currentTurnPlayerId)[0];
                                     result = await PushNotification.sendNotificationToDevices(inviteeUserId, 'bitwiser Game Play',
-                                        `${dbUser.displayName} did not accept your game play invitation, start a new game`, msg_data);
+                                        `Your game play invitation to ${dbUser.displayName} expired. Challenge your friends to a new game!`, msg_data);
                                     console.log('result', result);
-                                    console.log(`${dbUser.displayName} did not accept your game play invitation, start a new game`);
+                                    console.log(`Your game play invitation to ${dbUser.displayName} expired. Challenge your friends to a new game!`);
                                     break;
                             case GameStatus.TIME_EXPIRED:
                                 looserPlayerId = game.gameOptions.playerMode  == PlayerMode.Opponent ?

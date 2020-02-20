@@ -34,6 +34,7 @@ export class GameDialogComponent extends GameDialog implements OnDestroy {
     public userActions: UserActions, public utils: Utils, public cd: ChangeDetectorRef) {
     super(store, userActions, utils, cd, router);
     this.registerLifeCycleEvent();
+    this.isMobile = true;
   }
 
   resumeCallBack(args: ApplicationEventData) {

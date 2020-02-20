@@ -43,7 +43,7 @@ export class GameProfile {
     otherUserTopics = [];
     topicList = '';
     otherUserTopicList = '';
-    topicsArray = {userTopics : [], otherUserTopics: [], comparison: ''};
+    topicsArray = { userTopics: [], otherUserTopics: [], comparison: '' };
     constructor(
         public route: ActivatedRoute,
         public router: Router,
@@ -67,8 +67,9 @@ export class GameProfile {
                         this.topics = [...user.tags];
                         this.topicsArray.userTopics = [...user.tags, ...user.categoryIds];
                     }
-
-                    this.topics = [...this.topics, user.categoryIds.map((data) => this.categoryDictionary[data].categoryName)];
+                    if (user && user.categoryIds) {
+                        this.topics = [...this.topics, user.categoryIds.map((data) => this.categoryDictionary[data].categoryName)];
+                    }
 
                     this.topicList = this.topics.join(', ');
 
@@ -112,7 +113,7 @@ export class GameProfile {
                     this.otherUserTopics = [...this.user.tags];
                 }
                 this.otherUserTopics = [...this.otherUserTopics,
-                    this.user.categoryIds.map((data) => this.categoryDictionary[data].categoryName)];
+                this.user.categoryIds.map((data) => this.categoryDictionary[data].categoryName)];
 
                 this.otherUserTopicList = this.otherUserTopics.join(', ');
                 this.userProfileImageUrl = this.getImageUrl(this.user);
