@@ -146,7 +146,8 @@ export enum AuthProviderConstants {
     GOOGLE = 'google.com',
     FACEBOOK = 'facebook.com',
     PASSWORD = 'password',
-    PHONE = 'phone'
+    PHONE = 'phone',
+    APPLE = 'apple.com'
 }
 
 

@@ -103,6 +103,16 @@ export class TNSFirebaseAuthService implements FirebaseAuthService {
         });
     }
 
+    public appleLogin(): Promise<any> {
+        return firebase.login({
+            type: firebase.LoginType.APPLE,
+            appleOptions: {
+                locale: "en", // for Android
+                scopes: ["email"] // default ["email", "name"]
+              }
+        });
+    }
+    
     public phoneLogin(phoneNumber): Promise<any> {
         return firebase.login({
             type: firebase.LoginType.PHONE,

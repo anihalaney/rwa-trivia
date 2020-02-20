@@ -93,7 +93,7 @@
           </app-animation-box>
 
           <app-animation-box [fieldName]="'phoneNo'" (formSubmitted)='formSubmitted($event)' [fieldValue]="user.phoneNo"
-            (formEditOpen)='formEditOpen($event)' [isValid]="!userForm.controls.phoneNo.errors" [isDisplay]="(currentAuthProvider===authProviderConstants.GOOGLE || currentAuthProvider===authProviderConstants.FACEBOOK || currentAuthProvider===authProviderConstants.PASSWORD)">
+            (formEditOpen)='formEditOpen($event)' [isValid]="!userForm.controls.phoneNo.errors" [isDisplay]="(currentAuthProvider===authProviderConstants.GOOGLE || currentAuthProvider===authProviderConstants.FACEBOOK || currentAuthProvider===authProviderConstants.PASSWORD || currentAuthProvider===authProviderConstants.APPLE)">
             <TextField textField #textFieldContent hint="Phone" formControlName="phoneNo" paddingLeft="4" ios:marginTop="5"
               android:paddingBottom="10" android:marginTop="-5">
             </TextField>

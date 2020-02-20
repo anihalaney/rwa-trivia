@@ -15,19 +15,35 @@
       },
       "oauth_client": [
         {
+          "client_id": "701588063269-hjco2q6k3tk2ednuufn42nrn12bf5bsm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.bitwiser.trivia.dev",
+            "certificate_hash": "08952b16764380622408747d521548e9c6fc3db5"
+          }
+        },
+        {
+          "client_id": "701588063269-4mtoi4ue63kf7mdulkai94bm3r9djals.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.bitwiser.trivia.dev",
+            "certificate_hash": "68eee37d84361f215d2863d6c97d836a15b40c83"
+          }
+        },
+        {
+          "client_id": "701588063269-g84ejhk7c81im99r99aa1pvf8cm31sjk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.bitwiser.trivia.dev",
+            "certificate_hash": "d73787c179ba447352dd26a99e9757502d628e58"
+          }
+        },
+        {
           "client_id": "701588063269-e1osng4si8qde693m9essqpolq2cn6gu.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "io.bitwiser.trivia.dev",
             "certificate_hash": "e3cfbe283e042000fa62bc574bdfb4471491905c"
-          }
-        },
-        {
-          "client_id": "701588063269-kvckg71llm20h663svbevc94cfndml2f.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "io.bitwiser.trivia.dev",
-            "certificate_hash": "243ff572bae034f604023b6754c510493832f910"
           }
         },
         {
@@ -85,7 +101,7 @@
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAWq_VUyhWQr73n8x1lnUYjZGun6fL4aEQ"
+          "current_key": "AIzaSyAWp3WXlth5h-3vYfZNJnzr3eQM0R_mHvA"
         }
       ],
       "services": {
@@ -96,10 +112,10 @@
               "client_type": 3
             },
             {
-              "client_id": "701588063269-dor381go31bk90elf47kfbub5nq8v8pd.apps.googleusercontent.com",
+              "client_id": "701588063269-ct0irjdsrcdq5qe97cflfb19pio1nsas.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "io.bitwiser.trivia.dev"
+                "bundle_id": "org.nativescript.triviatest"
               }
             }
           ]
