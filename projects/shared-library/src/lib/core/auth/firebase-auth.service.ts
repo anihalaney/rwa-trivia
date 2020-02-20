@@ -18,6 +18,7 @@ export abstract class FirebaseAuthService {
     abstract phoneLogin(phoneNumber): Promise<any>;
     abstract twitterLogin(): Promise<any>;
     abstract githubLogin(): Promise<any>;
+    abstract appleLogin(): Promise<any>;
     abstract resumeState(user);
     abstract updatePushToken(token);
     abstract updateOnConnect(user);

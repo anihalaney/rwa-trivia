@@ -42,6 +42,7 @@ export class AnimationBoxComponent implements OnInit, AfterContentInit {
   }
 
   ngOnInit() {
+    console.log('eid<>>', this.type);
     if (this.isDisplay === undefined || this.isDisplay) {
       this.isDisplay = true;
     }
