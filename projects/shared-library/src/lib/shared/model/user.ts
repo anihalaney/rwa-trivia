@@ -42,6 +42,8 @@ export class User {
   bits?: number;
   date?: any;
   geoPoint? : firebase.firestore.GeoPoint; 
+  captured? : string; // web/mobile
+  isAutoComplete?: boolean;
 
   constructor(authState?: firebase.User & { name: string }) {
     this.totalFriends = 0;

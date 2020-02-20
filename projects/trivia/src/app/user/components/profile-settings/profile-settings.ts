@@ -641,6 +641,8 @@ export class ProfileSettings {
     this.toggleLoader(true);
     this.isEnableEditProfile = false;
     this.disableForm();
+    console.log('user', this.user);
+
     this.store.dispatch(
       this.userAction.addUserProfile(user, isLocationChanged)
     );
