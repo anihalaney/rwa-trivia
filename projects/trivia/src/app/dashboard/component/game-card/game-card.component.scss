@@ -17,6 +17,12 @@
   word-break: break-all;
   height: 40px;
 }
+
+.ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 .innerli .yourimg {
   width: 94%;
   max-width: 70px;

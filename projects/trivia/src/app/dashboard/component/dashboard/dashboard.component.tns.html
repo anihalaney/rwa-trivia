@@ -124,7 +124,7 @@
                                     <Label *ngIf="user && activeGames.length > 0" text="Active Games" textWrap="true"
                                         class="active-game p-15"></Label>
                                     <GridLayout *ngFor="let game of activeGames" iosOverflowSafeArea="false">
-                                        <game-card [game]="game">
+                                        <game-card [game]="game" [categoryDict]="categoryDict">
                                         </game-card>
                                     </GridLayout>
                                 </WrapLayout>

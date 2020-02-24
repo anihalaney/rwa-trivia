@@ -7,7 +7,7 @@ import { Utils, WindowRef } from 'shared-library/core/services';
 import { GameActions, QuestionActions, UserActions } from 'shared-library/core/store/actions';
 import {
   Account, ApplicationSettings, CalenderConstants, Game, GameStatus, Invitation,
-  OpponentType, PlayerMode, User, userCardType
+  OpponentType, PlayerMode, User, userCardType, Category
 } from 'shared-library/shared/model';
 import { AppState, appState } from '../../../store';
 import { map, flatMap, filter } from 'rxjs/operators';
@@ -71,7 +71,7 @@ export class Dashboard implements OnDestroy {
   notifications = [];
   userCardType = userCardType;
   categoryText = "";
-
+  categoryDict: { [key: number]: Category };
   constructor(
     public store: Store<AppState>,
     private questionActions: QuestionActions,
@@ -95,12 +95,10 @@ export class Dashboard implements OnDestroy {
       .pipe(select(s => s.userDict));
     this.photoUrl = this.utils.getImageUrl(this.user, 70, 60, "70X60");
 
-    let categoryDict;
-
     this.subscriptions.push(
       this.store
         .select(categoryDictionary)
-        .subscribe(dict => (categoryDict = dict))
+        .subscribe(dict => (this.categoryDict = dict))
     );
 
     this.subscriptions.push(
@@ -140,13 +138,13 @@ export class Dashboard implements OnDestroy {
             if (
               this.user.categoryIds &&
               this.user.categoryIds.length > 0 &&
-              categoryDict
+              this.categoryDict
             ) {
               topicsList = [
                 ...topicsList,
                 ...this.user.categoryIds
                   .map(id =>
-                    categoryDict[id] ? categoryDict[id].categoryName : ""
+                    this.categoryDict[id] ? this.categoryDict[id].categoryName : ""
                   )
                   .filter(name => name !== "")
               ];
