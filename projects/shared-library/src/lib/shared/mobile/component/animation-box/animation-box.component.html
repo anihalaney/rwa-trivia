@@ -24,7 +24,7 @@
             </FlexboxLayout>
         </GridLayout>
         <StackLayout row="1">
-            <ng-content select="[errorMsg]"></ng-content>
+            <ng-content *ngIf="type !== 'location'" select="[errorMsg]"></ng-content>
         </StackLayout>
     </GridLayout>
 </StackLayout>
