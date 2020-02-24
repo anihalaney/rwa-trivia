@@ -12,13 +12,11 @@ export class PushNotification {
         try {
 
             const dbUser: User = await UserService.getUserById(userId);
-            console.log('userId --------->', userId);
             const notificationPromises = [];
             if (dbUser.androidPushTokens && dbUser.androidPushTokens.length > 0) {
                 for (const androidPushToken of dbUser.androidPushTokens) {
                     if (androidPushToken.token) {
                         const token = androidPushToken.token;
-                        console.log('Android ----->', token, title, body, data);
                         notificationPromises.push(PushNotification.sendNotification(token, title, body, data, dbUser));
                     }
                 }
@@ -28,7 +26,6 @@ export class PushNotification {
                 for (const iosPushToken of dbUser.iosPushTokens) {
                     if (iosPushToken.token) {
                         const token = iosPushToken.token;
-                        console.log('IOS ------>', token, title, body, data);
                         notificationPromises.push(PushNotification.sendNotification(token, title, body, data, dbUser));
                     }
                 }
