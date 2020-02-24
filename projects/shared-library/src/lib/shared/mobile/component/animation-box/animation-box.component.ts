@@ -30,9 +30,11 @@ export class AnimationBoxComponent implements OnInit, AfterContentInit {
   @Input("fieldValue") fieldValue: string;
   @Input("isValid") isValid;
   @Input("isDisplay") isDisplay;
+  @Input("type") type;
 
   @Output() formSubmitted = new EventEmitter();
   @Output() formEditOpen = new EventEmitter();
+  @Output() getCurrentLocation = new EventEmitter();
   showEdit: boolean;
 
   constructor(private utils: Utils) {
@@ -40,6 +42,7 @@ export class AnimationBoxComponent implements OnInit, AfterContentInit {
   }
 
   ngOnInit() {
+    console.log('eid<>>', this.type);
     if (this.isDisplay === undefined || this.isDisplay) {
       this.isDisplay = true;
     }
@@ -123,5 +126,10 @@ export class AnimationBoxComponent implements OnInit, AfterContentInit {
         this.utils.focusTextField(this.textFieldContent);
       }
     }
+  }
+
+  location(){
+    console.log('location');
+    this.getCurrentLocation.emit();
   }
 }

@@ -20,7 +20,7 @@
     <span *ngIf="user?.online" class="online-dot">
     </span>
   </div>
-  <label href="#" id="you" class="dark text-style ">{{user.displayName}}</label>
+  <label href="#" id="you" class="dark text-style ">{{ user.userId === loggedInUserId ? 'You' :  user.displayName}}</label>
 </div>
 <!-- USER_CARD_TYPE_THREE -->
 <div class="author" *ngIf="user && userCardType.USER_WEB_NAME_IMAGE_HORIZONTAL === type">

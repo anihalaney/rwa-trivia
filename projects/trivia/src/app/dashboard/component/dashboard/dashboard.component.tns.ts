@@ -4,7 +4,7 @@ import { RouterExtensions } from 'nativescript-angular/router';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { Utils, WindowRef } from 'shared-library/core/services';
 import { GameActions, QuestionActions, UserActions } from 'shared-library/core/store/actions';
-import {  GameStatus } from 'shared-library/shared/model';
+import { GameStatus } from 'shared-library/shared/model';
 import { Page } from 'tns-core-modules/ui/page/page';
 import { AppState, appState } from '../../../store';
 import { Dashboard } from './dashboard';
@@ -23,8 +23,6 @@ export class DashboardComponent extends Dashboard implements OnInit, OnDestroy {
   // This is magic variable
   // it delay complex UI show Router navigation can finish first to have smooth transition
   renderView = false;
-
-
 
   constructor(public store: Store<AppState>,
     questionActions: QuestionActions,
@@ -52,10 +50,10 @@ export class DashboardComponent extends Dashboard implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.userDict$ = this.store.select(appState.coreState).pipe(select(s => s.userDict));
-    this.subscriptions.push(this.userDict$.subscribe(userDict => { this.userDict = userDict; this.cd.markForCheck(); }));
     // update to variable needed to do in ngZone otherwise it did not understand it
     this.page.on('loaded', () => { this.renderView = true; this.cd.markForCheck(); });
+    this.userDict$ = this.store.select(appState.coreState).pipe(select(s => s.userDict));
+    this.subscriptions.push(this.userDict$.subscribe(userDict => { this.userDict = userDict; this.cd.markForCheck(); }));
   }
 
   startNewGame(mode: string) {
@@ -98,5 +96,6 @@ export class DashboardComponent extends Dashboard implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.page.off('loaded');
     this.renderView = false;
+    this.cd.markForCheck();
   }
 }

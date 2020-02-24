@@ -26,7 +26,7 @@ import { AppState, appState } from "../../../store";
 import { QuestionActions } from "shared-library/core/store/actions/question.actions";
 import { Question, Answer, Category } from "shared-library/shared/model";
 import { QuestionAddUpdate } from "./question-add-update";
-import { debounceTime, take } from "rxjs/operators";
+import { debounceTime, filter } from "rxjs/operators";
 import { ObservableArray } from "tns-core-modules/data/observable-array";
 import { TokenModel } from "nativescript-ui-autocomplete";
 import { RadAutoCompleteTextViewComponent } from "nativescript-ui-autocomplete/angular";
@@ -54,6 +54,7 @@ import {
 import { ModalDialogService } from "nativescript-angular/directives/dialogs";
 import { CONFIG } from "shared-library/environments/environment";
 import * as Platform from "tns-core-modules/platform";
+import { isEmpty } from 'lodash';
 
 declare var IQKeyboardManager;
 declare var android: any;
@@ -64,7 +65,8 @@ declare var android: any;
   styleUrls: ["./question-add-update.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-@AutoUnsubscribe({ arrayName: "subscriptions" })
+
+@AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class QuestionAddUpdateComponent extends QuestionAddUpdate
   implements OnDestroy, OnChanges, AfterViewInit, OnInit {
   iqKeyboard: any;
@@ -459,7 +461,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate
     }
   }
 
-  ngOnChanges() {}
+  ngOnChanges() { }
 
   // private initDataItems() {
   //   this.tagItems = new ObservableArray<TokenModel>();

@@ -8,9 +8,9 @@ import { Leaderboard } from './leaderboard';
 import { SelectedIndexChangedEventData, DropDown } from 'nativescript-drop-down';
 import { ValueList } from 'nativescript-drop-down';
 import { AppState } from '../../../store';
-import { User } from 'shared-library/shared/model';
 import { RadListViewComponent } from 'nativescript-ui-listview/angular';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+
 @Component({
   selector: 'leaderboard',
   templateUrl: './leaderboard.component.html',

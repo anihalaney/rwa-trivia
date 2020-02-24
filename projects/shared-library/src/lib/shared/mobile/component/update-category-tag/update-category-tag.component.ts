@@ -5,7 +5,7 @@ import { Store, select } from "@ngrx/store";
 import { UserActions, CategoryActions, TagActions, coreState } from 'shared-library/core/store';
 import { User, Category } from 'shared-library/shared/model';
 import { Observable } from 'rxjs';
-import { map, flatMap } from 'rxjs/operators';
+import { map, flatMap, filter } from 'rxjs/operators';
 import { Utils } from './../../../../core/services/utils';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
@@ -60,6 +60,8 @@ export class UpdateCategoryTagComponent implements OnInit, OnDestroy {
     this.topTagsObs = this.store.select(coreState).pipe(select(s => s.getTopTags));
 
     this.store.select(coreState).pipe(select(s => s.user),
+      filter(u => { return u !== null;
+      }),
       map(user => { this.user = user; }),
       flatMap(() =>
         this.categoriesObs.pipe(map(categories => {

@@ -274,6 +274,7 @@ export class UserEffects {
             switchMap((action: ActionWithPayload<any>) =>
                 this.svc.getAddressSuggestions(action.payload).pipe(
                     map((result: any) => this.userActions.loadAddressSuggestionsSuccess(result))
+                    
                 ))
         );
 
