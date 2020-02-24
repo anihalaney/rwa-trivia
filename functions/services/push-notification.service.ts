@@ -16,16 +16,21 @@ export class PushNotificationService {
             return await PushNotificationService.pushNotificationMessagingClient.send(message);
         } catch (error) {
             if (error.code === pushNotificationRouteConstants.TOKEN_IS_NOT_REGISTERED) {
-                if (dbUser.androidPushTokens
+
+                if (dbUser.androidPushTokens) {
+                    const index = dbUser.androidPushTokens
                     .findIndex((androidPushToken) =>
                         (androidPushToken === message.token ||
-                            (androidPushToken && androidPushToken.token && androidPushToken.token === message.token))) !== -1) {
-                    dbUser.androidPushTokens.splice(message.token, 1);
-                } else if (dbUser.iosPushTokens
+                            (androidPushToken && androidPushToken.token && androidPushToken.token === message.token)));
+                    if (index > -1) {
+                        dbUser.androidPushTokens.splice(index, 1);
+                    }
+                } else if (dbUser.iosPushTokens) {
+                    const index = dbUser.iosPushTokens
                     .findIndex((iosPushToken) =>
                         (iosPushToken === message.token ||
-                            (iosPushToken && iosPushToken.token && iosPushToken.token === message.token))) !== -1) {
-                    dbUser.iosPushTokens.splice(message.token, 1);
+                            (iosPushToken && iosPushToken.token && iosPushToken.token === message.token)));
+                        dbUser.iosPushTokens.splice(index, 1);
                 }
                 return await UserService.updateUser({ ...dbUser });
             } else {

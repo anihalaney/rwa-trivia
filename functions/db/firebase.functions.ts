@@ -297,10 +297,7 @@ export class FirebaseFunctions {
 
             if (userDataStatus.device !== TriggerConstants.WEB) {
 
-                // get firestore db object
-                const realTimeUserStatus = await UserService.getUserById(userDataStatus.userId);
-                userDataStatus.status = realTimeUserStatus.status;
-
+                userDataStatus.status = user.status;
                // console.log('realTimeUserStatus---->', realTimeUserStatus);
              //   console.log('userDataStatus---->', userDataStatus);
 
