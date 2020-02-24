@@ -370,18 +370,14 @@ export class UserService {
 
     static async getGeoCode(location): Promise<any> {
         try {
-            const apiKey = Utils.getApiKey();
-            const option = {
-                url: `${externalUrl.geocodeUrl}?address=${location}&key=${apiKey}`,
-                json: true
-            };
-            const response = await requestPromise(option);
-
-            if (response['results'][0].geometry.location) {
-                return new firebase.firestore.GeoPoint(response['results'][0].geometry.location.lat, response['results'][0].geometry.location.lng);
+            if(location && location._lat && location._long) {
+                return new firebase.firestore.GeoPoint(location._lat, location._long);
+            } else if(location && location.latitude && location.longitude) {
+                return new firebase.firestore.GeoPoint(location.latitude, location.longitude);
             } else {
-                '';
+                return '';
             }
+            
 
         } catch (error) {
             return Utils.throwError(error);

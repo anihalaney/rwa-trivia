@@ -847,6 +847,11 @@ export class ProfileSettings {
       })
     );
   }
+
+  changedLocation(event): void {
+    this.user.isAutoComplete = true;
+  }
+  
 }
 
 function profileUpdateFormValidator(fg: FormGroup): { [key: string]: boolean } {

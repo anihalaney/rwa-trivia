@@ -247,10 +247,9 @@ export class ProfileSettingsComponent extends ProfileSettings
     }
   }
 
-  onTextChangedLocation(location,isAutoComplete=false): void {
+  onTextChangedLocation(location): void {
     this.userForm.patchValue({ location: location.text });
     this.user.captured = 'mobile';
-    this.user.isAutoComplete = isAutoComplete;
   }
 
   editLocationField() {
@@ -516,7 +515,7 @@ export class ProfileSettingsComponent extends ProfileSettings
     if (this.isLocationEnalbed) {
       try {
         const position = await geolocation.getCurrentLocation({});
-        if (position) { 
+        if (position) {
           console.log('points>>', position);
           this.user.geoPoint = new firebase.firestore().GeoPoint(position.latitude, position.longitude);
           this.store.dispatch(
@@ -572,7 +571,7 @@ export class ProfileSettingsComponent extends ProfileSettings
     this.routerExtensions.navigate(["/user-feedback"]);
   }
 
-  getCurrentLocation($event){
+  getCurrentLocation($event) {
     this.getLocation();
   }
 }

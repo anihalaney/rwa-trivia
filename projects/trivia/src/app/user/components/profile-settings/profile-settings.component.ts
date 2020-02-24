@@ -51,9 +51,9 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnInit,
     public route: ActivatedRoute,
     public router: Router,
     public authenticationProvider: AuthenticationProvider,
-    ) {
+  ) {
 
-    super(fb, store, userAction, utils, cd, route, router, authenticationProvider,platformId);
+    super(fb, store, userAction, utils, cd, route, router, authenticationProvider, platformId);
 
     // if (this.userType === 0) {
     this.setCropperSettings();
@@ -111,7 +111,6 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnInit,
     if (result) {
       this.store.dispatch(this.userAction.loadAddressSuggestions(result));
       this.user.captured = 'web';
-      this.user.isAutoComplete = true;
     }
 
   }

@@ -9,4 +9,3 @@ exports.onFirestoreAccountUpdate = require('./server/functions/db/firebase.funct
 exports.onFirestoreUnpublishedQuestionsUpdate = require('./server/functions/db/firebase.functions').onUnpublishedQuestionsUpdate;
 exports.onFirestoreQuestionCreate = require('./server/functions/db/firebase.functions').onQuestionCreate;
 exports.onDatabaseUserWrite = require('./server/functions/db/firebase.functions').onUserStatusWrite;
-exports.onFirestoreUserUpdate = require('./server/functions/db/firebase.functions').onUserUpdate;
