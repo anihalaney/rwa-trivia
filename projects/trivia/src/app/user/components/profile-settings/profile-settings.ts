@@ -800,20 +800,20 @@ export class ProfileSettings {
 
       location.results[0].address_components.map(component => {
         const cityList = component.types.filter(
-          typeName => { return typeName === "administrative_area_level_3" }
+          typeName => { return typeName === 'administrative_area_level_3' }
         );
         if (cityList.length > 0) {
           userLocation.push(component.long_name);
         } else {
           const cityList1 = component.types.filter(
-            typeName => { return typeName === "administrative_area_level_2"; }
+            typeName => { return typeName === 'administrative_area_level_2'; }
           );
           if (cityList1.length > 0) {
             userLocation.push(component.long_name);
           }
         }
         const stateList = component.types.filter(
-          typeName => { return typeName === "administrative_area_level_1"; }
+          typeName => { return typeName === 'administrative_area_level_1'; }
         );
         if (stateList.length > 0) {
           userLocation.push(component.long_name);
