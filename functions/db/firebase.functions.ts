@@ -302,10 +302,6 @@ export class FirebaseFunctions {
                 const realTimeUserStatus = await UserService.getUserById(userDataStatus.userId);
                 userDataStatus.status = realTimeUserStatus.status;
 
-                // console.log('realTimeUserStatus---->', realTimeUserStatus);
-                //   console.log('userDataStatus---->', userDataStatus);
-
-
                 if (userDataStatus.device === TriggerConstants.ANDROID) {
                     const deviceTokenIndex = user.androidPushTokens
                         .findIndex(
