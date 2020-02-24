@@ -117,7 +117,7 @@
           <app-animation-box [fieldName]="'location'" (formSubmitted)='formSubmitted($event)' (getCurrentLocation)="getCurrentLocation($event)"
             [fieldValue]="user.location" (formEditOpen)='formEditOpen($event)' [isValid]="true" [type]="'location'">
             <RadAutoCompleteTextView textField #textFieldContent #acLocation [items]="dataLocation" suggestMode="Suggest"
-              showCloseButton="false" (didAutoComplete)="onTextChangedLocation($event)"
+              showCloseButton="false" (didAutoComplete)="onTextChangedLocation($event);changedLocation($event)"
               (textChanged)="onTextChangedLocation($event)" (loaded)="onLoadedLocation($event)" ios:marginTop="0"
               android:paddingBottom="10" android:marginTop="-5">
               <SuggestionView tkAutoCompleteSuggestionView marginTop="20">

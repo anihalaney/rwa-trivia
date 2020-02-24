@@ -91,10 +91,10 @@
 
                 <label class="m-r-51">Location  </label>
                 <div *ngIf="userType === 0" class="input-edit"
-                [ngClass]="{'animate-ease-out': (singleFieldEdit.location), 'animate-ease-in': (!singleFieldEdit.location)}">
+                  [ngClass]="{'animate-ease-out': (singleFieldEdit.location), 'animate-ease-in': (!singleFieldEdit.location)}">
                   <input formControlName="location" [placeholder]="userType === 0 ? 'Enter Location' : ''" type="text"
-                    class="required" aria-label="location" list="locationList"
-                    (ngModelChange)="locationChanged($event)">
+                    class="required" aria-label="location" list="locationList" (ngModelChange)="locationChanged($event)"
+                    (change)="changedLocation($event)">
                   <datalist id="locationList">
                     <option *ngFor="let item of locations" [value]="item">{{item}}</option>
                   </datalist>
@@ -195,33 +195,33 @@
                             </div>
                           </div>
 
-                           <!-- Old Password -->
+                          <!-- Old Password -->
                           <div class="clearfix namefield"
-                           *ngIf="isEnableEditProfile && (currentAuthProvider===authProviderConstants.PASSWORD)">
-                           <div class="formfield">
-                             <label id="nameLableField">Old Password</label>
-                             <input formControlName="oldPassword" type="password"
-                               [placeholder]="userType === 0 ? 'Enter Old Password' : ''" class="required"
-                               aria-label="oldPassword">
-                             <p *ngIf="userForm.controls.oldPassword.errors?.minlength && !userForm.controls.oldPassword.pristine"
-                               class="error">Password must be atleast 6 characters</p>
-                             <p *ngIf="userForm.controls.password.valid && userForm.controls.confirmPassword.valid && !userForm.hasError('passwordmismatch') && userForm.hasError('requiredoldpassword')"
+                            *ngIf="isEnableEditProfile && (currentAuthProvider===authProviderConstants.PASSWORD)">
+                            <div class="formfield">
+                              <label id="nameLableField">Old Password</label>
+                              <input formControlName="oldPassword" type="password"
+                                [placeholder]="userType === 0 ? 'Enter Old Password' : ''" class="required"
+                                aria-label="oldPassword">
+                              <p *ngIf="userForm.controls.oldPassword.errors?.minlength && !userForm.controls.oldPassword.pristine"
+                                class="error">Password must be atleast 6 characters</p>
+                              <p *ngIf="userForm.controls.password.valid && userForm.controls.confirmPassword.valid && !userForm.hasError('passwordmismatch') && userForm.hasError('requiredoldpassword')"
                                 class="error">Old Password is required</p>
-                           </div>
-                         </div>
+                            </div>
+                          </div>
 
-                           <!-- New Password -->
+                          <!-- New Password -->
                           <div class="clearfix namefield"
-                           *ngIf="isEnableEditProfile && (currentAuthProvider===authProviderConstants.PASSWORD)">
-                           <div class="formfield">
-                             <label id="nameLableField">New Password</label>
-                             <input formControlName="password" type="password"
-                               [placeholder]="userType === 0 ? 'Enter New Password' : ''" class="required"
-                               aria-label="password">
-                             <p *ngIf="userForm.controls.password.errors?.minlength && !userForm.controls.password.pristine"
-                               class="error">Password must be atleast 6 characters</p>                               
-                           </div>
-                         </div>
+                            *ngIf="isEnableEditProfile && (currentAuthProvider===authProviderConstants.PASSWORD)">
+                            <div class="formfield">
+                              <label id="nameLableField">New Password</label>
+                              <input formControlName="password" type="password"
+                                [placeholder]="userType === 0 ? 'Enter New Password' : ''" class="required"
+                                aria-label="password">
+                              <p *ngIf="userForm.controls.password.errors?.minlength && !userForm.controls.password.pristine"
+                                class="error">Password must be atleast 6 characters</p>
+                            </div>
+                          </div>
 
                           <!-- Confirm Password -->
                           <div class="clearfix namefield"
@@ -236,7 +236,7 @@
                               <p *ngIf="userForm.controls.password.valid && userForm.controls.confirmPassword.valid && userForm.hasError('passwordmismatch')"
                                 class="error">Must match with New Password</p>
                             </div>
-                          </div>                        
+                          </div>
 
                           <!-- Social Accounts -->
                           <div *ngIf="isEnableEditProfile && userType===0" class="row pcategories saccount">
@@ -293,10 +293,9 @@
                               <div class="formfield" *ngFor="let topic of topicList?.controls; let i=index"
                                 [formGroupName]="i">
                                 <label>
-                                  <input formControlName="isSelected" type="checkbox"
-                                    name="">
-                                    {{topic.value['type'] === 'category' ?  categoryDict[topic.value['topic']].categoryName : topic.value['topic'] }}
-                                  </label>
+                                  <input formControlName="isSelected" type="checkbox" name="">
+                                  {{topic.value['type'] === 'category' ?  categoryDict[topic.value['topic']].categoryName : topic.value['topic'] }}
+                                </label>
                               </div>
                             </div>
                           </div>

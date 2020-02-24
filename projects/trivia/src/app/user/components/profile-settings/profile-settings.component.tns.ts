@@ -50,6 +50,7 @@ import { AuthenticationProvider } from "shared-library/core/auth";
 import * as Platform from "tns-core-modules/platform";
 import { RouterExtensions } from "nativescript-angular/router";
 import { screen } from "tns-core-modules/platform";
+const firebase = require('nativescript-plugin-firebase/app');
 
 declare var IQKeyboardManager;
 
@@ -191,6 +192,8 @@ export class ProfileSettingsComponent extends ProfileSettings
             const cityAndCountry = this.getCityAndCountryName(location);
             this.userForm.patchValue({ location: cityAndCountry });
             this.acLocation.nativeElement.text = cityAndCountry;
+            this.user.captured = 'mobile';
+            this.user.isAutoComplete = false;
           }
         })
     );
@@ -246,6 +249,7 @@ export class ProfileSettingsComponent extends ProfileSettings
 
   onTextChangedLocation(location): void {
     this.userForm.patchValue({ location: location.text });
+    this.user.captured = 'mobile';
   }
 
   editLocationField() {
@@ -512,6 +516,8 @@ export class ProfileSettingsComponent extends ProfileSettings
       try {
         const position = await geolocation.getCurrentLocation({});
         if (position) {
+          console.log('points>>', position);
+          this.user.geoPoint = new firebase.firestore().GeoPoint(position.latitude, position.longitude);
           this.store.dispatch(
             this.userAction.loadAddressUsingLatLong(
               `${position.latitude},${position.longitude}`
@@ -565,7 +571,7 @@ export class ProfileSettingsComponent extends ProfileSettings
     this.routerExtensions.navigate(["/user-feedback"]);
   }
 
-  getCurrentLocation($event){
+  getCurrentLocation($event) {
     this.getLocation();
   }
 }
