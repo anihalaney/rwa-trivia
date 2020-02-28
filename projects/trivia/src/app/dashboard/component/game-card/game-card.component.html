@@ -1,6 +1,5 @@
 <div class="innerli">
-  <div class="T-tagging">{{categoryDict[game?.gameOptions?.categoryIds[randomCategoryId]]?.categoryName.charAt(0).toUpperCase()
-    + categoryDict[game?.gameOptions?.categoryIds[randomCategoryId]]?.categoryName.slice(1)}}</div>
+<div *ngIf="categoryList" class="T-tagging ellipsis" >{{categoryList.join(", ")}}</div>
   <div class="row">
     <ng-container *ngIf="game.gameOptions.playerMode == PlayerMode.Single">
       <div class="col-xs-12 textcenter clearfix">

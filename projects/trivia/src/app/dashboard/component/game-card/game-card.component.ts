@@ -19,6 +19,7 @@ export class GameCardComponent implements OnInit, OnChanges, OnDestroy {
 
   @Input() game: Game;
   @Input() cardType: any;
+  @Input() categoryDict: { [key: number]: Category };
   @Input() userDict: { [key: string]: User };
   user$: Observable<User>;
   correctAnswerCount: number;
@@ -30,8 +31,6 @@ export class GameCardComponent implements OnInit, OnChanges, OnDestroy {
   public remainingHours: string;
   public remainingMinutes: string;
   timerSub: Subscription;
-  categoryDict$: Observable<{ [key: number]: Category }>;
-  categoryDict: { [key: number]: Category };
   randomCategoryId = 0;
   PlayerMode = PlayerMode;
   totalRound = 16;
@@ -40,6 +39,7 @@ export class GameCardComponent implements OnInit, OnChanges, OnDestroy {
   userDict$: Observable<{ [key: string]: User }>;
   subscriptions = [];
   userCardType = userCardType;
+  categoryList = [];
   constructor(public store: Store<AppState>, public utils: Utils, private cd: ChangeDetectorRef) {
     this.gameStatus = GameStatus;
     this.user$ = this.store.select(appState.coreState).pipe(select(s => s.user));
@@ -60,11 +60,6 @@ export class GameCardComponent implements OnInit, OnChanges, OnDestroy {
       this.cd.markForCheck();
     }));
 
-    this.categoryDict$ = store.select(categoryDictionary);
-    this.subscriptions.push(this.categoryDict$.subscribe(categoryDict => {
-      this.categoryDict = categoryDict;
-      this.cd.markForCheck();
-    }));
 
   }
 
@@ -88,6 +83,16 @@ export class GameCardComponent implements OnInit, OnChanges, OnDestroy {
     if (this.game) {
       this.otherUserId = this.game.playerIds.filter(userId => userId !== this.user.userId)[0];
       this.otherUserInfo = this.userDict[this.otherUserId];
+    }
+
+    if (this.game && this.categoryDict) {
+      this.categoryList = [
+        ...this.game.gameOptions.categoryIds
+          .map(id =>
+            this.categoryDict[id] ? this.capitalizeFirstLetter(this.categoryDict[id].categoryName) : ""
+          )
+          .filter(name => name !== '')
+      ];
     }
   }
 
@@ -118,5 +123,9 @@ export class GameCardComponent implements OnInit, OnChanges, OnDestroy {
       this.cd.markForCheck();
     });
     this.subscriptions.push(this.timerSub);
+  }
+
+  capitalizeFirstLetter(val: string) {
+    return val.charAt(0).toUpperCase() + val.slice(1);
   }
 }

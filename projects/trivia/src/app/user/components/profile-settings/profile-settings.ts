@@ -171,6 +171,7 @@ export class ProfileSettings {
           switchMap(user => {
             if (user && user.userId === this.userId) {
               this.user = user;
+              this.cd.markForCheck();
               if (
                 user.authState &&
                 user.authState.providerData &&
@@ -793,22 +794,38 @@ export class ProfileSettings {
   }
 
   getCityAndCountryName(location) {
-    const userLocation: string[] = [];
+    let userLocation: string[] = [];
     if (location.results) {
+
       location.results[0].address_components.map(component => {
         const cityList = component.types.filter(
-          typeName => typeName === "administrative_area_level_2"
+          typeName => { return typeName === 'administrative_area_level_3' }
         );
         if (cityList.length > 0) {
           userLocation.push(component.long_name);
+        } else {
+          const cityList1 = component.types.filter(
+            typeName => { return typeName === 'administrative_area_level_2'; }
+          );
+          if (cityList1.length > 0) {
+            userLocation.push(component.long_name);
+          }
         }
-        const countryList = component.types.filter(
-          typeName => typeName === "country"
+        const stateList = component.types.filter(
+          typeName => { return typeName === 'administrative_area_level_1'; }
         );
-        if (countryList.length > 0) {
+        if (stateList.length > 0) {
           userLocation.push(component.long_name);
         }
       });
+
+      // If userLocation length is 3 means we have admin_area_level_3 is exist  so we remove administrative_area_level_2
+      // from index 1 because we store it in index 1
+      if (userLocation.length === 3) {
+        userLocation.splice(1, 1);
+      }
+
+
       return userLocation.toString();
     } else {
       return "";
@@ -839,6 +856,11 @@ export class ProfileSettings {
       })
     );
   }
+
+  changedLocation(event): void {
+    this.user.isAutoComplete = true;
+  }
+  
 }
 
 function profileUpdateFormValidator(fg: FormGroup): { [key: string]: boolean } {
