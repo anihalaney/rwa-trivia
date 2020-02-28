@@ -1,10 +1,13 @@
-import { Component, OnInit, ChangeDetectorRef, NgZone, OnDestroy, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, NgZone, OnDestroy, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { select, Store } from '@ngrx/store';
-import { AppState, appState,  } from './../store';
+import { AppState, appState, } from './../store';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
-import { ApplicationSettings, Question, Answer, Category } from 'shared-library/shared/model';
+import { ApplicationSettings, Question, Answer, Category, QuestionStatus } from 'shared-library/shared/model';
 import { Subscription, Observable } from 'rxjs';
 import { FormGroup, FormArray, FormControl, Validators, FormBuilder } from '@angular/forms';
+import { Utils } from 'shared-library/core/services';
+import { map } from 'rxjs/operators';
+
 
 @Component({
   selector: 'app-add-question',
@@ -13,13 +16,14 @@ import { FormGroup, FormArray, FormControl, Validators, FormBuilder } from '@ang
 })
 
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
-export class AddQuestionComponent implements OnInit, OnDestroy {
+export class AddQuestionComponent implements OnInit, OnDestroy, AfterViewInit {
 
   editorContent = [{ insert: '' }];
   applicationSettings: ApplicationSettings;
   show = false;
   quillImageUrl = '';
   quillImageUrlAnswer = '';
+  answerImageUrl = '';
   answerIndex: number;
   public oWebViewInterface = (window as any).nsWebViewInterface;
   quillConfig = {
@@ -35,6 +39,7 @@ export class AddQuestionComponent implements OnInit, OnDestroy {
     blotFormatter: {},
     syntax: true
   };
+  fileUploadFor = '';
 
   quillConfigAnswer = {
     toolbar: {
@@ -68,21 +73,32 @@ export class AddQuestionComponent implements OnInit, OnDestroy {
   questionCategories: Array<string> = [];
   tags: string[];
   selectedQuestionCategoryIndex = 0;
+  autoTags: string[] = []; // auto computed based on match within Q/A
+  enteredTags: string[] = [];
+  filteredTags$: Observable<string[]>;
+  questionObject: any;
+  quillObject: any = {};
+  answerTexts = [];
+  editQuestion: Question;
 
   get answers(): FormArray {
     return this.questionForm.get('answers') as FormArray;
   }
 
-  
+  get tagsArray(): FormArray {
+    return this.questionForm.get('tagsArray') as FormArray;
+  }
+
 
   constructor(private store: Store<AppState>,
     private cd: ChangeDetectorRef,
     private ngZone: NgZone,
-    public fb: FormBuilder) {
+    public fb: FormBuilder,
+    public utils: Utils) {
     this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
       if (appSettings[0]) {
         this.applicationSettings = appSettings[0];
-        this.createForm(this.question);
+
         if (this.applicationSettings && this.applicationSettings.quill_options) {
           this.quillConfig.toolbar.container.push(this.applicationSettings.quill_options.list);
           this.quillConfig.mathEditor = { mathOptions: this.applicationSettings };
@@ -91,7 +107,7 @@ export class AddQuestionComponent implements OnInit, OnDestroy {
             if (this.viewType === 'question') {
               this.bottomBarOptions = Object.values(this.applicationSettings.quill_options.web_view_question_options).join('');
             } else {
-              
+
             }
             this.bottomBarAnswerOption = Object.values(this.applicationSettings.quill_options.web_view_answer_options).join('');
             this.quillConfigAnswer.toolbar.container.push(this.applicationSettings.quill_options.web_view_answer_options);
@@ -103,9 +119,11 @@ export class AddQuestionComponent implements OnInit, OnDestroy {
               this.quillConfig.toolbar.container.push(this.applicationSettings.quill_options.web_view_answer_options);
             }
           }
-         
-          this.createForm(this.question);
-          this.show = true;
+
+          this.oWebViewInterface.emit('appIsLoaded', 'appIsLoaded');
+
+          // this.createForm(this.question);
+
         }
       }
     }));
@@ -117,15 +135,18 @@ export class AddQuestionComponent implements OnInit, OnDestroy {
     this.subscriptions.push(this.categoriesObs.subscribe(categories => {
       this.categories = categories;
       this.questionCategories = this.categories.map(category => category.categoryName);
-  
+
       this.questionCategories.push('Select Preferred Category');
       this.selectedQuestionCategoryIndex = this.questionCategories.length - 1;
     }
     ));
+    this.subscriptions.push(this.tagsObs.subscribe(tags => this.tags = tags));
+
   }
 
 
   createForm(question: Question) {
+
     const answersFA: FormArray = this.createDefaultForm(question);
 
     let fcs: FormControl[] = question.tags.map(tag => {
@@ -137,25 +158,40 @@ export class AddQuestionComponent implements OnInit, OnDestroy {
     }
 
     const tagsFA = new FormArray(fcs);
+    this.questionObject = question.questionObject;
     this.questionForm = this.fb.group({
-      id: '',
+      id: (question.id) ? question.id : '',
       is_draft: false,
-      category: [(question.categories.length > 0 ? question.categories[0] : ''), Validators.required],
-      questionText: ['',
-        Validators.compose([Validators.required, Validators.maxLength(this.applicationSettings.question_max_length)])],
+      status: (question.status) ? question.status : QuestionStatus.PENDING,
+      category: [(question.categoryIds.length > 0 ? question.categoryIds[0] : ''), Validators.required],
+      questionText: [question.questionText,
+      Validators.compose([Validators.required])],
       tags: '',
       tagsArray: tagsFA,
       answers: answersFA,
       ordered: [question.ordered],
       explanation: [question.explanation],
       isRichEditor: [true],
+      questionObject: question.questionObject,
       maxTime: []
     }, { validator: questionFormValidator }
     );
+    this.filteredTags$ = this.questionForm.get('tags').valueChanges
+      .pipe(map(val => val.length > 0 ? this.filter(val) : []));
+
+    this.questionForm.valueChanges.subscribe(() => {
+      this.oWebViewInterface.emit('isFormValid', this.questionForm.valid);
+    });
+
+    this.enteredTags = question.tags;
+    this.cd.markForCheck();
+    this.show = true;
   }
 
   createDefaultForm(question: Question, isRichEditor = false): FormArray {
-    const fgs: FormGroup[] = question.answers.map(answer => {
+
+    const fgs: FormGroup[] = question.answers.map((answer, index) => {
+      this.answerTexts[index] = answer.answerObject;
       const fg = new FormGroup({
         answerText: new FormControl(answer.answerText ? answer.answerText : '',
           Validators.compose([Validators.required])),
@@ -168,31 +204,70 @@ export class AddQuestionComponent implements OnInit, OnDestroy {
     const answersFA = new FormArray(fgs);
     return answersFA;
   }
-  
-  onAnswerChanged(event,answerIndex){
-    console.log('event', event, ' answer index', answerIndex);
+
+  onAnswerChanged(event, answerIndex) {
+
+    const ansForm = (<FormArray>this.questionForm.controls["answers"]).at(
+      answerIndex
+    );
+    ansForm["controls"].answerText.patchValue(
+      event.html ? event.html : ""
+    );
+    ansForm["controls"].answerObject.patchValue(event.delta);
+
+    const question: Question = this.getQuestionFromFormValue(this.questionForm.value);
+
+
   }
 
   ngOnInit() {
 
     if (this.oWebViewInterface) {
-      this.oWebViewInterface.on('answerIndex', (answerIndex) => {
+
+      this.oWebViewInterface.on('getFormData', (getFormData) => {
+
+        const question: Question = this.getQuestionFromFormValue(this.questionForm.value);
+
+        this.oWebViewInterface.emit('question', question);
+
+      });
+
+      this.oWebViewInterface.on('getPreviewQuestion', (getPreviewQuestion) => {
+        const question: Question = this.getQuestionFromFormValue(this.questionForm.value);
+        this.oWebViewInterface.emit('previewQuestion', question);
+      });
+
+      this.oWebViewInterface.on('editQuestion', (editQuestion) => {
+       
         this.ngZone.run(() => {
-          // this.answerIndex = answerIndex;
-          // this.cd.detectChanges();
+          // setTimeout(() => {
+            this.createForm(editQuestion);
+          // }, 1500);
+       
+        this.editQuestion = editQuestion;
+        this.question.status = editQuestion.status;
+        this.cd.markForCheck();
         });
       });
 
       this.oWebViewInterface.on('imageUrl', (url) => {
         this.ngZone.run(() => {
-          this.quillImageUrl = url;
-        });
-      });
+          if (this.answerIndex >= 0) {
+            this.answerImageUrl = url;
+          } else {
+            this.quillImageUrl = url;
+          }
+          // });
+          setTimeout(() => {
+            if (this.answerIndex >= 0) {
+              this.quillImageUrl = '';
+              this.answerImageUrl = '';
+            } else {
+              this.quillImageUrl = '';
+            }
+            this.answerIndex = undefined;
+          }, 3);
 
-      this.oWebViewInterface.on('deltaObject', (deltaObject) => {
-        this.ngZone.run(() => {
-          // this.editorContent = deltaObject;
-          // this.cd.detectChanges();
         });
       });
 
@@ -207,31 +282,14 @@ export class AddQuestionComponent implements OnInit, OnDestroy {
           this.quillConfig.mathEditor = { mathOptions: this.applicationSettings };
         });
       });
-
-      this.oWebViewInterface.on('viewType', (viewType) => {
-        // this.ngZone.run(() => {
-        //   this.viewType = viewType;
-        //   if (this.applicationSettings && this.applicationSettings.quill_options) {
-        //     const dispOptions = Object.keys(this.viewType === 'question' ?
-        //       this.applicationSettings.quill_options.web_view_question_options :
-        //       this.applicationSettings.quill_options.web_view_answer_options);
-        //       Array.from(this.bottomToolBar.nativeElement.children).forEach((ele: any) => {
-        //         const newele = ele as HTMLElement;
-        //         if (dispOptions.indexOf(ele.className) === -1) {
-        //           newele.style.display = 'none';
-        //         } else {
-        //           newele.style.display = 'block';
-        //         }
-        //       });
-        //   }
-        // });
-      });
     }
   }
 
   // emit editor load finished event
   editorLoadFinished(event) {
-    console.log('Image upload>>>');
+    if (this.editQuestion) {
+      // this.createForm(this.editQuestion);
+    }
     this.ngZone.run(() => {
       this.oWebViewInterface.emit('editorLoadFinished', event);
       this.cd.detectChanges();
@@ -239,26 +297,25 @@ export class AddQuestionComponent implements OnInit, OnDestroy {
   }
 
   // Text change in quill editor
-  onTextChanged(text) {
-    // this.ngZone.run(() => {
-    //   text.answerIndex = this.answerIndex;
-    //   this.oWebViewInterface.emit('quillContent', text);
-    //   this.text = text;
-    //   this.cd.detectChanges();
-    // });
+  onTextChanged(quillContent) {
+
+    this.questionForm
+      .get("questionText")
+      .patchValue(quillContent.html ? quillContent.html : "");
+    this.questionForm.get("questionObject").patchValue(quillContent.delta);
 
   }
   // Image Upload
-  fileUploaded(quillImageUpload: any) {
-    console.log('file uploaded');
+  fileUploaded(quillImageUpload: any, fileUploadFor, answerIndex = -1) {
+
+    this.fileUploadFor = fileUploadFor;
     if (quillImageUpload.isMobile) {
       this.oWebViewInterface.emit('uploadImageStart', true);
     }
+    this.answerIndex = answerIndex;
+
   }
 
-  imageUpload() {
-    // this.oWebViewInterface.emit('uploadImageStart', true);
-  }
 
   ngOnDestroy() {
     // this.oWebViewInterface.off('answerIndex');
@@ -267,15 +324,71 @@ export class AddQuestionComponent implements OnInit, OnDestroy {
     // this.oWebViewInterface.off('viewType');
   }
 
+  // Helper functions
+  getQuestionFromFormValue(formValue: any): Question {
+    let question: Question;
+
+    question = new Question();
+    if (formValue.id) {
+      question.id = formValue.id;
+    }
+    // question.is_draft = formValue.is_draft;
+    question.questionText = formValue.questionText;
+    question.answers = formValue.answers;
+    question.categoryIds = (formValue.category >= 0) ? [formValue.category] : [];
+    question.tags = [...this.autoTags, ...this.enteredTags];
+    question.ordered = formValue.ordered;
+    question.explanation = formValue.explanation;
+    question.createdOn = new Date();
+    question.isRichEditor = formValue.isRichEditor;
+    question.maxTime = formValue.maxTime;
+    question.status = formValue.status ? formValue.status : QuestionStatus.PENDING;
+    question.questionObject = (formValue.questionObject) ? formValue.questionObject : '';
+    return question;
+  }
+
+  addTag() {
+    const tag = this.questionForm.get('tags').value;
+    if (tag) {
+      if (this.enteredTags.indexOf(tag) < 0) {
+        this.enteredTags.push(tag);
+        this.questionForm.patchValue({ tags: [] });
+      }
+      this.questionForm.get('tags').setValue('');
+    }
+    this.setTagsArray();
+  }
+
+  setTagsArray() {
+    this.tagsArray.controls = [];
+    [...this.autoTags, ...this.enteredTags].forEach(tag => this.tagsArray.push(new FormControl(tag)));
+  }
+  removeEnteredTag(tag) {
+
+    this.enteredTags = this.enteredTags.filter(t => t !== tag);
+    this.questionForm.patchValue({ tags: [] });
+  }
+
+  filter(val: string): string[] {
+    return this.tags.filter(option => new RegExp(this.utils.regExpEscape(`${val}`), 'gi').test(option));
+  }
+
+
+  ngAfterViewInit(): void {
+  
+  }
+
+
 }
 
 function questionFormValidator(fg: FormGroup): { [key: string]: boolean } {
   const answers: Answer[] = fg.get("answers").value;
-  if (
-    fg.get("isRichEditor").value &&
-    (fg.get("maxTime").value === 0 || fg.get("maxTime").value === null)
-  ) {
-    return { maxTimeNotSelected: true };
+
+
+
+  const tags: string[] = fg.get('tagsArray').value;
+  if (tags.length < 3) {
+    return { 'tagCountInvalid': true };
   }
 
   if (answers.filter(answer => answer.correct).length !== 1) {

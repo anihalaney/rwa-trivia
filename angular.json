@@ -562,6 +562,8 @@
               "projects/trivia-editor/src/assets"
             ],
             "styles": [
+              "projects/trivia/src/styles/rwa-trivia.theme.scss",
+              "projects/trivia/src/styles/global.scss",
               "projects/trivia-editor/src/styles.scss",
               "./node_modules/ng-quill-tex/assets/theme.css",
               "./node_modules/mathquill/formula/formula.css",

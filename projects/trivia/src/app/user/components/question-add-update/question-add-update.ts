@@ -168,7 +168,6 @@ export class QuestionAddUpdate implements OnDestroy {
   // Helper functions
   getQuestionFromFormValue(formValue: any): Question {
     let question: Question;
-
     question = new Question();
     question.id = formValue.id;
     question.is_draft = formValue.is_draft;

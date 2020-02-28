@@ -22,6 +22,8 @@ import { environment } from 'shared-library/environments/environment';
 import { RoutingModule } from './routing/routing.module';
 import { NgQuillTexModule } from 'ng-quill-tex';
 
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -32,6 +34,7 @@ import { NgQuillTexModule } from 'ng-quill-tex';
     CommonModule,
     BrowserModule,
     BrowserAnimationsModule,
+    MatAutocompleteModule,
 
     EffectsModule.forRoot([]),
     StoreModule.forRoot(reducers),

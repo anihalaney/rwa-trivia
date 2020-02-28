@@ -1,7 +1,6 @@
-<!-- <label> THIS is labe dd3</label> -->
 
+<div style="background: #f1f2f2;padding:10px;">
  <form class="question-form"  *ngIf="show"  [formGroup]="questionForm" novalidate>
-
     <div class="optionbox">
   
         <div class="pcategories">
@@ -27,11 +26,15 @@
 
     <h3>Question</h3>
     <ng-quill-tex  (editorLoadFinished)="editorLoadFinished($event)" [modules]="quillConfig" (textChanged)="onTextChanged($event)" 
-    (fileUploaded)="fileUploaded($event)" [class.bottomToolbar]="applicationSettings?.quill_options?.custom_toolbar_position === 'bottom'" [customToolbarPosition]="applicationSettings?.quill_options?.custom_toolbar_position"  [isMobile]="true" [imageUrl]="quillImageUrl" [content]="editorContent">
-        <span *ngIf="applicationSettings?.quill_options?.custom_toolbar_position === 'bottom'" class="ql-formats">
+    (fileUploaded)="fileUploaded($event,'question')" [class.bottomToolbar]="applicationSettings?.quill_options?.custom_toolbar_position === 'bottom'" [customToolbarPosition]="applicationSettings?.quill_options?.custom_toolbar_position"  [isMobile]="true" [imageUrl]="quillImageUrl"  
+    [content]="questionObject">
+    <span  class="ql-formats">
             <div #bottomToolBar [innerHtml]='bottomBarOptions | safeHtml'></div>
-        </span>
+    </span>
+  
     </ng-quill-tex>  
+
+
 
 
     <h3>Answers</h3>
@@ -50,14 +53,13 @@
             [imageUrl]="quillImageUrlAnswer" [controlName]="'answerText'"  [isMobile]="true">
           </ng-quill-tex> -->
 
-          <ng-quill-tex  (editorLoadFinished)="editorLoadFinished($event)" [modules]="quillConfigAnswer" (textChanged)="onTextChanged($event)" 
-            (fileUploaded)="fileUploaded($event)" [class.bottomToolbar]="applicationSettings?.quill_options?.custom_toolbar_position === 'bottom'" [customToolbarPosition]="applicationSettings?.quill_options?.custom_toolbar_position"  [isMobile]="true" [imageUrl]="quillImageUrlAnswer" [content]="editorContent">
+          <ng-quill-tex  (editorLoadFinished)="editorLoadFinished($event)" [modules]="quillConfigAnswer" (textChanged)="onAnswerChanged($event,i)" 
+            (fileUploaded)="fileUploaded($event,'answer',i)" [class.bottomToolbar]="applicationSettings?.quill_options?.custom_toolbar_position === 'bottom'" [customToolbarPosition]="applicationSettings?.quill_options?.custom_toolbar_position"  [isMobile]="true" [imageUrl]="answerImageUrl" [content]="answerTexts[i]">
                 <span *ngIf="applicationSettings?.quill_options?.custom_toolbar_position === 'bottom'" class="ql-formats">
-                    <div #bottomToolBar [innerHtml]='bottomBarOptions | safeHtml'></div>
+                    <div #bottomToolBar [innerHtml]='bottomBarAnswerOption | safeHtml'></div>
                 </span>
             </ng-quill-tex>  
         </div>
-
 
         <p [ngClass]="(!answer.controls.answerText.valid
         && answer.controls.answerText.errors 
@@ -72,4 +74,33 @@
     <div class="error" *ngIf="answers.valid && questionForm.hasError('correctAnswerCountInvalid')">
       Pick one and only one correct answer
     </div>
+
+
+
+    <div class="tags">
+      <p>Tags associated categories</p>
+      <div data-tags-input-name="tag" id="tagBox" class="tagging">
+        <mat-chip-list>
+          <mat-basic-chip *ngFor="let tag of autoTags" class="tag">
+            {{tag}}
+          </mat-basic-chip>
+          <mat-basic-chip *ngFor="let tag of enteredTags" class="tag">
+            {{tag}} <span (click)="removeEnteredTag(tag)" class="remove-tag">x</span>
+          </mat-basic-chip>
+        </mat-chip-list>
+        <input class="type-zone" contenteditable="true" formControlName="tags" aria-label="tags"
+          [matAutocomplete]="tagAuto">
+        <mat-autocomplete #tagAuto="matAutocomplete">
+          <mat-option *ngFor="let tag of filteredTags$ | async" [value]="tag">
+            {{tag}}
+          </mat-option>
+        </mat-autocomplete>
+        <button mat-button class="add-tag-button" color="primary" [disabled]="questionForm.controls.tags.value==''"
+          (click)="addTag()">ADD</button>
+        <div class="error" *ngIf="answers.valid && questionForm.controls.questionText.valid && questionForm.hasError('tagCountInvalid')">
+          Must have atleast 3 tags
+        </div>
+      </div>
+    </div>
 </form>
+</div>

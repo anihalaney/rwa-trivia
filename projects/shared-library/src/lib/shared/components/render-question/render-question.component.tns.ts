@@ -48,10 +48,10 @@ export class RenderQuestionComponent implements OnInit, OnChanges {
             var height = Math.max(body.scrollHeight, body.offsetHeight,
             html.clientHeight, html.scrollHeight, html.offsetHeight);
             document.location.href += "#" + height;
-            </script><style>pre.ql-syntax { background-color: #23241f;color: #f8f8f2;overflow: visible;}</style>`;
+            </script><style>pre.ql-syntax { background-color: #efecf4;overflow: visible;}</style>`;
 
     // tslint:disable-next-line:max-line-length
-    this.htmlStartTag = `<html><head><body style="font-size:18px;font-weight: bold !important;padding-top:10px;vertical-align: middle;text-align:left;background-color:${this.backgroundColor};"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"> `;
+    this.htmlStartTag = `<html><head><body style="padding-top:10px;vertical-align: middle;text-align:left;background-color:${this.backgroundColor};"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"> `;
     // tslint:disable-next-line:max-line-length
     this.htmlEndTag = `</body><link rel="stylesheet" href="${externalUrl.katexCSS}" crossorigin="anonymous"><link rel="stylesheet" href="${externalUrl.hightlighCSS}" crossorigin="anonymous"></html>`;
     this.cd.markForCheck();
@@ -93,6 +93,6 @@ export class RenderQuestionComponent implements OnInit, OnChanges {
       this.backgroundColor = this.theme === "dark" ? "#283b66" : "#f7f7f7";
       this.textColor = this.theme === "dark" ? "#ffffff" : "#a5a5a5";
     }
-    this.htmlStartTag = `<html><head><body style="font-size:18px;font-weight: bold !important;padding-top:10px;vertical-align: middle;text-align:left;background-color:${this.backgroundColor};color:${this.textColor};"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"> `;
+    this.htmlStartTag = `<html><head><body style="padding-top:10px;vertical-align: middle;text-align:left;background-color:${this.backgroundColor};color:${this.textColor};"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"> `;
   }
 }
