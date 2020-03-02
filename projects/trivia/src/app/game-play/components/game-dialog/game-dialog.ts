@@ -53,7 +53,7 @@ export class GameDialog {
   RANDOM_PLAYER = "Random Player";
   showBadge = false;
   MAX_TIME_IN_SECONDS_LOADER = 2;
-  MAX_TIME_IN_SECONDS_BADGE = 1;
+  MAX_TIME_IN_SECONDS_BADGE = 2;
   showLoader = true;
   showWinBadge = false;
   isCorrectAnswer = false;
@@ -323,17 +323,21 @@ export class GameDialog {
         () => {
           // Show badge screen
           this.utils.unsubscribe([this.timerSub]);
-          // if (!this.game.gameOptions.isBadgeWithCategory) {
+          if (this.game.gameOptions.isBadgeWithCategory) {
+              this.questionSub = this.gameQuestionObs.subscribe(question => {
+                if (question) {
+                  this.setCurrentQuestion(question);
+                  this.showNextBadgeToBeWon(question);
+                }
+              });
+          } else {
             this.showNextBadgeToBeWon();
-          // } else {
-          //   this.subscribeQuestion();
-          // }
-
+          }
         }
       );
   }
 
-  showNextBadgeToBeWon() {
+  showNextBadgeToBeWon(question?: Question) {
     this.showLoader = false;
     this.showBadge = true;
     this.timer = this.MAX_TIME_IN_SECONDS_BADGE;
@@ -352,7 +356,11 @@ export class GameDialog {
           // load question screen timer
           this.utils.unsubscribe([this.timerSub]);
           this.showBadge = false;
-          this.subscribeQuestion();
+          if (!this.game.gameOptions.isBadgeWithCategory) {
+            this.subscribeQuestion();
+          } else {
+            this.displayQuestionAndStartTimer(question);
+          }
           this.cd.detectChanges();
         }
       );
@@ -380,13 +388,16 @@ export class GameDialog {
 
   subscribeQuestion() {
     this.questionSub = this.gameQuestionObs.subscribe(question => {
-      console.log('here in question +====', question);
+      this.displayQuestionAndStartTimer(question);
+    });
+  }
+
+  displayQuestionAndStartTimer(question) {
       if (!question) {
         this.cd.markForCheck();
         this.setCurrentQuestion();
         return;
       }
-      // this.showNextBadgeToBeWon();
       this.originalAnswers = Object.assign({}, question.answers);
       this.setCurrentQuestion(question);
 
@@ -454,7 +465,6 @@ export class GameDialog {
           }, 100);
         }
       }
-    });
   }
 
   calculateMaxTime(): void {
