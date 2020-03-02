@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ChangeDetectorRef, EventEmitter, Input, OnInit, Output, SimpleChanges, OnChanges } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { Utils } from 'shared-library/core/services';
@@ -6,8 +6,8 @@ import { UserActions } from 'shared-library/core/store/actions';
 import { Game, PlayerMode, User, userCardType, ApplicationSettings } from 'shared-library/shared/model';
 import { AppState, appState } from '../../../store';
 
-export class GameContinue implements OnInit {
-  
+export class GameContinue implements OnInit, OnChanges {
+
   @Output() continueButtonClicked = new EventEmitter();
   @Input() game: Game;
   @Input() userDict: { [key: string]: User };
@@ -16,6 +16,9 @@ export class GameContinue implements OnInit {
   @Input() threeConsecutiveAnswer: boolean;
   @Input() applicationSettings: ApplicationSettings;
   @Input() otherPlayer: User;
+  @Input() earnedBadgesByOtherUser: string[];
+  @Input() earnedBadges: string[];
+  totalBadges: string[];
   user$: Observable<User>;
   user: User;
   otherUserId: string;
@@ -51,6 +54,13 @@ export class GameContinue implements OnInit {
     if (this.game) {
       this.otherUserId = this.game.playerIds.filter(userId => userId !== this.user.userId)[0];
       this.otherUserInfo = this.userDict[this.otherUserId];
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes && changes.applicationSettings && changes.applicationSettings.currentValue) {
+        this.totalBadges =  Object.keys(this.applicationSettings.badges);
+        console.log(this.totalBadges, 'this.totalBadges ==============.');
     }
   }
 

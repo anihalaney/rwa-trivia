@@ -8,11 +8,17 @@
         <hr>
         <div class="dark">Score {{game.stats[user.userId].score}}</div>
         <div class="div-badge">
-          <div [ngClass]="game.stats[user.userId].score >= 1?'score1':'score0'" class="sprite"></div>
-          <div [ngClass]="game.stats[user.userId].score >= 2?'score2':'score0'" class="sprite"></div>
-          <div [ngClass]="game.stats[user.userId].score >= 3?'score3':'score0'" class="sprite"></div>
-          <div [ngClass]="game.stats[user.userId].score >= 4?'score4':'score0'" class="sprite"></div>
-          <div [ngClass]="game.stats[user.userId].score >= 5?'score5':'score0'" class="sprite"></div>
+          <ng-template *ngIf="game?.gameOptions.isBadgeWithCategory; else showBadge" ngFor let-i="index"  let-badge [ngForOf]="[0,1,2,3,4]" >
+            <div class="sprite {{applicationSettings?.badges[earnedBadges[badge]]?.class ? applicationSettings?.badges[earnedBadges[badge]]?.class : 'score0'}}"></div>
+          </ng-template>
+          <ng-template #showBadge >
+            <div [ngClass]="game.stats[user.userId].score >= 1?'score1':'score0'" class="sprite"></div>
+            <div [ngClass]="game.stats[user.userId].score >= 2?'score2':'score0'" class="sprite"></div>
+            <div [ngClass]="game.stats[user.userId].score >= 3?'score3':'score0'" class="sprite"></div>
+            <div [ngClass]="game.stats[user.userId].score >= 4?'score4':'score0'" class="sprite"></div>
+            <div [ngClass]="game.stats[user.userId].score >= 5?'score5':'score0'" class="sprite"></div>
+          </ng-template>
+
         </div>
       </div>
     </ng-container>
@@ -38,11 +44,17 @@
       </div>
       <div class="text-align clearfix">
         <div class="div-width div-right-border float-left">
-          <div [ngClass]="game.stats[user.userId].score >= 1?'score1':'score0'" class="sprite"></div>
-          <div [ngClass]="game.stats[user.userId].score >= 2?'score2':'score0'" class="sprite"></div>
-          <div [ngClass]="game.stats[user.userId].score >= 3?'score3':'score0'" class="sprite"></div>
-          <div [ngClass]="game.stats[user.userId].score >= 4?'score4':'score0'" class="sprite"></div>
-          <div [ngClass]="game.stats[user.userId].score >= 5?'score5':'score0'" class="sprite"></div>
+          <ng-template *ngIf="game?.gameOptions.isBadgeWithCategory; else showBadgeForSinglePlayer" ngFor let-i="index"  let-badge [ngForOf]="[0,1,2,3,4]" >
+            <div class="sprite {{applicationSettings?.badges[earnedBadges[badge]]?.class ? applicationSettings?.badges[earnedBadges[badge]]?.class : 'score0'}}"></div>
+          </ng-template>
+          <ng-template  #showBadgeForSinglePlayer>
+            <div [ngClass]="game.stats[user.userId].score >= 1?'score1':'score0'" class="sprite"></div>
+            <div [ngClass]="game.stats[user.userId].score >= 2?'score2':'score0'" class="sprite"></div>
+            <div [ngClass]="game.stats[user.userId].score >= 3?'score3':'score0'" class="sprite"></div>
+            <div [ngClass]="game.stats[user.userId].score >= 4?'score4':'score0'" class="sprite"></div>
+            <div [ngClass]="game.stats[user.userId].score >= 5?'score5':'score0'" class="sprite"></div>
+          </ng-template>
+
         </div>
 
         <div class="div-width text-align padding-right float-right">
@@ -75,19 +87,30 @@
       </div>
       <div class="text-align clearfix">
         <div class="div-width div-right-border float-left">
-          <div [ngClass]="game.stats[user.userId].score >= 1?'score1':'score0'" class="sprite"></div>
-          <div [ngClass]="game.stats[user.userId].score >= 2?'score2':'score0'" class="sprite"></div>
-          <div [ngClass]="game.stats[user.userId].score >= 3?'score3':'score0'" class="sprite"></div>
-          <div [ngClass]="game.stats[user.userId].score >= 4?'score4':'score0'" class="sprite"></div>
-          <div [ngClass]="game.stats[user.userId].score >= 5?'score5':'score0'" class="sprite"></div>
+          <ng-template  *ngIf="game?.gameOptions?.isBadgeWithCategory; else showBadgeForTwoPlayer" ngFor let-i="index"  let-badge [ngForOf]="[0,1,2,3,4]" >
+              <div class="sprite {{applicationSettings?.badges[earnedBadges[badge]]?.class ? applicationSettings?.badges[earnedBadges[badge]]?.class : 'score0'}}"></div>
+          </ng-template>
+          <ng-template #showBadgeForTwoPlayer >
+              <div [ngClass]="game.stats[user.userId].score >= 1?'score1':'score0'" class="sprite"></div>
+              <div [ngClass]="game.stats[user.userId].score >= 2?'score2':'score0'" class="sprite"></div>
+              <div [ngClass]="game.stats[user.userId].score >= 3?'score3':'score0'" class="sprite"></div>
+              <div [ngClass]="game.stats[user.userId].score >= 4?'score4':'score0'" class="sprite"></div>
+              <div [ngClass]="game.stats[user.userId].score >= 5?'score5':'score0'" class="sprite"></div>
+          </ng-template>
+
         </div>
 
         <div class="div-width text-align padding-right float-right">
-          <div [ngClass]="game.stats[otherUserId].score >= 1?'score1':'score0'" class="sprite"></div>
-          <div [ngClass]="game.stats[otherUserId].score >= 2?'score2':'score0'" class="sprite"></div>
-          <div [ngClass]="game.stats[otherUserId].score >= 3?'score3':'score0'" class="sprite"></div>
-          <div [ngClass]="game.stats[otherUserId].score >= 4?'score4':'score0'" class="sprite"></div>
-          <div [ngClass]="game.stats[otherUserId].score >= 5?'score5':'score0'" class="sprite"></div>
+          <ng-template *ngIf="game?.gameOptions?.isBadgeWithCategory; else showBadgeForTwoPlayerOpponent" ngFor let-i="index"  let-badge [ngForOf]="[0,1,2,3,4]" >
+              <div class="sprite {{applicationSettings?.badges[earnedBadgesByOtherUser[badge]]?.class ? applicationSettings?.badges[earnedBadgesByOtherUser[badge]]?.class : 'score0'}}"></div>
+          </ng-template>
+          <ng-template #showBadgeForTwoPlayerOpponent >
+            <div [ngClass]="game.stats[otherUserId].score >= 1?'score1':'score0'" class="sprite"></div>
+            <div [ngClass]="game.stats[otherUserId].score >= 2?'score2':'score0'" class="sprite"></div>
+            <div [ngClass]="game.stats[otherUserId].score >= 3?'score3':'score0'" class="sprite"></div>
+            <div [ngClass]="game.stats[otherUserId].score >= 4?'score4':'score0'" class="sprite"></div>
+            <div [ngClass]="game.stats[otherUserId].score >= 5?'score5':'score0'" class="sprite"></div>
+          </ng-template>
         </div>
       </div>
     </ng-container>

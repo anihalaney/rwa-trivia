@@ -1,4 +1,4 @@
-import { Input, Output, EventEmitter, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Input, Output, EventEmitter, OnInit, ChangeDetectorRef, OnChanges, SimpleChanges } from '@angular/core';
 import { User, Game, PlayerMode, OpponentType, Account, ApplicationSettings, Invitation, userCardType } from 'shared-library/shared/model';
 import { Utils } from 'shared-library/core/services';
 import { AppState, appState } from '../../../store';
@@ -10,7 +10,15 @@ import * as dashboardactions from '../../../dashboard/store/actions';
 import { gamePlayState } from '../../store';
 import { skipWhile, map, flatMap, take } from 'rxjs/operators';
 
-export class GameOver implements OnInit {
+export enum GameStatus {
+  WON,
+  LOST,
+  TIE,
+  DRAW,
+  START
+}
+
+export class GameOver implements OnInit, OnChanges {
 
   @Input() correctCount: number;
   @Input() noOfQuestions: number;
@@ -20,7 +28,12 @@ export class GameOver implements OnInit {
   @Input() game: Game;
   @Input() userDict: { [key: string]: User };
   @Input() totalRound: number;
+  @Input() earnedBadgesByOtherUser;
+  @Input() earnedBadges;
+  @Input() totalBadges: string[];
 
+  gameStatus: number;
+  gameStatusEnum = GameStatus;
   user$: Observable<User>;
   user: User;
   otherUserId: string;
@@ -106,23 +119,55 @@ export class GameOver implements OnInit {
           res.answers.map((response) => {
             if (response.correct && response.answerText === res.userGivenAnswer) {
               this.correctAnswerClassIndexIncrement++;
-              const className = `score${this.correctAnswerClassIndexIncrement}`;
+              let className;
+              if (!this.game.gameOptions.isBadgeWithCategory) {
+                 className = `score${this.correctAnswerClassIndexIncrement}`;
+              } else {
+                 className = res.badge && res.badge.name && res.badge.won ? this.applicationSettings.badges[res.badge.name].class : '';
+              }
               res.className = className;
               res.ansStatus = true;
             }
           });
           return res;
         });
-        
         this.cd.markForCheck();
       }
     }));
   }
 
   ngOnInit() {
-    if (this.game) {
+
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes && changes.game && changes.game.currentValue) {
       this.otherUserId = this.game.playerIds.filter(userId => userId !== this.user.userId)[0];
       this.otherUserInfo = this.userDict[this.otherUserId];
+      this.game.decideWinner();
+      if (this.game.winnerPlayerId && Number(this.game.gameOptions.playerMode) === PlayerMode.Opponent) {
+        this.gameStatus = this.game.winnerPlayerId === this.user.userId ? GameStatus.WON :
+                                            (this.game.winnerPlayerId === this.otherUserId ? GameStatus.LOST : -1);
+      } else if (Number(this.game.gameOptions.playerMode) === PlayerMode.Single) {
+        this.gameStatus = this.game.winnerPlayerId === this.user.userId ? GameStatus.WON : GameStatus.LOST;
+      }
+
+      if (!this.game.winnerPlayerId && Number(this.game.gameOptions.playerMode) === PlayerMode.Opponent) {
+          if (this.game.round < 16 &&
+            (!this.game.gameOptions.isBadgeWithCategory &&
+              this.game.stats[this.user.userId].score < this.game.stats[this.otherUserId].score
+            ) ||
+            (
+              this.game.gameOptions.isBadgeWithCategory &&
+              this.earnedBadges.length < this.earnedBadgesByOtherUser.lenth
+            )
+          ) {
+             this.gameStatus = GameStatus.TIE;
+          } else if (this.game.round === 16 ) {
+             this.gameStatus = GameStatus.DRAW;
+          }
+
+      }
     }
   }
 

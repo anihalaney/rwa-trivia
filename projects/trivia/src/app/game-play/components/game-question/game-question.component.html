@@ -3,11 +3,16 @@
     <div class="row">
       <div class="col-sm-3">
         <span class="col-sm-12 light badge-heading">BADGES</span>
-        <div [ngClass]="correctCount < 1?'score0':'score1'" class="sprite"></div>
-        <div [ngClass]="correctCount < 2?'score0':'score2'" class="sprite"></div>
-        <div [ngClass]="correctCount < 3?'score0':'score3'" class="sprite"></div>
-        <div [ngClass]="correctCount < 4?'score0':'score4'" class="sprite"></div>
-        <div [ngClass]="correctCount < 5?'score0':'score5'" class="sprite"></div>
+        <ng-template *ngIf="game?.gameOptions.isBadgeWithCategory; else showBadge" ngFor let-i="index"  let-badge [ngForOf]="[0,1,2,3,4]" >
+          <div class="sprite {{applicationSettings?.badges[earnedBadges[badge]]?.class ? applicationSettings?.badges[earnedBadges[badge]]?.class : 'score0'}}"></div>
+        </ng-template>
+        <ng-template #showBadge >
+          <div [ngClass]="correctCount < 1?'score0':'score1'" class="sprite"></div>
+          <div [ngClass]="correctCount < 2?'score0':'score2'" class="sprite"></div>
+          <div [ngClass]="correctCount < 3?'score0':'score3'" class="sprite"></div>
+          <div [ngClass]="correctCount < 4?'score0':'score4'" class="sprite"></div>
+          <div [ngClass]="correctCount < 5?'score0':'score5'" class="sprite"></div>
+        </ng-template>
       </div>
       <div class="col-sm-6 category-div-spacing" >
         <div class="col-sm-12">

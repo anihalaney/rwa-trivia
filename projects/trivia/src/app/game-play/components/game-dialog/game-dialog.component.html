@@ -2,7 +2,18 @@
   <div class="" *ngIf="showLoader && !gameOver">
     <div class="card main-div textcenter">
       <div class="badge-icon">
-        <div class="circle-loader">
+        <div *ngIf="game?.gameOptions.isBadgeWithCategory" class="circle-loader">
+            <div [ngClass]="!earnedBadges[0]?'score0': applicationSettings?.badges[earnedBadges[0]].class" class="sprite badge1"></div>
+            <div class="col-xs-12 first-row">
+              <div [ngClass]="!earnedBadges[4] ?'score0': applicationSettings?.badges[earnedBadges[4]].class" class="sprite col-xs-6 badge5"></div>
+              <div [ngClass]="!earnedBadges[1]?'score0': applicationSettings?.badges[earnedBadges[1]].class" class="sprite col-xs-6 badge2"></div>
+            </div>
+            <div class="col-xs-12 second-row">
+              <div [ngClass]="!earnedBadges[3]?'score0': applicationSettings?.badges[earnedBadges[3]].class" class="sprite col-xs-6 badge4"></div>
+              <div [ngClass]="!earnedBadges[2]?'score0': applicationSettings?.badges[earnedBadges[2]].class" class="sprite col-xs-6 badge3"></div>
+            </div>
+        </div>
+        <div *ngIf="!game?.gameOptions.isBadgeWithCategory" class="circle-loader">
           <div [ngClass]="correctAnswerCount < 1?'score0':'score1'" class="sprite  badge1"></div>
           <div class="col-xs-12 first-row">
             <div [ngClass]="correctAnswerCount < 5?'score0':'score5'" class="sprite col-xs-6 badge5"></div>
@@ -23,7 +34,9 @@
     <div class="card main-div textcenter">
       <div class="badge-icon">
         <div class="circle">
-          <div [ngClass]="correctAnswerCount === 0
+          <div *ngIf="game?.gameOptions.isBadgeWithCategory" [ngClass]="currentQuestion?.badge ? applicationSettings?.badges[currentQuestion?.badge.name]?.class + '-L': '' "
+            class="sprite circle-image"></div>
+          <div *ngIf="!game?.gameOptions.isBadgeWithCategory" [ngClass]="correctAnswerCount === 0
             ?'score1-L':correctAnswerCount === 1
             ?'score2-L':correctAnswerCount === 2
             ?'score3-L':correctAnswerCount === 3
@@ -38,15 +51,18 @@
     </div>
   </div>
 
-  <game-continue *ngIf="showContinueScreen && !gameOver" class="overlay" [userDict]="userDict" [game]="game"
-  [totalRound]="totalRound" (continueButtonClicked)="continueButtonClicked()">
+  <game-continue *ngIf="showContinueScreen && !gameOver" class="overlay" [userDict]="userDict" [game]="game"   [earnedBadges]="earnedBadges"  [applicationSettings]="applicationSettings" 
+  [totalRound]="totalRound" [earnedBadgesByOtherUser]="earnedBadgesByOtherUser" (continueButtonClicked)="continueButtonClicked()">
 </game-continue>
 
   <div class="" *ngIf="showWinBadge && !gameOver">
     <div class="card main-div textcenter">
       <div class="badge-icon">
         <div class="circle">
-          <div [ngClass]="correctAnswerCount === 1
+          <div *ngIf="game?.gameOptions.isBadgeWithCategory" [ngClass]="game.playerQnAs[game.playerQnAs.length - 1]?.badge ? applicationSettings?.badges[game.playerQnAs[game.playerQnAs.length - 1]?.badge.name]?.class + '-L': '' "
+            class="sprite circle-image">
+          </div>
+          <div *ngIf="!game?.gameOptions.isBadgeWithCategory" [ngClass]="correctAnswerCount === 1
           ?'score1-L':correctAnswerCount === 2
           ?'score2-L':correctAnswerCount === 3
           ?'score3-L':correctAnswerCount === 4
@@ -62,8 +78,8 @@
     </div>
   </div>
   
-  <game-question *ngIf="showCurrentQuestion && !showLoader && !showBadge && !showWinBadge && !showContinueScreen" [categoryName]="categoryName"
-    [question]="currentQuestion" [gameOver]="gameOver" [questionIndex]="questionIndex" [timer]="timer" [MAX_TIME_IN_SECONDS]="MAX_TIME_IN_SECONDS"
+  <game-question *ngIf="showCurrentQuestion && !showLoader && !showBadge && !showWinBadge && !showContinueScreen" [earnedBadgesByOtherUser]="earnedBadgesByOtherUser" [earnedBadges]="earnedBadges" [categoryName]="categoryName"
+    [game]="game" [question]="currentQuestion" [gameOver]="gameOver" [questionIndex]="questionIndex" [timer]="timer" [MAX_TIME_IN_SECONDS]="MAX_TIME_IN_SECONDS"
     [continueNext]="continueNext" [correctCount]="correctAnswerCount" [noOfQuestions]="questionIndex" [showContinueBtn]="showContinueBtn"
     [otherPlayer]="otherPlayer" [showCurrentQuestion]="showCurrentQuestion" (gameOverButtonClicked)="gameOverButtonClicked($event)" 
     (answerClicked)="answerClicked($event)" (okClick)="okClick($event)" (continueClicked)="continueClicked($event)"
@@ -75,7 +91,7 @@
     (continueClicked)="continueClicked($event)">
   </game-question-continue>
 
-  <game-over *ngIf="gameOver && !showCurrentQuestion  && !showContinueScreen && !currentQuestion" class="overlay" [userDict]="userDict" [game]="game" [categoryName]="categoryName"
+  <game-over *ngIf="gameOver && !showCurrentQuestion  && !showContinueScreen && !currentQuestion" class="overlay" [earnedBadgesByOtherUser]="earnedBadgesByOtherUser" [earnedBadges]="earnedBadges" [userDict]="userDict" [game]="game" [categoryName]="categoryName"
     [correctCount]="correctAnswerCount" [noOfQuestions]="questionIndex" [totalRound]="totalRound"
     (gameOverContinueClicked)="gameOverContinueClicked()">
   </game-over>

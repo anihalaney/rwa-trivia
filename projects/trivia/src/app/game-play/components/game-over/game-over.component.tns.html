@@ -28,26 +28,14 @@
                   <StackLayout *ngIf="game.gameOptions?.playerMode == PlayerMode.Single" class="game-continue">
 
                     <StackLayout marginBottom="10">
-                      <StackLayout *ngIf="
-                                    (game.gameOptions?.playerMode != PlayerMode.Single && 
-                                     game.round < 16 &&
-                                     game.stats[user.userId]?.score > game.stats[otherUserId]?.score)
-                                    ||
-                                    (game.gameOptions?.playerMode == PlayerMode.Single &&
-                                     game.playerQnAs?.length - game.stats[user.userId]?.score !== 4)" margin="15"
+                      <StackLayout *ngIf="gameStatus === gameStatusEnum.WON" margin="15"
                         horizontalAlignment="center">
                         <Image src="~/assets/images/win.png" width="80" height="80" marginBottom="10">
                         </Image>
                         <Label class="gamestatus-username SF-Pro-Bold" text="{{playerUserName}} Won" textWrap="true"
                           marginLeft="10"></Label>
                       </StackLayout>
-                      <StackLayout *ngIf="
-                                    (game.gameOptions?.playerMode != PlayerMode.Single &&
-                                     game.round < 16 &&
-                                     game.stats[user.userId]?.score < game.stats[otherUserId]?.score)
-                                    ||
-                                    (game.gameOptions?.playerMode == PlayerMode.Single &&
-                                     game.playerQnAs?.length - game.stats[user.userId]?.score === 4)" margin="15"
+                      <StackLayout *ngIf="gameStatus === gameStatusEnum.LOST" margin="15"
                         horizontalAlignment="center">
                         <Image src="~/assets/images/gamelost.png" width="80" height="80" marginBottom="10">
                         </Image>
@@ -57,9 +45,9 @@
                     </StackLayout>
 
                     <Label class="roundandscore" horizontalAlignment="center"
-                      text="{{playerUserName}} {{playerUserName === 'You' ? 'have' : 'has'}} collected {{game.stats[user.userId]?.score >= 5 ? 'all the badges':''}}"
+                      text="{{playerUserName}} {{playerUserName === 'You' ? 'have' : 'has'}} collected {{earnedBadges.length >= 5 ? 'all the badges':''}}"
                       textWrap="true"></Label>
-                    <FlexboxLayout class="earnedsymbolsStack" horizontalAlignment="center">
+                    <FlexboxLayout  *ngIf="!game?.gameOptions.isBadgeWithCategory" class="earnedsymbolsStack" horizontalAlignment="center">
                       <Image src="{{game.stats[user.userId]?.score>=1 ? 'res://badge1' : 'res://badge1inactive'}}"
                         class="score-image" height="20" width="20" verticalAlignment="center">
                       </Image>
@@ -76,22 +64,21 @@
                         class="score-image" height="20" width="20" verticalAlignment="center">
                       </Image>
                     </FlexboxLayout>
+                    <FlexboxLayout *ngIf="game?.gameOptions.isBadgeWithCategory" class="earnedsymbolsStack" horizontalAlignment="center">
+                        <Image *ngFor="let badge of totalBadges" src="{{'res://' + applicationSettings?.badges[badge]?.image?.name + (earnedBadges.indexOf(badge) > -1 ? '' : 'inactive')}}" 
+                          class="score-image" height="20" width="20" verticalAlignment="center"></Image>
+                    </FlexboxLayout>
                   </StackLayout>
 
                   <GridLayout rows="*,*" columns="*,auto,*" horizontalAlignment="center"
                     *ngIf="game.gameOptions.playerMode == PlayerMode.Opponent">
                     <StackLayout marginTop="10" row="0" col="0" class="game-continue">
-                      <app-user-card [userId]="user.userId" [otherInfo]="{'isScreenShot': isScreenShot ? 'true' : 'false', 'isWinner': (game.gameOptions?.playerMode != PlayerMode.Single && 
-                                            game.round < 16 &&
-                                            game.stats[user.userId]?.score > game.stats[otherUserId]?.score)
-                                           ||
-                                           (game.gameOptions?.playerMode == PlayerMode.Single &&
-                                            game.playerQnAs?.length - game.stats[user.userId]?.score !== 4)}"
+                      <app-user-card [userId]="user.userId" [otherInfo]="{'isScreenShot': isScreenShot ? 'true' : 'false', 'isWinner': gameStatus === gameStatusEnum.WON}"
                         [type]="userCardType.USER_IMAGE_NAME_VERTICAL_GAME_OVER">
                       </app-user-card>
                       <!-- <Label class="roundandscore tagging" horizontalAlignment="center"
                                         text="Score {{game.stats[user.userId]?.score}}" textWrap="true"> </Label> -->
-                      <FlexboxLayout class="earnedsymbolsStack" horizontalAlignment="center">
+                      <FlexboxLayout *ngIf="!game?.gameOptions.isBadgeWithCategory"  class="earnedsymbolsStack" horizontalAlignment="center">
                         <Image src="{{game.stats[user.userId]?.score>=1 ? 'res://badge1' : 'res://badge1inactive'}}"
                           class="score-image" height="20" width="20" verticalAlignment="center">
                         </Image>
@@ -108,23 +95,22 @@
                           class="score-image" height="20" width="20" verticalAlignment="center">
                         </Image>
                       </FlexboxLayout>
+                      <FlexboxLayout *ngIf="game?.gameOptions.isBadgeWithCategory" class="earnedsymbolsStack" horizontalAlignment="center">
+                          <Image *ngFor="let badge of totalBadges" src="{{'res://' + applicationSettings?.badges[badge]?.image?.name + (earnedBadges.indexOf(badge) > -1 ? '' : 'inactive')}}"
+                            class="score-image" height="20" width="20" verticalAlignment="center"></Image>
+                      </FlexboxLayout>
                     </StackLayout>
 
                     <Label row="0" col="1" text="VS" class="vs-text" verticalAlignment="center" textWrap="true">
                     </Label>
 
                     <StackLayout marginTop="10" row="0" col="2" class="game-continue">
-                      <app-user-card [userId]="otherUserId" [otherInfo]="{'isWinner': (game.gameOptions?.playerMode != PlayerMode.Single &&
-                                            game.round < 16 &&
-                                            game.stats[user.userId]?.score < game.stats[otherUserId]?.score)
-                                           ||
-                                           (game.gameOptions?.playerMode == PlayerMode.Single &&
-                                            game.playerQnAs?.length - game.stats[user.userId]?.score === 4)}"
+                      <app-user-card [userId]="otherUserId" [otherInfo]="{'isWinner': gameStatus === gameStatusEnum.LOST}"
                         [type]="userCardType.USER_IMAGE_NAME_VERTICAL_GAME_OVER">
                       </app-user-card>
                       <!-- <Label class="roundandscore tagging" horizontalAlignment="center"
                                         text="Score {{game.stats[otherUserId]?.score}}" textWrap="true"> </Label> -->
-                      <FlexboxLayout class="earnedsymbolsStack" horizontalAlignment="center">
+                      <FlexboxLayout *ngIf="!game?.gameOptions.isBadgeWithCategory" class="earnedsymbolsStack" horizontalAlignment="center">
                         <Image src="{{game.stats[otherUserId]?.score>=1 ? 'res://badge1' : 'res://badge1inactive'}}"
                           class="score-image" height="20" width="20" verticalAlignment="center">
                         </Image>
@@ -141,45 +127,32 @@
                           class="score-image" height="20" width="20" verticalAlignment="center">
                         </Image>
                       </FlexboxLayout>
+                      <FlexboxLayout *ngIf="game?.gameOptions.isBadgeWithCategory" class="earnedsymbolsStack" horizontalAlignment="center">
+                          <Image *ngFor="let badge of totalBadges" src="{{'res://' + applicationSettings?.badges[badge]?.image?.name + (earnedBadgesByOtherUser.indexOf(badge) > -1 ? '' : 'inactive')}}"
+                            class="score-image" height="20" width="20" verticalAlignment="center"></Image>
+                      </FlexboxLayout>
                     </StackLayout>
 
                     <StackLayout row="1" colSpan="3" horizontalAlignment="center" class="gamestatus" marginTop="10">
-                      <StackLayout *ngIf="
-                                    (game.gameOptions?.playerMode != PlayerMode.Single && 
-                                     game.round < 16 &&
-                                     game.stats[user.userId]?.score > game.stats[otherUserId]?.score)
-                                    ||
-                                    (game.gameOptions?.playerMode == PlayerMode.Single &&
-                                     game.playerQnAs?.length - game.stats[user.userId]?.score !== 4)"
+                      <StackLayout *ngIf="gameStatus === gameStatusEnum.WON"
                         orientation="horizontal" margin="15" horizontalAlignment="center">
                         <Label class="gamestatus-username-color SF-Pro-Bold" text="{{playerUserName}} Won!"
                           textWrap="true" marginLeft="10" horizontalAlignment="center"></Label>
                       </StackLayout>
-                      <StackLayout *ngIf="
-                                    (game.gameOptions?.playerMode != PlayerMode.Single &&
-                                     game.round < 16 &&
-                                     game.stats[user.userId]?.score < game.stats[otherUserId]?.score)
-                                    ||
-                                    (game.gameOptions?.playerMode == PlayerMode.Single &&
-                                     game.playerQnAs?.length - game.stats[user.userId]?.score === 4)"
+                      <StackLayout *ngIf="gameStatus === gameStatusEnum.LOST"
                         orientation="horizontal" margin="15" horizontalAlignment="center">
                         <Label class="gamestatus-username-color SF-Pro-Bold" color="#F44336"
                           text="{{playerUserName}} Lost" textWrap="true" marginLeft="10"
                           horizontalAlignment="center"></Label>
                       </StackLayout>
 
-                      <StackLayout *ngIf="
-                                    (game.gameOptions?.playerMode != PlayerMode.Single &&
-                                     game.round < 16 &&
-                                     game.stats[user.userId]?.score == game.stats[otherUserId]?.score)"
+                      <StackLayout *ngIf="gameStatus === gameStatusEnum.TIE"
                         orientation="horizontal" margin="15" horizontalAlignment="center">
                         <Label class="gamestatus-username-color SF-Pro-Bold" text="It's a Tie" textWrap="true"
                           marginLeft="10"></Label>
                       </StackLayout>
 
-                      <StackLayout *ngIf="
-                                    game.gameOptions?.playerMode != PlayerMode.Single &&
-                                     game.round === 16" orientation="horizontal" margin="15"
+                      <StackLayout *ngIf="gameStatus === gameStatusEnum.DRAW" orientation="horizontal" margin="15"
                         horizontalAlignment="center">
                         <Label class="gamestatus-username-color SF-Pro-Bold" text="It's a Draw" textWrap="true"
                           marginLeft="10"></Label>

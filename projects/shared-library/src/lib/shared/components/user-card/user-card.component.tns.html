@@ -180,7 +180,7 @@
   </FlexboxLayout>
   <Progress row="1" colSpan="2" marginTop="5" marginBottom="5" col="0" [value]="otherInfo?.progressValue" android:backgroundColor="#f1f1f1" class="game-progress" maxValue="100"></Progress>
   <StackLayout  row="2" col="0">
-    <StackLayout orientation="horizontal" horizontalAlignment="left" android:backgroundColor="#f1f1f1" class="background-score">
+    <StackLayout *ngIf="!otherInfo.isBadgeWithCategory" orientation="horizontal" horizontalAlignment="left" android:backgroundColor="#f1f1f1" class="background-score">
       <Image src="{{otherInfo.correctCount>=1 ? 'res://badge1' : 'res://badge1inactive'}}">
       </Image>
       <Image src="{{otherInfo.correctCount>=2 ? 'res://badge2' : 'res://badge2inactive'}}">
@@ -190,6 +190,11 @@
       <Image src="{{otherInfo.correctCount>=4 ? 'res://badge4' : 'res://badge4inactive'}}">
       </Image>
       <Image src="{{otherInfo.correctCount>=5 ? 'res://badge5' : 'res://badge5inactive'}}">
+      </Image>
+    </StackLayout>
+
+    <StackLayout *ngIf="otherInfo?.isBadgeWithCategory" orientation="horizontal" horizontalAlignment="left" android:backgroundColor="#f1f1f1" class="background-score">
+      <Image *ngFor="let badge of otherInfo.totalBadges" src="{{'res://' + otherInfo?.applicationSettings?.badges[badge]?.image?.name + (otherInfo?.earnedBadges.indexOf(badge) > -1 ? '' : 'inactive')}}">
       </Image>
     </StackLayout>
   </StackLayout>
@@ -225,7 +230,7 @@
         <Label text="{{ (loggedInUserId === user.userId) ? 'You' : user?.displayName}}"  class="main-title first-player"></Label>
       </StackLayout>
 
-      <StackLayout  android:backgroundColor="#f1f1f1"  row="1" col="0" colSpan="2" class="background-score">
+      <StackLayout  *ngIf="!otherInfo.isBadgeWithCategory"  android:backgroundColor="#f1f1f1"  row="1" col="0" colSpan="2" class="background-score">
         <Image src="{{otherInfo.correctCount>=1 ? 'res://badge1' : 'res://badge1inactive'}}">
         </Image>
         <Image src="{{otherInfo.correctCount>=2 ? 'res://badge2' : 'res://badge2inactive'}}">
@@ -237,6 +242,11 @@
         <Image src="{{otherInfo.correctCount>=5 ? 'res://badge5' : 'res://badge5inactive'}}">
         </Image>
       </StackLayout>
+
+    <StackLayout *ngIf="otherInfo?.isBadgeWithCategory" android:backgroundColor="#f1f1f1"  row="1" col="0" colSpan="2" class="background-score">
+      <Image *ngFor="let badge of otherInfo.totalBadges" src="{{'res://' + otherInfo?.applicationSettings?.badges[badge]?.image?.name + (otherInfo?.earnedBadges.indexOf(badge) > -1 ? '' : 'inactive')}}">
+      </Image>
+    </StackLayout>
     </GridLayout>
     <!-- Second Player-->
     <GridLayout row="0" col="2" rows="*,*" columns="auto,*" class="second-player-game-play-container">
@@ -251,7 +261,7 @@
       <StackLayout row="0" col="1" class="SF-Pro-Regular" marginLeft="0" paddingRight="10">
           <Label text="{{otherInfo.otherPlayer?.displayName}}" class="second-player-title"></Label>
       </StackLayout>
-      <StackLayout  row="1" col="0" colSpan="2"  android:backgroundColor="#f1f1f1" class="background-score">
+      <StackLayout *ngIf="!otherInfo.isBadgeWithCategory"  row="1" col="0" colSpan="2"  android:backgroundColor="#f1f1f1" class="background-score">
         <Image src="{{otherInfo.otherPlayer?.score>=1 ? 'res://badge1' : 'res://badge1inactive'}}">
         </Image>
         <Image src="{{otherInfo.otherPlayer?.score>=2 ? 'res://badge2' : 'res://badge2inactive'}}">
@@ -263,6 +273,11 @@
         <Image src="{{otherInfo.otherPlayer?.score>=5 ? 'res://badge5' : 'res://badge5inactive'}}">
         </Image>
       </StackLayout>
+
+    <StackLayout *ngIf="otherInfo?.isBadgeWithCategory" row="1" col="0" colSpan="2"  android:backgroundColor="#f1f1f1" class="background-score">
+      <Image *ngFor="let badge of otherInfo.totalBadges" src="{{'res://' + otherInfo?.applicationSettings?.badges[badge]?.image?.name + (otherInfo?.earnedBadgesByOtherUser.indexOf(badge) > -1 ? '' : 'inactive')}}">
+      </Image>
+    </StackLayout>
     </GridLayout>
   </GridLayout>
 

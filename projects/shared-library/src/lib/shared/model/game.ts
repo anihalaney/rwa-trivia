@@ -9,6 +9,8 @@ export class PlayerQnA {
   isReported?: boolean;
   addedOn?: number;
   round?: number;
+  badge?: { name: string, won: boolean};
+  categoryId?: number[];
 }
 
 export class Stat {
@@ -71,6 +73,9 @@ export class Game {
         (qna['playerAnswerInSeconds'] !== undefined) ? playerOnA.playerAnswerInSeconds = qna.playerAnswerInSeconds : '';
         (qna['answerCorrect'] !== undefined) ? playerOnA.answerCorrect = qna.answerCorrect : '';
         (qna['round'] !== undefined) ? playerOnA.round = qna.round : '';
+        (qna['categoryId'] !== undefined) ? playerOnA.categoryId = qna.categoryId : '';
+        (qna['badge'] !== undefined) ? playerOnA.badge = qna.badge : '';
+        // console.log(playerOnA.categoryId, '=== ');
         playerOnA.isReported = (qna.isReported) ? true : false;
         this.playerQnAs.push({ ...playerOnA });
       }
@@ -182,17 +187,24 @@ export class Game {
     if (Number(this.gameOptions.playerMode) === PlayerMode.Opponent && this.playerIds.length > 1) {
       if (this.round < 16) {
         const playerId_1 = this.playerIds[1];
-        if ((this.stats[playerId_0].score > this.stats[playerId_1].score)) {
+        const player_0_score = this.gameOptions.isBadgeWithCategory ? this.getEarnedBadges(playerId_0) :  this.stats[playerId_0].score;
+        const player_1_score = this.gameOptions.isBadgeWithCategory ? this.getEarnedBadges(playerId_1) :  this.stats[playerId_1].score;
+        if ((player_0_score > player_1_score)) {
           this.winnerPlayerId = playerId_0;
-        } else if ((this.stats[playerId_0].score < this.stats[playerId_1].score)) {
+        } else if ((player_0_score < player_1_score)) {
           this.winnerPlayerId = playerId_1;
         }
       }
     } else {
-      if (this.stats[playerId_0].score >= 5) {
+      const player_0_score = this.gameOptions.isBadgeWithCategory ? this.getEarnedBadges(playerId_0) : this.stats[playerId_0].score;
+      if (player_0_score >= 5) {
         this.winnerPlayerId = playerId_0;
       }
     }
+  }
+
+  getEarnedBadges(playerId) {
+    return this.playerQnAs.map(data => data.badge && data.badge.won && data.playerId ===  playerId?  data.badge.name : '').filter(data => data !== '').length;
   }
 
   decideNextTurn(playerQnA: PlayerQnA, userId: string) {

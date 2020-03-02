@@ -2,7 +2,7 @@
 <StackLayout>
     <StackLayout *ngIf="showLoader && !gameOver" verticalAlignment="center" height="100%" horizontalAlignment="center">
         <StackLayout verticalAlignment="center" height="100%" horizontalAlignment="center" width="100%">
-            <AbsoluteLayout verticalAlignment="center" horizontalAlignment="center">
+            <AbsoluteLayout *ngIf="!game?.gameOptions?.isBadgeWithCategory" verticalAlignment="center" horizontalAlignment="center">
                 <GridLayout class="circle-loader" width="150" height="150"> </GridLayout>
 
                 <Image *ngIf=" correctAnswerCount  >= 1" src="res://badge1" height="30" width="30"
@@ -47,46 +47,74 @@
 
 
             </AbsoluteLayout>
+
+            <AbsoluteLayout *ngIf="game?.gameOptions?.isBadgeWithCategory" verticalAlignment="center" horizontalAlignment="center">
+                <GridLayout class="circle-loader" width="150" height="150"> </GridLayout>
+
+                <Image src="res://{{applicationSettings?.badges[totalBadges[0]]?.image?.name + (earnedBadges.indexOf(totalBadges[0]) > -1 ? '' : 'inactive')}}" height="30" width="30"
+                    marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50" top="10"
+                    left="80"></Image>
+                
+                <Image src="res://{{applicationSettings?.badges[totalBadges[1]]?.image?.name + (earnedBadges.indexOf(totalBadges[1]) > -1 ? '' : 'inactive')}}" height="30" width="30"
+                    marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50" top="50"
+                    left="15"></Image>
+                
+                <Image src="res://{{applicationSettings?.badges[totalBadges[4]]?.image?.name + (earnedBadges.indexOf(totalBadges[4]) > -1 ? '' : 'inactive')}}" height="30" width="30"
+                    marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50" top="50"
+                    left="150"></Image>
+                
+                <Image src="res://{{applicationSettings?.badges[totalBadges[2]]?.image?.name + (earnedBadges.indexOf(totalBadges[2]) > -1 ? '' : 'inactive')}}" height="30" width="30"
+                    marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50" top="120"
+                    left="15"></Image>
+                
+                <Image src="res://{{applicationSettings?.badges[totalBadges[3]]?.image?.name + (earnedBadges.indexOf(totalBadges[3]) > -1 ? '' : 'inactive')}}" height="30" width="30"
+                    marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50" top="120"
+                    left="145"></Image>
+            </AbsoluteLayout>
             <Label text="Loading" textWrap="true" fontSize="17" verticalAlignment="center"
                 horizontalAlignment="center"></Label>
         </StackLayout>
     </StackLayout>
     <StackLayout *ngIf="showBadge && !gameOver" orientation="vertical" verticalAlignment="center" height="100%">
-        <Image src="res://badge{{correctAnswerCount+1}}" height="70" width="70" marginLeft="2"
+        <Image *ngIf="game?.gameOptions.isBadgeWithCategory" src="{{currentQuestion?.badge ? 'res://' + applicationSettings?.badges[currentQuestion?.badge.name]?.image?.name : '~/assets/images/score0'}}" height="70" width="70" marginLeft="2"
             verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"></Image>
-
+        <Image *ngIf="!game?.gameOptions.isBadgeWithCategory" src="res://badge{{correctAnswerCount+1}}" height="70" width="70" marginLeft="2"
+        verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"></Image>
+        
         <Label text="Give the right answer & with this badge" class='text-center' horizontalAlignment="center"
             verticalAlignment="center" textWrap="true"></Label>
     </StackLayout>
 
-    <game-continue *ngIf="showContinueDialogueForThreeConsecutiveAnswers || (showContinueScreen && !gameOver)" class="overlay" [applicationSettings]="applicationSettings" [userDict]="userDict" [game]="game"
-        [categoryName]="categoryName" [correctCount]="correctAnswerCount" [noOfQuestions]="questionIndex"
+    <game-continue *ngIf="showContinueDialogueForThreeConsecutiveAnswers || (showContinueScreen && !gameOver)" class="overlay" [applicationSettings]="applicationSettings" [userDict]="userDict" [applicationSettings]="applicationSettings" [game]="game"
+        [earnedBadgesByOtherUser]="earnedBadgesByOtherUser" [earnedBadges]="earnedBadges" [categoryName]="categoryName" [correctCount]="correctAnswerCount" [noOfQuestions]="questionIndex"
         [otherPlayer]="otherPlayer"
         [turnFlag]="turnFlag" [threeConsecutiveAnswer]="threeConsecutiveAnswer"
         [totalRound]="totalRound" (continueButtonClicked)="continueButtonClicked()">
     </game-continue>
 
     <StackLayout *ngIf="showWinBadge && !gameOver" orientation="vertical" verticalAlignment="center" height="100%">
-        <Image *ngIf="correctAnswerCount > 0" src="res://badge{{correctAnswerCount}}" height="70"
+        <Image *ngIf="!game?.gameOptions.isBadgeWithCategory && correctAnswerCount > 0" src="res://badge{{correctAnswerCount}}" height="70"
+            width="70" marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"></Image>
+        <Image *ngIf="game?.gameOptions.isBadgeWithCategory" src="{{game?.playerQnAs[game.playerQnAs.length - 1]?.badge ? 'res://' + applicationSettings?.badges[game.playerQnAs[game.playerQnAs.length - 1]?.badge.name]?.image?.name : '~/assets/images/score0'}}" height="70"
             width="70" marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"></Image>
         <Label text="You Earned" class='text-center' textWrap="true" horizontalAlignment="center"
             verticalAlignment="center"></Label>
     </StackLayout>
 
     <game-question *ngIf="showCurrentQuestion && !showLoader && !showBadge && !showWinBadge && !showContinueScreen && !showContinueDialogueForThreeConsecutiveAnswers"
-        [categoryName]="categoryName" [gameOver]="gameOver"  [question]="currentQuestion" [questionIndex]="questionIndex" [timer]="timer"
+        [earnedBadgesByOtherUser]="earnedBadgesByOtherUser" [earnedBadges]="earnedBadges" [applicationSettings]="applicationSettings" [categoryName]="categoryName" [gameOver]="gameOver"  [question]="currentQuestion" [questionIndex]="questionIndex" [timer]="timer"
         [MAX_TIME_IN_SECONDS]="MAX_TIME_IN_SECONDS" [continueNext]="continueNext" [correctCount]="correctAnswerCount"
         [noOfQuestions]="questionIndex" [showContinueBtn]="showContinueBtn" [otherPlayer]="otherPlayer"
         [showCurrentQuestion]="showCurrentQuestion" (gameOverButtonClicked)="gameOverButtonClicked($event)" 
         (answerClicked)="answerClicked($event)" (okClick)="okClick($event)" (continueClicked)="continueClicked($event)"
-         [userDict]="userDict" [totalRound]="totalRound"
+         [userDict]="userDict" [totalRound]="totalRound" [totalBadges]="totalBadges"
         [turnFlag]="turnFlag" [threeConsecutiveAnswer]="threeConsecutiveAnswer"  [user]="user"
         (btnClickedAfterThreeConsecutiveAnswers)="btnClickedAfterThreeConsecutiveAnswers($event)"
-        [questionRound]="game.round" [applicationSettings]="applicationSettings" [playerMode]="playerMode"
+        [questionRound]="game.round" [applicationSettings]="applicationSettings" [playerMode]="playerMode" [game]="game"
         >
     </game-question>
-    <game-over *ngIf="gameOver && !showCurrentQuestion && !showContinueScreen && !currentQuestion" class="overlay" [userDict]="userDict" [game]="game"
-        [categoryName]="categoryName" [correctCount]="correctAnswerCount" [noOfQuestions]="questionIndex"
+    <game-over *ngIf="gameOver && !showCurrentQuestion && !showContinueScreen && !currentQuestion" [earnedBadgesByOtherUser]="earnedBadgesByOtherUser" [earnedBadges]="earnedBadges" class="overlay" [userDict]="userDict" [game]="game"
+        [categoryName]="categoryName" [correctCount]="correctAnswerCount" [totalBadges]="totalBadges" [noOfQuestions]="questionIndex"
         [totalRound]="totalRound" (gameOverContinueClicked)="gameOverContinueClicked()"
         >
     </game-over>

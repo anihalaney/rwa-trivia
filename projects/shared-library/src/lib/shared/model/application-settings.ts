@@ -27,7 +27,8 @@ export class ApplicationSettings {
     invite_bits?: number;
     invite_bits_enabled?: boolean;
     auto_save: { is_enabled: boolean, time: number };
-    apple_authentication: boolean
+    apple_authentication: boolean;
+    badges: {};
 }
 
 export class TimerLoader {

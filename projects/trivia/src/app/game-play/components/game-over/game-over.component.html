@@ -18,11 +18,18 @@
       <app-user-card [userId]="user.userId" [type]="userCardType.USER_WEB_IMAGE_70X60_IMAGE_VERTICAL"></app-user-card>
       <div class="dark div-top-spacing text-style ">Score {{game.stats[user.userId].score}} / {{game.round}}</div>
       <div class="div-top-spacing score-div-height">
-        <div *ngIf="game.stats[user.userId].score>= 1" class="sprite score1"></div>
-        <div *ngIf="game.stats[user.userId].score >= 2" class="sprite score2"></div>
-        <div *ngIf="game.stats[user.userId].score >= 3" class="sprite score3"></div>
-        <div *ngIf="game.stats[user.userId].score >= 4" class="sprite score4"></div>
-        <div *ngIf="game.stats[user.userId].score >= 5" class="sprite score5"></div>
+        <ng-template *ngIf="game.gameOptions.isBadgeWithCategory; else showBadge" ngFor let-i="index"  let-badge [ngForOf]="[0,1,2,3,4]" >
+          <div class="sprite {{applicationSettings?.badges[earnedBadges[badge]]?.class ? applicationSettings?.badges[earnedBadges[badge]]?.class : 'score0'}}"></div>
+        </ng-template>
+        <ng-template   #showBadge>
+          <div *ngIf="game.stats[user.userId].score>= 1" class="sprite score1"></div>
+          <div *ngIf="game.stats[user.userId].score >= 2" class="sprite score2"></div>
+          <div *ngIf="game.stats[user.userId].score >= 3" class="sprite score3"></div>
+          <div *ngIf="game.stats[user.userId].score >= 4" class="sprite score4"></div>
+          <div *ngIf="game.stats[user.userId].score >= 5" class="sprite score5"></div>
+        </ng-template>
+        
+
       </div>
     </div>
     <div class="textcenter clearfix gameOver" *ngIf="game.gameOptions.playerMode == PlayerMode.Opponent">
@@ -30,56 +37,50 @@
         <app-user-card [userId]="user.userId" [type]="userCardType.USER_WEB_IMAGE_70X60_IMAGE_VERTICAL"></app-user-card>
         <div class="dark div-top-spacing text-style">Score {{game.stats[user.userId].score}}</div>
         <div class="div-top-spacing">
-          <div *ngIf="game.stats[user.userId].score >= 1" class="sprite score1"></div>
-          <div *ngIf="game.stats[user.userId].score >= 2" class="sprite score2"></div>
-          <div *ngIf="game.stats[user.userId].score >= 3" class="sprite score3"></div>
-          <div *ngIf="game.stats[user.userId].score >= 4" class="sprite score4"></div>
-          <div *ngIf="game.stats[user.userId].score >= 5" class="sprite score5"></div>
+          <ng-template *ngIf="game.gameOptions.isBadgeWithCategory; else showBadgeTwoPlayer" ngFor let-i="index"  let-badge [ngForOf]="[0,1,2,3,4]" >
+            <div class="sprite {{applicationSettings?.badges[earnedBadges[badge]]?.class ? applicationSettings?.badges[earnedBadges[badge]]?.class : 'score0'}}"></div>
+          </ng-template>
+          <ng-template  #showBadgeTwoPlayer>
+            <div *ngIf="game.stats[user.userId].score >= 1" class="sprite score1"></div>
+            <div *ngIf="game.stats[user.userId].score >= 2" class="sprite score2"></div>
+            <div *ngIf="game.stats[user.userId].score >= 3" class="sprite score3"></div>
+            <div *ngIf="game.stats[user.userId].score >= 4" class="sprite score4"></div>
+            <div *ngIf="game.stats[user.userId].score >= 5" class="sprite score5"></div>
+          </ng-template>
+          
         </div>
       </div>
       <div class="col-sm-3 yourimg-spacing">
         <app-user-card [userId]="otherUserId" [type]="userCardType.USER_WEB_IMAGE_70X60_IMAGE_VERTICAL"></app-user-card>
         <div class="dark div-top-spacing text-style">Score {{game.stats[otherUserId].score}}</div>
         <div class="div-top-spacing">
+          <ng-template *ngIf="game.gameOptions.isBadgeWithCategory; else showBadgeTwoPlayerOpponent" ngFor let-i="index"  let-badge [ngForOf]="[0,1,2,3,4]" >
+            <div class="sprite {{applicationSettings?.badges[earnedBadgesByOtherUser[badge]]?.class ? applicationSettings?.badges[earnedBadgesByOtherUser[badge]]?.class : 'score0'}}"></div>
+          </ng-template>
+          <ng-template #showBadgeTwoPlayerOpponent >
           <div *ngIf="game.stats[otherUserId].score >= 1" class="sprite score1"></div>
           <div *ngIf="game.stats[otherUserId].score >= 2" class="sprite score2"></div>
           <div *ngIf="game.stats[otherUserId].score >= 3" class="sprite score3"></div>
           <div *ngIf="game.stats[otherUserId].score >= 4" class="sprite score4"></div>
           <div *ngIf="game.stats[otherUserId].score >= 5" class="sprite score5"></div>
+        </ng-template>
         </div>
       </div>
     </div>
     <div class="div-top-spacing win-icon-div">
-      <div class="win-icon" *ngIf="
-      (game.gameOptions.playerMode != PlayerMode.Single && 
-       game.round < 16 &&
-       game.stats[user.userId].score > game.stats[otherUserId].score)
-      ||
-      (game.gameOptions.playerMode == PlayerMode.Single &&
-       game.playerQnAs.length - game.stats[user.userId].score !== 4)">
+      <div class="win-icon" *ngIf="gameStatus === gameStatusEnum.WON">
         <div class="sprite thumb-up"></div>
         <span class="win-text">{{playerUserName}} Won</span>
       </div>
-      <div class="win-icon" *ngIf="
-      (game.gameOptions.playerMode != PlayerMode.Single &&
-       game.round < 16 &&
-       game.stats[user.userId].score < game.stats[otherUserId].score)
-      ||
-      (game.gameOptions.playerMode == PlayerMode.Single &&
-       game.playerQnAs.length - game.stats[user.userId].score === 4)">
+      <div class="win-icon" *ngIf="gameStatus === gameStatusEnum.LOST">
         <div class="sprite thumb-down"></div>
         <span class="win-text">{{playerUserName}} Lost</span>
       </div>
-      <div class="win-icon" *ngIf="
-      (game.gameOptions.playerMode != PlayerMode.Single &&
-       game.round < 16 &&
-       game.stats[user.userId].score == game.stats[otherUserId].score)">
+      <div class="win-icon" *ngIf="gameStatus === gameStatusEnum.TIE">
         <div class="sprite thumb-up"></div>
         <span class="win-text">It's a Tie</span>
       </div>
-      <div class="win-icon" *ngIf="
-      game.gameOptions.playerMode != PlayerMode.Single &&
-       game.round === 16">
+      <div class="win-icon" *ngIf="gameStatus === gameStatusEnum.DRAW">
         <div class="sprite thumb-up"></div>
         <span class="win-text">It's a Draw</span>
       </div>

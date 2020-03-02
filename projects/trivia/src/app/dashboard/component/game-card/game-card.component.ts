@@ -1,7 +1,8 @@
-import { Component, Input, OnInit, OnChanges, OnDestroy, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
+import { Component, Input, OnInit, OnChanges, OnDestroy, ChangeDetectorRef, ChangeDetectionStrategy, SimpleChanges } from '@angular/core';
 import { Observable, Subscription, timer } from 'rxjs';
 import { Store, select } from '@ngrx/store';
-import { User, Game, Category, PlayerMode, GameStatus, CalenderConstants, userCardType } from 'shared-library/shared/model';
+import { User, Game, Category, PlayerMode, GameStatus, CalenderConstants, userCardType,
+   ApplicationSettings } from 'shared-library/shared/model';
 import { Utils } from 'shared-library/core/services';
 import { AppState, appState, categoryDictionary } from '../../../store';
 import { take } from 'rxjs/operators';
@@ -20,6 +21,9 @@ export class GameCardComponent implements OnInit, OnChanges, OnDestroy {
   @Input() game: Game;
   @Input() cardType: any;
   @Input() userDict: { [key: string]: User };
+  @Input() applicationSettings: ApplicationSettings;
+  earnedBadges: string[];
+  earnedBadgesByOtherUser: string[];
   user$: Observable<User>;
   correctAnswerCount: number;
   questionIndex: number;
@@ -82,12 +86,18 @@ export class GameCardComponent implements OnInit, OnChanges, OnDestroy {
     }));
   }
 
-  ngOnChanges() {
+  ngOnChanges(changes: SimpleChanges) {
     this.questionIndex = this.game.playerQnAs.length;
     this.correctAnswerCount = this.game.playerQnAs.filter((p) => p.answerCorrect).length;
     if (this.game) {
       this.otherUserId = this.game.playerIds.filter(userId => userId !== this.user.userId)[0];
       this.otherUserInfo = this.userDict[this.otherUserId];
+    }
+    if (changes.game && changes.game.currentValue && this.game.gameOptions.isBadgeWithCategory) {
+      this.earnedBadges = this.game.playerQnAs.map(data => data.badge && data.badge.won && data.playerId === this.user.userId ?  data.badge.name : '').filter(data => data !== '');
+      if (Number(this.game.gameOptions.playerMode) === PlayerMode.Opponent) {
+        this.earnedBadgesByOtherUser = this.game.playerQnAs.map(data => data.badge && data.badge.won && data.playerId === this.otherUserId ?  data.badge.name : '').filter(data => data !== '');
+      }
     }
   }
 

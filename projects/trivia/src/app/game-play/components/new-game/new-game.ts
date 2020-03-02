@@ -232,6 +232,7 @@ export class NewGame {
       if (Number(gameOptions.playerMode) === PlayerMode.Opponent && Number(gameOptions.opponentType) === OpponentType.Friend) {
         gameOptions.friendId = this.friendUserId;
       }
+      gameOptions.isBadgeWithCategory = true;
       this.store.dispatch(new gameplayactions.CreateNewGame({ gameOptions: gameOptions, user: user }));
     })); // logged in user
 

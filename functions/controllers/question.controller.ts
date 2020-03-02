@@ -9,7 +9,7 @@ import { Utils } from '../utils/utils';
 import { QuestionService } from '../services/question.service';
 import { GameService } from '../services/game.service';
 import { StatsService } from '../services/stats.service';
-
+import { AppSettings } from '../services/app-settings.service';
 
 export class QuestionController {
 
@@ -90,7 +90,31 @@ export class QuestionController {
                     questionId: question.id,
                     addedOn: createdOn,
                 };
-
+                if (game.gameOptions.isBadgeWithCategory && game.gameOptions.isBadgeWithCategory === true) {
+                    const appSetting = await AppSettings.Instance.getAppSettings();
+                    playerQnA.categoryId = question.categoryIds;
+                    const earnedBadges =
+                    game.playerQnAs.map(data => data.badge && data.badge.won && data.playerId === userId ?  data.badge.name : '').filter(data => data !== '');
+                    console.log(earnedBadges, 'earnedBadges =================>');
+                    const remainingBadges = [];
+                    for (const badgeObj in appSetting.badges) {
+                        if (appSetting.badges.hasOwnProperty(badgeObj) && earnedBadges.indexOf(badgeObj) === -1) {
+                            if (appSetting.badges[badgeObj].category > 0 &&
+                                Number(appSetting.badges[badgeObj].category) ===  Number(question.categoryIds[0])) {
+                                    playerQnA.badge  = { name: badgeObj, won: false};
+                            } else if (appSetting.badges[badgeObj].category === 0) {
+                                remainingBadges.push(badgeObj);
+                            }
+                        }
+                    }
+                    if (!playerQnA.badge && remainingBadges.length > 0) {
+                        console.log('remaining badges', remainingBadges);
+                        console.log('inside here for random', remainingBadges[Math.floor(Math.random() * remainingBadges.length)], remainingBadges.length, Math.floor(Math.random() * remainingBadges.length));
+                        playerQnA.badge = { name: remainingBadges[Math.floor(Math.random() * remainingBadges.length)], won: false };
+                    }
+                    question.badge = playerQnA.badge;
+                    console.log(playerQnA, 'playerQnA =============>');
+                }
                 if (game.playerQnAs.length > 0) {
                     if (Number(game.gameOptions.playerMode) === PlayerMode.Single) {
                         game.round = game.round + 1;
@@ -101,6 +125,7 @@ export class QuestionController {
                 question.gameRound = game.round;
                 question.addedOn = createdOn;
                 question.serverTimeQCreated = createdOn;
+                
                 game.playerQnAs.push(playerQnA);
                 const dbGame = game.getDbModel();
                 await GameService.setGame(dbGame);
@@ -133,6 +158,7 @@ export class QuestionController {
             if (playerQnA.playerAnswerId && playerQnA.playerAnswerId !== null) {
                 const answerObj = question.answers[playerQnA.playerAnswerId];
                 question.userGivenAnswer = answerObj.answerText;
+                question.badge = playerQnA.badge;
             } else {
                 question.userGivenAnswer = null;
             }
