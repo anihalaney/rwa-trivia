@@ -93,9 +93,7 @@ export class QuestionController {
                 if (game.gameOptions.isBadgeWithCategory && game.gameOptions.isBadgeWithCategory === true) {
                     const appSetting = await AppSettings.Instance.getAppSettings();
                     playerQnA.categoryId = question.categoryIds;
-                    const earnedBadges =
-                    game.playerQnAs.map(data => data.badge && data.badge.won && data.playerId === userId ?  data.badge.name : '').filter(data => data !== '');
-                    console.log(earnedBadges, 'earnedBadges =================>');
+                    const earnedBadges = game.stats && game.stats[userId] && game.stats[userId].badge ? game.stats[userId].badge : [];
                     const remainingBadges = [];
                     for (const badgeObj in appSetting.badges) {
                         if (appSetting.badges.hasOwnProperty(badgeObj) && earnedBadges.indexOf(badgeObj) === -1) {
@@ -108,12 +106,9 @@ export class QuestionController {
                         }
                     }
                     if (!playerQnA.badge && remainingBadges.length > 0) {
-                        console.log('remaining badges', remainingBadges);
-                        console.log('inside here for random', remainingBadges[Math.floor(Math.random() * remainingBadges.length)], remainingBadges.length, Math.floor(Math.random() * remainingBadges.length));
                         playerQnA.badge = { name: remainingBadges[Math.floor(Math.random() * remainingBadges.length)], won: false };
                     }
                     question.badge = playerQnA.badge;
-                    console.log(playerQnA, 'playerQnA =============>');
                 }
                 if (game.playerQnAs.length > 0) {
                     if (Number(game.gameOptions.playerMode) === PlayerMode.Single) {
@@ -125,7 +120,7 @@ export class QuestionController {
                 question.gameRound = game.round;
                 question.addedOn = createdOn;
                 question.serverTimeQCreated = createdOn;
-                
+
                 game.playerQnAs.push(playerQnA);
                 const dbGame = game.getDbModel();
                 await GameService.setGame(dbGame);

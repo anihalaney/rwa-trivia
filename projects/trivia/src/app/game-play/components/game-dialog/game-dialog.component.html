@@ -92,7 +92,7 @@
   </game-question-continue>
 
   <game-over *ngIf="gameOver && !showCurrentQuestion  && !showContinueScreen && !currentQuestion" class="overlay" [earnedBadgesByOtherUser]="earnedBadgesByOtherUser" [earnedBadges]="earnedBadges" [userDict]="userDict" [game]="game" [categoryName]="categoryName"
-    [correctCount]="correctAnswerCount" [noOfQuestions]="questionIndex" [totalRound]="totalRound"
+    [correctCount]="correctAnswerCount" [noOfQuestions]="questionIndex" [totalRound]="totalRound" [totalBadges]="totalBadges"
     (gameOverContinueClicked)="gameOverContinueClicked()">
   </game-over>
 

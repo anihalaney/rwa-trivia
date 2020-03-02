@@ -121,15 +121,15 @@ export class GameDialog {
     );
     this.subscriptions.push(
       this.gameObs.subscribe(game => {
-        if (game.playerQnAs[game.playerQnAs.length - 1] && game.playerQnAs[game.playerQnAs.length - 1].badge) {
-          console.log(game.playerQnAs[game.playerQnAs.length - 1].badge, 'game', game.playerQnAs[game.playerQnAs.length - 1].categoryId);
-        }
         this.showLoader = false;
         this.game = game;
         if (this.game.gameOptions.isBadgeWithCategory) {
-          this.earnedBadges = game.playerQnAs.map(data => data.badge && data.badge.won && data.playerId === this.user.userId ?  data.badge.name : '').filter(data => data !== '');
+          this.earnedBadges = this.game.stats[this.user.userId].badge;
           if (Number(this.game.gameOptions.playerMode) === PlayerMode.Opponent) {
-            this.earnedBadgesByOtherUser = game.playerQnAs.map(data => data.badge && data.badge.won && data.playerId !== this.user.userId  ?  data.badge.name : '').filter(data => data !== '');
+            const otherPlayerUserId = this.game.playerIds.filter(
+              playerId => playerId !== this.user.userId
+            )[0];
+            this.earnedBadgesByOtherUser = this.game.stats[otherPlayerUserId].badge;
           }
         }
         this.playerMode = game.gameOptions.playerMode;
@@ -601,8 +601,6 @@ export class GameDialog {
         playerQnA.categoryId = this.game.playerQnAs[this.game.playerQnAs.length - 1].categoryId;
         if (this.game.playerQnAs[this.game.playerQnAs.length - 1].badge) {
         const badge = this.game.playerQnAs[this.game.playerQnAs.length - 1].badge;
-        console.log(badge, 'badge');
-        console.log(this.game.playerQnAs[this.game.playerQnAs.length - 1].categoryId);
         badge.won = userAnswerId === correctAnswerId;
         playerQnA.badge = badge;
       }
