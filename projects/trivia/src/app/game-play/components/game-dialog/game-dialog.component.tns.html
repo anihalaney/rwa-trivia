@@ -89,7 +89,7 @@
         [earnedBadgesByOtherUser]="earnedBadgesByOtherUser" [earnedBadges]="earnedBadges" [categoryName]="categoryName" [correctCount]="correctAnswerCount" [noOfQuestions]="questionIndex"
         [otherPlayer]="otherPlayer"
         [turnFlag]="turnFlag" [threeConsecutiveAnswer]="threeConsecutiveAnswer"
-        [totalRound]="totalRound" (continueButtonClicked)="continueButtonClicked()">
+        [totalRound]="totalRound"  [totalBadges]="totalBadges" (continueButtonClicked)="continueButtonClicked()">
     </game-continue>
 
     <StackLayout *ngIf="showWinBadge && !gameOver" orientation="vertical" verticalAlignment="center" height="100%">

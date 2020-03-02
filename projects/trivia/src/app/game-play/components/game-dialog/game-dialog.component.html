@@ -51,7 +51,7 @@
     </div>
   </div>
 
-  <game-continue *ngIf="showContinueScreen && !gameOver" class="overlay" [userDict]="userDict" [game]="game"   [earnedBadges]="earnedBadges"  [applicationSettings]="applicationSettings" 
+  <game-continue *ngIf="showContinueScreen && !gameOver" class="overlay" [userDict]="userDict" [game]="game"   [earnedBadges]="earnedBadges"  [applicationSettings]="applicationSettings" [totalBadges]="totalBadges"
   [totalRound]="totalRound" [earnedBadgesByOtherUser]="earnedBadgesByOtherUser" (continueButtonClicked)="continueButtonClicked()">
 </game-continue>
 
@@ -84,7 +84,7 @@
     [otherPlayer]="otherPlayer" [showCurrentQuestion]="showCurrentQuestion" (gameOverButtonClicked)="gameOverButtonClicked($event)" 
     (answerClicked)="answerClicked($event)" (okClick)="okClick($event)" (continueClicked)="continueClicked($event)"
      [userDict]="userDict" [questionRound]="game.round" [totalRound]="totalRound"
-    [turnFlag]="turnFlag" [threeConsecutiveAnswer]="threeConsecutiveAnswer" [applicationSettings]="applicationSettings" [user]="user">
+    [turnFlag]="turnFlag" [totalBadges]="totalBadges" [threeConsecutiveAnswer]="threeConsecutiveAnswer" [applicationSettings]="applicationSettings" [user]="user">
   </game-question>
 
   <game-question-continue *ngIf="false" class="overlay" [categoryName]="categoryName" [question]="currentQuestion"

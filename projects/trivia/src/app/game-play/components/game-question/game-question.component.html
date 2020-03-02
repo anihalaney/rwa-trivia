@@ -3,8 +3,8 @@
     <div class="row">
       <div class="col-sm-3">
         <span class="col-sm-12 light badge-heading">BADGES</span>
-        <ng-template *ngIf="game?.gameOptions.isBadgeWithCategory; else showBadge" ngFor let-i="index"  let-badge [ngForOf]="[0,1,2,3,4]" >
-          <div class="sprite {{applicationSettings?.badges[earnedBadges[badge]]?.class ? applicationSettings?.badges[earnedBadges[badge]]?.class : 'score0'}}"></div>
+        <ng-template *ngIf="game?.gameOptions.isBadgeWithCategory; else showBadge" ngFor let-i="index"  let-badge [ngForOf]="totalBadges" >
+          <div class="sprite {{applicationSettings?.badges[earnedBadges[i]]?.class ? applicationSettings?.badges[earnedBadges[i]]?.class : 'score0'}}"></div>
         </ng-template>
         <ng-template #showBadge >
           <div [ngClass]="correctCount < 1?'score0':'score1'" class="sprite"></div>

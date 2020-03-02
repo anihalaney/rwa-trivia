@@ -4,8 +4,8 @@
       <app-user-card [userId]="user.userId" [type]="userCardType.USER_WEB_IMAGE_NAME_VERTICAL"></app-user-card>
       <div class="dark div-top-spacing text-style ">Score {{game.stats[user.userId].score}} / {{game.round}}</div>
       <div class="div-top-spacing score-div-height">
-        <ng-template *ngIf="game?.gameOptions.isBadgeWithCategory; else showBadge"  ngFor let-i="index" let-badge [ngForOf]="[0,1,2,3,4]" >
-          <div class="sprite {{applicationSettings?.badges[earnedBadges[badge]]?.class}}"></div>
+        <ng-template *ngIf="game?.gameOptions.isBadgeWithCategory; else showBadge"  ngFor let-i="index" let-badge [ngForOf]="totalBadges" >
+          <div class="sprite {{applicationSettings?.badges[earnedBadges[i]]?.class}}"></div>
         </ng-template>
         <ng-template #showBadge>
           <div *ngIf="game.stats[user.userId].score>= 1" class="sprite score1"></div>
@@ -22,8 +22,8 @@
         <app-user-card [userId]="user.userId" [type]="userCardType.USER_WEB_IMAGE_NAME_VERTICAL"></app-user-card>
         <div class="dark div-top-spacing text-style">Score {{game.stats[user.userId].score}}</div>
         <div class="div-top-spacing">
-          <ng-template *ngIf="game?.gameOptions.isBadgeWithCategory; else showBadgeForTwoPlayer"  ngFor let-i="index" let-badge [ngForOf]="[0,1,2,3,4]" >
-            <div class="sprite {{applicationSettings?.badges[earnedBadges[badge]]?.class}}"></div>
+          <ng-template *ngIf="game?.gameOptions.isBadgeWithCategory; else showBadgeForTwoPlayer"  ngFor let-i="index" let-badge [ngForOf]="totalBadges" >
+            <div class="sprite {{applicationSettings?.badges[earnedBadges[i]]?.class}}"></div>
           </ng-template>
           <ng-template #showBadgeForTwoPlayer>
             <div *ngIf="game.stats[user.userId].score >= 1" class="sprite score1"></div>
@@ -42,8 +42,8 @@
         <div *ngIf="game.stats[otherUserId] && game.stats[otherUserId].score" class="dark div-top-spacing text-style">
           Score {{game.stats[otherUserId].score}}</div>
         <div class="div-top-spacing">
-          <ng-template *ngIf="game?.gameOptions.isBadgeWithCategory; else showBadgeForTwoPlayerOpponent" ngFor let-i="index" let-badge [ngForOf]="[0,1,2,3,4]" >
-              <div class="sprite {{applicationSettings?.badges[earnedBadgesByOtherUser[badge]]?.class}}"></div>
+          <ng-template *ngIf="game?.gameOptions.isBadgeWithCategory; else showBadgeForTwoPlayerOpponent" ngFor let-i="index" let-badge [ngForOf]="totalBadges" >
+              <div class="sprite {{applicationSettings?.badges[earnedBadgesByOtherUser[i]]?.class}}"></div>
           </ng-template>
           <ng-template #showBadgeForTwoPlayerOpponent>
             <div *ngIf="game.stats[otherUserId]?.score >= 1" class="sprite score1"></div>
