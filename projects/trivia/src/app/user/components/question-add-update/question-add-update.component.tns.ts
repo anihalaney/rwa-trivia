@@ -186,6 +186,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate
         ? "Resubmit"
         : "Submit";
     if (this.editQuestion) {
+      this.isFormValid = true;
       this.actionBarTxt = "Update Question";
     }
 
@@ -319,7 +320,6 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate
     });
 
     webInterface.on("isFormValid", (isFormValid) => {
-
       setTimeout(() => {
         if (isFormValid === 'false') {
           this.isFormValid = false;
@@ -366,8 +366,6 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate
       question.created_uid = this.user.userId;
       question.is_draft = false;
       question.status = this.getQuestionStatus(question);
-
-
       this.saveQuestion(question);
       this.isSaved = true;
       // }
@@ -425,11 +423,15 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate
   }
   ngOnDestroy() {
     //   this.renderView = false;
-    //   if (this.oWebViewInterface) {
-    //     this.oWebViewInterface.off("uploadImageStart");
-    //     this.oWebViewInterface.off("quillContent");
-    //     this.oWebViewInterface.off("editorLoadFinished");
-    //   }
+      if (this.oWebViewInterface) {
+        this.oWebViewInterface.off("editorLoadFinished");
+        this.oWebViewInterface.off("isFormValid");
+        this.oWebViewInterface.off("quillContent");
+        this.oWebViewInterface.off("appIsLoaded");
+        this.oWebViewInterface.off("question");
+        this.oWebViewInterface.off("previewQuestion");
+        this.oWebViewInterface.off("uploadImageStart");
+      }
   }
 
   weViewLoadFinished(event) {

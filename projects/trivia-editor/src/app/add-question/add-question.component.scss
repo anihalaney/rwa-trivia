@@ -123,3 +123,17 @@ pre.ql-syntax {
   color: rgb(88, 82, 96) !important;
   background: rgb(239, 236, 244)  !important;
 }
+
+.mat-chip{
+  border-radius: 14px;
+  border-color: #ccc;
+}
+.mathseditor{
+  display: inline-block;
+  width: calc(100% - 27px);
+}
+
+
+.tagging input{
+  width: 100%;
+}

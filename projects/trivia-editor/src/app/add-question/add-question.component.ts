@@ -79,6 +79,94 @@ export class AddQuestionComponent implements OnInit, OnDestroy, AfterViewInit {
   questionObject: any;
   quillObject: any = {};
   answerTexts = [];
+  // editQuestion: any = {
+  //   "isRichEditor": true,
+  //   "id": "ZupJMzo5uffECT5c46My",
+  //   "answers": [
+  //     {
+  //       "answerText": "<p>Nsjjdjnd</p>",
+  //       "correct": true,
+  //       "answerObject": [
+  //         {
+  //           "insert": "Nsjjdjnd\n"
+  //         }
+  //       ],
+  //       "isRichEditor": true
+  //     },
+  //     {
+  //       "answerText": "<p>Hdjdjdjj</p>",
+  //       "correct": null,
+  //       "answerObject": [
+  //         {
+  //           "insert": "Hdjdjdjj\n"
+  //         }
+  //       ],
+  //       "isRichEditor": true
+  //     },
+  //     {
+  //       "answerText": "<p>Hdjdjjdjd</p>",
+  //       "correct": null,
+  //       "answerObject": [
+  //         {
+  //           "insert": "Hdjdjjdjd\n"
+  //         }
+  //       ],
+  //       "isRichEditor": true
+  //     },
+  //     {
+  //       "answerText": "<p>Hdjdkd</p>",
+  //       "correct": null,
+  //       "answerObject": [
+  //         {
+  //           "insert": "Hdjdkd\n"
+  //         }
+  //       ],
+  //       "isRichEditor": true
+  //     }
+  //   ],
+  //   "ordered": false,
+  //   "tags": [
+  //     "Gsh",
+  //     "Hdh",
+  //     "Ushdj"
+  //   ],
+  //   "categories": [],
+  //   "categoryIds": [
+  //     "2"
+  //   ],
+  //   "published": false,
+  //   "status": 4,
+  //   "validationErrorMessages": [],
+  //   "questionText": "<p>Programming hhh</p><p><br></p><p><img src=\"https://rwa-trivia-dev-e57fc.firebaseapp.com/v1/question/getQuestionImage/1583139724224?d=1583139724376\"></p>",
+  //   "created_uid": "YNwWKg47xBetzYCxb7k48RyGRoi2",
+  //   "explanation": null,
+  //   "bulkUploadId": "",
+  //   "reason": "",
+  //   "questionObject": [
+  //     {
+  //       "insert": "Programming hhh\n\n"
+  //     },
+  //     {
+  //       "insert": {
+  //         "image": "https://rwa-trivia-dev-e57fc.firebaseapp.com/v1/question/getQuestionImage/1583139724224?d=1583139724376"
+  //       }
+  //     },
+  //     {
+  //       "insert": "\n"
+  //     }
+  //   ],
+  //   "createdOn": "2020-03-02T09:02:12.594Z",
+  //   "totalQALength": 155,
+  //   "maxTime": 0,
+  //   "reactionsCount": {},
+  //   "is_draft": false,
+  //   "appeared": 0,
+  //   "correct": 0,
+  //   "wrong": 0,
+  //   "stats": {}
+  // };
+
+
   editQuestion: Question;
 
   get answers(): FormArray {
@@ -158,7 +246,13 @@ export class AddQuestionComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     const tagsFA = new FormArray(fcs);
-    this.questionObject = question.questionObject;
+    this.questionObject =  question.questionObject;
+
+    if (question.isRichEditor) {
+      this.quillObject.questionText =  question.questionText ;
+      this.quillObject.jsonObject = question.questionObject;
+    }
+    
     this.questionForm = this.fb.group({
       id: (question.id) ? question.id : '',
       is_draft: false,
@@ -172,7 +266,7 @@ export class AddQuestionComponent implements OnInit, OnDestroy, AfterViewInit {
       ordered: [question.ordered],
       explanation: [question.explanation],
       isRichEditor: [true],
-      questionObject: question.questionObject,
+      // questionObject: {...question.questionObject},
       maxTime: []
     }, { validator: questionFormValidator }
     );
@@ -283,6 +377,21 @@ export class AddQuestionComponent implements OnInit, OnDestroy, AfterViewInit {
         });
       });
     }
+
+    // const questionControl = this.questionForm.get('questionText');
+    // this.subscriptions.push(questionControl.valueChanges.pipe(debounceTime(500)).subscribe(v => this.computeAutoTags()));
+    // this.subscriptions.push(this.answers.valueChanges.pipe(debounceTime(500)).subscribe(v => this.computeAutoTags()));
+
+
+    this.ngZone.run(() => {
+      // setTimeout(() => {
+        // this.createForm(this.editQuestion);
+      // }, 1500);
+   
+    // this.editQuestion = this.editQuestion;
+    // this.question.status = editQuestion.status;
+    this.cd.markForCheck();
+    });
   }
 
   // emit editor load finished event
@@ -299,10 +408,8 @@ export class AddQuestionComponent implements OnInit, OnDestroy, AfterViewInit {
   // Text change in quill editor
   onTextChanged(quillContent) {
 
-    this.questionForm
-      .get("questionText")
-      .patchValue(quillContent.html ? quillContent.html : "");
-    this.questionForm.get("questionObject").patchValue(quillContent.delta);
+    this.quillObject.jsonObject = quillContent.delta;
+    this.quillObject.questionText = quillContent.html;
 
   }
   // Image Upload
@@ -318,10 +425,11 @@ export class AddQuestionComponent implements OnInit, OnDestroy, AfterViewInit {
 
 
   ngOnDestroy() {
-    // this.oWebViewInterface.off('answerIndex');
-    // this.oWebViewInterface.off('imageUrl');
-    // this.oWebViewInterface.off('deltaObject');
-    // this.oWebViewInterface.off('viewType');
+    this.oWebViewInterface.off('imageUrl');
+    this.oWebViewInterface.off('getFormData');
+    this.oWebViewInterface.off('getPreviewQuestion');
+    this.oWebViewInterface.off('editQuestion');
+    this.oWebViewInterface.off('quillConfig');
   }
 
   // Helper functions
@@ -332,7 +440,7 @@ export class AddQuestionComponent implements OnInit, OnDestroy, AfterViewInit {
     if (formValue.id) {
       question.id = formValue.id;
     }
-    // question.is_draft = formValue.is_draft;
+
     question.questionText = formValue.questionText;
     question.answers = formValue.answers;
     question.categoryIds = (formValue.category >= 0) ? [formValue.category] : [];
@@ -343,7 +451,12 @@ export class AddQuestionComponent implements OnInit, OnDestroy, AfterViewInit {
     question.isRichEditor = formValue.isRichEditor;
     question.maxTime = formValue.maxTime;
     question.status = formValue.status ? formValue.status : QuestionStatus.PENDING;
-    question.questionObject = (formValue.questionObject) ? formValue.questionObject : '';
+
+    if (question.isRichEditor) {
+      question.questionText = this.quillObject.questionText;
+      question.questionObject = this.quillObject.jsonObject;
+    }
+
     return question;
   }
 
@@ -364,9 +477,10 @@ export class AddQuestionComponent implements OnInit, OnDestroy, AfterViewInit {
     [...this.autoTags, ...this.enteredTags].forEach(tag => this.tagsArray.push(new FormControl(tag)));
   }
   removeEnteredTag(tag) {
-
     this.enteredTags = this.enteredTags.filter(t => t !== tag);
     this.questionForm.patchValue({ tags: [] });
+    this.setTagsArray();
+    this.oWebViewInterface.emit('isFormValid', !this.questionForm.hasError('tagCountInvalid'));
   }
 
   filter(val: string): string[] {
@@ -376,6 +490,28 @@ export class AddQuestionComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngAfterViewInit(): void {
   
+  }
+
+  computeAutoTags() {
+    const formValue = this.questionForm.value;
+
+    const allTextValues: string[] = [formValue.questionText];
+    formValue.answers.forEach(answer => allTextValues.push(answer.answerText));
+
+    const wordString: string = allTextValues.join(" ");
+
+    const matchingTags: string[] = [];
+    this.tags.forEach(tag => {
+      const patt = new RegExp('\\b(' + tag.replace("+", "\\+") + ')\\b', "ig");
+      if (wordString.match(patt)) {
+        if (this.enteredTags.indexOf(tag) === -1 ) {
+          matchingTags.push(tag);
+        }
+      }
+    });
+    this.autoTags = matchingTags;
+    this.questionForm.patchValue({tags: [] });
+    this.setTagsArray();
   }
 
 
