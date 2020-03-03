@@ -123,7 +123,7 @@ export class GameOver implements OnInit, OnChanges {
               if (!this.game.gameOptions.isBadgeWithCategory) {
                  className = `score${this.correctAnswerClassIndexIncrement}`;
               } else {
-                 className = res.badge && res.badge.name && res.badge.won ? this.applicationSettings.badges[res.badge.name].class : '';
+                 className = res.badge && res.badge.name && res.badge.won ? res.badge.name : '';
               }
               res.className = className;
               res.ansStatus = true;

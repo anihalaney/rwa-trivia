@@ -155,7 +155,7 @@
                           <span class="text-style"
                             [ngClass]="answer.answerText === row.userGivenAnswer  && answer.correct? '':'label'">{{row.userGivenAnswer}}  
                           </span> 
-                          <span [ngClass]="row.className"
+                          <span [ngClass]="!game?.gameOptions?.isBadgeWithCategory ? row.className : (row?.className  && applicationSettings?.badges ? applicationSettings?.badges[row?.className].class : '' )"
                            class="sprite">
                           </span>
                         </p>
