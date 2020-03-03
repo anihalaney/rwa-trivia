@@ -78,7 +78,7 @@
                 </StackLayout>
             </FlexboxLayout>
 
-    <Label *ngIf="myTurn" text="Play Now" textWrap="true" class="active-play-now" [nsRouterLink]="['/game-play', game.gameId]"
+    <Label *ngIf="myTurn && !isHidePlayNow" text="Play Now" textWrap="true" class="active-play-now" [nsRouterLink]="['/game-play', game.gameId]"
         clearHistory="true"></Label>
 
     <Label *ngIf="(game.GameStatus === gameStatus.AVAILABLE_FOR_OPPONENT || game.GameStatus === gameStatus.WAITING_FOR_FRIEND_INVITATION_ACCEPTANCE || game.GameStatus === gameStatus.WAITING_FOR_RANDOM_PLAYER_INVITATION_ACCEPTANCE)"

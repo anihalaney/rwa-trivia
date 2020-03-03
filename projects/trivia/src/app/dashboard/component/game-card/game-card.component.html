@@ -96,13 +96,13 @@
   </div>
 
   <div class="textcenter">
-    <a *ngIf="myTurn" [routerLink]="['/game-play', game.gameId]" class="playnow btn">
+    <a *ngIf="myTurn && !isHidePlayNow" [routerLink]="['/game-play', game.gameId]" class="playnow btn">
       <span>Your Turn</span>
       <p>Play Now</p>
     </a>
   </div>
 
-  <div *ngIf="myTurn" class="opponent">
+  <div *ngIf="myTurn" [class.m-t-44]="isHidePlayNow" class="opponent">
     <p class="dark">{{remainingHours }}:{{remainingMinutes}} hrs</p>
     <p class="ellipsis">remaining to play your turn</p>
   </div>

@@ -40,6 +40,7 @@ export class GameCardComponent implements OnInit, OnChanges, OnDestroy {
   subscriptions = [];
   userCardType = userCardType;
   categoryList = [];
+  isHidePlayNow = false;
   constructor(public store: Store<AppState>, public utils: Utils, private cd: ChangeDetectorRef) {
     this.gameStatus = GameStatus;
     this.user$ = this.store.select(appState.coreState).pipe(select(s => s.user));
@@ -110,14 +111,18 @@ export class GameCardComponent implements OnInit, OnChanges, OnDestroy {
         const diff = this.utils.getTimeDifference(this.game.turnAt);
         const hour = Math.floor(diff / (CalenderConstants.HOURS_CALCULATIONS));
         const minute = Math.floor(diff % (CalenderConstants.HOURS_CALCULATIONS) / (CalenderConstants.MINUTE_CALCULATIONS));
-
-        if (minute > 0) {
-          this.remainingHours = this.utils.convertIntoDoubleDigit(31 - hour);
-          this.remainingMinutes = this.utils.convertIntoDoubleDigit(60 - minute);
-
+        if (hour < 32 ) {
+          if (minute > 0) {
+            this.remainingHours = this.utils.convertIntoDoubleDigit(31 - hour);
+            this.remainingMinutes = this.utils.convertIntoDoubleDigit(60 - minute);
+          } else {
+            this.remainingHours = this.utils.convertIntoDoubleDigit(32 - hour);
+            this.remainingMinutes = this.utils.convertIntoDoubleDigit(0);
+          }
         } else {
-          this.remainingHours = this.utils.convertIntoDoubleDigit(32 - hour);
+          this.remainingHours = this.utils.convertIntoDoubleDigit(0);
           this.remainingMinutes = this.utils.convertIntoDoubleDigit(0);
+          this.isHidePlayNow = true;
         }
       }
       this.cd.markForCheck();
