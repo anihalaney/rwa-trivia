@@ -1,7 +1,7 @@
 <div class="pageinner">
   <div class="row">
     <div class="pageheading col-md-6 col-xs-12 col-md-12">
-      <span class="hidden-xs pull-left">Dashboard</span>
+        <span class="hidden-xs pull-left">Dashboard</span>
 
       <div *ngIf="applicationSettings?.tokens?.enable && user && account" style="display: inline-block;"
         class="points pull-left m-l-20">
@@ -19,12 +19,12 @@
 
     </div>
 
-    <!-- <div class="lives" *ngIf="user && account && account.lives >=0 && isLivesEnable" > <span class="lives-text">{{account.lives}}</span> </div> -->
+    <!-- <div class="lives" *ngIf="user && account && account?.lives >=0 && isLivesEnable" > <span class="lives-text">{{account && account?.lives}}</span> </div> -->
     <div class="col-md-6 col-xs-12 col-md-12 align-right play-game-div-container">
-      <div *ngIf="user && account && account.lives >=0 && isLivesEnable" class="flex-div">
-        <img class="img-24" src="assets/images/life.png" alt="" />
+      <div *ngIf="user && account && account?.lives >=0 && isLivesEnable" class="flex-div">
+        <span style="font-size: 22px;" class="icon icon-life-icon"></span>
         <div  class="lives-text lives-div">
-          <span> {{ (account.lives / 10 < 1) && (account.lives / 10 > 0)  ? '0' : '' }}{{account.lives}} </span>
+          <span> {{ (account && account?.lives / 10 < 1) && (account && account?.lives / 10 > 0)  ? '0' : '' }}{{account && account?.lives}} </span>
         </div>
       </div>
       <div class="flex-div play-game-btn-container">
@@ -70,7 +70,7 @@
       <ul class="row" *ngIf="showGames">
         <li *ngFor="let game of activeGames | slice:gameSliceStartIndex:gameSliceLastIndex"
           class="col-lg-3 col-md-4 col-sm-12 col-xs-12 ">
-          <game-card [game]="game"></game-card>
+          <game-card [game]="game" [categoryDict]="categoryDict" ></game-card>
         </li>
         <ng-container *ngIf="activeGames.length > 0">
           <li *ngFor="let number of numbers" class="col-lg-3 col-md-4 col-sm-12 col-xs-12 hidden-xs">

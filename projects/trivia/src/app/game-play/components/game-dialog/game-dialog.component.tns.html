@@ -5,43 +5,43 @@
             <AbsoluteLayout verticalAlignment="center" horizontalAlignment="center">
                 <GridLayout class="circle-loader" width="150" height="150"> </GridLayout>
 
-                <Image *ngIf=" correctAnswerCount  >= 1" src="~/assets/images/score1.png" height="30" width="30"
+                <Image *ngIf=" correctAnswerCount  >= 1" src="res://badge1" height="30" width="30"
                     marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50" top="10"
                     left="80"></Image>
 
-                <Image *ngIf=" correctAnswerCount  < 1" src="~/assets/images/score0.png" height="30" width="30"
+                <Image *ngIf=" correctAnswerCount  < 1" src="res://badge1inactive" height="30" width="30"
                     marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50" top="10"
                     left="80"></Image>
 
-                <Image *ngIf="correctAnswerCount >= 2" src="~/assets/images/score2.png" height="30" width="30"
+                <Image *ngIf="correctAnswerCount >= 2" src="res://badge2" height="30" width="30"
                     marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50" top="50"
                     left="15"></Image>
 
-                <Image *ngIf="correctAnswerCount < 2" src="~/assets/images/score0.png" height="30" width="30"
+                <Image *ngIf="correctAnswerCount < 2" src="res://badge2inactive" height="30" width="30"
                     marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50" top="50"
                     left="15"></Image>
 
-                <Image *ngIf="correctAnswerCount >= 5" src="~/assets/images/score5.png" height="30" width="30"
-                    marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50" top="50"
-                    left="150"></Image>
-
-                <Image *ngIf="correctAnswerCount < 5" src="~/assets/images/score0.png" height="30" width="30"
+                <Image *ngIf="correctAnswerCount >= 5" src="res://badge5" height="30" width="30"
                     marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50" top="50"
                     left="150"></Image>
 
-                <Image *ngIf="correctAnswerCount >= 3" src="~/assets/images/score3.png" height="30" width="30"
+                <Image *ngIf="correctAnswerCount < 5" src="res://badge5inactive" height="30" width="30"
+                    marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50" top="50"
+                    left="150"></Image>
+
+                <Image *ngIf="correctAnswerCount >= 3" src="res://badge3" height="30" width="30"
                     marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50" top="120"
                     left="15"></Image>
 
-                <Image *ngIf="correctAnswerCount < 3" src="~/assets/images/score0.png" height="30" width="30"
+                <Image *ngIf="correctAnswerCount < 3" src="res://badge3inactive" height="30" width="30"
                     marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50" top="120"
                     left="15"></Image>
 
-                <Image *ngIf="correctAnswerCount >= 4" src="~/assets/images/score4.png" height="30" width="30"
+                <Image *ngIf="correctAnswerCount >= 4" src="res://badge4" height="30" width="30"
                     marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50" top="120"
                     left="145"></Image>
 
-                <Image *ngIf="correctAnswerCount < 4" src="~/assets/images/score0.png" height="30" width="30"
+                <Image *ngIf="correctAnswerCount < 4" src="res://badge4inactive" height="30" width="30"
                     marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50" top="120"
                     left="145"></Image>
 
@@ -52,36 +52,40 @@
         </StackLayout>
     </StackLayout>
     <StackLayout *ngIf="showBadge && !gameOver" orientation="vertical" verticalAlignment="center" height="100%">
-        <Image src="~/assets/images/score{{correctAnswerCount+1}}.png" height="70" width="70" marginLeft="2"
+        <Image src="res://badge{{correctAnswerCount+1}}" height="70" width="70" marginLeft="2"
             verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"></Image>
 
         <Label text="Give the right answer & with this badge" class='text-center' horizontalAlignment="center"
             verticalAlignment="center" textWrap="true"></Label>
     </StackLayout>
 
-    <game-continue *ngIf="showContinueScreen && !gameOver" class="overlay" [userDict]="userDict" [game]="game"
+    <game-continue *ngIf="showContinueDialogueForThreeConsecutiveAnswers || (showContinueScreen && !gameOver)" class="overlay" [applicationSettings]="applicationSettings" [userDict]="userDict" [game]="game"
         [categoryName]="categoryName" [correctCount]="correctAnswerCount" [noOfQuestions]="questionIndex"
+        [otherPlayer]="otherPlayer"
+        [turnFlag]="turnFlag" [threeConsecutiveAnswer]="threeConsecutiveAnswer"
         [totalRound]="totalRound" (continueButtonClicked)="continueButtonClicked()">
     </game-continue>
 
     <StackLayout *ngIf="showWinBadge && !gameOver" orientation="vertical" verticalAlignment="center" height="100%">
-        <Image *ngIf="correctAnswerCount > 0" src="~/assets/images/score{{correctAnswerCount}}.png" height="70"
+        <Image *ngIf="correctAnswerCount > 0" src="res://badge{{correctAnswerCount}}" height="70"
             width="70" marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"></Image>
         <Label text="You Earned" class='text-center' textWrap="true" horizontalAlignment="center"
             verticalAlignment="center"></Label>
     </StackLayout>
 
-    <game-question *ngIf="currentQuestion && !showLoader && !showBadge && !showWinBadge && !showContinueScreen"
-        [categoryName]="categoryName" [question]="currentQuestion" [questionIndex]="questionIndex" [timer]="timer"
+    <game-question *ngIf="showCurrentQuestion && !showLoader && !showBadge && !showWinBadge && !showContinueScreen && !showContinueDialogueForThreeConsecutiveAnswers"
+        [categoryName]="categoryName" [gameOver]="gameOver"  [question]="currentQuestion" [questionIndex]="questionIndex" [timer]="timer"
         [MAX_TIME_IN_SECONDS]="MAX_TIME_IN_SECONDS" [continueNext]="continueNext" [correctCount]="correctAnswerCount"
         [noOfQuestions]="questionIndex" [showContinueBtn]="showContinueBtn" [otherPlayer]="otherPlayer"
+        [showCurrentQuestion]="showCurrentQuestion" (gameOverButtonClicked)="gameOverButtonClicked($event)" 
         (answerClicked)="answerClicked($event)" (okClick)="okClick($event)" (continueClicked)="continueClicked($event)"
          [userDict]="userDict" [totalRound]="totalRound"
-        [turnFlag]="turnFlag" [threeConsecutiveAnswer]="threeConsecutiveAnswer" [user]="user"
+        [turnFlag]="turnFlag" [threeConsecutiveAnswer]="threeConsecutiveAnswer"  [user]="user"
+        (btnClickedAfterThreeConsecutiveAnswers)="btnClickedAfterThreeConsecutiveAnswers($event)"
         [questionRound]="game.round" [applicationSettings]="applicationSettings" [playerMode]="playerMode"
         >
     </game-question>
-    <game-over *ngIf="gameOver && !showContinueScreen" class="overlay" [userDict]="userDict" [game]="game"
+    <game-over *ngIf="gameOver && !showCurrentQuestion && !showContinueScreen && !currentQuestion" class="overlay" [userDict]="userDict" [game]="game"
         [categoryName]="categoryName" [correctCount]="correctAnswerCount" [noOfQuestions]="questionIndex"
         [totalRound]="totalRound" (gameOverContinueClicked)="gameOverContinueClicked()"
         >

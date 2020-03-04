@@ -113,8 +113,10 @@ export class UserController {
                 }
             }
 
-            user.bulkUploadPermissionStatus =
-                (user.bulkUploadPermissionStatus) ? user.bulkUploadPermissionStatus : profileSettingsConstants.NONE;
+            const geoPoint = await UserService.getGeoCode(user.geoPoint);
+            if (geoPoint) {
+                user.geoPoint = geoPoint;
+            }
 
             delete user[UserConstants.ROLES];
 

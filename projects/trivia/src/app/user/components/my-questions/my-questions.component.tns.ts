@@ -10,6 +10,7 @@ import { Page } from 'tns-core-modules/ui/page';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { FirebaseScreenNameConstants } from 'shared-library/shared/model';
 import { Utils } from 'shared-library/core/services';
+import * as Platform from "tns-core-modules/platform";
 
 @Component({
   selector: 'my-questions',
@@ -28,6 +29,11 @@ export class MyQuestionsComponent extends MyQuestions implements OnDestroy, OnIn
   selectedQuestion: Question;
   tabIndex = 0;
   renderView = false;
+  tab = 'published';
+  platform = Platform;
+
+
+
 
   constructor(public store: Store<AppState>,
     public questionActions: QuestionActions,
@@ -48,8 +54,12 @@ export class MyQuestionsComponent extends MyQuestions implements OnDestroy, OnIn
       this.cd.markForCheck();
     }));
     this.page.on('loaded', () => { this.renderView = true; this.cd.markForCheck(); });
+    // this.page.on('navigatedFrom', () => this.ngOnDestroy());
   }
 
+  onSelectTab(args) {
+    this.tab = args;
+  }
 
   // navigateToSubmitQuestion() {
   //   this.routerExtension.navigate(['/user/my/questions/add']);
@@ -73,7 +83,9 @@ export class MyQuestionsComponent extends MyQuestions implements OnDestroy, OnIn
   hideQuestion(displayEditQuestion: boolean) {
     this.displayEditQuestion = false;
     this.page.actionBarHidden = false;
+    this.cd.markForCheck();
   }
+
 
   getDisplayStatus(status: number): string {
     return QuestionStatus[status];

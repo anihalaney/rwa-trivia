@@ -15,7 +15,7 @@ import {
   Utils,
   CategoryService, TagService, QuestionService,
   GameService, BulkService, UserService, SocialService, StatsService,
-  WindowRef, ApplicationSettingsService, AchievementService} from './services';
+  WindowRef, ApplicationSettingsService, AchievementService, TopicService} from './services';
 
 import { AuthenticationProvider, AuthInterceptor } from './auth';
 
@@ -23,7 +23,7 @@ import { AuthGuard, BulkLoadGuard, CategoriesResolver, TagsResolver,
     AdminLoadGuard } from './route-guards';
 
 import {
-  UserActions, CategoryActions, TagActions, QuestionActions, UIStateActions, GameActions,
+  UserActions, CategoryActions, TopicActions, TagActions, QuestionActions, UIStateActions, GameActions,
   ApplicationSettingsActions
 } from './store/actions';
 import { effects } from './store/effects';
@@ -71,13 +71,13 @@ export const firebaseConfig: FirebaseAppConfig = CONFIG.firebaseConfig;
     Utils, AuthenticationProvider,
     CategoryService, TagService, QuestionService,
     GameService, BulkService, UserService, SocialService, StatsService,
-    WindowRef, ApplicationSettingsService, AchievementService,
+    WindowRef, ApplicationSettingsService, AchievementService, TopicService,
 
     //route guards
     AuthGuard, BulkLoadGuard, CategoriesResolver, TagsResolver, AdminLoadGuard,
 
     //Actions
-    UserActions, CategoryActions, TagActions, QuestionActions,
+    UserActions, CategoryActions, TopicActions, TagActions, QuestionActions,
     UIStateActions, GameActions, ApplicationSettingsActions,
 
     WebDbService,

@@ -24,6 +24,11 @@ export class GameQuestion {
   @Input() applicationSettings: ApplicationSettings;
   @Input() user: User;
   @Input() playerMode: any;
+  @Input() showCurrentQuestion: boolean;
+  @Output() gameOverButtonClicked = new EventEmitter();
+  @Input() gameOver: boolean;
+  @Output() btnClickedAfterThreeConsecutiveAnswers = new EventEmitter();
+  showLoader = false;
 
   answeredIndex: number;
   correctAnswerIndex: number;
@@ -53,6 +58,13 @@ export class GameQuestion {
   disableQuestions(correctAnswerIndex: number) {
     this.doPlay = false;
     this.correctAnswerIndex = correctAnswerIndex;
+  }
+
+  continueButtonClicked(event) {
+    if (this.showContinueBtn) {
+      this.continueClicked.emit(event);
+    }
+      this.showLoader = true;
   }
 
   fillTimer() { }

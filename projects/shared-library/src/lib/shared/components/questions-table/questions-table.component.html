@@ -62,9 +62,11 @@
                     class="status-btn">
                     <button class="view-reason-btn" type="button" (click)='showReason(row,i)'>View Reason</button>
                   </div>
+                  <div> <label  *ngIf="row.is_draft" ><b>Draft</b></label></div>
                   <div *ngIf="getDisplayStatus(row.status)==='REQUIRED_CHANGE' || (row.is_draft && (getDisplayStatus(row.status)==='REQUIRED_CHANGE' || getDisplayStatus(row.status)==='PENDING')) || showButtons" class="status-btn">
-                    <button class="edit-btn" type="button" (click)="editQuestions(row)">Edit it</button>
+                    <button class="edit-btn" type="button" (click)="editQuestions(row)">Edit</button>
                   </div>
+              
                 </div>
               </div>
             </li>
@@ -83,7 +85,7 @@
                 <div class="question-text ">Category :</div>
                 <div class="answer-text">
                  <span *ngFor="let id of row?.categoryIds">
-                    {{categoriesObs && categoriesObs[id] && categoriesObs[id]?.categoryName ? categoriesObs[id]?.categoryName : ''}}
+                    {{categoryObj && categoryObj[id] ? categoryObj[id] : ''}}
                   </span>
                 </div>
               </div>
@@ -133,31 +135,31 @@
             <li *ngIf="getDisplayStatus(row.status)==='APPROVED'">
                 <div class="question-text ">Appeared :</div>
                 <div class="answer-text">
-                  {{row.appeared ? row.appeared: 0 }}
+                  {{row.stats.appeared ? row.stats.appeared: 0 }}
                 </div>
             </li>
             <li *ngIf="getDisplayStatus(row.status)==='APPROVED'">
                 <div class="question-text ">Likes :</div>
                 <div class="answer-text">
-                  {{row.reactionsCount && row.reactionsCount.like ? row.reactionsCount.like: 0 }}
+                  {{row.stats.reactionsCount && row.stats.reactionsCount.like ? row.stats.reactionsCount.like: 0 }}
                 </div>
             </li>
             <li *ngIf="getDisplayStatus(row.status)==='APPROVED'">
                 <div class="question-text ">Dislikes :</div>
                 <div class="answer-text">
-                  {{row.reactionsCount && row.reactionsCount.dislike ? row.reactionsCount.dislike: 0 }}
+                  {{row.stats.reactionsCount && row.stats.reactionsCount.dislike ? row.stats.reactionsCount.dislike: 0 }}
                 </div>
             </li>
             <li *ngIf="getDisplayStatus(row.status)==='APPROVED'">
                 <div class="question-text ">Correct :</div>
                 <div class="answer-text">
-                  {{row.correct ? row.correct: 0 }}
+                  {{row.stats.correct ? row.stats.correct: 0 }}
                 </div>
             </li>
             <li *ngIf="getDisplayStatus(row.status)==='APPROVED'">
                 <div class="question-text ">Wrong :</div>
                 <div class="answer-text">
-                  {{row.wrong ? row.wrong: 0 }}
+                  {{row.stats.wrong ? row.stats.wrong: 0 }}
                 </div>
             </li>
 

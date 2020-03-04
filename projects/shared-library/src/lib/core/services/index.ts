@@ -1,5 +1,6 @@
 import { Utils } from './utils';
 import { CategoryService } from './category.service';
+import { TopicService } from './topic.service';
 import { TagService } from './tag.service';
 import { QuestionService } from './question.service';
 import { GameService } from './game.service';
@@ -14,6 +15,7 @@ import { AchievementService } from './achievement.service';
 export {
     Utils,
     CategoryService,
+    TopicService,
     TagService,
     QuestionService,
     GameService,
@@ -29,6 +31,7 @@ export {
 export default [
     Utils,
     CategoryService,
+    TopicService,
     TagService,
     QuestionService,
     GameService,

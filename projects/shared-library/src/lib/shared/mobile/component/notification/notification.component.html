@@ -1,18 +1,15 @@
-<ns-action-bar title="Notifications" class="Roboto-Regular" [hideHomeIcon]="'true'"
+<ns-action-bar title="Notifications" class="SF-Pro-Regular" [hideHomeIcon]="'true'"
     [isNotification]="(notifications.length > 0 ? true : false)">
 </ns-action-bar>
 <ScrollView>
-    <StackLayout class="profile-settings Roboto-Regular" marginTop="10">
-        <StackLayout *ngFor="let data of notifications">
-            <StackLayout *ngIf="!data.created_uid"
-                margin="0 10 10 10" iosOverflowSafeArea="false">
+    <FlexboxLayout flexDirection="column" class="profile-settings SF-Pro-Regular" marginTop="10">
+        <ng-container *ngFor="let data of notifications">
+            <FlexboxLayout *ngIf="!data.created_uid" margin="0 10 10 10" iosOverflowSafeArea="false">
                 <game-invite [game]="data"></game-invite>
-            </StackLayout>
-            <StackLayout *ngIf="data.created_uid" 
-                margin="0 10 10 10" iosOverflowSafeArea="false">
+            </FlexboxLayout>
+            <FlexboxLayout *ngIf="data.created_uid" margin="0 10 10 10" iosOverflowSafeArea="false">
                 <app-friend-invite [invitation]="data" [user]="user"></app-friend-invite>
-            </StackLayout>
-        </StackLayout>
-
-    </StackLayout>
+            </FlexboxLayout>
+        </ng-container>
+    </FlexboxLayout>
 </ScrollView>

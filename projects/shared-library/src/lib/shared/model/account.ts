@@ -8,8 +8,10 @@ export class AccountBase {
     id?: string;
     bits?: number;
     bytes?: number;
-    isFirstGame?: boolean;
+    signUpQuestionAnswered?: boolean;
     firstQuestionBitsAdded?: number;
+    lastGamePlayedNotification?: boolean;
+    lastGamePlayed?: number;
 }
 
 export class Account extends AccountBase {

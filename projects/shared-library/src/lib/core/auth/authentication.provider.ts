@@ -4,7 +4,7 @@ import { AngularFireDatabase } from '@angular/fire/database';
 import { Store } from '@ngrx/store';
 import { defer, from, Observable, of, throwError } from 'rxjs';
 import { filter, map, mapTo, share, take, tap } from 'rxjs/operators';
-import { User, UserStatusConstants } from '../../shared/model';
+import { User } from '../../shared/model';
 import { CoreState, coreState } from '../store';
 import { UIStateActions, UserActions } from '../store/actions';
 import { FirebaseAuthService } from './firebase-auth.service';
@@ -39,7 +39,16 @@ export class AuthenticationProvider {
 
 
     this.refreshTokenObserver = defer(() => {
-      return from(this.generateToken(true));
+      return from(this.generateToken(true)).pipe(tap((tokenResponse) => {
+        if (this.user) {
+          this.user.idToken = tokenResponse;
+          this.store.dispatch(this.userActions.loginSuccess(this.user));
+        }
+        return tokenResponse;
+      },
+        (err) => {
+          return throwError(err);
+        }));
     }).pipe(share());
 
 
@@ -80,14 +89,7 @@ export class AuthenticationProvider {
 
 
   refreshToken(): Observable<any> {
-    return this.refreshTokenObserver.pipe(tap((tokenResponse) => {
-      this.user.idToken = tokenResponse;
-      this.store.dispatch(this.userActions.loginSuccess(this.user));
-      return tokenResponse;
-    },
-      (err) => {
-        return throwError(err);
-      }));
+    return this.refreshTokenObserver;
   }
 
 
@@ -99,19 +101,19 @@ export class AuthenticationProvider {
 
   async updatePassword(email: string, currentPassword: string, newPassword: string) {
     await this.firebaseAuthService.updatePassword(email, currentPassword, newPassword);
-  }
+}
 
-  logout() {
-    this.firebaseAuthService.signOut();
-  }
+logout() {
+  this.firebaseAuthService.signOut();
+}
 
-  get isAuthenticated(): boolean {
-    let user: User;
-    this.store.select(coreState).pipe(take(1)).subscribe(s => user = s.user);
-    if (user) {
-      return true;
-    }
-    return false;
+get isAuthenticated(): boolean {
+  let user: User;
+  this.store.select(coreState).pipe(take(1)).subscribe(s => user = s.user);
+  if (user) {
+    return true;
   }
+  return false;
+}
 
 }

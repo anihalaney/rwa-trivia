@@ -69,7 +69,7 @@ export class QuestionsTableComponent implements OnInit, OnChanges, AfterViewInit
 
 
   viewReasonArray = [];
-
+  categoryObj = {};
   constructor(
     private fb: FormBuilder,
     private cd: ChangeDetectorRef) {
@@ -103,7 +103,8 @@ export class QuestionsTableComponent implements OnInit, OnChanges, AfterViewInit
         this.isDraft !== true && changes.questions.previousValue) {
         changes.questions.currentValue.map(data => {
           const index = changes.questions.previousValue.findIndex(q => q.id === data.id);
-          if ( index >= 0 && changes.questions.previousValue[index].status !==  data.status) {
+          if ( index >= 0 && ( changes.questions.previousValue[index].status !==  data.status ||
+            changes.questions.previousValue[index].is_draft !==  data.is_draft ) ) {
           (this.clientSidePagination) ? this.setClientSidePaginationDataSource(this.questions) : this.questionsSubject.next(this.questions);
           }
         });
@@ -111,6 +112,14 @@ export class QuestionsTableComponent implements OnInit, OnChanges, AfterViewInit
       (changes['questions'].previousValue) ? this.setPagination() : '';
     }
 
+    if (changes['categoryDictionary'] && changes['categoryDictionary'].currentValue !== changes['categoryDictionary'].previousValue &&
+        this.categoryDictionary ) {
+        for (const key in this.categoryDictionary) {
+          if (this.categoryDictionary.hasOwnProperty(key)) {
+            this.categoryObj[this.categoryDictionary[key].id] = this.categoryDictionary[key].categoryName;
+          }
+        }
+    }
 
   }
 

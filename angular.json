@@ -36,6 +36,7 @@
               "projects/trivia/src/styles/light.theme.scss",
               "projects/trivia/src/styles/dark.theme.scss",
               "projects/trivia/src/styles/mathquill.scss",
+              "projects/trivia/src/styles/icon-moon.scss",
               "./node_modules/firebaseui/dist/firebaseui.css",
               "./node_modules/ng-quill-tex/assets/theme.css",
               "./node_modules/mathquill/formula/formula.css",
@@ -89,7 +90,12 @@
                 }
               ],
               "scripts": [
-                "projects/trivia/src/scripts/google-analytics.js"
+                "projects/trivia/src/scripts/google-analytics.js",
+                "./node_modules/firebaseui/dist/firebaseui.js",
+                "projects/trivia/src/scripts/google-analytics.js",
+                "./node_modules/jquery/dist/jquery.min.js",
+                "./node_modules/mathquill/build/mathquill.min.js",
+                "./node_modules/highlightjs/highlight.pack.min.js"
               ],
               "optimization": true,
               "outputHashing": "all",
@@ -556,7 +562,7 @@
               "projects/trivia-editor/src/assets"
             ],
             "styles": [
-              "projects/trivia-editor/src/styles.css",
+              "projects/trivia-editor/src/styles.scss",
               "./node_modules/ng-quill-tex/assets/theme.css",
               "./node_modules/mathquill/formula/formula.css",
               "./node_modules/katex/dist/katex.css",

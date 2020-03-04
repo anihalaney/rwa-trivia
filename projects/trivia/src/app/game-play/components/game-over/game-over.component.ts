@@ -184,7 +184,6 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
   reMatchGame() {
     if (this.applicationSettings.lives.enable && this.account.lives === 0) {
       this.snackBar.open(this.liveErrorMsg, '', {
-        viewContainerRef: this.viewContainerRef,
         duration: 2000,
       });
     } else {

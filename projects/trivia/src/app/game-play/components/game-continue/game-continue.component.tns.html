@@ -1,103 +1,111 @@
-<StackLayout height="100%" backgroundColor="#f1f5f7">
+<GridLayout class="mobile result-container">
     <ScrollView>
-        <CardView class="cardStyle Roboto-Regular" android:elevation="20" ios:elevation="20" radius="1" backgroundColor="white"
-            margin="8">
-            <StackLayout class="game-continue">
-                <StackLayout (onloaded)="stackLoaded($event)" backgroundColor="#ffffff" marginTop="30">
-                    <StackLayout *ngIf="game.gameOptions?.playerMode == PlayerMode.Single" marginBottom="10">
-                        <app-user-card [userId]="user.userId" [isGamePlay]=true [type]="userCardType.USER_IMAGE_NAME_VERTICAL"> </app-user-card>
-                        <Label class="roundandscore" horizontalAlignment="center" text="Score {{game.stats[user.userId]?.score}} / {{game.round}}"
-                            textWrap="true"></Label>
-                        <StackLayout class="earnedsymbolsStack" orientation="horizontal" horizontalAlignment="center">
-                            <Image *ngIf="game.stats[user.userId]?.score>=1" src="~/assets/images/score1.png" height="30"
-                                width="30" marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20"
-                                borderRadius="50" top="10" left="80"></Image>
-                            <Image *ngIf="game.stats[user.userId]?.score>=2" src="~/assets/images/score2.png" height="30"
-                                width="30" marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20"
-                                borderRadius="50" top="10" left="80"></Image>
-                            <Image *ngIf="game.stats[user.userId]?.score>=3" src="~/assets/images/score3.png" height="30"
-                                width="30" marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20"
-                                borderRadius="50" top="10" left="80"></Image>
-                            <Image *ngIf="game.stats[user.userId]?.score>=4" src="~/assets/images/score4.png" height="30"
-                                width="30" marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20"
-                                borderRadius="50" top="10" left="80"></Image>
-                            <Image *ngIf="game.stats[user.userId]?.score>=5" src="~/assets/images/score5.png" height="30"
-                                width="30" marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20"
-                                borderRadius="50" top="10" left="80"></Image>
-                        </StackLayout>
+        <StackLayout>
+            <FlexboxLayout class="game-result">
+                <Label text="Round result" class="game-result-title"></Label>
+                <GridLayout rows="auto" columns="auto" width="100%" marginTop="7">
+                    <Label row="0" col="0" text="{{game.round}}/{{totalRound}}" class="main-title"></Label>
+                    <StackLayout android:backgroundColor="#f1f1f1" row="0" col="0" horizontalAlignment="left"
+                        class="game-round-info-container-grey">
                     </StackLayout>
+                    <StackLayout row="0" col="0" horizontalAlignment="left" class="game-round-info-container"
+                        width="{{game.round/totalRound > 0 ? ((game.round/totalRound) * 100) : 0}}%">
+                    </StackLayout>
+                </GridLayout>
+            </FlexboxLayout>
 
-                    <GridLayout rows="*" columns="*,auto,*" *ngIf="game.gameOptions.playerMode == PlayerMode.Opponent">
-                        <StackLayout row="0" col="0" horizontalAlignment="center" width="120">
-                            <app-user-card [userId]="user.userId" [isGamePlay]=true [type]="userCardType.USER_IMAGE_NAME_VERTICAL"> </app-user-card>
+            <render-box [setBackgroundColor]="'#f7f7f7'">
 
-                            <StackLayout textWrap="true">
-                                <Label class="roundandscore tagging" horizontalAlignment="center" text="Score {{game.stats[user.userId]?.score}}"
-                                    textWrap="true"> </Label>
-                            </StackLayout>
-                            <StackLayout class="earnedsymbolsStack" orientation="horizontal">
-                                <Image *ngIf="game.stats[user.userId]?.score>=1" src="~/assets/images/score1.png"
-                                    height="36" width="36" marginLeft="2" verticalAlignment="center" marginLeft="2"
-                                    padding="20" borderRadius="50" top="10" left="80"></Image>
-                                <Image *ngIf="game.stats[user.userId]?.score>=2" src="~/assets/images/score2.png"
-                                    height="36" width="36" marginLeft="2" verticalAlignment="center" marginLeft="2"
-                                    padding="20" borderRadius="50" top="10" left="80"></Image>
-                                <Image *ngIf="game.stats[user.userId]?.score>=3" src="~/assets/images/score3.png"
-                                    height="36" width="36" marginLeft="2" verticalAlignment="center" marginLeft="2"
-                                    padding="20" borderRadius="50" top="10" left="80"></Image>
-                            </StackLayout>
-                            <StackLayout class="earnedsymbolsStack" orientation="horizontal">
-                                <Image *ngIf="game.stats[user.userId]?.score>=4" src="~/assets/images/score4.png"
-                                    height="36" width="36" marginLeft="2" verticalAlignment="center" marginLeft="2"
-                                    padding="20" borderRadius="50" top="10" left="80"></Image>
-                                <Image *ngIf="game.stats[user.userId]?.score>=5" src="~/assets/images/score5.png"
-                                    height="36" width="36" marginLeft="2" verticalAlignment="center" marginLeft="2"
-                                    padding="20" borderRadius="50" top="10" left="80"></Image>
-                            </StackLayout>
+                <GridLayout marginTop="30" (onloaded)="stackLoaded($event)" rows="*,*,*,*,*,*" cols="*"
+                    class="game-continue">
+                    <StackLayout row="0" col="0" *ngIf="game.gameOptions?.playerMode == PlayerMode.Single"
+                        marginBottom="10">
+                        <app-user-card [userId]="user.userId" [isGamePlay]=true
+                            [type]="userCardType.USER_IMAGE_NAME_VERTICAL"> </app-user-card>
+                        <Label *ngIf="game.stats[user.userId]?.score>=1" class="roundandscore"
+                            horizontalAlignment="center"
+                            text="You have collected {{game.stats[user.userId]?.score}} {{game.stats[user.userId]?.score>1 ? 'badges':'badge'}} "
+                            textWrap="true"></Label>
+                        <FlexboxLayout *ngIf="game.stats[user.userId]?.score>=1" class="earnedsymbolsStack"
+                            orientation="horizontal" horizontalAlignment="center">
+                            <Image *ngIf="game.stats[user.userId]?.score>=1" src="res://badge1"></Image>
+                            <Image *ngIf="game.stats[user.userId]?.score>=2" src="res://badge2"></Image>
+                            <Image *ngIf="game.stats[user.userId]?.score>=3" src="res://badge3"></Image>
+                            <Image *ngIf="game.stats[user.userId]?.score>=4" src="res://badge4"></Image>
+                            <Image *ngIf="game.stats[user.userId]?.score>=5" src="res://badge5"></Image>
+                        </FlexboxLayout>
+                    </StackLayout>
+                    <GridLayout row="1" col="0" rows="*" columns="*,auto,*"
+                        *ngIf="game.gameOptions.playerMode == PlayerMode.Opponent">
+                        <StackLayout row="0" col="0" horizontalAlignment="center">
+                            <app-user-card [userId]="user.userId" [isGamePlay]=true
+                                [type]="userCardType.USER_IMAGE_NAME_VERTICAL"> </app-user-card>
+                            <FlexboxLayout android:backgroundColor="#f1f1f1" class="background-score">
+                                <Image
+                                    src="{{game.stats[user.userId]?.score>=1 ? 'res://badge1' : 'res://badge1inactive'}}">
+                                </Image>
+                                <Image
+                                    src="{{game.stats[user.userId]?.score>=2 ? 'res://badge2' : 'res://badge2inactive'}}">
+                                </Image>
+                                <Image
+                                    src="{{game.stats[user.userId]?.score>=3 ? 'res://badge3' : 'res://badge3inactive'}}">
+                                </Image>
+                                <Image
+                                    src="{{game.stats[user.userId]?.score>=4 ? 'res://badge4' : 'res://badge4inactive'}}">
+                                </Image>
+                                <Image
+                                    src="{{game.stats[user.userId]?.score>=5 ? 'res://badge5' : 'res://badge5inactive'}}">
+                                </Image>
+                            </FlexboxLayout>
                         </StackLayout>
 
-                        <Label row="0" col="1" text="V/S" class="vs" verticalAlignment="center" textWrap="true">
+                        <Label row="0" col="1" text="VS" class="vs" textWrap="true">
                         </Label>
 
-                        <StackLayout row="0" col="2" horizontalAlignment="center" width="120">
-                            <app-user-card [userId]="otherUserId" [isGamePlay]=true [type]="userCardType.USER_IMAGE_NAME_VERTICAL"> </app-user-card>
-
-                            <StackLayout>
-                                <Label class="roundandscore tagging" horizontalAlignment="center" text="Score {{game.stats[otherUserId]?.score}}"
-                                    textWrap="true"> </Label>
-                            </StackLayout>
-                            <StackLayout class="earnedsymbolsStack" orientation="horizontal">
-                                <Image *ngIf="game.stats[otherUserId]?.score>=1" src="~/assets/images/score1.png"
-                                    height="36" width="36" marginLeft="2" verticalAlignment="center" marginLeft="2"
-                                    padding="20" borderRadius="50" top="10" left="80"></Image>
-                                <Image *ngIf="game.stats[otherUserId]?.score>=2" src="~/assets/images/score2.png"
-                                    height="36" width="36" marginLeft="2" verticalAlignment="center" marginLeft="2"
-                                    padding="20" borderRadius="50" top="10" left="80"></Image>
-                                <Image *ngIf="game.stats[otherUserId]?.score>=3" src="~/assets/images/score3.png"
-                                    height="36" width="36" marginLeft="2" verticalAlignment="center" marginLeft="2"
-                                    padding="20" borderRadius="50" top="10" left="80"></Image>
-                            </StackLayout>
-                            <StackLayout class="earnedsymbolsStack" orientation="horizontal">
-                                <Image *ngIf="game.stats[otherUserId]?.score>=4" src="~/assets/images/score4.png"
-                                    height="36" width="36" marginLeft="2" verticalAlignment="center" marginLeft="2"
-                                    padding="20" borderRadius="50" top="10" left="80"></Image>
-                                <Image *ngIf="game.stats[otherUserId]?.score>=5" src="~/assets/images/score5.png"
-                                    height="36" width="36" marginLeft="2" verticalAlignment="center" marginLeft="2"
-                                    padding="20" borderRadius="50" top="10" left="80"></Image>
-                            </StackLayout>
+                        <StackLayout row="0" col="2" horizontalAlignment="center">
+                            <app-user-card [user]="otherPlayer" [isGamePlay]=true
+                                [type]="userCardType.USER_IMAGE_NAME_VERTICAL"> </app-user-card>
+                            <FlexboxLayout android:backgroundColor="#f1f1f1" class="background-score">
+                                <Image
+                                    src="{{game.stats[otherUserId]?.score>=1 ? 'res://badge1' : 'res://badge1inactive'}}">
+                                </Image>
+                                <Image
+                                    src="{{game.stats[otherUserId]?.score>=2 ? 'res://badge2' : 'res://badge2inactive'}}">
+                                </Image>
+                                <Image
+                                    src="{{game.stats[otherUserId]?.score>=3 ? 'res://badge3' : 'res://badge3inactive'}}">
+                                </Image>
+                                <Image
+                                    src="{{game.stats[otherUserId]?.score>=4 ? 'res://badge4' : 'res://badge4inactive'}}">
+                                </Image>
+                                <Image
+                                    src="{{game.stats[otherUserId]?.score>=5 ? 'res://badge5' : 'res://badge5inactive'}}">
+                                </Image>
+                            </FlexboxLayout>
                         </StackLayout>
                     </GridLayout>
-                </StackLayout>
-                <StackLayout *ngIf="game.gameOptions.playerMode == PlayerMode.Opponent" verticalAlignment="center"
-                    marginTop="10">
-                    <Label class="round" horizontalAlignment="center" text="Round {{game.round}}/{{totalRound}}"
+                    <Label row="2" col="0" class="badge-label" horizontalAlignment="center" text="You have earned"
                         textWrap="true"></Label>
-                </StackLayout>
-                <StackLayout paddingTop="8" marginBottom="60">
-                    <Button class="Hind-Medium continue-btn" width="64%" height="60" text="Continue" (tap)="continueClicked()"
-                        stlRippleEffect></Button>
-                </StackLayout>
-            </StackLayout>
-        </CardView>
+                    <FlexboxLayout row="3" col="0" horizontalAlignment="center" orientation="horizontal"
+                        class="score-container">
+                        <Image src="res://bits"></Image>
+                        <Label class="score-text"
+                            [text]="game.stats[user.userId]?.score * (applicationSettings?.tokens?.earn_bits ? applicationSettings?.tokens?.earn_bits : 0)"
+                            textWrap="true"></Label>
+                    </FlexboxLayout>
+                    <Button *ngIf="!turnFlag && !threeConsecutiveAnswer" android:elevation="20" ios:elevation="20" android:paddingTop="15" ios:paddingTop="10"
+                        android:paddingBottom="15" ios:paddingBottom="10" row="4" col="0" verticalAlignment="middle"
+                        marginBottom="30" class="SF-Pro-Medium continue-btn" width="55%" text="Continue"
+                        (rippleTap)="continueClicked()" stlRippleEffect></Button>
+                    <Label row="4" col="0" *ngIf="turnFlag || threeConsecutiveAnswer" textAlignment="center"  class="SF-Pro-Regular" fontSize="17"   margin="10 0 10 15" color="#af3424"
+                        [text]="threeConsecutiveAnswer ? 'You have reached the maximum number of correct answers you are allowed to give in the first round.' : 'You did not answer ' +
+                        ( game?.playerQnAs[game?.playerQnAs?.length - 1]?.playerAnswerId != undefined ? 'correctly' : 'in time') + '. It\'s ' + (otherUserInfo?.displayName ? otherUserInfo?.displayName : 'other player') + '\'s turn now!!'"
+                        textWrap="true">
+                    </Label>
+                    <Label class="home-lable" row="5" col="0" horizontalAlignment="center" text="HOME"
+                        textWrap="true" (rippleTap)="gotoDashboard()" stlRippleEffect></Label>
+                </GridLayout>
+            </render-box>
+        </StackLayout>
     </ScrollView>
-</StackLayout>
+</GridLayout>

@@ -12,6 +12,7 @@ import { userCardType } from './../../model';
 export class AuthorComponent {
     @Input() userId;
     @Input() isGamePlay;
+    @Input() theme: string;
     userCardType = userCardType;
     newUserid = '';
     constructor() {

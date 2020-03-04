@@ -1,11 +1,11 @@
-<ns-action-bar title="Privacy Policy" class="Roboto-Regular" showAdd="true"></ns-action-bar>
+<ns-action-bar title="Privacy Policy" class="SF-Pro-Regular" showAdd="true"></ns-action-bar>
 <StackLayout *ngIf="renderView">
   <ScrollView>
     <StackLayout class="privacy-policy-container" >
         <GridLayout rows="auto,*,*" orientation="horizontal">
             <Label margin="10 0 0 0" row="0" textWrap="true" text="This privacy policy (&quot;Policy&quot;) describes how Emaxers Inc (&quot;Emaxers Inc&quot;, &quot;we&quot;, &quot;us&quot; or &quot;our&quot;) collects, protects and uses the personally identifiable information (&quot;Personal Information&quot;) you (&quot;User&quot;, &quot;you&quot; or &quot;your&quot;) may provide on the"
             class="input input-border"></Label>
-            <Label row="1" text=" bitwiser.io " (tap)="openUrl('https://bitwiser.io')" color="#4797CE" ></Label>
+            <Label row="1" text=" bitwiser.io " horizontalAlignment="left" stlRippleEffect (rippleTap)="openUrl('https://bitwiser.io')" color="#4797CE" ></Label>
             <Label  row="2"  textWrap="true" text="website, the bitWiser mobile application, and any of its products or services (collectively, &quot;Website&quot; or &quot;Services&quot;). It also describes the choices available to you regarding our use of your Personal Information and how you can access and update this information. This Policy does not apply to the practices of companies that we do not own or control, or to individuals that we do not employ or manage."
               class="input input-border"></Label>
         </GridLayout>
@@ -22,9 +22,9 @@
         <Label textWrap="true" text="The app does use third party services that may collect information used to identify you. Link to privacy policy of third party service providers used by the app"
         class="input input-border"></Label>
         
-        <Label margin="0 0 0 10" color="#4797CE" (tap)="openUrl('https://www.google.com/policies/privacy')" text="Google Play Services"></Label>
-        <Label margin="0 0 0 10" color="#4797CE" (tap)="openUrl('https://firebase.google.com/support/privacy/')" text="Firebase"></Label>
-        <Label margin="0 0 0 10" color="#4797CE" (tap)="openUrl('https://www.facebook.com/about/privacy')" text="Facebook"></Label>
+        <Label margin="0 0 0 10" color="#4797CE" horizontalAlignment="left" stlRippleEffect (rippleTap)="openUrl('https://www.google.com/policies/privacy')" text="Google Play Services"></Label>
+        <Label margin="0 0 0 10" color="#4797CE" horizontalAlignment="left" stlRippleEffect (rippleTap)="openUrl('https://firebase.google.com/support/privacy/')" text="Firebase"></Label>
+        <Label margin="0 0 0 10" color="#4797CE" horizontalAlignment="left" stlRippleEffect (rippleTap)="openUrl('https://www.facebook.com/about/privacy')" text="Facebook"></Label>
 
         <Label text="Use and processing of collected information"  class="title-text" textWrap="true"></Label>
         <Label textWrap="true" text="Any of the information we collect from you may be used to personalize your experience; improve our Website; improve customer service and respond to queries and emails of our customers; process transactions; send notification emails such as password reminders, updates, etc;  run and operate our Website and Services. Non-Personal Information collected is used only to identify potential cases of abuse and establish statistical information regarding Website usage. This statistical information is not otherwise aggregated in such a way that would identify any particular user of the system."
@@ -64,7 +64,7 @@
         <Label text="Cookies"  class="title-text" textWrap="true"></Label>
         <Label textWrap="true" text="The Website uses &quot;cookies&quot; to help personalize your online experience. A cookie is a text file that is placed on your hard disk by a web page server. Cookies cannot be used to run programs or deliver viruses to your computer. Cookies are uniquely assigned to you, and can only be read by a web server in the domain that issued the cookie to you. We may use cookies to collect, store, and track information for statistical purposes to operate our Website and Services. You have the ability to accept or decline cookies. Most web browsers automatically accept cookies, but you can usually modify your browser setting to decline cookies if you prefer. If you choose to decline cookies, you will not be able to use and experience the features of the Website and Services. To learn more about cookies and how to manage them, visit"
         class="input input-border"></Label>
-        <Label text=" internetcookies.org "  textWrap="true"  (tap)="openUrl('https://www.internetcookies.org')" color="#4797CE" ></Label>
+        <Label text=" internetcookies.org " horizontalAlignment="left" textWrap="true"  stlRippleEffect (rippleTap)="openUrl('https://www.internetcookies.org')" color="#4797CE" ></Label>
         <Label textWrap="true" text="In addition to using cookies and related technologies as described above, we also may permit certain third-party companies to help us tailor advertising that we think may be of interest to users and to collect and use other data about user activities on the Website. These companies may deliver ads that might also place cookies and otherwise track user behavior."
         class="input input-border"></Label>
 

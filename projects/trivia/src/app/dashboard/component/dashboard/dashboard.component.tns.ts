@@ -4,7 +4,7 @@ import { RouterExtensions } from 'nativescript-angular/router';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { Utils, WindowRef } from 'shared-library/core/services';
 import { GameActions, QuestionActions, UserActions } from 'shared-library/core/store/actions';
-import { FirebaseScreenNameConstants, Game, GameStatus, PlayerMode } from 'shared-library/shared/model';
+import { GameStatus } from 'shared-library/shared/model';
 import { Page } from 'tns-core-modules/ui/page/page';
 import { AppState, appState } from '../../../store';
 import { Dashboard } from './dashboard';
@@ -12,7 +12,7 @@ import { Dashboard } from './dashboard';
 @Component({
   selector: 'dashboard',
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.scss', './dashboard.scss'],
+  styleUrls: ['./dashboard.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
@@ -20,12 +20,9 @@ import { Dashboard } from './dashboard';
 export class DashboardComponent extends Dashboard implements OnInit, OnDestroy {
 
   gameStatus: any;
-  subscriptions = [];
   // This is magic variable
   // it delay complex UI show Router navigation can finish first to have smooth transition
   renderView = false;
-
-
 
   constructor(public store: Store<AppState>,
     questionActions: QuestionActions,
@@ -53,17 +50,16 @@ export class DashboardComponent extends Dashboard implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.userDict$ = this.store.select(appState.coreState).pipe(select(s => s.userDict));
-    this.subscriptions.push(this.userDict$.subscribe(userDict => { this.userDict = userDict; this.cd.markForCheck(); }));
     // update to variable needed to do in ngZone otherwise it did not understand it
     this.page.on('loaded', () => { this.renderView = true; this.cd.markForCheck(); });
+    this.userDict$ = this.store.select(appState.coreState).pipe(select(s => s.userDict));
+    this.subscriptions.push(this.userDict$.subscribe(userDict => { this.userDict = userDict; this.cd.markForCheck(); }));
   }
 
   startNewGame(mode: string) {
 
     if (this.applicationSettings && this.applicationSettings.lives.enable) {
       if (this.account && this.account.lives > 0) {
-        console.log('mode::', mode);
         this.routerExtension.navigate(['/game-play/game-options', mode], { clearHistory: true });
       } else if (!this.account) {
         this.routerExtension.navigate(['/game-play/game-options', mode], { clearHistory: true });
@@ -74,29 +70,8 @@ export class DashboardComponent extends Dashboard implements OnInit, OnDestroy {
 
   }
 
-  filterGame(game: Game): boolean {
-    return game.GameStatus === GameStatus.AVAILABLE_FOR_OPPONENT ||
-      game.GameStatus === GameStatus.JOINED_GAME ||
-      game.GameStatus === GameStatus.WAITING_FOR_FRIEND_INVITATION_ACCEPTANCE
-      || game.GameStatus === GameStatus.WAITING_FOR_RANDOM_PLAYER_INVITATION_ACCEPTANCE;
-  }
-
-
-  filterSinglePlayerGame(game: Game): boolean {
-    return Number(game.gameOptions.playerMode) === Number(PlayerMode.Single) && game.playerIds.length === 1;
-  }
-
-  filterTwoPlayerGame = (game: Game): boolean => {
-    return Number(game.gameOptions.playerMode) === Number(PlayerMode.Opponent) &&
-      (game.nextTurnPlayerId === this.user.userId);
-  }
-
-  filterTwoPlayerWaitNextQGame = (game: Game): boolean => {
-    return game.GameStatus === GameStatus.WAITING_FOR_NEXT_Q && game.nextTurnPlayerId !== this.user.userId;
-  }
-
   navigateToMyQuestion() {
-    this.routerExtension.navigate(['/user/my/questions']);
+    this.routerExtension.navigate(['/user/my/questions/add']);
   }
 
   gotToNotification() {
@@ -111,7 +86,8 @@ export class DashboardComponent extends Dashboard implements OnInit, OnDestroy {
 
   navigateToCategories() {
     if (this.user && this.user !== null) {
-      this.routerExtension.navigate(['/user/my/profile', this.user.userId]);
+      this.routerExtension.navigate(['/user/my/profile', this.user ? this.user.userId : ''], { clearHistory: true });
+      // this.routerExtension.navigate(['/user/my/profile', this.user.userId]);
     } else {
       this.routerExtension.navigate(['/login'], { clearHistory: true });
     }
@@ -120,7 +96,6 @@ export class DashboardComponent extends Dashboard implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.page.off('loaded');
     this.renderView = false;
+    this.cd.markForCheck();
   }
 }
-
-

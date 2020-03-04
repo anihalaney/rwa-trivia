@@ -2,7 +2,7 @@ import { Observable, Subscription, empty } from 'rxjs';
 import { take, switchMap, map, flatMap, skipWhile } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 import * as gameplayactions from '../../store/actions';
-import { GameActions, UserActions } from 'shared-library/core/store/actions/index';
+import { GameActions, UserActions, TagActions } from 'shared-library/core/store/actions/index';
 import { Category, GameOptions, User, ApplicationSettings, PlayerMode, OpponentType, userCardType } from 'shared-library/shared/model';
 import { Utils, WindowRef } from 'shared-library/core/services';
 import { AppState, appState } from '../../../store';
@@ -12,9 +12,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { isPlatformBrowser } from '@angular/common';
 
 
-
-@AutoUnsubscribe({ 'arrayName': 'subscriptions' })
-export class NewGame implements OnDestroy {
+export class NewGame {
   categoriesObs: Observable<Category[]>;
   categories: Category[];
   tagsObs: Observable<string[]>;
@@ -39,6 +37,8 @@ export class NewGame implements OnDestroy {
   filteredCategories: Category[];
   selectedCategories: number[];
   routeType = '';
+  topTagsObs: Observable<any[]>;
+  topTags = [];
 
   constructor(
     public store: Store<AppState>,
@@ -49,9 +49,12 @@ export class NewGame implements OnDestroy {
     @Inject(PLATFORM_ID) public platformId: Object,
     public cd: ChangeDetectorRef,
     public route: ActivatedRoute,
-    public router: Router) {
+    public router: Router,
+    public tagActions: TagActions) {
     this.categoriesObs = store.select(appState.coreState).pipe(select(s => s.categories), take(1));
     this.tagsObs = store.select(appState.coreState).pipe(select(s => s.tags));
+    this.store.dispatch(this.tagActions.loadTopTags());
+    this.topTagsObs = this.store.select(appState.coreState).pipe(select(s => s.getTopTags));
     this.selectedTags = [];
     this.userDict$ = this.store.select(appState.coreState).pipe(select(s => s.userDict));
     this.subscriptions.push(this.userDict$.subscribe(userDict => { this.userDict = userDict; this.cd.markForCheck(); }));
@@ -59,16 +62,33 @@ export class NewGame implements OnDestroy {
     this.subscriptions.push(this.tagsObs.subscribe(tags => this.tags = tags));
     let challengerUserId = '';
     this.routeType = this.router.url.indexOf('challenge') >= 0 ? 'challenge' :
-    (this.router.url.indexOf('play-game-with-friend') >= 0 ? 'play-game-with-friend' :
-     this.router.url.indexOf('play-game-with-random-user') >= 0 ? 'play-game-with-random-user' : '' );
+      (this.router.url.indexOf('play-game-with-friend') >= 0 ? 'play-game-with-friend' :
+        this.router.url.indexOf('play-game-with-random-user') >= 0 ? 'play-game-with-random-user' : '');
     this.subscriptions.push(this.route.params.pipe(map(data => challengerUserId = data.userid),
+      switchMap(() => this.topTagsObs.pipe(map(topTags => {
+        this.topTags = topTags;
+        this.topTags.map((tag: any) => {
+          tag.requiredForGamePlay = false;
+          tag.isSelected = false;
+        });
+        this.cd.markForCheck();
+      }) )),
       switchMap(() => this.store.select(appState.coreState).pipe(select(s => s.user)))).subscribe(user => {
         if (user) {
           this.user = user;
           if (this.user.tags && this.user.tags.length > 0) {
             this.selectedTags = this.user.tags;
+            this.topTags.map(data => {
+                if (this.user.tags.indexOf(data.key) >= 0) {
+                    data.isSelected = true;
+                }
+            });
           } else if (this.user.lastGamePlayOption && this.user.lastGamePlayOption.tags.length > 0) {
-            this.selectedTags = this.user.lastGamePlayOption.tags;
+            this.topTags.map(data => {
+                if (this.user.lastGamePlayOption.tags.indexOf(data.key) >=0 ) {
+                    data.isSelected = true;
+                }
+            });
           }
           if (!challengerUserId || (challengerUserId && this.routeType !== 'challenge')) {
             this.store.dispatch(this.userActions.loadUserFriends(user.userId));
@@ -122,9 +142,9 @@ export class NewGame implements OnDestroy {
         this.uFriends = [];
         uFriends.map(friend => {
           if (challengerUserId === friend.userId) {
-            this.uFriends = [friend.userId, ...this.uFriends];
+            this.uFriends = [friend, ...this.uFriends];
           } else {
-            this.uFriends = [...this.uFriends, friend.userId];
+            this.uFriends = [...this.uFriends, friend];
           }
         });
         this.noFriendsStatus = false;
@@ -157,7 +177,15 @@ export class NewGame implements OnDestroy {
     } else if (this.user.lastGamePlayOption && this.user.lastGamePlayOption.categoryIds.length > 0) {
       return this.user.lastGamePlayOption.categoryIds.includes(categoryId);
     }
-    return true;
+    return false;
+  }
+
+  selectTags(tag: string) {
+      this.topTags.map( data => {
+        if (!data.requiredForGamePlay && data.key === tag) {
+          data.isSelected = !data.isSelected;
+        }
+      });      
   }
 
 
@@ -172,14 +200,17 @@ export class NewGame implements OnDestroy {
         this.errMsg = 'Please Select Friend';
         if (isMobile) {
           this.utils.showMessage('error', this.errMsg);
+          return false;
         } else {
           this.loaderStatus = false;
           if (isPlatformBrowser(this.platformId) && this.windowRef && this.windowRef.nativeWindow && this.windowRef.nativeWindow.scrollTo) {
             this.windowRef.nativeWindow.scrollTo(0, 0);
           }
         }
-        return;
       }
+      return true;
+    } else if (isMobile) {
+      return true;
     }
 
     if (this.applicationSettings.lives.enable && this.life === 0) {
@@ -236,7 +267,4 @@ export class NewGame implements OnDestroy {
     this.errMsg = undefined;
   }
 
-  ngOnDestroy() {
-
-  }
 }

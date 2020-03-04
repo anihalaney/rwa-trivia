@@ -1,7 +1,4 @@
-import {
-  ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, QueryList,
-  ViewChild, ViewChildren, ViewContainerRef
-} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren, ViewContainerRef } from '@angular/core';
 import { FormBuilder, NgModel } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import * as application from 'application';
@@ -11,7 +8,7 @@ import { setString } from 'nativescript-plugin-firebase/crashlytics/crashlytics'
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { Subject } from 'rxjs';
 import { filter, map, take } from 'rxjs/operators';
-import { android, AndroidActivityBackPressedEventData, AndroidApplication, } from 'tns-core-modules/application';
+import { android, AndroidActivityBackPressedEventData, AndroidApplication } from 'tns-core-modules/application';
 import { isAndroid, isIOS } from 'tns-core-modules/platform';
 import { Page } from 'tns-core-modules/ui/page';
 import { CountryListComponent } from '../../../shared/mobile/component/countryList/countryList.component';
@@ -27,8 +24,7 @@ declare var IQKeyboardManager;
   styleUrls: ['./login.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-
-@AutoUnsubscribe({ 'arrayName': 'subscriptions' })
+@AutoUnsubscribe({ arrayName: 'subscriptions' })
 export class LoginComponent extends Login implements OnInit, OnDestroy {
   iqKeyboard: any;
   @ViewChildren('textField') textField: QueryList<ElementRef>;
@@ -39,7 +35,7 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
     type: '',
     text: ''
   };
-  subscriptions = [];
+
   @ViewChild('phoneNumber', { static: false }) phoneNumber: NgModel;
   isCountryListOpened = false;
   isCountryCodeError;
@@ -59,10 +55,10 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
     private utils: Utils,
     public cd: ChangeDetectorRef,
     private viewContainerRef: ViewContainerRef,
-    private phonenumber: PhoneNumberValidationProvider) {
+    private phonenumber: PhoneNumberValidationProvider
+  ) {
     super(fb, store, cd);
     this.page.actionBarHidden = true;
-
 
     this.input = {
       selectedCountry: 'United States',
@@ -76,11 +72,9 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
     }
   }
 
-
   private validateNumber(): boolean {
     return this.phonenumber.isValidMobile(this.input.phoneNumber, this.input.country);
   }
-
 
   async signInWithPhone() {
     if (this.input.selectedCountry === '') {
@@ -101,10 +95,9 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
         JSON.stringify(result);
         this.redirectTo();
       }
-
     } catch (errorMessage) {
       console.error(errorMessage);
-      this.showMessage('error', errorMessage);
+      this.utils.showMessage('error', errorMessage);
       this.cd.markForCheck();
     }
   }
@@ -133,7 +126,6 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
     } catch (error) {
       console.error(error);
     }
-
   }
 
   ngOnInit() {
@@ -156,8 +148,6 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
       }
       this.loginForm.get('password').updateValueAndValidity();
     }));
-
-
   }
 
   handleBackButtonPress() {
@@ -179,8 +169,15 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
   async onSubmit() {
     this.hideKeyboard();
     if (!this.loginForm.valid) {
+      this.utils.showMessage('error', 'Please Fill the details');
       return;
     }
+
+    if (!this.loginForm.value.tnc && this.mode === 1) {
+      this.utils.showMessage('error', 'Please accept terms & conditions');
+      return;
+    }
+
     this.loader = true;
     this.removeMessage();
     let user;
@@ -214,47 +211,41 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
           // Forgot Password
           user = await this.firebaseAuthService.sendPasswordResetEmail(this.loginForm.value.email);
           this.notificationMsg = `email sent to ${this.loginForm.value.email}`;
-          this.showMessage('success', this.notificationMsg);
+          this.utils.showMessage('success', this.notificationMsg);
           this.loader = false;
           this.errorStatus = false;
           this.notificationLogs.push(this.loginForm.get('email').value);
           this.store.dispatch(this.uiStateActions.saveResetPasswordNotificationLogs([this.loginForm.get('email').value]));
-
       }
-
     } catch (error) {
       this.loader = false;
       switch (this.mode) {
         case 0:
           const singInError = error.message.split(':');
-          this.showMessage('error', singInError[1] || error.message);
+          this.utils.showMessage('error', singInError[1] || error.message);
           break;
         case 1:
           if (user && !user.emailVerified) {
             const verificationError = error.split(':');
-            this.showMessage('error', verificationError[1] || error);
+            this.utils.showMessage('error', verificationError[1] || error);
           } else {
             const singUpError = error.split(':');
-            this.showMessage('error', singUpError[1] || error);
+            this.utils.showMessage('error', singUpError[1] || error);
           }
           break;
         case 2:
-          this.showMessage('error', error);
+          this.utils.showMessage('error', error);
           break;
       }
       this.cd.markForCheck();
-
     } finally {
       this.cd.markForCheck();
     }
-
   }
 
   async googleLogin() {
     this.removeMessage();
-    if (isAndroid) {
-      this.loader = true;
-    }
+    this.loader = true;
     try {
       const result = await this.firebaseAuthService.googleLogin();
       if (result) {
@@ -262,23 +253,33 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
       }
     } catch (error) {
       this.loader = false;
-      this.showMessage('error', error);
+      this.utils.showMessage('error', error);
       this.cd.markForCheck();
     }
-
   }
 
   async fbLogin() {
     try {
       this.removeMessage();
-      if (isAndroid) {
-        this.loader = true;
-      }
+      this.loader = true;
       const result = await this.firebaseAuthService.facebookLogin();
       this.redirectTo();
     } catch (error) {
       this.loader = false;
-      this.showMessage('error', error);
+      this.utils.showMessage('error', error);
+      this.cd.markForCheck();
+    }
+  }
+
+  async appleSignIn() {
+    try {
+      this.removeMessage();
+      this.loader = true;
+      const result = await this.firebaseAuthService.appleLogin();
+      this.redirectTo();
+    } catch (error) {
+      this.loader = false;
+      this.utils.showMessage('error', error);
       this.cd.markForCheck();
     }
   }
@@ -286,8 +287,8 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
   redirectTo() {
     this.subscriptions.push(this.store.select(coreState).pipe(
       map(s => s.user),
-      filter(u => (u !== null && u.userId !== '')),
-      take(1)).subscribe((user) => {
+      filter(u => u !== null && u.userId !== ''),
+      take(1)).subscribe(user => {
         this.loader = false;
         this.subscriptions.push(this.store.select(coreState).pipe(
           map(s => s.loginRedirectUrl), take(1)).subscribe(url => {
@@ -302,9 +303,10 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
               this.navigateTo(redirectUrl, this.mode);
             }
             this.cd.markForCheck();
-          }));
-      }
-      ));
+          })
+        );
+      })
+    );
   }
 
   navigateTo(redirectUrl, mode) {
@@ -316,8 +318,6 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
     this.routerExtension.navigate([redirectUrl], { clearHistory: true });
   }
 
-
-
   showMessage(type: string, text: string) {
     this.message = {
       show: true,
@@ -326,9 +326,17 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
     };
   }
 
-  changeMode(mode: number) {
-    super.changeMode(mode);
-    this.removeMessage();
+  changeMode(mode) {
+    if (mode === '/dashboard') {
+      this.routerExtension.navigate([mode], { clearHistory: true });
+    } else if (mode === 'email') {
+      this.signInMethod = mode;
+      super.changeMode(0);
+      this.removeMessage();
+    } else {
+      super.changeMode(mode);
+      this.removeMessage();
+    }
   }
 
   removeMessage() {
@@ -348,6 +356,4 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
   hideKeyboard() {
     this.utils.hideKeyboard(this.textField);
   }
-
 }
-

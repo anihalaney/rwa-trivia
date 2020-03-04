@@ -32,11 +32,11 @@ class GeneralRoutes {
 
         // `/getTopCategories` 
         this.generalRoutes.get(`/${RoutesConstants.TOP_CATEGORIES_COUNT}`,
-            AuthMiddleware.authorizedOnly, GeneralController.getTopCategories);
+            GeneralController.getTopCategories);
 
         // `/getTopTags` 
         this.generalRoutes.get(`/${RoutesConstants.TOP_TAGS_COUNT}`,
-            AuthMiddleware.authorizedOnly, GeneralController.getTopTags);
+            GeneralController.getTopTags);
 
     }
 }

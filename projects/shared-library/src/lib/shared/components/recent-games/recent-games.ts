@@ -7,9 +7,7 @@ import { UserActions } from 'shared-library/core/store/actions';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
 
-@AutoUnsubscribe({ 'arrayName': 'subscriptions' })
-export class RecentGames implements OnDestroy {
-
+export class RecentGames {
 
   @Input() hideActionbar;
   user: User;
@@ -53,9 +51,6 @@ export class RecentGames implements OnDestroy {
       this.nextIndex = this.nextIndex + this.recentGames.length;
     }
     this.cd.markForCheck();
-  }
-
-  ngOnDestroy() {
   }
 
 }

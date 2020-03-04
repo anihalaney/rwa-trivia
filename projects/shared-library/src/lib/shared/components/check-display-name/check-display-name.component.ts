@@ -1,5 +1,7 @@
 import { Component, forwardRef, Input } from '@angular/core';
-import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
+import { NG_VALUE_ACCESSOR } from '@angular/forms';
+import { CheckDisplayName } from './check-display-name';
+import { Utils } from 'shared-library/core/services';
 
 @Component({
   selector: 'app-check-display-name',
@@ -14,34 +16,10 @@ import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
   ],
 })
 
-export class CheckDisplayNameComponent implements ControlValueAccessor {
-  @Input() placeholder;
-  @Input() hint;
-  myValue: any = null;
-  disabled: boolean;
-  propagateChange = (_: any) => { };
+export class CheckDisplayNameComponent extends CheckDisplayName {
 
-  constructor() {
-    this.disabled = false;
+  constructor(public utils:Utils) {
+    super(utils);
   }
 
-  writeValue(obj: any): void {
-    this.myValue = obj;
-  }
-
-  onTextChange(event) {
-    this.propagateChange(event);
-  }
-
-  registerOnChange(fn: any): void {
-    this.propagateChange = fn;
-  }
-
-  registerOnTouched(fn: any): void {
-    // do nothing
-  }
-
-  setDisabledState(isDisabled: boolean): void {
-    this.disabled = isDisabled;
-  }
 }

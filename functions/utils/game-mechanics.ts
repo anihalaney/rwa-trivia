@@ -1,7 +1,7 @@
 import {
     Game, GameOperations, GameOptions, GameStatus,
     OpponentType, PlayerMode, PlayerQnA,
-    pushNotificationRouteConstants, schedulerConstants, User, GeneralConstants
+    pushNotificationRouteConstants, schedulerConstants, User, GeneralConstants, CalenderConstants
 } from '../../projects/shared-library/src/lib/shared/model';
 import { AccountService } from '../services/account.service';
 import { GameService } from '../services/game.service';
@@ -24,8 +24,10 @@ export class GameMechanics {
                         console.log('CALCULATE_SCORE----------->', currentTurnPlayerId);
                         console.log('CALCULATE_SCORE  game----------->', game);
                         PushNotification.sendGamePlayPushNotifications(game, currentTurnPlayerId,
-                            pushNotificationRouteConstants.GAME_PLAY_NOTIFICATIONS);
+                            pushNotificationRouteConstants.GAME_PLAY_NOTIFICATIONS, playerQnA);
                     }
+                    game.reminder32Min = false;
+                    game.reminder8Hr = false;
                     game.turnAt = Utils.getUTCTimeStamp();
                     game.calculateStat(playerQnA.playerId);
 
@@ -64,53 +66,114 @@ export class GameMechanics {
     }
 
 
-    static async doGameOverOperations(): Promise<boolean> {
+    static async checkGameExpiredAndSetGameOver(): Promise<boolean> {
         try {
-            const games: Game[] = await GameService.checkGameOver();
-            for (const game of games) {
-                const millis = Utils.getUTCTimeStamp();
-                const noPlayTimeBound = (millis > game.turnAt) ? millis - game.turnAt : game.turnAt - millis;
-                const playedHours = Math.floor((noPlayTimeBound) / (1000 * 60 * 60));
-                const playedMinutes = Math.floor((noPlayTimeBound) / (1000 * 60));
-
-                let remainedTime;
-                if (playedMinutes > schedulerConstants.beforeGameExpireDuration) {
-                    remainedTime = playedMinutes - schedulerConstants.beforeGameExpireDuration;
-                } else {
-                    remainedTime = schedulerConstants.beforeGameExpireDuration - playedMinutes;
-                }
-                if ((Number(game.gameOptions.opponentType) === OpponentType.Random) ||
-                    (Number(game.gameOptions.opponentType) === OpponentType.Friend)) {
-                    if ((remainedTime) <= schedulerConstants.notificationInterval) {
-                        PushNotification.sendGamePlayPushNotifications(game, game.nextTurnPlayerId,
-                            pushNotificationRouteConstants.GAME_REMAINING_TIME_NOTIFICATIONS);
-                    }
-                }
-                if (playedHours >= schedulerConstants.gamePlayDuration) {
+            const millis = Utils.getUTCTimeStamp();
+            const noPlayTime = (CalenderConstants.HOURS_CALCULATIONS * schedulerConstants.gamePlayLagDuration);
+            const playedHoursTimeStamp = millis - noPlayTime;
+            const games: Game[] = await GameService.getAllExpiredGames(playedHoursTimeStamp,
+                [GameStatus.STARTED, GameStatus.RESTARTED, GameStatus.WAITING_FOR_NEXT_Q,
+                GameStatus.AVAILABLE_FOR_OPPONENT, GameStatus.JOINED_GAME]);
+                for (const game of games) {
+                    if (game.gameId) {
                     GameMechanics.setGameOverParams(true, GameStatus.TIME_EXPIRED, Utils.getUTCTimeStamp(), game);
                     game.winnerPlayerId = game.playerIds.filter(playerId => playerId !== game.nextTurnPlayerId)[0];
                     if ((Number(game.gameOptions.opponentType) === OpponentType.Random) ||
-                        (Number(game.gameOptions.opponentType) === OpponentType.Friend)) {
-                        PushNotification.sendGamePlayPushNotifications(game, game.winnerPlayerId,
+                        (Number(game.gameOptions.opponentType) === OpponentType.Friend) ||
+                        (Number(game.gameOptions.playerMode) === PlayerMode.Single)) {
+                        PushNotification.sendGamePlayPushNotifications(game,
+                           game.gameOptions.playerMode  == PlayerMode.Opponent ? game.winnerPlayerId  : game.nextTurnPlayerId,
                             pushNotificationRouteConstants.GAME_PLAY_NOTIFICATIONS);
                     }
                     const dbGame = game.getDbModel();
                     if (dbGame.id) {
                         await GameService.setGame(dbGame);
                     }
-                } else if (playedHours >= schedulerConstants.gameInvitationDuration
-                    && (game.GameStatus === GameStatus.WAITING_FOR_FRIEND_INVITATION_ACCEPTANCE ||
-                        game.GameStatus === GameStatus.WAITING_FOR_RANDOM_PLAYER_INVITATION_ACCEPTANCE)) {
+                    }
+            }
+        } catch (error) {
+            return Utils.throwError(error);
+        }
+    }
+
+
+    static async checkGameInvitationIsExpired(): Promise<boolean> {
+        try {
+            const millis = Utils.getUTCTimeStamp();
+            const noPlayTime = (CalenderConstants.HOURS_CALCULATIONS * schedulerConstants.gameInvitationDuration);
+            const playedHoursTimeStamp = millis - noPlayTime;
+            const games: Game[] = await GameService.getAllExpiredGames(playedHoursTimeStamp,
+                [GameStatus.WAITING_FOR_FRIEND_INVITATION_ACCEPTANCE, GameStatus.WAITING_FOR_RANDOM_PLAYER_INVITATION_ACCEPTANCE]);
+                for (const game of games) {
+                if (game.gameId) {
                     GameMechanics.setGameOverParams(true, GameStatus.INVITATION_TIMEOUT, Utils.getUTCTimeStamp(), game);
+
+                    PushNotification.sendGamePlayPushNotifications(game, game.nextTurnPlayerId,
+                         pushNotificationRouteConstants.GAME_PLAY_NOTIFICATIONS);
                     const dbGame = game.getDbModel();
                     if (dbGame.id) {
                         await GameService.setGame(dbGame);
                     }
                 }
             }
+        } catch (error) {
+            return Utils.throwError(error);
+        }
+    }
 
+    static async doSendGameReminderNotification(timeBefore: number): Promise<boolean> {
+        try {
+            let reminderInterval = '';
+            let gameStatus = [];
+            if (timeBefore === schedulerConstants.notificationInterval) {
+                reminderInterval = 'reminder32Min';
+                gameStatus = [GameStatus.STARTED, GameStatus.RESTARTED, GameStatus.WAITING_FOR_NEXT_Q,
+                    GameStatus.AVAILABLE_FOR_OPPONENT, GameStatus.JOINED_GAME];
+            } else if (timeBefore === schedulerConstants.reminderNotificationInterval) {
+                reminderInterval = 'reminder8Hr';
+                gameStatus = [];
+            } else {
+                return true;
+            }
+
+            const millis = Utils.getUTCTimeStamp();
+            const noPlayTime = (CalenderConstants.HOURS_CALCULATIONS * schedulerConstants.gamePlayLagDuration);
+            const notificationDuration = millis - ( noPlayTime -  (timeBefore * 60 * 1000));
+            const games: Game[] = await GameService.getAllGameForReminder(notificationDuration, reminderInterval, gameStatus);
+            for (const game of games) {
+                if (game.gameId) {
+                    PushNotification.sendGamePlayPushNotifications(game,
+                        game.playerIds.filter((playerId) => playerId !== game.nextTurnPlayerId)[0],
+                    pushNotificationRouteConstants.GAME_REMAINING_TIME_NOTIFICATIONS, timeBefore);
+                    game[reminderInterval] = true;
+                    const dbGame = game.getDbModel();
+                    if (dbGame.id) {
+                        await GameService.setGame(dbGame);
+                    }
+                }
+            }
             return true;
 
+        } catch (error) {
+            return Utils.throwError(error);
+        }
+    }
+
+
+    static async doSendGameNotPlayedNotification(): Promise<boolean>  {
+        try {
+            const timeStamp = Utils.getUTCTimeStamp();
+            const startTime = timeStamp - (CalenderConstants.DAYS_CALCULATIONS * schedulerConstants.gamePlayLagDuration); // 32 days
+            const accounts = await AccountService.getAccountsWithLagInGamePlay(startTime);
+            for (const account of accounts) {
+                PushNotification.sendGamePlayPushNotifications(
+                    ` - we have added new questions to bitWiser! Come back and challenge your friends to a new game.`,
+                    account.id,
+                    pushNotificationRouteConstants.GAME_PLAY_LAG_NOTIFICATION);
+                    account.lastGamePlayedNotification = true;
+                    await AccountService.updateAccountData(account);
+            }
+            return true;
         } catch (error) {
             return Utils.throwError(error);
         }
@@ -130,6 +193,14 @@ export class GameMechanics {
                     } else if (Number(gameOptions.opponentType) === OpponentType.Friend) {
                         gameId = await GameMechanics.createFriendUserGame(gameOptions.friendId, GameStatus.STARTED, userId, gameOptions);
                     }
+                }
+
+                if ((Number(gameOptions.opponentType) === OpponentType.Random ||
+                Number(gameOptions.opponentType) === OpponentType.Friend) && gameOptions.friendId && gameOptions.friendId !== '') {
+                    PushNotification.sendGamePlayPushNotifications(
+                        ' started a new bitWiser game with you! Stay tuned for your turn!',
+                        userId,
+                        pushNotificationRouteConstants.NEW_GAME_START_WITH_OPPONENT, gameOptions.friendId);
                 }
             } else {
                 gameId = (gameOptions.rematch) ?
@@ -246,10 +317,15 @@ export class GameMechanics {
                     lastAddedQuestion.answerCorrect = false;
                     lastAddedQuestion.playerAnswerInSeconds = 16;
                     game.playerQnAs[index] = lastAddedQuestion;
+                    const currentTurnPlayerId = game.nextTurnPlayerId;
                     if (Number(game.gameOptions.playerMode) === PlayerMode.Opponent) {
                         game.nextTurnPlayerId = game.playerIds.filter((playerId) => playerId !== game.nextTurnPlayerId)[0];
                     }
+                    game.reminder32Min = false;
+                    game.reminder8Hr = false;
                     game.turnAt = Utils.getUTCTimeStamp();
+                    PushNotification.sendGamePlayPushNotifications(game, currentTurnPlayerId,
+                        pushNotificationRouteConstants.GAME_PLAY_NOTIFICATIONS, lastAddedQuestion);
                     game.calculateStat(lastAddedQuestion.playerId);
                     await GameService.setGame(game.getDbModel());
                     return false;

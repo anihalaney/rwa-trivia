@@ -4,6 +4,10 @@ import { Utils } from '../utils/utils';
 import { AccountService } from './account.service';
 import { AppSettings } from '../services/app-settings.service';
 import { FriendService } from './friend.service';
+import * as requestPromise from 'request-promise';
+import { externalUrl } from '../../projects/shared-library/src/lib/environments/external-url';
+import * as firebase from 'firebase-admin';
+
 export class UserService {
 
     private static fireStoreClient: any = admin.firestore();
@@ -116,6 +120,8 @@ export class UserService {
             user.email = (dbUser && dbUser.email) ? dbUser.email : '';
             let gamePlayed;
             let isFriend = false;
+            const account = await AccountService.getAccountById(userId);
+            user.bits = (account && account.bits) ? account.bits : 0;
             if (extendedInfo) {
                 user.categoryIds = (dbUser && dbUser.categoryIds) ? dbUser.categoryIds : [];
                 user.tags = (dbUser && dbUser.tags) ? dbUser.tags : [];
@@ -130,7 +136,6 @@ export class UserService {
                     }
                 }
                 user.account = new Account();
-                const account = await AccountService.getAccountById(userId);
                 user.account.avgAnsTime = (account && account.avgAnsTime) ? account.avgAnsTime : 0;
                 user.account.badges = (account && account.badges) ? account.badges : 0;
                 user.account.bits = (account && account.bits) ? account.bits : 0;
@@ -362,4 +367,20 @@ export class UserService {
         }
     }
 
+
+    static async getGeoCode(location): Promise<any> {
+        try {
+            if(location && location._lat && location._long) {
+                return new firebase.firestore.GeoPoint(location._lat, location._long);
+            } else if(location && location.latitude && location.longitude) {
+                return new firebase.firestore.GeoPoint(location.latitude, location.longitude);
+            } else {
+                return '';
+            }
+            
+
+        } catch (error) {
+            return Utils.throwError(error);
+        }
+    }
 }

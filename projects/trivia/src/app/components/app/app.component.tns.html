@@ -1,14 +1,15 @@
 <RadSideDrawer drawerLocation="Bottom" (drawerClosed)="drawerEvent($event)" (drawerOpened)="drawerEvent($event)"
-    drawerContentSize="{{user ? 420 : '240'}}">
-    <StackLayout tkDrawerContent rows="auto" class="sidedrawer sidedrawer-left">
+    drawerContentSize="{{user ? 260 : bottomSafeArea}}" >
+    <StackLayout tkDrawerContent class="sidedrawer sidedrawer-left" iosOverflowSafeArea="false">
         <ns-drawer-component></ns-drawer-component>
     </StackLayout>
-    <GridLayout rows="*, auto" columns="*" tkMainContent>
-        <StackLayout ios:paddingBottom="60" row="0">
+    <GridLayout rows="*,auto" columns="*" tkMainContent>
+        <StackLayout row="0" [marginBottom]="showBottomBar ? '20' : '0'">
             <page-router-outlet class="page page-content"></page-router-outlet>
         </StackLayout>
-        <StackLayout *ngIf="showBottomBar" row="1">
-            <bottom-bar [isDrawerOpenOrClosed]="isDrawerOpenOrClosed" [screen]="'app'"></bottom-bar>
+        <StackLayout *ngIf="showBottomBar" row="1" marginTop="-26" backgroundColor="#ffffff" borderRadius="18 18 0 0">
+            <bottom-bar [isDrawerOpenOrClosed]="isDrawerOpenOrClosed" [screen]="'app'">
+            </bottom-bar>
         </StackLayout>
     </GridLayout>
 </RadSideDrawer>

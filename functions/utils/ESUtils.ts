@@ -4,7 +4,8 @@ import { resolve } from 'path';
 import { Question, SearchCriteria, SearchResults } from '../../projects/shared-library/src/lib/shared/model';
 import { Utils } from './utils';
 import { AppSettings } from './../services/app-settings.service';
-
+import { QuestionService } from '../services/question.service';
+import { StatsService } from '../services/stats.service';
 const elasticSearchConfig = JSON.parse(readFileSync(resolve(__dirname, '../../../config/elasticsearch.config.json'), 'utf8'));
 
 export class ESUtils {
@@ -171,9 +172,10 @@ export class ESUtils {
     const seed = date.getUTCFullYear().toString() + date.getUTCMonth().toString() + date.getUTCDate().toString();
     const hits = await ESUtils.getRandomItems(ESUtils.QUESTIONS_INDEX, 1, (isNextQuestion) ? '' : seed);
     hits[0]['_source'].serverTimeQCreated = Utils.getUTCTimeStamp();
+      await StatsService.updateQuestionStats(hits[0]._id, 'CREATED');
 
     // convert hit to Question
-    return Question.getViewModelFromES(hits[0]);
+    return  Question.getViewModelFromES(hits[0]);
   }
 
   static async getRandomGameQuestion(gameCategories: Array<number>, excludedQId: Array<string>): Promise<Question> {

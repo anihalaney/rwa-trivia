@@ -13,7 +13,11 @@ import {
   FirstQuestionComponent,
   SelectCategoryTagComponent,
   NotificationComponent,
-  BottomBarComponent
+  BottomBarComponent,
+  GameProgressBarComponent,
+  RenderBoxComponent,
+  UpdateCategoryTagComponent,
+  AnimationBoxComponent
 } from './mobile/component';
 import { NativeScriptCommonModule } from 'nativescript-angular/common';
 import { GameFilterPipe } from './pipe/game-filter.pipe';
@@ -30,6 +34,7 @@ import {
 import { ShowHintWhenFocusOutDirective, OpenUserProfileDirective, RippleEffectDirective } from './directive';
 import { PhoneNumberValidationProvider } from './mobile/component/countryList/phone-number-validation.provider';
 import { SafeHtmlPipe } from './pipe/safe-html.pipe';
+import {TimeAgoPipe} from 'time-ago-pipe';
 @NgModule({
   declarations: [
     ActionBarComponent,
@@ -58,7 +63,12 @@ import { SafeHtmlPipe } from './pipe/safe-html.pipe';
     GameInviteComponent,
     BottomBarComponent,
     RecentGamesComponent,
-    RecentGameCardComponent
+    RecentGameCardComponent,
+    GameProgressBarComponent,
+    RenderBoxComponent,
+    UpdateCategoryTagComponent,
+    TimeAgoPipe,
+    AnimationBoxComponent
   ],
   imports: [
     CommonModule,
@@ -109,12 +119,18 @@ import { SafeHtmlPipe } from './pipe/safe-html.pipe';
     GameInviteComponent,
     BottomBarComponent,
     RecentGamesComponent,
-    RecentGameCardComponent
+    RecentGameCardComponent,
+    GameProgressBarComponent,
+    RenderBoxComponent,
+    UpdateCategoryTagComponent,
+    TimeAgoPipe,
+    AnimationBoxComponent
   ],
   schemas: [NO_ERRORS_SCHEMA],
   entryComponents: [
     CountryListComponent,
-    RenderQuestionComponent
+    RenderQuestionComponent,
+    RenderBoxComponent
   ],
   providers: [
     PhoneNumberValidationProvider

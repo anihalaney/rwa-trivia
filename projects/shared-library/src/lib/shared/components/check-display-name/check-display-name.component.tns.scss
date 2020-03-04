@@ -1,8 +1,16 @@
-.input {
-    padding: 10 10 10 0;
-    // width: 325;
-    border: none;
-    border-width: 0;
-    border-bottom-width: 1;
-    border-bottom-color: #d3d3d3;
+.user-name {
+    // margin: 5;
+    // padding-bottom: 5;
+  }
+
+  .user-name-disabled {
+    margin: 5 0 5 5;
+    padding-bottom: 5;
+    font-size: 21;
+    font-weight: bold;
+  }
+
+  .bottom-border{
+    border-bottom-width: 2;
+    border-color: #dddddd;
   }

@@ -4,12 +4,23 @@
 <head>
   <meta charset="utf-8">
   <title>Trivia Editor</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- <meta name="viewport" content="width=device-width, user-scalable=no"> -->
+  <!-- <meta name="viewport" content="width=device-width, user-scalable=no" /> -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <link rel="icon" type="image/x-icon" href="favicon.ico">
 </head>
 
 <body>
   <app-root></app-root>
+  <script>
+      setTimeout(function(){ 
+        var meta = document.createElement('meta');
+        meta.name = 'viewport';
+        meta.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no';
+        var head = document.getElementsByTagName('head')[0];
+        head.appendChild(meta);
+      }, 2000);
+  </script>
 </body>
 
 </html>

@@ -5,8 +5,8 @@ import * as app from 'tns-core-modules/application';
 import * as firebase from 'nativescript-plugin-firebase';
 import { isAndroid } from 'tns-core-modules/platform';
 import { Store, select } from '@ngrx/store';
-import { User, ApplicationSettings, Parameter, DeviceToken, TriggerConstants, DrawerConstants } from './../../../../shared/model';
-import { UserActions } from '../../../../core/store/actions';
+import { User, ApplicationSettings, Parameter, DeviceToken, DrawerConstants } from './../../../../shared/model';
+import { UserActions, TopicActions, ApplicationSettingsActions } from '../../../../core/store/actions';
 import { CoreState, coreState } from '../../../../core/store';
 import { AuthenticationProvider } from './../../../../core/auth/authentication.provider';
 import { Utils } from './../../../../core/services';
@@ -51,6 +51,8 @@ export class DrawerComponent implements OnInit, OnDestroy {
         public authProvider: AuthenticationProvider,
         private utils: Utils,
         private userActions: UserActions,
+        private topicsActions: TopicActions,
+        private applicationSettingsAction: ApplicationSettingsActions,
         private router: Router,
         private firebaseAuthService: FirebaseAuthService
     ) {
@@ -220,13 +222,10 @@ export class DrawerComponent implements OnInit, OnDestroy {
         };
         analyticsParameter.push(userId);
 
-        console.log('analyticsParameter ==> ', analyticsParameter);
-
         firebase.analytics.logEvent({
             key: 'user_logout',
             parameters: analyticsParameter
         }).then(() => {
-            console.log('user_logout event slogged');
         });
 
     }
@@ -236,6 +235,8 @@ export class DrawerComponent implements OnInit, OnDestroy {
         this.logOut = false;
         this.pushToken = undefined;
         this.activeMenu = 'Home';
+        this.store.dispatch(this.topicsActions.loadTopTopics());
+        this.store.dispatch(this.applicationSettingsAction.loadApplicationSettings());
         this.closeDrawer();
     }
 
@@ -243,59 +244,24 @@ export class DrawerComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.userActions.updateUser(user, status));
     }
 
-    recentGames() {
-        this.routerExtension.navigate(['/recent-games'], { clearHistory: true });
+    navigateToRecentGames() {
+        this.routerExtension.navigate(['/recent-games']);
         this.closeDrawer();
     }
 
     navigateToProfileSettings() {
-        this.routerExtension.navigate(['/user/my/profile', this.user ? this.user.userId : ''], { clearHistory: true });
+        this.routerExtension.navigate(['/user/my/profile', this.user ? this.user.userId : '']);
         this.closeDrawer();
     }
 
     navigateToGameProfile() {
-        this.routerExtension.navigate(['/user/my/game-profile', this.user ? this.user.userId : ''], { clearHistory: true });
+        this.routerExtension.navigate(['/user/my/game-profile', this.user ? this.user.userId : '']);
         this.closeDrawer();
     }
 
     navigateToMyQuestion() {
-        this.routerExtension.navigate(['/user/my/questions'], { clearHistory: true });
+        this.routerExtension.navigate(['/user/my/questions']);
         this.closeDrawer();
-    }
-
-    navigateToFriendList() {
-        this.routerExtension.navigate(['/user/my/invite-friends'], { clearHistory: true });
-        this.closeDrawer();
-    }
-
-    navigateToPrivacyPolicy() {
-        this.routerExtension.navigate(['/privacy-policy'], { clearHistory: true });
-        this.closeDrawer();
-    }
-
-    navigateToTermsConditions() {
-        this.routerExtension.navigate(['/terms-and-conditions'], { clearHistory: true });
-        this.closeDrawer();
-    }
-
-    navigateToAchievements() {
-        this.routerExtension.navigate(['/achievements'], { clearHistory: true });
-        this.closeDrawer();
-    }
-
-    navigateToUserFeedback() {
-        this.routerExtension.navigate(['/user-feedback'], { clearHistory: true });
-        this.closeDrawer();
-    }
-
-    scrollToBottom() {
-        // wait for the layout to be loaded before scroll to bottom
-        setTimeout(() => {
-            this.scrollList.nativeElement.scrollToVerticalOffset(this.scrollList.nativeElement.scrollableHeight, true);
-        }, 100);
-    }
-
-    ngOnDestroy(): void {
     }
 
     get isDrawerOpen() {
@@ -305,4 +271,8 @@ export class DrawerComponent implements OnInit, OnDestroy {
             return isDrawerOpenOrClosed;
         }
     }
+
+    ngOnDestroy(): void {
+    }
+
 }

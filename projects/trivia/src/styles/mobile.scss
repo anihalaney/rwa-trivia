@@ -1,0 +1,80 @@
+@import "../app-variables";
+.btn-blue {
+  background-color: #3b5998;
+  color: white;
+  font-size: 17;
+  padding: 15;
+}
+
+.btn-transparent {
+  background: white;
+  color: #3b5998;
+  font-size: 17;
+  padding: 15;
+  border-width: 1;
+  border-color: #e2e2e2;
+  border-radius: 5;
+
+  &.blue-border {
+    border-color: #3b5998;
+  }
+}
+
+ .signIn .text-field,
+.signUp .text-field,
+.signUpExtraInfo .text-field,
+.display-name.text-field,
+.profile-settings .text-field{
+  border-width: 1;
+  border-color: #dddddd;
+  border-radius: 5;
+  padding: 15;
+  margin: 10 15;
+}
+
+.signUpExtraInfo  .display-name.text-field {
+  border-width: 1;
+  border-color: #dddddd;
+  border-radius: 5;
+  padding: 15;
+  margin: 10 15;
+}
+
+.profileSettings  .display-name.text-field {
+  padding: 0;
+  padding-right: 10;
+  border-width: 1;
+  margin: 0;
+  font-size: 24;
+}
+
+.report .text-color{
+  color: black;
+}
+
+.report .report-text-color{
+  color: rgb(76, 175, 80);
+}
+
+.QA-text-align{
+  text-align:center;
+  font-size:17;
+}
+
+.game-question .QA-text-align{
+  font-weight: bold;
+  font-size: 22 !important;
+}
+
+.report .QA-text-align,
+.reported-details-title .QA-text-align {
+  text-align: left;
+}
+.feedbackForm {
+    padding: 5;
+    .error {
+      margin: 5 0 0 15;
+      color:$red-dark;
+      
+    }
+}

@@ -1,147 +1,232 @@
-.textcenter.clearfix .yourimg { margin: 0 auto 16px; }
-.innerli{ border:1px solid; border-radius: 4px; padding: 15px; display: block;min-height: 415px;max-height: 415px; }
-.T-tagging{ font-size: 14px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0px;word-break: break-all;height: 40px;}
-.innerli .yourimg{ width: 94%; max-width: 70px; border-radius: 50%; height: auto; /*box-shadow: 0 3px 7px rgba(0,0,0,0.25);*/ margin-bottom: 16px; border:1px solid; padding: 2px}
-.yourimg img{ display: block; width: 70px; height: 60px; border-radius: 50% }
-.vs {position: absolute;top: 24px;font-size: 18px;font-family: hindmedium;height: 25px;right: -9px;color: #7c7c7c;background: #FFF;}
-.light{font-family: 'hindmedium';}
-.owl-item .col-md-3{ width: 100% }
-
-.playnow{ padding: 3px 54px;font-size: 16px}
-.playnow span{ display: block; font-size: 12px; font-family: 'hindregular'}
-.opponent{  margin-top: 3px;  text-align: center;}
-hr{height:15px; visibility: hidden; margin: 0;}
-.div-right-border
-{
-    border-right: 1px solid transparent; 
-    // text-align: left;
-    border-color: rgba(204,204,204,0.44);
+.textcenter.clearfix .yourimg {
+  margin: 0 auto 16px;
 }
-.div-left-border
-{
-    margin-left: -1px;
-    border-left: 1px solid transparent;
-    border-color: rgba(204,204,204,0.44);
+.innerli {
+  border: 1px solid;
+  border-radius: 4px;
+  padding: 15px;
+  display: block;
+  min-height: 415px;
+  max-height: 415px;
 }
-.div-spacing
-{
-    padding-top: 4%
-}
-.div-width
-{
-    width: 50%;
-    padding-left: 5%;
-}
-.btn-share{ 
-    font-size: 14px;
-    font-family: 'hindregular';
-    border-radius: 4px;
-    display:inline-block;
-    text-align: center;
-    border-width: 1px;
-    border-style: solid;
-}
-.opponent-turn
-{
-    padding: 12px 38px;
-}
-.waiting-for-opponent
-{
-    padding: 3px 54px;
-}
-.no-opponent{ display: block; width: 64px; height: 60px; border-radius: 50% } 
-.text-align
-{
-    text-align: left;
+.T-tagging {
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 0px;
+  word-break: break-all;
+  height: 40px;
 }
 
-.div-score
-{
-    padding-top: 7%;
+.ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
-.div-badge
-{
-    height: 100px;
+.innerli .yourimg {
+  width: 94%;
+  max-width: 70px;
+  border-radius: 50%;
+  height: auto; /*box-shadow: 0 3px 7px rgba(0,0,0,0.25);*/
+  margin-bottom: 16px;
+  border: 1px solid;
+  padding: 2px;
 }
-.div-location
-{
-   height: 25px;
+.yourimg img {
+  display: block;
+  width: 70px;
+  height: 60px;
+  border-radius: 50%;
 }
-.padding-right
-{
-    padding-right: 1px;
+.vs {
+  position: absolute;
+  top: 24px;
+  font-size: 18px;
+  font-family: hindmedium;
+  height: 25px;
+  right: -9px;
+  color: #7c7c7c;
+  background: #fff;
 }
-.score-text-align
-{
-    text-align: left;
+.light {
+  font-family: "hindmedium";
+}
+.owl-item .col-md-3 {
+  width: 100%;
+}
+
+.playnow {
+  padding: 3px 54px;
+  font-size: 16px;
+}
+.playnow span {
+  display: block;
+  font-size: 12px;
+  font-family: "hindregular";
+}
+.opponent {
+  margin-top: 3px;
+  text-align: center;
+}
+hr {
+  height: 15px;
+  visibility: hidden;
+  margin: 0;
+}
+.div-right-border {
+  border-right: 1px solid transparent;
+  // text-align: left;
+  border-color: rgba(204, 204, 204, 0.44);
+}
+.div-left-border {
+  margin-left: -1px;
+  border-left: 1px solid transparent;
+  border-color: rgba(204, 204, 204, 0.44);
+}
+.div-spacing {
+  padding-top: 4%;
+}
+.div-width {
+  width: 50%;
+  padding-left: 5%;
+}
+.btn-share {
+  font-size: 14px;
+  font-family: "hindregular";
+  border-radius: 4px;
+  display: inline-block;
+  text-align: center;
+  border-width: 1px;
+  border-style: solid;
+}
+.opponent-turn {
+  padding: 12px 38px;
+}
+.waiting-for-opponent {
+  padding: 3px 54px;
+}
+.no-opponent {
+  display: block;
+  width: 64px;
+  height: 60px;
+  border-radius: 50%;
+}
+.text-align {
+  text-align: left;
+}
+
+.div-score {
+  padding-top: 7%;
+}
+.div-badge {
+  height: 100px;
+}
+.div-location {
+  height: 25px;
+}
+.padding-right {
+  padding-right: 1px;
+}
+.score-text-align {
+  text-align: left;
 }
 
 .float-left {
-    float: left !important;
+  float: left !important;
 }
 
 .float-right {
-    float: right !important;
+  float: right !important;
 }
 
-@media screen and ( max-width:990px){
-    .text-align,.div-score
-    {
-        text-align: center;
-    }
-    .div-spacing
-    {
-        padding-top: 0
-    }
-    
+@media screen and (max-width: 990px) {
+  .text-align,
+  .div-score {
+    text-align: center;
+  }
+  .div-spacing {
+    padding-top: 0;
+  }
 }
-@media screen and ( max-width:768px){
-    .score-text-align
-    {
-        text-align: center;
-    }
-    .div-badge
-    {
-        height: 70px;
-    }
-    .div-spacing
-    {
-        padding-top: 2%
-    }
-    
-    
+@media screen and (max-width: 768px) {
+  .score-text-align {
+    text-align: center;
+  }
+  .div-badge {
+    height: 70px;
+  }
+  .div-spacing {
+    padding-top: 2%;
+  }
 }
-@media screen and ( max-width:767px){
-    .btn-share
-    {
-       width: 100%;
-    }
-    
+@media screen and (max-width: 767px) {
+  .btn-share {
+    width: 100%;
+  }
 }
-@media screen and ( max-width:400px){
-    .div-spacing
-    {
-        padding-top: 4%
-    }  
+@media screen and (max-width: 400px) {
+  .div-spacing {
+    padding-top: 4%;
+  }
 }
 @media (min-width: 1025px) and (max-width: 1282px) {
-    .playnow,.opponent-turn,.waiting-for-opponent
-    {
-        font-size: 14px;
-        padding: 0 30%;
-    }
+  .playnow,
+  .opponent-turn,
+  .waiting-for-opponent {
+    font-size: 14px;
+    padding: 0 30%;
   }
-.mobile{
-    padding:10;
-    
-    .tagging {
-        color: #fe4f20;
-        padding:2 0 2 0;
-    }
-
-    .user-name{
-        // color: black;
-        // font-size: 15;
-    }
 }
- 
+.mobile {
+  padding: 10;
+
+  .tagging {
+    color: #fe4f20;
+    padding: 2 0 2 0;
+  }
+
+  .user-name {
+    // color: black;
+    // font-size: 15;
+  }
+}
+
+.active-container {
+  border-width: 1;
+  border-color:#e4e4e4;
+  border-radius: 12;
+  padding: 15;
+  margin: 5 10 4 10;
+}
+
+.cat-title {
+  color: #3b5998;
+  font-size: 18;
+  font-weight: 500;
+  line-height: 19;
+}
+
+.active-game-timer {
+  color: #949494;
+  font-size: 17;
+  // line-height: 15;
+  padding: 0 0 0 0;
+}
+
+.active-play-now {
+  color: #3b5998;
+  font-size: 18;
+  text-transform: uppercase;
+  font-weight: 600;
+  line-height: 21;
+  padding-Top:8;
+}
+
+.active-waiting-opponent {
+  color: #dddddd;
+  font-size: 18;
+  text-transform: uppercase;
+  font-weight: 600;
+  line-height: 21;
+  padding-Top:8;
+}

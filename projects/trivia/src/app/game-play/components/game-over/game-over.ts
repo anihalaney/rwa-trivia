@@ -43,6 +43,8 @@ export class GameOver implements OnInit {
   userInvitations: { [key: string]: Invitation };
   userCardType = userCardType;
   correctAnswerClassIndexIncrement = 0;
+  dialogOpen: boolean = false;
+  openReportDialog: boolean = false;
   continueButtonClicked(event: any) {
     this.gameOverContinueClicked.emit();
   }
@@ -99,16 +101,20 @@ export class GameOver implements OnInit {
       if (stats != null) {
         this.questionsArray = stats;
         this.questionsArray.map((res) => {
+          res.openReport = false;
+          res.ansStatus = false;
           res.answers.map((response) => {
             if (response.correct && response.answerText === res.userGivenAnswer) {
               this.correctAnswerClassIndexIncrement++;
               const className = `score${this.correctAnswerClassIndexIncrement}`;
               res.className = className;
+              res.ansStatus = true;
             }
           });
           return res;
         });
-        this.cd.detectChanges();
+        
+        this.cd.markForCheck();
       }
     }));
   }

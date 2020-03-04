@@ -8,6 +8,7 @@ import { UserActions } from 'shared-library/core/store';
 import * as utils from 'tns-core-modules/utils/utils';
 import { Utils } from 'shared-library/core/services';
 import { Page } from 'tns-core-modules/ui/page';
+import { RouterExtensions } from 'nativescript-angular/router';
 @Component({
     selector: 'game-profile',
     templateUrl: './game-profile.component.html',
@@ -25,13 +26,19 @@ export class GameProfileComponent extends GameProfile implements OnDestroy, OnIn
         public userAction: UserActions,
         public cd: ChangeDetectorRef,
         public _utils: Utils,
-        private page: Page
+        private page: Page,
+        private routerExtension: RouterExtensions,
     ) {
         super(route, router, store, userAction, cd, _utils);
     }
 
     ngOnInit() {
         this.page.on('loaded', () => { this.renderView = true; this.cd.markForCheck(); });
+    }
+
+
+    getIcon(icon) {
+        return String.fromCharCode(parseInt(`0x${icon}`, 16));
     }
 
     ngOnDestroy() {
@@ -42,5 +49,10 @@ export class GameProfileComponent extends GameProfile implements OnDestroy, OnIn
     openLink(url: string) {
         utils.openUrl(url);
     }
+
+    updateCategoryTag(){
+        this.routerExtension.navigate(['/update-category-tag']);
+    }
+
 
 }

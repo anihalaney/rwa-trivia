@@ -89,18 +89,19 @@
             <div class="formfield">
               <div class="cell">
 
-                <label class="m-r-51">Location {{userType === 0 ? '*': ''}}</label>
-                <div *ngIf="userType === 0" class="input-edit">
+                <label class="m-r-51">Location  </label>
+                <div *ngIf="userType === 0" class="input-edit"
+                  [ngClass]="{'animate-ease-out': (singleFieldEdit.location), 'animate-ease-in': (!singleFieldEdit.location)}">
                   <input formControlName="location" [placeholder]="userType === 0 ? 'Enter Location' : ''" type="text"
-                    class="required" aria-label="location" list="locationList"
-                    (ngModelChange)="locationChanged($event)">
+                    class="required" aria-label="location" list="locationList" (ngModelChange)="locationChanged($event)"
+                    (change)="changedLocation($event)">
                   <datalist id="locationList">
                     <option *ngFor="let item of locations" [value]="item">{{item}}</option>
                   </datalist>
                   <span class="field-edit-icon" *ngIf="!singleFieldEdit.location  && userType === 0"
                     (click)="editSingleField('location')"></span>
                   <span class="field-save-icon"
-                    *ngIf="singleFieldEdit.location && userForm.value.location !==''  && userType === 0"
+                    *ngIf="singleFieldEdit.location && userType === 0"
                     (click)="onSubmit(true, 'location')"></span>
                 </div>
                 <button *ngIf="singleFieldEdit.location" (click)="getLocation()" class="get-location btn save"> Get
@@ -109,10 +110,10 @@
 
                   Where in the world you are
                 </p>
-                <p *ngIf="userForm.controls.location.errors && !userForm.controls.location.pristine"
+                <!-- <p *ngIf="userForm.controls.location.errors && !userForm.controls.location.pristine"
                   class="error location-error">
                   Location
-                  is required!</p>
+                  is required!</p> -->
               </div>
             </div>
           </div>
@@ -183,44 +184,44 @@
 
                           <!-- Phone No -->
                           <div class="clearfix namefield"
-                            *ngIf="isEnableEditProfile && (currentAuthProvider===authProviderConstants.GOOGLE || currentAuthProvider===authProviderConstants.FACEBOOK || currentAuthProvider===authProviderConstants.PASSWORD )">
+                            *ngIf="isEnableEditProfile && (currentAuthProvider===authProviderConstants.GOOGLE || currentAuthProvider===authProviderConstants.FACEBOOK || currentAuthProvider===authProviderConstants.PASSWORD || currentAuthProvider===authProviderConstants.APPLE )">
                             <div class="formfield">
-                              <label id="nameLableField">Phone No</label>
+                              <label id="nameLableField">Phone</label>
                               <input formControlName="phoneNo" type="text"
-                                [placeholder]="userType === 0 ? 'Enter Phone No' : ''" class="required"
+                                [placeholder]="userType === 0 ? 'Enter Phone' : ''" class="required"
                                 aria-label="name">
                               <p *ngIf="userForm.controls.phoneNo.errors?.pattern && !userForm.controls.phoneNo.pristine"
-                                class="error">Phone No is Invalid!</p>
+                                class="error">Phone is Invalid!</p>
                             </div>
                           </div>
 
-                           <!-- Old Password -->
+                          <!-- Old Password -->
                           <div class="clearfix namefield"
-                           *ngIf="isEnableEditProfile && (currentAuthProvider===authProviderConstants.PASSWORD)">
-                           <div class="formfield">
-                             <label id="nameLableField">Old Password</label>
-                             <input formControlName="oldPassword" type="password"
-                               [placeholder]="userType === 0 ? 'Enter Old Password' : ''" class="required"
-                               aria-label="oldPassword">
-                             <p *ngIf="userForm.controls.oldPassword.errors?.minlength && !userForm.controls.oldPassword.pristine"
-                               class="error">Password must be atleast 6 characters</p>
-                             <p *ngIf="userForm.controls.password.valid && userForm.controls.confirmPassword.valid && !userForm.hasError('passwordmismatch') && userForm.hasError('requiredoldpassword')"
+                            *ngIf="isEnableEditProfile && (currentAuthProvider===authProviderConstants.PASSWORD)">
+                            <div class="formfield">
+                              <label id="nameLableField">Old Password</label>
+                              <input formControlName="oldPassword" type="password"
+                                [placeholder]="userType === 0 ? 'Enter Old Password' : ''" class="required"
+                                aria-label="oldPassword">
+                              <p *ngIf="userForm.controls.oldPassword.errors?.minlength && !userForm.controls.oldPassword.pristine"
+                                class="error">Password must be atleast 6 characters</p>
+                              <p *ngIf="userForm.controls.password.valid && userForm.controls.confirmPassword.valid && !userForm.hasError('passwordmismatch') && userForm.hasError('requiredoldpassword')"
                                 class="error">Old Password is required</p>
-                           </div>
-                         </div>
+                            </div>
+                          </div>
 
-                           <!-- New Password -->
+                          <!-- New Password -->
                           <div class="clearfix namefield"
-                           *ngIf="isEnableEditProfile && (currentAuthProvider===authProviderConstants.PASSWORD)">
-                           <div class="formfield">
-                             <label id="nameLableField">New Password</label>
-                             <input formControlName="password" type="password"
-                               [placeholder]="userType === 0 ? 'Enter New Password' : ''" class="required"
-                               aria-label="password">
-                             <p *ngIf="userForm.controls.password.errors?.minlength && !userForm.controls.password.pristine"
-                               class="error">Password must be atleast 6 characters</p>                               
-                           </div>
-                         </div>
+                            *ngIf="isEnableEditProfile && (currentAuthProvider===authProviderConstants.PASSWORD)">
+                            <div class="formfield">
+                              <label id="nameLableField">New Password</label>
+                              <input formControlName="password" type="password"
+                                [placeholder]="userType === 0 ? 'Enter New Password' : ''" class="required"
+                                aria-label="password">
+                              <p *ngIf="userForm.controls.password.errors?.minlength && !userForm.controls.password.pristine"
+                                class="error">Password must be atleast 6 characters</p>
+                            </div>
+                          </div>
 
                           <!-- Confirm Password -->
                           <div class="clearfix namefield"
@@ -235,7 +236,7 @@
                               <p *ngIf="userForm.controls.password.valid && userForm.controls.confirmPassword.valid && userForm.hasError('passwordmismatch')"
                                 class="error">Must match with New Password</p>
                             </div>
-                          </div>                        
+                          </div>
 
                           <!-- Social Accounts -->
                           <div *ngIf="isEnableEditProfile && userType===0" class="row pcategories saccount">
@@ -282,25 +283,26 @@
                             </div>
                           </div>
                           <!-- Social Accounts end -->
-                          <!-- Categories -->
+                          <!-- Topics -->
                           <div *ngIf="userType === 0 && isEnableEditProfile" class="row pcategories">
                             <div class="col-sm-3 add-space">
-                              <h3>Preferred Categories</h3>
+                              <h3>Preferred Topics</h3>
                             </div>
-                            <div class="col-sm-9" formArrayName="categoryList">
-                              <div class="formfield" *ngFor="let category of categoryList.controls; let i=index"
+
+                            <div class="col-sm-9" formArrayName="topicList">
+                              <div class="formfield" *ngFor="let topic of topicList?.controls; let i=index"
                                 [formGroupName]="i">
                                 <label>
-                                  <input formControlName="isSelected" type="checkbox"
-                                    name="">{{categoryDict[category.value['category']].categoryName}}
+                                  <input formControlName="isSelected" type="checkbox" name="">
+                                  {{topic.value['type'] === 'category' ?  categoryDict[topic.value['topic']].categoryName : topic.value['topic'] }}
                                 </label>
                               </div>
                             </div>
                           </div>
-                          <!-- Categories end -->
+                          <!-- Topics end -->
 
                           <!-- Tags -->
-                          <div *ngIf="userType === 0 && isEnableEditProfile" class="row pcategories">
+                          <!-- <div *ngIf="userType === 0 && isEnableEditProfile" class="row pcategories">
                             <div class="col-sm-3 add-space">
                               <h3>Preferred Tags</h3>
                             </div>
@@ -329,11 +331,6 @@
                             </div>
 
                             <div class="col-xs-12 text-center">
-
-                              <!-- <div class="row"> -->
-                              <!-- Bulk Uploader Request -->
-
-                              <!-- <div class="col-md-9 col-sm-9 bulk-upload-request"> -->
                               <label>
                                 <button *ngIf="(!user.bulkUploadPermissionStatus
                                             || user.bulkUploadPermissionStatus === NONE
@@ -346,10 +343,8 @@
                                   privilege</p>
 
                               </label>
-                              <!-- </div> -->
-                              <!-- </div> -->
                             </div>
-                          </div>
+                          </div> -->
                         </div>
                       </div>
                       <div *ngIf="userType === 0" class="col-lg-2 col-sm-12 col-md-3 col-xs-12">

@@ -4,9 +4,10 @@ import { Store, select } from '@ngrx/store';
 import { AppState, appState } from '../../../store';
 import { User, userCardType, Account, Invitation } from 'shared-library/shared/model';
 import { Observable, Subject } from 'rxjs';
-import { UserActions } from 'shared-library/core/store';
+import { UserActions, categoryDictionary } from 'shared-library/core/store';
 import { ChangeDetectorRef } from '@angular/core';
 import { Utils } from 'shared-library/core/services';
+import * as lodash from 'lodash';
 
 export enum UserType {
     userProfile,
@@ -33,7 +34,16 @@ export class GameProfile {
     loggedInUserAccount: Account;
     gamePlayedAgainst: any;
     userInvitations: { [key: string]: Invitation };
-
+    tags: any = {};
+    tagsArray: any = {};
+    loader: Boolean = false;
+    categoryText = ' ';
+    categoryDictionary = {};
+    topics = [];
+    otherUserTopics = [];
+    topicList = '';
+    otherUserTopicList = '';
+    topicsArray = { userTopics: [], otherUserTopics: [], comparison: '' };
     constructor(
         public route: ActivatedRoute,
         public router: Router,
@@ -46,8 +56,23 @@ export class GameProfile {
             this.route.params.pipe(
                 skipWhile(params => !params.userid),
                 map(params => this.userId = params.userid),
+                switchMap(() => this.store.select(categoryDictionary).pipe(map(categoryDict => this.categoryDictionary = categoryDict))),
                 flatMap(() => this.store.select(appState.coreState).pipe(select(s => s.user))),
                 switchMap(user => {
+                    this.topics = [];
+                    if (user && user.tags && user.tags.length > 0) {
+                        this.tagsArray.userTags = user.tags;
+                        const userTags = user.tags.join(', ');
+                        this.tags.userTags = userTags ? userTags : '';
+                        this.topics = [...user.tags];
+                        this.topicsArray.userTopics = [...user.tags, ...user.categoryIds];
+                    }
+                    if (user && user.categoryIds) {
+                        this.topics = [...this.topics, user.categoryIds.map((data) => this.categoryDictionary[data].categoryName)];
+                    }
+
+                    this.topicList = this.topics.join(', ');
+
                     if (user && user.userId === this.userId) {
                         this.user = user;
                         this.userType = UserType.userProfile;
@@ -59,6 +84,7 @@ export class GameProfile {
                                 this.loggedInUserAccount = accountInfo;
                             });
                     }
+                    this.cd.markForCheck();
                     return this.initializeProfile();
                 })
             ).subscribe());
@@ -71,12 +97,25 @@ export class GameProfile {
             skipWhile(userDict => !userDict || !userDict[this.userId] || !userDict[this.userId].account),
             take(1),
             map(userDict => {
+                this.topics = [];
                 this.user = userDict[this.userId];
                 this.account = this.user.account;
                 this.gamePlayedAgainst = this.user.gamePlayed;
                 if (this.gamePlayedAgainst && this.loggedInUser && this.loggedInUser.userId && this.userType === 1) {
                     this.gamePlayedChangeSubject.next(true);
                 }
+                if (this.user && this.user.tags && this.user.tags.length > 0) {
+                    this.tagsArray.otherUserTags = this.user.tags;
+                    this.topicsArray.otherUserTopics = [...this.user.tags, ...this.user.categoryIds];
+                    this.topicsArray.comparison = lodash.intersection(this.topicsArray.userTopics, this.topicsArray.otherUserTopics);
+                    const userTags = this.user.tags.join(', ');
+                    this.tags.otherUserTags = userTags ? userTags : '';
+                    this.otherUserTopics = [...this.user.tags];
+                }
+                this.otherUserTopics = [...this.otherUserTopics,
+                this.user.categoryIds.map((data) => this.categoryDictionary[data].categoryName)];
+
+                this.otherUserTopicList = this.otherUserTopics.join(', ');
                 this.userProfileImageUrl = this.getImageUrl(this.user);
                 if (this.socialProfileObj) {
                     this.socialProfileObj.map(profile => {
@@ -132,6 +171,14 @@ export class GameProfile {
                 }));
     }
 
+    get userInfo() {
+        return {
+            showEditOrOptions: this.userType === 0 ? 'edit' : this.userType === 1 ? 'options' : false,
+            userId: this.user && this.user.userId ? this.user.userId : '',
+            routing: '/user/my/profile'
+        };
+    }
+
     getIcon(icon) {
         return String.fromCharCode(parseInt(`0x${icon}`, 16));
     }
@@ -147,6 +194,7 @@ export class GameProfile {
     }
 
     sendFriendRequest() {
+        this.loader = true;
         const inviteeUserId = this.user.userId;
         this.store.dispatch(this.userAction.addUserInvitation(
             { userId: this.loggedInUser.userId, inviteeUserId: inviteeUserId }));

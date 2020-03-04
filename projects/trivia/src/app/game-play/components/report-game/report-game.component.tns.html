@@ -1,66 +1,66 @@
-<StackLayout (tap)="hideKeyboard()" class="Roboto-Regular">
-    <GridLayout rows="auto" columns="auto,*" backgroundColor="#3e5b95" padding="15">
-        <Label row="0" col="0" text="Report an issue" horizontalAlignment="left" color="#ffffff" fontSize="20"
-            textWrap="true"></Label>
-        <Label row="0" col="1" text="&#xf057;" horizontalAlignment="right" (tap)="onClose()"
-            class="fa times-circle close-icon"></Label>
-    </GridLayout>
-    <StackLayout>
-        <ScrollView>
-            <StackLayout>
-                <StackLayout padding="15">
-                    <Label class="main-question Roboto-Medium" text="{{question.questionText}}"
-                        horizontalAlignment="left" textWrap="true"></Label>
-                    <StackLayout>
-                        <StackLayout orientation="horizontal">
-                            <Label class="reported-details-title Roboto-Medium" text="Correct answer: "
-                                textWrap="true"></Label>
-                            <Label class="reported-details-content" text="{{correctAnswer}}" textWrap="true"></Label>
-                        </StackLayout>
-                        <StackLayout orientation="horizontal">
-                            <Label class="reported-details-title Roboto-Medium" text="Other Option: "
-                                textWrap="true"></Label>
-                            <Label class="reported-details-content" text="{{otherAnswer}}" textWrap="true"></Label>
-                        </StackLayout>
-                        <StackLayout orientation="horizontal">
-                            <Label class="reported-details-title Roboto-Medium" text="Category: "
-                                textWrap="true"></Label>
-                            <Label class="reported-details-content" text="{{categoryName}}" textWrap="true"></Label>
-                        </StackLayout>
-                        <StackLayout orientation="horizontal">
-                            <Label class="reported-details-title Roboto-Medium" text="Tags: " textWrap="true"></Label>
-                            <Label class="reported-details-content" text="{{question.tags?.toString()}}"
-                                textWrap="true"></Label>
-                        </StackLayout>
+<StackLayout backgroundColor="#fff" (tap)="hideKeyboard()" class="SF-Pro-Regular">
+    <FlexboxLayout class="dialog-title-container" padding="0 20">
+        <Label text="Report" class="dialog-title" textWrap="true"></Label>
+        <Label text="&#xf00d;" class="fa close-tag" textWrap="true" (tap)="closeDialogReport()"></Label>
+    </FlexboxLayout>
+    <ScrollView height="100%">
+        <StackLayout>
+            <FlexboxLayout flexDirection="column" class="border-bottom">
+                <GridLayout class="report" marginBottom="10">
+                    <render-question [question]="question"></render-question>
+                </GridLayout>
+                <GridLayout rows="auto, auto, auto">
+                    <StackLayout row="0" class="report" marginBottom="10" style="font-size: 14;"
+                        orientation="horizontal">
+                        <Label verticalAlignment="top" class="report-text-color SF-Pro-Medium" text="Correct answer: "
+                            textWrap="true"></Label>
+                        <FlexboxLayout flexDirection="column" *ngIf="correctAnswer">
+                            <ng-container *ngFor="let answer of correctAnswer">
+                                <render-answer [answer]="answer" [doPlay]="false" [isUserInteractionEnabled]="false"
+                                    [isGameAnswer]="false"></render-answer>
+                            </ng-container>
+                        </FlexboxLayout>
                     </StackLayout>
-                </StackLayout>
-                <StackLayout class="hr-light" textWrap="true"></StackLayout>
-                <Label class="problem-content"
-                    text="If you're having trouble with above question, please use this from to tell us about the issue you're experiencing."
-                    textWrap="true"></Label>
-
-                <Label class="extra-content" text="Issues:" textWrap="true"></Label>
-
-                <StackLayout padding="15" row="0" col="0">
-                    <StackLayout class="p-10" *ngFor="let option of reportOptions">
-                        <StackLayout orientation="horizontal" verticalAlignment="center">
-                            <CheckBox #elem [checked]="option.selected"
-                                (checkedChange)="elem.checked !== option.selected && changeCheckedRadio(option)"
-                                class="checkbox" boxType="circle"></CheckBox>
-                            <StackLayout verticalAlignment="center">
-                                <Label style="color:#4b4b4b" [text]="option.text" textWrap="true"
-                                    (tap)="changeCheckedRadio(option)"></Label>
-                            </StackLayout>
-                        </StackLayout>
+                    <StackLayout row="1" class="reported-details-title" orientation="horizontal">
+                        <Label verticalAlignment="top" class="SF-Pro-Medium" text="Other Option: "
+                            textWrap="true"></Label>
+                        <FlexboxLayout flexDirection="column">
+                            <ng-container *ngFor="let wrongAnswers of otherAnswer; let i = index">
+                                <render-answer [answer]="wrongAnswers" [doPlay]="false"
+                                    [isUserInteractionEnabled]="false" [isGameAnswer]="false"></render-answer>
+                            </ng-container>
+                        </FlexboxLayout>
                     </StackLayout>
-                    <TextView hint="Other" #textField class="textbox" [(ngModel)]="otherReason" height="100"></TextView>
-                </StackLayout>
-                <Label class="extra-content"
-                    text="Thanks for taking the time to submit a issue. We will be in touch with you for more details as we investigate."
-                    textWrap="true"></Label>
-                <Button text="SUBMIT" class="submit-btn Roboto-Medium" (rippleTap)="saveReportQuestion()"
-                    stlRippleEffect></Button>
-            </StackLayout>
-        </ScrollView>
-    </StackLayout>
+                    <FlexboxLayout row="2" style="font-size: 14;">
+                        <Label class="reported-details-title text-grey SF-Pro-Medium" text="Category: "
+                            textWrap="true"></Label>
+                        <Label class="reported-details-content text-grey" text="{{categoryName}}"
+                            textWrap="true"></Label>
+                    </FlexboxLayout>
+                </GridLayout>
+            </FlexboxLayout>
+            <Label class="problem-content"
+                text="Report above question, choose from below issue or select other to type any other issue"
+                textWrap="true"></Label>
+            <FlexboxLayout flexDirection="column" padding="0 15">
+                <ng-container *ngFor="let option of reportOptions; let i = index;">
+                    <FlexboxLayout *ngIf="option.text !== 'Other'" class="option-border"
+                        [ngClass]="{'selected-report': option.selected}" (tap)="selectReasons(i)">
+                        <Label [text]="option.text" [ngStyle]="{color: (option.selected ? '#fff': '#000')}"
+                            textWrap="true"></Label>
+                    </FlexboxLayout>
+                    <FlexboxLayout flexDirection="column" *ngIf="option.text === 'Other'" (tap)="selectReasons(i)">
+                        <Label marginBottom="10" color="#000" [text]="option.text" textWrap="true"></Label>
+                        <TextView hint="Describe your issue" #textField class="textbox" [(ngModel)]="otherReason"
+                            height="100">
+                        </TextView>
+                    </FlexboxLayout>
+                </ng-container>
+
+            </FlexboxLayout>
+            <Button class="submit-btn btn-blue SF-Pro-Medium" (rippleTap)="saveReportQuestion()" stlRippleEffect
+                text="Submit">
+            </Button>
+        </StackLayout>
+    </ScrollView>
 </StackLayout>

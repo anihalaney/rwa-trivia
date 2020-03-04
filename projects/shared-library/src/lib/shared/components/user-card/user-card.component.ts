@@ -24,6 +24,9 @@ export class UserCardComponent implements OnInit, OnDestroy, OnChanges {
   @Input() otherInfo: any;
   @Input() userId: string;
   @Output() userChange = new EventEmitter();
+  @Input() theme: string;
+  @Input() height: number;
+  @Input() width: number;
   @Input() isGame: boolean;
   loggedInUserId: string;
   userCardType = userCardType;
@@ -43,6 +46,7 @@ export class UserCardComponent implements OnInit, OnDestroy, OnChanges {
   ngOnInit() {
     this.userDict$ = this.store.select(coreState).pipe(select(s => s.userDict));
     this.subscriptions.push(this.userDict$.subscribe(userDict => {
+      // console.log(userDict);
       this.userDict = userDict;
       if (this.user) {
         if (userDict[this.userId] && this.user) {

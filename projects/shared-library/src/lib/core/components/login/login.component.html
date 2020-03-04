@@ -95,6 +95,7 @@
           <a (click)="googleLogin()" ><img src="/assets/images/gpulsebtn.png" class="signin" alt="Google Plus" /></a>
           <a (click)="emailSignIn()"  *ngIf="applicationSettings && applicationSettings.phone_authentication && signInMethod === 'phone'"><img src="/assets/images/sign-email.png" class="signin" alt="Email Login" /></a>
           <a (click)="phoneSignIn()" *ngIf="applicationSettings && applicationSettings.phone_authentication && signInMethod === 'email'"><img src="/assets/images/sign-phone.png" class="signin" alt="Phone Login" /></a>
+          <a (click)="appleSignIn()" style="border-radius: 5px;" *ngIf="applicationSettings && applicationSettings.apple_authentication"><img src="/assets/images/sign-apple.png" class="signin" alt="Phone Login" /></a>
         </div>
       </div>
     </div>

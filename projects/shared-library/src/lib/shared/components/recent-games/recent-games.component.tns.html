@@ -1,9 +1,9 @@
-<ns-action-bar title="Recently Completed Games" class="Roboto-Regular" showAdd="true" *ngIf="!hideActionbar"></ns-action-bar>
-<StackLayout *ngIf="renderView">
+<ns-action-bar title="Recently Completed Games" class="SF-Pro-Regular" showAdd="true" *ngIf="!hideActionbar"></ns-action-bar>
+<StackLayout *ngIf="renderView || hideActionbar">
   <ScrollView>
     <StackLayout>
         <Label paddingTop="20" text="Completed Games" orientation="horizontal" horizontalAlignment="center" padding="10"
-        textWrap="true" class="title Roboto-Bold"> </Label>
+        textWrap="true" class="title SF-Pro-Bold"> </Label>
       <StackLayout *ngFor="let game of recentGames | slice:startIndex:maxIndex">
         <StackLayout *ngIf="(game.GameStatus !== GameStatus.REJECTED && game.GameStatus !== GameStatus.INVITATION_TIMEOUT ) || 
               (game.GameStatus === GameStatus.REJECTED && game.playerIds[0] === user.userId) ||

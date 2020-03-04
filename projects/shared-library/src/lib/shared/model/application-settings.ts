@@ -10,7 +10,7 @@ export class ApplicationSettings {
     earn_bytes_on_question_contribute: number;
     enabled_rich_editor: boolean;
     display_achievements: boolean;
-    quill_options: { list, options };
+    quill_options: { list, options, custom_toolbar_position: string, web_view_question_options, web_view_answer_options };
     max_image_size_of_question?: number;
     android_version: number;
     ios_version: number;
@@ -27,6 +27,7 @@ export class ApplicationSettings {
     invite_bits?: number;
     invite_bits_enabled?: boolean;
     auto_save: { is_enabled: boolean, time: number };
+    apple_authentication: boolean
 }
 
 export class TimerLoader {

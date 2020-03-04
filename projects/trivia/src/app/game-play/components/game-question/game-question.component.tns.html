@@ -1,96 +1,88 @@
 <GridLayout>
-    <ScrollView>
-        <StackLayout backgroundColor="#f1f2f2" [class.m-b-70]="showContinueBtn">
-            <CardView class="cardStyle" android:elevation="20" ios:elevation="40" radius="5" class="gameplay"
-                backgroundColor="white">
-                <StackLayout>
-                    <GridLayout *ngIf="user && user!==null && playerMode == PlayerMode.Single"  rows="auto,*" columns="auto,*,2*" marginRight="5" class="sideStackLayoutHeader" paddingTop="10">
-                        <app-user-card [user]="user" [userId]="user.userId" [isGamePlay]=true
-                            [type]="userCardType.USER_IMAGE_NAME_WITH_SCORE_IN_GAME_PLAY_SINGLE_PLAYER"
-                            [otherInfo]="{correctCount:correctCount,questionRound:questionRound,totalRound:totalRound,actionText:actionText }">
-                        </app-user-card>
-                    </GridLayout>           
-                    <GridLayout *ngIf="user && user!==null && playerMode == PlayerMode.Opponent" rows="*,*" columns="*" marginRight="5" class="sideStackLayoutHeader" paddingTop="10">
-                        <app-user-card [user]="user" [userId]="user.userId" [isGamePlay]=true
-                            [type]="userCardType.USER_IMAGE_NAME_WITH_SCORE_IN_GAME_PLAY_TWO_PLAYER"
-                            [otherInfo]="{correctCount:correctCount,questionRound:questionRound,totalRound:totalRound,otherPlayer:otherPlayer}">
-                        </app-user-card>
-                    </GridLayout>
-                    <StackLayout>
-                        <Label visibility="{{ turnFlag && threeConsecutiveAnswer ? 'visible'  : 'collapsed'}}"
-                            class="Roboto-Regular" fontSize="17" marginLeft="15" color="#af3424"
-                            text="You have reached the maximum number of correct answers you are allowed to give in the first round."
-                            textWrap="true"></Label>
-                    </StackLayout>
-                    <StackLayout *ngIf="continueNext">
-                        <Label
-                            visibility="{{ (answeredIndex!==undefined && correctAnswerIndex === answeredIndex)  ? 'visible'  : 'collapsed' }}"
-                            class="correct-text" text="CORRECT" textWrap="true" style.textAlignment="center"></Label>
+  <ScrollView [class.m-b-70]="showContinueBtn || ((answeredIndex>=0 || doPlay === false) && !showContinueBtn)"
+    id="scrollList">
+    <StackLayout margin="0 10" backgroundColor="#ffffff">
+      <GridLayout *ngIf="user && user!==null && playerMode == PlayerMode.Single" rows="*,*,*,*" columns="*,*"
+        class="sideStackLayoutHeader" padding="10 0">
+        <app-user-card [user]="user" [userId]="user.userId" [isGamePlay]=true
+          [type]="userCardType.USER_IMAGE_NAME_WITH_SCORE_IN_GAME_PLAY_SINGLE_PLAYER"
+          [otherInfo]="{bits: account.bits, bytes:account.bytes, progressValue: progressValue, correctCount:correctCount,questionRound:questionRound,totalRound:totalRound,actionText:actionText }">
+        </app-user-card>
+      </GridLayout>
+      <GridLayout margin="0 10" *ngIf="user && user!==null && playerMode == PlayerMode.Opponent" rows="*,*,*"
+        columns="*" class="sideStackLayoutHeader" paddingTop="10">
+        <app-user-card [user]="user" [userId]="user.userId" [isGamePlay]=true
+          [type]="userCardType.USER_IMAGE_NAME_WITH_SCORE_IN_GAME_PLAY_TWO_PLAYER"
+          [otherInfo]="{progressValue: progressValue, correctCount:correctCount,questionRound:questionRound,totalRound:totalRound,otherPlayer:otherPlayer}">
+        </app-user-card>
+      </GridLayout>
 
-                        <Label
-                            visibility="{{(answeredIndex!==undefined && correctAnswerIndex !== answeredIndex) ? 'visible'  : 'collapsed' }}"
-                            class="incorrect-text" text="INCORRECT" textWrap="true"
-                            style.textAlignment="center"></Label>
+      <FlexboxLayout justifyContent="center">
+        <Label
+          visibility="{{ (answeredIndex!==undefined && correctAnswerIndex === answeredIndex)  ? 'visible'  : 'collapsed' }}"
+          class="correct-text green" text="CORRECT" textWrap="true" style.textAlignment="center"></Label>
 
-                        <Label visibility="{{ answeredIndex===undefined  ? 'visible'  : 'collapsed' }}"
-                            class="timeout-text" text="TIMEOUT" textWrap="true" style.textAlignment="center"></Label>
-                    </StackLayout>
-                    <StackLayout marginTop="10">
-                        <Progress [value]="progressValue" maxValue="100"></Progress>
-                    </StackLayout>
-                </StackLayout>
-            </CardView>
+        <Label
+          visibility="{{(answeredIndex!==undefined && correctAnswerIndex !== answeredIndex) ? 'visible'  : 'collapsed' }}"
+          class="incorrect-text red" text="INCORRECT" textWrap="true" style.textAlignment="center"></Label>
 
-            <StackLayout margin="7 0 0 15" orientation="horizontal">
-                <Label text="Categories:" class="Roboto-Medium" marginRight="5" fontSize="15" textWrap="true"></Label>
-                <Label text="{{categoryName}}" class="Roboto-Regular" fontSize="15" textWrap="true"
-                    color="#1b1c1c"></Label>
+        <Label *ngIf="continueNext && progressValue>=100" class="timeout-text yellow" text="TIMES UP" textWrap="true"
+          style.textAlignment="center"></Label>
+      </FlexboxLayout>
+      <render-box [setBackgroundColor]="'#f7f7f7'">
+        <StackLayout padding="20 10" class="game-question">
+          <render-question [question]="question" [questionIndex]="questionIndex" [theme]="'light'"></render-question>
+          <FlexboxLayout *ngIf="question && question.tags" margin="7 0 7 -2.5" flexWrap="wrap">
+            <Label *ngIf="categoryName" text="{{categoryName}}"
+              [style.backgroundColor]="theme === 'dark' ? '#405177':'#e2e2e2'"
+              [style.color]="theme === 'dark' ? '#a5a5a5' : '#808080'" borderRadius="22" margin="2.5 2.5" padding="5 10"
+              textWrap="true"></Label>
+            <Label *ngFor="let tags of question.tags" [style.backgroundColor]="theme === 'dark' ? '#405177':'#e2e2e2'"
+              [style.color]="theme === 'dark' ? '#a5a5a5' : '#808080'" borderRadius="22" margin="2.5 2.5" [text]="tags"
+              padding="5 10" textWrap="true"></Label>
+            <GridLayout marginTop="15" marginLeft="2.5">
+              <Label [style.color]="theme === 'dark' ? '#a5a5a5' : '#000000'" fontSize="17" text="Choose any one"
+                textWrap="true"></Label>
+            </GridLayout>
+          </FlexboxLayout>
+          <StackLayout #renderView *ngIf="question">
+            <StackLayout class="question-answered SF-Pro-Medium" margin="10 0 10 0"
+              *ngFor="let answer of question.answers;let i=index" [class.players-answer]="answeredIndex === i"
+              [class.wrong]="answeredIndex === i && correctAnswerIndex !== i" [class.right]="correctAnswerIndex === i"
+              stlRippleEffect (rippleTap)="answerButtonClicked(answer,i)" [isUserInteractionEnabled]="doPlay"
+              borderColor="#a5a5a5" borderWidth="1" borderRadius="2"
+              [style.backgroundColor]="answeredIndex === i && correctAnswerIndex !== i ? '#d54937' : ''"
+              [style.backgroundColor]="correctAnswerIndex === i ? '#71b02f' : ''">
+
+              <render-answer [answer]="answer" [isWrong]="answeredIndex === i && correctAnswerIndex !== i"
+                [isRight]="correctAnswerIndex === i" [doPlay]="doPlay" [isUserInteractionEnabled]="doPlay"
+                [isGameAnswer]="true" [theme]="'light'"></render-answer>
             </StackLayout>
-            <StackLayout margin="15" orientation="horizontal">
-                <Label text="Tags: " class="Roboto-Medium" marginRight="5" fontSize="15" fontWeight="500"
-                    textWrap="true" color="#1b1c1c"></Label>
-                <Label text="{{question.tags?.toString()}}" class="Roboto-Regular" fontSize="15" textWrap="true"
-                    color="#1b1c1c"></Label>
-            </StackLayout>
-
-            <CardView class="cardStyle" android:elevation="20" ios:elevation="40" radius="5" class="gameplay"
-                backgroundColor="white" margin="15">
-                <StackLayout padding="20 10">
-                    <render-question [question]="question" [questionIndex]="questionIndex"></render-question>
-                    <StackLayout *ngIf="question">
-                        <StackLayout class="question-answered Hind-Medium" margin="10" *ngFor="let answer of question.answers;let i=index"
-                            [class.players-answer]="answeredIndex === i" [class.wrong]="answeredIndex === i && correctAnswerIndex !== i"
-                            [class.right]="correctAnswerIndex === i" stlRippleEffect (rippleTap)="answerButtonClicked(answer,i)"
-                            [isUserInteractionEnabled]="doPlay"
-                            [style.backgroundColor] = "answeredIndex === i && correctAnswerIndex !== i ? '#d54937' : ''"
-                            [style.backgroundColor] = "correctAnswerIndex === i ? '#71b02f' : ''"
-                            >
-                            <render-answer [answer]="answer" [isWrong]="answeredIndex === i && correctAnswerIndex !== i"
-                                [isRight]="correctAnswerIndex === i" [doPlay]="doPlay"
-                                [isUserInteractionEnabled]="doPlay" [isGameAnswer]="true"></render-answer>
-
-                        </StackLayout>
-                    </StackLayout>
-                    <GridLayout margin="0 15" rows="auto" columns="auto" *ngIf="question"
-                        style=" horizontal-align:right;" class="Roboto-Medium">
-                        <author [isGamePlay]="true" [userId]="question.created_uid"></author>
-                    </GridLayout>
-                    <GridLayout margin="0 15" rows="auto" columns="auto" *ngIf="question && showContinueBtn"
-                        style="horizontal-align:center;" class="Roboto-Medium">
-                        <user-reaction *ngIf="user && question" [user]='user' [question]='question'></user-reaction>
-                    </GridLayout>
-                </StackLayout>
-            </CardView>
+          </StackLayout>
+          <StackLayout orientation="horizontal" horizontalAlignment="left">
+            <author *ngIf="question" [isGamePlay]=true [userId]="question.created_uid"></author>
+          </StackLayout>
+          <StackLayout orientation="horizontal" horizontalAlignment="center">
+            <user-reaction *ngIf="user && question && showContinueBtn" [user]='user' [question]='question'>
+            </user-reaction>
+          </StackLayout>
         </StackLayout>
-    </ScrollView>
-    <AbsoluteLayout *ngIf="showContinueBtn || ((answeredIndex>=0 || doPlay === false) && !showContinueBtn)" verticalAlignment="bottom">
-        <Button backgroundColor="#8ac541" class="Hind-Medium" color="white" (tap)="continueClicked.emit($event)" *ngIf="answeredText!== null && showContinueBtn"
-            width="100%" height="70" text="CONTINUE" fontSize="17" stlRippleEffect></Button>
-        <FlexboxLayout *ngIf="(answeredIndex>=0 || doPlay === false) && !showContinueBtn" alignItems="center" orientation="horizontal"  justifyContent="center" backgroundColor="#c0c0c0" class="Hind-Medium"  
-        width="100%" height="70">
-            <Label verticalAlignment="center"  text="SAVING GAME STAT"  color="#ffffff"></Label>
-            <ActivityIndicator marginLeft="10" verticalAlignment="center"  color="gray" ios:width="25" ios:height="25" android:width="25"
-            android:height="25" busy="true" class="activity-indicator"></ActivityIndicator>
-        </FlexboxLayout>
-    </AbsoluteLayout>
+      </render-box>
+    </StackLayout>
+  </ScrollView>
+  <AbsoluteLayout backgroundColor="#ffffff" verticalAlignment="bottom">
+    <FlexboxLayout *ngIf="!gameOver && !threeConsecutiveAnswer && (answeredIndex>=0 || doPlay === false)" (rippleTap)="continueButtonClicked($event)" width="100%" class="SF-Pro-Medium btn-transparent" justifyContent="center" stlRippleEffect>
+        <Label verticleAlignment="center" text="Next Round" ></Label>
+        <ActivityIndicator  *ngIf="showLoader" marginLeft="10" verticalAlignment="center" color="blue" ios:width="25" ios:height="25"
+          android:width="25" android:height="25" busy="true" class="activity-indicator">
+        </ActivityIndicator>
+    </FlexboxLayout>
+
+    <FlexboxLayout *ngIf="gameOver || threeConsecutiveAnswer" (rippleTap)="checkRoundOver($event)" width="100%" class="Hind-Medium btn-transparent" justifyContent="center" stlRippleEffect>
+        <Label verticleAlignment="center" text="Next Round" ></Label>
+        <ActivityIndicator  *ngIf="showLoader" marginLeft="10" verticalAlignment="center" color="blue" ios:width="25" ios:height="25"
+          android:width="25" android:height="25" busy="true" class="activity-indicator">
+        </ActivityIndicator>
+    </FlexboxLayout>
+  </AbsoluteLayout>
 </GridLayout>

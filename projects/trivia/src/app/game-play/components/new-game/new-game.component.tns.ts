@@ -1,19 +1,19 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit, ViewChild, Inject, PLATFORM_ID } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit, ViewChild, Inject, PLATFORM_ID, QueryList, ElementRef, ViewChildren } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { RouterExtensions } from 'nativescript-angular/router';
 import { TokenModel } from 'nativescript-ui-autocomplete';
 import { RadAutoCompleteTextViewComponent } from 'nativescript-ui-autocomplete/angular';
-import { ListViewEventData } from 'nativescript-ui-listview';
 import { RadListViewComponent } from 'nativescript-ui-listview/angular';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { Utils, WindowRef } from 'shared-library/core/services';
-import { GameActions, UserActions } from 'shared-library/core/store/actions';
+import { GameActions, UserActions, TagActions } from 'shared-library/core/store/actions';
 import { Category, PlayerMode } from 'shared-library/shared/model';
 import { ObservableArray } from 'tns-core-modules/data/observable-array';
 import { Page, isIOS } from 'tns-core-modules/ui/page/page';
 import { AppState, appState } from '../../../store';
 import { NewGame } from './new-game';
+import { NavigationService } from 'shared-library/core/services/mobile';
 
 @Component({
   selector: 'new-game',
@@ -31,16 +31,26 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
   showSelectTag = false;
   customTag: string;
   private tagItems: ObservableArray<TokenModel>;
-  subscriptions = [];
+  private _filterFriendFunc: (item: any) => any;
+  // pagination: any;
   // This is magic variable
   // it delay complex UI show Router navigation can finish first to have smooth transition
   renderView = false;
   challengerUserId: string;
   actionBarTitle = 'Play as single player';
 
+  showModal = false;
+  showGameStartLoader = false;
+  dialogOpen;
+  searchFriend = '';
+  selectedTopFilter = 0;
+  chooseOptionsStep = 0;
+  skipNavigation = false;
+  theme: string;
 
   @ViewChild('autocomplete', { static: false }) autocomplete: RadAutoCompleteTextViewComponent;
   @ViewChild('friendListView', { static: false }) listViewComponent: RadListViewComponent;
+  @ViewChildren("textField", { read: false }) textField: QueryList<ElementRef>;
   modeAvailable: boolean;
   constructor(public store: Store<AppState>,
     public gameActions: GameActions,
@@ -49,14 +59,24 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     public userActions: UserActions,
     public router: Router,
     public route: ActivatedRoute,
+    public tagActions: TagActions,
     public cd: ChangeDetectorRef,
     private page: Page,
     public windowRef: WindowRef,
     @Inject(PLATFORM_ID) public platformId: Object,
-    private ngZone: NgZone) {
-    super(store, utils, gameActions, userActions, windowRef, platformId, cd, route, router);
+    private ngZone: NgZone,
+    private navigationService: NavigationService) {
+    super(store, utils, gameActions, userActions, windowRef, platformId, cd, route, router, tagActions);
     this.initDataItems();
     this.modeAvailable = false;
+    this.page.actionBarHidden = true;
+    this.filterFriendFunc = (item: any) => {
+      if (!this.searchFriend  || this.searchFriend === '') {
+        return true;
+      }
+      return ( item && item.userId && this.userDict[item.userId] &&
+        this.userDict[item.userId].displayName.toLowerCase().search(this.searchFriend.toLowerCase()) >= 0 ) ? true : false;
+    };
   }
   ngOnInit() {
 
@@ -67,7 +87,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
       // https://github.com/NativeScript/nativescript-ui-feedback/issues/753
       if (this.listViewComponent) {
         if (isIOS) {
-          this.listViewComponent.listView.refresh();
+          // this.listViewComponent.listView.refresh();
         }
       }
     }));
@@ -81,11 +101,13 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
           if (this.router.url.indexOf('challenge') > 0) {
             this.gameOptions.isChallenge = true;
           }
+          this.chooseOptionsStep = 1;
           this.friendUserId = data.userid;
         }
         if (this.router.url.indexOf('play-game-with-random-user') >= 0) {
           this.gameOptions.playerMode = 1;
           this.gameOptions.opponentType = 0;
+          this.chooseOptionsStep = 1;
         }
         if (data && data.mode) {
           this.modeAvailable = true;
@@ -94,8 +116,9 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
             this.actionBarTitle = 'Play as single player';
           } else {
             this.gameOptions.playerMode = 1;
-            this.gameOptions.opponentType = 0;
-            this.actionBarTitle = 'Play as multi player';
+            this.gameOptions.opponentType = 1;
+            this.chooseOptionsStep = 0;
+            this.actionBarTitle = 'Play as two player';
           }
         }
       }));
@@ -105,6 +128,32 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
       this.renderView = true;
       this.cd.markForCheck();
     }));
+  }
+
+  get filterFriendFunc(): (item: any) => any {
+    return this._filterFriendFunc;
+  }
+
+  set filterFriendFunc(value: (item: any) => any) {
+      this._filterFriendFunc = value;
+  }
+
+  showDialog() {
+    this.dialogOpen = true;
+  }
+
+  // it does nothing but stop the tap event from propogate to background component
+  stopEventPropogation() {
+    return false;
+  }
+
+  back() {
+    if (this.chooseOptionsStep === 0 || !this.skipNavigation) {
+      this.navigationService.back();
+    } else {
+      this.chooseOptionsStep = 0;
+      this.gameOptions.opponentType = 1;
+    }
   }
 
   ngOnDestroy() {
@@ -130,22 +179,30 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     this.autocomplete.autoCompleteTextView.resetAutoComplete();
   }
 
-  startGame() {
-    this.gameOptions.tags = this.selectedTags;
-    this.gameOptions.categoryIds = this.filteredCategories.filter(c => c.requiredForGamePlay || c.isSelected).map(c => c.id);
-    this.validateGameOptions(true, this.gameOptions);
+  onSearchFriendTextChange(event) {
+        this.searchFriend = event.value;
+        const listView = this.listViewComponent.listView;
+        listView.filteringFunction = undefined;
+        listView.filteringFunction = this.filterFriendFunc;
+  }
 
-    if (this.gameOptions.playerMode === PlayerMode.Single) {
-      delete this.gameOptions.opponentType;
+  startGame() {
+    this.showGameStartLoader = true;
+    this.gameOptions.tags = this.topTags.filter(c => c.requiredForGamePlay || c.isSelected).map(c => c.key);
+    this.gameOptions.categoryIds = this.filteredCategories.filter(c => c.requiredForGamePlay || c.isSelected).map(c => c.id);
+    if (this.validateGameOptions(true, this.gameOptions)) {
+      if (this.gameOptions.playerMode === PlayerMode.Single) {
+        delete this.gameOptions.opponentType;
+      }
+      this.startNewGame(this.gameOptions);
     }
 
-    this.startNewGame(this.gameOptions);
   }
 
 
 
-  selectCategory(args: ListViewEventData) {
-    const category: Category = this.filteredCategories[args.index];
+  selectCategory(args: number) {
+    const category: Category = this.filteredCategories[args];
     if (!category.requiredForGamePlay) {
       category.isSelected = !category.isSelected;
       this.filteredCategories = [... this.filteredCategories];
@@ -198,8 +255,10 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     this.customTag = args.text;
   }
 
-  selectFriendIdApp(friendId: string) {
-    this.friendUserId = friendId;
+  selectFriendIdApp(friend: any) {
+    this.friendUserId = friend.userId;
+    this.chooseOptionsStep = 1;
+    this.skipNavigation = true;
     this.listViewComponent.listView.refresh();
   }
 
@@ -232,4 +291,22 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     }
   }
 
+  chooseRandomPlayer() {
+    this.gameOptions.opponentType = 0;
+    this.gameOptions.playerMode = 1;
+    this.chooseOptionsStep = 1;
+    this.friendUserId = null;
+    this.skipNavigation = true;
+  }
+
+  changePlayGameWith(playerMode = 1) {
+    this.gameOptions.playerMode = playerMode;
+    this.gameOptions.opponentType = 1;
+    this.chooseOptionsStep = 0;
+    this.friendUserId = null;
+  }
+
+  hideKeyboard() {
+    this.utils.hideKeyboard(this.textField);
+  }
 }

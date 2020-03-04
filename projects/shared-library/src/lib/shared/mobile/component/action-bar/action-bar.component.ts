@@ -28,9 +28,11 @@ export class ActionBarComponent implements OnDestroy, OnInit {
     @Input() hideHomeIcon;
     @Input() showSkipBtn;
     @Input() subTitle;
+    @Input() showEdit;
+    @Input() emitBackEvent;
+    @Output() isBackPress: EventEmitter<any> = new EventEmitter<any>();
     @Output() open: EventEmitter<any> = new EventEmitter<any>();
     photoUrl: '';
-
 
     constructor(
         private routerExtensions: RouterExtensions,
@@ -50,7 +52,14 @@ export class ActionBarComponent implements OnDestroy, OnInit {
     }
 
     back() {
-        this.navigationService.back();
+        if (this.emitBackEvent) {
+            this.isBackPress.emit(true);
+        } else {
+            this.navigationService.back();
+        }
+    }
+    navigateToBulkUpload() {
+        this.routerExtensions.navigate(['/user/my/questions/bulk-upload-request']);
     }
 
     openSidebar() {
@@ -59,11 +68,15 @@ export class ActionBarComponent implements OnDestroy, OnInit {
         sideDrawer.showDrawer();
     }
 
-
     goToDashboard() {
         this.routerExtensions.navigate(['/dashboard'], { clearHistory: true });
     }
 
+    navigateToProfile() {
+        if (this.showEdit.showEditOrOptions === 'edit') {
+            this.routerExtensions.navigate([this.showEdit.routing, this.showEdit.userId]);
+        }
+    }
 
     navigateToSubmitQuestion() {
         this.routerExtensions.navigate(['/user/my/questions/add']);
