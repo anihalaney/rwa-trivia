@@ -23,6 +23,8 @@ import { UserService } from '../services/user.service';
 import { QuestionService } from '../services/question.service';
 import { Utils } from '../utils/utils';
 import { UserStatusService } from '../services/user-status.service';
+
+
 const mailConfig = JSON.parse(readFileSync(resolve(__dirname, '../../../config/mail.config.json'), 'utf8'));
 
 export class FirebaseFunctions {
@@ -79,7 +81,7 @@ export class FirebaseFunctions {
             if (context.params.reactions === 'reactions') {
                 const afterData = change.after.exists ? change.after.data() : null;
                 const beforeData = change.before.exists ? change.before.data() : null;
-                
+
                 const question: Question = await QuestionService.getQuestionById(context.params.questionId);
                 // for update
                 if (beforeData && afterData) {
@@ -300,10 +302,6 @@ export class FirebaseFunctions {
                 const realTimeUserStatus = await UserService.getUserById(userDataStatus.userId);
                 userDataStatus.status = realTimeUserStatus.status;
 
-               // console.log('realTimeUserStatus---->', realTimeUserStatus);
-             //   console.log('userDataStatus---->', userDataStatus);
-
-
                 if (userDataStatus.device === TriggerConstants.ANDROID) {
                     const deviceTokenIndex = user.androidPushTokens
                         .findIndex(
@@ -322,17 +320,17 @@ export class FirebaseFunctions {
                         user.iosPushTokens[deviceTokenIndex].online = onlineStatus;
                     }
                 }
-               // console.log('user', user);
+                // console.log('user', user);
                 await UserService.updateUser({ ...user });
 
             }
 
             const onlineOnAndroid = user.androidPushTokens && user.androidPushTokens.length > 0
-                                    ? user.androidPushTokens.some((androidPushToken) =>
-                                                                    androidPushToken.token && androidPushToken.online) : false;
+                ? user.androidPushTokens.some((androidPushToken) =>
+                    androidPushToken.token && androidPushToken.online) : false;
             const onlineOnIos = user.iosPushTokens && user.iosPushTokens.length > 0
-                                         ? user.iosPushTokens.some((iosPushToken) =>
-                                                                    iosPushToken.token && iosPushToken.online) : false;
+                ? user.iosPushTokens.some((iosPushToken) =>
+                    iosPushToken.token && iosPushToken.online) : false;
 
             userStatus.online = (onlineOnAndroid || onlineOnIos
                 || userDataStatus.status === UserStatusConstants.ONLINE) ? true : false;
@@ -348,6 +346,7 @@ export class FirebaseFunctions {
             throw error;
         }
     }
+
 }
 
 exports.onQuestionWrite = functions.firestore.document('/questions/{questionId}')

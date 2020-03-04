@@ -113,6 +113,10 @@ export class UserController {
                 }
             }
 
+            const geoPoint = await UserService.getGeoCode(user.geoPoint);
+            if (geoPoint) {
+                user.geoPoint = geoPoint;
+            }
 
             delete user[UserConstants.ROLES];
 

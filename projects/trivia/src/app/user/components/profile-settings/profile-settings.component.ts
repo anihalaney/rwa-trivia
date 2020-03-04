@@ -16,6 +16,7 @@ import { LocationResetDialogComponent } from './location-reset-dialog/location-r
 import { filter } from 'rxjs/operators';
 import { AuthenticationProvider } from 'shared-library/core/auth';
 import { isPlatformBrowser } from '@angular/common';
+import * as firebase from 'firebase/app';
 
 @Component({
   selector: 'profile-settings',
@@ -50,9 +51,9 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnInit,
     public route: ActivatedRoute,
     public router: Router,
     public authenticationProvider: AuthenticationProvider,
-    ) {
+  ) {
 
-    super(fb, store, userAction, utils, cd, route, router, authenticationProvider,platformId);
+    super(fb, store, userAction, utils, cd, route, router, authenticationProvider, platformId);
 
     // if (this.userType === 0) {
     this.setCropperSettings();
@@ -76,6 +77,8 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnInit,
     this.subscriptions.push(this.store.select(coreState).pipe(select(u => u.addressUsingLongLat), filter(location => !!location))
       .subscribe(location => {
         if (location) {
+          this.user.captured = 'web';
+          this.user.isAutoComplete = false;
           this.userForm.patchValue({ location: this.getCityAndCountryName(location) });
         }
       }));
@@ -107,6 +110,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnInit,
   locationChanged(result): void {
     if (result) {
       this.store.dispatch(this.userAction.loadAddressSuggestions(result));
+      this.user.captured = 'web';
     }
 
   }
@@ -293,6 +297,9 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnInit,
     if (isPlatformBrowser(this.platformId) && navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((position) => {
         this.store.dispatch(this.userAction.loadAddressUsingLatLong(`${position.coords.latitude},${position.coords.longitude}`));
+        const latitude = position.coords.latitude;
+        const longitude = position.coords.longitude;
+        this.user.geoPoint = new firebase.firestore.GeoPoint(latitude, longitude);
       }, error => {
         console.log('error', error);
         this.dialogRef = this.dialog.open(LocationResetDialogComponent, {
