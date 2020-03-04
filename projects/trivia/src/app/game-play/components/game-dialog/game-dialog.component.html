@@ -34,7 +34,7 @@
     <div class="card main-div textcenter">
       <div class="badge-icon">
         <div class="circle">
-          <div *ngIf="game?.gameOptions.isBadgeWithCategory" [ngClass]="currentQuestion?.badge ? applicationSettings?.badges[currentQuestion?.badge.name]?.class + '-L': '' "
+          <div *ngIf="game?.gameOptions.isBadgeWithCategory" [ngClass]="currentQuestion?.badge ? applicationSettings?.badges[currentQuestion?.badge.name]?.class + '-L': 'score0-L' "
             class="sprite circle-image"></div>
           <div *ngIf="!game?.gameOptions.isBadgeWithCategory" [ngClass]="correctAnswerCount === 0
             ?'score1-L':correctAnswerCount === 1
@@ -59,7 +59,7 @@
     <div class="card main-div textcenter">
       <div class="badge-icon">
         <div class="circle">
-          <div *ngIf="game?.gameOptions.isBadgeWithCategory" [ngClass]="game.playerQnAs[game.playerQnAs.length - 1]?.badge ? applicationSettings?.badges[game.playerQnAs[game.playerQnAs.length - 1]?.badge.name]?.class + '-L': '' "
+          <div *ngIf="game?.gameOptions.isBadgeWithCategory" [ngClass]="game.playerQnAs[game.playerQnAs.length - 1]?.badge ? applicationSettings?.badges[game.playerQnAs[game.playerQnAs.length - 1]?.badge.name]?.class + '-L': 'score0-L' "
             class="sprite circle-image">
           </div>
           <div *ngIf="!game?.gameOptions.isBadgeWithCategory" [ngClass]="correctAnswerCount === 1
