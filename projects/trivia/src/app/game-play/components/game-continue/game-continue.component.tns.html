@@ -66,7 +66,7 @@
                                 </Image>
                             </FlexboxLayout>
                             <FlexboxLayout *ngIf="game?.gameOptions.isBadgeWithCategory" android:backgroundColor="#f1f1f1" class="background-score">
-                                <Image *ngFor="let badge of totalBadges" src="{{'res://' + applicationSettings?.badges[badge]?.image?.name + (earnedBadges.indexOf(badge) > -1 ? '' : 'inactive')}}"></Image>
+                                <Image *ngFor="let badge of totalBadges; let i = index" src="{{ earnedBadges[i] ? 'res://' + applicationSettings?.badges[earnedBadges[i]]?.image?.name : '~/assets/images/score0'}}"></Image>
                             </FlexboxLayout>
                         </StackLayout>
 
@@ -94,7 +94,7 @@
                                 </Image>
                             </FlexboxLayout>
                             <FlexboxLayout *ngIf="game?.gameOptions.isBadgeWithCategory" android:backgroundColor="#f1f1f1" class="background-score">
-                                <Image *ngFor="let badge of totalBadges" src="{{'res://' + applicationSettings?.badges[badge]?.image?.name + (earnedBadgesByOtherUser.indexOf(badge) > -1 ? '' : 'inactive')}}"></Image>
+                                <Image *ngFor="let badge of totalBadges; let i = index" src="{{ earnedBadgesByOtherUser[i] ? 'res://' + applicationSettings?.badges[earnedBadgesByOtherUser[i]]?.image?.name : '~/assets/images/score0'}}"></Image>
                             </FlexboxLayout>
                         </StackLayout>
                     </GridLayout>

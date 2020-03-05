@@ -16,12 +16,12 @@
         <div *ngIf="!game?.gameOptions.isBadgeWithCategory" class="circle-loader">
           <div [ngClass]="correctAnswerCount < 1?'score0':'score1'" class="sprite  badge1"></div>
           <div class="col-xs-12 first-row">
-            <div [ngClass]="correctAnswerCount < 5?'score0':'score5'" class="sprite col-xs-6 badge5"></div>
-            <div [ngClass]="correctAnswerCount < 2?'score0':'score2'" class="sprite col-xs-6 badge2"></div>
+            <div [ngClass]="correctAnswerCount < 5?'score0':'score5'" class="sprite col-xs-6 badge2"></div>
+            <div [ngClass]="correctAnswerCount < 2?'score0':'score2'" class="sprite col-xs-6 badge5"></div>
           </div>
           <div class="col-xs-12 second-row">
-            <div [ngClass]="correctAnswerCount < 4?'score0':'score4'" class="sprite col-xs-6 badge4"></div>
-            <div [ngClass]="correctAnswerCount < 3?'score0':'score3'" class="sprite col-xs-6 badge3"></div>
+            <div [ngClass]="correctAnswerCount < 4?'score0':'score4'" class="sprite col-xs-6 badge3"></div>
+            <div [ngClass]="correctAnswerCount < 3?'score0':'score3'" class="sprite col-xs-6 badge4"></div>
           </div>
         </div>
         <div class="text-loading textcenter">

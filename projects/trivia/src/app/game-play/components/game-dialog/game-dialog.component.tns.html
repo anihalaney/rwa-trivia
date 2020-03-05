@@ -51,25 +51,25 @@
             <AbsoluteLayout *ngIf="game?.gameOptions?.isBadgeWithCategory" verticalAlignment="center" horizontalAlignment="center">
                 <GridLayout class="circle-loader" width="150" height="150"> </GridLayout>
 
-                <Image src="res://{{applicationSettings?.badges[totalBadges[0]]?.image?.name + (earnedBadges.indexOf(totalBadges[0]) > -1 ? '' : 'inactive')}}" height="30" width="30"
+                <Image src="{{ earnedBadges[0] ? 'res://' + applicationSettings?.badges[earnedBadges[0]]?.image?.name : '~/assets/images/score0' }}" height="30" width="30"
                     marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50" top="10"
                     left="80"></Image>
                 
-                <Image src="res://{{applicationSettings?.badges[totalBadges[1]]?.image?.name + (earnedBadges.indexOf(totalBadges[1]) > -1 ? '' : 'inactive')}}" height="30" width="30"
+                <Image src="{{ earnedBadges[1] ? 'res://' + applicationSettings?.badges[earnedBadges[1]]?.image?.name : '~/assets/images/score0' }}" height="30" width="30"
                     marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50" top="50"
-                    left="15"></Image>
+                    left="149"></Image>
                 
-                <Image src="res://{{applicationSettings?.badges[totalBadges[4]]?.image?.name + (earnedBadges.indexOf(totalBadges[4]) > -1 ? '' : 'inactive')}}" height="30" width="30"
+                <Image src="{{ earnedBadges[4] ? 'res://' + applicationSettings?.badges[earnedBadges[4]]?.image?.name : '~/assets/images/score0' }}" height="30" width="30"
                     marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50" top="50"
-                    left="150"></Image>
+                    left="13"></Image>
                 
-                <Image src="res://{{applicationSettings?.badges[totalBadges[2]]?.image?.name + (earnedBadges.indexOf(totalBadges[2]) > -1 ? '' : 'inactive')}}" height="30" width="30"
-                    marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50" top="120"
-                    left="15"></Image>
-                
-                <Image src="res://{{applicationSettings?.badges[totalBadges[3]]?.image?.name + (earnedBadges.indexOf(totalBadges[3]) > -1 ? '' : 'inactive')}}" height="30" width="30"
+                <Image src="{{ earnedBadges[2] ? 'res://' + applicationSettings?.badges[earnedBadges[2]]?.image?.name : '~/assets/images/score0' }}" height="30" width="30"
                     marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50" top="120"
                     left="145"></Image>
+                
+                <Image src="{{ earnedBadges[3] ? 'res://' + applicationSettings?.badges[earnedBadges[3]]?.image?.name : '~/assets/images/score0' }}" height="30" width="30"
+                    marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50" top="120"
+                    left="15"></Image>
             </AbsoluteLayout>
             <Label text="Loading" textWrap="true" fontSize="17" verticalAlignment="center"
                 horizontalAlignment="center"></Label>
