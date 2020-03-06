@@ -137,3 +137,36 @@ pre.ql-syntax {
 .tagging input{
   width: 100%;
 }
+
+.editor-autocomplete{
+  border: 1px solid;
+  border-color: rgb(221,221,221);
+  border-radius: 6px;
+  height: 37px;
+  font-size: 16px;
+}
+
+.secondary-color{
+  background-color: #fff;
+  color: rgb(59, 89, 152) !important;
+  border-color: rgb(59, 89, 152) !important;
+  border: 1px solid rgb(59, 89, 152);
+  margin-top:10px;
+}
+
+.custom-input-fields{
+  background: white;
+  height: 50px;
+  border: 1px solid;
+  border-color: rgb(221,221,221);
+  -webkit-appearance:none;
+}
+
+
+.remove-webkit{
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  background: red !important;
+  background-color:red !important;
+}

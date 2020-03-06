@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, SimpleChanges, OnChanges, ChangeDetectorRef, Output, EventEmitter } from "@angular/core";
 import { Question } from 'shared-library/shared/model';
-import { LoadEventData } from 'tns-core-modules/ui/web-view';
+import { LoadEventData, WebView } from 'tns-core-modules/ui/web-view';
 import { isAndroid, isIOS } from 'tns-core-modules/platform';
 import { externalUrl } from './../../../environments/external-url';
 
@@ -62,14 +62,39 @@ export class RenderQuestionComponent implements OnInit, OnChanges {
       const height = event.url
         ? decodeURIComponent(event.url).split("#")[1]
         : undefined;
+
       if (height) {
         this.questionHeight = parseInt(height, 10);
         this.calHeight.emit(this.questionHeight);
       } else if (this.question.isRichEditor) {
         this.calHeight.emit(150);
       }
+
+      const webView = <WebView>event.object,
+        jsStr = `var body = document.body;
+        var html = document.documentElement;
+        Math.max( body.scrollHeight, body.offsetHeight, 
+        html.clientHeight, html.scrollHeight, html.offsetHeight);`;
+
+      webView.ios.scrollView.scrollEnabled = false;
+      webView.ios.evaluateJavaScriptCompletionHandler(jsStr,
+        (height, error) => {
+          if (error) {
+            console.log("error...");
+          } else if (height) {
+
+            if (height) {
+              this.questionHeight = height;
+              this.calHeight.emit(this.questionHeight);
+              this.cd.markForCheck();
+            } else if (this.question.isRichEditor) {
+              this.calHeight.emit(150);
+            }
+
+          }
+        });
     }
-    this.cd.markForCheck();
+    // this.cd.markForCheck();
   }
 
   ngOnChanges(changes: SimpleChanges) {

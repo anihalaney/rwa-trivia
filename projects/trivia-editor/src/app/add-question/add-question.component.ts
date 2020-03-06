@@ -246,13 +246,13 @@ export class AddQuestionComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     const tagsFA = new FormArray(fcs);
-    this.questionObject =  question.questionObject;
+    this.questionObject = question.questionObject;
 
     if (question.isRichEditor) {
-      this.quillObject.questionText =  question.questionText ;
+      this.quillObject.questionText = question.questionText;
       this.quillObject.jsonObject = question.questionObject;
     }
-    
+
     this.questionForm = this.fb.group({
       id: (question.id) ? question.id : '',
       is_draft: false,
@@ -332,15 +332,13 @@ export class AddQuestionComponent implements OnInit, OnDestroy, AfterViewInit {
       });
 
       this.oWebViewInterface.on('editQuestion', (editQuestion) => {
-       
+
         this.ngZone.run(() => {
-          // setTimeout(() => {
-            this.createForm(editQuestion);
-          // }, 1500);
-       
-        this.editQuestion = editQuestion;
-        this.question.status = editQuestion.status;
-        this.cd.markForCheck();
+
+          this.createForm(editQuestion);
+          this.editQuestion = editQuestion;
+          this.question.status = editQuestion.status;
+          this.cd.markForCheck();
         });
       });
 
@@ -365,6 +363,8 @@ export class AddQuestionComponent implements OnInit, OnDestroy, AfterViewInit {
         });
       });
 
+      this.createForm(this.editQuestion);
+      this.cd.markForCheck();
 
       this.oWebViewInterface.on('quillConfig', (quillConfig) => {
         this.ngZone.run(() => {
@@ -385,12 +385,12 @@ export class AddQuestionComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.ngZone.run(() => {
       // setTimeout(() => {
-        // this.createForm(this.editQuestion);
+      // this.createForm(this.editQuestion);
       // }, 1500);
-   
-    // this.editQuestion = this.editQuestion;
-    // this.question.status = editQuestion.status;
-    this.cd.markForCheck();
+
+      // this.editQuestion = this.editQuestion;
+      // this.question.status = editQuestion.status;
+      this.cd.markForCheck();
     });
   }
 
@@ -489,7 +489,7 @@ export class AddQuestionComponent implements OnInit, OnDestroy, AfterViewInit {
 
 
   ngAfterViewInit(): void {
-  
+
   }
 
   computeAutoTags() {
@@ -504,13 +504,13 @@ export class AddQuestionComponent implements OnInit, OnDestroy, AfterViewInit {
     this.tags.forEach(tag => {
       const patt = new RegExp('\\b(' + tag.replace("+", "\\+") + ')\\b', "ig");
       if (wordString.match(patt)) {
-        if (this.enteredTags.indexOf(tag) === -1 ) {
+        if (this.enteredTags.indexOf(tag) === -1) {
           matchingTags.push(tag);
         }
       }
     });
     this.autoTags = matchingTags;
-    this.questionForm.patchValue({tags: [] });
+    this.questionForm.patchValue({ tags: [] });
     this.setTagsArray();
   }
 

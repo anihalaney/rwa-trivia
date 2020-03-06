@@ -1,4 +1,4 @@
-<div style="background: #f1f2f2;padding:10px;">
+<div style="background: #FFF; width: 100%; padding: 0px 15px;">
   <form class="question-form" *ngIf="show" [formGroup]="questionForm" novalidate>
     <div class="optionbox">
 
@@ -6,7 +6,7 @@
         <h2><span>Select the category:</span></h2>
         <div class="row">
           <div class="formfield">
-            <select placeholder="Select Category" class="required" formControlName="category">
+            <select placeholder="Select Category" class="required custom-input-fields" formControlName="category">
               <option value="">
                 Select a Category
               </option>
@@ -44,7 +44,7 @@
           </label>
 
           <input *ngIf="!answer.value.isRichEditor" [placeholder]="'Enter Option ' + (i+1)" formControlName="answerText"
-            type="text" class="required" aria-label="answer-text">
+            type="text" class="required remove-webkit" aria-label="answer-text">
 
           <div class="mathseditor" *ngIf="answer.value.isRichEditor">
             <!-- <ng-quill-tex [modules]="quillConfigAnswer" (textChanged)="onAnswerChanged($event,i)" (fileUploaded)="fileUploaded($event)"
@@ -75,7 +75,7 @@
         Pick one and only one correct answer
       </div>
 
-      <div class="tags">
+      <div class="tags" style="width:100%;" >
         <p>Tags associated categories</p>
         <div data-tags-input-name="tag" id="tagBox" class="tagging">
           <mat-chip-list>
@@ -86,14 +86,14 @@
               {{tag}} <span (click)="removeEnteredTag(tag)" class="remove-tag">x</span>
             </mat-basic-chip>
           </mat-chip-list>
-          <input class="type-zone" contenteditable="true" formControlName="tags" aria-label="tags"
+          <input class="type-zone editor-autocomplete" contenteditable="true" formControlName="tags" aria-label="tags"
             [matAutocomplete]="tagAuto">
           <mat-autocomplete #tagAuto="matAutocomplete">
             <mat-option *ngFor="let tag of filteredTags$ | async" [value]="tag">
               {{tag}}
             </mat-option>
           </mat-autocomplete>
-          <button mat-button class="add-tag-button" color="primary" [disabled]="questionForm.controls.tags.value==''"
+          <button mat-button class="add-tag-button secondary-color" color="primary" [disabled]="questionForm.controls.tags.value==''"
             (click)="addTag()">ADD</button>
           <div class="error"
             *ngIf="answers.valid && questionForm.controls.questionText.valid && questionForm.hasError('tagCountInvalid')">
