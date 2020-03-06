@@ -39,6 +39,7 @@ export class User {
   isFriend?: boolean;
   phoneNumber?: string;
   totalFriends?: number;
+  status?: string;
   bits?: number;
   date?: any;
   geoPoint? : firebase.firestore.GeoPoint; 

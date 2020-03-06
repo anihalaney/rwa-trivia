@@ -124,37 +124,41 @@ export class DrawerComponent implements OnInit, OnDestroy {
                 this.user = user;
                 if (!this.pushToken) {
                     firebase.getCurrentPushToken().then((token) => {
-                        this.pushToken = token;
-                        this.authProvider.updateDevicePushToken(token);
-                        const deviceToken: DeviceToken = new DeviceToken();
-                        deviceToken.token = token;
-                        deviceToken.online = true;
-                        if (isAndroid) {
-                            user.androidPushTokens = (user.androidPushTokens) ? user.androidPushTokens : [];
-                            if (user.androidPushTokens.length === 0 || user.androidPushTokens
-                                .findIndex((androidPushToken) =>
-                                    (androidPushToken === token ||
-                                        (androidPushToken && androidPushToken.token && androidPushToken.token === token))) === -1) {
-                                user.androidPushTokens.push(deviceToken);
-                                this.updateUser(user, DrawerConstants.UPDATE_TOKEN_STATUS);
-                            } else {
-                                this.authProvider.updateUserConnection();
-                            }
+                        if (token) {
+                            this.pushToken = token;
+                            this.authProvider.updateDevicePushToken(token);
+                            const deviceToken: DeviceToken = new DeviceToken();
+                            deviceToken.token = token;
+                            deviceToken.online = true;
+                            if (isAndroid) {
+                                user.androidPushTokens = (user.androidPushTokens) ? user.androidPushTokens : [];
+                                if (user.androidPushTokens.length === 0 || user.androidPushTokens
+                                    .findIndex((androidPushToken) =>
+                                        (androidPushToken === token ||
+                                            (androidPushToken && androidPushToken.token && androidPushToken.token === token))) === -1) {
+                                    console.log('Android token', token);
+                                    user.androidPushTokens.push(deviceToken);
+                                    this.updateUser(user, DrawerConstants.UPDATE_TOKEN_STATUS);
+                                } else {
+                                    this.authProvider.updateUserConnection();
+                                }
 
-                        } else {
-                            user.iosPushTokens = (user.iosPushTokens) ? user.iosPushTokens : [];
-                            if (user.iosPushTokens.length === 0 || user.iosPushTokens
-                                .findIndex((iosPushToken) =>
-                                    (iosPushToken === token ||
-                                        (iosPushToken && iosPushToken.token && iosPushToken.token === token))) === -1) {
-                                user.iosPushTokens.push(deviceToken);
-                                this.updateUser(user, DrawerConstants.UPDATE_TOKEN_STATUS);
                             } else {
-                                this.authProvider.updateUserConnection();
-                            }
+                                user.iosPushTokens = (user.iosPushTokens) ? user.iosPushTokens : [];
+                                if (user.iosPushTokens.length === 0 || user.iosPushTokens
+                                    .findIndex((iosPushToken) =>
+                                        (iosPushToken === token ||
+                                            (iosPushToken && iosPushToken.token && iosPushToken.token === token))) === -1) {
+                                    console.log('ios token', token);
+                                    user.iosPushTokens.push(deviceToken);
+                                    this.updateUser(user, DrawerConstants.UPDATE_TOKEN_STATUS);
+                                } else {
+                                    this.authProvider.updateUserConnection();
+                                }
 
+                            }
+                            this.user = user;
                         }
-                        this.user = user;
                     });
                 }
             }
