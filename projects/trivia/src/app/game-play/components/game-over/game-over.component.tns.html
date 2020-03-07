@@ -65,7 +65,7 @@
                       </Image>
                     </FlexboxLayout>
                     <FlexboxLayout *ngIf="game?.gameOptions.isBadgeWithCategory" class="earnedsymbolsStack" horizontalAlignment="center">
-                        <Image *ngFor="let badge of totalBadges; let i = index" src="{{ earnedBadges[i] ? 'res://' + applicationSettings?.badges[earnedBadges[i]]?.image?.name : '~/assets/images/score0'}}" 
+                        <Image *ngFor="let badge of totalBadges; let i = index" src="{{ earnedBadges[i] ? 'res://' + applicationSettings?.badges[earnedBadges[i]]?.image?.name : '~/assets/images/score0.png'}}" 
                           class="score-image" height="20" width="20" verticalAlignment="center"></Image>
                     </FlexboxLayout>
                   </StackLayout>
@@ -96,7 +96,7 @@
                         </Image>
                       </FlexboxLayout>
                       <FlexboxLayout *ngIf="game?.gameOptions.isBadgeWithCategory" class="earnedsymbolsStack" horizontalAlignment="center">
-                          <Image *ngFor="let badge of totalBadges; let i = index" src="{{ earnedBadges[i] ? 'res://' + applicationSettings?.badges[earnedBadges[i]]?.image?.name : '~/assets/images/score0'}}" 
+                          <Image *ngFor="let badge of totalBadges; let i = index" src="{{ earnedBadges[i] ? 'res://' + applicationSettings?.badges[earnedBadges[i]]?.image?.name : '~/assets/images/score0.png'}}" 
                             class="score-image" height="20" width="20" verticalAlignment="center"></Image>
                       </FlexboxLayout>
                     </StackLayout>
@@ -128,7 +128,7 @@
                         </Image>
                       </FlexboxLayout>
                       <FlexboxLayout *ngIf="game?.gameOptions.isBadgeWithCategory" class="earnedsymbolsStack" horizontalAlignment="center">
-                          <Image *ngFor="let badge of totalBadges; let i = index" src="{{ earnedBadgesByOtherUser[i] ? 'res://' + applicationSettings?.badges[earnedBadgesByOtherUser[i]]?.image?.name : '~/assets/images/score0'}}"
+                          <Image *ngFor="let badge of totalBadges; let i = index" src="{{ earnedBadgesByOtherUser[i] ? 'res://' + applicationSettings?.badges[earnedBadgesByOtherUser[i]]?.image?.name : '~/assets/images/score0.png'}}"
                             class="score-image" height="20" width="20" verticalAlignment="center"></Image>
                       </FlexboxLayout>
                     </StackLayout>

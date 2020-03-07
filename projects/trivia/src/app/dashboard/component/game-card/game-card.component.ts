@@ -90,11 +90,12 @@ export class GameCardComponent implements OnInit, OnChanges, OnDestroy {
       this.otherUserInfo = this.userDict[this.otherUserId];
     }
     if (changes.game && changes.game.currentValue && this.game.gameOptions.isBadgeWithCategory) {
-      if (this.user.userId && this.game.stats.badge) {
-        this.earnedBadges = this.game.stats.badge[this.user.userId].reverse();
+      if (this.user.userId && this.game.stats[this.user.userId].badge) {
+        this.earnedBadges = [...this.game.stats[this.user.userId].badge].reverse();
       }
-      if (Number(this.game.gameOptions.playerMode) === PlayerMode.Opponent && this.game.stats.badge) {
-        this.earnedBadgesByOtherUser = this.game.stats.badge[this.otherUserId].reverse();
+      if (Number(this.game.gameOptions.playerMode) === PlayerMode.Opponent && this.game.stats[this.otherUserId] &&
+         this.game.stats[this.otherUserId].badge) {
+        this.earnedBadgesByOtherUser = [...this.game.stats[this.otherUserId].badge].reverse();
       }
     }
     if (changes.applicationSettings && changes.applicationSettings.currentValue) {

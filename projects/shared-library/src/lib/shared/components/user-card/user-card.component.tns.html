@@ -194,7 +194,7 @@
     </StackLayout>
 
     <StackLayout *ngIf="otherInfo?.isBadgeWithCategory" orientation="horizontal" horizontalAlignment="left" android:backgroundColor="#f1f1f1" class="background-score">
-      <Image *ngFor="let badge of otherInfo.totalBadges; let i = index" src="{{ otherInfo?.earnedBadges[i] ? 'res://' + otherInfo?.applicationSettings?.badges[otherInfo?.earnedBadges[i]]?.image?.name : '~/assets/images/score0'}}">
+      <Image *ngFor="let badge of otherInfo.totalBadges; let i = index" src="{{ otherInfo?.earnedBadges[i] ? 'res://' + otherInfo?.applicationSettings?.badges[otherInfo?.earnedBadges[i]]?.image?.name : '~/assets/images/score0.png'}}">
       </Image>
     </StackLayout>
   </StackLayout>
@@ -244,7 +244,7 @@
       </StackLayout>
 
     <StackLayout *ngIf="otherInfo?.isBadgeWithCategory" android:backgroundColor="#f1f1f1"  row="1" col="0" colSpan="2" class="background-score">
-      <Image *ngFor="let badge of otherInfo.totalBadges; let i = index" src="{{ otherInfo?.earnedBadges[i] ? 'res://' + otherInfo?.applicationSettings?.badges[otherInfo?.earnedBadges[i]]?.image?.name : '~/assets/images/score0'}}">
+      <Image *ngFor="let badge of otherInfo.totalBadges; let i = index" src="{{ otherInfo?.earnedBadges[i] ? 'res://' + otherInfo?.applicationSettings?.badges[otherInfo?.earnedBadges[i]]?.image?.name : '~/assets/images/score0.png'}}">
       </Image>
     </StackLayout>
     </GridLayout>
@@ -275,7 +275,7 @@
       </StackLayout>
 
     <StackLayout *ngIf="otherInfo?.isBadgeWithCategory" row="1" col="0" colSpan="2"  android:backgroundColor="#f1f1f1" class="background-score">
-      <Image *ngFor="let badge of otherInfo.totalBadges; let i = index" src="{{ otherInfo?.earnedBadgesByOtherUser[i] ? 'res://' + otherInfo?.applicationSettings?.badges[otherInfo?.earnedBadgesByOtherUser[i]]?.image?.name : '~/assets/images/score0' }}">
+      <Image *ngFor="let badge of otherInfo.totalBadges; let i = index" src="{{ otherInfo?.earnedBadgesByOtherUser[i] ? 'res://' + otherInfo?.applicationSettings?.badges[otherInfo?.earnedBadgesByOtherUser[i]]?.image?.name : '~/assets/images/score0.png' }}">
       </Image>
     </StackLayout>
     </GridLayout>
