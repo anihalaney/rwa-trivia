@@ -321,7 +321,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate
 
     webInterface.on("isFormValid", (isFormValid) => {
       setTimeout(() => {
-        if (isFormValid === 'false') {
+        if (isFormValid === false) {
           this.isFormValid = false;
         } else {
           this.isFormValid = true;

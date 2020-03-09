@@ -110,14 +110,15 @@ export class RenderQuestionComponent implements OnInit, OnChanges {
     } else if (this.question) {
       this.questionText = this.question.questionText;
     }
+  
     this.cd.markForCheck();
   }
 
   setStartTag() {
     if (this.theme) {
       this.backgroundColor = this.theme === "dark" ? "#283b66" : "#f7f7f7";
-      this.textColor = this.theme === "dark" ? "#ffffff" : "#a5a5a5";
+      // this.textColor = this.theme === "dark" ? "#ffffff" : "#a5a5a5";
     }
-    this.htmlStartTag = `<html><head><body style="padding-top:10px;vertical-align: middle;text-align:left;background-color:${this.backgroundColor};color:${this.textColor};"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"> `;
+    this.htmlStartTag = `<html><head><body style="padding-top:10px;vertical-align: middle;text-align:left;background-color:${this.backgroundColor};"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"> `;
   }
 }
