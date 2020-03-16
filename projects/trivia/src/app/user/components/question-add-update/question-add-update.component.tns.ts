@@ -87,9 +87,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate
 
   demoQ: Question = new Question();
   renderView = false;
-  // @ViewChild("categoryDropdown", { static: false })
   categoryDropdown: ElementRef;
-  // @ViewChild("timeDropdown", { static: false }) timeDropdown: ElementRef;
 
   public imageTaken: ImageAsset;
   public saveToGallery = true;
@@ -117,14 +115,6 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate
 
   showEditQuestion = false;
   @Output() hideQuestion = new EventEmitter<boolean>();
-  // @ViewChild("autocomplete", { static: false })
-  // autocomplete: RadAutoCompleteTextViewComponent;
-  // @ViewChildren("textField") textField: QueryList<ElementRef>;
-  // @ViewChild("webView", { static: false }) webView: ElementRef<WebView>;
-  // @ViewChild("questionStack", { static: false }) questionStack: ElementRef;
-  // @ViewChildren("answerStack") answerStack: QueryList<ElementRef>;
-  // @ViewChild("webViewParentStack", { static: false })
-  // webViewParentStack: ElementRef;
   isWebViewLoaded = false;
   get dataItems(): ObservableArray<TokenModel> {
     return this.tagItems;
@@ -137,13 +127,9 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate
     public utils: Utils,
     public questionAction: QuestionActions,
     private routerExtension: RouterExtensions,
-    private page: Page,
     private cd: ChangeDetectorRef,
     public questionService: QuestionService,
-    private modal: ModalDialogService,
-    private vcRef: ViewContainerRef,
     private ngZone: NgZone,
-    private renderer: Renderer2,
     private el: ElementRef
   ) {
     super(fb, store, utils, questionAction);
@@ -295,13 +281,10 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate
             "viewType",
             this.currentWebViewParentId >= 0 ? "answer" : "question"
           );
-          // this.setInitialValue();
         }, 1);
       }
     }
   }
-
-  // preventEventPropogation() {}
 
   setWebInterface(webViewInstace) {
     const webInterface = new webViewInterfaceModule.WebViewInterface(
@@ -422,7 +405,6 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate
 
   }
   ngOnDestroy() {
-    //   this.renderView = false;
       if (this.oWebViewInterface) {
         this.oWebViewInterface.off("editorLoadFinished");
         this.oWebViewInterface.off("isFormValid");
@@ -432,14 +414,6 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate
         this.oWebViewInterface.off("previewQuestion");
         this.oWebViewInterface.off("uploadImageStart");
       }
-  }
-
-  weViewLoadFinished(event) {
-
-    // setTimeout(() => {
-    //   // this.oWebViewInterface.emit('editQuestion', this.editQuestion);
-    // }, 1000);
-
   }
 }
 

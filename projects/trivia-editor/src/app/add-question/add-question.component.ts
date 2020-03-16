@@ -180,16 +180,15 @@ export class AddQuestionComponent implements OnInit, OnDestroy, AfterViewInit {
       ordered: [question.ordered],
       explanation: [question.explanation],
       isRichEditor: [true],
-      // questionObject: {...question.questionObject},
       maxTime: []
     }, { validator: questionFormValidator }
     );
     this.filteredTags$ = this.questionForm.get('tags').valueChanges
       .pipe(map(val => val.length > 0 ? this.filter(val) : []));
 
-    this.questionForm.valueChanges.subscribe(() => {
+    this.subscriptions.push(this.questionForm.valueChanges.subscribe(() => {
     this.oWebViewInterface.emit('isFormValid', this.questionForm.valid);
-    });
+    }));
 
     this.enteredTags = question.tags;
     this.cd.markForCheck();
@@ -292,18 +291,8 @@ export class AddQuestionComponent implements OnInit, OnDestroy, AfterViewInit {
       });
     }
 
-    // const questionControl = this.questionForm.get('questionText');
-    // this.subscriptions.push(questionControl.valueChanges.pipe(debounceTime(500)).subscribe(v => this.computeAutoTags()));
-    // this.subscriptions.push(this.answers.valueChanges.pipe(debounceTime(500)).subscribe(v => this.computeAutoTags()));
-
 
     this.ngZone.run(() => {
-      // setTimeout(() => {
-      // this.createForm(this.editQuestion);
-      // }, 1500);
-
-      // this.editQuestion = this.editQuestion;
-      // this.question.status = editQuestion.status;
       this.cd.markForCheck();
     });
   }
