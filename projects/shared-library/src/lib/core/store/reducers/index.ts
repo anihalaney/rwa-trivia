@@ -8,7 +8,7 @@ import {
 import { categories, topCategories } from './categories.reducer';
 import { topTopics } from './topic.reducer';
 import { tags, topTags } from './tags.reducer';
-import { questionOfTheDay, questionSaveStatus, updateQuestion, firstQuestion, questionDraftSaveStatus } from './questions.reducer';
+import { questionOfTheDay, questionSaveStatus, updateQuestion, firstQuestion, questionDraftSaveStatus, deleteQuestionImage } from './questions.reducer';
 import { loginRedirectUrl, resetPasswordLogs } from './ui-state.reducer';
 import {
   activeGames, newGameId, gameCreateStatus, updateUserReactionStatus, getUserReactionStatus,
@@ -66,6 +66,7 @@ export interface CoreState {
   getTopTags: any;
   checkDisplayName: boolean;
   updateQuestionStatSuccess: any;
+  deleteQuestionImage: any;
 }
 
 export const reducer: ActionReducerMap<CoreState> = {
@@ -106,7 +107,8 @@ export const reducer: ActionReducerMap<CoreState> = {
   getTopCategories: topCategories,
   getTopTags: topTags,
   checkDisplayName: checkDisplayName,
-  updateQuestionStatSuccess: updateQuestionStatSuccess
+  updateQuestionStatSuccess: updateQuestionStatSuccess,
+  deleteQuestionImage: deleteQuestionImage
 };
 
 // Features

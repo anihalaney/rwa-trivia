@@ -54,4 +54,13 @@ export function updateQuestion(state: any = 'NONE', action: ActionWithPayload<st
   }
 }
 
+export function deleteQuestionImage(state: any = null, action: ActionWithPayload<any>): any {
+  switch (action.type) {
+    case QuestionActions.DELETE_QUESTION_IMAGE_SUCCESS:
+      return action.payload;
+    default:
+      return state;
+  }
+}
+
 

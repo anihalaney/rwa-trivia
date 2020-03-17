@@ -412,6 +412,7 @@ export enum RoutesConstants {
     GAME_DASH_TIME_DASH_REMINDER_NOTIFICATION = 'game-time-reminder-notification',
     REMINDER_DASH_BEFORE_DASH_TIME = 'reminderBeforeTime',
     UPDATE_DASH_QUESTION_DASH_STATS = 'updateQuestionStats',    
+    DELETE_DASH_QUESTION_DASH_IMAGE='deleteQuestionImage'
     
 }
 

@@ -204,10 +204,25 @@ export class QuestionController {
             const questionId = req.body.questionId;
             const type = req.body.type;
             const update = req.body.update;
-            Utils.sendResponse(res, interceptorConstants.SUCCESS, await  StatsService.updateQuestionStats(questionId, type , update));
+            Utils.sendResponse(res, interceptorConstants.SUCCESS, await StatsService.updateQuestionStats(questionId, type, update));
         } catch (error) {
             Utils.sendError(res, error);
         }
     }
+
+    static async deleteQuestionImage(req, res) {
+        const imageName = req.params.imageName;
+        if (imageName) {
+            try {
+                QuestionService.deleteQuestionImage(imageName)
+                Utils.sendResponse(res, interceptorConstants.SUCCESS, { 'message': 'Deleted!' });
+            } catch (error) {
+                Utils.sendError(res, error);
+            }
+        } else {
+            Utils.sendResponse(res, interceptorConstants.BAD_REQUEST, ResponseMessagesConstants.BAD_REQUEST);
+        }
+    }
+
 
 }

@@ -165,7 +165,7 @@ export class QuestionService {
         delete question.correct;
         delete question.wrong;
         delete question.reactionsCount;
-        
+
         promises.push(
           QuestionService.updateQuestion(QuestionService.QC, updateQuestion, false)
         );
@@ -176,5 +176,11 @@ export class QuestionService {
       return Utils.throwError(error);
     }
   }
+
+  static async deleteQuestionImage(imageName: string) {
+    const file = QuestionService.bucket.file(`questions/${imageName}`);
+    return file.delete();
+  }
+
 }
 

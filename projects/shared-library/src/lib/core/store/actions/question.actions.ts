@@ -96,4 +96,20 @@ export class QuestionActions {
     };
   }
 
+  static DELETE_QUESTION_IMAGE = 'DELETE_QUESTION_IMAGE';
+  deleteQuestionImage(imageName: string): ActionWithPayload<string> {
+    return {
+      type: QuestionActions.DELETE_QUESTION_IMAGE,
+      payload: imageName
+    };
+  }
+
+  static DELETE_QUESTION_IMAGE_SUCCESS = 'DELETE_QUESTION_IMAGE_SUCCESS';
+  deleteQuestionImageSuccess(msg: string): ActionWithPayload<string> {
+    return {
+      type: QuestionActions.DELETE_QUESTION_IMAGE_SUCCESS,
+      payload: msg
+    };
+  }
+
 }
