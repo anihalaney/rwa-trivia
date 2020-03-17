@@ -95,17 +95,24 @@ export class QuestionController {
                     playerQnA.categoryId = question.categoryIds;
                     const earnedBadges = game.stats && game.stats[userId] && game.stats[userId].badge ? game.stats[userId].badge : [];
                     const remainingBadges = [];
+                    let isBadgeWonWithQuestionCategory = false;
                     for (const badgeObj in appSetting.badges) {
-                        if (appSetting.badges.hasOwnProperty(badgeObj) && earnedBadges.indexOf(badgeObj) === -1) {
+                        if (appSetting.badges.hasOwnProperty(badgeObj)) {
                             if (appSetting.badges[badgeObj].category > 0 &&
                                 Number(appSetting.badges[badgeObj].category) ===  Number(question.categoryIds[0])) {
-                                    playerQnA.badge  = { name: badgeObj, won: false};
-                            } else if (appSetting.badges[badgeObj].category === 0) {
-                                remainingBadges.push(badgeObj);
+                                isBadgeWonWithQuestionCategory = true;
+                            }
+                            if (earnedBadges.indexOf(badgeObj) === -1) {
+                                if (appSetting.badges[badgeObj].category > 0 &&
+                                    Number(appSetting.badges[badgeObj].category) ===  Number(question.categoryIds[0])) {
+                                        playerQnA.badge  = { name: badgeObj, won: false};
+                                } else if (appSetting.badges[badgeObj].category === 0) {
+                                    remainingBadges.push(badgeObj);
+                                }
                             }
                         }
                     }
-                    if (!playerQnA.badge && remainingBadges.length > 0) {
+                    if (!playerQnA.badge && remainingBadges.length > 0 && !isBadgeWonWithQuestionCategory) {
                         playerQnA.badge = { name: remainingBadges[Math.floor(Math.random() * remainingBadges.length)], won: false };
                     }
                     question.badge = playerQnA.badge;

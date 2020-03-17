@@ -129,7 +129,9 @@ export class GameDialog {
             const otherPlayerUserId = this.game.playerIds.filter(
               playerId => playerId !== this.user.userId
             )[0];
-            this.earnedBadgesByOtherUser = this.game.stats[otherPlayerUserId].badge;
+            if (otherPlayerUserId) {
+              this.earnedBadgesByOtherUser = this.game.stats[otherPlayerUserId].badge;
+            }
           }
         }
         this.playerMode = game.gameOptions.playerMode;
