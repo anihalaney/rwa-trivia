@@ -41,7 +41,7 @@
               "./node_modules/ng-quill-tex/assets/theme.css",
               "./node_modules/mathquill/formula/formula.css",
               "./node_modules/katex/dist/katex.css",
-              "./node_modules/highlightjs/styles/arta.css",
+              "./node_modules/highlightjs/styles/arduino-light.css",
               "./node_modules/quill/dist/quill.snow.css"
             ],
             "scripts": [
@@ -302,7 +302,7 @@
               "./node_modules/ng-quill-tex/assets/theme.css",
               "./node_modules/mathquill/formula/formula.css",
               "./node_modules/katex/dist/katex.css",
-              "./node_modules/highlightjs/styles/arta.css",
+              "./node_modules/highlightjs/styles/arduino-light.css",
               "./node_modules/quill/dist/quill.snow.css"
             ],
             "scripts": [
@@ -562,11 +562,13 @@
               "projects/trivia-editor/src/assets"
             ],
             "styles": [
+              "projects/trivia/src/styles/rwa-trivia.theme.scss",
+              "projects/trivia/src/styles/global.scss",
               "projects/trivia-editor/src/styles.scss",
               "./node_modules/ng-quill-tex/assets/theme.css",
               "./node_modules/mathquill/formula/formula.css",
               "./node_modules/katex/dist/katex.css",
-              "./node_modules/highlightjs/styles/arta.css",
+              "./node_modules/highlightjs/styles/arduino-light.css",
               "./node_modules/quill/dist/quill.snow.css"
             ],
             "scripts": [

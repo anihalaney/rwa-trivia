@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, SimpleChanges, OnChanges, ChangeDetectorRef, Output, EventEmitter } from "@angular/core";
 import { Question } from 'shared-library/shared/model';
-import { LoadEventData } from 'tns-core-modules/ui/web-view';
+import { LoadEventData, WebView } from 'tns-core-modules/ui/web-view';
 import { isAndroid, isIOS } from 'tns-core-modules/platform';
 import { externalUrl } from './../../../environments/external-url';
 
@@ -48,10 +48,10 @@ export class RenderQuestionComponent implements OnInit, OnChanges {
             var height = Math.max(body.scrollHeight, body.offsetHeight,
             html.clientHeight, html.scrollHeight, html.offsetHeight);
             document.location.href += "#" + height;
-            </script><style>pre.ql-syntax { background-color: #23241f;color: #f8f8f2;overflow: visible;}</style>`;
+            </script><style>pre.ql-syntax { background-color: #efecf4;overflow: visible;}</style>`;
 
     // tslint:disable-next-line:max-line-length
-    this.htmlStartTag = `<html><head><body style="font-size:18px;font-weight: bold !important;padding-top:10px;vertical-align: middle;text-align:left;background-color:${this.backgroundColor};"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"> `;
+    this.htmlStartTag = `<html><head><body style="padding-top:10px;vertical-align: middle;text-align:left;background-color:${this.backgroundColor};"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"> `;
     // tslint:disable-next-line:max-line-length
     this.htmlEndTag = `</body><link rel="stylesheet" href="${externalUrl.katexCSS}" crossorigin="anonymous"><link rel="stylesheet" href="${externalUrl.hightlighCSS}" crossorigin="anonymous"></html>`;
     this.cd.markForCheck();
@@ -62,14 +62,39 @@ export class RenderQuestionComponent implements OnInit, OnChanges {
       const height = event.url
         ? decodeURIComponent(event.url).split("#")[1]
         : undefined;
+
       if (height) {
         this.questionHeight = parseInt(height, 10);
         this.calHeight.emit(this.questionHeight);
       } else if (this.question.isRichEditor) {
         this.calHeight.emit(150);
       }
+
+      const webView = <WebView>event.object,
+        jsStr = `var body = document.body;
+        var html = document.documentElement;
+        Math.max( body.scrollHeight, body.offsetHeight, 
+        html.clientHeight, html.scrollHeight, html.offsetHeight);`;
+
+      webView.ios.scrollView.scrollEnabled = false;
+      webView.ios.evaluateJavaScriptCompletionHandler(jsStr,
+        (height, error) => {
+          if (error) {
+            console.log("error...");
+          } else if (height) {
+
+            if (height) {
+              this.questionHeight = height;
+              this.calHeight.emit(this.questionHeight);
+              this.cd.markForCheck();
+            } else if (this.question.isRichEditor) {
+              this.calHeight.emit(150);
+            }
+
+          }
+        });
     }
-    this.cd.markForCheck();
+    // this.cd.markForCheck();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -85,14 +110,15 @@ export class RenderQuestionComponent implements OnInit, OnChanges {
     } else if (this.question) {
       this.questionText = this.question.questionText;
     }
+  
     this.cd.markForCheck();
   }
 
   setStartTag() {
     if (this.theme) {
       this.backgroundColor = this.theme === "dark" ? "#283b66" : "#f7f7f7";
-      this.textColor = this.theme === "dark" ? "#ffffff" : "#a5a5a5";
+      // this.textColor = this.theme === "dark" ? "#ffffff" : "#a5a5a5";
     }
-    this.htmlStartTag = `<html><head><body style="font-size:18px;font-weight: bold !important;padding-top:10px;vertical-align: middle;text-align:left;background-color:${this.backgroundColor};color:${this.textColor};"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"> `;
+    this.htmlStartTag = `<html><head><body style="padding-top:10px;vertical-align: middle;text-align:left;background-color:${this.backgroundColor};"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"> `;
   }
 }

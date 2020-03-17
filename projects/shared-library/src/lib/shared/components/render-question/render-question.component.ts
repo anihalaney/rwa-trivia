@@ -9,6 +9,7 @@ import { Question } from 'shared-library/shared/model';
 
 export class RenderQuestionComponent implements OnInit {
 
+
     @Input() question: Question;
     @Input() questionIndex: number | string;
 
