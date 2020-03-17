@@ -133,7 +133,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnI
           return this.questionService.saveQuestionImage(result['image'], fileName);
         }),
           mergeMap(image => {
-            return this.questionService.getQuestionDownloadUrl(`questions/${image['name']}`);
+             return of(this.utils.getQuestionUrl(`${image['name']}`) + `?d=${new Date().getTime()}`);
           })
         ).subscribe(imageUrl => {
           // SetImage callback function called to set image in editor

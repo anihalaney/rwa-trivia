@@ -113,6 +113,9 @@ export class QuestionAddUpdate implements OnDestroy {
   onTextChanged(text) {
     this.quillObject.jsonObject = text.delta;
     this.quillObject.questionText = text.html;
+    if(text.imageParsedName){
+      this.store.dispatch(this.questionAction.deleteQuestionImage(text.imageParsedName));
+    }
   }
 
   createDefaultForm(question: Question, isRichEditor = false): FormArray {
