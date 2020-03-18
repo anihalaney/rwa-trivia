@@ -1,5 +1,5 @@
 import { Input, Output, EventEmitter } from '@angular/core';
-import { Question, Answer, User, ApplicationSettings, userCardType, PlayerMode } from 'shared-library/shared/model';
+import { Question, Answer, User, ApplicationSettings, userCardType, PlayerMode, Game } from 'shared-library/shared/model';
 
 export class GameQuestion {
   @Input() questionIndex: number;
@@ -28,6 +28,10 @@ export class GameQuestion {
   @Output() gameOverButtonClicked = new EventEmitter();
   @Input() gameOver: boolean;
   @Output() btnClickedAfterThreeConsecutiveAnswers = new EventEmitter();
+  @Input() earnedBadgesByOtherUser: string[];
+  @Input() earnedBadges: string[];
+  @Input() game: Game;
+  @Input() totalBadges: string[];
   showLoader = false;
 
   answeredIndex: number;
