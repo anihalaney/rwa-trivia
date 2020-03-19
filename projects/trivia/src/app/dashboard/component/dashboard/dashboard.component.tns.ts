@@ -86,7 +86,7 @@ export class DashboardComponent extends Dashboard implements OnInit, OnDestroy {
 
   navigateToCategories() {
     if (this.user && this.user !== null) {
-      this.routerExtension.navigate(['/user/my/profile', this.user ? this.user.userId : ''], { clearHistory: true });
+      this.routerExtension.navigate(['/update-category-tag']);
       // this.routerExtension.navigate(['/user/my/profile', this.user.userId]);
     } else {
       this.routerExtension.navigate(['/login'], { clearHistory: true });
