@@ -139,7 +139,7 @@ export class GameDialog {
         if (game !== null && game.playerQnAs.length === 3) {
           let consecutiveCount = 0;
           this.game.playerQnAs.map(playerQnA => {
-            consecutiveCount = playerQnA.answerCorrect
+            consecutiveCount = playerQnA.answerCorrect && playerQnA.badge
               ? ++consecutiveCount
               : consecutiveCount;
           });
@@ -519,10 +519,19 @@ export class GameDialog {
         this.cd.detectChanges();
       }
     } else if (
-      this.questionIndex - this.correctAnswerCount === 4 ||
-      (!this.game.gameOptions.isBadgeWithCategory && this.correctAnswerCount >= 5 ) ||
-      (this.game.gameOptions.isBadgeWithCategory && this.earnedBadges.length >= 5) ||
-      this.questionIndex >= this.game.gameOptions.maxQuestions
+      (!this.game.gameOptions.isBadgeWithCategory &&
+          (this.questionIndex - this.correctAnswerCount === 4 ||
+           this.correctAnswerCount >= 5 ||
+           this.questionIndex >= this.game.gameOptions.maxQuestions
+           )
+      ) ||
+      (this.game.gameOptions.isBadgeWithCategory &&
+        ( (this.game.round < this.game.gameOptions.maxQuestions && this.game.round - this.earnedBadges.length === 4) ||
+        this.earnedBadges.length >= 5 ||
+          (Number(this.game.round) === Number(this.game.gameOptions.maxQuestions) && !this.game.playerQnAs[this.game.playerQnAs.length - 1].answerCorrect) ||
+          (this.game.round > this.game.gameOptions.maxQuestions)
+        )
+      )
     ) {
       this.setGameOver();
       // this.gameOverContinueClicked();

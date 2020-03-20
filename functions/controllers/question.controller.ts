@@ -118,7 +118,14 @@ export class QuestionController {
                     question.badge = playerQnA.badge;
                 }
                 if (game.playerQnAs.length > 0) {
-                    if (Number(game.gameOptions.playerMode) === PlayerMode.Single) {
+                    if (Number(game.gameOptions.playerMode) === PlayerMode.Single &&
+                            (!game.gameOptions.isBadgeWithCategory ||
+                                (game.gameOptions.isBadgeWithCategory &&
+                                    !(!game.playerQnAs[game.playerQnAs.length - 1].badge && game.playerQnAs[game.playerQnAs.length - 1].answerCorrect === true
+                                    )
+                                )
+                            )
+                    ) {
                         game.round = game.round + 1;
                     }
                 }
