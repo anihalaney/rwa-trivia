@@ -239,7 +239,7 @@ export class FirebaseFunctions {
             if (beforeEventData.status !== afterEventData.status) {
                 const oldStatus = QuestionStatus[beforeEventData.status].toLowerCase().replace('_', ' ');
                 const newStatus = QuestionStatus[afterEventData.status].toLowerCase().replace('_', ' ');
-                const message = `The status changed from ${oldStatus} to ${newStatus} for ${afterEventData.questionText}.`;
+                const message = `The status changed from ${oldStatus} to ${newStatus} for your question.`;
                 console.log('message', message);
                 PushNotification.sendGamePlayPushNotifications(message, afterEventData.created_uid,
                     pushNotificationRouteConstants.QUESTION_NOTIFICATIONS);
