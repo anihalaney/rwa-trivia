@@ -333,12 +333,12 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate
 
 
     webInterface.on("appIsLoaded", appIsLoaded => {
-      if(this.editQuestion) {
+      if (this.editQuestion) {
         this.oWebViewInterface.emit('editQuestion', this.editQuestion);
       } else {
         this.oWebViewInterface.emit('editQuestion', this.question);
       }
-      
+
     });
 
     webInterface.on("question", question => {
@@ -356,11 +356,17 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate
     });
 
 
+    webInterface.on("deleteImageUrl", deleteImageUrl => {
+      if (deleteImageUrl) {
+        this.store.dispatch(this.questionAction.deleteQuestionImage(deleteImageUrl));
+      }
+    });
+
+
     webInterface.on("previewQuestion", previewQuestion => {
       this.previewQuestion = previewQuestion;
       this.cd.markForCheck();
     });
-
 
     webInterface.on("uploadImageStart", uploadImage => {
       dialogs
@@ -405,15 +411,15 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate
 
   }
   ngOnDestroy() {
-      if (this.oWebViewInterface) {
-        this.oWebViewInterface.off("editorLoadFinished");
-        this.oWebViewInterface.off("isFormValid");
-        this.oWebViewInterface.off("quillContent");
-        this.oWebViewInterface.off("appIsLoaded");
-        this.oWebViewInterface.off("question");
-        this.oWebViewInterface.off("previewQuestion");
-        this.oWebViewInterface.off("uploadImageStart");
-      }
+    if (this.oWebViewInterface) {
+      this.oWebViewInterface.off("editorLoadFinished");
+      this.oWebViewInterface.off("isFormValid");
+      this.oWebViewInterface.off("quillContent");
+      this.oWebViewInterface.off("appIsLoaded");
+      this.oWebViewInterface.off("question");
+      this.oWebViewInterface.off("previewQuestion");
+      this.oWebViewInterface.off("uploadImageStart");
+    }
   }
 }
 
