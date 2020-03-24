@@ -41,12 +41,20 @@ export class GameDialogComponent extends GameDialog implements OnDestroy {
     if (args.ios) {
       this.resumeTime = this.utils.getUTCTimeStamp();
       const remainTime = Math.round((this.resumeTime - this.suspendTime) / 1000);
-      if ((this.timer - remainTime) < 0) {
-        this.timer = 0;
+      if ([true, false].indexOf(this.game.playerQnAs[this.game.playerQnAs.length - 1].answerCorrect) >= 0) {
         this.utils.unsubscribe([this.timerSub]);
-        this.fillTimer();
       } else {
-        this.timer = (this.timer - remainTime);
+        if ((this.timer - remainTime) < 0) {
+          this.timer = 0;
+          this.utils.unsubscribe([this.timerSub]);
+          if (!(this.showContinueDialogueForThreeConsecutiveAnswers ||
+              (this.showContinueScreen && !this.gameOver))
+            ) {
+            this.fillTimer();
+          }
+        } else {
+          this.timer = (this.timer - remainTime);
+        }
       }
     }
   }

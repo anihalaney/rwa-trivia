@@ -136,15 +136,29 @@ export class GameDialog {
         }
         this.playerMode = game.gameOptions.playerMode;
         this.threeConsecutiveAnswer = false;
-        if (game !== null && game.playerQnAs.length === 3) {
+        if (game !== null && game.playerQnAs.length === 3 && !game.gameOptions.isBadgeWithCategory) {
           let consecutiveCount = 0;
           this.game.playerQnAs.map(playerQnA => {
-            consecutiveCount = playerQnA.answerCorrect && playerQnA.badge
+            consecutiveCount = playerQnA.answerCorrect
               ? ++consecutiveCount
               : consecutiveCount;
           });
           this.threeConsecutiveAnswer =
             consecutiveCount === 3 && this.game.round === 1 ? true : false;
+        } else if (game !== null && game.stats[this.user.userId] &&
+          game.stats[this.user.userId].badge.length === 3 && game.gameOptions.isBadgeWithCategory && this.game.round === 1 &&
+          Number(this.game.gameOptions.playerMode) === PlayerMode.Opponent) {
+          let consecutiveCount = 0;
+          let isUserIsNotFirstPlayer = this.game.playerQnAs.some(data => data.playerId != this.user.userId);
+          if (!isUserIsNotFirstPlayer) {
+            this.game.playerQnAs.map(playerQnA => {
+              consecutiveCount = playerQnA.answerCorrect && playerQnA.badge && playerQnA.playerId === this.user.userId
+                ? ++consecutiveCount
+                : consecutiveCount;
+            });
+            this.threeConsecutiveAnswer =
+              consecutiveCount === 3 && this.game.round === 1 ? true : false;
+          }
         }
         if (game !== null && !this.isGameLoaded) {
           this.turnFlag =
@@ -526,7 +540,7 @@ export class GameDialog {
            )
       ) ||
       (this.game.gameOptions.isBadgeWithCategory &&
-        ( (this.game.round < this.game.gameOptions.maxQuestions && this.game.round - this.earnedBadges.length === 4) ||
+        ( (this.game.round < this.game.gameOptions.maxQuestions && (this.game.round - this.earnedBadges.length === 4 && !this.game.playerQnAs[this.game.playerQnAs.length - 1].answerCorrect)) ||
         this.earnedBadges.length >= 5 ||
           (Number(this.game.round) === Number(this.game.gameOptions.maxQuestions) && !this.game.playerQnAs[this.game.playerQnAs.length - 1].answerCorrect) ||
           (this.game.round > this.game.gameOptions.maxQuestions)
