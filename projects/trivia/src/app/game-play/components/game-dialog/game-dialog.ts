@@ -53,7 +53,7 @@ export class GameDialog {
   RANDOM_PLAYER = "Random Player";
   showBadge = false;
   MAX_TIME_IN_SECONDS_LOADER = 2;
-  MAX_TIME_IN_SECONDS_BADGE = 1;
+  MAX_TIME_IN_SECONDS_BADGE = 2;
   showLoader = true;
   showWinBadge = false;
   isCorrectAnswer = false;
@@ -67,6 +67,10 @@ export class GameDialog {
   showContinueScreen = false;
   showCurrentQuestion = false;
   showContinueDialogueForThreeConsecutiveAnswers = false;
+  currentBadge = '';
+  earnedBadges = [];
+  earnedBadgesByOtherUser = [];
+  totalBadges: string[];
 
   private genQuestionComponent: GameQuestionComponent;
   isMobile = false;
@@ -119,6 +123,17 @@ export class GameDialog {
       this.gameObs.subscribe(game => {
         this.showLoader = false;
         this.game = game;
+        if (this.game.gameOptions.isBadgeWithCategory) {
+          this.earnedBadges = this.game.stats[this.user.userId].badge;
+          if (Number(this.game.gameOptions.playerMode) === PlayerMode.Opponent) {
+            const otherPlayerUserId = this.game.playerIds.filter(
+              playerId => playerId !== this.user.userId
+            )[0];
+            if (otherPlayerUserId) {
+              this.earnedBadgesByOtherUser = this.game.stats[otherPlayerUserId].badge;
+            }
+          }
+        }
         this.playerMode = game.gameOptions.playerMode;
         this.threeConsecutiveAnswer = false;
         if (game !== null && game.playerQnAs.length === 3) {
@@ -172,6 +187,7 @@ export class GameDialog {
         .subscribe(appSettings => {
           if (appSettings) {
             this.applicationSettings = appSettings[0];
+            this.totalBadges =  Object.keys(this.applicationSettings.badges);
           }
         })
     );
@@ -309,28 +325,45 @@ export class GameDialog {
         () => {
           // Show badge screen
           this.utils.unsubscribe([this.timerSub]);
-          this.showLoader = false;
-          this.showBadge = true;
-          this.timer = this.MAX_TIME_IN_SECONDS_BADGE;
-          this.timerSub = timer(
-            gamePlayConstants.GAME_Q_TIMER,
-            gamePlayConstants.GAME_Q_TIMER
-          )
-            .pipe(take(this.timer))
-            .subscribe(
-              t => {
-                this.timer--;
-                this.cd.markForCheck();
-              },
-              null,
-              () => {
-                // load question screen timer
-                this.utils.unsubscribe([this.timerSub]);
-                this.showBadge = false;
-                this.subscribeQuestion();
-                this.cd.detectChanges();
-              }
-            );
+          if (this.game.gameOptions.isBadgeWithCategory) {
+              this.questionSub = this.gameQuestionObs.subscribe(question => {
+                if (question) {
+                  this.setCurrentQuestion(question);
+                  this.showNextBadgeToBeWon(question);
+                }
+              });
+          } else {
+            this.showNextBadgeToBeWon();
+          }
+        }
+      );
+  }
+
+  showNextBadgeToBeWon(question?: Question) {
+    this.showLoader = false;
+    this.showBadge = true;
+    this.timer = this.MAX_TIME_IN_SECONDS_BADGE;
+    this.timerSub = timer(
+      gamePlayConstants.GAME_Q_TIMER,
+      gamePlayConstants.GAME_Q_TIMER
+    )
+      .pipe(take(this.timer))
+      .subscribe(
+        t => {
+          this.timer--;
+          this.cd.markForCheck();
+        },
+        null,
+        () => {
+          // load question screen timer
+          this.utils.unsubscribe([this.timerSub]);
+          this.showBadge = false;
+          if (!this.game.gameOptions.isBadgeWithCategory) {
+            this.subscribeQuestion();
+          } else {
+            this.displayQuestionAndStartTimer(question);
+          }
+          this.cd.detectChanges();
         }
       );
   }
@@ -348,6 +381,7 @@ export class GameDialog {
     if (value) {
       this.currentQuestion = value;
       this.showCurrentQuestion = true;
+      // this.currentBadge = this.getCurrentBadge();
     } else {
       this.currentQuestion = undefined;
       this.showCurrentQuestion = false;
@@ -356,6 +390,11 @@ export class GameDialog {
 
   subscribeQuestion() {
     this.questionSub = this.gameQuestionObs.subscribe(question => {
+      this.displayQuestionAndStartTimer(question);
+    });
+  }
+
+  displayQuestionAndStartTimer(question) {
       if (!question) {
         this.cd.markForCheck();
         this.setCurrentQuestion();
@@ -428,7 +467,6 @@ export class GameDialog {
           }, 100);
         }
       }
-    });
   }
 
   calculateMaxTime(): void {
@@ -474,14 +512,16 @@ export class GameDialog {
       this.otherPlayerUserId = this.game.playerIds.filter(
         playerId => playerId !== this.user.userId
       )[0];
-      if (this.correctAnswerCount >= 5 || this.game.round >= 16) {
+      if ((!this.game.gameOptions.isBadgeWithCategory &&  this.correctAnswerCount >= 5 ) ||
+      (this.game.gameOptions.isBadgeWithCategory &&  this.earnedBadges.length >= 5 ) || this.game.round >= 16) {
         // this.gameOverContinueClicked();
         this.setGameOver();
         this.cd.detectChanges();
       }
     } else if (
       this.questionIndex - this.correctAnswerCount === 4 ||
-      this.correctAnswerCount >= 5 ||
+      (!this.game.gameOptions.isBadgeWithCategory && this.correctAnswerCount >= 5 ) ||
+      (this.game.gameOptions.isBadgeWithCategory && this.earnedBadges.length >= 5) ||
       this.questionIndex >= this.game.gameOptions.maxQuestions
     ) {
       this.setGameOver();
@@ -539,6 +579,7 @@ export class GameDialog {
         originalAnswers[key] = originalAnswer;
       }
 
+      // badge.won = userAnswerId === correctAnswerId;
       const playerQnA: PlayerQnA = {
         playerId: this.user.userId,
         // playerAnswerId: isNaN(userAnswerId) ? null : userAnswerId.toString(),
@@ -557,6 +598,19 @@ export class GameDialog {
         addedOn: this.currentQuestion.addedOn,
         round: this.currentQuestion.gameRound
       };
+
+      if (this.game.gameOptions.isBadgeWithCategory) {
+        playerQnA.categoryId = this.game.playerQnAs[this.game.playerQnAs.length - 1].categoryId;
+        if (this.game.playerQnAs[this.game.playerQnAs.length - 1].badge) {
+        const badge = this.game.playerQnAs[this.game.playerQnAs.length - 1].badge;
+        badge.won = userAnswerId === correctAnswerId;
+        playerQnA.badge = badge;
+      }
+    }
+
+      // if (badgeWon === '') {
+      //   this.earnedBadges.push(badgeWon);
+      // }
       this.questionAnswered = true;
       this.isGameLoaded = false;
       // dispatch action to push player answer

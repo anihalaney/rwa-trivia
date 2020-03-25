@@ -8,6 +8,7 @@ export class GameOptions {
   friendId?: string;
   rematch?: boolean;
   isChallenge?: boolean;
+  isBadgeWithCategory?: boolean;
 
   constructor(isChallenge = false) {
     // Defaults

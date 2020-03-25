@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ChangeDetectorRef, EventEmitter, Input, OnInit, Output, SimpleChanges, OnChanges } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { Utils } from 'shared-library/core/services';
@@ -7,7 +7,7 @@ import { Game, PlayerMode, User, userCardType, ApplicationSettings } from 'share
 import { AppState, appState } from '../../../store';
 
 export class GameContinue implements OnInit {
-  
+
   @Output() continueButtonClicked = new EventEmitter();
   @Input() game: Game;
   @Input() userDict: { [key: string]: User };
@@ -16,6 +16,9 @@ export class GameContinue implements OnInit {
   @Input() threeConsecutiveAnswer: boolean;
   @Input() applicationSettings: ApplicationSettings;
   @Input() otherPlayer: User;
+  @Input() earnedBadgesByOtherUser: string[];
+  @Input() earnedBadges: string[];
+  @Input() totalBadges: string[];
   user$: Observable<User>;
   user: User;
   otherUserId: string;

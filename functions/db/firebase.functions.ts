@@ -239,7 +239,7 @@ export class FirebaseFunctions {
             if (beforeEventData.status !== afterEventData.status) {
                 const oldStatus = QuestionStatus[beforeEventData.status].toLowerCase().replace('_', ' ');
                 const newStatus = QuestionStatus[afterEventData.status].toLowerCase().replace('_', ' ');
-                const message = `The status changed from ${oldStatus} to ${newStatus} for ${afterEventData.questionText}.`;
+                const message = `The status changed from ${oldStatus} to ${newStatus} for your question.`;
                 console.log('message', message);
                 PushNotification.sendGamePlayPushNotifications(message, afterEventData.created_uid,
                     pushNotificationRouteConstants.QUESTION_NOTIFICATIONS);
@@ -298,9 +298,10 @@ export class FirebaseFunctions {
 
             if (userDataStatus.device !== TriggerConstants.WEB) {
 
-                // get firestore db object
-                const realTimeUserStatus = await UserService.getUserById(userDataStatus.userId);
-                userDataStatus.status = realTimeUserStatus.status;
+                userDataStatus.status = user.status;
+               // console.log('realTimeUserStatus---->', realTimeUserStatus);
+             //   console.log('userDataStatus---->', userDataStatus);
+
 
                 if (userDataStatus.device === TriggerConstants.ANDROID) {
                     const deviceTokenIndex = user.androidPushTokens
