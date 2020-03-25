@@ -303,14 +303,12 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate
     });
 
     webInterface.on("isFormValid", (isFormValid) => {
-      setTimeout(() => {
-        if (isFormValid === false) {
-          this.isFormValid = false;
-        } else {
-          this.isFormValid = true;
-        }
-        this.cd.markForCheck();
-      }, 1);
+      if (isFormValid === true) {
+        this.isFormValid = true;
+      } else {
+        this.isFormValid = false;
+      }     
+      this.cd.detectChanges();
 
     });
 

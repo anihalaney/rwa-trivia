@@ -9,7 +9,7 @@
         </StackLayout>
         <GridLayout [class.dialogOpen]="isShowPreview" rows="*,auto" columns="*" class="submit-question">
             <WebView row="0" col="0" width="100%" height="auto" #webView id="questionWebView"
-                (loaded)="webViewLoaded($event)" (loadFinished)="weViewLoadFinished($event)"></WebView>
+                (loaded)="webViewLoaded($event)"></WebView>
             <GridLayout row="1" col="0" columns="*,50,*" iosOverflowSafeArea="false" class="button-section">
                 <Button stlRippleEffect row="0" col="0" colspan="2" width="100%" [text]="submitBtnTxt"
           
