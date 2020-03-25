@@ -21,6 +21,7 @@ export class Question {
   reason?: string;
   validationErrorMessages?: string[];
   userGivenAnswer?: string;
+  badge?: { name: string, won: boolean};
   addedOn?: number;
   gameRound?: number;
   totalQALength?: number;

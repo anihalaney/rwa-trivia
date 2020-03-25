@@ -23,7 +23,7 @@ export class GameController {
                 // Game Option is not added
                 Utils.sendResponse(res, interceptorConstants.BAD_REQUEST, ResponseMessagesConstants.GAME_OPTION_NOT_FOUND);
             }
-
+            gameOptions.isBadgeWithCategory = true;
             if (!userId) {
                 // userId is not added
                 Utils.sendResponse(res, interceptorConstants.BAD_REQUEST, ResponseMessagesConstants.USER_ID_NOT_FOUND);
