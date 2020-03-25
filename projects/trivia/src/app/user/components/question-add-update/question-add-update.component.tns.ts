@@ -108,7 +108,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate
   theme: string;
   isShowPreview = false;
   previewQuestion: Question;
-  isFormValid: boolean;
+  isQFormValid: boolean;
 
   @Input() editQuestion: Question;
   @Input() displayBottomBar: Boolean = true;
@@ -139,7 +139,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate
     this.actionBarTxt = "Add_Question";
     // this.initDataItems();
     this.question = new Question();
-    this.isFormValid = false;
+    this.isQFormValid = false;
 
     if (isIOS) {
       this.iqKeyboard = IQKeyboardManager.sharedManager();
@@ -172,9 +172,10 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate
         ? "Resubmit"
         : "Submit";
     if (this.editQuestion) {
-      this.isFormValid = true;
+      this.isQFormValid = true;
       this.actionBarTxt = "Update Question";
     }
+
 
   }
 
@@ -303,14 +304,12 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate
     });
 
     webInterface.on("isFormValid", (isFormValid) => {
-      setTimeout(() => {
-        if (isFormValid === false) {
-          this.isFormValid = false;
+        if (isFormValid === true) {
+          this.isQFormValid = true;
         } else {
-          this.isFormValid = true;
+          this.isQFormValid = false;
         }
-        this.cd.markForCheck();
-      }, 1);
+        this.cd.detectChanges();
 
     });
 
