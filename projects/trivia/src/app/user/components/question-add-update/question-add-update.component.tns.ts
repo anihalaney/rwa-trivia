@@ -308,7 +308,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate
           this.isQFormValid = true;
         } else {
           this.isQFormValid = false;
-        }
+        }     
         this.cd.detectChanges();
 
     });
