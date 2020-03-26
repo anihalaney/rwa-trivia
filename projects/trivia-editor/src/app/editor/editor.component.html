@@ -1,6 +1,15 @@
 <div *ngIf="show">
-    <ng-quill-tex (editorLoadFinished)="editorLoadFinished($event)" [styles]="{height: '140px'}"  [modules]="quillConfig" (textChanged)="onTextChanged($event)" 
+    <ng-quill-tex (editorLoadFinished)="editorLoadFinished($event)"   [modules]="quillConfig" (textChanged)="onTextChanged($event)" 
     (fileUploaded)="fileUploaded($event)" [class.bottomToolbar]="applicationSettings?.quill_options?.custom_toolbar_position === 'bottom'" [customToolbarPosition]="applicationSettings?.quill_options?.custom_toolbar_position"  [imageUrl]="quillImageUrl" [content]="editorContent" [isMobile]="true">
+        <span *ngIf="applicationSettings?.quill_options?.custom_toolbar_position === 'bottom'" class="ql-formats">
+            <div #bottomToolBar [innerHtml]='bottomBarOptions | safeHtml'></div>
+        </span>
+    </ng-quill-tex>  
+
+    <label for=""> Second </label>
+    
+    <ng-quill-tex  (editorLoadFinished)="editorLoadFinished($event)" [modules]="quillConfig" (textChanged)="onTextChanged($event)" 
+    (fileUploaded)="fileUploaded($event)" [class.bottomToolbar]="applicationSettings?.quill_options?.custom_toolbar_position === 'bottom'" [customToolbarPosition]="applicationSettings?.quill_options?.custom_toolbar_position"  [isMobile]="true" [imageUrl]="quillImageUrl" [content]="editorContent">
         <span *ngIf="applicationSettings?.quill_options?.custom_toolbar_position === 'bottom'" class="ql-formats">
             <div #bottomToolBar [innerHtml]='bottomBarOptions | safeHtml'></div>
         </span>

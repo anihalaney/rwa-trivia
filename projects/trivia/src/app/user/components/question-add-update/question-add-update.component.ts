@@ -208,7 +208,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnI
   submit() {
 
     const question: Question = super.onSubmit();
-
+    
     if (question.isRichEditor) {
       question.questionText = this.quillObject.questionText;
       question.questionObject = this.quillObject.jsonObject;
