@@ -342,7 +342,7 @@ export class ESUtils {
     let filter = null;
     const randomSeed = (seed === '') ? null : seed;
     if (categories && categories.length > 0) {
-      filter = { 'terms': { 'categoryIds': categories } };
+      // filter = { 'terms': { 'categoryIds': [1, 2, 3, 4, 5, 6, 7, 8, 9] } };
     }
 
     try {
@@ -355,13 +355,13 @@ export class ESUtils {
               'query': {
                 'bool': {
                   'must': { 'match_all': {} },
-                  'must_not': [{ 'ids': { 'values': excludeIds } }],
-                  'filter': filter
+                  'must_not': [{ 'ids': { 'values': excludeIds } }]
                 }
               },
               'functions': [
                 {
-                  'random_score': { 'seed': randomSeed }
+                  'filter': { 'terms': { 'categoryIds': categories } },
+                  'weight': 100
                 }
               ]
             }
