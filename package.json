@@ -5,11 +5,11 @@
   "angular-cli": {},
   "nativescript": {
     "id": "${packageName}",
-    "tns-ios": {
-      "version": "6.2.0"
-    },
     "tns-android": {
-      "version": "6.2.0"
+      "version": "6.5.0"
+    },
+    "tns-ios": {
+      "version": "6.5.0"
     }
   },
   "scripts": {
@@ -63,9 +63,9 @@
     "google-libphonenumber": "^3.2.5",
     "hammerjs": "^2.0.8",
     "lodash.clonedeep": "^4.5.0",
-    "nativescript-angular": "^8.2.1",
+    "nativescript-angular": "^8.21.0",
     "nativescript-appversion": "^1.4.1",
-    "nativescript-camera": "^4.4.1",
+    "nativescript-camera": "^4.5.0",
     "nativescript-cardview": "^3.1.1",
     "nativescript-carousel": "^6.1.1",
     "nativescript-checkbox": "^3.0.3",
@@ -91,11 +91,11 @@
     "ngx-papaparse": "^3.0.2",
     "ngx-swiper-wrapper": "^8.0.1",
     "reflect-metadata": "^0.1.13",
-    "rxjs": "^6.5.3",
+    "rxjs": "^6.4.0",
     "stream": "0.0.2",
     "string-hash": "^1.1.3",
     "time-ago-pipe": "^1.3.2",
-    "tns-core-modules": "^6.1.1",
+    "tns-core-modules": "^6.5.0",
     "zone.js": "^0.9.1"
   },
   "devDependencies": {
@@ -136,7 +136,7 @@
     "lodash": "^4.17.11",
     "lodash.template": "^4.5.0",
     "mathquill": "^0.10.1-a",
-    "nativescript-dev-webpack": "^1.3.0",
+    "nativescript-dev-webpack": "^1.5.1",
     "nativescript-pager": "^9.5.4",
     "ng-katex": "^1.2.1",
     "node-sass": "^4.12.0",
