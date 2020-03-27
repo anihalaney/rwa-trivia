@@ -96,7 +96,7 @@ export class GeneralService {
      */
     static async getGameQuestionTest(): Promise<any> {
         try {
-            return await ESUtils.getRandomGameQuestion([2, 4, 5, 6], []);
+            return await ESUtils.getRandomGameQuestion([2, 4, 5, 6], [], []);
         } catch (error) {
             return Utils.throwError(error);
         }

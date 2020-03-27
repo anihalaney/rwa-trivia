@@ -178,8 +178,8 @@ export class ESUtils {
     return  Question.getViewModelFromES(hits[0]);
   }
 
-  static async getRandomGameQuestion(gameCategories: Array<number>, excludedQId: Array<string>): Promise<Question> {
-    const hits = await ESUtils.getRandomQuestionES(ESUtils.QUESTIONS_INDEX, 1, '', gameCategories, [], excludedQId);
+  static async getRandomGameQuestion(gameCategories: Array<number>, excludedQId: Array<string>, attemptedCategories: Array<number>): Promise<Question> {
+    const hits = await ESUtils.getRandomQuestionES(ESUtils.QUESTIONS_INDEX, 1, '', gameCategories, [], excludedQId, attemptedCategories);
     return Question.getViewModelFromES(hits[0]);
   }
 
@@ -335,7 +335,7 @@ export class ESUtils {
   }
 
   static async getRandomQuestionES(index: string, size: number, seed: string,
-    categories: number[], tags: string[], excludeIds: string[]): Promise<any> {
+    categories: number[], tags: string[], excludeIds: string[], attemptedCategories: number[]): Promise<any> {
     const client: ElasticSearch.Client = ESUtils.getElasticSearchClient();
     index = ESUtils.getIndex(index);
 
@@ -360,8 +360,15 @@ export class ESUtils {
               },
               'functions': [
                 {
+                  'random_score': { 'seed': randomSeed }
+                },
+                {
                   'filter': { 'terms': { 'categoryIds': categories } },
                   'weight': 100
+                },
+                {
+                  'filter': { 'terms': { 'categoryIds': attemptedCategories } },
+                  'weight': 0
                 }
               ]
             }
