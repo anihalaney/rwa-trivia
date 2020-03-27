@@ -80,7 +80,7 @@ export class DashboardComponent extends Dashboard implements OnInit, OnDestroy {
 
   navigateToProfileSettings() {
     if (this.user && this.user !== null) {
-      this.routerExtension.navigate(['/user/my/profile', this.user.userId]);
+       this.routerExtension.navigate(['/user/my/profile', this.user.userId]);
     }
   }
 

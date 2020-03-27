@@ -106,7 +106,7 @@ export class QuestionService {
 
     if (!question.id || question.id === '') {
       dbQuestion['source'] = 'question';
-      dbQuestion['id'] = this.dbService.createId();
+      dbQuestion['id'] = this.dbService.createId();;
       this.dbService.createDoc('unpublished_questions', dbQuestion).then(ref => {
         if (question.is_draft) {
           this.store.dispatch(this.questionActions.addQuestionDraftSuccess(dbQuestion['id']));

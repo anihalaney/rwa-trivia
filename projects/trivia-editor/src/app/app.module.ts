@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 
 import { AppComponent } from './app.component';
 import { EditorComponent } from './editor/editor.component';
+import { AddQuestionComponent } from './add-question/add-question.component';
 
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
@@ -21,15 +22,19 @@ import { environment } from 'shared-library/environments/environment';
 import { RoutingModule } from './routing/routing.module';
 import { NgQuillTexModule } from 'ng-quill-tex';
 
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
+
 @NgModule({
   declarations: [
     AppComponent,
-    EditorComponent
+    EditorComponent,
+    AddQuestionComponent
   ],
   imports: [
     CommonModule,
     BrowserModule,
     BrowserAnimationsModule,
+    MatAutocompleteModule,
 
     EffectsModule.forRoot([]),
     StoreModule.forRoot(reducers),
