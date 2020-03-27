@@ -23,7 +23,8 @@
   },
   "private": true,
   "dependencies": {
-    "@angular-devkit/core": "~8.1.2",
+    "@angular-devkit/core": "^8.1.3",
+    "@angular-devkit/schematics": "^9.1.0",
     "@angular/animations": "~8.2.0",
     "@angular/cdk": "~8.1.3",
     "@angular/common": "~8.2.0",
@@ -55,6 +56,7 @@
     "@ngx-share/buttons": "^7.1.4",
     "@ngx-share/core": "^7.1.4",
     "@nstudio/nativescript-checkbox": "^1.0.0",
+    "@schematics/angular": "^9.1.0",
     "angular2-cookie-law": "^7.0.1",
     "axios": "^0.19.0",
     "dom-to-image": "^2.6.0",
