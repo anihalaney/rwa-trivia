@@ -339,11 +339,7 @@ export class ESUtils {
     const client: ElasticSearch.Client = ESUtils.getElasticSearchClient();
     index = ESUtils.getIndex(index);
 
-    let filter = null;
     const randomSeed = (seed === '') ? null : seed;
-    if (categories && categories.length > 0) {
-      // filter = { 'terms': { 'categoryIds': [1, 2, 3, 4, 5, 6, 7, 8, 9] } };
-    }
 
     try {
       const body: ElasticSearch.SearchResponse<any> = await client.search({
