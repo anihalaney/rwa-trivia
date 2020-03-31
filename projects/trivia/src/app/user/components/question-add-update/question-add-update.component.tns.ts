@@ -292,7 +292,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate
       webViewInstace,
       CONFIG.editorUrl
     );
-    // new webViewInterfaceModule.WebViewInterface(webViewInstace, CONFIG.editorUrl);
+
     webInterface.on("editorLoadFinished", quillContent => {
       if (quillContent) {
         // change is not being detected.
