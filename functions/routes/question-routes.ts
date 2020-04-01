@@ -44,7 +44,7 @@ class QuestionRoutes {
 
         // 'deleteQuestionImage/:imageName'
         this.questionRoutes.delete(`/:${RoutesConstants.DELETE_DASH_QUESTION_DASH_IMAGE}/:${RoutesConstants.IMAGE_NAME}`,
-            QuestionController.deleteQuestionImage);
+            AuthMiddleware.authorizedOnly,QuestionController.deleteQuestionImage);
 
     }
 }
