@@ -283,7 +283,6 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
   changePlayerMode(playerMode: number, opponentType: any) {
     this.gameOptions.playerMode = playerMode;
     this.gameOptions.opponentType = opponentType;
-
     if (this.gameOptions.playerMode === PlayerMode.Single) {
       this.actionBarTitle = 'Play as single player';
     } else {
@@ -304,6 +303,13 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     this.gameOptions.opponentType = 1;
     this.chooseOptionsStep = 0;
     this.friendUserId = null;
+
+    // Reset friend filter when switch game option playerMode
+    if(this.gameOptions.playerMode !== 0){
+      this.searchFriend = '';
+    }
+   
+    
   }
 
   hideKeyboard() {

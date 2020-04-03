@@ -302,7 +302,7 @@ export class ProfileSettingsComponent extends ProfileSettings
         const imageSource = await fromAsset(imageAsset);
         setTimeout(() => {
           this.cropImage(imageSource);
-        }, 1);
+        },isIOS ? 250 : 0);
       } catch (error) {
         this.utils.sendErrorToCrashlytics("appLog", error);
         console.error(error);
