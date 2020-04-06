@@ -18,16 +18,14 @@ import { PrivacyPolicyComponent, AchievementsComponent } from './components';
 import { UserFeedbackComponent } from './components/index.tns';
 import { WelcomeScreenComponent } from '../../../shared-library/src/lib/shared/mobile/component';
 import { ModalDialogService } from 'nativescript-angular/modal-dialog';
+import { CardView } from '@nstudio/nativescript-cardview';
 // import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 export function firebaseFactory() {
   return TNSFirebase;
 }
 
 registerElement('PreviousNextView', () => require('nativescript-iqkeyboardmanager').PreviousNextView);
-
-// registerElement('CardView', () => CardView);
-registerElement('CardView', () => require('nativescript-cardview').CardView);
-registerElement('Fab', () => require('nativescript-floatingactionbutton').Fab);
+registerElement('CardView', () => CardView);
 registerElement("NestedScrollView", () => require("nativescript-nested-scrollview").NestedScrollView);
 
 @NgModule({
