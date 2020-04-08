@@ -80,10 +80,19 @@ export class QuestionController {
             const status = await GameMechanics.changeTheTurn(game);
             if (status) {
                 const questionIds = [];
+                let attemptedCategories = [];
                 for (const questionObj of game.playerQnAs) {
                     questionIds.push(questionObj.questionId);
+                    if (questionObj.categoryId && questionObj.categoryId.length > 0 && questionObj.badge && questionObj.badge.won) {
+                        if (Number(game.gameOptions.playerMode) === PlayerMode.Single ||
+                        (Number(game.gameOptions.playerMode) === PlayerMode.Opponent && questionObj.playerId === userId)) {
+                            attemptedCategories =
+                            [...new Set([ ...attemptedCategories, ...questionObj.categoryId.map(data => Number(data))])];
+                        }
+                    }
                 }
-                const question = await ESUtils.getRandomGameQuestion(game.gameOptions.categoryIds, questionIds);
+                const remainingCategories = game.gameOptions.categoryIds.filter(data => attemptedCategories.indexOf(data) === -1);
+                const question = await ESUtils.getRandomGameQuestion(remainingCategories, questionIds, attemptedCategories);
                 const createdOn = Utils.getUTCTimeStamp();
                 const playerQnA: PlayerQnA = {
                     playerId: userId,
