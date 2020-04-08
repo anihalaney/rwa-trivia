@@ -100,4 +100,6 @@
     <Label *ngIf="(game.GameStatus === gameStatus.AVAILABLE_FOR_OPPONENT || game.GameStatus === gameStatus.WAITING_FOR_FRIEND_INVITATION_ACCEPTANCE || game.GameStatus === gameStatus.WAITING_FOR_RANDOM_PLAYER_INVITATION_ACCEPTANCE)"
         text="Waiting for Opponent" textWrap="true" class="active-waiting-opponent"></Label>
 
+    <Label *ngIf="!myTurn && game.GameStatus === gameStatus.WAITING_FOR_NEXT_Q"
+    text="Opponent's Turn" textWrap="true" class="active-waiting-opponent"></Label>
 </StackLayout>
