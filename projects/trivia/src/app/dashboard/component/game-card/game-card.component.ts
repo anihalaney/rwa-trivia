@@ -74,7 +74,8 @@ export class GameCardComponent implements OnInit, OnChanges, OnDestroy {
     this.totalRound = (Number(this.game.gameOptions.playerMode) === PlayerMode.Single) ? 8 : 16;
     this.subscriptions.push(this.store.select(appState.coreState).pipe(take(1)).subscribe(s => {
       this.user = s.user;
-      this.myTurn = this.game.nextTurnPlayerId === this.user.userId;
+      this.myTurn = this.game.nextTurnPlayerId === this.user.userId &&
+      ([this.gameStatus.STARTED, this.gameStatus.RESTARTED, this.gameStatus.JOINED_GAME, this.gameStatus.WAITING_FOR_NEXT_Q].indexOf(this.game.GameStatus) >= 0 );
       this.randomCategoryId = Math.floor(Math.random() * this.game.gameOptions.categoryIds.length);
       if (this.myTurn) {
         this.updateRemainingTime();

@@ -405,7 +405,7 @@ export class ProfileSettings {
         return fg;
       });
 
-      const filteredTags = [...this.user.tags];
+      const filteredTags = this.user.tags ? [...this.user.tags] : [];
       this.topics.forEach(data => {
         if (filteredTags.indexOf(data.id) >= 0) {
           filteredTags.splice(filteredTags.indexOf(data.id), 1);
