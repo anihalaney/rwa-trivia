@@ -81,7 +81,7 @@ export class AddQuestionComponent implements OnInit, OnDestroy, AfterViewInit {
   answerTexts = [];
 
 
-  editQuestion: Question;
+    editQuestion: Question;
 
   get answers(): FormArray {
     return this.questionForm.get('answers') as FormArray;
@@ -309,10 +309,14 @@ export class AddQuestionComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   // Text change in quill editor
-  onTextChanged(quillContent) {
 
+  onTextChanged(quillContent) {
     this.quillObject.jsonObject = quillContent.delta;
     this.quillObject.questionText = quillContent.html;
+    if(quillContent.imageParsedName){
+      //     this.store.dispatch(this.questionAction.deleteQuestionImage(text.imageParsedName));
+      this.oWebViewInterface.emit('deleteImageUrl', quillContent.imageParsedName);
+    }
     this.questionForm.controls.questionText.patchValue(quillContent.html);
 
   }
@@ -384,6 +388,7 @@ export class AddQuestionComponent implements OnInit, OnDestroy, AfterViewInit {
     this.enteredTags = this.enteredTags.filter(t => t !== tag);
     this.questionForm.patchValue({ tags: [] });
     this.setTagsArray();
+    console.log("479", this.questionForm.valid);
     this.oWebViewInterface.emit('isFormValid', !this.questionForm.hasError('tagCountInvalid'));
   }
 

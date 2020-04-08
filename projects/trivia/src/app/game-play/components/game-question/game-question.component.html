@@ -46,7 +46,7 @@
         </div>
       </div>
       <div *ngIf="turnFlag && threeConsecutiveAnswer" class="col-xs-12 turn-change-reason">
-        <span>You have reached the maximum number of correct answers you are allowed to give in the first round.</span>
+        <span>{{ game?.gameOptions?.isBadgeWithCategory ?  'You have earned  maximum number of badges you are allowed to win in first round.' : 'You have reached the maximum number of correct answers you are allowed to give in the first round.'}}</span>
       </div>
     </div>
 

@@ -136,7 +136,7 @@ export class GameDialog {
         }
         this.playerMode = game.gameOptions.playerMode;
         this.threeConsecutiveAnswer = false;
-        if (game !== null && game.playerQnAs.length === 3) {
+        if (game !== null && game.playerQnAs.length === 3 && !game.gameOptions.isBadgeWithCategory) {
           let consecutiveCount = 0;
           this.game.playerQnAs.map(playerQnA => {
             consecutiveCount = playerQnA.answerCorrect
@@ -145,6 +145,20 @@ export class GameDialog {
           });
           this.threeConsecutiveAnswer =
             consecutiveCount === 3 && this.game.round === 1 ? true : false;
+        } else if (game !== null && game.stats[this.user.userId] &&
+          game.stats[this.user.userId].badge.length === 3 && game.gameOptions.isBadgeWithCategory && this.game.round === 1 &&
+          Number(this.game.gameOptions.playerMode) === PlayerMode.Opponent) {
+          let consecutiveCount = 0;
+          let isUserIsNotFirstPlayer = this.game.playerQnAs.some(data => data.playerId != this.user.userId);
+          if (!isUserIsNotFirstPlayer) {
+            this.game.playerQnAs.map(playerQnA => {
+              consecutiveCount = playerQnA.answerCorrect && playerQnA.badge && playerQnA.playerId === this.user.userId
+                ? ++consecutiveCount
+                : consecutiveCount;
+            });
+            this.threeConsecutiveAnswer =
+              consecutiveCount === 3 && this.game.round === 1 ? true : false;
+          }
         }
         if (game !== null && !this.isGameLoaded) {
           this.turnFlag =
@@ -470,9 +484,7 @@ export class GameDialog {
   }
 
   calculateMaxTime(): void {
-    if (this.currentQuestion.isRichEditor && this.currentQuestion.maxTime) {
-      this.MAX_TIME_IN_SECONDS = this.currentQuestion.maxTime;
-    } else if (this.applicationSettings) {
+    if (this.applicationSettings) {
       this.applicationSettings.game_play_timer_loader_ranges.forEach(
         timerLoader => {
           if (
@@ -519,10 +531,19 @@ export class GameDialog {
         this.cd.detectChanges();
       }
     } else if (
-      this.questionIndex - this.correctAnswerCount === 4 ||
-      (!this.game.gameOptions.isBadgeWithCategory && this.correctAnswerCount >= 5 ) ||
-      (this.game.gameOptions.isBadgeWithCategory && this.earnedBadges.length >= 5) ||
-      this.questionIndex >= this.game.gameOptions.maxQuestions
+      (!this.game.gameOptions.isBadgeWithCategory &&
+          (this.questionIndex - this.correctAnswerCount === 4 ||
+           this.correctAnswerCount >= 5 ||
+           this.questionIndex >= this.game.gameOptions.maxQuestions
+           )
+      ) ||
+      (this.game.gameOptions.isBadgeWithCategory &&
+        ( (this.game.round < this.game.gameOptions.maxQuestions && (this.game.round - this.earnedBadges.length === 4 && !this.game.playerQnAs[this.game.playerQnAs.length - 1].answerCorrect)) ||
+        this.earnedBadges.length >= 5 ||
+          (Number(this.game.round) === Number(this.game.gameOptions.maxQuestions) && !this.game.playerQnAs[this.game.playerQnAs.length - 1].answerCorrect) ||
+          (this.game.round > this.game.gameOptions.maxQuestions)
+        )
+      )
     ) {
       this.setGameOver();
       // this.gameOverContinueClicked();

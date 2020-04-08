@@ -83,14 +83,14 @@ export class QuestionService {
   }
 
 
-  static async uploadImage(image: String, imageName: number): Promise<any> {
+  static async uploadImage(image: String, imageName: number, userId:string): Promise<any> {
 
     let filePath =
       `questions`;
     const imageBase64 = image.replace(/^data:image\/\w+;base64,/, '');
     let bufferStream = new Buffer(imageBase64, GeneralConstants.BASE64);
     try {
-      await QuestionService.uploadQImage(bufferStream, 'image/jpeg', filePath, imageName);
+      await QuestionService.uploadQImage(bufferStream, 'image/jpeg', filePath, imageName, userId);
       return;
 
     } catch (error) {
@@ -102,7 +102,7 @@ export class QuestionService {
   * upload Question Image
   * return status
  */
-  static async uploadQImage(data: any, mimeType: any, filePath: string, imageName: number): Promise<any> {
+  static async uploadQImage(data: any, mimeType: any, filePath: string, imageName: number,userId: string): Promise<any> {
     const stream = require('stream');
     const file = QuestionService.bucket.file(`${filePath}/${imageName}`);
     const dataStream = new stream.PassThrough();
@@ -115,7 +115,8 @@ export class QuestionService {
         metadata: {
           contentType: mimeType,
           metadata: {
-            custom: QuestionsConstants.META_DATA
+            custom: QuestionsConstants.META_DATA,
+            userId: userId,
           }
         }
       }))
@@ -165,7 +166,7 @@ export class QuestionService {
         delete question.correct;
         delete question.wrong;
         delete question.reactionsCount;
-        
+
         promises.push(
           QuestionService.updateQuestion(QuestionService.QC, updateQuestion, false)
         );
@@ -176,5 +177,17 @@ export class QuestionService {
       return Utils.throwError(error);
     }
   }
+
+  static async deleteQuestionImage(imageName: string, userId: string) {
+    const file = QuestionService.bucket.file(`questions/${imageName}`);
+    const metaData = await file.getMetadata();
+    if(metaData && metaData[0].metadata.userId && metaData[0].metadata.userId === userId){
+      file.delete();
+      return {'message': 'Deleted !!!'};
+    } else{
+       return {'message': 'Your have no permission to delete image'};
+    }
+  }
+
 }
 

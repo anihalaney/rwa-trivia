@@ -215,7 +215,12 @@ export class Game {
     if (Number(this.gameOptions.playerMode) === PlayerMode.Opponent) {
       const otherPlayerUserId = this.playerIds.filter(playerId => playerId !== userId)[0];
       let consecutiveCorrectAnswers = (this.stats[userId].consecutiveCorrectAnswers) ? this.stats[userId].consecutiveCorrectAnswers : 0;
-      consecutiveCorrectAnswers = (!playerQnA.answerCorrect) ? 0 : consecutiveCorrectAnswers + 1;
+      if (this.gameOptions.isBadgeWithCategory) {
+        consecutiveCorrectAnswers = (!playerQnA.answerCorrect) ? 0 : (playerQnA.badge ? (consecutiveCorrectAnswers + 1) : consecutiveCorrectAnswers);
+      } else {
+        consecutiveCorrectAnswers = (!playerQnA.answerCorrect) ? 0 : consecutiveCorrectAnswers + 1;
+      }
+
 
       if (Number(this.gameOptions.opponentType) === OpponentType.Random) {
         if (this.GameStatus === GameStatus.STARTED && (!playerQnA.answerCorrect || consecutiveCorrectAnswers === 3)) {

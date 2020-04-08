@@ -24,7 +24,8 @@ function isAuthenticated() {
     match /questions {
       // questions files, only authenticated user (for now)
       match /{allFiles=**} {
-        allow read, write: if request.auth != null;
+        allow write, delete: if request.auth != null;
+        allow read;
       }
     }
      match /bulk_upload/{userId} {

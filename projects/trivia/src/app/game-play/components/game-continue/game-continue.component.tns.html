@@ -112,7 +112,7 @@
                         marginBottom="30" class="SF-Pro-Medium continue-btn" width="55%" text="Continue"
                         (rippleTap)="continueClicked()" stlRippleEffect></Button>
                     <Label row="4" col="0" *ngIf="turnFlag || threeConsecutiveAnswer" textAlignment="center"  class="SF-Pro-Regular" fontSize="17"   margin="10 0 10 15" color="#af3424"
-                        [text]="threeConsecutiveAnswer ? 'You have reached the maximum number of correct answers you are allowed to give in the first round.' : 'You did not answer ' +
+                        [text]="threeConsecutiveAnswer ? (game?.gameOptions?.isBadgeWithCategory ? 'You have earned  maximum number of badges you are allowed to win in first round' : 'You have reached the maximum number of correct answers you are allowed to give in the first round.' ) : 'You did not answer ' +
                         ( game?.playerQnAs[game?.playerQnAs?.length - 1]?.playerAnswerId != undefined ? 'correctly' : 'in time') + '. It\'s ' + (otherUserInfo?.displayName ? otherUserInfo?.displayName : 'other player') + '\'s turn now!!'"
                         textWrap="true">
                     </Label>

@@ -19,7 +19,7 @@ class QuestionRoutes {
 
         //  '/question-stat-update/'
         this.questionRoutes.post(`/${RoutesConstants.GAME_DASH_STAT_DASH_UPDATE}`,
-        QuestionController.updateQuestionStat);
+            QuestionController.updateQuestionStat);
 
         //  '/day/:nextQ'
         this.questionRoutes.get(`/${RoutesConstants.DAY}/:${RoutesConstants.NEXT_Q}`,
@@ -41,6 +41,10 @@ class QuestionRoutes {
         //  'getQuestionImage/:questionId'
         this.questionRoutes.get(`/:${RoutesConstants.GET_QUESTION_IMAGE}/:${RoutesConstants.IMAGE_NAME}`,
             QuestionController.getQuestionImage);
+
+        // 'deleteQuestionImage/:imageName'
+        this.questionRoutes.delete(`/:${RoutesConstants.DELETE_DASH_QUESTION_DASH_IMAGE}/:${RoutesConstants.IMAGE_NAME}`,
+            AuthMiddleware.authorizedOnly,QuestionController.deleteQuestionImage);
 
     }
 }

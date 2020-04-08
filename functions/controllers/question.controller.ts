@@ -80,10 +80,19 @@ export class QuestionController {
             const status = await GameMechanics.changeTheTurn(game);
             if (status) {
                 const questionIds = [];
+                let attemptedCategories = [];
                 for (const questionObj of game.playerQnAs) {
                     questionIds.push(questionObj.questionId);
+                    if (questionObj.categoryId && questionObj.categoryId.length > 0 && questionObj.badge && questionObj.badge.won) {
+                        if (Number(game.gameOptions.playerMode) === PlayerMode.Single ||
+                        (Number(game.gameOptions.playerMode) === PlayerMode.Opponent && questionObj.playerId === userId)) {
+                            attemptedCategories =
+                            [...new Set([ ...attemptedCategories, ...questionObj.categoryId.map(data => Number(data))])];
+                        }
+                    }
                 }
-                const question = await ESUtils.getRandomGameQuestion(game.gameOptions.categoryIds, questionIds);
+                const remainingCategories = game.gameOptions.categoryIds.filter(data => attemptedCategories.indexOf(data) === -1);
+                const question = await ESUtils.getRandomGameQuestion(remainingCategories, questionIds, attemptedCategories);
                 const createdOn = Utils.getUTCTimeStamp();
                 const playerQnA: PlayerQnA = {
                     playerId: userId,
@@ -118,7 +127,14 @@ export class QuestionController {
                     question.badge = playerQnA.badge;
                 }
                 if (game.playerQnAs.length > 0) {
-                    if (Number(game.gameOptions.playerMode) === PlayerMode.Single) {
+                    if (Number(game.gameOptions.playerMode) === PlayerMode.Single &&
+                            (!game.gameOptions.isBadgeWithCategory ||
+                                (game.gameOptions.isBadgeWithCategory &&
+                                    !(!game.playerQnAs[game.playerQnAs.length - 1].badge && game.playerQnAs[game.playerQnAs.length - 1].answerCorrect === true
+                                    )
+                                )
+                            )
+                    ) {
                         game.round = game.round + 1;
                     }
                 }
@@ -196,10 +212,10 @@ export class QuestionController {
 
     static async uploadQuestionImage(req, res): Promise<any> {
         const questionImage = req.body.image;
+        const userId = req.user.uid;
         if (questionImage) {
             const imageName = new Date().getTime();
-            await QuestionService.uploadImage(questionImage, imageName);
-            // QuestionService.generateQuesitonImage(imageName);
+            await QuestionService.uploadImage(questionImage, imageName, userId);
             Utils.sendResponse(res, interceptorConstants.SUCCESS, { name: imageName });
         } else {
             Utils.sendResponse(res, interceptorConstants.SUCCESS, ResponseMessagesConstants.UNPUBLISHED_STATUS_CHANGED);
@@ -210,6 +226,7 @@ export class QuestionController {
         const imageName = req.params.imageName;
         if (imageName) {
             try {
+
                 const stream = await QuestionService.generateQuesitonImage(imageName);
                 res.setHeader(HeaderConstants.CONTENT_DASH_DISPOSITION,
                     HeaderConstants.ATTACHMENT_QUESTION_IMAGE_PNG);
@@ -232,10 +249,26 @@ export class QuestionController {
             const questionId = req.body.questionId;
             const type = req.body.type;
             const update = req.body.update;
-            Utils.sendResponse(res, interceptorConstants.SUCCESS, await  StatsService.updateQuestionStats(questionId, type , update));
+            Utils.sendResponse(res, interceptorConstants.SUCCESS, await StatsService.updateQuestionStats(questionId, type, update));
         } catch (error) {
             Utils.sendError(res, error);
         }
     }
+
+    static async deleteQuestionImage(req, res) {
+        const imageName = req.params.imageName;
+        const userId = req.user.uid;
+        if (imageName) {
+            try {
+                const result  = await QuestionService.deleteQuestionImage(imageName,userId)
+                Utils.sendResponse(res, interceptorConstants.SUCCESS, result);
+            } catch (error) {
+                Utils.sendError(res, error);
+            }
+        } else {
+            Utils.sendResponse(res, interceptorConstants.BAD_REQUEST, ResponseMessagesConstants.BAD_REQUEST);
+        }
+    }
+
 
 }
