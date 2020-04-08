@@ -37,8 +37,7 @@
           "/*.js"
         ],
         "urls": [
-          "https://cdnjs.cloudflare.com/ajax/libs/core-js/2.4.1/shim.min.js",
-          "https://fonts.googleapis.com/icon?family=Material+Icons"
+          "https://cdnjs.cloudflare.com/ajax/libs/core-js/2.4.1/shim.min.js"
         ]
       }
     },

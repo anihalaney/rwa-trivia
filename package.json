@@ -5,11 +5,11 @@
   "angular-cli": {},
   "nativescript": {
     "id": "${packageName}",
-    "tns-ios": {
-      "version": "6.2.0"
-    },
     "tns-android": {
-      "version": "6.2.0"
+      "version": "6.5.0"
+    },
+    "tns-ios": {
+      "version": "6.5.0"
     }
   },
   "scripts": {
@@ -23,7 +23,8 @@
   },
   "private": true,
   "dependencies": {
-    "@angular-devkit/core": "~8.1.2",
+    "@angular-devkit/core": "^8.1.3",
+    "@angular-devkit/schematics": "^9.1.0",
     "@angular/animations": "~8.2.0",
     "@angular/cdk": "~8.1.3",
     "@angular/common": "~8.2.0",
@@ -54,7 +55,9 @@
     "@ngx-share/button": "^7.1.4",
     "@ngx-share/buttons": "^7.1.4",
     "@ngx-share/core": "^7.1.4",
+    "@nstudio/nativescript-cardview": "^1.0.0",
     "@nstudio/nativescript-checkbox": "^1.0.0",
+    "@schematics/angular": "^9.1.0",
     "angular2-cookie-law": "^7.0.1",
     "axios": "^0.19.0",
     "dom-to-image": "^2.6.0",
@@ -63,26 +66,23 @@
     "google-libphonenumber": "^3.2.5",
     "hammerjs": "^2.0.8",
     "lodash.clonedeep": "^4.5.0",
-    "nativescript-angular": "^8.2.1",
+    "nativescript-angular": "^8.21.0",
     "nativescript-appversion": "^1.4.1",
-    "nativescript-camera": "^4.4.1",
-    "nativescript-cardview": "^3.1.1",
+    "nativescript-camera": "^4.5.0",
     "nativescript-carousel": "^6.1.1",
-    "nativescript-checkbox": "^3.0.3",
     "nativescript-drop-down": "^5.0.4",
     "nativescript-feedback": "^1.3.12",
-    "nativescript-floatingactionbutton": "^5.0.3",
     "nativescript-geolocation": "^5.1.0",
     "nativescript-imagecropper": "3.0.0",
-    "nativescript-imagepicker": "^6.2.0",
+    "nativescript-imagepicker": "^7.1.0",
     "nativescript-iqkeyboardmanager": "^1.5.1",
     "nativescript-nested-scrollview": "^1.1.0",
     "nativescript-plugin-firebase": "^10.3.3",
     "nativescript-screenshot": "0.0.2",
     "nativescript-social-share": "^1.5.1",
-    "nativescript-ui-autocomplete": "5.0.0",
-    "nativescript-ui-listview": "^7.1.0",
-    "nativescript-ui-sidedrawer": "^7.0.2",
+    "nativescript-ui-autocomplete": "^6.0.1",
+    "nativescript-ui-listview": "^8.0.1",
+    "nativescript-ui-sidedrawer": "^8.0.0",
     "nativescript-webview-interface": "^1.4.3",
     "ng-quill-tex": "file:ng-quill-tex-0.0.1.tgz",
     "ngx-auto-unsubscribe": "^3.0.0",
@@ -91,11 +91,11 @@
     "ngx-papaparse": "^3.0.2",
     "ngx-swiper-wrapper": "^8.0.1",
     "reflect-metadata": "^0.1.13",
-    "rxjs": "^6.5.3",
+    "rxjs": "^6.4.0",
     "stream": "0.0.2",
     "string-hash": "^1.1.3",
     "time-ago-pipe": "^1.3.2",
-    "tns-core-modules": "^6.1.1",
+    "tns-core-modules": "^6.5.0",
     "zone.js": "^0.9.1"
   },
   "devDependencies": {
@@ -136,8 +136,7 @@
     "lodash": "^4.17.11",
     "lodash.template": "^4.5.0",
     "mathquill": "^0.10.1-a",
-    "nativescript-dev-webpack": "^1.3.0",
-    "nativescript-pager": "^9.5.4",
+    "nativescript-dev-webpack": "^1.5.1",
     "ng-katex": "^1.2.1",
     "node-sass": "^4.12.0",
     "protractor": "^5.4.2",

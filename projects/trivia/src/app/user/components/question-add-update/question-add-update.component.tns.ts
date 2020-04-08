@@ -197,7 +197,9 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate
         this.imageTaken = imageAsset;
         const source = new ImageSource();
         const imageSource = await fromAsset(imageAsset);
-        await this.cropImage(imageSource, webviewElement);
+        setTimeout(() => {
+          this.cropImage(imageSource, webviewElement);
+        },isIOS ? 250 : 0);
       } catch (error) {
         console.error(error);
       }
