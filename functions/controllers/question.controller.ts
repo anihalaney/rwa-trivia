@@ -212,10 +212,10 @@ export class QuestionController {
 
     static async uploadQuestionImage(req, res): Promise<any> {
         const questionImage = req.body.image;
+        const userId = req.user.uid;
         if (questionImage) {
             const imageName = new Date().getTime();
-            await QuestionService.uploadImage(questionImage, imageName);
-            // QuestionService.generateQuesitonImage(imageName);
+            await QuestionService.uploadImage(questionImage, imageName, userId);
             Utils.sendResponse(res, interceptorConstants.SUCCESS, { name: imageName });
         } else {
             Utils.sendResponse(res, interceptorConstants.SUCCESS, ResponseMessagesConstants.UNPUBLISHED_STATUS_CHANGED);
@@ -226,6 +226,7 @@ export class QuestionController {
         const imageName = req.params.imageName;
         if (imageName) {
             try {
+
                 const stream = await QuestionService.generateQuesitonImage(imageName);
                 res.setHeader(HeaderConstants.CONTENT_DASH_DISPOSITION,
                     HeaderConstants.ATTACHMENT_QUESTION_IMAGE_PNG);
@@ -248,10 +249,26 @@ export class QuestionController {
             const questionId = req.body.questionId;
             const type = req.body.type;
             const update = req.body.update;
-            Utils.sendResponse(res, interceptorConstants.SUCCESS, await  StatsService.updateQuestionStats(questionId, type , update));
+            Utils.sendResponse(res, interceptorConstants.SUCCESS, await StatsService.updateQuestionStats(questionId, type, update));
         } catch (error) {
             Utils.sendError(res, error);
         }
     }
+
+    static async deleteQuestionImage(req, res) {
+        const imageName = req.params.imageName;
+        const userId = req.user.uid;
+        if (imageName) {
+            try {
+                const result  = await QuestionService.deleteQuestionImage(imageName,userId)
+                Utils.sendResponse(res, interceptorConstants.SUCCESS, result);
+            } catch (error) {
+                Utils.sendError(res, error);
+            }
+        } else {
+            Utils.sendResponse(res, interceptorConstants.BAD_REQUEST, ResponseMessagesConstants.BAD_REQUEST);
+        }
+    }
+
 
 }

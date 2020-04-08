@@ -68,6 +68,19 @@ export class QuestionEffects {
           map((question: Question) => this.questionActions.getFirstQuestionSuccess(question)),
           catchError(err => of(this.questionActions.getFirstQuestionError(err))))));
 
+
+  @Effect()
+  // handle location update
+  deleteQuestionImage$ = this.actions$
+    .pipe(ofType(QuestionActions.DELETE_QUESTION_IMAGE))
+    .pipe(
+      switchMap((action: ActionWithPayload<string>) =>
+        this.svc.deleteQuestionImage(action.payload)
+          .pipe(
+            map((res: any) => this.questionActions.deleteQuestionImageSuccess(res.message))
+          )
+      ));
+
   constructor(
     private actions$: Actions,
     private questionActions: QuestionActions,

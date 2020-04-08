@@ -3,13 +3,13 @@ import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@ang
 import { Question, QuestionStatus, Category, User, Answer, ApplicationSettings } from '../../model';
 import { QuestionService } from '../../../core/services';
 import { Observable, interval, of, Subject, merge } from 'rxjs';
-import { debounceTime, switchMap, map, multicast, take, skip} from 'rxjs/operators';
+import { debounceTime, switchMap, map, multicast, take, skip, mergeMap} from 'rxjs/operators';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 // import { QuillImageUpload } from 'ng-quill-tex/lib/models/quill-image-upload';
 import { CropImageDialogComponent } from './../crop-image-dialog/crop-image-dialog.component';
 import { MatDialog } from '@angular/material';
 import { Store, select } from '@ngrx/store';
-import { CoreState, coreState } from './../../../core/store';
+import { CoreState, coreState, QuestionActions } from './../../../core/store';
 import * as userActions from '../../../../../../trivia/src/app/user/store/actions';
 import { Utils } from 'shared-library/core/services';
 @Component({
@@ -56,7 +56,8 @@ export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
     public dialog: MatDialog,
     public questionService: QuestionService,
     public store: Store<CoreState>,
-    public utils: Utils) {
+    public utils: Utils,
+    public questionAction: QuestionActions) {
 
 
     }
@@ -309,6 +310,9 @@ export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
   onTextChanged(text) {
     this.quillObject.jsonObject = text.delta;
     this.quillObject.questionText = text.html;
+    if(text.imageParsedName){
+      this.store.dispatch(this.questionAction.deleteQuestionImage(text.imageParsedName));
+    }
   }
 
   // Image Upload
@@ -321,20 +325,21 @@ export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
     });
 
     this.dialogRef.componentInstance.ref = this.dialogRef;
-    this.subscriptions.push(this.dialogRef.componentInstance.ref.afterClosed().subscribe(result => {
-      if (result) {
-        const fileName = `questions/${new Date().getTime()}-${file.name}`;
-        this.questionService.saveQuestionImage(result.image, fileName).subscribe(uploadTask => {
-          if (uploadTask != null) {
-            if (uploadTask.task.snapshot.state === 'success') {
-              this.questionService.getQuestionDownloadUrl(fileName).subscribe(imageUrl => {
-                quillImageUpload.setImage(imageUrl);
-              });
-            }
-          }
-        });
-      }
+    this.subscriptions.push(this.dialogRef.componentInstance.ref.afterClosed()
+    .pipe(mergeMap(result => {
+      const fileName = `questions/${new Date().getTime()}-${file.name}`;
+      return this.questionService.saveQuestionImage(result['image'], fileName);
+    }),
+      mergeMap(image => {
+         return of(this.utils.getQuestionUrl(`${image['name']}`) + `?d=${new Date().getTime()}`);
+      })
+    ).subscribe(imageUrl => {
+      // SetImage callback function called to set image in editor
+      quillImageUpload.setImage(imageUrl);
+      // this.cd.markForCheck();
     }));
+
+
   }
 
 }

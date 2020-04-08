@@ -62,10 +62,10 @@
             </ng-quill-tex>
           </div>
 
-          <p [ngClass]="(!answer.controls.answerText.valid
+        <p [ngClass]="(!answer.controls.answerText.valid
         && answer.controls.answerText.errors 
         &&  answer.controls.answerText.errors.maxlength) ? 'show-answer-text' : 'hide-answer-text'" class="error">
-            {{applicationSettings.answer_max_length}} characters are allowed</p>
+            {{applicationSettings?.answer_max_length}} characters are allowed</p>
         </div>
       </ng-container>
       <div class="error" *ngIf="!answers.valid && answers.touched">
