@@ -29,6 +29,7 @@ export class ApplicationSettings {
     auto_save: { is_enabled: boolean, time: number };
     apple_authentication: boolean;
     badges: {};
+    notification_template: { [key: string]: { message: string} };
 }
 
 export class TimerLoader {

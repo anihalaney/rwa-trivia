@@ -236,10 +236,14 @@ export class FirebaseFunctions {
         try {
             const beforeEventData = change.before.data();
             const afterEventData = change.after.data();
+            const appSetting = await AppSettings.Instance.getAppSettings();
             if (beforeEventData.status !== afterEventData.status) {
                 const oldStatus = QuestionStatus[beforeEventData.status].toLowerCase().replace('_', ' ');
                 const newStatus = QuestionStatus[afterEventData.status].toLowerCase().replace('_', ' ');
-                const message = `The status changed from ${oldStatus} to ${newStatus} for your question.`;
+                const message =  PushNotification.compileTemplateString(
+                                    appSetting.notification_template.question_notifications_status_change.message,
+                                    {oldStatus : oldStatus, newStatus: newStatus}
+                                 );
                 console.log('message', message);
                 PushNotification.sendGamePlayPushNotifications(message, afterEventData.created_uid,
                     pushNotificationRouteConstants.QUESTION_NOTIFICATIONS);
@@ -258,8 +262,8 @@ export class FirebaseFunctions {
             const data = snap.data();
             if (data) {
                 const question: Question = data;
-
-                const message = `Yay! Your submitted question has been approved for the bitWiser question bank. You earned 8 bytes!!`;
+                const appSetting = await AppSettings.Instance.getAppSettings();
+                const message =  appSetting.notification_template.question_notifications_approved.message;
                 console.log('Notification sent on question approved');
                 PushNotification.sendGamePlayPushNotifications(message, question.created_uid,
                     pushNotificationRouteConstants.QUESTION_NOTIFICATIONS);

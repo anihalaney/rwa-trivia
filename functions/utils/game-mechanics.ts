@@ -167,7 +167,7 @@ export class GameMechanics {
             const accounts = await AccountService.getAccountsWithLagInGamePlay(startTime);
             for (const account of accounts) {
                 PushNotification.sendGamePlayPushNotifications(
-                    ` - we have added new questions to bitWiser! Come back and challenge your friends to a new game.`,
+                    '',
                     account.id,
                     pushNotificationRouteConstants.GAME_PLAY_LAG_NOTIFICATION);
                     account.lastGamePlayedNotification = true;
@@ -198,7 +198,7 @@ export class GameMechanics {
                 if ((Number(gameOptions.opponentType) === OpponentType.Random ||
                 Number(gameOptions.opponentType) === OpponentType.Friend) && gameOptions.friendId && gameOptions.friendId !== '') {
                     PushNotification.sendGamePlayPushNotifications(
-                        ' started a new bitWiser game with you! Stay tuned for your turn!',
+                        '',
                         userId,
                         pushNotificationRouteConstants.NEW_GAME_START_WITH_OPPONENT, gameOptions.friendId);
                 }

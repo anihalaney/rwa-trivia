@@ -58,8 +58,7 @@ export class AchievementMechanics {
             }
 
             for (const achievementId of achievementIdsForNotification) {
-                const message = `You get ${achievementRulesDict[achievementId].name} Achievement`;
-                PushNotification.sendGamePlayPushNotifications(message, account.id,
+                PushNotification.sendGamePlayPushNotifications(achievementRulesDict[achievementId].name, account.id,
                     pushNotificationRouteConstants.ACHIEVEMENT_NOTIFICATION);
             }
 
