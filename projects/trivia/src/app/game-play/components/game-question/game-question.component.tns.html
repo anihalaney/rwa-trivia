@@ -27,7 +27,7 @@
           visibility="{{(answeredIndex!==undefined && correctAnswerIndex !== answeredIndex) ? 'visible'  : 'collapsed' }}"
           class="incorrect-text red" text="INCORRECT" textWrap="true" style.textAlignment="center"></Label>
 
-        <Label *ngIf="continueNext && progressValue>=100" class="timeout-text yellow" text="TIMES UP" textWrap="true"
+        <Label *ngIf="(continueNext || !doPlay) && progressValue>=100" class="timeout-text yellow" text="TIMES UP" textWrap="true"
           style.textAlignment="center"></Label>
       </FlexboxLayout>
       <render-box [setBackgroundColor]="'#f7f7f7'">
