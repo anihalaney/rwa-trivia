@@ -217,8 +217,9 @@ export class Utils extends UtilsCore {
       );
 
       if (
-        game.round < 16 &&
-        game.stats[userId].score === game.stats[otherUserId].score
+        game.round <= 16 &&
+        (!game.gameOptions.isBadgeWithCategory && game.stats[userId].score === game.stats[otherUserId].score) ||
+        (game.gameOptions.isBadgeWithCategory && game.stats[userId].badge.length === game.stats[otherUserId].badge.length)
       ) {
         analyticsParameter = this.setAnalyticsParameter(
           FirebaseAnalyticsKeyConstants.IS_TIE,
@@ -229,7 +230,8 @@ export class Utils extends UtilsCore {
         let winPlayerId = otherUserId;
         if (
           game.round < 16 &&
-          game.stats[userId].score > game.stats[otherUserId].score
+          (!game.gameOptions.isBadgeWithCategory && game.stats[userId].score > game.stats[otherUserId].score) ||
+          (game.gameOptions.isBadgeWithCategory && game.stats[userId].badge.length > game.stats[otherUserId].badge.length)
         ) {
           winPlayerId = userId;
         }

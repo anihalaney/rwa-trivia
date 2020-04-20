@@ -525,8 +525,17 @@ export class GameDialog {
         playerId => playerId !== this.user.userId
       )[0];
       if ((!this.game.gameOptions.isBadgeWithCategory &&  this.correctAnswerCount >= 5 ) ||
-      (this.game.gameOptions.isBadgeWithCategory &&  this.earnedBadges.length >= 5 ) || this.game.round >= 16) {
+      (this.game.gameOptions.isBadgeWithCategory &&  this.earnedBadges.length >= 5 )) {
         // this.gameOverContinueClicked();
+        this.setGameOver();
+        this.cd.detectChanges();
+      } else if (Number(this.game.round) === 16) {
+        const players =  [...new Set(this.game.playerQnAs.filter(data => Number(data.round) === 16).map(data => data.playerId))];
+        if (players.length >= 2 && !this.game.playerQnAs[this.game.playerQnAs.length - 1].answerCorrect) {
+          this.setGameOver();
+          this.cd.detectChanges();
+        }
+      } else if (Number(this.game.round) > 16) {
         this.setGameOver();
         this.cd.detectChanges();
       }

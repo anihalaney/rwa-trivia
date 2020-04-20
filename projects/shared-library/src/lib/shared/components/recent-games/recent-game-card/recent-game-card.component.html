@@ -9,14 +9,18 @@
             <div *ngIf="game.gameOptions.playerMode == PlayerMode.Opponent">
                 <div class="success result" *ngIf="game.winnerPlayerId && game.winnerPlayerId === user.userId">Won</div>
                 <div class="label result" *ngIf="game.winnerPlayerId && game.winnerPlayerId !== user.userId">Lost</div>
-                <div class="success result" *ngIf="game.round < 16 && !game.winnerPlayerId && game.GameStatus !== GameStatus.REJECTED && game.GameStatus !== GameStatus.INVITATION_TIMEOUT && game.GameStatus !== GameStatus.TIME_EXPIRED">
+                <div class="success result" *ngIf="game.round >= 16 && !game.winnerPlayerId && 
+                    ((game?.gameOptions?.isBadgeWithCategory &&  game?.stats[game?.playerIds[0]]?.badge?.length === game?.stats[game.playerIds[1]]?.badge?.length) ||
+                    (!game?.gameOptions?.isBadgeWithCategory &&  game?.stats[game?.playerIds[0]]?.score === game?.stats[game.playerIds[1]]?.score))">
                     Tie</div>
                 <div class="label result" *ngIf="!game.winnerPlayerId && game.GameStatus === GameStatus.REJECTED">
                     Rejected</div>
                 <div class="label result" *ngIf="game.GameStatus === GameStatus.INVITATION_TIMEOUT">
                     Invitation Timeout
                 </div>
-                <div class="label result" *ngIf="!game.winnerPlayerId && game.round === 16">
+                <div class="label result" *ngIf="game.round >= 16 && !game.winnerPlayerId &&
+                    ((game?.gameOptions?.isBadgeWithCategory &&  game?.stats[game?.playerIds[0]]?.badge?.length !== game?.stats[game.playerIds[1]]?.badge?.length) ||
+                    (!game?.gameOptions?.isBadgeWithCategory &&  game?.stats[game?.playerIds[0]]?.score !== game?.stats[game.playerIds[1]]?.score))">
                     Draw
                 </div>
             </div>
