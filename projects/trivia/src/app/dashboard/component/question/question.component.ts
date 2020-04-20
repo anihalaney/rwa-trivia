@@ -50,7 +50,7 @@ export class QuestionComponent implements OnDestroy {
         switchMap(() => { return this.store.select(appState.coreState).pipe(select(s => s.questionOfTheDay)); })
       ).subscribe(questionOfTheDay => {
         if (questionOfTheDay) {
-
+          this.doPlay = true;
           this.question = questionOfTheDay;
           this.cd.markForCheck();
 
@@ -99,7 +99,6 @@ export class QuestionComponent implements OnDestroy {
   getNextQuestion() {
     this.answeredText = '';
     this.correctAnswerText = '';
-    this.doPlay = true;
     this.store.dispatch(this.questionAction.getQuestionOfTheDay());
   }
 
