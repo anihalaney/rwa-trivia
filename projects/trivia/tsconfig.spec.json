@@ -6,21 +6,24 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "lib": [
-      "es2016",
-      "dom"
+      "es2018",
+      "dom",
+      "es6",
+      "es2015.iterable"
     ],
     "outDir": "../out-tsc/spec",
     "module": "commonjs",
-    "target": "es5",
+    "target": "es2015",
     "baseUrl": "",
     "types": [
-      "jasmine",
+      "jest",
+      "jquery",
+      "jsdom",
       "node"
     ]
   },
   "files": [
-    "test.ts",
-    "polyfills.ts"
+    "src/polyfills.ts"
   ],
   "include": [
     "**/*.spec.ts",
