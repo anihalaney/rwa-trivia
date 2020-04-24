@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "sourceMap": true,
+    "allowJs": true,
     "declaration": false,
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
@@ -11,6 +12,11 @@
       "es6",
       "es2015.iterable"
     ],
+    "paths": {
+      "shared-library/*": [
+          "../../projects/shared-library/src/lib/*"
+      ]
+    },
     "outDir": "../out-tsc/spec",
     "module": "commonjs",
     "target": "es2015",
