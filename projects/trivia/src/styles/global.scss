@@ -652,6 +652,12 @@ body.dialog-open .cdk-global-overlay-wrapper {
   .cookie-law-wrapper .copy .container{
     padding: 0px !important;
   }
+  .cdk-overlay-pane{overflow: scroll;}
+}
+
+
+@media only screen and (max-width: 812px) and (orientation: landscape) {
+      .cdk-overlay-pane{overflow: scroll;}
 }
 
 .gameplay .wrong .text, .gameplay .right .text{
@@ -796,3 +802,4 @@ question .author{
 .blot-formatter__resize-handle img{
   max-width: 200px !important;
 }
+

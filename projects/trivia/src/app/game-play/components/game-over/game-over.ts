@@ -211,7 +211,6 @@ export class GameOver implements OnInit, OnChanges {
     this.loaderStatus = undefined;
     this.opponentType = undefined;
     this.disableFriendInviteBtn = undefined;
-    this.subscriptions = [];
     this.account = undefined;
     this.applicationSettings = undefined;
   }
