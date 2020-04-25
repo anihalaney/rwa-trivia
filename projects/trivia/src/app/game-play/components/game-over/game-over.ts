@@ -153,17 +153,16 @@ export class GameOver implements OnInit, OnChanges {
       }
 
       if (!this.game.winnerPlayerId && Number(this.game.gameOptions.playerMode) === PlayerMode.Opponent) {
-          if (this.game.round < 16 &&
-            (!this.game.gameOptions.isBadgeWithCategory &&
-              this.game.stats[this.user.userId].score < this.game.stats[this.otherUserId].score
+          if ((!this.game.gameOptions.isBadgeWithCategory &&
+              this.game.stats[this.user.userId].score !== this.game.stats[this.otherUserId].score
             ) ||
             (
               this.game.gameOptions.isBadgeWithCategory &&
-              this.earnedBadges.length < this.earnedBadgesByOtherUser.lenth
+              this.earnedBadges.length === this.earnedBadgesByOtherUser.length
             )
           ) {
              this.gameStatus = GameStatus.TIE;
-          } else if (this.game.round === 16 ) {
+          } else if (this.game.round >= 16 ) {
              this.gameStatus = GameStatus.DRAW;
           }
 

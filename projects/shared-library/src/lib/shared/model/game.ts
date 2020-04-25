@@ -188,13 +188,13 @@ export class Game {
   decideWinner() {
     const playerId_0 = this.playerIds[0];
     if (Number(this.gameOptions.playerMode) === PlayerMode.Opponent && this.playerIds.length > 1) {
-      if (this.round < 16) {
+      if (this.round <= 16) {
         const playerId_1 = this.playerIds[1];
         const player_0_score = this.gameOptions.isBadgeWithCategory ? this.stats[playerId_0].badge.length :  this.stats[playerId_0].score;
         const player_1_score = this.gameOptions.isBadgeWithCategory ? this.stats[playerId_1].badge.length :  this.stats[playerId_1].score;
-        if ((player_0_score > player_1_score)) {
+        if ((player_0_score >= 5)) {
           this.winnerPlayerId = playerId_0;
-        } else if ((player_0_score < player_1_score)) {
+        } else if (player_1_score >= 5) {
           this.winnerPlayerId = playerId_1;
         }
       }
