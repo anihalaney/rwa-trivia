@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "sourceMap": true,
+    "allowJs": true,
     "declaration": false,
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
