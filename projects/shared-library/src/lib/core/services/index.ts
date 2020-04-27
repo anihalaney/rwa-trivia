@@ -11,7 +11,6 @@ import { StatsService } from './stats.service';
 import { WindowRef } from './windowref.service';
 import { ApplicationSettingsService } from './application-settings.service';
 import { AchievementService } from './achievement.service';
-import { AutoUnsubscribe } from './auto-unsubscribe';
 
 export {
     Utils,
@@ -26,8 +25,7 @@ export {
     StatsService,
     ApplicationSettingsService,
     WindowRef,
-    AchievementService,
-    AutoUnsubscribe
+    AchievementService
 };
 
 export default [
@@ -43,6 +41,5 @@ export default [
     StatsService,
     ApplicationSettingsService,
     WindowRef,
-    AchievementService,
-    AutoUnsubscribe
+    AchievementService
 ];

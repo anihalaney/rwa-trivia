@@ -197,8 +197,6 @@
         "test": {
           "builder": "@angular-builders/jest:run",
           "options": {
-     
-            "karmaConfig": "projects/trivia/karma.conf.js",
             "polyfills": "projects/trivia/src/polyfills.ts",
             "tsConfig": "/../trivia/tsconfig.spec.json",
             "scripts": [],

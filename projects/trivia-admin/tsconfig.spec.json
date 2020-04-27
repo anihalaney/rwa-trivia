@@ -8,7 +8,8 @@
       "jquery",
       "jsdom",
       "node"
-    ]
+    ],
+    "allowJs": true,
   },
   "files": [
     "src/polyfills.ts"

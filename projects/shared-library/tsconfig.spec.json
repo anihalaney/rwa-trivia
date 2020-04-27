@@ -8,6 +8,7 @@
     ],
     "module": "commonjs",
     "target": "es5",
+    "allowJs": true,
   },
   "files": [
   ],
