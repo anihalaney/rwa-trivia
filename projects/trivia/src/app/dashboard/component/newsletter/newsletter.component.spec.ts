@@ -8,7 +8,6 @@ import { of } from 'rxjs';
 import { AppState, appState } from '../../../store';
 import { FormBuilder } from '@angular/forms';
 import { provideMockStore, MockStore } from '@ngrx/store/testing';
-import { dashboardState, reducer } from './../../store/reducers/index'
 import { CoreState, coreState } from 'shared-library/core/store';
 
 
@@ -17,90 +16,106 @@ const formBuilder: FormBuilder = new FormBuilder();
 
 describe('NewsletterComponent', () => {
 
-    let component: NewsletterComponent;
-    let fixture: ComponentFixture<NewsletterComponent>;
-    let user: User;
-    let mockStore:  MockStore<AppState>;
-    let mockUsernameSelector: MemoizedSelector<AppState, CoreState>;
+  let component: NewsletterComponent;
+  let fixture: ComponentFixture<NewsletterComponent>;
+  let user: User;
+  let mockStore: MockStore<AppState>;
+  let mockCoreSelector: MemoizedSelector<CoreState, {}>;
 
-    let user1 = { email: null };
-    beforeEach(async(() => {
 
-        TestBed.configureTestingModule({
+  beforeEach(async(() => {
 
-            imports: [ReactiveFormsModule, FormsModule],
-            // providers: [ Store ],
-            providers: [
-                provideMockStore(),
-                { provide: FormBuilder, useValue: formBuilder }
-            ],
-            declarations: [NewsletterComponent],
-        }).compileComponents()
-            .then(() => {
-                fixture = TestBed.createComponent(NewsletterComponent);
-                mockStore = TestBed.get(Store);
-                mockUsernameSelector = mockStore.overrideSelector(coreState, { user: user });
-                // mockUsernameSelector.setResult({ coreState: { user } });
-                component = fixture.componentInstance;
-                fixture.detectChanges();
+    TestBed.configureTestingModule({
 
-            });;
-    }));
+      imports: [ReactiveFormsModule, FormsModule, StoreModule.forRoot({})],
+      // providers: [ Store ],
+      providers: [ provideMockStore( {
+        initialState: { core: {}, dashboard: {}},
+        // selectors: [
+        //   // {
+        //   //   selector: appState.coreState,
+        //   //   value: {
+        //   //     user: null,
+        //   //   }
+        //   // },
+        //   {
+        //     selector: appState.dashboardState,
+        //     value: {
+        //       // checkEmailSubscriptionStatus: null,
+        //       // getTotalSubscriptionStatus: {
+        //       //   count: 0
+        //       // }
+        //     }
+        //   }
+        // ]
+      })],
+      declarations: [NewsletterComponent],
+    });
+    // create component and NewsletterComponent fixture
+    fixture = TestBed.createComponent(NewsletterComponent);
 
-    beforeEach(() => {
-        // let user: User = { email: null };
-        // _store.resetSelectors();
-        // // _store.overrideSelector(coreState['user'] , user);
-        // _store.setState({ coreState: { user: user } });
+    // get NewsletterComponent component from the fixture
+    component = fixture.componentInstance;
+    component.user = user;
+    fixture = TestBed.createComponent(NewsletterComponent);
+    mockStore = TestBed.get(Store);
+    mockCoreSelector = mockStore.overrideSelector(appState.coreState, { user: user });
+    mockCoreSelector.setResult( user );
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  }));
 
+//     beforeEach(() => {
+//         // let user: User = { email: null };
+//         // _store.resetSelectors();
+//         // // _store.overrideSelector(coreState['user'] , user);
+//         // _store.setState({ coreState: { user: user } });
+
+//         fixture.detectChanges();
+//     });
+
+//     afterEach(() => { fixture.destroy(); });
+
+
+//     // beforeEach(inject([Store], (store: MockStore<AppState>) => {
+//     //     store.nextMock({
+//     //         isAdmin: false
+//     //     }, 'account');
+//     // }));
+
+
+//     it('should create', () => {
+//         expect(component).toBeTruthy();
+//     });
+
+    it('form invalid when empty', () => {
+        component.subscriptionForm.controls['email'].setValue('demn@demo.com');
         fixture.detectChanges();
+        component.onSubscribe();
+        expect(component.subscriptionForm.valid).toBeTruthy();
     });
 
-    afterEach(() => { fixture.destroy(); });
+//     // it(`Subscription for already subscribed user `, () => {
+//     //     // mockStore = TestBed.get(Store);
+//     //     // formErrors = mockStore.overrideSelector(reducer.checkEmailSubscriptionStatus, true);
+//     //     fixture.detectChanges();
+//     //     component.onSubscribe();
+//     //     expect(component.message).toBe('This EmailId is already Subscribed!!')
+//     // });
 
+//     // it(`Subscription for first time user subscribed user `, () => {
+//     //     component.onSubscribe();
+//     //     let storeMock = new StoreMock;
+//     //     // Trying to inject another mock
+//     //     storeMock.final.checkEmailSubscriptionStatus = false;
 
-    // beforeEach(inject([Store], (store: MockStore<AppState>) => {
-    //     store.nextMock({
-    //         isAdmin: false
-    //     }, 'account');
-    // }));
+//     //     TestBed.overrideProvider(Store, { useValue: StoreMock1 });
+//     //     fixture.detectChanges();
+//     //     // _store = fixture.debugElement.injector.get(Store);
+//     //     component.onSubscribe();
 
-
-    it('should create', () => {
-        expect(component).toBeTruthy();
-    });
-
-    // it('form invalid when empty', () => {
-    //     component.subscriptionForm.controls['email'].setValue('demn@demo.com');
-    //     fixture.detectChanges();
-    //     component.onSubscribe();
-    //     expect(component.subscriptionForm.valid).toBeTruthy()
-    // });
-
-    // it(`Subscription for already subscribed user `, () => {
-    //     // mockStore = TestBed.get(Store);
-    //     // formErrors = mockStore.overrideSelector(reducer.checkEmailSubscriptionStatus, true);
-    //     fixture.detectChanges();
-    //     component.onSubscribe();
-    //     expect(component.message).toBe('This EmailId is already Subscribed!!')
-    // });
-
-    // it(`Subscription for first time user subscribed user `, () => {
-    //     component.onSubscribe();
-    //     let storeMock = new StoreMock;
-    //     // Trying to inject another mock
-    //     storeMock.final.checkEmailSubscriptionStatus = false;
-
-    //     TestBed.overrideProvider(Store, { useValue: StoreMock1 });
-    //     fixture.detectChanges();
-    //     // _store = fixture.debugElement.injector.get(Store);
-    //     component.onSubscribe();
-
-    //     expect(component.message).toBe('Your EmailId is Successfully Subscribed!!')
-    // });
+//     //     expect(component.message).toBe('Your EmailId is Successfully Subscribed!!')
+//     // });
 
 
 });
-
-
-

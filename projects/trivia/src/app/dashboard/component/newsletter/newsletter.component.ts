@@ -59,8 +59,10 @@ export class NewsletterComponent implements OnInit, OnDestroy {
       }
     }));
     this.subscriptions.push(this.store.select(dashboardState).pipe(select(s => s.getTotalSubscriptionStatus)).subscribe(subscribers => {
-      this.totalCount = subscribers['count'];
-      this.cd.markForCheck();
+      if (subscribers) {
+        this.totalCount = subscribers['count'];
+        this.cd.markForCheck();
+      }
     }));
   }
 
