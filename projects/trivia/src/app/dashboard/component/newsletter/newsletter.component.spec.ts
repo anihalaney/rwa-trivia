@@ -20,7 +20,7 @@ describe('NewsletterComponent', () => {
   let fixture: ComponentFixture<NewsletterComponent>;
   let user: User;
   let mockStore: MockStore<AppState>;
-  let mockCoreSelector: MemoizedSelector<CoreState, {}>;
+  let mockCoreSelector: MemoizedSelector<AppState, Partial<CoreState>>;
 
 
   beforeEach(async(() => {
@@ -59,7 +59,7 @@ describe('NewsletterComponent', () => {
     component.user = user;
     fixture = TestBed.createComponent(NewsletterComponent);
     mockStore = TestBed.get(Store);
-    mockCoreSelector = mockStore.overrideSelector(appState.coreState, { user: user });
+    mockCoreSelector = mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, { user: user });
     mockCoreSelector.setResult( user );
     component = fixture.componentInstance;
     fixture.detectChanges();
