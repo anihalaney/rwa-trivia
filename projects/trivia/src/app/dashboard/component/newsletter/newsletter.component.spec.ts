@@ -10,10 +10,6 @@ import { CoreState } from 'shared-library/core/store';
 import { DashboardState } from '../../store';
 import * as dashboardActions from '../../store/actions';
 
-
-// create new instance of FormBuilder
-const formBuilder: FormBuilder = new FormBuilder();
-
 describe('Testing Newsletter Component', () => {
 
   let component: NewsletterComponent;
