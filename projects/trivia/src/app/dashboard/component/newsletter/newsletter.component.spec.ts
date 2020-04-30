@@ -1,178 +1,173 @@
-import { TestBed, ComponentFixture, async, fakeAsync, inject } from '@angular/core/testing';
+import { TestBed, ComponentFixture, async } from '@angular/core/testing';
 import { NewsletterComponent } from './newsletter.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { StoreModule, Store, MemoizedSelector } from '@ngrx/store';
-import { User, Subscription } from '../../../../../../shared-library/src/lib/shared/model';
+import { User, Subscription, Subscribers } from 'shared-library/shared/model';
 import { AppState, appState } from '../../../store';
-import { FormBuilder } from '@angular/forms';
 import { provideMockStore, MockStore } from '@ngrx/store/testing';
 import { CoreState } from 'shared-library/core/store';
 import { DashboardState } from '../../store';
-import { TEST_DATA } from '../../../testing/test.data';
+import * as dashboardActions from '../../store/actions';
 
-// create new instance of FormBuilder
-const formBuilder: FormBuilder = new FormBuilder();
-
-describe('NewsletterComponent', () => {
+describe('Testing Newsletter Component', () => {
 
   let component: NewsletterComponent;
   let fixture: ComponentFixture<NewsletterComponent>;
   let user: User;
   let mockStore: MockStore<AppState>;
   let spy: any;
-  let mockCoreSelector: MemoizedSelector<AppState, Partial<CoreState> | Partial<DashboardState>>;
-
+  let mockCoreSelector: MemoizedSelector<AppState, Partial<CoreState>>;
+  let mockDashboardSelector: MemoizedSelector<AppState, Partial<DashboardState>>;
 
   beforeEach(async(() => {
 
     TestBed.configureTestingModule({
 
       imports: [ReactiveFormsModule, FormsModule, StoreModule.forRoot({})],
-      // providers: [ Store ],
       providers: [provideMockStore({
         initialState: {},
         selectors: [
           {
             selector: appState.coreState,
-            value: {
-              user: null,
-            }
+            value: {}
           },
           {
             selector: appState.dashboardState,
-            value: {
-              checkEmailSubscriptionStatus: true,
-              getTotalSubscriptionStatus: {
-                count: 0
-              }
-            }
+            value: {}
           }
         ]
       })],
       declarations: [NewsletterComponent],
     });
+
+    user = {
+      userId: '1',
+      displayName: 'test',
+      authState: null,
+      bulkUploadPermissionStatus: '',
+      bulkUploadPermissionStatusUpdateTime: 0,
+      croppedImageUrl: '',
+      originalImageUrl: '',
+      imageType: '',
+      achievements: null,
+      gamePlayed: null,
+      email: 'test@test.com'
+    };
+
     // create component and NewsletterComponent fixture
     fixture = TestBed.createComponent(NewsletterComponent);
 
     // get NewsletterComponent component from the fixture
     component = fixture.componentInstance;
-    component.user = user;
     fixture = TestBed.createComponent(NewsletterComponent);
     mockStore = TestBed.get(Store);
-    spy = spyOn(mockStore, 'dispatch');
+    mockCoreSelector = mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {});
+    mockDashboardSelector = mockStore.overrideSelector<AppState, Partial<DashboardState>>(appState.dashboardState, {});
     component = fixture.componentInstance;
+    spy = spyOn(mockStore, 'dispatch');
     fixture.detectChanges();
   }));
 
-  it('form invalid when empty', () => {
+  afterEach(() => { fixture.destroy(); });
+
+  it('Form should have Email set for logged in user', () => {
+    mockCoreSelector.setResult({ user });
+    mockStore.refreshState();
+    expect(component.subscriptionForm.get('email').value).toEqual('test@test.com');
+
+  });
+
+  it('Form should be valid for logged in user', () => {
+    mockCoreSelector.setResult({ user });
+    mockStore.refreshState();
+    expect(component.subscriptionForm.valid).toBeTruthy();
+  });
+
+  it('Form should not have email set when user is not logged in ', () => {
+    expect(component.subscriptionForm.get('email').value).toEqual('');
+  });
+
+  it('Form should be default invalid when user is not logged in', () => {
     expect(component.subscriptionForm.valid).toBeFalsy();
   });
 
-
-  it('email field validity', () => {
-    let errors = {};
-    const email = component.subscriptionForm.controls['email'];
-
-    // Email field is required
-    errors = email.errors || {};
-    expect(errors['required']).toBeTruthy();
-
-    // Set incorrect value to email
-    email.setValue('test');
-    errors = email.errors || {};
-    expect(errors['required']).toBeFalsy();
-    expect(errors['pattern']).toBeTruthy();
-
-    // Set correct value to email
-    email.setValue('demo@example.com');
-    errors = email.errors || {};
-    expect(errors['required']).toBeFalsy();
-    expect(errors['pattern']).toBeFalsy();
+  it('Form should have email required error when email is not set ', () => {
+    expect(component.subscriptionForm.get('email').errors).toEqual({ 'required': true });
   });
 
-  it(`Initially total count should be zero `, () => {
-    expect(component.totalCount).toBe(0)
-  });
-
-  it(`Update total count should not be zero `, () => {
-
-    mockStore.overrideSelector<AppState, Partial<DashboardState>>(appState.dashboardState, {
-      getTotalSubscriptionStatus: {
-        count: 10
+  it('Form should have email pattern error when email enter does not match pattern ', () => {
+    component.subscriptionForm.get('email').setValue('test');
+    expect(component.subscriptionForm.get('email').errors).toEqual({
+      'pattern': {
+        // tslint:disable-next-line: max-line-length
+        'actualValue': 'test', 'requiredPattern': '/^(([^<>()\\[\\]\\\\.,;:\\s@"]+(\\.[^<>()\\[\\]\\\\.,;:\\s@"]+)*)|(".+"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$/'
       }
     });
-    mockStore.refreshState();
-    expect(component.totalCount).toBe(10)
   });
 
-  it(`Subscription for already subscribed user `, () => {
-    expect(component.message).toBe('This EmailId is already Subscribed!!')
+  it('Form should be valid when valid email is provided', () => {
+    component.subscriptionForm.get('email').setValue('test@test.com');
+    expect(component.subscriptionForm.valid).toBeTruthy();
   });
 
-  it(`Subscription for first time user subscribed user `, () => {
-
-    mockStore.overrideSelector<AppState, Partial<DashboardState>>(appState.dashboardState, {
-      checkEmailSubscriptionStatus: false,
+  it('on load component should dispatch action to get subscription count', () => {
+    spy.and.callFake((action: dashboardActions.GetTotalSubscriber) => {
+      expect(action.type).toEqual(dashboardActions.DashboardActionTypes.TOTAL_SUBSCRIBER);
     });
-
-    mockStore.refreshState();
-    expect(component.message).toBe('Your EmailId is Successfully Subscribed!!')
+    component.ngOnInit();
+    expect(mockStore.dispatch).toHaveBeenCalled();
   });
 
-  it('Subscription for normal user', () => {
+  it('Total count should be set when total subscriptions emit value', () => {
+    const subscribers: Subscribers = new Subscribers();
+    subscribers.count = 10;
+    mockDashboardSelector.setResult({ getTotalSubscriptionStatus: subscribers });
+    mockStore.refreshState();
+    expect(component.totalCount).toEqual(10);
+  });
 
-    expect(component.subscriptionForm.valid).toBeFalsy();
+  it('on load component should have empty message', () => {
+      expect(component.message).toEqual('');
+  });
+
+  it('on subscription status true correct message should be set', () => {
+    mockDashboardSelector.setResult({ checkEmailSubscriptionStatus: true });
+    mockStore.refreshState();
+    expect(component.message).toBe('This EmailId is already Subscribed!!');
+  });
+
+  it('on subscription status false correct message should be set', () => {
+    mockDashboardSelector.setResult({ checkEmailSubscriptionStatus: false });
+    mockStore.refreshState();
+    expect(component.message).toBe('Your EmailId is Successfully Subscribed!!');
+  });
+
+  it('on subscribe should dispatch action to add subscriber with correct payload when user is not logged in', () => {
     component.subscriptionForm.controls['email'].setValue('test@test.com');
-    expect(component.subscriptionForm.valid).toBeTruthy();
-
-    // dispatch service to save subscribe email
-
     const subscription = new Subscription();
-    subscription.email = component.subscriptionForm.controls['email'].value;
-
-    spy.and.callFake((action: any) => {
-      expect(action.AddSubscriber);
+    subscription.email = 'test@test.com';
+    spy.and.callFake((action: dashboardActions.AddSubscriber) => {
+      expect(action.type).toEqual(dashboardActions.DashboardActionTypes.ADD_SUBSCRIBER);
       expect(action.payload.subscription).toEqual(subscription);
     });
-
     // Trigger the subscribe function
     component.onSubscribe();
-
     expect(mockStore.dispatch).toHaveBeenCalled();
-
-    // Now we can check to make sure the emitted value is correct
-    expect(component.subscriptionForm.get('email').value).toBe('test@test.com');
   });
 
-
-  it('subscription for logged in user', () => {
-    expect(component.subscriptionForm.valid).toBeFalsy();
-    user = { ...TEST_DATA.userList[0] };
-    component.user = user;
-    component.subscriptionForm.controls['email'].setValue(user.email);
-    expect(component.subscriptionForm.valid).toBeTruthy();
-
-    // dispatch service to save subscribe email
-
+  it('on subscribe should dispatch action to add subscriber with correct payload when user is logged in', () => {
     const subscription = new Subscription();
-    subscription.email = user.email;
-    if (user) {
-      subscription.userId = user.userId;
-    }
-
-    spy.and.callFake((action: any) => {
-      expect(action.AddSubscriber);
+    subscription.email = 'test@test.com';
+    subscription.userId = '1';
+    spy.and.callFake((action: dashboardActions.AddSubscriber) => {
+      expect(action.type).toEqual(dashboardActions.DashboardActionTypes.ADD_SUBSCRIBER);
       expect(action.payload.subscription).toEqual(subscription);
     });
-
+    mockCoreSelector.setResult({ user });
+    mockStore.refreshState();
     // Trigger the subscribe function
     component.onSubscribe();
-
     expect(mockStore.dispatch).toHaveBeenCalled();
-
-    // Now we can check to make sure the emitted value is correct
-    expect(component.subscriptionForm.get('email').value).toBe(user.email);
-    expect(component.user.userId).toBe(user.userId);
   });
 
 });

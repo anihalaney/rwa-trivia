@@ -150,10 +150,5 @@
     "typescript": "~3.5.3",
     "xmlhttprequest": "^1.8.0",
     "yargs": "^13.2.4"
-  },
-  "husky": {
-    "hooks": {
-      "pre-push": "npm run test && ng e2e trivia-e2e"
-    }
   }
 }
