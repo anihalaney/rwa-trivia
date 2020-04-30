@@ -3,13 +3,12 @@ import { NewsletterComponent } from './newsletter.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { StoreModule, Store, MemoizedSelector } from '@ngrx/store';
 import { User, Subscription } from '../../../../../../shared-library/src/lib/shared/model';
-import { of } from 'rxjs';
-// import { MockStore } from 'shared-library/testing';
 import { AppState, appState } from '../../../store';
 import { FormBuilder } from '@angular/forms';
 import { provideMockStore, MockStore } from '@ngrx/store/testing';
-import { CoreState, coreState } from 'shared-library/core/store';
-
+import { CoreState } from 'shared-library/core/store';
+import { DashboardState } from '../../store';
+import { TEST_DATA } from '../../../testing/test.data';
 
 // create new instance of FormBuilder
 const formBuilder: FormBuilder = new FormBuilder();
@@ -20,7 +19,8 @@ describe('NewsletterComponent', () => {
   let fixture: ComponentFixture<NewsletterComponent>;
   let user: User;
   let mockStore: MockStore<AppState>;
-  let mockCoreSelector: MemoizedSelector<CoreState, {}>;
+  let spy: any;
+  let mockCoreSelector: MemoizedSelector<AppState, Partial<CoreState> | Partial<DashboardState>>;
 
 
   beforeEach(async(() => {
@@ -29,25 +29,25 @@ describe('NewsletterComponent', () => {
 
       imports: [ReactiveFormsModule, FormsModule, StoreModule.forRoot({})],
       // providers: [ Store ],
-      providers: [ provideMockStore( {
-        initialState: { core: {}, dashboard: {}},
-        // selectors: [
-        //   // {
-        //   //   selector: appState.coreState,
-        //   //   value: {
-        //   //     user: null,
-        //   //   }
-        //   // },
-        //   {
-        //     selector: appState.dashboardState,
-        //     value: {
-        //       // checkEmailSubscriptionStatus: null,
-        //       // getTotalSubscriptionStatus: {
-        //       //   count: 0
-        //       // }
-        //     }
-        //   }
-        // ]
+      providers: [provideMockStore({
+        initialState: {},
+        selectors: [
+          {
+            selector: appState.coreState,
+            value: {
+              user: null,
+            }
+          },
+          {
+            selector: appState.dashboardState,
+            value: {
+              checkEmailSubscriptionStatus: true,
+              getTotalSubscriptionStatus: {
+                count: 0
+              }
+            }
+          }
+        ]
       })],
       declarations: [NewsletterComponent],
     });
@@ -59,63 +59,120 @@ describe('NewsletterComponent', () => {
     component.user = user;
     fixture = TestBed.createComponent(NewsletterComponent);
     mockStore = TestBed.get(Store);
-    mockCoreSelector = mockStore.overrideSelector(appState.coreState, { user: user });
-    mockCoreSelector.setResult( user );
+    spy = spyOn(mockStore, 'dispatch');
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));
 
-//     beforeEach(() => {
-//         // let user: User = { email: null };
-//         // _store.resetSelectors();
-//         // // _store.overrideSelector(coreState['user'] , user);
-//         // _store.setState({ coreState: { user: user } });
-
-//         fixture.detectChanges();
-//     });
-
-//     afterEach(() => { fixture.destroy(); });
+  it('form invalid when empty', () => {
+    expect(component.subscriptionForm.valid).toBeFalsy();
+  });
 
 
-//     // beforeEach(inject([Store], (store: MockStore<AppState>) => {
-//     //     store.nextMock({
-//     //         isAdmin: false
-//     //     }, 'account');
-//     // }));
+  it('email field validity', () => {
+    let errors = {};
+    const email = component.subscriptionForm.controls['email'];
 
+    // Email field is required
+    errors = email.errors || {};
+    expect(errors['required']).toBeTruthy();
 
-//     it('should create', () => {
-//         expect(component).toBeTruthy();
-//     });
+    // Set incorrect value to email
+    email.setValue('test');
+    errors = email.errors || {};
+    expect(errors['required']).toBeFalsy();
+    expect(errors['pattern']).toBeTruthy();
 
-    it('form invalid when empty', () => {
-        component.subscriptionForm.controls['email'].setValue('demn@demo.com');
-        fixture.detectChanges();
-        component.onSubscribe();
-        expect(component.subscriptionForm.valid).toBeTruthy();
+    // Set correct value to email
+    email.setValue('demo@example.com');
+    errors = email.errors || {};
+    expect(errors['required']).toBeFalsy();
+    expect(errors['pattern']).toBeFalsy();
+  });
+
+  it(`Initially total count should be zero `, () => {
+    expect(component.totalCount).toBe(0)
+  });
+
+  it(`Update total count should not be zero `, () => {
+
+    mockStore.overrideSelector<AppState, Partial<DashboardState>>(appState.dashboardState, {
+      getTotalSubscriptionStatus: {
+        count: 10
+      }
+    });
+    mockStore.refreshState();
+    expect(component.totalCount).toBe(10)
+  });
+
+  it(`Subscription for already subscribed user `, () => {
+    expect(component.message).toBe('This EmailId is already Subscribed!!')
+  });
+
+  it(`Subscription for first time user subscribed user `, () => {
+
+    mockStore.overrideSelector<AppState, Partial<DashboardState>>(appState.dashboardState, {
+      checkEmailSubscriptionStatus: false,
     });
 
-//     // it(`Subscription for already subscribed user `, () => {
-//     //     // mockStore = TestBed.get(Store);
-//     //     // formErrors = mockStore.overrideSelector(reducer.checkEmailSubscriptionStatus, true);
-//     //     fixture.detectChanges();
-//     //     component.onSubscribe();
-//     //     expect(component.message).toBe('This EmailId is already Subscribed!!')
-//     // });
+    mockStore.refreshState();
+    expect(component.message).toBe('Your EmailId is Successfully Subscribed!!')
+  });
 
-//     // it(`Subscription for first time user subscribed user `, () => {
-//     //     component.onSubscribe();
-//     //     let storeMock = new StoreMock;
-//     //     // Trying to inject another mock
-//     //     storeMock.final.checkEmailSubscriptionStatus = false;
+  it('Subscription for normal user', () => {
 
-//     //     TestBed.overrideProvider(Store, { useValue: StoreMock1 });
-//     //     fixture.detectChanges();
-//     //     // _store = fixture.debugElement.injector.get(Store);
-//     //     component.onSubscribe();
+    expect(component.subscriptionForm.valid).toBeFalsy();
+    component.subscriptionForm.controls['email'].setValue('test@test.com');
+    expect(component.subscriptionForm.valid).toBeTruthy();
 
-//     //     expect(component.message).toBe('Your EmailId is Successfully Subscribed!!')
-//     // });
+    // dispatch service to save subscribe email
 
+    const subscription = new Subscription();
+    subscription.email = component.subscriptionForm.controls['email'].value;
+
+    spy.and.callFake((action: any) => {
+      expect(action.AddSubscriber);
+      expect(action.payload.subscription).toEqual(subscription);
+    });
+
+    // Trigger the subscribe function
+    component.onSubscribe();
+
+    expect(mockStore.dispatch).toHaveBeenCalled();
+
+    // Now we can check to make sure the emitted value is correct
+    expect(component.subscriptionForm.get('email').value).toBe('test@test.com');
+  });
+
+
+  it('subscription for logged in user', () => {
+    expect(component.subscriptionForm.valid).toBeFalsy();
+    user = { ...TEST_DATA.userList[0] };
+    component.user = user;
+    component.subscriptionForm.controls['email'].setValue(user.email);
+    expect(component.subscriptionForm.valid).toBeTruthy();
+
+    // dispatch service to save subscribe email
+
+    const subscription = new Subscription();
+    subscription.email = user.email;
+    if (user) {
+      subscription.userId = user.userId;
+    }
+
+    spy.and.callFake((action: any) => {
+      expect(action.AddSubscriber);
+      expect(action.payload.subscription).toEqual(subscription);
+    });
+
+    // Trigger the subscribe function
+    component.onSubscribe();
+
+    expect(mockStore.dispatch).toHaveBeenCalled();
+
+    // Now we can check to make sure the emitted value is correct
+    expect(component.subscriptionForm.get('email').value).toBe(user.email);
+    expect(component.user.userId).toBe(user.userId);
+  });
 
 });

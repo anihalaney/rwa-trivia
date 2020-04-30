@@ -31,7 +31,7 @@ export class User {
   iosPushTokens?: Array<any>;
   lastGamePlayOption?: GameOptions;
   account?: Account;
-  achievements: string[];
+  achievements?: string[];
   gamePlayed: Array<{ [key: string]: FriendsMetadata }>;
   online?: boolean;
   isCategorySet?: boolean;

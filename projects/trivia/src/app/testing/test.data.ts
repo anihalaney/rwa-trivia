@@ -345,7 +345,14 @@ export const TEST_DATA = {
             "displayName": "trivia",
             "email": "trivia@realworldfullstack.io",
             "roles": {},
-            "authState": null
+            "authState": null,
+            "bulkUploadPermissionStatusUpdateTime":null,
+            "bulkUploadPermissionStatus":null,
+            "croppedImageUrl":null,
+            "gamePlayed":null,
+            "originalImageUrl":null,
+            "imageType":null
+
         }
     ],
 
