@@ -2,7 +2,7 @@ import { TestBed, ComponentFixture, async } from '@angular/core/testing';
 import { NewsletterComponent } from './newsletter.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { StoreModule, Store, MemoizedSelector } from '@ngrx/store';
-import { User, Subscription } from 'shared-library/shared/model';
+import { User, Subscription, Subscribers } from 'shared-library/shared/model';
 import { AppState, appState } from '../../../store';
 import { provideMockStore, MockStore } from '@ngrx/store/testing';
 import { CoreState } from 'shared-library/core/store';
@@ -116,6 +116,14 @@ describe('Testing Newsletter Component', () => {
     });
     component.ngOnInit();
     expect(mockStore.dispatch).toHaveBeenCalled();
+  });
+
+  it('Total count should be set when total subscriptions emit value', () => {
+    const subscribers: Subscribers = new Subscribers();
+    subscribers.count = 10;
+    mockDashboardSelector.setResult({ getTotalSubscriptionStatus: subscribers });
+    mockStore.refreshState();
+    expect(component.totalCount).toEqual(10);
   });
 
   it('on load component should have empty message', () => {
