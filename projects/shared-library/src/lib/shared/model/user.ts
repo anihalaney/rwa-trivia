@@ -15,7 +15,7 @@ export class User {
   profilePicture?: string;
   email: string;
   idToken?: string;
-  authState: firebase.User;
+  authState?: firebase.User;
   roles?: any;
   tags?: string[];
   isSubscribed?: boolean;

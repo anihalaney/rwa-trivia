@@ -52,7 +52,6 @@ export class GameCardComponent implements OnInit, OnChanges, OnDestroy {
     this.subscriptions.push(this.user$.subscribe(user => {
       if (user !== null) {
         this.user = user;
-        console.log(JSON.stringify(user), 'user');
       }
       this.cd.markForCheck();
     }));
@@ -60,7 +59,7 @@ export class GameCardComponent implements OnInit, OnChanges, OnDestroy {
     this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
     this.subscriptions.push(this.userDict$.subscribe(userDict => {
       this.userDict = userDict;
-      if (this.game && this.user) {
+      if (this.game && this.user && this.userDict) {
         this.otherUserId = this.game.playerIds.filter(userId => userId !== this.user.userId)[0];
         this.otherUserInfo = this.userDict[this.otherUserId];
       }
@@ -117,9 +116,7 @@ export class GameCardComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  getImageUrl(user: any) {
-    return this.utils.getImageUrl(user, 70, 60, '70X60');
-  }
+
 
   ngOnDestroy() {
 

@@ -1,5 +1,4 @@
-<div class="innerli" *ngIf="user">
-  {{game | json}}
+<div class="innerli">
 <div *ngIf="categoryList" class="T-tagging ellipsis" >{{categoryList.join(", ")}}</div>
   <div class="row">
     <ng-container *ngIf="game.gameOptions.playerMode == PlayerMode.Single">
