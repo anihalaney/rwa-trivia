@@ -90,6 +90,22 @@ describe('GameCardComponent', () => {
         expect(component).toBeTruthy();
     });
 
+    it('should match snapshot', () => {
+        component.isHidePlayNow = false;
+        component.applicationSettings = TEST_DATA.applicationSettings;
+
+        component.categoryDict = TEST_DATA.categoryDictionary;
+        component.user = TEST_DATA.userList[0];
+        component.PlayerMode = PlayerMode;
+        component.gameStatus = GameStatus;
+        const otherUser = { ...TEST_DATA.userList[1] };
+        component.otherUserId = 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1';
+        component.userDict = {'4kFa6HRvP5OhvYXsH9mEsRrXj4o2': user, 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1': otherUser};
+        component.ngOnInit();
+        fixture.detectChanges();
+        expect(fixture).toMatchSnapshot();
+    });
+
     it('verify capitalizeFirstLetter function', () => {
         const categoryName = 'infrastructure/networking';
         const categoryNameWithCapitalizedFirstLetter = component.capitalizeFirstLetter(categoryName);
