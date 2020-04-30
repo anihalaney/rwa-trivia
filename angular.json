@@ -197,6 +197,7 @@
         "test": {
           "builder": "@angular-builders/jest:run",
           "options": {
+            "configPath": "./../../jest.config.js", 
             "polyfills": "projects/trivia/src/polyfills.ts",
             "tsConfig": "/../trivia/tsconfig.spec.json",
             "scripts": [],
@@ -433,6 +434,7 @@
         "test": {
           "builder": "@angular-builders/jest:run",
           "options": {
+            "configPath": "./../../jest.config.js", 
             "polyfills": "projects/trivia-admin/src/polyfills.ts",
             "tsConfig": "/../trivia-admin/tsconfig.spec.json", 
             "karmaConfig": "projects/trivia-admin/karma.conf.js",
@@ -519,6 +521,7 @@
         "test": {
           "builder": "@angular-builders/jest:run",
           "options": {
+            "configPath": "./../../jest.config.js", 
             "tsConfig":"/../shared-library/tsconfig.spec.json",
             "karmaConfig": "projects/shared-library/karma.conf.js"
           }
@@ -728,6 +731,7 @@
         "test": {
           "builder": "@angular-builders/jest:run",
           "options": {
+            "configPath": "./../../jest.config.js", 
             "polyfills": "projects/trivia-editor/src/polyfills.ts",
             "tsConfig": "/../trivia-editor/tsconfig.spec.json",
             "karmaConfig": "projects/trivia-editor/karma.conf.js",
