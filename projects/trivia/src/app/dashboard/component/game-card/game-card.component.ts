@@ -6,7 +6,7 @@ import { User, Game, Category, PlayerMode, GameStatus, CalenderConstants, userCa
 import { Utils } from 'shared-library/core/services';
 import { AppState, appState, categoryDictionary } from '../../../store';
 import { take } from 'rxjs/operators';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 
 @Component({
   selector: 'game-card',
@@ -52,6 +52,7 @@ export class GameCardComponent implements OnInit, OnChanges, OnDestroy {
     this.subscriptions.push(this.user$.subscribe(user => {
       if (user !== null) {
         this.user = user;
+        console.log(JSON.stringify(user), 'user');
       }
       this.cd.markForCheck();
     }));
@@ -59,7 +60,7 @@ export class GameCardComponent implements OnInit, OnChanges, OnDestroy {
     this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
     this.subscriptions.push(this.userDict$.subscribe(userDict => {
       this.userDict = userDict;
-      if (this.game) {
+      if (this.game && this.user) {
         this.otherUserId = this.game.playerIds.filter(userId => userId !== this.user.userId)[0];
         this.otherUserInfo = this.userDict[this.otherUserId];
       }
@@ -73,14 +74,16 @@ export class GameCardComponent implements OnInit, OnChanges, OnDestroy {
 
     this.totalRound = (Number(this.game.gameOptions.playerMode) === PlayerMode.Single) ? 8 : 16;
     this.subscriptions.push(this.store.select(appState.coreState).pipe(take(1)).subscribe(s => {
-      this.user = s.user;
-      this.myTurn = this.game.nextTurnPlayerId === this.user.userId &&
-      ([this.gameStatus.STARTED, this.gameStatus.RESTARTED, this.gameStatus.JOINED_GAME, this.gameStatus.WAITING_FOR_NEXT_Q].indexOf(this.game.GameStatus) >= 0 );
-      this.randomCategoryId = Math.floor(Math.random() * this.game.gameOptions.categoryIds.length);
-      if (this.myTurn) {
-        this.updateRemainingTime();
+      if (s.user && this.user) {
+        this.user = s.user;
+        this.myTurn = this.game.nextTurnPlayerId === this.user.userId &&
+        ([this.gameStatus.STARTED, this.gameStatus.RESTARTED, this.gameStatus.JOINED_GAME, this.gameStatus.WAITING_FOR_NEXT_Q].indexOf(this.game.GameStatus) >= 0 );
+        this.randomCategoryId = Math.floor(Math.random() * this.game.gameOptions.categoryIds.length);
+        if (this.myTurn) {
+          this.updateRemainingTime();
+        }
+        this.cd.markForCheck();
       }
-      this.cd.markForCheck();
     }));
   }
 
@@ -114,7 +117,7 @@ export class GameCardComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  getImageUrl(user: User) {
+  getImageUrl(user: any) {
     return this.utils.getImageUrl(user, 70, 60, '70X60');
   }
 
