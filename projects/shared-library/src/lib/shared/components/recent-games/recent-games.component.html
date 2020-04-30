@@ -2,7 +2,6 @@
   <h2>Recently Completed Games</h2>
   <ul>
     <ng-container *ngFor="let game of recentGames$ | async |slice:startIndex:nextIndex">
-      {{game | json}}
       <li *ngIf="(game.GameStatus !== GameStatus.REJECTED && game.GameStatus !== GameStatus.INVITATION_TIMEOUT ) || 
       (game.GameStatus === GameStatus.REJECTED && game.playerIds[0] === user.userId) ||
       (game.GameStatus === GameStatus.INVITATION_TIMEOUT && game.playerIds[0] === user.userId)"
