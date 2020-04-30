@@ -1,10 +1,9 @@
-import { TestBed, ComponentFixture, async, fakeAsync, inject } from '@angular/core/testing';
+import { TestBed, ComponentFixture, async } from '@angular/core/testing';
 import { NewsletterComponent } from './newsletter.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { StoreModule, Store, MemoizedSelector } from '@ngrx/store';
 import { User, Subscription } from 'shared-library/shared/model';
 import { AppState, appState } from '../../../store';
-import { FormBuilder } from '@angular/forms';
 import { provideMockStore, MockStore } from '@ngrx/store/testing';
 import { CoreState } from 'shared-library/core/store';
 import { DashboardState } from '../../store';
@@ -62,15 +61,8 @@ describe('Testing Newsletter Component', () => {
     component = fixture.componentInstance;
     fixture = TestBed.createComponent(NewsletterComponent);
     mockStore = TestBed.get(Store);
-    mockCoreSelector = mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
-      user: null,
-    });
-    mockDashboardSelector = mockStore.overrideSelector<AppState, Partial<DashboardState>>(appState.dashboardState, {
-      getTotalSubscriptionStatus: {
-        count: 0
-      },
-      checkEmailSubscriptionStatus: false,
-    });
+    mockCoreSelector = mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {});
+    mockDashboardSelector = mockStore.overrideSelector<AppState, Partial<DashboardState>>(appState.dashboardState, { });
     component = fixture.componentInstance;
     spy = spyOn(mockStore, 'dispatch');
     fixture.detectChanges();
