@@ -62,7 +62,7 @@ describe('Testing Newsletter Component', () => {
     fixture = TestBed.createComponent(NewsletterComponent);
     mockStore = TestBed.get(Store);
     mockCoreSelector = mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {});
-    mockDashboardSelector = mockStore.overrideSelector<AppState, Partial<DashboardState>>(appState.dashboardState, { });
+    mockDashboardSelector = mockStore.overrideSelector<AppState, Partial<DashboardState>>(appState.dashboardState, {});
     component = fixture.componentInstance;
     spy = spyOn(mockStore, 'dispatch');
     fixture.detectChanges();
