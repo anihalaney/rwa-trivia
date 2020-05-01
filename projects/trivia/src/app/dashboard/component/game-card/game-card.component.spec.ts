@@ -14,12 +14,10 @@ describe('GameCardComponent', () => {
 
     let component: GameCardComponent;
     let fixture: ComponentFixture<GameCardComponent>;
-    let _store: any;
     let spy: any;
     let user: User;
     let mockStore: MockStore<AppState>;
-    let mockCoreSelector: MemoizedSelector<AppState, Partial<CoreState>>;
-
+ 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [GameCardComponent],
@@ -59,8 +57,6 @@ describe('GameCardComponent', () => {
 
         component = fixture.debugElement.componentInstance;
 
-        // init data
-        _store = fixture.debugElement.injector.get(Store);
         const dbModel = TEST_DATA.game[0];
         component.game = Game.getViewModel(dbModel);
 
@@ -86,17 +82,17 @@ describe('GameCardComponent', () => {
         expect(fixture).toMatchSnapshot();
     });
 
-    it('verify capitalizeFirstLetter function', () => {
+    it('capitalizeFirstLetter function should capitalize first letter', () => {
         const categoryName = 'infrastructure/networking';
         const categoryNameWithCapitalizedFirstLetter = component.capitalizeFirstLetter(categoryName);
         expect(categoryNameWithCapitalizedFirstLetter).toEqual('Infrastructure/networking');
     });
 
-    it(`Initially user value should be undefined `, () => {
+    it(`User should be undefined when component is created`, () => {
         expect(component.user).toBe(undefined);
     });
 
-    it('subscription for logged in user', () => {
+    it('User should be set when user is logged in', () => {
         user = { ...TEST_DATA.userList[0] };
         mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
             user: user
@@ -105,7 +101,7 @@ describe('GameCardComponent', () => {
           expect(component.user).toBe(user);
       });
 
-      it('subscription for user dictionary', () => {
+      it('User dictionary should be set when values are emitted', () => {
         user = { ...TEST_DATA.userList[0] };
         const otherUser = { ...TEST_DATA.userList[1] };
         const userDict = {'4kFa6HRvP5OhvYXsH9mEsRrXj4o2': user, 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1': otherUser};
