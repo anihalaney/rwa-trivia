@@ -16,13 +16,12 @@ exports[`GameCardComponent should match snapshot 1`] = `
   store={[Function MockStore]}
   subscriptions={[Function Array]}
   totalRound={[Function Number]}
-  updateRemainingTime={[Function Function]}
   user={[Function Object]}
   user$={[Function Store]}
   userCardType={[Function Object]}
   userDict={[Function Object]}
   userDict$={[Function Store]}
-  utils={[Function Utils]}
+  utils={[Function Object]}
 >
   <div
     class="innerli"

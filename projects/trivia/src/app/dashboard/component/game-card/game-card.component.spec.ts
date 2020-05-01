@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
 import { UserActions } from 'shared-library/core/store/actions/user.actions';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
-import { Utils, WindowRef } from 'shared-library/core/services';
+import { Utils } from 'shared-library/core/services';
 import {
     User, Game, Category, PlayerMode, GameStatus, CalenderConstants, userCardType,
     ApplicationSettings
@@ -45,13 +45,21 @@ describe('GameCardComponent', () => {
     let mockCoreSelector: MemoizedSelector<AppState, Partial<CoreState>>;
 
 
+
+
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [GameCardComponent],
             schemas: [NO_ERRORS_SCHEMA],
             providers: [
-                Utils,
-                WindowRef,
+                {provide: Utils, useValue: {
+                    getTimeDifference(turnAt: number) {
+                        return 1588313130838 - turnAt;
+                    },
+                    convertIntoDoubleDigit(digit: Number) {
+                        return (digit < 10) ? `0${digit}` : `${digit}`;
+                    }
+                }},
                 provideMockStore( {
                     selectors: [
                       {
@@ -83,7 +91,7 @@ describe('GameCardComponent', () => {
         const dbModel = TEST_DATA.game[0];
         component.game = Game.getViewModel(dbModel);
 
-        spyOn(component, 'updateRemainingTime');
+        // spyOn(component, 'updateRemainingTime');
     });
 
     it('should create', () => {
@@ -136,6 +144,46 @@ describe('GameCardComponent', () => {
           expect(component.userDict).toBe(userDict);
       });
 
+
+    it('remaining time should be 2 hr 30 min', (async () => {
+
+        component.isHidePlayNow = false;
+        component.applicationSettings = TEST_DATA.applicationSettings;
+
+        component.categoryDict = TEST_DATA.categoryDictionary;
+        component.user = TEST_DATA.userList[0];
+        component.PlayerMode = PlayerMode;
+        component.gameStatus = GameStatus;
+        const otherUser = { ...TEST_DATA.userList[1] };
+        component.otherUserId = 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1';
+        component.userDict = {'4kFa6HRvP5OhvYXsH9mEsRrXj4o2': user, 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1': otherUser};
+        component.updateRemainingTime();
+
+        await new Promise((r) => setTimeout(r, 2000));
+        expect(component.remainingMinutes).toBe('30');
+        expect(component.remainingHours).toBe('02');
+    }));
+
+    it('remaining time should be 0 hr 0 min', (async () => {
+
+        component.isHidePlayNow = false;
+        component.applicationSettings = TEST_DATA.applicationSettings;
+        const dbModel = TEST_DATA.game[1];
+        component.game = Game.getViewModel(dbModel);
+        component.categoryDict = TEST_DATA.categoryDictionary;
+        component.user = TEST_DATA.userList[0];
+        component.PlayerMode = PlayerMode;
+        component.gameStatus = GameStatus;
+        const otherUser = { ...TEST_DATA.userList[1] };
+        component.otherUserId = 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1';
+        component.userDict = {'4kFa6HRvP5OhvYXsH9mEsRrXj4o2': user, 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1': otherUser};
+        component.updateRemainingTime();
+
+        await new Promise((r) => setTimeout(r, 2000));
+        expect(component.remainingMinutes).toBe('00');
+        expect(component.remainingHours).toBe('00');
+    }));
+
     //   it('Verify updateRemainingTime function', async(() => {
     //     user = { ...TEST_DATA.userList[0] };
     //     const otherUser = { ...TEST_DATA.userList[1] };
@@ -187,4 +235,6 @@ describe('GameCardComponent', () => {
     //     newSub.unsubscribe();
     //   }));
     //   afterEach(() => { fixture.destroy(); });
+
+    
 });
