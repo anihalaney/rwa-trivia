@@ -15,7 +15,7 @@ export class User {
   profilePicture?: string;
   email: string;
   idToken?: string;
-  authState: firebase.User;
+  authState?: firebase.User;
   roles?: any;
   tags?: string[];
   isSubscribed?: boolean;
@@ -31,7 +31,7 @@ export class User {
   iosPushTokens?: Array<any>;
   lastGamePlayOption?: GameOptions;
   account?: Account;
-  achievements: string[];
+  achievements?: string[];
   gamePlayed: Array<{ [key: string]: FriendsMetadata }>;
   online?: boolean;
   isCategorySet?: boolean;

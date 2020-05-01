@@ -1,8 +1,8 @@
 <StackLayout class="active-container">
+ 
     <GridLayout rows="36" columns="*,auto,auto">
         <Label *ngIf="categoryList" text="{{categoryList.join(', ')}}"
             row="0" col="0" class="cat-title"></Label>
-
         <StackLayout row="0" col="1" horizontalAlignment="right">
             <AbsoluteLayout *ngIf="game?.gameOptions.isBadgeWithCategory">
                 <Image *ngFor="let badge of earnedBadgesByOtherUser; let i = index"  left="{{24 + ((earnedBadgesByOtherUser.length - (i+1)) * 12)}}" top="5" src="res://{{applicationSettings?.badges[badge]?.image?.name}}"

@@ -6,7 +6,7 @@ import { AppState, appState } from '../../../store';
 import * as dashboardActions from '../../store/actions';
 import { dashboardState } from '../../store';
 import { isPlatformBrowser } from '@angular/common';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 // tslint:disable-next-line:max-line-length
 const EMAIL_REGEXP = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
@@ -33,7 +33,7 @@ export class NewsletterComponent implements OnInit, OnDestroy {
     this.subscriptionForm = this.fb.group({
       email: ['', Validators.compose([Validators.required, Validators.pattern(EMAIL_REGEXP)])]
     });
-
+  
     this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
 
       this.user = user;
@@ -59,8 +59,10 @@ export class NewsletterComponent implements OnInit, OnDestroy {
       }
     }));
     this.subscriptions.push(this.store.select(dashboardState).pipe(select(s => s.getTotalSubscriptionStatus)).subscribe(subscribers => {
-      this.totalCount = subscribers['count'];
-      this.cd.markForCheck();
+      if (subscribers) {
+        this.totalCount = subscribers['count'];
+        this.cd.markForCheck();
+      }
     }));
   }
 
@@ -68,7 +70,7 @@ export class NewsletterComponent implements OnInit, OnDestroy {
     if (isPlatformBrowser(this.platformId)) {
       this.store.dispatch(new dashboardActions.GetTotalSubscriber());
     }
-  }
+ }
 
   onSubscribe() {
     if (!this.subscriptionForm.valid) {

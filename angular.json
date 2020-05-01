@@ -195,12 +195,11 @@
           }
         },
         "test": {
-          "builder": "@angular-devkit/build-angular:karma",
+          "builder": "@angular-builders/jest:run",
           "options": {
-            "main": "projects/trivia/src/test.ts",
-            "karmaConfig": "projects/trivia/karma.conf.js",
+            "configPath": "./../../jest.config.js", 
             "polyfills": "projects/trivia/src/polyfills.ts",
-            "tsConfig": "projects/trivia/tsconfig.spec.json",
+            "tsConfig": "/../trivia/tsconfig.spec.json",
             "scripts": [],
             "styles": [
               "projects/trivia/src/styles/rwa-trivia.theme.scss",
@@ -433,11 +432,11 @@
           }
         },
         "test": {
-          "builder": "@angular-devkit/build-angular:karma",
+          "builder": "@angular-builders/jest:run",
           "options": {
-            "main": "projects/trivia-admin/src/test.ts",
+            "configPath": "./../../jest.config.js", 
             "polyfills": "projects/trivia-admin/src/polyfills.ts",
-            "tsConfig": "projects/trivia-admin/tsconfig.spec.json",
+            "tsConfig": "/../trivia-admin/tsconfig.spec.json", 
             "karmaConfig": "projects/trivia-admin/karma.conf.js",
             "styles": [
               "projects/trivia-admin/src/styles.css"
@@ -520,10 +519,10 @@
           }
         },
         "test": {
-          "builder": "@angular-devkit/build-angular:karma",
+          "builder": "@angular-builders/jest:run",
           "options": {
-            "main": "projects/shared-library/src/test.ts",
-            "tsConfig": "projects/shared-library/tsconfig.spec.json",
+            "configPath": "./../../jest.config.js", 
+            "tsConfig":"/../shared-library/tsconfig.spec.json",
             "karmaConfig": "projects/shared-library/karma.conf.js"
           }
         },
@@ -730,11 +729,11 @@
           }
         },
         "test": {
-          "builder": "@angular-devkit/build-angular:karma",
+          "builder": "@angular-builders/jest:run",
           "options": {
-            "main": "projects/trivia-editor/src/test.ts",
+            "configPath": "./../../jest.config.js", 
             "polyfills": "projects/trivia-editor/src/polyfills.ts",
-            "tsConfig": "projects/trivia-editor/tsconfig.spec.json",
+            "tsConfig": "/../trivia-editor/tsconfig.spec.json",
             "karmaConfig": "projects/trivia-editor/karma.conf.js",
             "styles": [
               "projects/trivia-editor/src/styles.css"
