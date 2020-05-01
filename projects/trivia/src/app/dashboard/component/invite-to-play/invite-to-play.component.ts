@@ -1,11 +1,10 @@
 import { Component, ChangeDetectionStrategy, OnInit, OnDestroy, Input, OnChanges, ChangeDetectorRef } from '@angular/core';
-import { AutoUnsubscribe } from 'shared-library/shared/decorators';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { select, Store } from '@ngrx/store';
 import { UserActions } from 'shared-library/core/store';
 import { userCardType } from 'shared-library/shared/model';
 import { appState } from '../../../store';
 import { Router } from '@angular/router';
-
 @Component({
   selector: 'app-invite-to-play',
   templateUrl: './invite-to-play.component.html',
