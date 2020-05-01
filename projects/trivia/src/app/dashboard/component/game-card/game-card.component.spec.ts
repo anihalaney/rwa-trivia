@@ -1,57 +1,36 @@
 import { async, ComponentFixture, TestBed, tick, fakeAsync } from '@angular/core/testing';
-// import { fakeSchedulers } from 'rxjs-marbles/jasmine/angular';
 import { GameCardComponent } from './game-card.component';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { select, Store, StoreModule, MemoizedSelector } from '@ngrx/store';
+import { Store, MemoizedSelector } from '@ngrx/store';
 import { provideMockStore, MockStore } from '@ngrx/store/testing';
-import { provideMockActions } from '@ngrx/effects/testing';
-import { Observable, of } from 'rxjs';
-import { RouterTestingModule } from '@angular/router/testing';
-import { Router } from '@angular/router';
-import { UserActions } from 'shared-library/core/store/actions/user.actions';
-import { By } from '@angular/platform-browser';
-import { DebugElement } from '@angular/core';
-import { Utils, WindowRef } from 'shared-library/core/services';
-import {
-    User, Game, Category, PlayerMode, GameStatus, CalenderConstants, userCardType,
-    ApplicationSettings
-} from 'shared-library/shared/model';
+import { Utils } from 'shared-library/core/services';
+import { User, Game, PlayerMode, GameStatus } from 'shared-library/shared/model';
 import { AppState, appState } from '../../../store';
 import { TEST_DATA } from 'shared-library/testing/test.data';
-
-// import { cold } from 'jasmine-marbles';
 import { CoreState } from 'shared-library/core/store';
-import { delay } from 'rxjs/operators';
-
 import { MatSnackBarModule } from '@angular/material';
-
-import { Subscription } from 'rxjs';
-class RouterStub {
-    navigateByUrl(url: string) { return url; }
-}
-
-class UserActionStub {
-
-}
 
 describe('GameCardComponent', () => {
 
     let component: GameCardComponent;
     let fixture: ComponentFixture<GameCardComponent>;
-    let _store: any;
     let spy: any;
     let user: User;
     let mockStore: MockStore<AppState>;
-    let mockCoreSelector: MemoizedSelector<AppState, Partial<CoreState>>;
-
-
+ 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [GameCardComponent],
             schemas: [NO_ERRORS_SCHEMA],
             providers: [
-                Utils,
-                WindowRef,
+                {provide: Utils, useValue: {
+                    getTimeDifference(turnAt: number) {
+                        return 1588313130838 - turnAt;
+                    },
+                    convertIntoDoubleDigit(digit: Number) {
+                        return (digit < 10) ? `0${digit}` : `${digit}`;
+                    }
+                }},
                 provideMockStore( {
                     selectors: [
                       {
@@ -78,12 +57,9 @@ describe('GameCardComponent', () => {
 
         component = fixture.debugElement.componentInstance;
 
-        // init data
-        _store = fixture.debugElement.injector.get(Store);
         const dbModel = TEST_DATA.game[0];
         component.game = Game.getViewModel(dbModel);
 
-        spyOn(component, 'updateRemainingTime');
     });
 
     it('should create', () => {
@@ -106,17 +82,17 @@ describe('GameCardComponent', () => {
         expect(fixture).toMatchSnapshot();
     });
 
-    it('verify capitalizeFirstLetter function', () => {
+    it('capitalizeFirstLetter function should capitalize first letter', () => {
         const categoryName = 'infrastructure/networking';
         const categoryNameWithCapitalizedFirstLetter = component.capitalizeFirstLetter(categoryName);
         expect(categoryNameWithCapitalizedFirstLetter).toEqual('Infrastructure/networking');
     });
 
-    it(`Initially user value should be undefined `, () => {
+    it(`User should be undefined when component is created`, () => {
         expect(component.user).toBe(undefined);
     });
 
-    it('subscription for logged in user', () => {
+    it('User should be set when user is logged in', () => {
         user = { ...TEST_DATA.userList[0] };
         mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
             user: user
@@ -125,7 +101,7 @@ describe('GameCardComponent', () => {
           expect(component.user).toBe(user);
       });
 
-      it('subscription for user dictionary', () => {
+      it('User dictionary should be set when values are emitted', () => {
         user = { ...TEST_DATA.userList[0] };
         const otherUser = { ...TEST_DATA.userList[1] };
         const userDict = {'4kFa6HRvP5OhvYXsH9mEsRrXj4o2': user, 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1': otherUser};
@@ -136,55 +112,44 @@ describe('GameCardComponent', () => {
           expect(component.userDict).toBe(userDict);
       });
 
-    //   it('Verify updateRemainingTime function', async(() => {
-    //     user = { ...TEST_DATA.userList[0] };
-    //     const otherUser = { ...TEST_DATA.userList[1] };
-    //     const userDict = {'4kFa6HRvP5OhvYXsH9mEsRrXj4o2': user, 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1': otherUser};
-    //     mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
-    //         user: user,
-    //         userDict: userDict
-    //       });
-    //       mockStore.refreshState();
 
-    //       jest.useFakeTimers();
-    //       expect(component.remainingHours).toEqual(undefined);
-    //       component.updateRemainingTime();
-    //       jest.advanceTimersByTime(1);
-    //       expect(component.remainingHours).toEqual('32');
-    //       jest.useRealTimers();
+    it('remaining time should be 2 hr 30 min', (async () => {
 
-    //   }));
+        component.isHidePlayNow = false;
+        component.applicationSettings = TEST_DATA.applicationSettings;
 
-    //   it('verfiy timer function ', fakeSchedulers(() => {
+        component.categoryDict = TEST_DATA.categoryDictionary;
+        component.user = TEST_DATA.userList[0];
+        component.PlayerMode = PlayerMode;
+        component.gameStatus = GameStatus;
+        const otherUser = { ...TEST_DATA.userList[1] };
+        component.otherUserId = 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1';
+        component.userDict = {'4kFa6HRvP5OhvYXsH9mEsRrXj4o2': user, 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1': otherUser};
+        component.updateRemainingTime();
 
-    //     const newSub: Subscription = component.timerSub;
-    //     user = { ...TEST_DATA.userList[0] };
-    //     const otherUser = { ...TEST_DATA.userList[1] };
-    //     const userDict = {'4kFa6HRvP5OhvYXsH9mEsRrXj4o2': user, 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1': otherUser};
-    //     component.otherUserId = 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1';
-    //     component.userDict = userDict;
-    //     component.user = user;
-    //     fixture.detectChanges();
-    //     tick(3000);
-    //     expect(component.updateGameRemainTime).toHaveBeenCalledTimes(1); // fail
-    //     newSub.unsubscribe();
-    //   }));
+        await new Promise((r) => setTimeout(r, 2000));
+        expect(component.remainingMinutes).toBe('30');
+        expect(component.remainingHours).toBe('02');
+    }));
 
+    it('remaining time should be 0 hr 0 min', (async () => {
 
+        component.isHidePlayNow = false;
+        component.applicationSettings = TEST_DATA.applicationSettings;
+        const dbModel = TEST_DATA.game[1];
+        component.game = Game.getViewModel(dbModel);
+        component.categoryDict = TEST_DATA.categoryDictionary;
+        component.user = TEST_DATA.userList[0];
+        component.PlayerMode = PlayerMode;
+        component.gameStatus = GameStatus;
+        const otherUser = { ...TEST_DATA.userList[1] };
+        component.otherUserId = 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1';
+        component.userDict = {'4kFa6HRvP5OhvYXsH9mEsRrXj4o2': user, 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1': otherUser};
+        component.updateRemainingTime();
 
-    //   it('verfiy timer function ', fakeSchedulers(() => {
+        await new Promise((r) => setTimeout(r, 2000));
+        expect(component.remainingMinutes).toBe('00');
+        expect(component.remainingHours).toBe('00');
+    }));
 
-    //     const newSub: Subscription = component.timerSub;
-    //     user = { ...TEST_DATA.userList[0] };
-    //     const otherUser = { ...TEST_DATA.userList[1] };
-    //     const userDict = {'4kFa6HRvP5OhvYXsH9mEsRrXj4o2': user, 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1': otherUser};
-    //     component.otherUserId = 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1';
-    //     component.userDict = userDict;
-    //     component.user = user;
-    //     fixture.detectChanges();
-    //     tick(3000);
-    //     expect(component.updateGameRemainTime).toHaveBeenCalledTimes(1); // fail
-    //     newSub.unsubscribe();
-    //   }));
-    //   afterEach(() => { fixture.destroy(); });
 });
