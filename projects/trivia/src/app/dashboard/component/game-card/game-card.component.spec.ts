@@ -63,6 +63,90 @@ describe('GameCardComponent', () => {
         expect(component).toBeTruthy();
     });
 
+    it(' updateRemainingTime function should be called from ngOnInit when it is user\'s turn', () => {
+        component.updateRemainingTime = jest.fn();
+        component.isHidePlayNow = false;
+        component.applicationSettings = TEST_DATA.applicationSettings;
+
+        component.categoryDict = TEST_DATA.categoryDictionary;
+        user = { ...TEST_DATA.userList[0] };
+        mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
+            user: user
+          });
+          mockStore.refreshState();
+        component.PlayerMode = PlayerMode;
+        component.gameStatus = GameStatus;
+        const otherUser = { ...TEST_DATA.userList[1] };
+        component.otherUserId = 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1';
+        component.userDict = {'4kFa6HRvP5OhvYXsH9mEsRrXj4o2': user, 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1': otherUser};
+        fixture.detectChanges();
+        expect(component.updateRemainingTime).toHaveBeenCalledTimes(1);
+    });
+
+    it(' capitalizeFirstLetter should be called for all categoryId data from game options', () => {
+
+        component.capitalizeFirstLetter = jest.fn();
+        component.applicationSettings = TEST_DATA.applicationSettings;
+        component.categoryDict = TEST_DATA.categoryDictionary;
+        component.user = { ...TEST_DATA.userList[0] };
+        component.PlayerMode = PlayerMode;
+        component.gameStatus = GameStatus;
+        const otherUser = { ...TEST_DATA.userList[1] };
+        component.otherUserId = 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1';
+        component.userDict = {'4kFa6HRvP5OhvYXsH9mEsRrXj4o2': user, 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1': otherUser};
+        component.ngOnChanges({
+            applicationSettings :
+            {
+                previousValue: undefined,
+                currentValue: TEST_DATA.applicationSettings,
+                firstChange: true,
+                isFirstChange: undefined
+            }
+        });
+        expect(component.capitalizeFirstLetter).toHaveBeenCalledTimes(component.game.gameOptions.categoryIds.length);
+    });
+
+    it('verify that after game data set otherUserId and otherUserInfo is set', () => {
+        component.applicationSettings = TEST_DATA.applicationSettings;
+        component.user = { ...TEST_DATA.userList[0] };
+        const otherUser = { ...TEST_DATA.userList[1] };
+        component.userDict = {'4kFa6HRvP5OhvYXsH9mEsRrXj4o2': user, 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1': otherUser};
+        component.ngOnChanges({
+            applicationSettings :
+            {
+                previousValue: undefined,
+                currentValue: TEST_DATA.applicationSettings,
+                firstChange: true,
+                isFirstChange: undefined
+            }
+        });
+        expect(component.otherUserId).toEqual(otherUser.userId);
+        expect(component.otherUserInfo).toEqual(otherUser);
+    });
+
+    it('verify that after game data set otherUserId and otherUserInfo is set', () => {
+        component.applicationSettings = TEST_DATA.applicationSettings;
+        component.user = { ...TEST_DATA.userList[0] };
+        const otherUser = { ...TEST_DATA.userList[1] };
+        component.userDict = {'4kFa6HRvP5OhvYXsH9mEsRrXj4o2': user, 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1': otherUser};
+        const dbModel = TEST_DATA.game[1];
+        component.game = Game.getViewModel(dbModel);
+        const currentUserEarnedBadges = [...component.game.stats[component.user.userId].badge].reverse();
+        component.PlayerMode = PlayerMode;
+        const otherUserEarnedBadges = [...component.game.stats[otherUser.userId].badge].reverse();
+        component.ngOnChanges({
+            game :
+            {
+                previousValue: undefined,
+                currentValue: Game.getViewModel(dbModel),
+                firstChange: true,
+                isFirstChange: undefined
+            }
+        });
+        expect(component.earnedBadges).toEqual(currentUserEarnedBadges);
+        expect(component.earnedBadgesByOtherUser).toEqual(otherUserEarnedBadges);
+    });
+
     it('should match snapshot', () => {
         component.isHidePlayNow = false;
         component.applicationSettings = TEST_DATA.applicationSettings;
