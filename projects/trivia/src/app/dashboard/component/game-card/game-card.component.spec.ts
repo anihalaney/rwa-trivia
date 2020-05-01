@@ -1,38 +1,14 @@
 import { async, ComponentFixture, TestBed, tick, fakeAsync } from '@angular/core/testing';
-// import { fakeSchedulers } from 'rxjs-marbles/jasmine/angular';
 import { GameCardComponent } from './game-card.component';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { select, Store, StoreModule, MemoizedSelector } from '@ngrx/store';
+import { Store, MemoizedSelector } from '@ngrx/store';
 import { provideMockStore, MockStore } from '@ngrx/store/testing';
-import { provideMockActions } from '@ngrx/effects/testing';
-import { Observable, of } from 'rxjs';
-import { RouterTestingModule } from '@angular/router/testing';
-import { Router } from '@angular/router';
-import { UserActions } from 'shared-library/core/store/actions/user.actions';
-import { By } from '@angular/platform-browser';
-import { DebugElement } from '@angular/core';
 import { Utils } from 'shared-library/core/services';
-import {
-    User, Game, Category, PlayerMode, GameStatus, CalenderConstants, userCardType,
-    ApplicationSettings
-} from 'shared-library/shared/model';
+import { User, Game, PlayerMode, GameStatus } from 'shared-library/shared/model';
 import { AppState, appState } from '../../../store';
 import { TEST_DATA } from 'shared-library/testing/test.data';
-
-// import { cold } from 'jasmine-marbles';
 import { CoreState } from 'shared-library/core/store';
-import { delay } from 'rxjs/operators';
-
 import { MatSnackBarModule } from '@angular/material';
-
-import { Subscription } from 'rxjs';
-class RouterStub {
-    navigateByUrl(url: string) { return url; }
-}
-
-class UserActionStub {
-
-}
 
 describe('GameCardComponent', () => {
 
@@ -43,9 +19,6 @@ describe('GameCardComponent', () => {
     let user: User;
     let mockStore: MockStore<AppState>;
     let mockCoreSelector: MemoizedSelector<AppState, Partial<CoreState>>;
-
-
-
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
@@ -91,7 +64,6 @@ describe('GameCardComponent', () => {
         const dbModel = TEST_DATA.game[0];
         component.game = Game.getViewModel(dbModel);
 
-        // spyOn(component, 'updateRemainingTime');
     });
 
     it('should create', () => {
@@ -184,57 +156,4 @@ describe('GameCardComponent', () => {
         expect(component.remainingHours).toBe('00');
     }));
 
-    //   it('Verify updateRemainingTime function', async(() => {
-    //     user = { ...TEST_DATA.userList[0] };
-    //     const otherUser = { ...TEST_DATA.userList[1] };
-    //     const userDict = {'4kFa6HRvP5OhvYXsH9mEsRrXj4o2': user, 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1': otherUser};
-    //     mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
-    //         user: user,
-    //         userDict: userDict
-    //       });
-    //       mockStore.refreshState();
-
-    //       jest.useFakeTimers();
-    //       expect(component.remainingHours).toEqual(undefined);
-    //       component.updateRemainingTime();
-    //       jest.advanceTimersByTime(1);
-    //       expect(component.remainingHours).toEqual('32');
-    //       jest.useRealTimers();
-
-    //   }));
-
-    //   it('verfiy timer function ', fakeSchedulers(() => {
-
-    //     const newSub: Subscription = component.timerSub;
-    //     user = { ...TEST_DATA.userList[0] };
-    //     const otherUser = { ...TEST_DATA.userList[1] };
-    //     const userDict = {'4kFa6HRvP5OhvYXsH9mEsRrXj4o2': user, 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1': otherUser};
-    //     component.otherUserId = 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1';
-    //     component.userDict = userDict;
-    //     component.user = user;
-    //     fixture.detectChanges();
-    //     tick(3000);
-    //     expect(component.updateGameRemainTime).toHaveBeenCalledTimes(1); // fail
-    //     newSub.unsubscribe();
-    //   }));
-
-
-
-    //   it('verfiy timer function ', fakeSchedulers(() => {
-
-    //     const newSub: Subscription = component.timerSub;
-    //     user = { ...TEST_DATA.userList[0] };
-    //     const otherUser = { ...TEST_DATA.userList[1] };
-    //     const userDict = {'4kFa6HRvP5OhvYXsH9mEsRrXj4o2': user, 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1': otherUser};
-    //     component.otherUserId = 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1';
-    //     component.userDict = userDict;
-    //     component.user = user;
-    //     fixture.detectChanges();
-    //     tick(3000);
-    //     expect(component.updateGameRemainTime).toHaveBeenCalledTimes(1); // fail
-    //     newSub.unsubscribe();
-    //   }));
-    //   afterEach(() => { fixture.destroy(); });
-
-    
 });
