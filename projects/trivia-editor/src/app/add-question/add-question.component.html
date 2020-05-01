@@ -32,9 +32,11 @@
         <span class="ql-formats">
           <div #bottomToolBar [innerHtml]='bottomBarOptions | safeHtml'></div>
         </span>
-
       </ng-quill-tex>
-
+      <div *ngIf="!questionForm.controls.questionText.valid && questionForm.controls.questionText.touched && questionForm.controls.questionText.errors">
+        <p *ngIf="questionForm.controls.questionText.errors.required" class="error">Question is required!</p>
+      </div>
+      
       <h3>Answers</h3>
       <ng-container formArrayName="answers">
         <div *ngFor="let answer of answers.controls; let i=index" [formGroupName]="i" class="formfield" style="padding:0px;">

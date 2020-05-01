@@ -13,8 +13,8 @@
             <GridLayout row="1" col="0" columns="*,50,*" iosOverflowSafeArea="false" class="button-section">
                 <Button stlRippleEffect row="0" col="0" colspan="2" width="100%" [text]="submitBtnTxt"
           
-                    [ngClass]="{'enable-btn' : isFormValid, 'disable-btn' : !isFormValid }" class="question-buttons"
-                    (tap)="getQuestion()"  [isEnabled]="isFormValid"></Button>
+                    [ngClass]="{'enable-btn' : isQFormValid, 'disable-btn' : !isQFormValid }" class="question-buttons"
+                    (tap)="getQuestion()"  [isEnabled]="isQFormValid"></Button>
                 <FlexboxLayout stlRippleEffect borderRadius="3" class="enable-btn-preview" row="0" col="2"
                     orientation="horizontal" justifyContent="center" padding="12" (tap)="preview()">
                     <Label text="Preview" textWrap="true"></Label>
