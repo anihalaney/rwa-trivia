@@ -16,7 +16,7 @@
     "ng": "ng",
     "api": "json-server --watch src/db.json",
     "lint": "tslint \"src/**/*.ts\" --project src/tsconfig.json --type-check && tslint \"e2e/**/*.ts\" --project e2e/tsconfig.json --type-check",
-    "test": "jest",
+    "test": "ng test",
     "test:watch": "jest --watch",
     "pree2e": "webdriver-manager update --standalone false --gecko false",
     "e2e": "protractor"
@@ -46,10 +46,10 @@
     "@fortawesome/fontawesome-svg-core": "^1.2.25",
     "@fortawesome/free-brands-svg-icons": "^5.11.2",
     "@fortawesome/free-solid-svg-icons": "^5.11.2",
-    "@ngrx/effects": "8.1.0",
-    "@ngrx/router-store": "8.1.0",
-    "@ngrx/store": "8.1.0",
-    "@ngrx/store-devtools": "8.1.0",
+    "@ngrx/effects": "8.6.0",
+    "@ngrx/router-store": "8.6.0",
+    "@ngrx/store": "8.6.0",
+    "@ngrx/store-devtools": "8.6.0",
     "@nguniversal/express-engine": "^8.1.1",
     "@nguniversal/module-map-ngfactory-loader": "^8.1.1",
     "@ngx-share/button": "^7.1.4",
@@ -99,6 +99,7 @@
     "zone.js": "^0.9.1"
   },
   "devDependencies": {
+    "@angular-builders/jest": "^9.0.1",
     "@angular-devkit/build-angular": "^0.802.2",
     "@angular-devkit/build-ng-packagr": "^0.801.3",
     "@angular/cli": "^8.3.8",
@@ -107,9 +108,10 @@
     "@ngtools/webpack": "~8.2.0",
     "@types/hammerjs": "2.0.36",
     "@types/jasmine": "3.3.15",
-    "@types/jest": "^24.0.18",
+    "@types/jest": "^24.9.1",
     "@types/node": "^12.7.11",
     "axios": "^0.19.0",
+    "babel-jest": "^25.4.0",
     "codelyzer": "5.0.1",
     "compression": "^1.7.4",
     "core-js": "^3.2.1",
@@ -122,16 +124,12 @@
     "jasmine-core": "3.4.0",
     "jasmine-marbles": "^0.6.0",
     "jasmine-spec-reporter": "4.2.1",
-    "jest": "^24.9.0",
-    "jest-preset-angular": "^7.1.0",
+    "jest": "^25.4.0",
+    "jest-preset-angular": "^8.1.3",
+    "jest-zone-patch": "0.0.10",
     "jquery": "^3.4.1",
     "json-server": "0.15.0",
-    "karma": "^4.3.0",
-    "karma-chrome-launcher": "3.0.0",
     "karma-cli": "2.0.0",
-    "karma-coverage-istanbul-reporter": "2.1.0",
-    "karma-jasmine": "2.0.1",
-    "karma-jasmine-html-reporter": "1.4.2",
     "katex": "^0.10.2",
     "lodash": "^4.17.11",
     "lodash.template": "^4.5.0",
@@ -152,22 +150,5 @@
     "typescript": "~3.5.3",
     "xmlhttprequest": "^1.8.0",
     "yargs": "^13.2.4"
-  },
-  "jest": {
-    "preset": "jest-preset-angular",
-    "setupTestFrameworkScriptFile": "<rootDir>/projects/trivia/src/setup-jest.ts",
-    "verbose": true,
-    "testURL": "http://localhost/",
-    "globals": {
-      "ts-jest": {
-        "tsConfigFile": "projects/trivia/tsconfig.spec.json"
-      },
-      "__TRANSFORM_HTML__": true
-    }
-  },
-  "husky": {
-    "hooks": {
-      "pre-push": "npm run test && ng e2e trivia-e2e"
-    }
   }
 }
