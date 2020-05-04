@@ -8,6 +8,7 @@ import { provideMockStore, MockStore } from '@ngrx/store/testing';
 import { CoreState } from 'shared-library/core/store';
 import { DashboardState } from '../../store';
 import * as dashboardActions from '../../store/actions';
+import { TEST_DATA } from 'shared-library/testing/test.data';
 
 describe('Testing Newsletter Component', () => {
 
@@ -40,20 +41,6 @@ describe('Testing Newsletter Component', () => {
       declarations: [NewsletterComponent],
     });
 
-    user = {
-      userId: '1',
-      displayName: 'test',
-      authState: null,
-      bulkUploadPermissionStatus: '',
-      bulkUploadPermissionStatusUpdateTime: 0,
-      croppedImageUrl: '',
-      originalImageUrl: '',
-      imageType: '',
-      achievements: null,
-      gamePlayed: null,
-      email: 'test@test.com'
-    };
-
     // create component and NewsletterComponent fixture
     fixture = TestBed.createComponent(NewsletterComponent);
 
@@ -71,6 +58,7 @@ describe('Testing Newsletter Component', () => {
   afterEach(() => { fixture.destroy(); });
 
   it('Form should have Email set for logged in user', () => {
+    const user = TEST_DATA.userList[2];
     mockCoreSelector.setResult({ user });
     mockStore.refreshState();
     expect(component.subscriptionForm.get('email').value).toEqual('test@test.com');
@@ -78,6 +66,7 @@ describe('Testing Newsletter Component', () => {
   });
 
   it('Form should be valid for logged in user', () => {
+    const user =  TEST_DATA.userList[2];
     mockCoreSelector.setResult({ user });
     mockStore.refreshState();
     expect(component.subscriptionForm.valid).toBeTruthy();
