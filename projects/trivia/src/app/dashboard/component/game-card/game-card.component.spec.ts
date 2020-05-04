@@ -106,11 +106,10 @@ describe('GameCardComponent', () => {
         expect(component.capitalizeFirstLetter).toHaveBeenCalledTimes(component.game.gameOptions.categoryIds.length);
     });
 
-    it('verify that after game data set otherUserId and otherUserInfo is set', () => {
+    it('verify that Other Player information should be set with game data', () => {
         component.applicationSettings = TEST_DATA.applicationSettings;
         component.user = { ...TEST_DATA.userList[0] };
-        const gameOtherUserId = component.game.playerIds.filter(data => data !== component.user.userId)[0];
-        const otherUser = { ...TEST_DATA.userList.filter(data => data.userId === gameOtherUserId)[0] };
+        const otherUser = { ...TEST_DATA.userList[1] };
         component.userDict = {'4kFa6HRvP5OhvYXsH9mEsRrXj4o2': user, 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1': otherUser};
         component.ngOnChanges({
             applicationSettings :
@@ -125,17 +124,16 @@ describe('GameCardComponent', () => {
         expect(component.otherUserInfo).toEqual(otherUser);
     });
 
-    it('verify that after game data set otherUserId and otherUserInfo is set', () => {
+    it('Verify that Earned badges should be set with Game data', () => {
         component.applicationSettings = TEST_DATA.applicationSettings;
         component.user = { ...TEST_DATA.userList[0] };
         const otherUser = { ...TEST_DATA.userList[1] };
         component.userDict = {'4kFa6HRvP5OhvYXsH9mEsRrXj4o2': user, 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1': otherUser};
         const dbModel = TEST_DATA.game[1];
         component.game = Game.getViewModel(dbModel);
-        const game = Game.getViewModel(dbModel);
-        const currentUserEarnedBadges = [...game.playerQnAs.filter(data => data.badge && data.badge.won && data.playerId === user.userId).map(data => data.badge.name)].reverse();
+        const currentUserEarnedBadges = [...component.game.stats[component.user.userId].badge].reverse();
         component.PlayerMode = PlayerMode;
-        const otherUserEarnedBadges = [...game.playerQnAs.filter(data => data.badge && data.badge.won && data.playerId === otherUser.userId).map(data => data.badge.name)].reverse();
+        const otherUserEarnedBadges = [...component.game.stats[otherUser.userId].badge].reverse();
         component.ngOnChanges({
             game :
             {
