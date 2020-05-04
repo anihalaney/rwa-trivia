@@ -27,7 +27,7 @@
           <span class="light">Round {{questionRound}} / {{totalRound}}</span>
         </div>
         <div class="answer-status" [ngClass]="continueNext ? '' : 'ptb-10'">
-            <div [hidden]="!continueNext">
+            <div [hidden]="doPlay && !continueNext">
                 <p [hidden]="correctAnswerIndex !== answeredIndex" class="correct-text">CORRECT</p>
                 <p [hidden]="!(answeredIndex >= 0 && correctAnswerIndex !== answeredIndex)" class="incorrect-text">INCORRECT</p>
                 <p [hidden]="answeredIndex !== null && answeredIndex !== undefined" class="timeout-text">TIMEOUT</p>

@@ -178,7 +178,7 @@
       </FlexboxLayout>
     </StackLayout>
   </FlexboxLayout>
-  <Progress row="1" colSpan="2" marginTop="5" marginBottom="5" col="0" [value]="otherInfo?.progressValue" android:backgroundColor="#f1f1f1" class="game-progress" maxValue="100"></Progress>
+  <Progress row="1" colSpan="2" marginTop="5" marginBottom="5" col="0" [value]="otherInfo?.progressValue" [ngClass]="{'red-color': otherInfo?.progressValue >= 100, 'yellow-color': otherInfo?.progressValue <= 99}"  class="game-progress" maxValue="100"></Progress>
   <StackLayout  row="2" col="0">
     <StackLayout *ngIf="!otherInfo.isBadgeWithCategory" orientation="horizontal" horizontalAlignment="left" android:backgroundColor="#f1f1f1" class="background-score">
       <Image src="{{otherInfo.correctCount>=1 ? 'res://badge1' : 'res://badge1inactive'}}">
