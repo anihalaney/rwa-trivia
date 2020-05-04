@@ -3,7 +3,6 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { InviteMailFriendsComponent } from './invite-mail-friends.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { StoreModule, MemoizedSelector, Store } from '@ngrx/store';
-import { User } from 'shared-library/shared/model';
 import { provideMockStore, MockStore } from '@ngrx/store/testing';
 import { coreState, CoreState, UserActions } from 'shared-library/core/store';
 import { Utils, WindowRef } from 'shared-library/core/services';
@@ -14,23 +13,10 @@ import { TEST_DATA } from 'shared-library/testing/test.data';
 describe('InviteMailFriendsComponent', () => {
     let component: InviteMailFriendsComponent;
     let fixture: ComponentFixture<InviteMailFriendsComponent>;
-    let user: User;
     let mockStore: MockStore<AppState>;
     let spy: any;
     let mockCoreSelector: MemoizedSelector<CoreState, Partial<CoreState>>;
-    user = {
-        userId: '1',
-        displayName: 'test',
-        authState: null,
-        bulkUploadPermissionStatus: '',
-        bulkUploadPermissionStatusUpdateTime: 0,
-        croppedImageUrl: '',
-        originalImageUrl: '',
-        imageType: '',
-        achievements: null,
-        gamePlayed: null,
-        email: 'test@test.com'
-    };
+
 
 
     beforeEach(async(() => {
@@ -187,7 +173,7 @@ describe('InviteMailFriendsComponent', () => {
 
     it(`on Subscribe should dispatch action to add user invitation with correct payload `, () => {
         component.invitationForm.controls['email'].setValue('trivia@mail.com');
-
+        const user = { ...TEST_DATA.userList[0] };
         mockCoreSelector.setResult({ user });
         mockStore.refreshState();
 
