@@ -8,7 +8,7 @@
     <ScrollView>
         <StackLayout *ngIf="renderView">
             <GridLayout columns="auto,*,auto" rows="auto,auto" margin="20 20 20 0">
-                <app-user-card rowSpan="2" col="0" [userId]="user?.userId"
+                <app-user-card  col="0" [userId]="user?.userId"
                     [type]="userCardType.USER_IMAGE_NAME_PROFILE_HORIZONTAL" [userType]="0">
                 </app-user-card>
 

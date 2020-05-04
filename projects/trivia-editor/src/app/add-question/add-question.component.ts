@@ -80,8 +80,7 @@ export class AddQuestionComponent implements OnInit, OnDestroy, AfterViewInit {
   quillObject: any = {};
   answerTexts = [];
 
-
-    editQuestion: Question;
+  editQuestion: Question;
 
   get answers(): FormArray {
     return this.questionForm.get('answers') as FormArray;
@@ -221,7 +220,9 @@ export class AddQuestionComponent implements OnInit, OnDestroy, AfterViewInit {
       event.html ? event.html : ""
     );
     ansForm["controls"].answerObject.patchValue(event.delta);
-
+    this.questionForm.controls["answers"].markAllAsTouched();
+    this.computeAutoTags();
+    
     const question: Question = this.getQuestionFromFormValue(this.questionForm.value);
 
 
@@ -313,10 +314,12 @@ export class AddQuestionComponent implements OnInit, OnDestroy, AfterViewInit {
   onTextChanged(quillContent) {
     this.quillObject.jsonObject = quillContent.delta;
     this.quillObject.questionText = quillContent.html;
+    this.computeAutoTags();
     if(quillContent.imageParsedName){
       //     this.store.dispatch(this.questionAction.deleteQuestionImage(text.imageParsedName));
       this.oWebViewInterface.emit('deleteImageUrl', quillContent.imageParsedName);
     }
+    this.questionForm.controls.questionText.markAsTouched();
     this.questionForm.controls.questionText.patchValue(quillContent.html);
 
   }
@@ -406,7 +409,10 @@ export class AddQuestionComponent implements OnInit, OnDestroy, AfterViewInit {
 
     const allTextValues: string[] = [formValue.questionText];
     formValue.answers.forEach(answer => allTextValues.push(answer.answerText));
-
+    if(formValue.isRichEditor && this.quillObject && this.quillObject.questionText){
+      const removedHtmlTag = this.quillObject.questionText.replace( /(<([^>]+)>)/ig, '');
+      allTextValues.push(removedHtmlTag);  
+    }
     const wordString: string = allTextValues.join(" ");
 
     const matchingTags: string[] = [];
@@ -423,21 +429,17 @@ export class AddQuestionComponent implements OnInit, OnDestroy, AfterViewInit {
     this.setTagsArray();
   }
 
-
 }
 
 function questionFormValidator(fg: FormGroup): { [key: string]: boolean } {
   const answers: Answer[] = fg.get("answers").value;
 
-
-
+  if (answers.filter(answer => answer.correct).length !== 1) {
+    return { correctAnswerCountInvalid: true };
+  }
   const tags: string[] = fg.get('tagsArray').value;
   if (tags.length < 3) {
     return { 'tagCountInvalid': true };
-  }
-
-  if (answers.filter(answer => answer.correct).length !== 1) {
-    return { correctAnswerCountInvalid: true };
   }
 }
 

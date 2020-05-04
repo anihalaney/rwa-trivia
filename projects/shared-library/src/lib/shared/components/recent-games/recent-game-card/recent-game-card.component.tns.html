@@ -29,7 +29,9 @@
         <Label text="LOST" textWrap="true" class="label-failed"
             *ngIf="game.winnerPlayerId && game.winnerPlayerId !== user.userId" horizontalAlignment="center"></Label>
         <Label text="TIE" textWrap="true" class="label-success"
-            *ngIf="game.round < 16 && !game.winnerPlayerId && game.GameStatus !== GameStatus.REJECTED && game.GameStatus !== GameStatus.INVITATION_TIMEOUT && game.GameStatus !== GameStatus.TIME_EXPIRED"
+            *ngIf="game.round >= 16 && !game.winnerPlayerId && 
+            ((game?.gameOptions?.isBadgeWithCategory &&  game?.stats[game?.playerIds[0]]?.badge?.length === game?.stats[game.playerIds[1]]?.badge?.length) ||
+            (!game?.gameOptions?.isBadgeWithCategory &&  game?.stats[game?.playerIds[0]]?.score === game?.stats[game.playerIds[1]]?.score))"
             horizontalAlignment="center"></Label>
         <Label text="REJECTED" textWrap="true" class="label-failed"
             *ngIf="!game.winnerPlayerId && game.GameStatus === GameStatus.REJECTED"
@@ -37,7 +39,9 @@
         <Label text="INVITATION TIMEOUT" textWrap="true" class="label-failed"
             *ngIf="game.GameStatus === GameStatus.INVITATION_TIMEOUT"
             horizontalAlignment="center"></Label>
-        <Label text="DRAW" textWrap="true" class="label-failed" *ngIf="!game.winnerPlayerId && game.round === 16"
+        <Label text="DRAW" textWrap="true" class="label-failed" *ngIf="game.round >= 16 && !game.winnerPlayerId &&
+            ((game?.gameOptions?.isBadgeWithCategory &&  game?.stats[game?.playerIds[0]]?.badge?.length !== game?.stats[game.playerIds[1]]?.badge?.length) ||
+            (!game?.gameOptions?.isBadgeWithCategory &&  game?.stats[game?.playerIds[0]]?.score !== game?.stats[game.playerIds[1]]?.score))"
             horizontalAlignment="center"></Label>
         <Label class="label-category SF-Pro-Regular" text="{{categoryDict[game.gameOptions?.categoryIds[0]]?.categoryName?.charAt(0)?.toUpperCase() +
                 categoryDict[game.gameOptions?.categoryIds[0]]?.categoryName?.slice(1)}}" textWrap="true"

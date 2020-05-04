@@ -27,7 +27,8 @@ export const userRoutes: Routes = [
     children: [
       {
         path: 'profile/:userid',
-        component: ProfileSettingsComponent
+        component: ProfileSettingsComponent,
+        canActivate: [AuthGuard],
       },
       {
         path: 'questions',

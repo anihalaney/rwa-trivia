@@ -192,12 +192,17 @@ export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
   removeEnteredTag(tag) {
     this.enteredTags = this.enteredTags.filter(t => t !== tag);
     this.setTagsArray();
-  }
+}
 
   computeAutoTags() {
     const formValue = this.questionForm.value;
     const allTextValues: string[] = [formValue.questionText];
+
     formValue.answers.forEach(answer => allTextValues.push(answer.answerText));
+    if(formValue.isRichEditor && this.quillObject && this.quillObject.questionText){
+      const removedHtmlTag = this.quillObject.questionText.replace( /(<([^>]+)>)/ig, '');
+      allTextValues.push(removedHtmlTag);  
+    }
     const wordString: string = allTextValues.join(' ');
     const matchingTags: string[] = [];
     this.tags.forEach(tag => {
