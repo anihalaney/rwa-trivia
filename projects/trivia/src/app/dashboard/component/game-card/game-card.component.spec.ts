@@ -109,7 +109,8 @@ describe('GameCardComponent', () => {
     it('verify that after game data set otherUserId and otherUserInfo is set', () => {
         component.applicationSettings = TEST_DATA.applicationSettings;
         component.user = { ...TEST_DATA.userList[0] };
-        const otherUser = { ...TEST_DATA.userList[1] };
+        const gameOtherUserId = component.game.playerIds.filter(data => data !== component.user.userId)[0];
+        const otherUser = { ...TEST_DATA.userList.filter(data => data.userId === gameOtherUserId)[0] };
         component.userDict = {'4kFa6HRvP5OhvYXsH9mEsRrXj4o2': user, 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1': otherUser};
         component.ngOnChanges({
             applicationSettings :
@@ -131,9 +132,10 @@ describe('GameCardComponent', () => {
         component.userDict = {'4kFa6HRvP5OhvYXsH9mEsRrXj4o2': user, 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1': otherUser};
         const dbModel = TEST_DATA.game[1];
         component.game = Game.getViewModel(dbModel);
-        const currentUserEarnedBadges = [...component.game.stats[component.user.userId].badge].reverse();
+        const game = Game.getViewModel(dbModel);
+        const currentUserEarnedBadges = [...game.playerQnAs.filter(data => data.badge && data.badge.won && data.playerId === user.userId).map(data => data.badge.name)].reverse();
         component.PlayerMode = PlayerMode;
-        const otherUserEarnedBadges = [...component.game.stats[otherUser.userId].badge].reverse();
+        const otherUserEarnedBadges = [...game.playerQnAs.filter(data => data.badge && data.badge.won && data.playerId === otherUser.userId).map(data => data.badge.name)].reverse();
         component.ngOnChanges({
             game :
             {
@@ -232,5 +234,9 @@ describe('GameCardComponent', () => {
         expect(component.remainingMinutes).toBe('00');
         expect(component.remainingHours).toBe('00');
     }));
+
+    afterEach(() => {
+        fixture.destroy();
+    });
 
 });
