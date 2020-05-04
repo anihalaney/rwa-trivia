@@ -131,9 +131,10 @@ describe('GameCardComponent', () => {
         component.userDict = {'4kFa6HRvP5OhvYXsH9mEsRrXj4o2': user, 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1': otherUser};
         const dbModel = TEST_DATA.game[1];
         component.game = Game.getViewModel(dbModel);
-        const currentUserEarnedBadges = [...component.game.stats[component.user.userId].badge].reverse();
+        const game = Game.getViewModel(dbModel);
+        const currentUserEarnedBadges = [...game.stats[component.user.userId].badge].reverse();
         component.PlayerMode = PlayerMode;
-        const otherUserEarnedBadges = [...component.game.stats[otherUser.userId].badge].reverse();
+        const otherUserEarnedBadges = [...game.stats[otherUser.userId].badge].reverse();
         component.ngOnChanges({
             game :
             {
