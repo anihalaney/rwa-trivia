@@ -4,7 +4,7 @@ import { InviteMailFriendsComponent } from './invite-mail-friends.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { StoreModule, MemoizedSelector, Store } from '@ngrx/store';
 import { provideMockStore, MockStore } from '@ngrx/store/testing';
-import { coreState, CoreState, UserActions } from 'shared-library/core/store';
+import { coreState, CoreState, UserActions, ActionWithPayload } from 'shared-library/core/store';
 import { Utils, WindowRef } from 'shared-library/core/services';
 import { MatSnackBarModule } from '@angular/material';
 import { AppState } from '../../../../../../trivia/src/app/store';
@@ -65,12 +65,7 @@ describe('InviteMailFriendsComponent', () => {
         expect(component.errorMsg).toEqual('');
     });
 
-    it('on load component should have showErrorMsg should false', () => {
-        component.invitationForm.get('email').setValue('test@test.com');
-        expect(component.showErrorMsg).toBeFalsy();
-    });
-
-    it('on load component should have showErrorMsg should false', () => {
+    it('on load component should not show error message', () => {
         component.invitationForm.get('email').setValue('test@test.com');
         expect(component.showErrorMsg).toBeFalsy();
     });
@@ -101,34 +96,29 @@ describe('InviteMailFriendsComponent', () => {
         expect(component.isValid('test@test.com')).toBeTruthy();
     });
 
-    it(`isValid will return false if email will be like 'test`, () => {
+    it(`Email value 'test' should make isValid function to return false`, () => {
         expect(component.isValid('test')).toBeFalsy();
     });
 
-    it(`isValid will return false if email will be like 'test@test`, () => {
-        expect(component.isValid('test')).toBeFalsy();
+    it(`Email value 'test@test' should make isValid function to return false`, () => {
+        expect(component.isValid('test@test')).toBeFalsy();
     });
 
-    it(`isValid will return false if email will be like 'test@test.`, () => {
-        expect(component.isValid('test')).toBeFalsy();
+    it(`Email value 'test@test.' should make isValid function to return false`, () => {
+        expect(component.isValid('test@test.')).toBeFalsy();
     });
 
-    it(`on Subscribe errorMsg message should be set if wrong single email inserted `, () => {
+    it(`Error message should be set when wrong email is entered`, () => {
         component.invitationForm.controls['email'].setValue('test@test');
         component.onSubscribe();
         expect(component.errorMsg).toBe('Following email is not valid address!');
     })
 
 
-    it(`on Subscribe showErrorMsg should be true set if wrong single email inserted `, () => {
+    it(`on Subscribe check if email is invalid then invalid email will add into invalid email list and show error msg should be false `, () => {
         component.invitationForm.controls['email'].setValue('test@test');
         component.onSubscribe();
         expect(component.showErrorMsg).toBeTruthy();
-    })
-
-    it(`on Subscribe showErrorMsg should be true set if wrong single email inserted `, () => {
-        component.invitationForm.controls['email'].setValue('test@test');
-        component.onSubscribe();
         expect(component.invalidEmailList.length).toEqual(1);
     })
 
@@ -139,22 +129,10 @@ describe('InviteMailFriendsComponent', () => {
     })
 
 
-    it(`on Subscribe showErrorMsg should be true set if wrong single email inserted `, () => {
+    it(`on Subscribe show error message should be true set if invalid single email inserted`, () => {
         component.invitationForm.controls['email'].setValue('test@test,second.mail');
         component.onSubscribe();
         expect(component.showErrorMsg).toBeTruthy();
-    })
-
-    it(`on Subscribe showErrorMsg should be true set if wrong single email inserted `, () => {
-        component.invitationForm.controls['email'].setValue('test@test,second.mail');
-        component.onSubscribe();
-        expect(component.invalidEmailList.length).toEqual(2);
-    })
-
-
-    it(`on Subscribe showErrorMsg should be true set if wrong single email inserted `, () => {
-        component.invitationForm.controls['email'].setValue('test@test,second.mail');
-        component.onSubscribe();
         expect(component.invalidEmailList.length).toEqual(2);
     })
 
@@ -178,11 +156,11 @@ describe('InviteMailFriendsComponent', () => {
         mockStore.refreshState();
 
         const payloadData = {
-            userId: component.user.userId,
+            userId: user.userId,
             emails: ['trivia@mail.com']
         }
 
-        spy.and.callFake((action: any) => {
+        spy.and.callFake((action: ActionWithPayload<string>) => {
             expect(action.type).toEqual(UserActions.ADD_USER_INVITATION);
             expect(action.payload).toEqual(payloadData);
         });
