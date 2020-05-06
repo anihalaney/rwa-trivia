@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, OnDestroy, NgZone } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { select, Store } from "@ngrx/store";
-import { AutoUnsubscribe } from "ngx-auto-unsubscribe";
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 import { Observable } from "rxjs";
 import { Utils } from "shared-library/core/services";
 import {
