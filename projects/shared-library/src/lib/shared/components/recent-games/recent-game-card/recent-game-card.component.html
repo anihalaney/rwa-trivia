@@ -1,6 +1,6 @@
 <ng-container>
     <div class="col-xs-12 textcenter clearfix">
-        <div>
+        <div *ngIf="game">
             <div *ngIf="game.gameOptions.playerMode == PlayerMode.Single">
                 <div class="success result" *ngIf="game.winnerPlayerId && game.winnerPlayerId === user.userId">Won</div>
                 <div class="label result" *ngIf="game.winnerPlayerId !== user.userId">Lost</div>

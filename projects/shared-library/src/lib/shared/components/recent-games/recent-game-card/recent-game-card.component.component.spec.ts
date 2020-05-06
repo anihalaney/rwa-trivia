@@ -9,7 +9,8 @@ import { Utils, WindowRef } from 'shared-library/core/services';
 import { MatSnackBarModule } from '@angular/material';
 import { AppState } from '../../../../../../../trivia/src/app/store';
 import { TEST_DATA } from 'shared-library/testing/test.data';
-import { UserCardComponent } from 'shared-library/shared/components';
+import { UserCardComponent } from './../../user-card/user-card.component';
+import { OpenUserProfileDirective } from './../../../directive/open-user-profile.directive';
 
 describe('RecentGameCardComponent', () => {
   let component: RecentGameCardComponent;
@@ -36,7 +37,7 @@ describe('RecentGameCardComponent', () => {
         UserActions,
         Utils,
         WindowRef,],
-      declarations: [RecentGameCardComponent, UserCardComponent]
+      declarations: [RecentGameCardComponent, UserCardComponent, OpenUserProfileDirective]
     });
 
     fixture = TestBed.createComponent(RecentGameCardComponent);

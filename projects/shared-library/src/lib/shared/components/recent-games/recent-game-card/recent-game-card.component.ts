@@ -6,6 +6,7 @@ import { Utils } from 'shared-library/core/services';
 import { coreState, CoreState, categoryDictionary } from 'shared-library/core/store';
 import { UserActions } from 'shared-library/core/store/actions';
 import { AutoUnsubscribe } from 'shared-library/shared/decorators';
+
 @Component({
     selector: 'recent-game-card',
     templateUrl: './recent-game-card.component.html',
