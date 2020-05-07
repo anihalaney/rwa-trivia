@@ -156,6 +156,20 @@ describe('LeaderboardComponent', () => {
             expect(component.loggedInUserId).toBe(user.userId);
     });
 
+    it('displayMore function should be set the value correctly', () => {
+
+        component.lbsUsersSliceLastIndex = 15;
+        component.displayMore();
+        expect(component.lbsUsersSliceLastIndex).toBe(22);
+    });
+
+    it('getImageUrl function should return user image correctly', () => {
+
+        component.lbsUsersSliceLastIndex = 15;
+        component.displayMore();
+        expect(component.lbsUsersSliceLastIndex).toBe(22);
+    });
+
     it('Category dictionary should be set when values are emitted', () => {
         const categories = [];
         for (const key in TEST_DATA.categoryDictionary) {
@@ -255,7 +269,7 @@ describe('LeaderboardComponent', () => {
         expect(component.leaderBoardCat).toEqual(leaderBoardCat);
     });
 
-    it('leaderboard category should be set when leaderboard contains more than one user values are emitted', () => {
+    it('leaderboard data should be set when leaderboard contains more than one user values are emitted', () => {
         const user = TEST_DATA.userList[0];
         const categories = [];
         for (const key in TEST_DATA.categoryDictionary) {
@@ -300,9 +314,12 @@ describe('LeaderboardComponent', () => {
             `${leaderBoardStatDict.id.charAt(0).toUpperCase()}${leaderBoardStatDict.id.slice(1)}`] =
             leaderBoardStatDict.users;
         });
-
+        expect(component.items).toEqual(items);
         expect(component.leaderBoardCat).toEqual(leaderBoardCat);
         expect(component.leaderBoardStatDict).toEqual(leaderBoardStatDictArr);
+        expect(component.lbsUsersSliceStartIndex).toEqual(0);
+        expect(component.lbsUsersSliceStartIndex).toEqual(0);
+        expect(component.selectedCatList).toEqual(leaderBoardStatDictArr[items[0]]);
     });
 
     afterEach(() => {

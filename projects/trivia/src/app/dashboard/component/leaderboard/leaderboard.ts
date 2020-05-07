@@ -178,9 +178,5 @@ export class Leaderboard implements OnDestroy {
     this.cd.markForCheck();
   }
 
-  getImageUrl(user: User) {
-    return this.utils.getImageUrl(user, 44, 40, "44X40");
-  }
-
   ngOnDestroy() {}
 }
