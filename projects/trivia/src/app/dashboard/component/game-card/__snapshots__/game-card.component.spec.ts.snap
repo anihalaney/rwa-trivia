@@ -1,0 +1,133 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`GameCardComponent should match snapshot 1`] = `
+<game-card
+  PlayerMode={[Function Object]}
+  applicationSettings={[Function Object]}
+  categoryDict={[Function Object]}
+  categoryList={[Function Array]}
+  cd={[Function ViewRef_]}
+  defaultAvatar={[Function String]}
+  game={[Function Game]}
+  gameStatus={[Function Object]}
+  isHidePlayNow="false"
+  otherUserId={[Function String]}
+  randomCategoryId="0"
+  store={[Function MockStore]}
+  subscriptions={[Function Array]}
+  totalRound={[Function Number]}
+  user={[Function Object]}
+  user$={[Function Store]}
+  userCardType={[Function Object]}
+  userDict={[Function Object]}
+  userDict$={[Function Store]}
+  utils={[Function Object]}
+>
+  <div
+    class="innerli"
+  >
+    
+    <div
+      class="T-tagging ellipsis"
+    >
+      
+    </div>
+    <div
+      class="row"
+    >
+      
+      
+      
+      
+      <div
+        class="textcenter clearfix"
+      >
+        <div
+          class="col-xs-6 div-right-border"
+        >
+          <app-user-card />
+          <span
+            class="vs"
+          >
+             Vs 
+          </span>
+        </div>
+        <div
+          class="col-xs-6"
+        >
+          <app-user-card />
+        </div>
+      </div>
+      <div
+        class="clearfix"
+      >
+        <div
+          class="col-xs-6 div-right-border div-score score-text-align"
+        >
+          <div
+            class="dark"
+          >
+            Score 10
+          </div>
+        </div>
+        <div
+          class="col-xs-6 div-score score-text-align"
+        >
+          <div
+            class="dark"
+          >
+            Score 1
+          </div>
+        </div>
+      </div>
+      <div
+        class="text-align clearfix"
+      >
+        <div
+          class="div-width div-right-border float-left"
+        >
+          
+          
+          
+          
+        </div>
+        <div
+          class="div-width text-align padding-right float-right"
+        >
+          
+          
+          
+          
+        </div>
+      </div>
+      
+      <div
+        class="col-xs-12 div-spacing textcenter"
+      >
+        <span
+          class="light"
+        >
+          Round 3 / 16
+        </span>
+      </div>
+    </div>
+    <div
+      class="textcenter"
+    >
+      
+    </div>
+    
+    
+    
+    <div
+      class="opponent"
+    >
+      <a
+        class="btn-share opponent-turn"
+      >
+        Opponent's Turn 
+      </a>
+    </div>
+  </div>
+</game-card>
+`;
