@@ -192,9 +192,15 @@ describe('LeaderboardComponent', () => {
 
     it('score board should be set when values are emitted', () => {
         const user = TEST_DATA.userList[0];
+        const categories = [];
+        for (const key in TEST_DATA.categoryDictionary) {
+            if (TEST_DATA.categoryDictionary.hasOwnProperty(key)) {
+                categories.push(TEST_DATA.categoryDictionary[key]);
+            }
+        }
         mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
                 topTopics: [],
-                categories: [],
+                categories: categories,
                 user: user
         });
 
@@ -220,8 +226,47 @@ describe('LeaderboardComponent', () => {
             topTopics.push({id: data.id, categoryName: data.key, type: data.key});
         });
 
+        mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
+                user: user,
+                topTopics: topTopics,
+                categories: categories
+        });
+
         mockStore.overrideSelector<AppState, Partial<DashboardState>>(appState.dashboardState, {
             scoreBoard: TEST_DATA.leaderBoard
+        });
+
+        mockStore.refreshState();
+
+        const leaderBoardCat = [];
+        const items = [];
+        TEST_DATA.leaderBoard.map(
+            (leaderBoard: any) => {
+              if (leaderBoard.users.length > 0) {
+                leaderBoardCat.push(leaderBoard['type'] === 'category' ?  TEST_DATA.categoryDictionary[leaderBoard.id].categoryName :
+                (`${leaderBoard.id.charAt(0).toUpperCase()}${leaderBoard.id.slice(1)}`));
+              }
+              items.push(leaderBoard['type'] === 'category' ?  TEST_DATA.categoryDictionary[leaderBoard.id].categoryName :
+              (`${leaderBoard.id.charAt(0).toUpperCase()}${leaderBoard.id.slice(1)}`));
+            }
+        );
+
+
+        expect(component.leaderBoardCat).toEqual(leaderBoardCat);
+    });
+
+    it('leaderboard category should be set when leaderboard contains more than one user values are emitted', () => {
+        const user = TEST_DATA.userList[0];
+        const categories = [];
+        for (const key in TEST_DATA.categoryDictionary) {
+            if (TEST_DATA.categoryDictionary.hasOwnProperty(key)) {
+                categories.push(TEST_DATA.categoryDictionary[key]);
+            }
+        }
+
+        const topTopics = [];
+        TEST_DATA.topTopics.forEach(data => {
+            topTopics.push({id: data.id, categoryName: data.key, type: data.key});
         });
 
         mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
@@ -230,25 +275,34 @@ describe('LeaderboardComponent', () => {
                 categories: categories
         });
 
-
-
-
-        // const leaderBoardCat = [];
-        // const items = [];
-        // TEST_DATA.leaderBoard.map(
-        //     (leaderBoard: any) => {
-        //       if (leaderBoard.users.length > 0) {
-        //         leaderBoardCat.push(leaderBoard['type'] === 'category' ?  TEST_DATA.categoryDictionary[leaderBoard.id].categoryName :
-        //         (`${leaderBoard.id.charAt(0).toUpperCase()}${leaderBoard.id.slice(1)}`));
-        //       }
-        //       items.push(leaderBoard['type'] === 'category' ?  TEST_DATA.categoryDictionary[leaderBoard.id].categoryName :
-        //       (`${leaderBoard.id.charAt(0).toUpperCase()}${leaderBoard.id.slice(1)}`));
-        //     }
-        // );
-
+        mockStore.overrideSelector<AppState, Partial<DashboardState>>(appState.dashboardState, {
+            scoreBoard: TEST_DATA.leaderBoard
+        });
 
         mockStore.refreshState();
-        expect(component.leaderBoardStatDictArray).toEqual(TEST_DATA.leaderBoard);
+
+        const leaderBoardCat = [];
+        const items = [];
+        const leaderBoardStatDictArr = {};
+        TEST_DATA.leaderBoard.map(
+            (leaderBoard: any) => {
+              if (leaderBoard.users.length > 0) {
+                leaderBoardCat.push(leaderBoard['type'] === 'category' ?  TEST_DATA.categoryDictionary[leaderBoard.id].categoryName :
+                (`${leaderBoard.id.charAt(0).toUpperCase()}${leaderBoard.id.slice(1)}`));
+              }
+              items.push(leaderBoard['type'] === 'category' ?  TEST_DATA.categoryDictionary[leaderBoard.id].categoryName :
+              (`${leaderBoard.id.charAt(0).toUpperCase()}${leaderBoard.id.slice(1)}`));
+            }
+        );
+        TEST_DATA.leaderBoard.filter((leaderBoardStatDict: any) => {
+            leaderBoardStatDictArr[leaderBoardStatDict['type'] === 'category' ?
+            TEST_DATA.categoryDictionary[leaderBoardStatDict.id].categoryName :
+            `${leaderBoardStatDict.id.charAt(0).toUpperCase()}${leaderBoardStatDict.id.slice(1)}`] =
+            leaderBoardStatDict.users;
+        });
+
+        expect(component.leaderBoardCat).toEqual(leaderBoardCat);
+        expect(component.leaderBoardStatDict).toEqual(leaderBoardStatDictArr);
     });
 
     afterEach(() => {

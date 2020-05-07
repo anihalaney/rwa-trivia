@@ -128,7 +128,7 @@ export class Leaderboard implements OnDestroy {
           })
         )
         .subscribe(lbsStat => {
-          if (lbsStat) {
+          if (lbsStat  && Object.entries(this.categoryDict).length > 0) {
             this.leaderBoardStatDictArray = lbsStat;
             this.items = [];
             this.leaderBoardStatDictArray.map(
