@@ -1,8 +1,8 @@
 module.exports = {
-    coverageDirectory: '<rootDir>/test/coverage/shared-library',
+    coverageDirectory: '<rootDir>/test/coverage/trivia-admin',
     reporters: ['default', ['jest-stare', {
-        "resultDir": "test/result/shared-library",
-        "coverageLink": "./../coverage/shared-library/index.html"
+        "resultDir": "test/result/trivia-admin",
+        "coverageLink": "./../../coverage/trivia-admin/index.html"
     }]],
   };
 
