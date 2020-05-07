@@ -35,7 +35,7 @@ ng-quill-tex-0.0.1.tgz
 # misc
 /.sass-cache
 /connect.lock
-/coverage/*
+/test/*
 /libpeerconnection.log
 npm-debug.log
 yarn-error.log
