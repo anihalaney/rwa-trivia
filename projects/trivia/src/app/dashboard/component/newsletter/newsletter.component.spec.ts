@@ -61,7 +61,7 @@ describe('Testing Newsletter Component', () => {
     const user = TEST_DATA.userList[2];
     mockCoreSelector.setResult({ user });
     mockStore.refreshState();
-    expect(component.subscriptionForm.get('email').value).toEqual('test@test.com');
+    expect(component.subscriptionForm.get('email').value).toEqual(user.email);
 
   });
 
