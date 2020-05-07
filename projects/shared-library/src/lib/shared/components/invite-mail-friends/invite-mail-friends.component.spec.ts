@@ -7,13 +7,12 @@ import { provideMockStore, MockStore } from '@ngrx/store/testing';
 import { coreState, CoreState, UserActions, ActionWithPayload } from 'shared-library/core/store';
 import { Utils, WindowRef } from 'shared-library/core/services';
 import { MatSnackBarModule } from '@angular/material';
-import { AppState } from '../../../../../../trivia/src/app/store';
 import { TEST_DATA } from 'shared-library/testing/test.data';
 
 describe('InviteMailFriendsComponent', () => {
     let component: InviteMailFriendsComponent;
     let fixture: ComponentFixture<InviteMailFriendsComponent>;
-    let mockStore: MockStore<AppState>;
+    let mockStore: MockStore<CoreState>;
     let spy: any;
     let mockCoreSelector: MemoizedSelector<CoreState, Partial<CoreState>>;
 
@@ -35,7 +34,7 @@ describe('InviteMailFriendsComponent', () => {
             }),
                 UserActions,
                 Utils,
-                WindowRef,],
+                WindowRef, ],
             declarations: [InviteMailFriendsComponent]
         });
 
@@ -112,21 +111,22 @@ describe('InviteMailFriendsComponent', () => {
         component.invitationForm.controls['email'].setValue('test@test');
         component.onSubscribe();
         expect(component.errorMsg).toBe('Following email is not valid address!');
-    })
+    });
 
 
+    // tslint:disable-next-line: max-line-length
     it(`on Subscribe check if email is invalid then invalid email will add into invalid email list and show error msg should be false `, () => {
         component.invitationForm.controls['email'].setValue('test@test');
         component.onSubscribe();
         expect(component.showErrorMsg).toBeTruthy();
         expect(component.invalidEmailList.length).toEqual(1);
-    })
+    });
 
     it(`on Subscribe errorMsg message should be set if wrong multiple email inserted `, () => {
         component.invitationForm.controls['email'].setValue('test@test,second.mail');
         component.onSubscribe();
         expect(component.errorMsg).toBe('Following emails are not valid address!');
-    })
+    });
 
 
     it(`on Subscribe show error message should be true set if invalid single email inserted`, () => {
@@ -134,20 +134,20 @@ describe('InviteMailFriendsComponent', () => {
         component.onSubscribe();
         expect(component.showErrorMsg).toBeTruthy();
         expect(component.invalidEmailList.length).toEqual(2);
-    })
+    });
 
 
     it(`on Subscribe invalid email should push on invalidEmailList list should 1`, () => {
         component.invitationForm.controls['email'].setValue('test@test,test@mail.com');
         component.onSubscribe();
         expect(component.invalidEmailList.length).toEqual(1);
-    })
+    });
 
     it(`on Subscribe valid email should push on validEmail list length should be 2`, () => {
         component.invitationForm.controls['email'].setValue('test@test,test@mail.com,trivia@mail.com');
         component.onSubscribe();
         expect(component.validEmail.length).toEqual(2);
-    })
+    });
 
     it(`on Subscribe should dispatch action to add user invitation with correct payload `, () => {
         component.invitationForm.controls['email'].setValue('trivia@mail.com');
@@ -158,7 +158,7 @@ describe('InviteMailFriendsComponent', () => {
         const payloadData = {
             userId: user.userId,
             emails: ['trivia@mail.com']
-        }
+        };
 
         spy.and.callFake((action: ActionWithPayload<string>) => {
             expect(action.type).toEqual(UserActions.ADD_USER_INVITATION);
@@ -167,38 +167,38 @@ describe('InviteMailFriendsComponent', () => {
 
         component.onSubscribe();
         expect(mockStore.dispatch).toHaveBeenCalled();
-    })
+    });
 
     it(`Invitation message should set to showSuccessMsg`, () => {
-        const userProfileSaveStatus = "Invitation is sent on user@user.com";
+        const userProfileSaveStatus = 'Invitation is sent on user@user.com';
         mockCoreSelector.setResult({ userProfileSaveStatus });
         mockStore.refreshState();
         expect(component.showSuccessMsg).toEqual(userProfileSaveStatus);
     });
 
     it(`Invitation message should not set to showSuccessMsg if it status is 'NONE'`, () => {
-        const userProfileSaveStatus = "NONE";
+        const userProfileSaveStatus = 'NONE';
         mockCoreSelector.setResult({ userProfileSaveStatus });
         mockStore.refreshState();
         expect(component.showSuccessMsg).toBeUndefined();
     });
 
     it(`Invitation message should not set to showSuccessMsg if it status is 'IN PROCESS'`, () => {
-        const userProfileSaveStatus = "IN PROCESS";
+        const userProfileSaveStatus = 'IN PROCESS';
         mockCoreSelector.setResult({ userProfileSaveStatus });
         mockStore.refreshState();
         expect(component.showSuccessMsg).toBeUndefined();
     });
 
     it(`Invitation message should not set to showSuccessMsg if it status is 'SUCCESS'`, () => {
-        const userProfileSaveStatus = "SUCCESS";
+        const userProfileSaveStatus = 'SUCCESS';
         mockCoreSelector.setResult({ userProfileSaveStatus });
         mockStore.refreshState();
         expect(component.showSuccessMsg).toBeUndefined();
     });
 
     it(`Invitation message should not set to showSuccessMsg if it status is 'MAKE FRIEND SUCCESS'`, () => {
-        const userProfileSaveStatus = "MAKE FRIEND SUCCESS";
+        const userProfileSaveStatus = 'MAKE FRIEND SUCCESS';
         mockCoreSelector.setResult({ userProfileSaveStatus });
         mockStore.refreshState();
         expect(component.showSuccessMsg).toBeUndefined();

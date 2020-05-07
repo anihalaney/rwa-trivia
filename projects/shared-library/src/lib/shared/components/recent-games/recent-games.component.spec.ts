@@ -3,19 +3,18 @@ import { RecentGamesComponent } from './recent-games.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { StoreModule, MemoizedSelector, Store } from '@ngrx/store';
 import { provideMockStore, MockStore } from '@ngrx/store/testing';
-import { coreState, CoreState, UserActions, categoryDictionary, getCategories } from 'shared-library/core/store';
+import { ActionWithPayload, coreState, CoreState, UserActions } from 'shared-library/core/store';
 import { Utils, WindowRef } from 'shared-library/core/services';
 import { MatSnackBarModule } from '@angular/material';
-import { AppState } from '../../../../../../trivia/src/app/store';
 import { TEST_DATA } from 'shared-library/testing/test.data';
-import { User, Game, PlayerMode, GameStatus } from 'shared-library/shared/model';
+import { User, Game } from 'shared-library/shared/model';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { ActionWithPayload } from '../../../core/store';
+
 
 describe('RecentGamesComponent', () => {
   let component: RecentGamesComponent;
   let fixture: ComponentFixture<RecentGamesComponent>;
-  let mockStore: MockStore<AppState>;
+  let mockStore: MockStore<CoreState>;
   let spy: any;
   let mockCoreSelector: MemoizedSelector<CoreState, Partial<CoreState>>;
   beforeEach(async(() => {
@@ -35,7 +34,7 @@ describe('RecentGamesComponent', () => {
       }),
         UserActions,
         Utils,
-        WindowRef,],
+        WindowRef, ],
 
     });
 

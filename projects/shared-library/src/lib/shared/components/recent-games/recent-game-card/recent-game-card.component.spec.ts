@@ -6,7 +6,6 @@ import { provideMockStore, MockStore } from '@ngrx/store/testing';
 import { coreState, CoreState, UserActions, categoryDictionary } from 'shared-library/core/store';
 import { Utils, WindowRef } from 'shared-library/core/services';
 import { MatSnackBarModule } from '@angular/material';
-import { AppState } from '../../../../../../../trivia/src/app/store';
 import { TEST_DATA } from 'shared-library/testing/test.data';
 import { Game } from 'shared-library/shared/model';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
@@ -14,7 +13,7 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 describe('RecentGameCardComponent', () => {
   let component: RecentGameCardComponent;
   let fixture: ComponentFixture<RecentGameCardComponent>;
-  let mockStore: MockStore<AppState>;
+  let mockStore: MockStore<CoreState>;
   let spy: any;
   let mockCoreSelector: MemoizedSelector<CoreState, Partial<CoreState>>;
   let mockCategorySelector: MemoizedSelector<any, {}>;
