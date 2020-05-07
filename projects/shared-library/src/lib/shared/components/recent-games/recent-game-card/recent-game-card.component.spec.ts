@@ -53,7 +53,7 @@ describe('RecentGameCardComponent', () => {
     component.game = Game.getViewModel(dbModel);
 
     mockCoreSelector = mockStore.overrideSelector<CoreState, Partial<CoreState>>(coreState, {});
-    mockCategorySelector = mockStore.overrideSelector<any, Partial<any>>(categoryDictionary, {});
+    mockCategorySelector = mockStore.overrideSelector(categoryDictionary, {});
     spy = spyOn(mockStore, 'dispatch');
     fixture.detectChanges();
   }));
@@ -63,14 +63,10 @@ describe('RecentGameCardComponent', () => {
   });
 
   it('On subscribe categoryDictionary, categoryDict should set', () => {
-    const categoryDictionary = TEST_DATA.categoryDictionary;
-    // console.log('s', categoryDictionary);
-    // mockCategorySelector.setResult({ categoryDictionary });
-    // mockStore.refreshState();
-    // console.log("componenet>>", component.categoryDict)
-    // console.log("categoryDictionary>>", categoryDictionary)
-    // expect(component.categoryDict).toBe(categoryDictionary);
-    expect(component).toBeTruthy();
+    const categoryDict = TEST_DATA.categoryDictionary;
+    mockCategorySelector.setResult(categoryDict);
+    mockStore.refreshState();
+    expect(component.categoryDict).toBe(categoryDict);
   });
 
   it('On load component getOpponentId should call to get opponentId', () => {
