@@ -106,6 +106,11 @@ describe('LeaderboardComponent', () => {
         expect(component.maxLeaderBoardDisplay).toEqual(10);
    });
 
+    it('trackByFn should return  index', () => {
+        const index = component.trackByFn(5, {});
+        expect(index).toEqual(5);
+    });
+
     it('User dictionary should be set when values are emitted', () => {
         user = { ...TEST_DATA.userList[0] };
         const userDict = {};
@@ -163,20 +168,8 @@ describe('LeaderboardComponent', () => {
         expect(component.lbsUsersSliceLastIndex).toBe(22);
     });
 
-    it('getImageUrl function should return user image correctly', () => {
-
-        component.lbsUsersSliceLastIndex = 15;
-        component.displayMore();
-        expect(component.lbsUsersSliceLastIndex).toBe(22);
-    });
-
     it('Category dictionary should be set when values are emitted', () => {
-        const categories = [];
-        for (const key in TEST_DATA.categoryDictionary) {
-            if (TEST_DATA.categoryDictionary.hasOwnProperty(key)) {
-                categories.push(TEST_DATA.categoryDictionary[key]);
-            }
-        }
+        const categories = TEST_DATA.categoryList;
 
         mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
             topTopics: [],
@@ -206,12 +199,7 @@ describe('LeaderboardComponent', () => {
 
     it('score board should be set when values are emitted', () => {
         const user = TEST_DATA.userList[0];
-        const categories = [];
-        for (const key in TEST_DATA.categoryDictionary) {
-            if (TEST_DATA.categoryDictionary.hasOwnProperty(key)) {
-                categories.push(TEST_DATA.categoryDictionary[key]);
-            }
-        }
+        const categories = TEST_DATA.categoryList;
         mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
                 topTopics: [],
                 categories: categories,
@@ -228,12 +216,7 @@ describe('LeaderboardComponent', () => {
 
     it('leaderboard category should be set when leaderboard contains more than one user values are emitted', () => {
         const user = TEST_DATA.userList[0];
-        const categories = [];
-        for (const key in TEST_DATA.categoryDictionary) {
-            if (TEST_DATA.categoryDictionary.hasOwnProperty(key)) {
-                categories.push(TEST_DATA.categoryDictionary[key]);
-            }
-        }
+        const categories = TEST_DATA.categoryList;
 
         const topTopics = [];
         TEST_DATA.topTopics.forEach(data => {
@@ -271,12 +254,7 @@ describe('LeaderboardComponent', () => {
 
     it('leaderboard data should be set when leaderboard contains more than one user values are emitted', () => {
         const user = TEST_DATA.userList[0];
-        const categories = [];
-        for (const key in TEST_DATA.categoryDictionary) {
-            if (TEST_DATA.categoryDictionary.hasOwnProperty(key)) {
-                categories.push(TEST_DATA.categoryDictionary[key]);
-            }
-        }
+        const categories = TEST_DATA.categoryList;
 
         const topTopics = [];
         TEST_DATA.topTopics.forEach(data => {
