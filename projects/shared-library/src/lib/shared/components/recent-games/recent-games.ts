@@ -33,8 +33,11 @@ export class RecentGames {
     this.recentGames$ = store.select(coreState).pipe(select(s => s.getGameResult));
 
     this.subscriptions.push(this.recentGames$.subscribe((recentGames) => {
-      this.recentGames = recentGames;
-      this.cd.markForCheck();
+      if (recentGames) {
+        this.recentGames = recentGames;
+        this.cd.markForCheck();
+      }
+
     }));
   }
 
