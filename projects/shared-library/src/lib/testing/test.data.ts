@@ -1005,17 +1005,17 @@ export const TEST_DATA = {
                   ],
                   "badge": {
                       "name": "paper",
-                      "won": false
+                      "won": true
                   },
                   "isReported": false
               },
               {
-                  "playerId": "4kFa6HRvP5OhvYXsH9mEsRrXj4o2",
+                  "playerId": "yP7sLu5TmYRUO9YT4tWrYLAqxSz1",
                   "questionId": "USxShnwfA65wkxs2X9rY",
                   "addedOn": 1587463742000,
                   "playerAnswerId": "2",
                   "playerAnswerInSeconds": 1,
-                  "answerCorrect": true,
+                  "answerCorrect": false,
                   "round": 3,
                   "categoryId": [
                       4
@@ -1066,15 +1066,16 @@ export const TEST_DATA = {
                       "lizard"
                   ],
                   "consecutiveCorrectAnswers": 1,
-                  "score": 10
+                  "score": 9
               },
               "yP7sLu5TmYRUO9YT4tWrYLAqxSz1": {
                   "avgAnsTime": 2,
                   "badge": [
-                      "lizard"
+                      "lizard",
+                      "paper"
                   ],
                   "consecutiveCorrectAnswers": 0,
-                  "score": 1
+                  "score": 2
               }
           },
           "round": 3
