@@ -3,19 +3,19 @@
   <div class="row">
     <ng-container *ngIf="game.gameOptions.playerMode == PlayerMode.Single">
       <div class="col-xs-12 textcenter clearfix">
-        <app-user-card [userId]="user.userId" [type]="userCardType.USER_WEB_IMAGE_NAME_LOCATION_VERTICAL"></app-user-card>
+        <app-user-card [userId]="user?.userId" [type]="userCardType.USER_WEB_IMAGE_NAME_LOCATION_VERTICAL"></app-user-card>
         <hr>
-        <div class="dark">Score {{game.stats[user.userId].score}}</div>
+        <div class="dark">Score {{game.stats[user?.userId].score}}</div>
         <div class="div-badge">
           <ng-template *ngIf="game?.gameOptions.isBadgeWithCategory; else showBadge" ngFor let-i="index"  let-badge [ngForOf]="totalBadges" >
             <div class="sprite {{applicationSettings?.badges[game?.stats[user?.userId]?.badge[i]]?.class ? applicationSettings?.badges[game?.stats[user?.userId]?.badge[i]]?.class : 'score0'}}"></div>
           </ng-template>
           <ng-template #showBadge >
-            <div [ngClass]="game.stats[user.userId].score >= 1?'score1':'score0'" class="sprite"></div>
-            <div [ngClass]="game.stats[user.userId].score >= 2?'score2':'score0'" class="sprite"></div>
-            <div [ngClass]="game.stats[user.userId].score >= 3?'score3':'score0'" class="sprite"></div>
-            <div [ngClass]="game.stats[user.userId].score >= 4?'score4':'score0'" class="sprite"></div>
-            <div [ngClass]="game.stats[user.userId].score >= 5?'score5':'score0'" class="sprite"></div>
+            <div [ngClass]="game.stats[user?.userId].score >= 1?'score1':'score0'" class="sprite"></div>
+            <div [ngClass]="game.stats[user?.userId].score >= 2?'score2':'score0'" class="sprite"></div>
+            <div [ngClass]="game.stats[user?.userId].score >= 3?'score3':'score0'" class="sprite"></div>
+            <div [ngClass]="game.stats[user?.userId].score >= 4?'score4':'score0'" class="sprite"></div>
+            <div [ngClass]="game.stats[user?.userId].score >= 5?'score5':'score0'" class="sprite"></div>
           </ng-template>
 
         </div>
