@@ -44,7 +44,9 @@ export class InviteMailFriends {
     });
     this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.applicationSettings))
       .subscribe(appSettings => {
-        this.applicationSettings = appSettings[0];
+        if (appSettings) {
+          this.applicationSettings = appSettings[0];
+        }
       }));
   }
 
