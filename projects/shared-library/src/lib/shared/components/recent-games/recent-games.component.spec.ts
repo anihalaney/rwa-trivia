@@ -34,7 +34,7 @@ describe('RecentGamesComponent', () => {
       }),
         UserActions,
         Utils,
-        WindowRef, ],
+        WindowRef],
 
     });
 
@@ -50,7 +50,7 @@ describe('RecentGamesComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('on component load initial value should set', () => {
+  it('on component load should component be initialized with correct values', () => {
     expect(component.startIndex).toBe(0);
     expect(component.nextIndex).toBe(4);
     expect(component.maxIndex).toBe(10);
@@ -76,7 +76,7 @@ describe('RecentGamesComponent', () => {
     expect(mockStore.dispatch).toHaveBeenCalled();
   });
 
-  it('set recentGames on subscribe getGameResult', () => {
+  it('Recent games should be set when store emits game results', () => {
     const games = TEST_DATA.game.map(dbModel => {
       return Game.getViewModel(dbModel);
     });
@@ -86,7 +86,7 @@ describe('RecentGamesComponent', () => {
   });
 
 
-  it('on call getMoreCard function nextIndex should be 14', () => {
+  it('When we have more recent games than current index plus max allowed, call to get more card should set next index to max allowed plus next index', () => {
     component.recentGames = TEST_DATA.game.map(dbModel => {
       return Game.getViewModel(dbModel);
     });
@@ -95,19 +95,17 @@ describe('RecentGamesComponent', () => {
 
   });
 
-  it('on call second time getMoreCard function next Index should be 16', () => {
+
+  it('When we have less recent games than max index ,call to get more card should set next index to next index plus recent games length', () => {
     component.recentGames = TEST_DATA.game.map(dbModel => {
       return Game.getViewModel(dbModel);
-    });
-
-    // Set nextIndex 14 because we call getMoreCard second time.
-    component.nextIndex = 14;
+    }).slice(0, 5);
     component.getMoreCard();
-    expect(component.nextIndex).toBe(16);
+    expect(component.nextIndex).toBe(9);
   });
 
 
-  it('on call second time getMoreCard function next Index should be 12', () => {
+  it('When max allowed plus next index are greater than length of recent games , call to get more card should set next index to length of recent games', () => {
     // next Index should be  12 because we have less recentGames then  (nextIndex+maxIndex)
 
     // slice recentGames 12

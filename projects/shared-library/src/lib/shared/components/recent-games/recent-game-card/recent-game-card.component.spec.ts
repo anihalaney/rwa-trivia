@@ -61,27 +61,27 @@ describe('RecentGameCardComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('On subscribe categoryDictionary, categoryDict should set', () => {
+  it('Category dictionary should be set when store emit Category dictionary', () => {
     const categoryDict = TEST_DATA.categoryDictionary;
     mockCategorySelector.setResult(categoryDict);
     mockStore.refreshState();
     expect(component.categoryDict).toBe(categoryDict);
   });
 
-  it('On load component getOpponentId should call to get opponentId', () => {
+  it('on component load should call getOppnonentID function', () => {
     spy = spyOn(component, 'getOpponentId');
     component.ngOnInit();
     expect(component.getOpponentId).toHaveBeenCalled();
   });
 
-  it('Check getOpponentId function should return opponent id', () => {
+  it('call to getOpponentId function should return correct opponent Id for passed game', () => {
     const dbModel = TEST_DATA.game[0];
     const opponentId = dbModel.playerIds[1];
     const game = Game.getViewModel(dbModel);
     expect(component.getOpponentId(game)).toBe(opponentId);
   });
 
-  it('on subscribe userDict, userDict should set ', () => {
+  it('User dictionary should be set when store emit user dictionary', () => {
     const userDict = TEST_DATA.userDict;
     mockCoreSelector.setResult({ userDict: userDict });
     mockStore.refreshState();
