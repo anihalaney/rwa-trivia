@@ -2,7 +2,7 @@ import { TestBed, ComponentFixture, async } from '@angular/core/testing';
 import { NewsletterComponent } from './newsletter.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { StoreModule, Store, MemoizedSelector } from '@ngrx/store';
-import { User, Subscription, Subscribers } from 'shared-library/shared/model';
+import { Subscription, Subscribers } from 'shared-library/shared/model';
 import { AppState, appState } from '../../../store';
 import { provideMockStore, MockStore } from '@ngrx/store/testing';
 import { CoreState } from 'shared-library/core/store';
@@ -14,7 +14,6 @@ describe('Testing Newsletter Component', () => {
 
   let component: NewsletterComponent;
   let fixture: ComponentFixture<NewsletterComponent>;
-  let user: User;
   let mockStore: MockStore<AppState>;
   let spy: any;
   let mockCoreSelector: MemoizedSelector<AppState, Partial<CoreState>>;
@@ -61,7 +60,7 @@ describe('Testing Newsletter Component', () => {
     const user = TEST_DATA.userList[2];
     mockCoreSelector.setResult({ user });
     mockStore.refreshState();
-    expect(component.subscriptionForm.get('email').value).toEqual('test@test.com');
+    expect(component.subscriptionForm.get('email').value).toEqual(user.email);
 
   });
 
@@ -145,9 +144,10 @@ describe('Testing Newsletter Component', () => {
   });
 
   it('on subscribe should dispatch action to add subscriber with correct payload when user is logged in', () => {
+    const user = TEST_DATA.userList[2];
     const subscription = new Subscription();
-    subscription.email = 'test@test.com';
-    subscription.userId = '1';
+    subscription.email = user.email;
+    subscription.userId = user.userId;
     spy.and.callFake((action: dashboardActions.AddSubscriber) => {
       expect(action.type).toEqual(dashboardActions.DashboardActionTypes.ADD_SUBSCRIBER);
       expect(action.payload.subscription).toEqual(subscription);

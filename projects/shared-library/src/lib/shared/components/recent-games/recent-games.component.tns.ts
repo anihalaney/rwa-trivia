@@ -4,7 +4,7 @@ import { UserActions } from 'shared-library/core/store/actions';
 import { Page } from 'tns-core-modules/ui/page';
 import { CoreState } from 'shared-library/core/store';
 import { RecentGames } from './recent-games';
-import { AutoUnsubscribe } from "ngx-auto-unsubscribe";
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 
 @Component({
   selector: 'recent-games',
