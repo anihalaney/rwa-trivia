@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "sourceMap": true,
+    "baseUrl": "",
     "allowJs": true,
     "declaration": false,
     "moduleResolution": "node",
@@ -17,12 +18,11 @@
       "shared-library/*": [
           "../../projects/shared-library/src/lib/*"
       ],
-      "test-data/*": ["../../../test/*"]
+      "test/*": ["../../test/*"]
     },
     "outDir": "../out-tsc/spec",
     "module": "commonjs",
     "target": "es2015",
-    "baseUrl": "",
     "types": [
       "jest",
       "jquery",
@@ -36,7 +36,6 @@
   "include": [
     "**/*.spec.ts",
     "**/*.d.ts",
-    "./../../test/data/*.ts"
   ],
   "exclude": [
     "node_modules",

@@ -8,7 +8,7 @@ import { provideMockStore, MockStore } from '@ngrx/store/testing';
 import { CoreState } from 'shared-library/core/store';
 import { DashboardState } from '../../store';
 import * as dashboardActions from '../../store/actions';
-import { UserList } from 'test-data/data';
+import { UserList } from 'test/data';
 
 describe('Testing Newsletter Component', () => {
 
