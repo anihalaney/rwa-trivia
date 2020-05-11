@@ -5,7 +5,7 @@ import { User, Game, Category, PlayerMode, GameStatus, userCardType } from 'shar
 import { Utils } from 'shared-library/core/services';
 import { coreState, CoreState, categoryDictionary } from 'shared-library/core/store';
 import { UserActions } from 'shared-library/core/store/actions';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 
 @Component({
     selector: 'recent-game-card',
@@ -34,8 +34,11 @@ export class RecentGameCardComponent implements OnInit, OnDestroy {
     userCardType = userCardType;
 
     constructor(private store: Store<CoreState>, private userActions: UserActions, public utils: Utils, private cd: ChangeDetectorRef) {
+
         this.categoryDictObs = store.select(categoryDictionary);
-        this.subscriptions.push(this.categoryDictObs.subscribe(categoryDict => this.categoryDict = categoryDict));
+        this.subscriptions.push(this.categoryDictObs.subscribe(categoryDict => {
+            this.categoryDict = categoryDict
+        }));
     }
 
     ngOnInit(): void {
@@ -44,7 +47,6 @@ export class RecentGameCardComponent implements OnInit, OnDestroy {
             this.userDict = userDict;
             this.cd.markForCheck();
         }));
-
         if (this.game) {
             this.otherUserId = this.getOpponentId(this.game);
         }
