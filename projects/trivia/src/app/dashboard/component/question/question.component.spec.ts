@@ -1,10 +1,10 @@
-import { async, ComponentFixture, TestBed, tick, fakeAsync } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { QuestionComponent } from './question.component';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { Store, MemoizedSelector } from '@ngrx/store';
+import { Store } from '@ngrx/store';
 import { provideMockStore, MockStore } from '@ngrx/store/testing';
 import { Utils } from 'shared-library/core/services';
-import { User, Game, PlayerMode, GameStatus, Answer } from 'shared-library/shared/model';
+import { Answer } from 'shared-library/shared/model';
 import { AppState, appState } from '../../../store';
 import { TEST_DATA } from 'shared-library/testing/test.data';
 import { MatSnackBarModule } from '@angular/material';
@@ -18,7 +18,6 @@ describe('QuestionComponent', () => {
     let fixture: ComponentFixture<QuestionComponent>;
     let spy: any;
     let mockStore: MockStore<AppState>;
-    // let mockDashboardSelector: MemoizedSelector<AppState, Partial<>>;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
@@ -45,8 +44,6 @@ describe('QuestionComponent', () => {
                       {
                         selector: appState.coreState,
                         value: {
-                            categories: [],
-                            questionOfTheDay: []
                         }
                       }
                     ]
@@ -199,21 +196,6 @@ describe('QuestionComponent', () => {
         );
     });
 
-    it('verify getNextQuestion function works', async () => {
-        mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
-            categories: TEST_DATA.categoryList,
-            questionOfTheDay: TEST_DATA.questionOfTheDay
-          });
-        mockStore.refreshState();
-        fixture.detectChanges();
-
-        component.getNextQuestion();
-
-        expect(spy).toHaveBeenCalledWith(
-            new QuestionActions().getQuestionOfTheDay()
-          );
-    });
-
     it('verify answerButtonClicked function should work and  answerClicked event should emit the correct index', async () => {
       spyOn(component.answerClicked, 'emit');
       mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
@@ -242,7 +224,7 @@ describe('QuestionComponent', () => {
       expect(component.answerClicked.emit).toBeCalledTimes(0);
     });
 
-    it('verify if the answer is correct UpdateQuestionStat action should fire with correct argument', async () => {
+    it('verify if the answer is correct UpdateQuestionStat action should fire with \'correct\' argument', async () => {
 
       mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
           categories: TEST_DATA.categoryList,
@@ -256,7 +238,7 @@ describe('QuestionComponent', () => {
       );
     });
 
-    it('verify if the answer is correct UpdateQuestionStat action should fire with wrong argument', async () => {
+    it('verify if the answer is wrong UpdateQuestionStat action should fire with \'wrong\' argument', async () => {
 
       mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
           categories: TEST_DATA.categoryList,
