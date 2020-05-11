@@ -1,10 +1,10 @@
-import { async, ComponentFixture, TestBed, tick, fakeAsync } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { LeaderboardComponent } from './leaderboard.component';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { Store, MemoizedSelector } from '@ngrx/store';
+import { Store } from '@ngrx/store';
 import { provideMockStore, MockStore } from '@ngrx/store/testing';
 import { Utils } from 'shared-library/core/services';
-import { User, Game, PlayerMode, GameStatus, Topic } from 'shared-library/shared/model';
+import { User, Topic } from 'shared-library/shared/model';
 import { AppState, appState } from '../../../store';
 import { TEST_DATA } from 'shared-library/testing/test.data';
 import { CoreState } from 'shared-library/core/store';
@@ -86,19 +86,19 @@ describe('LeaderboardComponent', () => {
           expect(component.userDict).toEqual({});
     });
 
-    it('logged In User should be empty intially', () => {
+    it('logged In User should be empty initially', () => {
             expect(component.loggedInUserId).toBeFalsy();
     });
 
-    it('User should be empty intially', () => {
+    it('User should be empty initially', () => {
         expect(component.user).toBeUndefined();
     });
 
-    it('Leader board data be empty intially', () => {
+    it('Leader board data be empty initially', () => {
         expect(component.leaderBoardCat).toEqual([]);
     });
 
-    it('Leader board list start index intially should be falsy', () => {
+    it('on component load leader board list start index should be -1', () => {
         expect(component.lbsSliceStartIndex).toEqual(-1);
     });
 
