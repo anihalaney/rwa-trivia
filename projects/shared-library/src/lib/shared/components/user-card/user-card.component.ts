@@ -3,7 +3,7 @@ import { User, userCardType, Invitation } from 'shared-library/shared/model';
 import { Utils } from 'shared-library/core/services';
 import { CoreState, coreState } from './../../../core/store';
 import { Store, select } from '@ngrx/store';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 import { UserActions } from '../../../core/store/actions';
 import { Observable } from 'rxjs';
 import * as lodash from 'lodash';

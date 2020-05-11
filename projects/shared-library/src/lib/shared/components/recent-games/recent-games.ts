@@ -4,8 +4,6 @@ import { User, GameStatus, Game } from 'shared-library/shared/model';
 import { coreState, CoreState } from 'shared-library/core/store';
 import { Observable } from 'rxjs';
 import { UserActions } from 'shared-library/core/store/actions';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
-
 
 export class RecentGames {
 
@@ -35,8 +33,11 @@ export class RecentGames {
     this.recentGames$ = store.select(coreState).pipe(select(s => s.getGameResult));
 
     this.subscriptions.push(this.recentGames$.subscribe((recentGames) => {
-      this.recentGames = recentGames;
-      this.cd.markForCheck();
+      if (recentGames) {
+        this.recentGames = recentGames;
+        this.cd.markForCheck();
+      }
+
     }));
   }
 

@@ -1,6 +1,6 @@
 <ng-container>
     <div class="col-xs-12 textcenter clearfix">
-        <div>
+        <div *ngIf="game">
             <div *ngIf="game.gameOptions.playerMode == PlayerMode.Single">
                 <div class="success result" *ngIf="game.winnerPlayerId && game.winnerPlayerId === user.userId">Won</div>
                 <div class="label result" *ngIf="game.winnerPlayerId !== user.userId">Lost</div>
@@ -28,7 +28,7 @@
         </div>
 
         <div class="dark">{{categoryDict[game.gameOptions.categoryIds[0]]?.categoryName.charAt(0).toUpperCase() +
-            categoryDict[game.gameOptions.categoryIds[0]]?.categoryName.slice(1)}}</div>
+            categoryDict[game.gameOptions.categoryIds[0]]?.categoryName?.slice(1)  }}</div>
         <div class="col-xs-12 no-padding card-bottom-spacing" *ngIf="game.gameOptions.playerMode==PlayerMode.Opponent">
             <div class="col-xs-6 no-padding" *ngIf="game.winnerPlayerId === user.userId">
                 <app-user-card [userId]="game.winnerPlayerId" [type]="userCardType.USER_WEB_IMAGE_NAME_RECENT_GAME_VERTICAL"> </app-user-card>
