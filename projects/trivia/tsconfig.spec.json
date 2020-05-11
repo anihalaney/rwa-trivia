@@ -16,7 +16,8 @@
     "paths": {
       "shared-library/*": [
           "../../projects/shared-library/src/lib/*"
-      ]
+      ],
+      "test-data/*": ["../../../test/*"]
     },
     "outDir": "../out-tsc/spec",
     "module": "commonjs",
@@ -34,7 +35,8 @@
   ],
   "include": [
     "**/*.spec.ts",
-    "**/*.d.ts"
+    "**/*.d.ts",
+    "./../../test/data/*.ts"
   ],
   "exclude": [
     "node_modules",
