@@ -9,7 +9,7 @@ import { AppState, appState } from '../../../store';
 import { TEST_DATA } from 'shared-library/testing/test.data';
 import { CoreState } from 'shared-library/core/store';
 import { MatSnackBarModule } from '@angular/material';
-import { UserActions, TagActions, TopicActions } from "shared-library/core/store/actions";
+import { UserActions, TagActions, TopicActions } from 'shared-library/core/store/actions';
 import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
 import { DashboardState } from '../../store';
@@ -150,7 +150,7 @@ describe('LeaderboardComponent', () => {
 
     it('Logged In user should be set when values are emitted', () => {
 
-        const user = TEST_DATA.userList[0];
+        user = TEST_DATA.userList[0];
         mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
             topTopics: [],
             categories: [],
@@ -182,7 +182,7 @@ describe('LeaderboardComponent', () => {
     });
 
     it('score board should be initially empty', () => {
-            const user = TEST_DATA.userList[0];
+            user = TEST_DATA.userList[0];
             mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
                     topTopics: [],
                     categories: [],
@@ -198,7 +198,7 @@ describe('LeaderboardComponent', () => {
     });
 
     it('score board should be set when values are emitted', () => {
-        const user = TEST_DATA.userList[0];
+        user = TEST_DATA.userList[0];
         const categories = TEST_DATA.categoryList;
         mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
                 topTopics: [],
@@ -215,7 +215,7 @@ describe('LeaderboardComponent', () => {
     });
 
     it('leaderboard category should be set when leaderboard contains more than one user values are emitted', () => {
-        const user = TEST_DATA.userList[0];
+        user = TEST_DATA.userList[0];
         const categories = TEST_DATA.categoryList;
 
         const topTopics = [];
@@ -253,7 +253,7 @@ describe('LeaderboardComponent', () => {
     });
 
     it('leaderboard data should be set when leaderboard contains more than one user values are emitted', () => {
-        const user = TEST_DATA.userList[0];
+        user = TEST_DATA.userList[0];
         const categories = TEST_DATA.categoryList;
 
         const topTopics = [];
