@@ -40,6 +40,7 @@ describe('QuestionComponent', () => {
                     }
                 }},
                 provideMockStore( {
+                   initialState: {},
                     selectors: [
                       {
                         selector: appState.coreState,
