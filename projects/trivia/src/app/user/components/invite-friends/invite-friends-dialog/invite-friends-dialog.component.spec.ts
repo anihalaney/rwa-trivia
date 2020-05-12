@@ -74,17 +74,17 @@ describe('InviteFriendsDialogComponent', () => {
 
     it('Verify if the closeModel function works', async () => {
         component.ref = { close: function () { } };
-        spy = spyOn(component, 'closeModel');
+        component.ref.close = jest.fn();
         component.closeModel();
-        expect(spy).toHaveBeenCalled();
+        expect(component.ref.close).toHaveBeenCalledTimes(1);
     });
 
     it('navLinks should be empty when component is created', () => {
-        expect(component.navLinks.length).toBe(0);
+        expect(component.navLinks).toEqual([]);
     });
 
     it('Subscription should be empty when component is created', () => {
-        expect(component.subscriptions.length).toBe(0);
+        expect(component.subscriptions).toEqual([]);
     });
 
     it('showSkipBtn should be undefined when component is created', () => {
@@ -98,5 +98,9 @@ describe('InviteFriendsDialogComponent', () => {
     it('Verify different route params and check if the value is assigned properly', () => {
         fixture.detectChanges();
         expect(component.showSkipBtn).toEqual(false);
+    });
+
+    afterEach(() => {
+        fixture.destroy();
     });
 });
