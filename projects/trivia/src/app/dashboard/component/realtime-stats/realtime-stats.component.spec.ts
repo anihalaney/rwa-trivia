@@ -23,6 +23,7 @@ describe('RealtimeStatsComponent', () => {
             // Set provider
             providers: [
                 provideMockStore({
+                    initialState: {},
                     selectors: [
                         {
                             selector: dashboardState,
@@ -52,7 +53,7 @@ describe('RealtimeStatsComponent', () => {
     });
 
     // Verifying after dispach action
-    it('Verify the type of dispach action', async () => {
+    it('Verify that the laod system stat action is dispached', async () => {
         mockStore.overrideSelector<AppState, Partial<DashboardState>>(dashboardState, {});
         mockStore.refreshState();
         fixture.detectChanges();
