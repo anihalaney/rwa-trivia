@@ -8,7 +8,7 @@ import { provideMockStore, MockStore } from '@ngrx/store/testing';
 import { CoreState } from 'shared-library/core/store';
 import { DashboardState } from '../../store';
 import * as dashboardActions from '../../store/actions';
-import { UserList } from 'test/data';
+import { testData } from 'test/data';
 
 describe('Testing Newsletter Component', () => {
 
@@ -57,7 +57,7 @@ describe('Testing Newsletter Component', () => {
   afterEach(() => { fixture.destroy(); });
 
   it('Form should have Email set for logged in user', () => {
-    const user = UserList[2];
+    const user = testData.userList[2];
     mockCoreSelector.setResult({ user });
     mockStore.refreshState();
     expect(component.subscriptionForm.get('email').value).toEqual(user.email);
@@ -65,7 +65,7 @@ describe('Testing Newsletter Component', () => {
   });
 
   it('Form should be valid for logged in user', () => {
-    const user =  UserList[2];
+    const user =  testData.userList[2];
     mockCoreSelector.setResult({ user });
     mockStore.refreshState();
     expect(component.subscriptionForm.valid).toBeTruthy();
@@ -144,7 +144,7 @@ describe('Testing Newsletter Component', () => {
   });
 
   it('on subscribe should dispatch action to add subscriber with correct payload when user is logged in', () => {
-    const user = UserList[2];
+    const user = testData.userList[2];
     const subscription = new Subscription();
     subscription.email = user.email;
     subscription.userId = user.userId;

@@ -1,9 +1,22 @@
-export * from './categories';
-export * from './category-dictionary';
-export * from './tag-list';
-export * from './questions';
-export * from './user-list';
-export * from './blogs';
-export * from './realtime-stats';
-export * from './games';
-export * from './application-settings';
+import { Categories } from './categories';
+import { CategoryDictionary } from './category-dictionary';
+import { TagList } from './tag-list';
+import { Questions } from './questions';
+import { UserList } from './user-list';
+import { Blogs } from './blogs';
+import { RealTimeStats } from './realtime-stats';
+import { Games } from './games';
+import { ApplicationSettings } from './application-settings';
+
+export const testData = {
+    categories: Categories,
+    categoryDictionary: CategoryDictionary,
+    tagList: TagList,
+    questions: Questions,
+    userList: UserList,
+    blogs: Blogs,
+    realtimeStats: RealTimeStats,
+    games: Games,
+    applicationSettings: ApplicationSettings
+};
+

@@ -6,7 +6,7 @@ import { provideMockStore, MockStore } from '@ngrx/store/testing';
 import { Utils } from 'shared-library/core/services';
 import { User, Game, PlayerMode, GameStatus } from 'shared-library/shared/model';
 import { AppState, appState } from '../../../store';
-import { UserList, Games, ApplicationSettings, CategoryDictionary } from 'test/data';
+import { testData } from 'test/data';
 import { CoreState } from 'shared-library/core/store';
 import { MatSnackBarModule } from '@angular/material';
 
@@ -54,7 +54,7 @@ describe('GameCardComponent', () => {
 
         component = fixture.debugElement.componentInstance;
 
-        const dbModel = Games[0];
+        const dbModel = testData.games[0];
         component.game = Game.getViewModel(dbModel);
 
     });
@@ -66,17 +66,17 @@ describe('GameCardComponent', () => {
     it(' updateRemainingTime function should be called from ngOnInit when it is user\'s turn', () => {
         component.updateRemainingTime = jest.fn();
         component.isHidePlayNow = false;
-        component.applicationSettings = ApplicationSettings;
+        component.applicationSettings = testData.applicationSettings;
 
-        component.categoryDict = CategoryDictionary;
-        user = { ...UserList[0] };
+        component.categoryDict = testData.categoryDictionary;
+        user = { ...testData.userList[0] };
         mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
             user: user
           });
           mockStore.refreshState();
         component.PlayerMode = PlayerMode;
         component.gameStatus = GameStatus;
-        const otherUser = { ...UserList[1] };
+        const otherUser = { ...testData.userList[1] };
         component.otherUserId = 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1';
         component.userDict = {'4kFa6HRvP5OhvYXsH9mEsRrXj4o2': user, 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1': otherUser};
         fixture.detectChanges();
@@ -86,19 +86,19 @@ describe('GameCardComponent', () => {
     it(' capitalizeFirstLetter should be called for all categoryId data from game options', () => {
 
         component.capitalizeFirstLetter = jest.fn();
-        component.applicationSettings = ApplicationSettings;
-        component.categoryDict = CategoryDictionary;
-        component.user = { ...UserList[0] };
+        component.applicationSettings = testData.applicationSettings;
+        component.categoryDict = testData.categoryDictionary;
+        component.user = { ...testData.userList[0] };
         component.PlayerMode = PlayerMode;
         component.gameStatus = GameStatus;
-        const otherUser = { ...UserList[1] };
+        const otherUser = { ...testData.userList[1] };
         component.otherUserId = 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1';
         component.userDict = {'4kFa6HRvP5OhvYXsH9mEsRrXj4o2': user, 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1': otherUser};
         component.ngOnChanges({
             applicationSettings :
             {
                 previousValue: undefined,
-                currentValue: ApplicationSettings,
+                currentValue: testData.applicationSettings,
                 firstChange: true,
                 isFirstChange: undefined
             }
@@ -107,15 +107,15 @@ describe('GameCardComponent', () => {
     });
 
     it('verify that Other Player information should be set with game data', () => {
-        component.applicationSettings = ApplicationSettings;
-        component.user = { ...UserList[0] };
-        const otherUser = { ...UserList[1] };
+        component.applicationSettings = testData.applicationSettings;
+        component.user = { ...testData.userList[0] };
+        const otherUser = { ...testData.userList[1] };
         component.userDict = {'4kFa6HRvP5OhvYXsH9mEsRrXj4o2': user, 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1': otherUser};
         component.ngOnChanges({
             applicationSettings :
             {
                 previousValue: undefined,
-                currentValue: ApplicationSettings,
+                currentValue: testData.applicationSettings,
                 firstChange: true,
                 isFirstChange: undefined
             }
@@ -125,11 +125,11 @@ describe('GameCardComponent', () => {
     });
 
     it('Verify that Earned badges should be set with Game data', () => {
-        component.applicationSettings = ApplicationSettings;
-        component.user = { ...UserList[0] };
-        const otherUser = { ...UserList[1] };
+        component.applicationSettings = testData.applicationSettings;
+        component.user = { ...testData.userList[0] };
+        const otherUser = { ...testData.userList[1] };
         component.userDict = {'4kFa6HRvP5OhvYXsH9mEsRrXj4o2': user, 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1': otherUser};
-        const dbModel = Games[1];
+        const dbModel = testData.games[1];
         component.game = Game.getViewModel(dbModel);
         const game = Game.getViewModel(dbModel);
         const currentUserEarnedBadges = [...game.stats[component.user.userId].badge].reverse();
@@ -150,13 +150,13 @@ describe('GameCardComponent', () => {
 
     it('should match snapshot', () => {
         component.isHidePlayNow = false;
-        component.applicationSettings = ApplicationSettings;
+        component.applicationSettings = testData.applicationSettings;
 
-        component.categoryDict = CategoryDictionary;
-        component.user = UserList[0];
+        component.categoryDict = testData.categoryDictionary;
+        component.user = testData.userList[0];
         component.PlayerMode = PlayerMode;
         component.gameStatus = GameStatus;
-        const otherUser = { ...UserList[1] };
+        const otherUser = { ...testData.userList[1] };
         component.otherUserId = 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1';
         component.userDict = {'4kFa6HRvP5OhvYXsH9mEsRrXj4o2': user, 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1': otherUser};
         component.ngOnInit();
@@ -175,7 +175,7 @@ describe('GameCardComponent', () => {
     });
 
     it('User should be set when user is logged in', () => {
-        user = { ...UserList[0] };
+        user = { ...testData.userList[0] };
         mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
             user: user
           });
@@ -184,8 +184,8 @@ describe('GameCardComponent', () => {
       });
 
       it('User dictionary should be set when values are emitted', () => {
-        user = { ...UserList[0] };
-        const otherUser = { ...UserList[1] };
+        user = { ...testData.userList[0] };
+        const otherUser = { ...testData.userList[1] };
         const userDict = {'4kFa6HRvP5OhvYXsH9mEsRrXj4o2': user, 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1': otherUser};
         mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
             userDict: userDict
@@ -198,13 +198,13 @@ describe('GameCardComponent', () => {
     it('remaining time should be 2 hr 30 min', (async () => {
 
         component.isHidePlayNow = false;
-        component.applicationSettings = ApplicationSettings;
+        component.applicationSettings = testData.applicationSettings;
 
-        component.categoryDict = CategoryDictionary;
-        component.user = UserList[0];
+        component.categoryDict = testData.categoryDictionary;
+        component.user = testData.userList[0];
         component.PlayerMode = PlayerMode;
         component.gameStatus = GameStatus;
-        const otherUser = { ...UserList[1] };
+        const otherUser = { ...testData.userList[1] };
         component.otherUserId = 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1';
         component.userDict = {'4kFa6HRvP5OhvYXsH9mEsRrXj4o2': user, 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1': otherUser};
         component.updateRemainingTime();
@@ -217,14 +217,14 @@ describe('GameCardComponent', () => {
     it('remaining time should be 0 hr 0 min', (async () => {
 
         component.isHidePlayNow = false;
-        component.applicationSettings = ApplicationSettings;
-        const dbModel = Games[1];
+        component.applicationSettings = testData.applicationSettings;
+        const dbModel = testData.games[1];
         component.game = Game.getViewModel(dbModel);
-        component.categoryDict = CategoryDictionary;
-        component.user = UserList[0];
+        component.categoryDict = testData.categoryDictionary;
+        component.user = testData.userList[0];
         component.PlayerMode = PlayerMode;
         component.gameStatus = GameStatus;
-        const otherUser = { ...UserList[1] };
+        const otherUser = { ...testData.userList[1] };
         component.otherUserId = 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1';
         component.userDict = {'4kFa6HRvP5OhvYXsH9mEsRrXj4o2': user, 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1': otherUser};
         component.updateRemainingTime();
