@@ -6,7 +6,7 @@ import { provideMockStore, MockStore } from '@ngrx/store/testing';
 import { Utils } from 'shared-library/core/services';
 import { User, Game, PlayerMode, GameStatus } from 'shared-library/shared/model';
 import { AppState, appState } from '../../../store';
-import { UserList, Games, ApplicationSettings, CategoryDictionary } from '../../../../../../../test/data';
+import { UserList, Games, ApplicationSettings, CategoryDictionary } from 'test/data';
 import { CoreState } from 'shared-library/core/store';
 import { MatSnackBarModule } from '@angular/material';
 
