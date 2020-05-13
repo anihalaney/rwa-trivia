@@ -64,8 +64,8 @@ describe('RealtimeStatsComponent', () => {
 
     // Verifying systemStat data
     it('Verify the data for systemStat', () => {
-        systemStat = { ...testData.realTimeStats };
-        mockStore.overrideSelector<AppState, Partial<DashboardState>>(dashboardState, {
+        systemStat = { ...testData.realTimeStats};
+            mockStore.overrideSelector<AppState, Partial<DashboardState>>(dashboardState, {
             systemStat: systemStat
         });
         mockStore.refreshState();

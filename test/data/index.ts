@@ -8,10 +8,9 @@ import { RealTimeStats } from './realtime-stats';
 import { Games } from './games';
 import { ApplicationSettings } from './application-settings';
 import { CategoryList } from './category-list';
-import { LeaderBoard } from './leader-board';
+import { LeaderBoard } from './leaderBoard';
 import { TopTopics } from './top-topics';
-import { realTimeStats } from './real-time-stats';
-import { userDict } from './user-dict';
+import { UserDict } from './user-dictionary';
 import { Invitation } from './invitation';
 
 export const testData = {
@@ -21,14 +20,14 @@ export const testData = {
     questions: Questions,
     userList: UserList,
     blogs: Blogs,
-    realtimeStats: RealTimeStats,
+    realTimeStats: RealTimeStats,
     games: Games,
     applicationSettings: ApplicationSettings,
     categoryList: CategoryList,
     leaderBoard: LeaderBoard,
     topTopics: TopTopics,
-    realTimeStats: realTimeStats,
-    userDict:userDict,
-    invitation:Invitation
+    userDict: UserDict,
+    invitation: Invitation
+
 };
 
