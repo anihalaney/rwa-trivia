@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, OnDestroy, NgZone } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { select, Store } from "@ngrx/store";
-import { AutoUnsubscribe } from "ngx-auto-unsubscribe";
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 import { Observable } from "rxjs";
 import { Utils } from "shared-library/core/services";
 import {
@@ -128,7 +128,7 @@ export class Leaderboard implements OnDestroy {
           })
         )
         .subscribe(lbsStat => {
-          if (lbsStat) {
+          if (lbsStat  && Object.entries(this.categoryDict).length > 0) {
             this.leaderBoardStatDictArray = lbsStat;
             this.items = [];
             this.leaderBoardStatDictArray.map(
@@ -176,10 +176,6 @@ export class Leaderboard implements OnDestroy {
   displayMore(): void {
     this.lbsUsersSliceLastIndex = this.lbsUsersSliceLastIndex + 7;
     this.cd.markForCheck();
-  }
-
-  getImageUrl(user: User) {
-    return this.utils.getImageUrl(user, 44, 40, "44X40");
   }
 
   ngOnDestroy() {}

@@ -1,11 +1,10 @@
-import { Component, OnInit, Renderer2, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import { take } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import { User } from 'shared-library/shared/model';
-import { Utils } from 'shared-library/core/services';
 import { AppState, appState } from '../../../../store';
 import { Subscription } from 'rxjs';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -20,9 +19,9 @@ export class InviteFriendsDialogComponent implements OnInit, OnDestroy {
   user: User;
   navLinks = [];
   ref: any;
-  subscriptions = [];
+  subscriptions: Subscription[] = [];
   showSkipBtn: boolean;
-  constructor(private store: Store<AppState>, private renderer: Renderer2, private utils: Utils, private route: ActivatedRoute) {
+  constructor(private store: Store<AppState>, private route: ActivatedRoute) {
   }
 
   ngOnInit() {
