@@ -16,8 +16,8 @@
     "ng": "ng",
     "api": "json-server --watch src/db.json",
     "lint": "tslint \"src/**/*.ts\" --project src/tsconfig.json --type-check && tslint \"e2e/**/*.ts\" --project e2e/tsconfig.json --type-check",
-    "test": "ng test",
-    "test:watch": "jest --watch",
+    "test": "ng test --coverage",
+    "test:watch": "ng test --watch",
     "pree2e": "webdriver-manager update --standalone false --gecko false",
     "e2e": "protractor"
   },

@@ -7,6 +7,10 @@ import { Blogs } from './blogs';
 import { RealTimeStats } from './realtime-stats';
 import { Games } from './games';
 import { ApplicationSettings } from './application-settings';
+import { CategoryList } from './category-list';
+import { LeaderBoard } from './leaderBoard';
+import { TopTopics } from './top-topics';
+import { UserDict } from './user-dictionary';
 
 export const testData = {
     categories: Categories,
@@ -15,8 +19,12 @@ export const testData = {
     questions: Questions,
     userList: UserList,
     blogs: Blogs,
-    realtimeStats: RealTimeStats,
+    realTimeStats: RealTimeStats,
     games: Games,
-    applicationSettings: ApplicationSettings
+    applicationSettings: ApplicationSettings,
+    categoryList: CategoryList,
+    leaderBoard: LeaderBoard,
+    topTopics: TopTopics,
+    userDict: UserDict
 };
 

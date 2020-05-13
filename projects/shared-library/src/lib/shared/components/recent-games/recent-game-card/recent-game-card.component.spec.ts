@@ -6,7 +6,7 @@ import { provideMockStore, MockStore } from '@ngrx/store/testing';
 import { coreState, CoreState, UserActions, categoryDictionary } from 'shared-library/core/store';
 import { Utils, WindowRef } from 'shared-library/core/services';
 import { MatSnackBarModule } from '@angular/material';
-import { TEST_DATA } from 'shared-library/testing/test.data';
+import { testData } from 'test/data';
 import { Game } from 'shared-library/shared/model';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 
@@ -47,8 +47,8 @@ describe('RecentGameCardComponent', () => {
     mockStore = TestBed.get(Store);
     component = fixture.componentInstance;
 
-    component.user = TEST_DATA.userList[0];
-    const dbModel = TEST_DATA.game[0];
+    component.user = testData.userList[0];
+    const dbModel = testData.games[0];
     component.game = Game.getViewModel(dbModel);
 
     mockCoreSelector = mockStore.overrideSelector<CoreState, Partial<CoreState>>(coreState, {});
@@ -62,7 +62,7 @@ describe('RecentGameCardComponent', () => {
   });
 
   it('Category dictionary should be set when store emit Category dictionary', () => {
-    const categoryDict = TEST_DATA.categoryDictionary;
+    const categoryDict = testData.categoryDictionary;
     mockCategorySelector.setResult(categoryDict);
     mockStore.refreshState();
     expect(component.categoryDict).toBe(categoryDict);
@@ -75,14 +75,14 @@ describe('RecentGameCardComponent', () => {
   });
 
   it('call to getOpponentId function should return correct opponent Id for passed game', () => {
-    const dbModel = TEST_DATA.game[0];
+    const dbModel = testData.games[0];
     const opponentId = dbModel.playerIds[1];
     const game = Game.getViewModel(dbModel);
     expect(component.getOpponentId(game)).toBe(opponentId);
   });
 
   it('User dictionary should be set when store emit user dictionary', () => {
-    const userDict = TEST_DATA.userDict;
+    const userDict = testData.userDict;
     mockCoreSelector.setResult({ userDict: userDict });
     mockStore.refreshState();
     expect(component.userDict).toBe(userDict);
