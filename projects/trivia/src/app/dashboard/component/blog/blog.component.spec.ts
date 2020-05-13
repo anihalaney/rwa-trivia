@@ -5,7 +5,7 @@ import { provideMockStore, MockStore } from '@ngrx/store/testing';
 import { appState, AppState } from '../../../store';
 import { MatSnackBarModule } from '@angular/material';
 import { Store } from '@ngrx/store';
-import { TEST_DATA } from 'shared-library/testing/test.data';
+import { testData } from 'test/data';
 import { DashboardState } from '../../store';
 
 describe('BlogComponent', () => {
@@ -50,13 +50,13 @@ describe('BlogComponent', () => {
     });
 
     it('Verify onNotify function work', () => {
-        component.blogData = TEST_DATA.blog;
-        component.onNotify(TEST_DATA.blog[0]);
-        expect(component.blogData[0].share_status).toEqual(TEST_DATA.blog[0].share_status);
+        component.blogData = testData.blogs;
+        component.onNotify(testData.blogs[0]);
+        expect(component.blogData[0].share_status).toEqual(testData.blogs[0].share_status);
     });
 
     it('Verify blog data is set after the value is emitted', () => {
-        blogData = TEST_DATA.blog;
+        blogData = testData.blogs;
         mockStore.overrideSelector<AppState, Partial<DashboardState>>(appState.dashboardState, {
             blogs: blogData
         });
