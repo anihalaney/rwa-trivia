@@ -2,7 +2,7 @@ import { Component, Input, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDet
 import { Store, select } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { AppState, appState } from '../../../store';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 
 @Component({
   selector: 'blog',
@@ -16,7 +16,7 @@ export class BlogComponent implements OnDestroy, AfterViewInit {
   @Input() blogId: number;
   blogData = [];
 
-  subscriptions = [];
+  subscriptions: Subscription[] = [];
   constructor(private store: Store<AppState>, private cd: ChangeDetectorRef) {
     this.subscriptions.push(this.store.select(appState.dashboardState).pipe(select(s => s.blogs)).subscribe(blogs => {
       this.blogData = blogs;
