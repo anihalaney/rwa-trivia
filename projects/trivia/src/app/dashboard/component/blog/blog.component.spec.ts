@@ -51,8 +51,10 @@ describe('BlogComponent', () => {
 
     it('Verify onNotify function work', () => {
         component.blogData = testData.blogs;
-        component.onNotify(testData.blogs[0]);
-        expect(component.blogData[0].share_status).toEqual(testData.blogs[0].share_status);
+        const blogTestData = testData.blogs[0];
+        blogTestData.share_status = true;
+        component.onNotify(blogTestData);
+        expect(component.blogData[0].share_status).toEqual(blogTestData.share_status);
     });
 
     it('Verify blog data is set after the value is emitted', () => {
