@@ -2,7 +2,7 @@ import { Directive, Input, Renderer2, HostListener, AfterViewInit, OnDestroy } f
 import { FormControl } from '@angular/forms';
 import { Utils } from './../../core/services' ;
 import { Subscription } from 'rxjs';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 
 @Directive({
   selector: '[stlShowHintWhenFocusOut]'

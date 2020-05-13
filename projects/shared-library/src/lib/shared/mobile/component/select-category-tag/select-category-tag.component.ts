@@ -2,7 +2,7 @@ import { Component, OnInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { RouterExtensions } from 'nativescript-angular/router';
 import { UserActions, CategoryActions, TagActions } from 'shared-library/core/store';
 import { select, Store } from '@ngrx/store';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 import { coreState } from '../../../../core/store';
 import { User } from 'shared-library/shared/model/user';
 import { Category } from 'shared-library/shared/model';

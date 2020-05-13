@@ -5,7 +5,7 @@ import * as application from 'application';
 import { ModalDialogOptions, ModalDialogService } from 'nativescript-angular/modal-dialog';
 import { RouterExtensions } from 'nativescript-angular/router';
 import { setString } from 'nativescript-plugin-firebase/crashlytics/crashlytics';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 import { Subject } from 'rxjs';
 import { filter, map, take } from 'rxjs/operators';
 import { android, AndroidActivityBackPressedEventData, AndroidApplication } from 'tns-core-modules/application';

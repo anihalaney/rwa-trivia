@@ -11,7 +11,7 @@ import { GameDialogComponent } from '../game-dialog/game-dialog.component';
 import { User } from 'shared-library/shared/model';
 import { AppState, appState } from '../../../store';
 import * as gameplayactions from '../../store/actions';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 import { isPlatformBrowser } from '@angular/common';
 
 @Component({

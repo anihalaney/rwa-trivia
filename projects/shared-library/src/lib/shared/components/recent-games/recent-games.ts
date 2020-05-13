@@ -4,7 +4,7 @@ import { User, GameStatus, Game } from 'shared-library/shared/model';
 import { coreState, CoreState } from 'shared-library/core/store';
 import { Observable } from 'rxjs';
 import { UserActions } from 'shared-library/core/store/actions';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 
 
 export class RecentGames {

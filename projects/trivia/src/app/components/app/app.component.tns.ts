@@ -16,7 +16,7 @@ import { ApplicationSettings } from 'shared-library/shared/model';
 import { on as applicationOn, resumeEvent, ApplicationEventData } from 'tns-core-modules/application';
 import { FirebaseAuthService } from 'shared-library/core/auth/firebase-auth.service';
 import { ApplicationSettingsActions, CategoryActions } from 'shared-library/core/store/actions';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 import * as util from 'tns-core-modules/utils/utils';
 import { alert } from 'tns-core-modules/ui/dialogs/dialogs';
 import { projectMeta } from '../../../../../shared-library/src/lib/environments/environment';

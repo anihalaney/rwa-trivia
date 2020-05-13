@@ -135,7 +135,7 @@ export class Question {
 
 
 export class Answer {
-  id: number;
+  id?: number;
   answerText: string;
   correct: boolean;
   renderedAnswer?: string;

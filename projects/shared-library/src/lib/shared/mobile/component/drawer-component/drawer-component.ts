@@ -14,7 +14,7 @@ import { Observable, Subscription } from 'rxjs';
 import { Category } from './../../../model';
 import { Router, NavigationEnd, NavigationStart } from '@angular/router';
 import { filter } from 'rxjs/operators';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 import { projectMeta } from 'shared-library/environments/environment';
 import { FirebaseAuthService } from 'shared-library/core/auth';
 

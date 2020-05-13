@@ -2,7 +2,7 @@ import { Component, Input, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDet
 import { Store, select } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { AppState, appState } from '../../../store';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 
 @Component({
   selector: 'blog',
