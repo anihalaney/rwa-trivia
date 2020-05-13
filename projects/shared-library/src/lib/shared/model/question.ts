@@ -27,7 +27,7 @@ export class Question {
   totalQALength?: number;
   serverTimeQCreated?: number;
   renderedQuestion?: any;
-  renderedAnswer?; any;
+  renderedAnswer?: any;
   questionObject?: any;
   isRichEditor?: boolean = false;
   maxTime?: number;
