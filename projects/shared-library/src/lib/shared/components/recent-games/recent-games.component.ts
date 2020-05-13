@@ -1,7 +1,6 @@
 import { Component, ChangeDetectionStrategy, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { CoreState } from 'shared-library/core/store';
-import { Utils } from 'shared-library/core/services';
 import { UserActions } from 'shared-library/core/store/actions';
 import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 import { RecentGames } from './recent-games';
