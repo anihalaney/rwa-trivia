@@ -46,11 +46,7 @@ describe('BlogComponent', () => {
     });
 
     it('Blog data should be undefined when component is created', () => {
-        expect(component.blogData).toEqual(undefined);
-    });
-
-    it('Subscription should not be empty when component is created', () => {
-        expect(component.subscriptions).not.toEqual([]);
+        expect(component.blogData).toEqual([]);
     });
 
     it('Verify onNotify function work', () => {
@@ -59,7 +55,7 @@ describe('BlogComponent', () => {
         expect(component.blogData[0].share_status).toEqual(TEST_DATA.blog[0].share_status);
     });
 
-    it('Verify subscription data in constructor and ngAfterViewInit', () => {
+    it('Verify blog data is set after the value is emitted', () => {
         blogData = TEST_DATA.blog;
         mockStore.overrideSelector<AppState, Partial<DashboardState>>(appState.dashboardState, {
             blogs: blogData
