@@ -27,7 +27,16 @@ describe('GameInviteComponent', () => {
       schemas: [NO_ERRORS_SCHEMA],
       providers: [
         {
-          provide: Utils
+          provide: Utils, useValue: {
+            getTimeDifference(pastTime: number, currentTime: number) {
+              const diff = currentTime - pastTime;
+              return diff;
+            },
+            getUTCTimeStamp() {
+              return 1589378074;
+            }
+
+          }
         },
         provideMockStore({
           initialState: {},
@@ -93,6 +102,57 @@ describe('GameInviteComponent', () => {
 
     component.rejectGameInvitation();
     expect(mockStore.dispatch).toHaveBeenCalled();
+  });
+
+  it('call to   ngOnChanges', () => {
+    const dbModel = testData.games[1];
+    component.game = Game.getViewModel(dbModel);
+    component.ngOnChanges({
+      game:
+      {
+        previousValue: undefined,
+        currentValue: component.game,
+        firstChange: true,
+        isFirstChange: undefined
+      }
+    });
+    expect(component.gameStatus).toBe('Friend');
+    expect(component.remainingDays).toBe(8);
+  });
+
+  it('call to otherInfo function it should return category name, remainingDays and notificationText', () => {
+    const dbModel = testData.games[1];
+    component.categoryDict = testData.categoryDictionary;
+    const game = Game.getViewModel(dbModel);
+    component.game = game;
+    component.ngOnChanges({
+      game:
+      {
+        previousValue: undefined,
+        currentValue: component.game,
+        firstChange: true,
+        isFirstChange: undefined
+      }
+    });
+
+    component.randomCategoryId = 2;
+    const otherInfo = component.otherInfo(game);
+    expect(otherInfo).toEqual({
+      category: 'Programming',
+      remainingDays: 8,
+      notificationText: 'sent you an invite to play game together'
+    });
+  });
+
+  it('call to getCategoryName it should return category name with first character in uppercase', () => {
+    const dbModel = testData.games[1];
+    component.categoryDict = testData.categoryDictionary;
+    const game = Game.getViewModel(dbModel);
+    const randomCategoryId = 2;
+    const categoryName = component.getCategoryName(game, randomCategoryId);
+
+    expect(categoryName).toBe('Programming');
+
   });
 
 
