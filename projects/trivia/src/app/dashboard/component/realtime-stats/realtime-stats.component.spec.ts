@@ -6,7 +6,7 @@ import { AppState } from '../../../store';
 import { SystemStats } from 'shared-library/shared/model';
 import { Store} from '@ngrx/store';
 import { DashboardState, dashboardState } from '../../store';
-import { TEST_DATA } from 'shared-library/testing/test.data';
+import { testData } from 'test/data';
 import * as StatActions from '../../store/actions';
 
 describe('RealtimeStatsComponent', () => {
@@ -64,7 +64,7 @@ describe('RealtimeStatsComponent', () => {
 
     // Verifying systemStat data
     it('Verify the data for systemStat', () => {
-        systemStat = { ...TEST_DATA.realTimeStats };
+        systemStat = { ...testData.realTimeStats };
         mockStore.overrideSelector<AppState, Partial<DashboardState>>(dashboardState, {
             systemStat: systemStat
         });
