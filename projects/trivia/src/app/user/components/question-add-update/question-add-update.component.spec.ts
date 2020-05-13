@@ -7,7 +7,7 @@ import { CoreState, ActionWithPayload, categoryDictionary } from 'shared-library
 import { Utils, WindowRef } from 'shared-library/core/services';
 import { MatSnackBarModule } from '@angular/material';
 import { AppState, appState } from '../../../../../../trivia/src/app/store';
-import { TEST_DATA } from 'shared-library/testing/test.data';
+import { testData } from 'test/data';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { RouterTestingModule } from '@angular/router/testing'
@@ -32,23 +32,7 @@ describe('QuestionAddUpdateComponent', () => {
 
   let questionObject = () => {
     let question = new Question();
-    question.categories = []
-    question.categoryIds = [1];
-    question.created_uid = "";
-    question.explanation = "";
-    question.id = ""
-    question.isRichEditor = true;
-    question.is_draft = false
-    question.maxTime = 8;
-    question.ordered = false
-    question.published = false;
-    question.answers = [{ answerText: "A", correct: null, isRichEditor: false, answerObject: null },
-    { answerText: "B", correct: null, isRichEditor: false, answerObject: null },
-    { answerText: "C", correct: null, isRichEditor: false, answerObject: null },
-    { answerText: "D", correct: true, isRichEditor: false, answerObject: null }
-    ],
-      question.questionObject = "";
-    question.questionText = "";
+    question = testData.question;
     return question;
   }
 
@@ -122,9 +106,9 @@ describe('QuestionAddUpdateComponent', () => {
   });
 
   it('on load component should set applicationSettings', () => {
-    mockCoreSelector.setResult({ applicationSettings: [TEST_DATA.applicationSettings] });
+    mockCoreSelector.setResult({ applicationSettings: [testData.applicationSettings] });
     mockStore.refreshState();
-    expect(component.applicationSettings).toStrictEqual(TEST_DATA.applicationSettings);
+    expect(component.applicationSettings).toStrictEqual(testData.applicationSettings);
   });
 
   it('Reset action should dispatch when store emit questionSaveStatus', () => {
@@ -214,7 +198,8 @@ describe('QuestionAddUpdateComponent', () => {
   });
 
   it(`Categories should be set when store emit Categories and set place holder 'Select Preferred Category' to last index and set selectedQuestionCategoryIndex to categories's index`, () => {
-    const categories = TEST_DATA.categories;
+    // console.log('categweweor>>???????>', testData.categories.categories);
+    const categories = testData.categories.categories;
     mockCoreSelector.setResult({ categories: categories });
     mockStore.refreshState();
     expect(component.categories).toEqual(categories);
@@ -276,7 +261,7 @@ describe('QuestionAddUpdateComponent', () => {
     answers.controls[3]['controls'].answerText.setValue('D');
     component.questionForm.get('answers')
 
-    component.tags = TEST_DATA.tagList;
+    component.tags = testData.tagList;
 
     component.computeAutoTags();
     expect(component.autoTags).toEqual(['Java', 'C']);
@@ -298,7 +283,7 @@ describe('QuestionAddUpdateComponent', () => {
     answers.controls[3]['controls'].answerText.setValue('D');
     component.questionForm.get('answers')
 
-    component.tags = TEST_DATA.tagList;
+    component.tags = testData.tagList;
     component.computeAutoTags();
     expect(component.autoTags).toEqual(['Java', 'C']);
     expect(component).toBeTruthy();
@@ -313,7 +298,7 @@ describe('QuestionAddUpdateComponent', () => {
 
 
   it(`call to filter function it should should return the matched`, () => {
-    component.tags = TEST_DATA.tagList;
+    component.tags = testData.tagList;
     const filteredTag = component.filter('Java');
     expect(filteredTag).toEqual(['Java', 'JavaScript']);
   });
@@ -331,7 +316,7 @@ describe('QuestionAddUpdateComponent', () => {
   });
 
   it(`Call to getQuestionFromFormValue it should return form values from form`, () => {
-    component.applicationSettings = TEST_DATA.applicationSettings;
+    component.applicationSettings = testData.applicationSettings;
     component.createForm(questionObject());
     component.questionForm.get('isRichEditor').setValue(true);
     component.questionForm.get('maxTime').setValue(8);
@@ -393,8 +378,8 @@ describe('QuestionAddUpdateComponent', () => {
 
   it(`call to onSubmit function with skip paramter true, it should return question's object `, () => {
 
-    component.applicationSettings = TEST_DATA.applicationSettings;
-    component.user = TEST_DATA.userList[0];
+    component.applicationSettings = testData.applicationSettings;
+    component.user = testData.userList[0];
     component.createForm(questionObject());
     component.questionForm.get('isRichEditor').setValue(true);
     component.questionForm.get('maxTime').setValue(8);
@@ -450,8 +435,8 @@ describe('QuestionAddUpdateComponent', () => {
 
   it(`call to onSubmit function with skip paramter false, it should validate and return false if form is invalid`, () => {
 
-    component.applicationSettings = TEST_DATA.applicationSettings;
-    component.user = TEST_DATA.userList[0];
+    component.applicationSettings = testData.applicationSettings;
+    component.user = testData.userList[0];
     component.createForm(questionObject());
     component.questionForm.get('isRichEditor').setValue(true);
     component.questionForm.get('maxTime').setValue(8);
@@ -461,29 +446,29 @@ describe('QuestionAddUpdateComponent', () => {
   })
 
   it(`Form should have questionText required error when questionText is not set`, () => {
-    component.applicationSettings = TEST_DATA.applicationSettings;
-    component.user = TEST_DATA.userList[0];
+    component.applicationSettings = testData.applicationSettings;
+    component.user = testData.userList[0];
     component.createForm(questionObject());
     expect(component.questionForm.get('questionText').errors).toEqual({ 'required': true });
   })
 
   it(`Form should have category required error when category is not set`, () => {
-    component.applicationSettings = TEST_DATA.applicationSettings;
-    component.user = TEST_DATA.userList[0];
+    component.applicationSettings = testData.applicationSettings;
+    component.user = testData.userList[0];
     component.createForm(questionObject());
     expect(component.questionForm.get('category').errors).toEqual({ 'required': true });
   })
 
   it(`Form should have tagCountInvalid when tagsArray length is less then 3`, () => {
-    component.applicationSettings = TEST_DATA.applicationSettings;
-    component.user = TEST_DATA.userList[0];
+    component.applicationSettings = testData.applicationSettings;
+    component.user = testData.userList[0];
     component.createForm(questionObject());
     expect(component.questionForm.hasError('tagCountInvalid')).toBeTruthy();
   })
 
   it(`Form should have correctAnswerCountInvalid error when only one answer is not selected `, () => {
-    component.applicationSettings = TEST_DATA.applicationSettings;
-    component.user = TEST_DATA.userList[0];
+    component.applicationSettings = testData.applicationSettings;
+    component.user = testData.userList[0];
     component.createForm(questionObject());
     const answers = (<FormArray>component.questionForm.get('answers'));
     answers.controls[3]['controls'].correct.setValue(false);
@@ -491,7 +476,7 @@ describe('QuestionAddUpdateComponent', () => {
   })
 
   it(`call to setValidators function with isRichEditor is true, it should set validator for maxTime and questionText field`, () => {
-    component.applicationSettings = TEST_DATA.applicationSettings;
+    component.applicationSettings = testData.applicationSettings;
     let question = questionObject();
     question.tags = ['C', 'Java'];
     component.createForm(question);
@@ -501,7 +486,7 @@ describe('QuestionAddUpdateComponent', () => {
   });
 
   it(`call to setValidators function with isRichEditor is false, it should set validator for maxTime and questionText field`, () => {
-    component.applicationSettings = TEST_DATA.applicationSettings;
+    component.applicationSettings = testData.applicationSettings;
     let question = questionObject();
     question.tags = ['C', 'Java'];
     component.createForm(question);
@@ -512,7 +497,7 @@ describe('QuestionAddUpdateComponent', () => {
 
 
   it(`on call setValidators function with isRichEditor is false, is should set validator for question_max_length error`, () => {
-    component.applicationSettings = TEST_DATA.applicationSettings;
+    component.applicationSettings = testData.applicationSettings;
     const questionText = 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum'
     let question = questionObject();
     component.createForm(question);
@@ -530,7 +515,7 @@ describe('QuestionAddUpdateComponent', () => {
 
 
   it(`call to autoSaveQuestion function  it should to dispatch event to add question add question`, () => {
-    component.user = TEST_DATA.userList[0];
+    component.user = testData.userList[0];
     component.isMobile = false;
     spy.and.callFake((action: userActions.AddQuestion) => {
       expect(action.type).toEqual(userActions.UserActionTypes.ADD_QUESTION);
@@ -542,7 +527,7 @@ describe('QuestionAddUpdateComponent', () => {
   });
 
   it(`call to autoSaveQuestion function it should not dispatch add question when question is already saved `, () => {
-    component.user = TEST_DATA.userList[0];
+    component.user = testData.userList[0];
     component.isMobile = false;
     component.isSaved = true
     component.question = questionObject();

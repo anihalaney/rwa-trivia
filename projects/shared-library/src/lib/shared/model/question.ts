@@ -6,7 +6,7 @@ export class Question {
   answers: Answer[];
   ordered: boolean;
   explanation?: string;
-  tags: string[];
+  tags?: string[];
   categories?: Category[];
   categoryIds: number[];
   published?: boolean;
@@ -27,17 +27,17 @@ export class Question {
   totalQALength?: number;
   serverTimeQCreated?: number;
   renderedQuestion?: any;
-  renderedAnswer?; any;
+  renderedAnswer?: any;
   questionObject?: any;
   isRichEditor?: boolean = false;
   maxTime?: number;
   is_draft: boolean;
-  appeared: number;
-  correct: number;
-  wrong: number;
+  appeared?: number;
+  correct?: number;
+  wrong?: number;
   height?: number;
   reactionsCount?: { [key: string]: number };
-  stats:  {
+  stats?:  {
     appeared: number;
     correct: number;
     wrong: number;
