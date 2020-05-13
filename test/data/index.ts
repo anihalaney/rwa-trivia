@@ -12,6 +12,7 @@ import { LeaderBoard } from './leader-board';
 import { TopTopics } from './top-topics';
 import { realTimeStats } from './real-time-stats';
 import { userDict } from './user-dict';
+import { Invitation } from './invitation';
 
 export const testData = {
     categories: Categories,
@@ -27,6 +28,7 @@ export const testData = {
     leaderBoard: LeaderBoard,
     topTopics: TopTopics,
     realTimeStats: realTimeStats,
-    userDict:userDict
+    userDict:userDict,
+    invitation:Invitation
 };
 
