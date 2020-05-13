@@ -242,6 +242,7 @@ export const Games =  [
       }
     ],
     'gameId': 'vTzY3HeUvy9lXxaGHa0d',
+    'id': 'vTzY3HeUvy9lXxaGHa0d',
     'GameStatus': 'waiting for next question',
     'createdAt': 1587463514000,
     'turnAt': 1588206930838,
