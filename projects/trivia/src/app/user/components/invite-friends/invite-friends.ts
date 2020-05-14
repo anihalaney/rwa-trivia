@@ -5,7 +5,7 @@ import { AppState, appState } from '../../../store';
 import { Store, select } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { UserActions } from 'shared-library/core/store/actions';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class InviteFriends implements OnDestroy {
@@ -22,7 +22,7 @@ export class InviteFriends implements OnDestroy {
     public cd: ChangeDetectorRef) {
     this.userDict$ = this.store.select(appState.coreState).pipe(select(s => s.userDict));
     this.subscriptions.push(this.userDict$.subscribe(userDict => { this.userDict = userDict;
-       if ( Object.entries(userDict).length !== 0) { this.cd.markForCheck(); }  }));
+       if (userDict && Object.entries(userDict).length !== 0) { this.cd.markForCheck(); }  }));
     this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
       if (user) {
         this.store.dispatch(this.userActions.loadUserFriends(user.userId));
