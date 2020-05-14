@@ -1,10 +1,10 @@
 import { Component, Input, Output, EventEmitter, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
-import { Question, Answer, User, ApplicationSettings } from 'shared-library/shared/model';
+import { Question, Answer, User } from 'shared-library/shared/model';
 import { AppState, appState, categoryDictionary } from '../../../store';
 import { Store, select } from '@ngrx/store';
 import { QuestionActions } from 'shared-library/core/store/actions';
 import { Utils } from 'shared-library/core/services';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 import { GameActions } from 'shared-library/core/store/actions';
 import { skipWhile, map, switchMap } from 'rxjs/operators';
 
@@ -30,20 +30,12 @@ export class QuestionComponent implements OnDestroy {
   doPlay = true;
   categoryDictionary: any;
   subscriptions = [];
-  applicationSettings: ApplicationSettings;
-
   constructor(private store: Store<AppState>, private questionAction: QuestionActions, private utils: Utils,
     private cd: ChangeDetectorRef, public gameActions: GameActions) {
 
     this.answeredText = '';
     this.correctAnswerText = '';
-    this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings))
-      .subscribe(appSettings => {
-        if (appSettings) {
-          this.applicationSettings = appSettings[0];
-          this.cd.markForCheck();
-        }
-      }));
+
     this.subscriptions.push(this.store.select(categoryDictionary)
       .pipe(skipWhile(categories => Object.entries(categories).length === 0 && categories.constructor === Object),
         map(categories => (this.categoryDictionary = categories)),
