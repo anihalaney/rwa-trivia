@@ -9,7 +9,7 @@ import { Store } from '@ngrx/store';
 import { Utils } from 'shared-library/core/services';
 import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
-import { TEST_DATA } from 'shared-library/testing/test.data';
+import { testData } from 'test/data';
 import { CoreState } from 'shared-library/core/store';
 
 describe('InviteFriendsDialogComponent', () => {
@@ -63,7 +63,7 @@ describe('InviteFriendsDialogComponent', () => {
     });
 
     it('Verify that user information should be set successfully', () => {
-        user = { ...TEST_DATA.userList[0] };
+        user = { ...testData.userList[0] };
         mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
             user: user
         });
