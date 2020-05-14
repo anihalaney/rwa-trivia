@@ -1,5 +1,4 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
-import { Utils } from 'shared-library/core/services';
 import { AppState } from '../../../store';
 import { Store } from '@ngrx/store';
 import { UserActions } from 'shared-library/core/store/actions';
@@ -19,9 +18,9 @@ export class InviteFriendsComponent extends InviteFriends implements OnInit, OnD
   // it delay complex UI show Router navigation can finish first to have smooth transition
   renderView = false;
 
-  constructor(public store: Store<AppState>, public userActions: UserActions, public utils: Utils,
+  constructor(public store: Store<AppState>, public userActions: UserActions,
     private page: Page, public cd: ChangeDetectorRef) {
-    super(store, userActions, utils, cd);
+    super(store, userActions, cd);
   }
 
   ngOnInit() {
