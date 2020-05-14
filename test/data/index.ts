@@ -11,7 +11,7 @@ import { CategoryList } from './category-list';
 import { LeaderBoard } from './leaderBoard';
 import { TopTopics } from './top-topics';
 import { UserDict } from './user-dictionary';
-
+import { QuestionOfTheDay } from './question-of-the-day';
 export const testData = {
     categories: Categories,
     categoryDictionary: CategoryDictionary,
@@ -25,6 +25,7 @@ export const testData = {
     categoryList: CategoryList,
     leaderBoard: LeaderBoard,
     topTopics: TopTopics,
-    userDict: UserDict
+    userDict: UserDict,
+    questionOfTheDay : QuestionOfTheDay
 };
 

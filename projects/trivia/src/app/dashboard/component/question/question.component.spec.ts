@@ -6,7 +6,7 @@ import { provideMockStore, MockStore } from '@ngrx/store/testing';
 import { Utils } from 'shared-library/core/services';
 import { Answer } from 'shared-library/shared/model';
 import { AppState, appState } from '../../../store';
-import { TEST_DATA } from 'shared-library/testing/test.data';
+import { testData } from 'test/data';
 import { MatSnackBarModule } from '@angular/material';
 import { QuestionActions } from 'shared-library/core/store/actions';
 import { GameActions } from 'shared-library/core/store/actions';
@@ -88,25 +88,25 @@ describe('QuestionComponent', () => {
 
     it('category dictionary and question of the day should be same as emitted value', () => {
         mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
-            categories: TEST_DATA.categoryList,
-            questionOfTheDay: TEST_DATA.questionOfTheDay
+            categories: testData.categoryList,
+            questionOfTheDay: testData.questionOfTheDay
           });
         mockStore.refreshState();
         fixture.detectChanges();
-        expect(component.categoryDictionary).toEqual(TEST_DATA.categoryDictionary);
-        expect(component.question).toEqual(TEST_DATA.questionOfTheDay);
+        expect(component.categoryDictionary).toEqual(testData.categoryDictionary);
+        expect(component.question).toEqual(testData.questionOfTheDay);
     });
 
 
     it('answer\'s order should be changed for question of the day', () => {
         mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
-            categories: TEST_DATA.categoryList,
-            questionOfTheDay: TEST_DATA.questionOfTheDay
+            categories: testData.categoryList,
+            questionOfTheDay: testData.questionOfTheDay
           });
         mockStore.refreshState();
         fixture.detectChanges();
 
-        const question = TEST_DATA.questionOfTheDay;
+        const question = testData.questionOfTheDay;
 
         const tempAnswers = [...question.answers];
         question.answers[3] = tempAnswers[0];
@@ -119,8 +119,8 @@ describe('QuestionComponent', () => {
 
     it('Verify Correct answer', () => {
         mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
-            categories: TEST_DATA.categoryList,
-            questionOfTheDay: TEST_DATA.questionOfTheDay
+            categories: testData.categoryList,
+            questionOfTheDay: testData.questionOfTheDay
           });
         mockStore.refreshState();
         fixture.detectChanges();
@@ -130,15 +130,15 @@ describe('QuestionComponent', () => {
 
     it('Verify category name is set from the question categories', () => {
         mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
-            categories: TEST_DATA.categoryList,
-            questionOfTheDay: TEST_DATA.questionOfTheDay
+            categories: testData.categoryList,
+            questionOfTheDay: testData.questionOfTheDay
           });
         mockStore.refreshState();
         fixture.detectChanges();
 
-        const categoryName = TEST_DATA.questionOfTheDay.categoryIds.map(category => {
-            if (TEST_DATA.categoryDictionary[category]) {
-              return TEST_DATA.categoryDictionary[category].categoryName;
+        const categoryName = testData.questionOfTheDay.categoryIds.map(category => {
+            if (testData.categoryDictionary[category]) {
+              return testData.categoryDictionary[category].categoryName;
             } else {
               return '';
             }
@@ -149,31 +149,31 @@ describe('QuestionComponent', () => {
 
     it('verify selectedAnswer function', () => {
         mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
-            categories: TEST_DATA.categoryList,
-            questionOfTheDay: TEST_DATA.questionOfTheDay
+            categories: testData.categoryList,
+            questionOfTheDay: testData.questionOfTheDay
           });
         mockStore.refreshState();
         fixture.detectChanges();
-        component.selectedAnswer(TEST_DATA.questionOfTheDay.answers[1]);
-        expect(component.answeredText).toEqual(TEST_DATA.questionOfTheDay.answers[1].answerText);
+        component.selectedAnswer(testData.questionOfTheDay.answers[1]);
+        expect(component.answeredText).toEqual(testData.questionOfTheDay.answers[1].answerText);
     });
 
     it('verify rippleTap function works', () => {
         component.answerButtonClicked = jest.fn();
         mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
-            categories: TEST_DATA.categoryList,
-            questionOfTheDay: TEST_DATA.questionOfTheDay
+            categories: testData.categoryList,
+            questionOfTheDay: testData.questionOfTheDay
           });
         mockStore.refreshState();
         fixture.detectChanges();
-        component.rippleTap(TEST_DATA.questionOfTheDay.answers[1]);
+        component.rippleTap(testData.questionOfTheDay.answers[1]);
         expect(component.answerButtonClicked).toHaveBeenCalledTimes(1);
     });
 
     it('verify getNextQuestion function works', () => {
         mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
-            categories: TEST_DATA.categoryList,
-            questionOfTheDay: TEST_DATA.questionOfTheDay
+            categories: testData.categoryList,
+            questionOfTheDay: testData.questionOfTheDay
           });
         mockStore.refreshState();
         fixture.detectChanges();
@@ -184,8 +184,8 @@ describe('QuestionComponent', () => {
 
     it('verify get Next Question action dispatches correctly', async () => {
       mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
-          categories: TEST_DATA.categoryList,
-          questionOfTheDay: TEST_DATA.questionOfTheDay
+          categories: testData.categoryList,
+          questionOfTheDay: testData.questionOfTheDay
         });
       mockStore.refreshState();
       fixture.detectChanges();
@@ -200,56 +200,56 @@ describe('QuestionComponent', () => {
     it('verify answerButtonClicked function should work and  answerClicked event should emit the correct index', async () => {
       spyOn(component.answerClicked, 'emit');
       mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
-          categories: TEST_DATA.categoryList,
-          questionOfTheDay: TEST_DATA.questionOfTheDay
+          categories: testData.categoryList,
+          questionOfTheDay: testData.questionOfTheDay
         });
       mockStore.refreshState();
       fixture.detectChanges();
 
-      component.answerButtonClicked(TEST_DATA.questionOfTheDay.answers[1]);
+      component.answerButtonClicked(testData.questionOfTheDay.answers[1]);
       expect(component.doPlay).toBeFalsy();
-      expect(component.answeredText).toEqual(TEST_DATA.questionOfTheDay.answers[1].answerText);
+      expect(component.answeredText).toEqual(testData.questionOfTheDay.answers[1].answerText);
       expect(component.answerClicked.emit).toBeCalledWith(1);
     });
 
     it('verify answerButtonClicked function should not work if doPlay is false', async () => {
       spyOn(component.answerClicked, 'emit');
       mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
-          categories: TEST_DATA.categoryList,
-          questionOfTheDay: TEST_DATA.questionOfTheDay
+          categories: testData.categoryList,
+          questionOfTheDay: testData.questionOfTheDay
         });
       mockStore.refreshState();
       fixture.detectChanges();
       component.doPlay = false;
-      component.answerButtonClicked(TEST_DATA.questionOfTheDay.answers[1]);
+      component.answerButtonClicked(testData.questionOfTheDay.answers[1]);
       expect(component.answerClicked.emit).toBeCalledTimes(0);
     });
 
     it('verify if the answer is correct UpdateQuestionStat action should fire with \'correct\' argument', async () => {
 
       mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
-          categories: TEST_DATA.categoryList,
-          questionOfTheDay: TEST_DATA.questionOfTheDay
+          categories: testData.categoryList,
+          questionOfTheDay: testData.questionOfTheDay
         });
       mockStore.refreshState();
       fixture.detectChanges();
-      component.answerButtonClicked(TEST_DATA.questionOfTheDay.answers[2]);
+      component.answerButtonClicked(testData.questionOfTheDay.answers[2]);
       expect(spy).toHaveBeenCalledWith(
-        new GameActions().UpdateQuestionStat(TEST_DATA.questionOfTheDay.id, 'CORRECT')
+        new GameActions().UpdateQuestionStat(testData.questionOfTheDay.id, 'CORRECT')
       );
     });
 
     it('verify if the answer is wrong UpdateQuestionStat action should fire with \'wrong\' argument', async () => {
 
       mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
-          categories: TEST_DATA.categoryList,
-          questionOfTheDay: TEST_DATA.questionOfTheDay
+          categories: testData.categoryList,
+          questionOfTheDay: testData.questionOfTheDay
         });
       mockStore.refreshState();
       fixture.detectChanges();
-      component.answerButtonClicked(TEST_DATA.questionOfTheDay.answers[1]);
+      component.answerButtonClicked(testData.questionOfTheDay.answers[1]);
       expect(spy).toHaveBeenCalledWith(
-        new GameActions().UpdateQuestionStat(TEST_DATA.questionOfTheDay.id, 'WRONG')
+        new GameActions().UpdateQuestionStat(testData.questionOfTheDay.id, 'WRONG')
       );
     });
 
