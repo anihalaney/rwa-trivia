@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 import { User } from 'shared-library/shared/model/user';
 import { Store, select } from '@ngrx/store';
 import { CoreState, coreState } from './../../../core/store';
@@ -43,16 +43,41 @@ export class SignupExtraInfoComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.user)).subscribe((user) => {
-      this.user = user;
-      this.userForm.patchValue(
-        {
-          email: this.user.email || '',
-          phoneNo: this.user.phoneNo || '',
-          displayName: this.user.displayName || ''
+      if (user) {
+        this.user = user;
+        this.userForm.patchValue(
+          {
+            email: this.user.email || '',
+            phoneNo: this.user.phoneNo || '',
+            displayName: this.user.displayName || ''
+          }
+        );
+        this.emailEditable = (!this.user.email) ? true : false;
+        this.phoneEditable = (!this.user.phoneNo) ? true : false;
+      }
+
+    }));
+
+    this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.checkDisplayName)).subscribe(status => {
+      if (this.router.url === '/signup-extra-info') {
+        this.isValidDisplayName = status;
+        if (this.isValidDisplayName !== null && this.isValidDisplayName !== undefined) {
+          if (this.isValidDisplayName) {
+            const data = this.userForm.value;
+            this.user.phoneNo = data.phoneNo;
+            this.user.email = data.email;
+            this.user.displayName = data.displayName;
+            this.store.dispatch(this.userAction.addUserProfile(this.user, false));
+            this.router.navigate(['select-category-tag']);
+            this.cd.markForCheck();
+          } else {
+            this.userForm.controls['displayName'].setErrors({ 'exist': true });
+            this.userForm.controls['displayName'].markAsTouched();
+            this.cd.markForCheck();
+          }
+          this.isValidDisplayName = null;
         }
-      );
-      this.emailEditable = (!this.user.email) ? true : false;
-      this.phoneEditable = (!this.user.phoneNo) ? true : false;
+      }
     }));
   }
 
@@ -67,26 +92,6 @@ export class SignupExtraInfoComponent implements OnInit, OnDestroy {
     } else {
       const data = this.userForm.value;
       this.checkDisplayName(data.displayName);
-      this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.checkDisplayName)).subscribe(status => {
-        if (this.router.url === '/signup-extra-info') {
-          this.isValidDisplayName = status;
-          if (this.isValidDisplayName !== null) {
-            if (this.isValidDisplayName) {
-              this.user.phoneNo = data.phoneNo;
-              this.user.email = data.email;
-              this.user.displayName = data.displayName;
-              this.store.dispatch(this.userAction.addUserProfile(this.user, false));
-              this.router.navigate(['select-category-tag']);
-              this.cd.markForCheck();
-            } else {
-              this.userForm.controls['displayName'].setErrors({ 'exist': true });
-              this.userForm.controls['displayName'].markAsTouched();
-              this.cd.markForCheck();
-            }
-            this.isValidDisplayName = null;
-          }
-        }
-      }));
     }
   }
 
