@@ -108,7 +108,7 @@ describe('UserReactionComponent', () => {
     });
 
     it('call to getUserReaction it should dispatch the Get UserReaction action', () => {
-        component.question = testData.questions.published[0];;
+        component.question = testData.questions.published[0];
         component.user = testData.userList[0];
 
         spy.and.callFake((action: ActionWithPayload<any>) => {
@@ -121,7 +121,7 @@ describe('UserReactionComponent', () => {
 
 
     it('call to GetQuestion should dispatch the GetQuestion action', () => {
-        component.question = testData.questions.published[0];;
+        component.question = testData.questions.published[0];
         component.user = testData.userList[0];
 
         spy.and.callFake((action: ActionWithPayload<any>) => {
