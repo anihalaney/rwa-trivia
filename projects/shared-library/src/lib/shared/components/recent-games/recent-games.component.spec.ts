@@ -6,7 +6,7 @@ import { provideMockStore, MockStore } from '@ngrx/store/testing';
 import { ActionWithPayload, coreState, CoreState, UserActions } from 'shared-library/core/store';
 import { Utils, WindowRef } from 'shared-library/core/services';
 import { MatSnackBarModule } from '@angular/material';
-import { TEST_DATA } from 'shared-library/testing/test.data';
+import { testData } from 'test/data';
 import { User, Game } from 'shared-library/shared/model';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 
@@ -58,7 +58,7 @@ describe('RecentGamesComponent', () => {
 
   it('on component load should set user when user is logged in', () => {
 
-    const user: User = TEST_DATA.userList[1];
+    const user: User = testData.userList[1];
     mockCoreSelector.setResult({ user });
     mockStore.refreshState();
     expect(component.user).toBe(user);
@@ -66,7 +66,7 @@ describe('RecentGamesComponent', () => {
 
   it('on component load should dispatch action to get game result with correct payload when user is logged in', () => {
 
-    const user: User = TEST_DATA.userList[1];
+    const user: User = testData.userList[1];
     spy.and.callFake((action: ActionWithPayload<User>) => {
       expect(action.type).toEqual(UserActions.GET_GAME_RESULT);
       expect(action.payload).toEqual(user);
@@ -77,7 +77,7 @@ describe('RecentGamesComponent', () => {
   });
 
   it('Recent games should be set when store emits game results', () => {
-    const games = TEST_DATA.game.map(dbModel => {
+    const games = testData.games.map(dbModel => {
       return Game.getViewModel(dbModel);
     });
     mockCoreSelector.setResult({ getGameResult: games });
@@ -87,7 +87,7 @@ describe('RecentGamesComponent', () => {
 
 
   it('When we have more recent games than current index plus max allowed, call to get more card should set next index to max allowed plus next index', () => {
-    component.recentGames = TEST_DATA.game.map(dbModel => {
+    component.recentGames = testData.games.map(dbModel => {
       return Game.getViewModel(dbModel);
     });
     component.getMoreCard();
@@ -97,7 +97,7 @@ describe('RecentGamesComponent', () => {
 
 
   it('When we have less recent games than max index ,call to get more card should set next index to next index plus recent games length', () => {
-    component.recentGames = TEST_DATA.game.map(dbModel => {
+    component.recentGames = testData.games.map(dbModel => {
       return Game.getViewModel(dbModel);
     }).slice(0, 5);
     component.getMoreCard();
@@ -109,7 +109,7 @@ describe('RecentGamesComponent', () => {
     // next Index should be  12 because we have less recentGames then  (nextIndex+maxIndex)
 
     // slice recentGames 12
-    component.recentGames = TEST_DATA.game.map(dbModel => {
+    component.recentGames = testData.games.map(dbModel => {
       return Game.getViewModel(dbModel);
     }).slice(0, 12);
     component.getMoreCard();

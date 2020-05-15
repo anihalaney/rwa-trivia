@@ -7,7 +7,7 @@ import { provideMockStore, MockStore } from '@ngrx/store/testing';
 import { coreState, CoreState, UserActions, ActionWithPayload } from 'shared-library/core/store';
 import { Utils, WindowRef } from 'shared-library/core/services';
 import { MatSnackBarModule } from '@angular/material';
-import { TEST_DATA } from 'shared-library/testing/test.data';
+import { testData } from 'test/data';
 
 describe('InviteMailFriendsComponent', () => {
     let component: InviteMailFriendsComponent;
@@ -70,15 +70,15 @@ describe('InviteMailFriendsComponent', () => {
     });
 
     it(`on load component user should set`, () => {
-        mockCoreSelector.setResult({ user: TEST_DATA.userList[0] });
+        mockCoreSelector.setResult({ user: testData.userList[0] });
         mockStore.refreshState();
-        expect(component.user).toEqual(TEST_DATA.userList[0]);
+        expect(component.user).toEqual(testData.userList[0]);
     });
 
     it('on load component should set applicationSettings', () => {
-        mockCoreSelector.setResult({ applicationSettings: [TEST_DATA.applicationSettings] });
+        mockCoreSelector.setResult({ applicationSettings: [testData.applicationSettings] });
         mockStore.refreshState();
-        expect(component.applicationSettings).toStrictEqual(TEST_DATA.applicationSettings);
+        expect(component.applicationSettings).toStrictEqual(testData.applicationSettings);
     });
 
     it('Form should have email required error when email is not set', () => {
@@ -151,7 +151,7 @@ describe('InviteMailFriendsComponent', () => {
 
     it(`on Subscribe should dispatch action to add user invitation with correct payload `, () => {
         component.invitationForm.controls['email'].setValue('trivia@mail.com');
-        const user = { ...TEST_DATA.userList[0] };
+        const user = { ...testData.userList[0] };
         mockCoreSelector.setResult({ user });
         mockStore.refreshState();
 
