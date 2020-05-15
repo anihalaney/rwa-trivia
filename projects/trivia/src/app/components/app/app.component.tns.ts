@@ -19,15 +19,15 @@ import { ApplicationSettingsActions, CategoryActions } from 'shared-library/core
 import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 import * as util from 'tns-core-modules/utils/utils';
 import { alert } from 'tns-core-modules/ui/dialogs/dialogs';
-import { projectMeta } from '../../../../../shared-library/src/lib/environments/environment';
+import { projectMeta } from 'shared-library/environments/environment';
 import * as appversion from 'nativescript-appversion';
 import { Utils } from 'shared-library/core/services';
-import { NavigationEnd, Router, NavigationStart } from '@angular/router';
-import { FirebaseScreenNameConstants, User } from '../../../../../shared-library/src/lib/shared/model';
+import { NavigationEnd, Router } from '@angular/router';
+import { FirebaseScreenNameConstants, User } from 'shared-library/shared/model';
 import { registerElement } from 'nativescript-angular/element-registry';
 import { Carousel, CarouselItem } from 'nativescript-carousel';
 import { ModalDialogOptions, ModalDialogService } from 'nativescript-angular/modal-dialog';
-import { WelcomeScreenComponent } from '../../../../../shared-library/src/lib/shared/mobile/component';
+import { WelcomeScreenComponent } from 'shared-library/shared/components';
 import * as appSettingsStorage from 'tns-core-modules/application-settings';
 import { TopicActions } from 'shared-library/core/store/actions';
 
@@ -43,7 +43,7 @@ registerElement('CarouselItem', () => CarouselItem);
 })
 
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
-export class AppComponent implements OnInit, OnDestroy, AfterViewInit  {
+export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   user: User;
   subscriptions = [];
   applicationSettings: ApplicationSettings;
@@ -51,7 +51,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit  {
   showBottomBar: Boolean = true;
   currentRouteUrl: string;
   bottomSafeArea: number;
-  @ViewChild(RadSideDrawerComponent, {static : true}) public drawerComponent: RadSideDrawerComponent;
+  @ViewChild(RadSideDrawerComponent, { static: true }) public drawerComponent: RadSideDrawerComponent;
   private _drawer: SideDrawerType;
   constructor(
     private store: Store<AppState>,
@@ -85,9 +85,9 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit  {
         if (message.foreground) {
           this.utils.showMessage('success', message.body);
         } else {
-        // only redirect to dashboard when notification is clicked from background
-        // While app is foreground user may be playing game
-        this.ngZone.run(() => this.navigationService.redirectPushRoutes(message.data));
+          // only redirect to dashboard when notification is clicked from background
+          // While app is foreground user may be playing game
+          this.ngZone.run(() => this.navigationService.redirectPushRoutes(message.data));
         }
       },
       showNotifications: true,
@@ -180,12 +180,12 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit  {
     }));
   }
 
-  ngAfterViewInit () {
+  ngAfterViewInit() {
     this._drawer = this.drawerComponent.sideDrawer;
     if (this._drawer.ios) {
-        this._drawer.ios.defaultSideDrawer.style.shadowMode = 2;
-        this._drawer.ios.defaultSideDrawer.style.shadowOpacity = 0.1; // 0-1, higher is darker
-        this._drawer.ios.defaultSideDrawer.style.shadowRadius = 15; // higher is more spread
+      this._drawer.ios.defaultSideDrawer.style.shadowMode = 2;
+      this._drawer.ios.defaultSideDrawer.style.shadowOpacity = 0.1; // 0-1, higher is darker
+      this._drawer.ios.defaultSideDrawer.style.shadowRadius = 15; // higher is more spread
     }
   }
 
@@ -229,7 +229,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit  {
 
     let version;
     try {
-        version = await appversion.getVersionCode();
+      version = await appversion.getVersionCode();
     } catch (error) {
       this.utils.sendErrorToCrashlytics('appLog', error);
       console.error(error);

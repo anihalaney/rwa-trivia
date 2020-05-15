@@ -10,11 +10,11 @@ import { AppState, appState } from '../../../../../../trivia/src/app/store';
 import { testData } from 'test/data';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { RouterTestingModule } from '@angular/router/testing'
+import { RouterTestingModule } from '@angular/router/testing';
 import { QuestionActions } from 'shared-library/core/store/actions/question.actions';
 import { QuestionService } from 'shared-library/core/services';
 import { HttpClientModule } from '@angular/common/http';
-import { DbService } from 'shared-library/core/db-service'
+import { DbService } from 'shared-library/core/db-service';
 import { MatDialogModule } from '@angular/material';
 import { Router } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -30,18 +30,18 @@ describe('QuestionAddUpdateComponent', () => {
   let mockCoreSelector: MemoizedSelector<CoreState, Partial<CoreState>>;
   let router: Router;
 
-  let questionObject = () => {
+  const questionObject = () => {
     let question = new Question();
     question = testData.question;
     return question;
-  }
+  };
 
-  let quillObject = () => {
+  const quillObject = () => {
     return {
-      jsonObject: [{ insert: "hello" }],
-      questionText: "<p>hello</p>",
-    }
-  }
+      jsonObject: [{ insert: 'hello' }],
+      questionText: '<p>hello</p>',
+    };
+  };
 
   beforeEach(async(() => {
 
@@ -83,7 +83,7 @@ describe('QuestionAddUpdateComponent', () => {
     spy = spyOn(mockStore, 'dispatch');
     router = TestBed.get(Router);
 
-    let question = new Question();
+    const question = new Question();
     const answersFA: FormArray = component.createDefaultForm(question);
     component.questionForm = formBuilder.group({
       id: null,
@@ -108,7 +108,7 @@ describe('QuestionAddUpdateComponent', () => {
   it('on load component should set applicationSettings', () => {
     mockCoreSelector.setResult({ applicationSettings: [testData.applicationSettings] });
     mockStore.refreshState();
-    expect(component.applicationSettings).toStrictEqual(testData.applicationSettings);
+    expect(component.applicationSettings).toEqual(testData.applicationSettings);
   });
 
   it('Reset action should dispatch when store emit questionSaveStatus', () => {
@@ -137,32 +137,33 @@ describe('QuestionAddUpdateComponent', () => {
   });
 
   it('on call removeEnteredTag function it should call removeEnteredTag and setTagsArray function', () => {
-    let spyOnRemoveEnteredTag = spyOn(component, 'removeEnteredTag').and.callThrough();
-    let spyOnSetTagsArray = spyOn(component, 'setTagsArray').and.callThrough();
+    const spyOnRemoveEnteredTag = spyOn(component, 'removeEnteredTag').and.callThrough();
+    const spyOnSetTagsArray = spyOn(component, 'setTagsArray').and.callThrough();
 
     component.removeEnteredTag('angular');
 
     expect(spyOnRemoveEnteredTag).toHaveBeenCalled();
-    expect(spyOnSetTagsArray).toBeCalled();
+    expect(spyOnSetTagsArray).toHaveBeenCalled();
 
   });
 
   it('on call computeAutoTags function it should call computeAutoTags and setTagsArray function', () => {
-    let spyOnComputeAutoTags = spyOn(component, 'computeAutoTags').and.callThrough();
-    let spyOnSetTagsArray = spyOn(component, 'setTagsArray').and.callThrough();
+    const spyOnComputeAutoTags = spyOn(component, 'computeAutoTags').and.callThrough();
+    const spyOnSetTagsArray = spyOn(component, 'setTagsArray').and.callThrough();
 
     component.computeAutoTags();
     expect(spyOnComputeAutoTags).toHaveBeenCalled();
-    expect(spyOnSetTagsArray).toBeCalled();
+    expect(spyOnSetTagsArray).toHaveBeenCalled();
 
   });
 
   it('on call onAnswerChanged function it should set delta to answerObject and html to answerText', () => {
     const event = {
-      delta: [{ insert: "hello" }],
-      html: "<p>hello</p>",
+      delta: [{ insert: 'hello' }],
+      html: '<p>hello</p>',
       imageParsedName: ''
-    }
+    };
+
     component.onAnswerChanged(event, 0);
     const answers = (<FormArray>component.questionForm.get('answers'));
     expect(answers.controls[0]['controls'].answerObject.value).toEqual(event.delta);
@@ -193,12 +194,13 @@ describe('QuestionAddUpdateComponent', () => {
     component.submit();
 
     component.questionForm.get('tags').setValue('tag');
-    expect(spySaveQuestion).toBeCalled();
+    expect(spySaveQuestion).toHaveBeenCalled();
 
   });
 
+// tslint:disable-next-line:max-line-length
   it(`Categories should be set when store emit Categories and set place holder 'Select Preferred Category' to last index and set selectedQuestionCategoryIndex to categories's index`, () => {
-    // console.log('categweweor>>???????>', testData.categories.categories);
+
     const categories = testData.categories.categories;
     mockCoreSelector.setResult({ categories: categories });
     mockStore.refreshState();
@@ -217,10 +219,11 @@ describe('QuestionAddUpdateComponent', () => {
   it(`call to onTextChanged function should assign  quill text to quillObject and dispatch event for delete question image`, () => {
 
     const event = {
-      delta: [{ insert: "hello" }],
-      html: "<p>hello</p>",
+      delta: [{ insert: 'hello' }],
+      html: '<p>hello</p>',
       imageParsedName: 'image.png'
-    }
+    };
+
     spy.and.callFake((action: ActionWithPayload<string>) => {
       expect(action.type).toEqual(QuestionActions.DELETE_QUESTION_IMAGE);
       expect(action.payload).toEqual(event.imageParsedName);
@@ -238,9 +241,10 @@ describe('QuestionAddUpdateComponent', () => {
   it(`call to onTextChanged function should not dispatch event for delete question image if image is not exist`, () => {
 
     const event = {
-      delta: [{ insert: "hello" }],
-      html: "<p>hello</p>",
-    }
+      delta: [{ insert: 'hello' }],
+      html: '<p>hello</p>',
+    };
+
     spy.and.callFake((action: ActionWithPayload<string>) => {
       expect(action.type).toEqual(QuestionActions.DELETE_QUESTION_IMAGE);
     });
@@ -252,14 +256,14 @@ describe('QuestionAddUpdateComponent', () => {
 
   it(`call to computeAutoTags function should get the auto tags from the question and answers, when question is not rich editor`, () => {
 
-    component.questionForm.get('questionText').setValue('Which of the following option leads to the portability and security of Java?')
+    component.questionForm.get('questionText').setValue('Which of the following option leads to the portability and security of Java?');
 
     const answers = (<FormArray>component.questionForm.get('answers'));
     answers.controls[0]['controls'].answerText.setValue('A');
     answers.controls[1]['controls'].answerText.setValue('B');
     answers.controls[2]['controls'].answerText.setValue('C');
     answers.controls[3]['controls'].answerText.setValue('D');
-    component.questionForm.get('answers')
+    component.questionForm.get('answers');
 
     component.tags = testData.tagList;
 
@@ -270,10 +274,10 @@ describe('QuestionAddUpdateComponent', () => {
 
   it(`call to computeAutoTags function should get the auto tags from the question and answers,  when question is rich editor`, () => {
 
-    let quillObj = {
+    const quillObj = {
       questionText: `<p>Which of the following option leads to the portability and security of Java?</p>`
     };
-    component.questionForm.get('isRichEditor').setValue(true)
+    component.questionForm.get('isRichEditor').setValue(true);
     component.quillObject = quillObj;
 
     const answers = (<FormArray>component.questionForm.get('answers'));
@@ -281,7 +285,7 @@ describe('QuestionAddUpdateComponent', () => {
     answers.controls[1]['controls'].answerText.setValue('B');
     answers.controls[2]['controls'].answerText.setValue('C');
     answers.controls[3]['controls'].answerText.setValue('D');
-    component.questionForm.get('answers')
+    component.questionForm.get('answers');
 
     component.tags = testData.tagList;
     component.computeAutoTags();
@@ -363,8 +367,7 @@ describe('QuestionAddUpdateComponent', () => {
       createdOn: new Date(),
       maxTime: 8,
       questionObject: ''
-
-    }
+    };
 
     expect(question).toEqual(originalQuestion);
 
@@ -427,8 +430,7 @@ describe('QuestionAddUpdateComponent', () => {
       maxTime: 8,
       questionObject: '',
       created_uid: '4kFa6HRvP5OhvYXsH9mEsRrXj4o2'
-
-    }
+    };
 
     expect(question).toEqual(questionFromFormValue);
   });
@@ -442,29 +444,30 @@ describe('QuestionAddUpdateComponent', () => {
     component.questionForm.get('maxTime').setValue(8);
 
     const question = component.onSubmit(false);
-    expect(question).toBeFalsy;
-  })
+    expect(question).toBeFalsy();
+
+  });
 
   it(`Form should have questionText required error when questionText is not set`, () => {
     component.applicationSettings = testData.applicationSettings;
     component.user = testData.userList[0];
     component.createForm(questionObject());
     expect(component.questionForm.get('questionText').errors).toEqual({ 'required': true });
-  })
+  });
 
   it(`Form should have category required error when category is not set`, () => {
     component.applicationSettings = testData.applicationSettings;
     component.user = testData.userList[0];
     component.createForm(questionObject());
     expect(component.questionForm.get('category').errors).toEqual({ 'required': true });
-  })
+  });
 
   it(`Form should have tagCountInvalid when tagsArray length is less then 3`, () => {
     component.applicationSettings = testData.applicationSettings;
     component.user = testData.userList[0];
     component.createForm(questionObject());
     expect(component.questionForm.hasError('tagCountInvalid')).toBeTruthy();
-  })
+  });
 
   it(`Form should have correctAnswerCountInvalid error when only one answer is not selected `, () => {
     component.applicationSettings = testData.applicationSettings;
@@ -473,11 +476,11 @@ describe('QuestionAddUpdateComponent', () => {
     const answers = (<FormArray>component.questionForm.get('answers'));
     answers.controls[3]['controls'].correct.setValue(false);
     expect(component.questionForm.hasError('correctAnswerCountInvalid')).toBeTruthy();
-  })
+  });
 
   it(`call to setValidators function with isRichEditor is true, it should set validator for maxTime and questionText field`, () => {
     component.applicationSettings = testData.applicationSettings;
-    let question = questionObject();
+    const question = questionObject();
     question.tags = ['C', 'Java'];
     component.createForm(question);
     component.setValidators(true);
@@ -487,7 +490,7 @@ describe('QuestionAddUpdateComponent', () => {
 
   it(`call to setValidators function with isRichEditor is false, it should set validator for maxTime and questionText field`, () => {
     component.applicationSettings = testData.applicationSettings;
-    let question = questionObject();
+    const question = questionObject();
     question.tags = ['C', 'Java'];
     component.createForm(question);
     component.setValidators(false);
@@ -498,11 +501,14 @@ describe('QuestionAddUpdateComponent', () => {
 
   it(`on call setValidators function with isRichEditor is false, is should set validator for question_max_length error`, () => {
     component.applicationSettings = testData.applicationSettings;
-    const questionText = 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum'
-    let question = questionObject();
+    // tslint:disable-next-line:max-line-length
+    const questionText = 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum';
+    const question = questionObject();
+
     component.createForm(question);
-    component.questionForm.get('questionText').setValue(questionText)
+    component.questionForm.get('questionText').setValue(questionText);
     component.setValidators(false);
+    
     expect(component.questionForm.get('maxTime').errors).toBeNull();
     expect(component.questionForm.get('questionText').errors).toEqual({
       'maxlength': {
@@ -523,13 +529,13 @@ describe('QuestionAddUpdateComponent', () => {
     component.questionForm.get('isRichEditor').setValue(true);
     component.autoSaveQuestion();
     expect(mockStore.dispatch).toHaveBeenCalled();
-    expect(false).toBeFalsy;
+    expect(false).toBeFalsy();
   });
 
   it(`call to autoSaveQuestion function it should not dispatch add question when question is already saved `, () => {
     component.user = testData.userList[0];
     component.isMobile = false;
-    component.isSaved = true
+    component.isSaved = true;
     component.question = questionObject();
     component.question.status = QuestionStatus.PENDING;
     spy.and.callFake((action: userActions.AddQuestion) => {
@@ -537,7 +543,7 @@ describe('QuestionAddUpdateComponent', () => {
     });
     component.questionForm.get('isRichEditor').setValue(true);
     component.autoSaveQuestion();
-    expect(mockStore.dispatch).not.toBeCalled();
+    expect(mockStore.dispatch).not.toHaveBeenCalled();
   });
 
 
