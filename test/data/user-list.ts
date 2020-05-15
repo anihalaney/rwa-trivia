@@ -32,7 +32,10 @@ export const UserList = [
     'phoneNo': null,
     'profilePictureUrl': '/assets/images/default-avatar-small.png',
     'tags': [
-
+      'test',
+      'angular',
+      'net',
+      'cloud'
     ],
     'totalFriends': 0,
     'userId': '4kFa6HRvP5OhvYXsH9mEsRrXj4o2'
@@ -84,7 +87,7 @@ export const UserList = [
     ],
     'authState': null,
     'bulkUploadPermissionStatus': 'false',
-    'bulkUploadPermissionStatusUpdateTime' : 1588266851711,
+    'bulkUploadPermissionStatusUpdateTime': 1588266851711,
     'croppedImageUrl': '',
     'originalImageUrl': '',
     'imageType': '',
