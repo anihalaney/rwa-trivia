@@ -1,12 +1,12 @@
 import { FriendInviteComponent } from './friend-invite.component';
-import { User, friendInvitationConstants } from 'shared-library/shared/model';
+import { friendInvitationConstants } from 'shared-library/shared/model';
 import { TestBed, ComponentFixture, async } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/compiler/src/core';
 import { provideMockStore, MockStore } from '@ngrx/store/testing';
 import { Store } from '@ngrx/store';
 import { testData } from 'test/data';
 import { CoreState } from 'shared-library/core/store';
-import { coreState, UserActions, ActionWithPayload } from '../../../core/store';
+import { UserActions, ActionWithPayload } from '../../../core/store';
 
 describe('FriendInviteComponent', () => {
   let component: FriendInviteComponent;
@@ -88,7 +88,7 @@ describe('FriendInviteComponent', () => {
   it('call to rejectFriendInvitation it should dispatch update Invitation action', () => {
 
     const user = testData.userList[0];
-    let invitation = testData.invitation;
+    const invitation = testData.invitation;
     invitation.status = friendInvitationConstants.REJECTED;
 
     component.user = user;
@@ -103,7 +103,5 @@ describe('FriendInviteComponent', () => {
     expect(mockStore.dispatch).toHaveBeenCalled();
 
   });
-
-
 
 });
