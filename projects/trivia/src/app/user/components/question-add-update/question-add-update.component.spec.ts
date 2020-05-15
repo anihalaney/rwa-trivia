@@ -1,5 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { QuestionAddUpdateComponent } from './question-add-update.component'
+import { QuestionAddUpdateComponent } from './question-add-update.component';
 import { ReactiveFormsModule, FormsModule, FormBuilder, FormControl, FormArray } from '@angular/forms';
 import { StoreModule, MemoizedSelector, Store } from '@ngrx/store';
 import { provideMockStore, MockStore } from '@ngrx/store/testing';
@@ -508,7 +508,7 @@ describe('QuestionAddUpdateComponent', () => {
     component.createForm(question);
     component.questionForm.get('questionText').setValue(questionText);
     component.setValidators(false);
-    
+
     expect(component.questionForm.get('maxTime').errors).toBeNull();
     expect(component.questionForm.get('questionText').errors).toEqual({
       'maxlength': {
