@@ -5,7 +5,7 @@ import { CoreState, UIStateActions } from '../../store';
 import { Store } from '@ngrx/store';
 import { FirebaseAuthService } from './../../auth/firebase-auth.service';
 import { Login } from './login';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 import * as firebase from 'firebase/app';
 import * as firebaseui from 'firebaseui';
 import { WindowRef } from 'shared-library/core/services';
