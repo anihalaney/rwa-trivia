@@ -221,10 +221,10 @@ describe('GameProfileComponent', () => {
             user: user,
             applicationSettings: applicationSetting
         });
+        component.initializeSocialSetting().subscribe();
         mockStore.refreshState();
-        component.initializeSocialSetting();
         fixture.detectChanges();
-        expect(component.applicationSettings).toEqual(applicationSetting);
+        expect(component.applicationSettings).toEqual(applicationSetting[0]);
     });
 
     afterEach(() => {
