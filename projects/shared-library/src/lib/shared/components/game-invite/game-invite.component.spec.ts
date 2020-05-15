@@ -103,7 +103,7 @@ describe('GameInviteComponent', () => {
     expect(mockStore.dispatch).toHaveBeenCalled();
   });
 
-  it('call to   ngOnChanges', () => {
+  it('call to ngOnChanges it should set gameStatus and remainingDays', () => {
     const dbModel = testData.games[1];
     component.game = Game.getViewModel(dbModel);
     component.ngOnChanges({
