@@ -77,15 +77,43 @@ describe('InviteFriendsComponent', () => {
         expect(mockStore.dispatch).toHaveBeenCalledTimes(1);
     });
 
-    it('loadUserFriends action should be fired after the user data is set', () => {
+    it('userFriends list should be set after the value is emitted', () => {
         mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
-            user: testData.userList[0]
+            userFriends: testData.friendsList
         });
         mockStore.refreshState();
-        expect(mockStore.dispatch).toHaveBeenCalledWith(
-            new UserActions().loadUserFriends(testData.userList[0].userId)
-        );
-        expect(mockStore.dispatch).toHaveBeenCalledTimes(1);
+        expect(component.uFriends).toEqual(testData.friendsList);
+    });
+
+    it('setPaginatorAndSort should be called after the friend list value is emitted', () => {
+        component.setPaginatorAndSort = jest.fn();
+        mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
+            userFriends: testData.friendsList
+        });
+        mockStore.refreshState();
+        fixture.detectChanges();
+        expect(component.setPaginatorAndSort).toHaveBeenCalledTimes(1);
+    });
+
+    it('setPaginatorAndSort should work correctly', () => {
+        mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
+            userFriends: testData.friendsList
+        });
+        mockStore.refreshState();
+        fixture.detectChanges();
+        component.setPaginatorAndSort();
+        expect(component.dataSource.paginator).toEqual(component.paginator);
+    });
+
+    it('inviteMoreFriend should work correctly', (async () => {
+        component.openDialog = jest.fn();
+        component.inviteMoreFriend();
+        await new Promise((r) => setTimeout(r, 0));
+        expect(component.openDialog).toHaveBeenCalledTimes(1);
+    }));
+
+    it('openDialog should work correctly', () => {
+        // to do add test case for click event of dialog and check if the intended css class is added. same as for close dialog event.
     });
 
 

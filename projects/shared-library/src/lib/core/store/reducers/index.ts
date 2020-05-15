@@ -42,7 +42,7 @@ export interface CoreState {
   invitationToken: string;
   resetPasswordLogs: string[];
   gameInvites: Game[];
-  userFriends: Friends;
+  userFriends: Friends[];
   friendInvitations: Invitation[];
   newGameId: string;
   userProfileSaveStatus: String;
