@@ -1,5 +1,5 @@
 import { GameInviteComponent } from './game-invite.component';
-import { User, friendInvitationConstants, Game } from 'shared-library/shared/model';
+import { Game } from 'shared-library/shared/model';
 import { TestBed, ComponentFixture, async } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/compiler/src/core';
 import { provideMockStore, MockStore } from '@ngrx/store/testing';
@@ -8,9 +8,8 @@ import { testData } from 'test/data';
 import { CoreState, categoryDictionary } from 'shared-library/core/store';
 import { coreState, UserActions, ActionWithPayload } from '../../../core/store';
 import { Utils } from 'shared-library/core/services';
-import { ActivatedRoute, Router } from '@angular/router';
-import { of } from 'rxjs';
-import { RouterTestingModule } from '@angular/router/testing'
+import { Router } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('GameInviteComponent', () => {
   let component: GameInviteComponent;
@@ -152,8 +151,6 @@ describe('GameInviteComponent', () => {
     const categoryName = component.getCategoryName(game, randomCategoryId);
 
     expect(categoryName).toBe('Programming');
-
   });
-
 
 });
