@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { GameProfile } from './game-profile';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { Router, ActivatedRoute } from '@angular/router';

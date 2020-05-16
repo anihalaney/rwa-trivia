@@ -8,7 +8,7 @@ import {
 import { CoreState, categoryDictionary } from './../../../core/store';
 import { Utils } from 'shared-library/core/services';
 import { UserActions } from 'shared-library/core/store/actions';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 import { Router } from '@angular/router';
 
 @Component({

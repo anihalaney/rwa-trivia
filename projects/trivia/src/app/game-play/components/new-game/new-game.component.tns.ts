@@ -5,7 +5,7 @@ import { RouterExtensions } from 'nativescript-angular/router';
 import { TokenModel } from 'nativescript-ui-autocomplete';
 import { RadAutoCompleteTextViewComponent } from 'nativescript-ui-autocomplete/angular';
 import { RadListViewComponent } from 'nativescript-ui-listview/angular';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 import { Utils, WindowRef } from 'shared-library/core/services';
 import { GameActions, UserActions, TagActions } from 'shared-library/core/store/actions';
 import { Category, PlayerMode } from 'shared-library/shared/model';

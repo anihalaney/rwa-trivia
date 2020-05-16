@@ -9,7 +9,7 @@ import { QuestionActions } from 'shared-library/core/store/actions/question.acti
 import { QuestionAddUpdate } from './question-add-update';
 import { Question, Answer } from 'shared-library/shared/model';
 import { debounceTime, map, concatMap, mergeMap, take } from 'rxjs/operators';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 import { QuestionService } from 'shared-library/core/services';
 import { ImageCropperComponent } from 'ngx-img-cropper';
 import { QuillImageUpload } from 'ng-quill-tex/lib/models/quill-image-upload';
@@ -79,40 +79,47 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnI
       }
     }));
 
-    this.subscriptions.push(this.questionForm.get('isRichEditor').valueChanges.subscribe(isRichEditor => {
-      setTimeout(() => {
-        this.questionForm.patchValue({ questionText: '' });
-        if (isRichEditor) {
-          this.questionForm.get('maxTime').setValidators(Validators.compose([Validators.required]));
-          this.questionForm.get('questionText').setValidators(Validators.compose([Validators.required]));
-        } else {
-          this.questionForm.get('maxTime').setValidators([]);
-          this.questionForm.get('questionText').setValidators(Validators.compose([Validators.required,
-          Validators.maxLength(this.applicationSettings.question_max_length)]));
-        }
-        this.questionForm.get('maxTime').updateValueAndValidity();
-        this.questionForm.get('questionText').updateValueAndValidity();
-      }, 0);
-    }));
+    if (this.questionForm) {
+      this.subscriptions.push(this.questionForm.get('isRichEditor').valueChanges.subscribe(isRichEditor => {
+        setTimeout(() => {
+          this.setValidators(isRichEditor);
+        }, 0);
+      }));
 
-    const questionControl = this.questionForm.get('questionText');
+      const questionControl = this.questionForm.get('questionText');
 
-    this.subscriptions.push(questionControl.valueChanges.pipe(debounceTime(500)).subscribe(v => this.computeAutoTags()));
-    this.subscriptions.push(this.answers.valueChanges.pipe(debounceTime(500)).subscribe(v => this.computeAutoTags()));
+      this.subscriptions.push(questionControl.valueChanges.pipe(debounceTime(500)).subscribe(v => this.computeAutoTags()));
+      this.subscriptions.push(this.answers.valueChanges.pipe(debounceTime(500)).subscribe(v => this.computeAutoTags()));
 
 
-    this.filteredTags$ = this.questionForm.get('tags').valueChanges
-      .pipe(map(val => val.length > 0 ? this.filter(val) : []));
+      this.filteredTags$ = this.questionForm.get('tags').valueChanges
+        .pipe(map(val => val.length > 0 ? this.filter(val) : []));
+    }
+
 
     this.subscriptions.push(store.select(appState.coreState).pipe(select(s => s.questionSaveStatus)).subscribe((status) => {
       if (status === 'SUCCESS') {
+        this.store.dispatch(this.questionAction.resetQuestionSuccess());
         this.snackBar.open('Question saved!', '', { duration: 2000 });
         this.router.navigate(['/user/my/questions']);
-        this.store.dispatch(this.questionAction.resetQuestionSuccess());
+
       }
     }));
   }
 
+
+  setValidators(isRichEditor) {
+    if (isRichEditor) {
+      this.questionForm.get('maxTime').setValidators(Validators.compose([Validators.required]));
+      this.questionForm.get('questionText').setValidators(Validators.compose([Validators.required]));
+    } else {
+      this.questionForm.get('maxTime').setValidators([]);
+      this.questionForm.get('questionText').setValidators(Validators.compose([Validators.required,
+      Validators.maxLength(this.applicationSettings.question_max_length)]));
+    }
+    this.questionForm.get('maxTime').updateValueAndValidity();
+    this.questionForm.get('questionText').updateValueAndValidity();
+  }
 
   // Image Upload
   fileUploaded(quillImageUpload: QuillImageUpload) {
@@ -125,21 +132,20 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnI
         data: { file: file, applicationSettings: this.applicationSettings }
       });
 
-      this.dialogRef.componentInstance.ref = this.dialogRef;
-
-      this.subscriptions.push(this.dialogRef.componentInstance.ref.afterClosed()
+      this.subscriptions.push(this.dialogRef.afterClosed()
         .pipe(mergeMap(result => {
           const fileName = `questions/${new Date().getTime()}-${file.name}`;
           return this.questionService.saveQuestionImage(result['image'], fileName);
         }),
           mergeMap(image => {
-             return of(this.utils.getQuestionUrl(`${image['name']}`) + `?d=${new Date().getTime()}`);
+            return of(this.utils.getQuestionUrl(`${image['name']}`) + `?d=${new Date().getTime()}`);
           })
         ).subscribe(imageUrl => {
           // SetImage callback function called to set image in editor
           quillImageUpload.setImage(imageUrl);
           this.cd.markForCheck();
         }));
+
     }
 
 
@@ -207,8 +213,8 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnI
 
   submit() {
 
-    const question: Question = super.onSubmit();
-    
+    const question: Question = this.onSubmit();
+
     if (question.isRichEditor) {
       question.questionText = this.quillObject.questionText;
       question.questionObject = this.quillObject.jsonObject;
@@ -216,9 +222,6 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnI
     if (question) {
       // call saveQuestion
       this.saveQuestion(question);
-
-      this.filteredTags$ = this.questionForm.get('tags').valueChanges
-        .pipe(map(val => val.length > 0 ? this.filter(val) : []));
     }
 
   }
@@ -233,24 +236,23 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnI
   }
 
   preview() {
-    this.question = super.onSubmit();
-    if (this.question.isRichEditor) {
-      this.question.questionText = this.quillObject.questionText;
-      this.question.questionObject = this.quillObject.jsonObject;
-    }
-
-    this.dialogRef = this.dialog.open(PreviewQuestionDialogComponent, {
+    this.switchQuestionQuillObject();
+    const dialogRef = this.dialog.open(PreviewQuestionDialogComponent, {
       disableClose: false,
       data: { question: this.question }
     });
-
-    this.dialogRef.componentInstance.ref = this.dialogRef;
-    this.subscriptions.push(this.dialogRef.componentInstance.ref.afterClosed().subscribe(result => {
+    this.subscriptions.push(dialogRef.afterClosed().subscribe(result => {
     }));
+  }
 
+  switchQuestionQuillObject() {
+    this.question = this.onSubmit();
+    if (this.question && this.question.isRichEditor) {
+      this.question.questionText = this.quillObject.questionText;
+      this.question.questionObject = this.quillObject.jsonObject;
+    }
   }
 }
-
 
 // Custom Validators
 function questionFormValidator(fg: FormGroup): { [key: string]: boolean } {

@@ -4,7 +4,7 @@ import { ModalDialogService } from 'nativescript-angular/directives/dialogs';
 import { RouterExtensions } from 'nativescript-angular/router';
 import { getImage } from 'nativescript-screenshot';
 import * as SocialShare from "nativescript-social-share";
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 import { WindowRef, Utils } from 'shared-library/core/services';
 import { coreState } from 'shared-library/core/store';
 import { UserActions } from 'shared-library/core/store/actions';

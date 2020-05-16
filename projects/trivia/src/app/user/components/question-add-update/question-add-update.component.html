@@ -34,9 +34,9 @@
 
       <!-- Enter Your Question -->
       <div class="enterquestion secondbg">
-        <div class="optionbox" style="margin-bottom:20px;" *ngIf="applicationSettings.enabled_rich_editor">
-          <label><span class="label-richtext">Rich Editor:</span></label>
-          <mat-checkbox mdPrefix formControlName="isRichEditor"></mat-checkbox>
+        <div class="optionbox" style="margin-bottom:20px;" *ngIf="applicationSettings?.enabled_rich_editor">
+          <label><span class="label-richtext" for="mat-checkbox-20-input">Rich Editor:</span></label>
+          <mat-checkbox mdPrefix formControlName="isRichEditor" id="mat-checkbox-20-input"></mat-checkbox>
         </div>
 
         <div class="optionbox">
@@ -74,7 +74,7 @@
           <h3>Answers</h3>
           <ng-container formArrayName="answers">
             <div *ngFor="let answer of answers.controls; let i=index" [formGroupName]="i" class="formfield">
-              <div class="optionbox col-md-12" style="margin-bottom:20px;" *ngIf="applicationSettings.enabled_rich_editor">
+              <div class="optionbox col-md-12" style="margin-bottom:20px;" *ngIf="applicationSettings?.enabled_rich_editor">
                 <label><span class="label-richtext">Rich Editor:</span></label>
                 <input type="checkbox" formControlName="isRichEditor">
               </div>
@@ -98,7 +98,7 @@
               && answer.controls.answerText.errors 
               &&  answer.controls.answerText.errors.maxlength) ? 'show-answer-text' : 'hide-answer-text'"
              class="error">
-             {{applicationSettings.answer_max_length}} characters are allowed</p>
+             {{applicationSettings?.answer_max_length}} characters are allowed</p>
             </div>
           </ng-container>
           <div class="error" *ngIf="!answers.valid && answers.touched">

@@ -13,26 +13,26 @@
           <div class="col-md-12 question">
               <render-question [question]="question"></render-question>
           </div>
-          <div class="question-list">
+          <div class="question-list" *ngIf="question && question.answers">
             <div class="col-xs-12">
               <ul id="list">
-                <li class="col-sm-5 col-xs-12 item" *ngFor="let answer of question.answers|slice:0:2;">
+                <li class="col-sm-5 col-xs-12 item" *ngFor="let answer of question?.answers|slice:0:2;">
                   <render-answer [answer]="answer"></render-answer>
                 </li>
               </ul>
             </div>
             <div class="col-xs-12">
               <ul>
-                <li class="col-sm-5 col-xs-12" *ngFor="let answer of question.answers|slice:2:4;">
+                <li class="col-sm-5 col-xs-12" *ngFor="let answer of question?.answers|slice:2:4;">
                   <render-answer [answer]="answer"></render-answer>
                 </li>
               </ul>
             </div>
           </div>
           <div>
-            <div class="col-sm-6 col-xs-12 ellipsis question-tags" title=" {{question.tags?.toString()}}">
+            <div class="col-sm-6 col-xs-12 ellipsis question-tags" title=" {{question?.tags?.toString()}}">
               Tags :
-              <span>{{question.tags?.toString()}}</span>
+              <span>{{question?.tags?.toString()}}</span>
             </div>
             <div class="col-sm-6 col-xs-12 alignment">
               <!-- <author [userDict]="userDict" [userId]="question.created_uid"></author> -->
