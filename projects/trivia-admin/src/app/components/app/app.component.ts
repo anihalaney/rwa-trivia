@@ -5,7 +5,7 @@ import { skip, take } from 'rxjs/operators';
 import { AppState, appState } from '../../store';
 import { AuthenticationProvider } from 'shared-library/core/auth';
 import { User } from 'shared-library/shared/model';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 import { ApplicationSettingsActions } from 'shared-library/core/store/actions';
 import { CategoryActions } from 'shared-library/core/store/actions';
 

@@ -6,7 +6,7 @@ import { AppState } from '../../../store';
 import * as bulkActions from '../../store/actions';
 import { bulkState } from '../../store';
 import { Utils } from 'shared-library/core/services';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 
 @Component({
   selector: 'app-bulk-summary',

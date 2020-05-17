@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
+import { Component, Input, OnChanges, ChangeDetectionStrategy, OnDestroy, SimpleChanges } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 import {
@@ -8,7 +8,7 @@ import {
 import { CoreState, categoryDictionary } from './../../../core/store';
 import { Utils } from 'shared-library/core/services';
 import { UserActions } from 'shared-library/core/store/actions';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 import { Router } from '@angular/router';
 
 @Component({
@@ -37,7 +37,7 @@ export class GameInviteComponent implements OnChanges, OnDestroy {
 
   }
 
-  ngOnChanges() {
+  ngOnChanges(changes: SimpleChanges) {
     if (this.game) {
       this.randomCategoryId = Math.floor(Math.random() * this.game.gameOptions.categoryIds.length);
       this.gameStatus = (this.game.GameStatus === GameStatus.WAITING_FOR_RANDOM_PLAYER_INVITATION_ACCEPTANCE) ? 'Random' : 'Friend';
@@ -56,11 +56,16 @@ export class GameInviteComponent implements OnChanges, OnDestroy {
   }
 
   otherInfo(game) {
-    const category = this.categoryDict[game.gameOptions.categoryIds[this.randomCategoryId]].categoryName.charAt(0).toUpperCase() +
-      this.categoryDict[game.gameOptions.categoryIds[this.randomCategoryId]].categoryName.slice(1);
+    const category = this.getCategoryName(game, this.randomCategoryId);
     return {
       category: category, remainingDays: this.remainingDays, notificationText: 'sent you an invite to play game together'
     };
+  }
+
+
+  getCategoryName(game, randomCategoryId) {
+    return this.categoryDict[game.gameOptions.categoryIds[randomCategoryId]].categoryName.charAt(0).toUpperCase() +
+      this.categoryDict[game.gameOptions.categoryIds[randomCategoryId]].categoryName.slice(1);
   }
 
   ngOnDestroy() {

@@ -1,13 +1,14 @@
 <div class="row">
   <div class="col-md-5 col-sm-6 col-xs-12">
-    <app-user-card [userId]="game.playerIds[0]" [type]="userCardType.USER_WEB_IMAGE_NAME_STATUS_LOCATION_HORIZONTAL" [gameStatus]="gameStatus"></app-user-card>
+    <app-user-card [userId]="game?.playerIds[0]" [type]="userCardType.USER_WEB_IMAGE_NAME_STATUS_LOCATION_HORIZONTAL"
+      [gameStatus]="gameStatus"></app-user-card>
   </div>
 
-
-  <div class="col-md-2 col-sm-2 col-xs-12 T-tagging ellipsis text-align" title="{{categoryDict[game.gameOptions.categoryIds[randomCategoryId]].categoryName.charAt(0).toUpperCase() + categoryDict[game.gameOptions.categoryIds[randomCategoryId]].categoryName.slice(1)}}">{{categoryDict[game.gameOptions.categoryIds[randomCategoryId]].categoryName.charAt(0).toUpperCase()
-    + categoryDict[game.gameOptions.categoryIds[randomCategoryId]].categoryName.slice(1)}}</div>
+  <div class="col-md-2 col-sm-2 col-xs-12 T-tagging ellipsis text-align"
+    title="{{categoryDict[game?.gameOptions?.categoryIds[randomCategoryId]]?.categoryName?.charAt(0)?.toUpperCase() + categoryDict[game?.gameOptions?.categoryIds[randomCategoryId]]?.categoryName?.slice(1)}}">{{categoryDict[game?.gameOptions?.categoryIds[randomCategoryId]]?.categoryName?.charAt(0)?.toUpperCase()
+    + categoryDict[game?.gameOptions?.categoryIds[randomCategoryId]]?.categoryName?.slice(1)}}</div>
   <div class="col-md-3 col-sm-2 col-xs-12 text-align">
-    <a class="btn" [routerLink]="['/game-play', game.gameId]">Accept </a>
+    <a class="btn" *ngIf="game" [routerLink]="['/game-play', game?.gameId]">Accept </a>
     <a class="btn reject-btn" (click)="rejectGameInvitation()">Reject </a>
   </div>
   <div class="col-md-2 col-sm-2 col-xs-12  invitation-left">{{remainingDays}} days left to accept invitation</div>

@@ -12,6 +12,7 @@ import { LeaderBoard } from './leaderBoard';
 import { TopTopics } from './top-topics';
 import { UserDict } from './user-dictionary';
 import { Invitation } from './invitation';
+import { Question } from './question';
 import { QuestionOfTheDay } from './question-of-the-day';
 
 export const testData = {
@@ -29,6 +30,7 @@ export const testData = {
     topTopics: TopTopics,
     userDict: UserDict,
     invitation: Invitation,
+    question: Question,
     questionOfTheDay : QuestionOfTheDay
 };
 
