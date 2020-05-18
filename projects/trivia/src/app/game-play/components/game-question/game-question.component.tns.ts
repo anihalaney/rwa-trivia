@@ -7,7 +7,7 @@ import { GamePlayState } from '../../store';
 import { appState } from '../../../store';
 import { Observable, timer, Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 import { projectMeta } from 'shared-library/environments/environment';
 
 

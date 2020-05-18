@@ -3,7 +3,7 @@ import { Invitation, Category, userCardType, User } from 'shared-library/shared/
 import { Store, select } from '@ngrx/store';
 import { CoreState, coreState, categoryDictionary } from './../../../../core/store';
 import { Observable, combineLatest } from 'rxjs';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 
 @Component({
   selector: 'app-notification',

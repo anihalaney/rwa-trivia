@@ -3,7 +3,7 @@ import * as app from 'tns-core-modules/application';
 import { RouterExtensions } from 'nativescript-angular/router';
 import { RadSideDrawer } from 'nativescript-ui-sidedrawer';
 import { select, Store } from '@ngrx/store';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 import { CoreState, coreState } from '../../../../core/store';
 import { User } from 'shared-library/shared/model';
 import { Utils } from './../../../../core/services';

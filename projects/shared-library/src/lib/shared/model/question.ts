@@ -6,7 +6,7 @@ export class Question {
   answers: Answer[];
   ordered: boolean;
   explanation?: string;
-  tags: string[];
+  tags?: string[];
   categories?: Category[];
   categoryIds: number[];
   published?: boolean;
@@ -135,7 +135,7 @@ export class Question {
 
 
 export class Answer {
-  id: number;
+  id?: number;
   answerText: string;
   correct: boolean;
   renderedAnswer?: string;

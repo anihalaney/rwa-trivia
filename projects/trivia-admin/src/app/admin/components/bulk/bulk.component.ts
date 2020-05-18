@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { select, Store } from '@ngrx/store';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 import { Subscription } from 'rxjs';
 import { bulkState } from '../../../bulk/store';
 import * as bulkActions from '../../../bulk/store/actions';

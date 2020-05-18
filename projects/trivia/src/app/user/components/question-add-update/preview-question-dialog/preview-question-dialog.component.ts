@@ -1,8 +1,8 @@
 import { Component, ChangeDetectionStrategy, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { User, Question } from 'shared-library/shared/model';
-import { MAT_DIALOG_DATA } from '@angular/material';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { Inject } from '@angular/core';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 
 @Component({
   selector: 'app-preview-question-dialog',
@@ -16,16 +16,16 @@ export class PreviewQuestionDialogComponent implements OnDestroy {
   question: Question;
   user: User;
   navLinks = [];
-  ref: any;
   subscriptions = [];
 
   constructor(@Inject(MAT_DIALOG_DATA) private data: any,
-    public cd: ChangeDetectorRef) {
+    public cd: ChangeDetectorRef,
+    public dialogRef: MatDialogRef<PreviewQuestionDialogComponent>) {
     this.question = data.question;
   }
 
   closeModel() {
-    this.ref.close();
+    this.dialogRef.close();
   }
 
   ngOnDestroy() {
