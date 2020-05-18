@@ -7,7 +7,7 @@ import { User, Question, QuestionStatus } from 'shared-library/shared/model';
 import { AppState, appState } from '../../../store';
 import { MyQuestions } from './my-questions';
 import { Page } from 'tns-core-modules/ui/page';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 import { FirebaseScreenNameConstants } from 'shared-library/shared/model';
 import { Utils } from 'shared-library/core/services';
 import * as Platform from "tns-core-modules/platform";

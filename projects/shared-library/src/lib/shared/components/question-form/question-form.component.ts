@@ -4,7 +4,7 @@ import { Question, QuestionStatus, Category, User, Answer, ApplicationSettings }
 import { QuestionService } from '../../../core/services';
 import { Observable, interval, of, Subject, merge } from 'rxjs';
 import { debounceTime, switchMap, map, multicast, take, skip, mergeMap} from 'rxjs/operators';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 // import { QuillImageUpload } from 'ng-quill-tex/lib/models/quill-image-upload';
 import { CropImageDialogComponent } from './../crop-image-dialog/crop-image-dialog.component';
 import { MatDialog } from '@angular/material';

@@ -3,7 +3,7 @@ import { AngularFireStorage } from '@angular/fire/storage';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 import { Observable, Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { BulkUploadFileInfo, Category, User } from 'shared-library/shared/model';

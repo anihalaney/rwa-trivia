@@ -6,7 +6,7 @@ import { GameActions, UserActions, TagActions } from 'shared-library/core/store/
 import { Category, GameOptions, User, ApplicationSettings, PlayerMode, OpponentType, userCardType } from 'shared-library/shared/model';
 import { Utils, WindowRef } from 'shared-library/core/services';
 import { AppState, appState } from '../../../store';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 import { OnDestroy, ChangeDetectorRef, PLATFORM_ID, Inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { isPlatformBrowser } from '@angular/common';

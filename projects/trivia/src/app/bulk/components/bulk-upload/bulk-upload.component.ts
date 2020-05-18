@@ -10,7 +10,7 @@ import { Utils } from 'shared-library/core/services';
 import { AppState, appState } from '../../../store';
 import { Papa } from 'ngx-papaparse';
 import * as bulkActions from '../../../bulk/store/actions';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 
 @Component({
   selector: 'bulk-upload',

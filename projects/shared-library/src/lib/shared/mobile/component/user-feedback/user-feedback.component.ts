@@ -4,7 +4,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
 import { UserActions, coreState } from 'shared-library/core/store';
 import { AppState, appState } from './../../../../../../../trivia/src/app/store';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 import { isIOS } from 'tns-core-modules/platform';
 import { Utils } from 'shared-library/core/services';
 declare var IQKeyboardManager;

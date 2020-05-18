@@ -13,7 +13,9 @@ import { TopTopics } from './top-topics';
 import { UserDict } from './user-dictionary';
 import { FriendsList } from './friends-list';
 
+import { Question } from './question';
 import { QuestionOfTheDay } from './question-of-the-day';
+
 export const testData = {
     categories: Categories,
     categoryDictionary: CategoryDictionary,
@@ -29,6 +31,7 @@ export const testData = {
     topTopics: TopTopics,
     userDict: UserDict,
     friendsList: FriendsList,
+    question: Question,
     questionOfTheDay : QuestionOfTheDay
 };
 

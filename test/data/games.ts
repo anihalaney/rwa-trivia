@@ -242,6 +242,7 @@ export const Games =  [
       }
     ],
     'gameId': 'vTzY3HeUvy9lXxaGHa0d',
+    'id': 'vTzY3HeUvy9lXxaGHa0d',
     'GameStatus': 'waiting for next question',
     'createdAt': 1587463514000,
     'turnAt': 1588206930838,
@@ -516,7 +517,7 @@ export const Games =  [
     'gameId': 'vTzY3HeUvy9lXxaGHa0d',
     'GameStatus': 'waiting for next question',
     'createdAt': 1587463514000,
-    'turnAt': 1588197930838,
+    'turnAt': 1589377651,
     'gameOverAt': 1587463792000,
     'reminder32Min': false,
     'reminder8Hr': false,

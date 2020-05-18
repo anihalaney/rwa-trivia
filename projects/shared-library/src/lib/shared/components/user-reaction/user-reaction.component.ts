@@ -1,7 +1,7 @@
 import { Component, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, Input, SimpleChanges, OnChanges } from '@angular/core';
 import { Question, User } from 'shared-library/shared/model';
 import { Store, select } from '@ngrx/store';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 import { Subscription } from 'rxjs';
 import { CoreState, coreState } from 'shared-library/core/store';
 import { GameActions } from 'shared-library/core/store/actions';
