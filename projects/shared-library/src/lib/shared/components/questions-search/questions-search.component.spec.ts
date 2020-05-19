@@ -104,10 +104,10 @@ describe('QuestionsSearchComponent', () => {
         };
         component.questionsSearchResults = questionsSearchResults;
         component.ngOnChanges();
-        expect(component.questions).toEqual(component.questionsSearchResults.questions);
-        expect(component.totalCount).toEqual(component.questionsSearchResults.totalCount);
-        expect(component.categoryAggregation).toEqual(component.questionsSearchResults.categoryAggregation);
-        expect(component.tagsCount).toEqual(component.questionsSearchResults.tagsCount);
+        expect(component.questions).toEqual(questionsSearchResults.questions);
+        expect(component.totalCount).toEqual(questionsSearchResults.totalCount);
+        expect(component.categoryAggregation).toEqual(questionsSearchResults.categoryAggregation);
+        expect(component.tagsCount).toEqual(questionsSearchResults.tagsCount);
     });
 
 });
