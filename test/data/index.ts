@@ -13,6 +13,7 @@ import { TopTopics } from './top-topics';
 import { UserDict } from './user-dictionary';
 import { FriendsList } from './friends-list';
 
+import { Invitation } from './invitation';
 import { Question } from './question';
 import { QuestionOfTheDay } from './question-of-the-day';
 
@@ -31,6 +32,7 @@ export const testData = {
     topTopics: TopTopics,
     userDict: UserDict,
     friendsList: FriendsList,
+    invitation: Invitation,
     question: Question,
     questionOfTheDay : QuestionOfTheDay
 };

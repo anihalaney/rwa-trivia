@@ -1,10 +1,8 @@
 import { Component, OnInit, Input, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { User, Invitation, friendInvitationConstants, userCardType } from 'shared-library/shared/model';
-import { Utils } from 'shared-library/core/services';
 import { Store } from '@ngrx/store';
 import { UserActions } from 'shared-library/core/store/actions';
-// import { AppState } from '../../../store';
-import { CoreState, coreState } from './../../../core/store';
+import { CoreState } from './../../../core/store';
 
 @Component({
   selector: 'app-friend-invite',
@@ -12,19 +10,14 @@ import { CoreState, coreState } from './../../../core/store';
   styleUrls: ['./friend-invite.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class FriendInviteComponent implements OnInit {
+export class FriendInviteComponent {
   @Input() invitation: Invitation;
-  invitations: Invitation[];
   @Input() user: User;
   userCardType = userCardType;
 
   constructor(private store: Store<CoreState>,
-    private utils: Utils,
     private userActions: UserActions,
     private cd: ChangeDetectorRef) {
-  }
-
-  ngOnInit() {
   }
 
   acceptFriendInvitation(): void {
