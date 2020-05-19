@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
 import { select, Store } from '@ngrx/store';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 import { coreState, QuestionActions } from 'shared-library/core/store';
 import { Question } from 'shared-library/shared/model';
 import { AppState } from '../../../store';

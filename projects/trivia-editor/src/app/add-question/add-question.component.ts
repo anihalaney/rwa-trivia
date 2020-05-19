@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef, NgZone, OnDestroy, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { AppState, appState, } from './../store';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 import { ApplicationSettings, Question, Answer, Category, QuestionStatus } from 'shared-library/shared/model';
 import { Subscription, Observable } from 'rxjs';
 import { FormGroup, FormArray, FormControl, Validators, FormBuilder } from '@angular/forms';

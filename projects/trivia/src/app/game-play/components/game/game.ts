@@ -3,7 +3,7 @@ import { take } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 import { User } from 'shared-library/shared/model';
 import { AppState, appState } from '../../../store';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 import { OnDestroy } from '@angular/core';
 
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })

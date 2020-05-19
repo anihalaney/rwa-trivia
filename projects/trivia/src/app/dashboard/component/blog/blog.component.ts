@@ -1,8 +1,8 @@
-import { Component, Input, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, AfterViewInit } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { AppState, appState } from '../../../store';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 
 @Component({
   selector: 'blog',
@@ -12,16 +12,12 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 })
 
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
-export class BlogComponent implements OnDestroy, AfterViewInit {
+export class BlogComponent implements OnDestroy, OnInit {
   @Input() blogId: number;
   blogData = [];
 
-  subscriptions = [];
+  subscriptions: Subscription[] = [];
   constructor(private store: Store<AppState>, private cd: ChangeDetectorRef) {
-    this.subscriptions.push(this.store.select(appState.dashboardState).pipe(select(s => s.blogs)).subscribe(blogs => {
-      this.blogData = blogs;
-      this.cd.markForCheck();
-    }));
   }
 
   onNotify(info: any) {
@@ -31,9 +27,10 @@ export class BlogComponent implements OnDestroy, AfterViewInit {
   ngOnDestroy() {
   }
 
-  ngAfterViewInit(): void {
+  ngOnInit(): void {
     this.subscriptions.push(this.store.select(appState.dashboardState).pipe(select(s => s.blogs)).subscribe(blogs => {
       this.blogData = blogs;
+      this.cd.markForCheck();
     }));
   }
 }
