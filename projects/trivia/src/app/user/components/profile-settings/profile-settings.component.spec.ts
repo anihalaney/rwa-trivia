@@ -43,14 +43,15 @@ describe('ProfileSettingsComponent', () => {
 
     const mockGeolocation = {
         getCurrentPosition: jest.fn()
-            .mockImplementationOnce(key => Promise.resolve(success({
+            .mockImplementationOnce(success => Promise.resolve(success({
                 coords: {
                     latitude: 51.1,
                     longitude: 45.3
                 }
             })))
     };
-    let navigator: navigator.geolocation = mockGeolocation;
+    const navigator =  {geolocation: null};
+    navigator.geolocation = mockGeolocation;
 
     beforeEach(async(() => {
         // create new instance of FormBuilder
