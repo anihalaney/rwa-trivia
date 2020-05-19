@@ -2,7 +2,7 @@ import {
     ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, QueryList, ViewChildren, Input, SimpleChanges, OnChanges, Output, EventEmitter
 } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 import { Observable } from 'rxjs';
 import { Utils } from 'shared-library/core/services';
 import { Category, FirebaseScreenNameConstants, Game, Question, QuestionMetadata, ReportQuestion, User } from 'shared-library/shared/model';

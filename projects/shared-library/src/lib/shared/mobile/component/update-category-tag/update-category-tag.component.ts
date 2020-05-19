@@ -7,7 +7,7 @@ import { User, Category } from 'shared-library/shared/model';
 import { Observable } from 'rxjs';
 import { map, flatMap, filter } from 'rxjs/operators';
 import { Utils } from './../../../../core/services/utils';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 
 
 @Component({

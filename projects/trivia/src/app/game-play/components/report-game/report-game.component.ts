@@ -9,7 +9,7 @@ import * as gameplayactions from '../../store/actions';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
 import { Utils } from 'shared-library/core/services';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 
 @Component({
     selector: 'report-game',

@@ -5,7 +5,7 @@ import { User } from 'shared-library/shared/model';
 import { Utils } from 'shared-library/core/services';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { Inject } from '@angular/core';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 import { CropperSettings, ImageCropperComponent } from 'ngx-img-cropper';
 
 @Component({
@@ -32,7 +32,8 @@ export class CropImageDialogComponent implements OnInit, OnDestroy {
   @ViewChild('cropper', { static: false }) cropper: ImageCropperComponent;
 
   constructor(@Inject(MAT_DIALOG_DATA) private data: any,
-    public cd: ChangeDetectorRef) {
+    public cd: ChangeDetectorRef,
+    public dialogRef: MatDialogRef<CropImageDialogComponent>) {
     this.setCropperSettings();
   }
 
@@ -101,7 +102,7 @@ export class CropImageDialogComponent implements OnInit, OnDestroy {
       this.cd.markForCheck();
       this.errorMsg = `Image size should be less than ${this.maxImageSize} KB`;
     } else {
-      this.ref.close(cropImage);
+      this.dialogRef.close(cropImage);
     }
   }
 }

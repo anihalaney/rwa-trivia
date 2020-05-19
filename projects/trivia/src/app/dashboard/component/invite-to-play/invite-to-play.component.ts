@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy, OnInit, OnDestroy, Input, OnChanges, ChangeDetectorRef } from '@angular/core';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 import { select, Store } from '@ngrx/store';
 import { UserActions } from 'shared-library/core/store';
 import { userCardType } from 'shared-library/shared/model';
