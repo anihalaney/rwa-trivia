@@ -20,23 +20,6 @@ describe('QuestionsSearchComponent', () => {
         fixture = TestBed.createComponent(QuestionsSearchComponent);
         component = fixture.componentInstance;
 
-        component.categoryDictionary = testData.categoryDictionary;
-        component.applicationSettings = testData.applicationSettings;
-        component.showApproveButton = true;
-        const questionsSearchResults: SearchResults = {
-            questions: testData.questions.published,
-            totalCount: 20,
-            searchCriteria: {
-                categoryIds: [1, 2, 3],
-                tags: ['Typescript', ''],
-                status: 'APPROVED',
-                searchInput: 'Typ',
-                sortOrder: ''
-            },
-            categoryAggregation: { 20: 20 },
-            tagsCount: [{ tag: 'Typescript', count: 20 }]
-        };
-        component.questionsSearchResults = questionsSearchResults;
         fixture.detectChanges();
     }));
 
@@ -105,10 +88,21 @@ describe('QuestionsSearchComponent', () => {
     });
 
     it('verify that questions,totalCount,categoryAggregation,tagsCount, tagsChecked should be set on ngOnChanges', () => {
-        component.questions = component.questionsSearchResults.questions;
-        component.totalCount = component.questionsSearchResults.totalCount;
-        component.categoryAggregation = component.questionsSearchResults.categoryAggregation;
-        component.tagsCount = component.questionsSearchResults.tagsCount;
+
+        const questionsSearchResults: SearchResults = {
+            questions: testData.questions.published,
+            totalCount: 20,
+            searchCriteria: {
+                categoryIds: [1, 2, 3],
+                tags: ['Typescript', ''],
+                status: 'APPROVED',
+                searchInput: 'Typ',
+                sortOrder: ''
+            },
+            categoryAggregation: { 20: 20 },
+            tagsCount: [{ tag: 'Typescript', count: 20 }]
+        };
+        component.questionsSearchResults = questionsSearchResults;
         component.ngOnChanges();
         expect(component.questions).toEqual(component.questionsSearchResults.questions);
         expect(component.totalCount).toEqual(component.questionsSearchResults.totalCount);
