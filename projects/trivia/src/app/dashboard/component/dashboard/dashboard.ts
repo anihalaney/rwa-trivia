@@ -1,7 +1,7 @@
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { ChangeDetectorRef, Inject, NgZone, OnDestroy, PLATFORM_ID } from '@angular/core';
 import { select, Store } from '@ngrx/store';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 import { Observable, Subscription, timer, combineLatest } from 'rxjs';
 import { Utils, WindowRef } from 'shared-library/core/services';
 import { GameActions, QuestionActions, UserActions } from 'shared-library/core/store/actions';

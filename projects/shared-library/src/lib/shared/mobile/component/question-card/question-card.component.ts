@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, OnDestroy, ChangeDetectorRef, ChangeDetectionStrategy, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 import { Question } from './../../../model/question';
 import { select, Store } from '@ngrx/store';
 import { CoreState, coreState } from '../../../../core/store';

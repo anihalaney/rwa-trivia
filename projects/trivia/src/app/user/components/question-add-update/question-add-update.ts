@@ -7,7 +7,7 @@ import { Utils } from 'shared-library/core/services';
 import { AppState, appState } from '../../../store';
 import * as userActions from '../../store/actions';
 import { QuestionActions } from 'shared-library/core/store/actions/question.actions';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 import { OnDestroy } from '@angular/core';
 import { isEmpty } from 'lodash';
 
@@ -53,10 +53,12 @@ export class QuestionAddUpdate implements OnDestroy {
 
     this.subscriptions.push(this.store.select(appState.coreState).pipe(take(1)).subscribe(s => this.user = s.user));
     this.subscriptions.push(this.categoriesObs.subscribe(categories => {
-      this.categories = categories;
-      this.questionCategories = this.categories.map(category => category.categoryName);
-      this.questionCategories.push('Select Preferred Category');
-      this.selectedQuestionCategoryIndex = this.questionCategories.length - 1;
+      if (categories) {
+        this.categories = categories;
+        this.questionCategories = this.categories.map(category => category.categoryName);
+        this.questionCategories.push('Select Preferred Category');
+        this.selectedQuestionCategoryIndex = this.questionCategories.length - 1;
+      }
     }
     ));
     this.subscriptions.push(this.tagsObs.subscribe(tags => this.tags = tags));
@@ -87,34 +89,38 @@ export class QuestionAddUpdate implements OnDestroy {
         }
       })).subscribe(data => {
         if (data) {
-          const question = this.getQuestionFromFormValue(this.questionForm.value);
-          if (this.question.status) {
-              question.status = this.question.status;
-          }
-          if (!question.status) {
-            question.status = QuestionStatus.PENDING;
-          }
-
-          if (question.isRichEditor && !this.isMobile ) {
-            question.questionText = this.quillObject.questionText ? this.quillObject.questionText : '';
-            question.questionObject = this.quillObject.jsonObject ? this.quillObject.jsonObject : {};
-          }
-          question.created_uid = this.user.userId;
-          if (!this.isSaved) {
-            this.store.dispatch(new userActions.AddQuestion({ question: question }));
-          }
+          this.autoSaveQuestion()
         }
       }));
 
   }
 
+  autoSaveQuestion() {
+    const question = this.getQuestionFromFormValue(this.questionForm.value);
+    if (this.question.status) {
+      question.status = this.question.status;
+    }
+    if (!question.status) {
+      question.status = QuestionStatus.PENDING;
+    }
+
+    if (question.isRichEditor && !this.isMobile) {
+      question.questionText = this.quillObject.questionText ? this.quillObject.questionText : '';
+      question.questionObject = this.quillObject.jsonObject ? this.quillObject.jsonObject : {};
+    }
+    question.created_uid = this.user.userId;
+    if (!this.isSaved) {
+      this.store.dispatch(new userActions.AddQuestion({ question: question }));
+    }
+
+  }
 
   // Text change in quill editor
   onTextChanged(text) {
     this.quillObject.jsonObject = text.delta;
     this.quillObject.questionText = text.html;
-    if(text.imageParsedName){
-      this.store.dispatch(this.questionAction.deleteQuestionImage(text.imageParsedName));
+    if (text.imageParsedName) {
+      this.store.dispatch(this.questionAction.deleteQuestionImage(text.imageParsedName));
     }
   }
 
@@ -136,36 +142,42 @@ export class QuestionAddUpdate implements OnDestroy {
   addTag(tag: string) {
     if (this.enteredTags.indexOf(tag) < 0) {
       this.enteredTags.push(tag);
-       this.questionForm.patchValue({tags: [] });
+      this.questionForm.patchValue({ tags: [] });
     }
   }
 
   removeEnteredTag(tag) {
     this.enteredTags = this.enteredTags.filter(t => t !== tag);
-    this.questionForm.patchValue({tags: [] });
+    this.questionForm.patchValue({ tags: [] });
   }
 
 
   computeAutoTags() {
     const formValue = this.questionForm.value;
     const allTextValues: string[] = [formValue.questionText];
-    formValue.answers.forEach(answer => allTextValues.push(answer.answerText));
-    if(formValue.isRichEditor && this.quillObject && this.quillObject.questionText){
-      const removedHtmlTag = this.quillObject.questionText.replace( /(<([^>]+)>)/ig, '');
-      allTextValues.push(removedHtmlTag);  
+    if (formValue.answers) {
+      formValue.answers.forEach(answer => allTextValues.push(answer.answerText));
+    }
+
+    if (formValue.isRichEditor && this.quillObject && this.quillObject.questionText) {
+      const removedHtmlTag = this.quillObject.questionText.replace(/(<([^>]+)>)/ig, '');
+      allTextValues.push(removedHtmlTag);
     }
     const wordString: string = allTextValues.join(" ");
     const matchingTags: string[] = [];
-    this.tags.forEach(tag => {
-      const patt = new RegExp('\\b(' + tag.replace("+", "\\+") + ')\\b', "ig");
-      if (wordString.match(patt)) {
-        if (this.enteredTags.indexOf(tag) === -1 ) {
-          matchingTags.push(tag);
+    if (this.tags) {
+      this.tags.forEach(tag => {
+        const patt = new RegExp('\\b(' + tag.replace("+", "\\+") + ')\\b', "ig");
+        if (wordString.match(patt)) {
+          if (this.enteredTags.indexOf(tag) === -1) {
+            matchingTags.push(tag);
+          }
         }
-      }
-    });
+      });
+    }
+
     this.autoTags = matchingTags;
-    this.questionForm.patchValue({tags: [] });
+    this.questionForm.patchValue({ tags: [] });
   }
 
 
@@ -177,7 +189,7 @@ export class QuestionAddUpdate implements OnDestroy {
     question.is_draft = formValue.is_draft;
     question.questionText = formValue.questionText;
     question.answers = formValue.answers;
-    question.categoryIds = (formValue.category >= 0 ) ? [formValue.category] : [];
+    question.categoryIds = (formValue.category >= 0) ? [formValue.category] : [];
     question.tags = [...this.autoTags, ...this.enteredTags];
     question.ordered = formValue.ordered;
     question.explanation = formValue.explanation;

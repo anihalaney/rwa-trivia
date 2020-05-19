@@ -9,7 +9,7 @@ import { SelectedIndexChangedEventData, DropDown } from 'nativescript-drop-down'
 import { ValueList } from 'nativescript-drop-down';
 import { AppState } from '../../../store';
 import { RadListViewComponent } from 'nativescript-ui-listview/angular';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 
 @Component({
   selector: 'leaderboard',

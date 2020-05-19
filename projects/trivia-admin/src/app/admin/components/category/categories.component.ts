@@ -6,7 +6,7 @@ import { Store, select } from '@ngrx/store';
 
 import { AppState, appState } from '../../../store';
 import { Category } from 'shared-library/shared/model';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 
 @Component({
   selector: 'category-list',

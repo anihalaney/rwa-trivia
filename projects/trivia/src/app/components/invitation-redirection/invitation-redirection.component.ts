@@ -6,7 +6,7 @@ import { User } from 'shared-library/shared/model';
 import { AuthenticationProvider } from 'shared-library/core/auth';
 import { AppState, appState } from '../../store';
 import { UserActions } from 'shared-library/core/store/actions';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 
 @Component({
     selector: 'invitation-redirection',

@@ -3,7 +3,7 @@ import { Question, Answer, User, ApplicationSettings } from 'shared-library/shar
 import { CoreState, coreState, categoryDictionary } from './../../../../core/store';
 import { Store, select } from '@ngrx/store';
 import { Utils } from 'shared-library/core/services';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 import { Observable } from 'rxjs';
 import { RouterExtensions } from 'nativescript-angular/router';
 import { map, flatMap, filter } from 'rxjs/operators';

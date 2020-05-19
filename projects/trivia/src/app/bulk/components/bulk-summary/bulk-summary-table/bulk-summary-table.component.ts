@@ -14,7 +14,7 @@ import { AngularFireStorage } from '@angular/fire/storage';
 import * as bulkActions from '../../../store/actions';
 import { Router } from '@angular/router';
 import { Utils } from 'shared-library/core/services';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 import { isPlatformBrowser } from '@angular/common';
 
 @Component({

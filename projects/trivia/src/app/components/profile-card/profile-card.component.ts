@@ -5,7 +5,7 @@ import { AppState, appState } from '../../store';
 import { Store, select } from '@ngrx/store';
 import { Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 
 @Component({
   selector: 'profile-card',

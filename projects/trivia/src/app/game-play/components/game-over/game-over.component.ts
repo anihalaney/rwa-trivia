@@ -5,7 +5,7 @@ import {
 import { MatDialog, MatDialogRef, MatSnackBar } from '@angular/material';
 import { select, Store } from '@ngrx/store';
 import * as domtoimage from 'dom-to-image';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 import { Utils, WindowRef } from 'shared-library/core/services';
 import { coreState } from 'shared-library/core/store';
 import { UserActions } from 'shared-library/core/store/actions';
