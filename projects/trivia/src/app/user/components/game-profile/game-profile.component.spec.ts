@@ -33,6 +33,8 @@ describe('GameProfileComponent', () => {
                     useValue: {
                         getImageUrl(user: User, width: Number, height: Number, size: string) {
                             if (user && user !== null && user.profilePicture && user.profilePicture !== '') {
+                                //  no need to do this you can send static response from here like for this `${CONFIG.functionsUrl}/user/profile/${user.userId}/${user.profilePicture}/${width}/${height}`
+                                //  you can send `https://rwa-trivia-dev-e57fc.firebaseapp.com/v1/user/profile/${user.userId}/${user.profilePicture}//${width}/${height}`
                                 if (this.sanitizer) {
                                     return this.sanitizer.bypassSecurityTrustUrl(
                                         `${CONFIG.functionsUrl}/user/profile/${user.userId}/${user.profilePicture}/${width}/${height}`
@@ -92,6 +94,7 @@ describe('GameProfileComponent', () => {
         expect(component.user).toBe(undefined);
     });
 
+    // wrong, in this case you have to check if the addUserInvitation is emitted or not with given predefined value, and loader value should be true
     it('Verify sendFriendRequest function works', () => {
         component.user = { ...testData.userList[0] };
         component.loggedInUser = { ...testData.userList[1] };
@@ -99,6 +102,7 @@ describe('GameProfileComponent', () => {
         expect(spy).toHaveBeenCalled();
     });
 
+     // check for all the possibilities - check with different user to have diffrerenct result from the function
     it('Verify getImageUrl function works', () => {
         user = { ...testData.userList[0] };
         component.categoryDictionary = testData.categoryDictionary;
@@ -108,12 +112,13 @@ describe('GameProfileComponent', () => {
         mockStore.refreshState();
         fixture.detectChanges();
         const expectedURL = '~/assets/images/avatar-400X400.png';
+        // get image url should be called from line no 119 so you have to set the values acccordingly and check if the function is called?
         expect(component.getImageUrl(user)).toEqual(expectedURL);
     });
 
     it('Verify topicsArray for diffrent user login profile', () => {
         user = { ...testData.userList[0] };
-        component.categoryDictionary = testData.categoryDictionary;
+        component.categoryDictionary = testData.categoryDictionary; // you can set this value in mocking store
         mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
             user: user
         });
@@ -127,7 +132,7 @@ describe('GameProfileComponent', () => {
 
     it('Verify topicsArray for same user login profile', () => {
         user = { ...testData.userList[1] };
-        component.categoryDictionary = testData.categoryDictionary;
+        component.categoryDictionary = testData.categoryDictionary; // you can set this value in mocking store
         mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
             user: user
         });
@@ -141,7 +146,7 @@ describe('GameProfileComponent', () => {
 
     it('Verify tagsArray for diffrent user login profile', () => {
         user = { ...testData.userList[0] };
-        component.categoryDictionary = testData.categoryDictionary;
+        component.categoryDictionary = testData.categoryDictionary; // you can set this value in mocking store
         mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
             user: user
         });
@@ -153,9 +158,9 @@ describe('GameProfileComponent', () => {
         expect(component.tagsArray.userTags).toEqual(expectedTopics.userTags);
     });
 
-    it('Verify tagsArray for same user login profile', () => {
+    it('Verify tagsArray for loggedIn user profile', () => {
         user = { ...testData.userList[1] };
-        component.categoryDictionary = testData.categoryDictionary;
+        component.categoryDictionary = testData.categoryDictionary; // you can set this value in mocking store
         mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
             user: user
         });
@@ -167,6 +172,7 @@ describe('GameProfileComponent', () => {
         expect(component.tagsArray.userTags).toEqual(expectedTopics.userTags);
     });
 
+    //  this case is non required 
     it('Verify topics for diffrent user login profile', () => {
         user = { ...testData.userList[0] };
         component.categoryDictionary = testData.categoryDictionary;
@@ -192,7 +198,7 @@ describe('GameProfileComponent', () => {
 
     it('Verify topics for same user login profile', () => {
         user = { ...testData.userList[1] };
-        component.categoryDictionary = testData.categoryDictionary;
+        component.categoryDictionary = testData.categoryDictionary; // you can set this value in mocking store
         mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
             user: user
         });
@@ -206,7 +212,7 @@ describe('GameProfileComponent', () => {
         }
         // Check if user have category
         if (user && user.categoryIds) {
-            expectedUserTopics = [...user.tags, user.categoryIds.map((data) => component.categoryDictionary[data].categoryName)];
+            expectedUserTopics = [...user.tags, user.categoryIds.map((data) => component.categoryDictionary[data].categoryName)]; // get this category dictionary data from testdata or by mocking the store do not use variable from component
         } else {
             expectedUserTopics = [];
         }
@@ -223,9 +229,22 @@ describe('GameProfileComponent', () => {
         });
         component.initializeSocialSetting().subscribe();
         mockStore.refreshState();
+        // check for socialProfileObj
+        // check for socialProfileSettings
+        // check for enableSocialProfile
         fixture.detectChanges();
         expect(component.applicationSettings).toEqual(applicationSetting[0]);
     });
+
+    
+    // check initializeProfile() function
+    // check if initializeSocialSetting() is called after you set everything before line number 138 in initializeProfile() function
+    // check is isLivesEnable() - you have to call the function and check the returned value with expected returned value which is boolean check for both true and false value (to get the false value you have to set the variables values so that it gives false in return)
+    // check startNewGame() function check for the this.router.navigate function to be called times
+    // check getIcon() function
+    // check userInfo() function
+    // check getImageUrl() function
+
 
     afterEach(() => {
         fixture.destroy();
