@@ -65,7 +65,7 @@ describe('ProfileSettingsComponent', () => {
         const formBuilder: FormBuilder = new FormBuilder();
 
         TestBed.configureTestingModule({
-            declarations: [ProfileSettingsComponent],
+            declarations: [ProfileSettingsComponent, CheckDisplayNameComponent],
             schemas: [NO_ERRORS_SCHEMA],
             imports: [ReactiveFormsModule, FormsModule, MatFormFieldModule,
                 MatInputModule, MatSnackBarModule, RouterTestingModule.withRoutes([]), BrowserAnimationsModule, MatDialogModule],
