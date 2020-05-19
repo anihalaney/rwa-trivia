@@ -64,7 +64,7 @@ describe('MyQuestionsComponent', () => {
         expect(component.user).toBe(undefined);
     });
 
-    it('categoriesObs should be set when counstrocter call', () => {
+    it('categoriesObs should be set when constructor call', () => {
         categories = testData.categories;
         const categories$ = of(testData.categories);
         questions = { ...testData.questions };
@@ -76,6 +76,7 @@ describe('MyQuestionsComponent', () => {
         });
         mockStore.refreshState();
         fixture.detectChanges();
+        // we are supposed to check the value of categories set in component after we emit the value in mockStore so you should check component.categories values with our mock data please refer game-card
         categories$.pipe(toArray()).subscribe(result => {
             expect(result[0]).toEqual(categories);
         });
@@ -93,6 +94,7 @@ describe('MyQuestionsComponent', () => {
         });
         mockStore.refreshState();
         fixture.detectChanges();
+        // same as above
         tags$.pipe(toArray()).subscribe(result => {
             expect(result[0]).toEqual(tags);
         });
@@ -105,6 +107,8 @@ describe('MyQuestionsComponent', () => {
         });
         mockStore.refreshState();
         fixture.detectChanges();
+
+        // this is correct do it like this
         expect(component.user).toEqual(user);
     });
 
@@ -155,6 +159,7 @@ describe('MyQuestionsComponent', () => {
         });
         mockStore.refreshState();
         fixture.detectChanges();
+        // change variable name to mathEditorOptions
         const expectedResult = {
             mathOptions: applicationSettings[0]
         };
@@ -163,6 +168,7 @@ describe('MyQuestionsComponent', () => {
 
     it('Verify hideLoader function works', () => {
         questions = { ...testData.questions };
+        // use testData.questions.published for published and testData.questions.unpublished for unpublished questions add one question in unpublished data
         mockStore.overrideSelector<AppState, Partial<UserState>>(userState, {
             userPublishedQuestions: questions,
             userUnpublishedQuestions: questions
@@ -170,6 +176,8 @@ describe('MyQuestionsComponent', () => {
         mockStore.refreshState();
         fixture.detectChanges();
         component.hideLoader();
+
+        // try to follow game-card example 'remaining time should be 0 hr 0 min' case
         setTimeout(() => {
             expect(spy).toHaveBeenCalledWith(
                 component.toggleLoader(false)
@@ -187,6 +195,8 @@ describe('MyQuestionsComponent', () => {
         expect(component.snackBar.open).toHaveBeenCalled();
     });
 
+    // write test case for toggleLoader function check
+    // write test case for updateUnpublishedQuestions() function check, check for the dispatched event
     afterEach(() => {
         fixture.destroy();
     });
