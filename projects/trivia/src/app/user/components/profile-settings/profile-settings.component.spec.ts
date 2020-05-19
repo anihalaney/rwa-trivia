@@ -1,20 +1,26 @@
 import { ProfileSettingsComponent } from './profile-settings.component';
 import { ComponentFixture, async, TestBed } from '@angular/core/testing';
-import { AppState, appState } from '../../../store';
+import {
+    AppState, appState, categoryDictionary,
+    getCategories,
+    getTags
+} from '../../../store';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
-import { Router, ActivatedRoute } from '@angular/router';
-import { CoreState, UserActions, UIStateActions, coreState } from 'shared-library/core/store';
-import { MemoizedSelector, Store, StoreModule } from '@ngrx/store';
-import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { CoreState, UserActions, UIStateActions, coreState, getTopTopics } from 'shared-library/core/store';
+import { Store } from '@ngrx/store';
+import { FormBuilder, FormsModule, ReactiveFormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { NO_ERRORS_SCHEMA } from '@angular/compiler/src/core';
-import { MatDialogModule, MatSnackBarModule, MatAutocompleteModule } from '@angular/material';
+import { MatDialogModule, MatSnackBarModule, MatAutocompleteModule, MatFormFieldModule, MatInputModule } from '@angular/material';
 import { Utils, WindowRef } from 'shared-library/core/services';
 import { of } from 'rxjs';
 import { RouterTestingModule } from '@angular/router/testing';
-import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AuthenticationProvider, FirebaseAuthService } from 'shared-library/core/auth';
 import { User } from 'shared-library/shared/model';
+import { testData } from 'test/data';
+import { forwardRef } from '@angular/core';
+import { CheckDisplayNameComponent } from 'shared-library/shared/components';
 
 describe('ProfileSettingsComponent', () => {
     window.scrollTo = jest.fn();
@@ -24,6 +30,7 @@ describe('ProfileSettingsComponent', () => {
     let mockStore: MockStore<AppState>;
     const firebaseAuthService: FirebaseAuthService = null;
     const store: Store<CoreState> = null;
+    const applicationSettings: any[] = [];
     let user: User;
     const firebaseAuthState = () => {
         firebaseAuthService.authState().subscribe(afUser => {
@@ -50,7 +57,7 @@ describe('ProfileSettingsComponent', () => {
                 }
             })))
     };
-    const navigator =  {geolocation: null};
+    const navigator = { geolocation: null };
     navigator.geolocation = mockGeolocation;
 
     beforeEach(async(() => {
@@ -60,8 +67,8 @@ describe('ProfileSettingsComponent', () => {
         TestBed.configureTestingModule({
             declarations: [ProfileSettingsComponent],
             schemas: [NO_ERRORS_SCHEMA],
-            imports: [ReactiveFormsModule, FormsModule, StoreModule.forRoot({}), MatSnackBarModule, MatAutocompleteModule,
-                RouterTestingModule.withRoutes([]), HttpClientModule, BrowserAnimationsModule, MatDialogModule],
+            imports: [ReactiveFormsModule, FormsModule, MatFormFieldModule,
+                MatInputModule, MatSnackBarModule, RouterTestingModule.withRoutes([]), BrowserAnimationsModule, MatDialogModule],
             providers: [
                 provideMockStore({
                     selectors: [
@@ -72,7 +79,6 @@ describe('ProfileSettingsComponent', () => {
                     ]
                 }),
                 Utils,
-                // { provide: WindowRef, useValue: windowRef },
                 WindowRef,
                 UserActions,
                 UIStateActions,
@@ -101,6 +107,7 @@ describe('ProfileSettingsComponent', () => {
         const getGeoLocation = spyOn(navigator.geolocation, 'getCurrentPosition');
 
         component = fixture.debugElement.componentInstance;
+        fixture.detectChanges();
         // router = TestBed.get(Router);
     });
 
@@ -132,10 +139,47 @@ describe('ProfileSettingsComponent', () => {
         expect(component.setNotificationMsg).toHaveBeenCalled();
     });
 
-    it('Verify getLocation function works', () => {
-        component.userAction.loadAddressUsingLatLong = jest.fn();
-        navigator.geolocation.getCurrentPosition(position => console.log('spec file position ==>', position));
+    it('Verify that applicationSettings information should be set successfully', () => {
+        applicationSettings.push(testData.applicationSettings);
+        mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
+            applicationSettings: applicationSettings
+        });
+        mockStore.refreshState();
         fixture.detectChanges();
-        component.getLocation();
+        component.initializeSocialSetting().subscribe();
+        expect(component.applicationSettings).toEqual(applicationSettings[0]);
     });
+
+    it('Verify that user information should be set successfully', () => {
+        user = { ...testData.userList[0] };
+        applicationSettings.push(testData.applicationSettings);
+        const account = {
+            bits: 74,
+            bytes: 2,
+            id: '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
+            lastGamePlayed: 1588669561000,
+            lastGamePlayedNotification: false,
+            lastLiveUpdate: 1588671649000,
+            lives: 4,
+            nextLiveUpdate: 1588671467000,
+            signUpQuestionAnswered: true,
+        };
+        mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
+            applicationSettings: applicationSettings,
+            user: user,
+            account: account
+        });
+        getCategories.setResult(testData.categoryList);
+        categoryDictionary.setResult(testData.categoryDictionary);
+        getTopTopics.setResult(testData.topTopics as any);
+        mockStore.refreshState();
+        fixture.detectChanges();
+        expect(component.user).toEqual(user);
+    });
+
+    // it('Verify getLocation function works', () => {
+    //     component.userAction.loadAddressUsingLatLong = jest.fn();
+    //     fixture.detectChanges();
+    //     component.getLocation();
+    // });
 });

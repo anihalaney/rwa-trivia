@@ -604,9 +604,9 @@ export class ProfileSettings {
         case AuthProviderConstants.FACEBOOK:
           this.user.phoneNo = this.userForm.get('phoneNo').value;
           break;
-          case AuthProviderConstants.APPLE:
-            this.user.phoneNo = this.userForm.get('phoneNo').value;
-            break;
+        case AuthProviderConstants.APPLE:
+          this.user.phoneNo = this.userForm.get('phoneNo').value;
+          break;
         case AuthProviderConstants.PHONE:
           this.user.email = this.userForm.get('email').value;
           break;
@@ -699,7 +699,7 @@ export class ProfileSettings {
     }
   }
 
-  editSingleField(field: string) {debugger
+  editSingleField(field: string) {
     this.activeEditField = field;
     this.singleFieldEdit[field] = this.singleFieldEdit[field] ? false : true;
 
@@ -860,7 +860,7 @@ export class ProfileSettings {
   changedLocation(event): void {
     this.user.isAutoComplete = true;
   }
-  
+
 }
 
 function profileUpdateFormValidator(fg: FormGroup): { [key: string]: boolean } {
