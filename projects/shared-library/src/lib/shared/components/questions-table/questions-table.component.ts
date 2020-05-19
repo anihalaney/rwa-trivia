@@ -219,7 +219,7 @@ export class QuestionsTableComponent implements OnInit, OnChanges, AfterViewInit
   }
 
   approveButtonClicked(question: Question) {
-    this.onApproveClicked.emit(question)
+    this.onApproveClicked.emit(question);
   }
   pageChanged(pageEvent: PageEvent) {
     this.onPageChanged.emit(pageEvent);
