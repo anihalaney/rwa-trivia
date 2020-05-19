@@ -31,7 +31,7 @@ export class Question {
   questionObject?: any;
   isRichEditor?: boolean = false;
   maxTime?: number;
-  is_draft: boolean;
+  is_draft?: boolean;
   appeared?: number;
   correct?: number;
   wrong?: number;
