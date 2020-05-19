@@ -54,7 +54,6 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnInit,
   ) {
 
     super(fb, store, userAction, utils, cd, route, router, authenticationProvider, platformId);
-
     // if (this.userType === 0) {
     this.setCropperSettings();
     this.setNotificationMsg('', false, 0);
@@ -227,8 +226,6 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnInit,
   onSubmit(isEditSingleField = false, field = '') {
     // validations
     this.userForm.updateValueAndValidity();
-
-    // this.userForm.controls['displayName'].setErrors({ 'exist': false });
 
     if (this.profileImageFile) {
       this.assignImageValues();
