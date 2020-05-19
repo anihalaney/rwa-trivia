@@ -98,7 +98,7 @@ describe('ProfileSettingsComponent', () => {
         // mock data
         mockStore = TestBed.get(Store);
         spy = spyOn(mockStore, 'dispatch');
-        // getGeoLocation = spyOn(window.navigator.geolocation, 'getCurrentPosition');
+        const getGeoLocation = spyOn(navigator.geolocation, 'getCurrentPosition');
 
         component = fixture.debugElement.componentInstance;
         // router = TestBed.get(Router);
