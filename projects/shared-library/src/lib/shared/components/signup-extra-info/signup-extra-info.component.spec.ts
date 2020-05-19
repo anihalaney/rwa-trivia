@@ -1,5 +1,4 @@
 import { SignupExtraInfoComponent } from './signup-extra-info.component';
-import { User, friendInvitationConstants, Game } from 'shared-library/shared/model';
 import { TestBed, ComponentFixture, async } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/compiler/src/core';
 import { provideMockStore, MockStore } from '@ngrx/store/testing';
@@ -8,10 +7,8 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { testData } from 'test/data';
 import { CoreState, categoryDictionary } from 'shared-library/core/store';
 import { coreState, UserActions, ActionWithPayload } from '../../../core/store';
-import { Utils } from 'shared-library/core/services';
-import { ActivatedRoute, Router } from '@angular/router';
-import { of } from 'rxjs';
-import { RouterTestingModule } from '@angular/router/testing'
+import { RouterTestingModule } from '@angular/router/testing';
+import { Router } from '@angular/router';
 
 describe('SignupExtraInfoComponent', () => {
   let component: SignupExtraInfoComponent;
@@ -74,24 +71,26 @@ describe('SignupExtraInfoComponent', () => {
     expect(component).toBeTruthy();
   });
 
+  // tslint:disable-next-line: max-line-length
   it(`Forms's email, and displayName fields should fill, phone number should null and emailEditable should be falsy and phoneEditable should be truthy  when store emit User`, () => {
     const user = testData.userList[2];
     mockCoreSelector.setResult({ user });
     mockStore.refreshState();
     expect(component.userForm.get('email').value).toEqual('test@test.com');
-    expect(component.userForm.get('phoneNo').value).toEqual('')
+    expect(component.userForm.get('phoneNo').value).toEqual('');
     expect(component.userForm.get('displayName').value).toEqual('test');
     expect(component.emailEditable).toBeFalsy();
     expect(component.phoneEditable).toBeTruthy();
 
   });
 
+  // tslint:disable-next-line: max-line-length
   it(`Forms's phone number and displayName fields should fill, email should null and phoneEditable should be truthy when store emit User`, () => {
     const user = testData.userList[3];
     mockCoreSelector.setResult({ user });
     mockStore.refreshState();
     expect(component.userForm.get('email').value).toEqual('');
-    expect(component.userForm.get('phoneNo').value).toEqual('+14844732320')
+    expect(component.userForm.get('phoneNo').value).toEqual('+14844732320');
     expect(component.userForm.get('displayName').value).toEqual('Mack');
 
     expect(component.emailEditable).toBeTruthy();
@@ -154,8 +153,8 @@ describe('SignupExtraInfoComponent', () => {
     component.userForm.get('phoneNo').setValue('123456');
     expect(component.userForm.get('phoneNo').errors).toEqual({
       minlength: {
-        "actualLength": 6,
-        "requiredLength": 9,
+        'actualLength': 6,
+        'requiredLength': 9,
       }
     });
   });
@@ -164,8 +163,8 @@ describe('SignupExtraInfoComponent', () => {
     component.userForm.get('phoneNo').setValue('123456789101112');
     expect(component.userForm.get('phoneNo').errors).toEqual({
       maxlength: {
-        "actualLength": 15,
-        "requiredLength": 13,
+        'actualLength': 15,
+        'requiredLength': 13,
       }
     });
   });
@@ -178,7 +177,7 @@ describe('SignupExtraInfoComponent', () => {
     component.userForm.get('email').setValue('test@email.com');
     component.userForm.get('phoneNo').setValue('1234567890');
     component.userForm.get('displayName').setValue('Mack');
-    const payloadData = { user: user, isLocationChanged: false }
+    const payloadData = { user: user, isLocationChanged: false };
     spy.and.callFake((action: ActionWithPayload<string>) => {
       expect(action.type).toEqual(UserActions.ADD_USER_PROFILE);
       expect(action.payload).toEqual(payloadData);
@@ -200,7 +199,7 @@ describe('SignupExtraInfoComponent', () => {
     component.userForm.get('email').setValue('test@email.com');
     component.userForm.get('phoneNo').setValue('1234567890');
     component.userForm.get('displayName').setValue('Mack');
-    const payloadData = { user: user, isLocationChanged: false }
+    const payloadData = { user: user, isLocationChanged: false };
     spy.and.callFake((action: ActionWithPayload<string>) => {
       expect(action.type).toEqual(UserActions.ADD_USER_PROFILE);
       expect(action.payload).toEqual(payloadData);
@@ -209,10 +208,8 @@ describe('SignupExtraInfoComponent', () => {
     mockStore.refreshState();
 
     expect(component.userForm.get('displayName').errors).toEqual({
-      "exist": true
+      'exist': true
     });
-
   });
 
-
-}); 
+});
