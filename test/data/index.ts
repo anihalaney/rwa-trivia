@@ -12,6 +12,10 @@ import { LeaderBoard } from './leaderBoard';
 import { TopTopics } from './top-topics';
 import { UserDict } from './user-dictionary';
 import { QuestionOfTheDay } from './question-of-the-day';
+import { TopTags } from './top-tags';
+import { Accounts } from './accounts';
+import { NewGameFilteredCategories } from './new-game-filtered-categories';
+
 export const testData = {
     categories: Categories,
     categoryDictionary: CategoryDictionary,
@@ -26,6 +30,9 @@ export const testData = {
     leaderBoard: LeaderBoard,
     topTopics: TopTopics,
     userDict: UserDict,
-    questionOfTheDay : QuestionOfTheDay
+    questionOfTheDay : QuestionOfTheDay,
+    getTopTags: TopTags,
+    accounts: Accounts,
+    newGameFilteredCategories: NewGameFilteredCategories
 };
 
