@@ -35,7 +35,7 @@ export class UserCardComponent implements OnInit, OnDestroy, OnChanges {
   userDict: { [key: string]: User };
 
 
-  constructor(private utils: Utils,
+  constructor(public utils: Utils,
     private store: Store<CoreState>,
     private userActions: UserActions,
     protected cd: ChangeDetectorRef,
@@ -99,7 +99,7 @@ export class UserCardComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   setUser() {
-    if (this.userDict[this.userId]) {
+    if (this.userDict && this.userDict[this.userId]) {
       this.user = this.userDict[this.userId];
       this.cd.markForCheck();
     }
