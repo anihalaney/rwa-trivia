@@ -283,9 +283,68 @@ describe('QuestionsTableComponent', () => {
     const reasonValue = component.requestFormGroup.get('reason').value;
     expect(reasonValue).toBe('');
 
+  });
+
+
+  it('call to saveRequestToChangeQuestion it should return undefined if requestFormGroup is invalid', () => {
+
+    const response = component.saveRequestToChangeQuestion();
+
+    expect(response).toBe(undefined);
 
   });
 
+
+  it('call to saveRejectToChangeQuestion it should return undefined if rejectFormGroup is invalid', () => {
+
+    const response = component.saveRejectToChangeQuestion();
+
+    expect(response).toBe(undefined);
+
+  });
+
+  // tslint:disable-next-line: max-line-length
+  it('call to saveRejectToChangeQuestion it should emit updateBulkUpload and updateUnpublishedQuestions event if status is not REJECTED and reason field should set blank', () => {
+
+    component.rejectFormGroup.get('reason').setValue('Improved question');
+    const question = testData.questions.unpublished[0];
+    const user = testData.userList[0];
+    const bulkUploadFileInfo = testData.bulkUploads[0];
+
+    component.bulkUploadFileInfo = { ...bulkUploadFileInfo };
+
+    component.user = user;
+    component.rejectQuestion = question;
+    spyOn(component.updateUnpublishedQuestions, 'emit');
+    spyOn(component.updateBulkUpload, 'emit');
+    component.saveRejectToChangeQuestion();
+
+    bulkUploadFileInfo.rejected += 1;
+    expect(component.updateUnpublishedQuestions.emit).toHaveBeenCalledWith(question);
+    expect(component.updateBulkUpload.emit).toHaveBeenCalledWith(bulkUploadFileInfo);
+    const reasonValue = component.rejectFormGroup.get('reason').value;
+    expect(reasonValue).toBe('');
+
+  });
+
+
+  // tslint:disable-next-line: max-line-length
+  it('call to saveRejectToChangeQuestion it should emit updateBulkUploadedRejectQuestionStatus event if status is not REJECTED and reason field should set blank', () => {
+
+    component.rejectFormGroup.get('reason').setValue('Improved question');
+    const question = testData.questions.unpublished[1];
+    const user = testData.userList[0];
+
+    component.user = user;
+    component.rejectQuestion = question;
+    spyOn(component.updateBulkUploadedRejectQuestionStatus, 'emit');
+
+    component.saveRejectToChangeQuestion();
+
+    expect(component.updateBulkUploadedRejectQuestionStatus.emit).toHaveBeenCalledWith(question);
+    const reasonValue = component.rejectFormGroup.get('reason').value;
+    expect(reasonValue).toBe('');
+  });
 
 });
 

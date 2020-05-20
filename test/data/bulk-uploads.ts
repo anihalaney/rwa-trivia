@@ -9,7 +9,7 @@ export const BulkUploads = [
         isAdminArchived: true,
         isUserArchived: false,
         primaryTag: 'Jav',
-        rejected: 2,
+        rejected: 5,
         status: 'Under Review',
         uploaded: 12,
     }
