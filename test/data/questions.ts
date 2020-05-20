@@ -205,6 +205,73 @@ export const Questions = {
     'categoryIds': [2],
     'published': false,
     'is_draft': true
+  },
+  {
+    'id': '0Iy0OvhLvT6tibIf4HoA',
+    'questionText': 'Which of the following function of Array object reverses the order of the elements of an array?',
+    'answers': [
+      {
+        'id': 1,
+        'answerText': 'reverse()',
+        'correct': true
+      },
+      {
+        'id': 2,
+        'answerText': 'push()',
+        'correct': false
+      },
+      {
+        'id': 3,
+        'answerText': 'reduce()',
+        'correct': false
+      },
+      {
+        'id': 4,
+        'answerText': 'reduceRight()',
+        'correct': false
+      }
+    ],
+    'ordered': false,
+    'tags': ['JavaScript', 'front-end', 'ES5'],
+    'categoryIds': [2],
+    'published': false,
+    'is_draft': false,
+    'status': 4,
+    'reason': 'Question is not clear',
+    'bulkUploadId': 'JSEsdpDvhLvT6tibIf4HoA',
+  },
+  {
+    'id': 'PLyKOvhLvT6tibIf4HoQ',
+    'questionText': 'Which of the following option leads to the portability and security of Java?',
+    'answers': [
+      {
+        'id': 1,
+        'answerText': 'Bytecode is executed by JVM',
+        'correct': true
+      },
+      {
+        'id': 2,
+        'answerText': 'The applet makes the Java code secure and portable',
+        'correct': false
+      },
+      {
+        'id': 3,
+        'answerText': 'Use of exception handling',
+        'correct': false
+      },
+      {
+        'id': 4,
+        'answerText': 'Dynamic binding between objects',
+        'correct': false
+      }
+    ],
+    'ordered': false,
+    'tags': ['JavaScript', 'front-end', 'ES5'],
+    'categoryIds': [2],
+    'published': false,
+    'is_draft': false,
+    'status': 5,
+    'reason': 'Question is not clear'
   }
   ]
 };

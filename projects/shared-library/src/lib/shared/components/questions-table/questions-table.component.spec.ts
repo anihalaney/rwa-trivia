@@ -139,10 +139,157 @@ describe('QuestionsTableComponent', () => {
     component.editQuestion = testData.questions.unpublished[0];
     component.nullifyQuestion(false);
     expect(component.editQuestion).not.toBeNull();
+  });
+
+  it('call to showReason function it should set question in passed index in paramter', () => {
+
+    const index = 1;
+    const row = testData.questions.unpublished[0];
+
+    component.showReason(row, index);
+    expect(component.viewReasonArray[index]).toBe(row);
 
   });
 
+  it('call to updateQuestionData should emit updateUnpublishedQuestions question', () => {
+
+    spyOn(component.updateUnpublishedQuestions, 'emit');
+    const question = testData.questions.unpublished[0];
+    component.updateQuestionData(question);
+    expect(component.updateUnpublishedQuestions.emit).toHaveBeenCalledWith(question);
+
+  });
+
+  it('call to showQuestion it should set undefined whose cancel status match', () => {
+
+    const index = 1;
+    const row = testData.questions.unpublished[1];
+    component.viewReasonArray[index] = row;
+    component.showQuestion(row.reason);
+    expect(component.viewReasonArray[index]).toBeUndefined();
+
+  });
+
+  it('call to approveQuestion it should emit approveUnpublishedQuestion event', () => {
+
+    const index = 1;
+    const question = testData.questions.unpublished[1];
+    const user = testData.userList[0];
+    component.user = user;
+    spyOn(component.approveUnpublishedQuestion, 'emit');
+    spyOn(component.updateBulkUploadedApprovedQuestionStatus, 'emit');
+    component.approveQuestion(question);
+    expect(component.approveUnpublishedQuestion.emit).toHaveBeenCalledWith(question);
+    expect(component.updateBulkUploadedApprovedQuestionStatus.emit).toHaveBeenCalledWith(question);
+
+  });
+
+  // tslint:disable-next-line: max-line-length
+  it('call to approveQuestion it should increment approved counter by 1 and emit updateBulkUpload event if bulkUploadFileInfo exist', () => {
+
+    const question = testData.questions.unpublished[0];
+    const bulkUploadFileInfo = testData.bulkUploads[0];
+    component.bulkUploadFileInfo = { ...bulkUploadFileInfo };
+
+    const user = testData.userList[0];
+    component.user = user;
+
+    spyOn(component.updateBulkUpload, 'emit');
+
+    component.approveQuestion(question);
+    expect(component.bulkUploadFileInfo.approved).toBe((bulkUploadFileInfo.approved + 1));
+
+    bulkUploadFileInfo.approved += 1;
+    expect(component.updateBulkUpload.emit).toHaveBeenCalledWith(bulkUploadFileInfo);
+
+
+  });
+
+
+  // tslint:disable-next-line: max-line-length
+  it('call to approveQuestion it should increment approved counter by 1 and decrement rejected by -1 and emit updateBulkUpload event if bulkUploadFileInfo exist', () => {
+
+    const question = testData.questions.unpublished[2];
+    const bulkUploadFileInfo = testData.bulkUploads[0];
+    component.bulkUploadFileInfo = { ...bulkUploadFileInfo };
+
+    const user = testData.userList[0];
+    component.user = user;
+
+    spyOn(component.updateBulkUpload, 'emit');
+    component.approveQuestion(question);
+    expect(component.bulkUploadFileInfo.approved).toBe((bulkUploadFileInfo.approved + 1));
+
+    expect(component.bulkUploadFileInfo.rejected).toBe((bulkUploadFileInfo.rejected - 1));
+
+    bulkUploadFileInfo.approved += 1;
+    bulkUploadFileInfo.rejected -= 1;
+    expect(component.updateBulkUpload.emit).toHaveBeenCalledWith(bulkUploadFileInfo);
+
+  });
+
+  // tslint:disable-next-line: max-line-length
+  it('call to saveRequestToChangeQuestion it should emit updateUnpublishedQuestions event', () => {
+
+    component.requestFormGroup.get('reason').setValue('Improved question');
+    const question = testData.questions.unpublished[2];
+    const user = testData.userList[0];
+
+    component.user = user;
+
+    component.requestQuestion = question;
+
+    spyOn(component.updateUnpublishedQuestions, 'emit');
+    component.saveRequestToChangeQuestion();
+    expect(component.updateUnpublishedQuestions.emit).toHaveBeenCalledWith(question);
+
+  });
+
+  // tslint:disable-next-line: max-line-length
+  it('call to saveRequestToChangeQuestion it should emit updateBulkUploadedRequestToChangeQuestionStatus event if status is not REJECTED', () => {
+
+    component.requestFormGroup.get('reason').setValue('Improved question');
+    const question = testData.questions.unpublished[1];
+    const user = testData.userList[0];
+
+    component.user = user;
+
+    component.requestQuestion = question;
+
+    spyOn(component.updateBulkUploadedRequestToChangeQuestionStatus, 'emit');
+    component.saveRequestToChangeQuestion();
+    expect(component.updateBulkUploadedRequestToChangeQuestionStatus.emit).toHaveBeenCalledWith(question);
+
+  });
+
+  // tslint:disable-next-line: max-line-length
+  it('call to saveRequestToChangeQuestion it should emit updateBulkUpload event if status is not REJECTED and reason field should set blank', () => {
+
+    component.requestFormGroup.get('reason').setValue('Improved question');
+    const question = testData.questions.unpublished[0];
+    const user = testData.userList[0];
+    const bulkUploadFileInfo = testData.bulkUploads[0];
+
+    component.bulkUploadFileInfo = { ...bulkUploadFileInfo };
+
+    component.user = user;
+    component.requestQuestion = question;
+    spyOn(component.updateBulkUpload, 'emit');
+    component.saveRequestToChangeQuestion();
+
+    bulkUploadFileInfo.rejected -= 1;
+    expect(component.updateBulkUpload.emit).toHaveBeenCalledWith(bulkUploadFileInfo);
+
+    const reasonValue = component.requestFormGroup.get('reason').value;
+    expect(reasonValue).toBe('');
+
+
+  });
+
+
 });
+
+
 
 
 
