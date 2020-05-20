@@ -4,7 +4,7 @@ import { QuestionsTableComponent } from './questions-table.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { StoreModule, MemoizedSelector, Store } from '@ngrx/store';
 import { provideMockStore, MockStore } from '@ngrx/store/testing';
-import { coreState, CoreState, UserActions, ActionWithPayload } from 'shared-library/core/store';
+import { coreState, CoreState, UserActions } from 'shared-library/core/store';
 import { Utils, WindowRef } from 'shared-library/core/services';
 import { MatSnackBarModule, MatSelectModule, MatPaginatorModule, MatCheckboxModule, PageEvent, MatSelectChange } from '@angular/material';
 import { testData } from 'test/data';
@@ -61,12 +61,13 @@ describe('QuestionsTableComponent', () => {
   });
 
 
-  it('call to getDisplayStatus ', () => {
+  it('call to getDisplayStatus should return status in string', () => {
     const statusName = component.getDisplayStatus(2);
     expect(statusName).toBe('APPROVED');
   });
 
-  it('call to displayRequestToChange  should set requestQuestionStatus set true, rejectQuestionStatus to false set requestQuestion', () => {
+  // tslint:disable-next-line: max-line-length
+  it('call to displayRequestToChange should set requestQuestionStatus set true, rejectQuestionStatus to false and set requestQuestion', () => {
     const question = testData.questions.published[0];
     component.displayRequestToChange(question);
     expect(component.requestQuestionStatus).toBeTruthy();
@@ -74,7 +75,8 @@ describe('QuestionsTableComponent', () => {
     expect(component.requestQuestion).toBe(question);
   });
 
-  it('call to displayRejectToChange  should set requestQuestionStatus set true, rejectQuestionStatus to false set requestQuestion', () => {
+  // tslint:disable-next-line: max-line-length
+  it('call to displayRejectToChange should set requestQuestionStatus set false, rejectQuestionStatus to true and set rejectQuestion', () => {
     const question = testData.questions.unpublished[0];
     component.displayRejectToChange(question);
     expect(component.rejectQuestionStatus).toBeTruthy();
@@ -83,7 +85,7 @@ describe('QuestionsTableComponent', () => {
   });
 
 
-  it('call to editQuestions set editQuestion is_draft true', () => {
+  it(`call to editQuestions should set editQuestion'is_draft true`, () => {
     const question = testData.questions.unpublished[0];
 
     component.editQuestions(question);
@@ -91,7 +93,7 @@ describe('QuestionsTableComponent', () => {
 
   });
 
-  it('call to approveButtonClicked should emit question', () => {
+  it('call to approveButtonClicked should emit question event', () => {
     const question = testData.questions.unpublished[0];
     component.approveButtonClicked(question);
     spyOn(component.onApproveClicked, 'emit');
@@ -101,7 +103,7 @@ describe('QuestionsTableComponent', () => {
 
 
 
-  it('call to pageChanged should emit question', () => {
+  it('call to pageChanged should emit pageEvent event', () => {
 
     spyOn(component.onPageChanged, 'emit');
     const pageEvent: PageEvent = {
@@ -116,12 +118,12 @@ describe('QuestionsTableComponent', () => {
   });
 
 
-  it('call to sortOrderChanged should emit question', () => {
+  it('call to sortOrderChanged should emit value of selected field', () => {
 
     spyOn(component.onSortOrderChanged, 'emit');
     const event: MatSelectChange | any = {
       source: '',
-      value: 1,
+      value: 'CreatedTimeDesc',
     };
     component.sortOrderChanged(event);
     expect(component.onSortOrderChanged.emit).toHaveBeenCalledWith(event.value);
@@ -135,7 +137,7 @@ describe('QuestionsTableComponent', () => {
 
   });
 
-  it('call to nullifyQuestion with updateStatus false then it should set editQuestion to null', () => {
+  it('call to nullifyQuestion with updateStatus false then it should set editQuestion not to be null', () => {
     component.editQuestion = testData.questions.unpublished[0];
     component.nullifyQuestion(false);
     expect(component.editQuestion).not.toBeNull();
@@ -170,7 +172,7 @@ describe('QuestionsTableComponent', () => {
 
   });
 
-  it('call to approveQuestion it should emit approveUnpublishedQuestion event', () => {
+  it('call to approveQuestion it should emit approveUnpublishedQuestion and updateBulkUploadedApprovedQuestionStatus event', () => {
 
     const index = 1;
     const question = testData.questions.unpublished[1];
@@ -346,11 +348,144 @@ describe('QuestionsTableComponent', () => {
     expect(reasonValue).toBe('');
   });
 
+  it('call to ngOnChanges it should call setQuestions function when clientSidePagination is false', () => {
+    const questions = testData.questions.unpublished.slice(0, 1);
+
+    spyOn(component, 'setQuestions');
+    component.ngOnChanges({
+      questions:
+      {
+        previousValue: undefined,
+        currentValue: questions,
+        firstChange: true,
+        isFirstChange: undefined
+      }
+    });
+
+    expect(component.setQuestions).toHaveBeenCalled();
+  });
+
+  it('call to ngOnChanges it should call setQuestions function when clientSidePagination is true', () => {
+
+    const questions = testData.questions.unpublished;
+    component.clientSidePagination = true;
+    spyOn(component, 'setClientSidePaginationDataSource');
+    component.ngOnChanges({
+      questions:
+      {
+        previousValue: undefined,
+        currentValue: questions,
+        firstChange: true,
+        isFirstChange: undefined
+      }
+    });
+
+    expect(component).toBeTruthy();
+    expect(component.setClientSidePaginationDataSource).toHaveBeenCalled();
+  });
+
+
+  // tslint:disable-next-line: max-line-length
+  it(`call to ngOnChanges it should call setClientSidePaginationDataSource when questions are changes and question's status or is_draft changes`, () => {
+    const previousQuestions = testData.questions.unpublished;
+
+    const questionsUpdate = testData.questions.unpublished.map(question => {
+      return {
+        ...question,
+        is_draft: !question.is_draft,
+        status: 1
+      };
+    });
+
+    component.isAdmin = false;
+    component.isDraft = false;
+    component.clientSidePagination = true;
+
+    spyOn(component, 'setClientSidePaginationDataSource');
+    component.ngOnChanges({
+      questions:
+      {
+        previousValue: previousQuestions,
+        currentValue: questionsUpdate,
+        firstChange: false,
+        isFirstChange: undefined
+      }
+    });
+    expect(component.setClientSidePaginationDataSource).toHaveBeenCalled();
+  });
+
+
+  // tslint:disable-next-line: max-line-length
+  it(`call to ngOnChanges it should call setQuestions when questions are changes and question's status or is_draft changes and clientSidePagination is false`, () => {
+    const previousQuestions = testData.questions.unpublished;
+
+    const questionsUpdate = testData.questions.unpublished.map(question => {
+      return {
+        ...question,
+        is_draft: !question.is_draft,
+        status: 1
+      };
+    });
+
+    component.isAdmin = false;
+    component.isDraft = false;
+    component.clientSidePagination = false;
+
+    spyOn(component, 'setQuestions');
+    component.ngOnChanges({
+      questions:
+      {
+        previousValue: previousQuestions,
+        currentValue: questionsUpdate,
+        firstChange: false,
+        isFirstChange: undefined
+      }
+    });
+    expect(component.setQuestions).toHaveBeenCalled();
+  });
+
+  it(`call to ngOnChanges it should set category Object`, () => {
+
+    const categories = testData.categoryDictionary;
+    component.categoryDictionary = testData.categoryDictionary;
+
+    const categoryObject = {
+      '1': 'Bit of sci-fi',
+      '2': 'Programming',
+      '3': 'Architecture',
+      '4': 'Networking/Infrastructure',
+      '5': 'Database',
+      '6': 'Dev Ops',
+      '7': 'UX/UI',
+      '8': 'Bit of fact',
+      '9': 'Hardware'
+    };
+    component.ngOnChanges({
+      categoryDictionary:
+      {
+        previousValue: undefined,
+        currentValue: categories,
+        firstChange: true,
+        isFirstChange: undefined
+      }
+    });
+    expect(component.categoryObj).toStrictEqual(categoryObject);
+  });
+
+
+  it(`call to setClientSidePaginationDataSource it should set questionsDS MatTableDataSource`, () => {
+
+    const questions = testData.questions.unpublished;
+    component.setClientSidePaginationDataSource(questions);
+    expect(component.questionsDS).not.toBeNull();
+  });
+
+  it(`call to setQuestions it should set value to questionsSubject `, () => {
+
+    const questions = testData.questions.unpublished;
+    component.setQuestions(questions);
+    expect(component.questionsSubject.getValue()).toBe(questions);
+  });
+
 });
-
-
-
-
-
-
 
