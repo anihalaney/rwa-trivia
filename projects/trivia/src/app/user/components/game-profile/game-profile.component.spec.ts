@@ -106,17 +106,11 @@ describe('GameProfileComponent', () => {
 
     it('Verify getImageUrl function works', () => {
         user = { ...testData.userList[1] };
-        categoryDictionary.setResult(testData.categoryDictionary);
-        component.getImageUrl(user);
-        mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
-            user: user
-        });
-        mockStore.refreshState();
-        fixture.detectChanges();
-        expect(spy).toHaveBeenCalled();
+        const expectedResult = '~/assets/images/avatar-400X400.png';
+        expect(component.getImageUrl(user)).toEqual(expectedResult);
     });
 
-    it('Verify topicsArray for diffrent user login profile', () => {
+    it('Verify topicsArray for different user login profile', () => {
         user = { ...testData.userList[0] };
         categoryDictionary.setResult(testData.categoryDictionary);
         mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
@@ -144,7 +138,7 @@ describe('GameProfileComponent', () => {
         expect(component.topicsArray.userTopics).toEqual(expectedTopics.userTopics);
     });
 
-    it('Verify tagsArray for diffrent user login profile', () => {
+    it('Verify tagsArray for different user login profile', () => {
         user = { ...testData.userList[0] };
         categoryDictionary.setResult(testData.categoryDictionary);
         mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
@@ -173,7 +167,7 @@ describe('GameProfileComponent', () => {
     });
 
     //  this case is non required
-    it('Verify topics for diffrent user login profile', () => {
+    it('Verify topics for different user login profile', () => {
         user = { ...testData.userList[0] };
         component.categoryDictionary = testData.categoryDictionary;
         mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
@@ -415,7 +409,7 @@ describe('GameProfileComponent', () => {
         );
     });
 
-    it('Check loggedInUserAccount info set properlly or not', () => {
+    it('Check loggedInUserAccount info set properly or not', () => {
         user = { ...testData.userList[0] };
         categoryDictionary.setResult(testData.categoryDictionary);
         mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
@@ -427,12 +421,12 @@ describe('GameProfileComponent', () => {
         expect(component.loggedInUserAccount).toEqual(user.account);
     });
 
-    it('Check getIcon function works properlly or not', () => {
+    it('Check getIcon function works properly or not', () => {
         const expectedResult = String.fromCharCode(parseInt(`0x${100}`, 16));
         expect(component.getIcon(100)).toEqual(expectedResult);
     });
 
-    it('Check startNewGame function works properlly or not', () => {
+    it('Check startNewGame function works properly or not', () => {
         user = { ...testData.userList[1] };
         const navigateSpy = spyOn(router, 'navigate');
         // mock data
