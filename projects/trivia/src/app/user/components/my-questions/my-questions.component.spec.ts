@@ -9,8 +9,6 @@ import { MatSnackBarModule } from '@angular/material';
 import { CoreState } from 'shared-library/core/store';
 import { testData } from 'test/data';
 import { userState, UserState } from '../../../user/store';
-import { of } from 'rxjs';
-import { toArray } from 'rxjs/operators';
 import { User } from 'shared-library/shared/model';
 
 describe('MyQuestionsComponent', () => {
@@ -18,7 +16,8 @@ describe('MyQuestionsComponent', () => {
     let fixture: ComponentFixture<MyQuestionsComponent>;
     let spy: any;
     let categories: any;
-    let questions: any;
+    let publishedQuestions: any;
+    let unpublishedQuestions: any;
     let user: User;
     const applicationSettings: any[] = [];
     let tags: any;
@@ -66,38 +65,38 @@ describe('MyQuestionsComponent', () => {
 
     it('categoriesObs should be set when constructor call', () => {
         categories = testData.categories;
-        const categories$ = of(testData.categories);
-        questions = { ...testData.questions };
+        publishedQuestions = { ...testData.questions.published };
         mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
             categories: categories
         });
         mockStore.overrideSelector<AppState, Partial<UserState>>(userState, {
-            userPublishedQuestions: questions
+            userPublishedQuestions: publishedQuestions
         });
         mockStore.refreshState();
         fixture.detectChanges();
-        // we are supposed to check the value of categories set in component after we emit the value in mockStore so you should check component.categories values with our mock data please refer game-card
-        categories$.pipe(toArray()).subscribe(result => {
-            expect(result[0]).toEqual(categories);
+        let componentCategories;
+        component.categoriesObs.subscribe(result => {
+            componentCategories = result;
         });
+        expect(componentCategories).toEqual(categories);
     });
 
     it('tagsObs should be set when counstrocter call', () => {
         tags = testData.tagList;
-        const tags$ = of(testData.tagList);
-        questions = { ...testData.questions };
+        publishedQuestions = { ...testData.questions.published };
         mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
             tags: tags
         });
         mockStore.overrideSelector<AppState, Partial<UserState>>(userState, {
-            userPublishedQuestions: questions
+            userPublishedQuestions: publishedQuestions
         });
         mockStore.refreshState();
         fixture.detectChanges();
-        // same as above
-        tags$.pipe(toArray()).subscribe(result => {
-            expect(result[0]).toEqual(tags);
+        let componentTags;
+        component.tagsObs.subscribe(result => {
+            componentTags = result;
         });
+        expect(componentTags).toEqual(tags);
     });
 
     it('user should be set when counstrocter call', () => {
@@ -107,29 +106,27 @@ describe('MyQuestionsComponent', () => {
         });
         mockStore.refreshState();
         fixture.detectChanges();
-
-        // this is correct do it like this
         expect(component.user).toEqual(user);
     });
 
     it('publishedQuestions should be set when counstrocter call', () => {
-        questions = { ...testData.questions };
+        publishedQuestions = { ...testData.questions.published };
         mockStore.overrideSelector<AppState, Partial<UserState>>(userState, {
-            userPublishedQuestions: questions
+            userPublishedQuestions: publishedQuestions
         });
         mockStore.refreshState();
         fixture.detectChanges();
-        expect(component.publishedQuestions).toEqual(questions);
+        expect(component.publishedQuestions).toEqual(publishedQuestions);
     });
 
-    it('publishedQuestions should be set when counstrocter call', () => {
-        questions = { ...testData.questions };
+    it('unpublishedQuestions should be set when counstrocter call', () => {
+        unpublishedQuestions = { ...testData.questions.unpublished };
         mockStore.overrideSelector<AppState, Partial<UserState>>(userState, {
-            userUnpublishedQuestions: questions
+            userUnpublishedQuestions: unpublishedQuestions
         });
         mockStore.refreshState();
         fixture.detectChanges();
-        expect(component.unpublishedQuestions).toEqual(questions);
+        expect(component.unpublishedQuestions).toEqual(unpublishedQuestions);
     });
 
     it('Verify quillconfig container options should be set when counstrocter call', () => {
@@ -159,31 +156,21 @@ describe('MyQuestionsComponent', () => {
         });
         mockStore.refreshState();
         fixture.detectChanges();
-        // change variable name to mathEditorOptions
-        const expectedResult = {
+        const mathEditorOptions = {
             mathOptions: applicationSettings[0]
         };
-        expect(component.quillConfig.mathEditor).toEqual(expectedResult);
+        expect(component.quillConfig.mathEditor).toEqual(mathEditorOptions);
     });
 
-    it('Verify hideLoader function works', () => {
-        questions = { ...testData.questions };
-        // use testData.questions.published for published and testData.questions.unpublished for unpublished questions add one question in unpublished data
-        mockStore.overrideSelector<AppState, Partial<UserState>>(userState, {
-            userPublishedQuestions: questions,
-            userUnpublishedQuestions: questions
-        });
-        mockStore.refreshState();
-        fixture.detectChanges();
+    it('Verify hideLoader function works', (async () => {
+        component.toggleLoader = jest.fn();
+        component.publishedQuestions = { ...testData.questions.published };
+        component.unpublishedQuestions = { ...testData.questions.unpublished };
         component.hideLoader();
 
-        // try to follow game-card example 'remaining time should be 0 hr 0 min' case
-        setTimeout(() => {
-            expect(spy).toHaveBeenCalledWith(
-                component.toggleLoader(false)
-            );
-        }, 1000);
-    });
+        await new Promise((r) => setTimeout(r, 2000));
+        expect(component.toggleLoader).toHaveBeenCalledTimes(1);
+    }));
 
     it('Verify updateQuestion status, it should be UPDATE', () => {
         component.snackBar.open = jest.fn();
@@ -195,8 +182,19 @@ describe('MyQuestionsComponent', () => {
         expect(component.snackBar.open).toHaveBeenCalled();
     });
 
-    // write test case for toggleLoader function check
-    // write test case for updateUnpublishedQuestions() function check, check for the dispatched event
+    it('Verify toggleLoader function', () => {
+        component.toggleLoader(true);
+        expect(component.loaderBusy).toBe(true);
+    });
+
+    it('Verify updateUnpublishedQuestions function', () => {
+        unpublishedQuestions = { ...testData.questions.unpublished };
+        component.updateUnpublishedQuestions(unpublishedQuestions);
+        expect(spy).toHaveBeenCalledWith(
+            new QuestionActions().updateQuestion(unpublishedQuestions)
+        );
+    });
+
     afterEach(() => {
         fixture.destroy();
     });
