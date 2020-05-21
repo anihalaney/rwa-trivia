@@ -33,14 +33,19 @@ describe('CheckDisplayNameComponent', () => {
     expect(component.myValue).toBeFalsy();
   });
 
-  it(`show disabled if component is called from other than profile page `, () => {
+  it(`it should assign set disabled is false if isProfilePage is false`, () => {
     component.isProfilePage = false;
     component.ngOnInit();
     expect(component.disabled).toEqual(false);
   });
 
+  it(`it should assign set disabled is true if isProfilePage is true`, () => {
+    component.isProfilePage = true;
+    component.ngOnInit();
+    expect(component.disabled).toEqual(true);
+  });
+
   it(`call to writeValue function should set the input text`, () => {
-    spy = spyOn(component, 'writeValue');
     component.writeValue(event);
     expect(component.myValue).toEqual(event);
   });
