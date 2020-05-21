@@ -99,7 +99,7 @@ describe('SignupExtraInfoComponent', () => {
   });
 
 
-  it('call to checkDisplayName function it should dispatch checkDisplayName event ', () => {
+  it('call to checkDisplayName function it should dispatch checkDisplayName Action ', () => {
     expect(component).toBeTruthy();
 
     const payloadData = 'test';
@@ -124,7 +124,7 @@ describe('SignupExtraInfoComponent', () => {
     expect(component.checkDisplayName).toHaveBeenCalled();
   });
 
-  it('call to submit function it should not call checkDisplayName because form is invalid', () => {
+  it('When user submit form and form is invalid check for display name should not be called', () => {
     spyOn(component, 'checkDisplayName').and.callThrough();
     const user = testData.userList[2];
     mockCoreSelector.setResult({ user });
@@ -178,7 +178,7 @@ describe('SignupExtraInfoComponent', () => {
     component.userForm.get('phoneNo').setValue('1234567890');
     component.userForm.get('displayName').setValue('Mack');
     const payloadData = { user: user, isLocationChanged: false };
-    spy.and.callFake((action: ActionWithPayload<string>) => {
+    spy.and.callFake((action: ActionWithPayload<any>) => {
       expect(action.type).toEqual(UserActions.ADD_USER_PROFILE);
       expect(action.payload).toEqual(payloadData);
     });
@@ -200,7 +200,7 @@ describe('SignupExtraInfoComponent', () => {
     component.userForm.get('phoneNo').setValue('1234567890');
     component.userForm.get('displayName').setValue('Mack');
     const payloadData = { user: user, isLocationChanged: false };
-    spy.and.callFake((action: ActionWithPayload<string>) => {
+    spy.and.callFake((action: ActionWithPayload<any>) => {
       expect(action.type).toEqual(UserActions.ADD_USER_PROFILE);
       expect(action.payload).toEqual(payloadData);
     });
