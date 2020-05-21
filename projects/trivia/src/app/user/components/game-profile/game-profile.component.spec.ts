@@ -1,19 +1,20 @@
-import { async, ComponentFixture, TestBed, tick, fakeAsync } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { GameProfileComponent } from './game-profile.component';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { Store, MemoizedSelector } from '@ngrx/store';
+import { Store } from '@ngrx/store';
 import { provideMockStore, MockStore } from '@ngrx/store/testing';
 import { Utils } from 'shared-library/core/services';
 import { User } from 'shared-library/shared/model';
-import { AppState, appState } from '../../../store';
+import { AppState, appState, categoryDictionary } from '../../../store';
 import { testData } from 'test/data';
 import { CoreState } from 'shared-library/core/store';
 import { MatSnackBarModule } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
 import { of } from 'rxjs';
 import { UserActions } from 'shared-library/core/store';
-import { CONFIG } from 'shared-library/environments/environment';
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
+import * as lodash from 'lodash';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('GameProfileComponent', () => {
 
@@ -21,6 +22,7 @@ describe('GameProfileComponent', () => {
     let fixture: ComponentFixture<GameProfileComponent>;
     let spy: any;
     let user: User;
+    let router: Router;
     let mockStore: MockStore<AppState>;
 
     beforeEach(async(() => {
@@ -33,14 +35,14 @@ describe('GameProfileComponent', () => {
                     useValue: {
                         getImageUrl(user: User, width: Number, height: Number, size: string) {
                             if (user && user !== null && user.profilePicture && user.profilePicture !== '') {
-                                //  no need to do this you can send static response from here like for this `${CONFIG.functionsUrl}/user/profile/${user.userId}/${user.profilePicture}/${width}/${height}`
-                                //  you can send `https://rwa-trivia-dev-e57fc.firebaseapp.com/v1/user/profile/${user.userId}/${user.profilePicture}//${width}/${height}`
                                 if (this.sanitizer) {
                                     return this.sanitizer.bypassSecurityTrustUrl(
-                                        `${CONFIG.functionsUrl}/user/profile/${user.userId}/${user.profilePicture}/${width}/${height}`
+                                        `https://rwa-trivia-dev-e57fc.firebaseapp.com/v1/user/profile/
+                                        ${user.userId}/${user.profilePicture}//${width}/${height}`
                                     );
                                 } else {
-                                    return `${CONFIG.functionsUrl}/user/profile/${user.userId}/${user.profilePicture}/${width}/${height}`;
+                                    return `https://rwa-trivia-dev-e57fc.firebaseapp.com/v1/user/profile/
+                                    ${user.userId}/${user.profilePicture}//${width}/${height}`;
                                 }
                             } else {
                                 if (isPlatformBrowser(this.platformId) === false && isPlatformServer(this.platformId) === false) {
@@ -58,9 +60,6 @@ describe('GameProfileComponent', () => {
                         params: of({ userid: 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1' })
                     }
                 },
-                {
-                    provide: Router
-                },
                 UserActions,
                 provideMockStore({
                     selectors: [
@@ -71,7 +70,7 @@ describe('GameProfileComponent', () => {
                     ]
                 })
             ],
-            imports: [MatSnackBarModule]
+            imports: [MatSnackBarModule, RouterTestingModule.withRoutes([])]
         });
 
     }));
@@ -84,6 +83,7 @@ describe('GameProfileComponent', () => {
         spy = spyOn(mockStore, 'dispatch');
 
         component = fixture.debugElement.componentInstance;
+        router = TestBed.get(Router);
     });
 
     it('should create', () => {
@@ -94,31 +94,31 @@ describe('GameProfileComponent', () => {
         expect(component.user).toBe(undefined);
     });
 
-    // wrong, in this case you have to check if the addUserInvitation is emitted or not with given predefined value, and loader value should be true
-    it('Verify sendFriendRequest function works', () => {
+    it('Verify if the sendFriendRequest function called or not if called then addUserInvitation action should be fire', () => {
         component.user = { ...testData.userList[0] };
         component.loggedInUser = { ...testData.userList[1] };
         component.sendFriendRequest();
-        expect(spy).toHaveBeenCalled();
+        expect(component.loader).toBe(true);
+        expect(spy).toHaveBeenCalledWith(
+            new UserActions().addUserInvitation({ userId: 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1', inviteeUserId: '4kFa6HRvP5OhvYXsH9mEsRrXj4o2' })
+        );
     });
 
-     // check for all the possibilities - check with different user to have diffrerenct result from the function
     it('Verify getImageUrl function works', () => {
-        user = { ...testData.userList[0] };
-        component.categoryDictionary = testData.categoryDictionary;
+        user = { ...testData.userList[1] };
+        categoryDictionary.setResult(testData.categoryDictionary);
+        component.getImageUrl(user);
         mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
             user: user
         });
         mockStore.refreshState();
         fixture.detectChanges();
-        const expectedURL = '~/assets/images/avatar-400X400.png';
-        // get image url should be called from line no 119 so you have to set the values acccordingly and check if the function is called?
-        expect(component.getImageUrl(user)).toEqual(expectedURL);
+        expect(spy).toHaveBeenCalled();
     });
 
     it('Verify topicsArray for diffrent user login profile', () => {
         user = { ...testData.userList[0] };
-        component.categoryDictionary = testData.categoryDictionary; // you can set this value in mocking store
+        categoryDictionary.setResult(testData.categoryDictionary);
         mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
             user: user
         });
@@ -132,7 +132,7 @@ describe('GameProfileComponent', () => {
 
     it('Verify topicsArray for same user login profile', () => {
         user = { ...testData.userList[1] };
-        component.categoryDictionary = testData.categoryDictionary; // you can set this value in mocking store
+        categoryDictionary.setResult(testData.categoryDictionary);
         mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
             user: user
         });
@@ -146,7 +146,7 @@ describe('GameProfileComponent', () => {
 
     it('Verify tagsArray for diffrent user login profile', () => {
         user = { ...testData.userList[0] };
-        component.categoryDictionary = testData.categoryDictionary; // you can set this value in mocking store
+        categoryDictionary.setResult(testData.categoryDictionary);
         mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
             user: user
         });
@@ -160,7 +160,7 @@ describe('GameProfileComponent', () => {
 
     it('Verify tagsArray for loggedIn user profile', () => {
         user = { ...testData.userList[1] };
-        component.categoryDictionary = testData.categoryDictionary; // you can set this value in mocking store
+        categoryDictionary.setResult(testData.categoryDictionary);
         mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
             user: user
         });
@@ -172,7 +172,7 @@ describe('GameProfileComponent', () => {
         expect(component.tagsArray.userTags).toEqual(expectedTopics.userTags);
     });
 
-    //  this case is non required 
+    //  this case is non required
     it('Verify topics for diffrent user login profile', () => {
         user = { ...testData.userList[0] };
         component.categoryDictionary = testData.categoryDictionary;
@@ -189,7 +189,7 @@ describe('GameProfileComponent', () => {
         }
         // Check if user have category
         if (user && user.categoryIds) {
-            expectedUserTopics = [...user.tags, user.categoryIds.map((data) => component.categoryDictionary[data].categoryName)];
+            expectedUserTopics = [...user.tags, user.categoryIds.map((data) => testData.categoryDictionary[data].categoryName)];
         } else {
             expectedUserTopics = [];
         }
@@ -198,7 +198,7 @@ describe('GameProfileComponent', () => {
 
     it('Verify topics for same user login profile', () => {
         user = { ...testData.userList[1] };
-        component.categoryDictionary = testData.categoryDictionary; // you can set this value in mocking store
+        categoryDictionary.setResult(testData.categoryDictionary);
         mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
             user: user
         });
@@ -212,39 +212,292 @@ describe('GameProfileComponent', () => {
         }
         // Check if user have category
         if (user && user.categoryIds) {
-            expectedUserTopics = [...user.tags, user.categoryIds.map((data) => component.categoryDictionary[data].categoryName)]; // get this category dictionary data from testdata or by mocking the store do not use variable from component
+            expectedUserTopics = [...user.tags, user.categoryIds.map((data) => testData.categoryDictionary[data].categoryName)];
         } else {
             expectedUserTopics = [];
         }
         expect(component.topics).toEqual(expectedUserTopics);
     });
 
+    it('Verify if initializeProfile function works', () => {
+        user = { ...testData.userList[1] };
+        const userDict = {
+            'yP7sLu5TmYRUO9YT4tWrYLAqxSz1': user
+        };
+        // mock data
+        mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
+            user: user,
+            userDict: userDict
+        });
+        mockStore.refreshState();
+        fixture.detectChanges();
+        component.initializeProfile().subscribe();
+        expect(component.user).toEqual(userDict[user.userId]);
+        expect(component.account).toEqual(user.account);
+        expect(component.gamePlayedAgainst).toEqual(user.gamePlayed);
+    });
+
     it('Verify applicationSetting for user', () => {
-        user = { ...testData.userList[0] };
+        user = { ...testData.userList[1] };
         const applicationSetting: any[] = [];
         applicationSetting.push(testData.applicationSettings);
         mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
             user: user,
             applicationSettings: applicationSetting
         });
-        component.initializeSocialSetting().subscribe();
         mockStore.refreshState();
-        // check for socialProfileObj
-        // check for socialProfileSettings
-        // check for enableSocialProfile
         fixture.detectChanges();
+        component.initializeSocialSetting().subscribe();
+        // Expected social profile settings
+        const expectedSocialProfileSettings = applicationSetting[0].social_profile
+            .filter(profile =>
+                user &&
+                user[profile.social_name]
+                && user[profile.social_name] !== '');
+        // Expected enable social profile
+        const expectedEnableSocialProfile = expectedSocialProfileSettings.filter(profile => profile.enable).length;
+
         expect(component.applicationSettings).toEqual(applicationSetting[0]);
+        expect(component.socialProfileObj).toEqual(applicationSetting[0].social_profile);
+        expect(component.socialProfileSettings).toEqual(expectedSocialProfileSettings);
+        expect(component.enableSocialProfile).toEqual(expectedEnableSocialProfile);
     });
 
-    
-    // check initializeProfile() function
-    // check if initializeSocialSetting() is called after you set everything before line number 138 in initializeProfile() function
-    // check is isLivesEnable() - you have to call the function and check the returned value with expected returned value which is boolean check for both true and false value (to get the false value you have to set the variables values so that it gives false in return)
-    // check startNewGame() function check for the this.router.navigate function to be called times
-    // check getIcon() function
-    // check userInfo() function
-    // check getImageUrl() function
+    it('Verify otherUserTags from initializeProfile function', () => {
+        user = { ...testData.userList[1] };
+        const userDict = {
+            'yP7sLu5TmYRUO9YT4tWrYLAqxSz1': user
+        };
+        // mock data
+        mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
+            user: user,
+            userDict: userDict
+        });
+        mockStore.refreshState();
+        fixture.detectChanges();
+        component.initializeProfile().subscribe();
+        expect(component.tagsArray.otherUserTags).toEqual(user.tags);
+    });
 
+    it('Verify topicsArray from initializeProfile function', () => {
+        user = { ...testData.userList[1] };
+        const userDict = {
+            'yP7sLu5TmYRUO9YT4tWrYLAqxSz1': user
+        };
+        // mock data
+        mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
+            user: user,
+            userDict: userDict
+        });
+        mockStore.refreshState();
+        fixture.detectChanges();
+        component.initializeProfile().subscribe();
+        // Test other user topics
+        const expectedOtherUserTopics = [...user.tags, ...user.categoryIds];
+        expect(component.topicsArray.otherUserTopics).toEqual(expectedOtherUserTopics);
+        // Test topics array comparison
+        const expectedTopicArrayComparison = lodash.intersection(component.topicsArray.userTopics, component.topicsArray.otherUserTopics);
+        expect(component.topicsArray.comparison).toEqual(expectedTopicArrayComparison);
+    });
+
+    it('Verify otherUserTags from initializeProfile function', () => {
+        user = { ...testData.userList[1] };
+        const userDict = {
+            'yP7sLu5TmYRUO9YT4tWrYLAqxSz1': user
+        };
+        // mock data
+        mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
+            user: user,
+            userDict: userDict
+        });
+        mockStore.refreshState();
+        fixture.detectChanges();
+        component.initializeProfile().subscribe();
+        const userTags = user.tags.join(', ');
+        expect(component.tags.otherUserTags).toEqual(userTags);
+    });
+
+    it('Verify otherUserTopics from initializeProfile function', () => {
+        user = { ...testData.userList[1] };
+        const userDict = {
+            'yP7sLu5TmYRUO9YT4tWrYLAqxSz1': user
+        };
+        // mock data
+        mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
+            user: user,
+            userDict: userDict
+        });
+        mockStore.refreshState();
+        fixture.detectChanges();
+        component.initializeProfile().subscribe();
+        // Test other user topics
+        const expectedOtherUserTopics = [...user.tags, user.categoryIds.map((data) => testData.categoryDictionary[data].categoryName)];
+        expect(component.otherUserTopics).toEqual(expectedOtherUserTopics);
+    });
+
+    it('Verify otherUserTopicList from initializeProfile function', () => {
+        user = { ...testData.userList[1] };
+        const userDict = {
+            'yP7sLu5TmYRUO9YT4tWrYLAqxSz1': user
+        };
+        // mock data
+        mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
+            user: user,
+            userDict: userDict
+        });
+        mockStore.refreshState();
+        fixture.detectChanges();
+        component.initializeProfile().subscribe();
+        // Test other user topic list
+        const expectedOtherUserTopics = [...user.tags, user.categoryIds.map((data) => testData.categoryDictionary[data].categoryName)];
+        const expectedOtherUserTopicsList = expectedOtherUserTopics.join(', ');
+        expect(component.otherUserTopicList).toEqual(expectedOtherUserTopicsList);
+    });
+
+    it('Verify userProfileImageUrl from initializeProfile function', () => {
+        user = { ...testData.userList[1] };
+        const userDict = {
+            'yP7sLu5TmYRUO9YT4tWrYLAqxSz1': user
+        };
+        // mock data
+        mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
+            user: user,
+            userDict: userDict
+        });
+        mockStore.refreshState();
+        fixture.detectChanges();
+        component.initializeProfile().subscribe();
+
+        const expectedUserProfileURL = component.getImageUrl(user);
+        expect(component.userProfileImageUrl).toEqual(expectedUserProfileURL);
+    });
+
+    it('Verify socialProfileObj from initializeProfile function', () => {
+        user = { ...testData.userList[1] };
+        const userDict = {
+            'yP7sLu5TmYRUO9YT4tWrYLAqxSz1': user
+        };
+        const applicationSetting: any[] = [];
+        applicationSetting.push(testData.applicationSettings);
+        // mock data
+        mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
+            user: user,
+            userDict: userDict,
+            applicationSettings: applicationSetting
+        });
+        mockStore.refreshState();
+        fixture.detectChanges();
+        component.initializeSocialSetting().subscribe();
+        component.initializeProfile().subscribe();
+        expect(component.socialProfileObj).toEqual(applicationSetting[0].social_profile);
+    });
+
+    it('Verify userFriendInvitations from initializeProfile function', () => {
+        user = { ...testData.userList[0] };
+        const userDict = {
+            'yP7sLu5TmYRUO9YT4tWrYLAqxSz1': user
+        };
+        const invitation = { 'data6@data.com': testData.invitation };
+        const applicationSetting: any[] = [];
+        applicationSetting.push(testData.applicationSettings);
+        // mock data
+        categoryDictionary.setResult(testData.categoryDictionary);
+        mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
+            user: user,
+            userDict: userDict,
+            userFriendInvitations: invitation,
+            applicationSettings: applicationSetting
+        });
+        mockStore.refreshState();
+        fixture.detectChanges();
+        expect(spy).toHaveBeenCalledWith(
+            new UserActions().loadUserInvitationsInfo(component.loggedInUser.userId, user.email, user.userId)
+        );
+    });
+
+    it('Check loggedInUserAccount info set properlly or not', () => {
+        user = { ...testData.userList[0] };
+        categoryDictionary.setResult(testData.categoryDictionary);
+        mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
+            user: user,
+            account: user.account
+        });
+        mockStore.refreshState();
+        fixture.detectChanges();
+        expect(component.loggedInUserAccount).toEqual(user.account);
+    });
+
+    it('Check getIcon function works properlly or not', () => {
+        const expectedResult = String.fromCharCode(parseInt(`0x${100}`, 16));
+        expect(component.getIcon(100)).toEqual(expectedResult);
+    });
+
+    it('Check startNewGame function works properlly or not', () => {
+        user = { ...testData.userList[1] };
+        const navigateSpy = spyOn(router, 'navigate');
+        // mock data
+        mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
+            user: user
+        });
+        mockStore.refreshState();
+        fixture.detectChanges();
+        component.startNewGame();
+        expect(navigateSpy).toHaveBeenCalledTimes(1);
+    });
+
+    it('Check isLivesEnable function it should return true value', () => {
+        user = { ...testData.userList[0] };
+        const userDict = {
+            'yP7sLu5TmYRUO9YT4tWrYLAqxSz1': user
+        };
+        categoryDictionary.setResult(testData.categoryDictionary);
+        const applicationSetting: any[] = [];
+        applicationSetting.push(testData.applicationSettings);
+        mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
+            user: user,
+            account: user.account,
+            userDict: userDict,
+            applicationSettings: applicationSetting,
+        });
+        mockStore.refreshState();
+        component.initializeSocialSetting().subscribe();
+        expect(component.isLivesEnable).toBe(true);
+    });
+
+    it('Check isLivesEnable function it should return false value', () => {
+        user = { ...testData.userList[0] };
+        user.account.lives = 0;
+        const userDict = {
+            'yP7sLu5TmYRUO9YT4tWrYLAqxSz1': user
+        };
+        categoryDictionary.setResult(testData.categoryDictionary);
+        const applicationSetting: any[] = [];
+        applicationSetting.push(testData.applicationSettings);
+        mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
+            user: user,
+            account: user.account,
+            userDict: userDict,
+            applicationSettings: applicationSetting,
+        });
+        mockStore.refreshState();
+        component.initializeSocialSetting().subscribe();
+        expect(component.isLivesEnable).toBe(false);
+    });
+
+    it('Check userInfo function return value', () => {
+        user = { ...testData.userList[0] };
+        mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
+            user: user
+        });
+        mockStore.refreshState();
+        fixture.detectChanges();
+        const expectedUserInfo = {
+            showEditOrOptions: 'options',
+            userId: '',
+            routing: '/user/my/profile'
+        };
+        expect(component.userInfo).toEqual(expectedUserInfo);
+    });
 
     afterEach(() => {
         fixture.destroy();
