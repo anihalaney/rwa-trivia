@@ -24,29 +24,24 @@ describe('SocialPaletteComponent', () => {
         expect(component).toBeTruthy();
     });
 
-    it('Initial value of the data should be falsy', () => {
+    it('Initial value of the isFromBlog and blogData should be falsy and blogUrl should be undefined', () => {
         expect(component.blogUrl).toBeUndefined();
         expect(component.isFromBlog).toBeFalsy();
         expect(component.blogData).toBeFalsy();
     });
 
     it('call to closeSocial should change share_status to false', () => {
+        spy = spyOn(component.notify, 'emit');
         component.blogData = testData.blogs[0];
-        component.blogData.share_status = false;
-        spyOn(component.notify, 'emit');
-        fixture.detectChanges();
         component.closeSocial();
+        expect(component.blogData.share_status).toBe(false);
         expect(component.notify.emit).toHaveBeenCalledWith(component.blogData);
     });
 
     it('call to ngOnChanges should set blogUrl', () => {
-        spy = spyOn(component, 'ngOnChanges').and.callThrough();
-        expect(component).toBeDefined();
-        expect(spy);
         component.blogData = testData.blogs[0];
-        this.blogUrl = component.blogData.link;
-        fixture.detectChanges();
         component.ngOnChanges();
-        expect(component.ngOnChanges).toHaveBeenCalled();
+        expect(component.blogUrl).toBe(component.blogData.link);
     });
+
 });
