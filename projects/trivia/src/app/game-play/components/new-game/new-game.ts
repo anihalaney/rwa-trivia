@@ -35,7 +35,7 @@ export class NewGame {
   loaderStatus = false;
   userCardType = userCardType;
   filteredCategories: Category[];
-  selectedCategories: number[];
+  selectedCategories: number[] = [];
   routeType = '';
   topTagsObs: Observable<any[]>;
   topTags = [];
@@ -78,14 +78,14 @@ export class NewGame {
       switchMap(() => this.store.select(appState.coreState).pipe(select(s => s.user)))).subscribe(user => {
         if (user) {
           this.user = user;
-          if (this.user.tags && this.user.tags.length > 0) {
+          if (this.user.tags && this.user.tags.length > 0 && this.topTags) {
             this.selectedTags = this.user.tags;
             this.topTags.map(data => {
                 if (this.user.tags.indexOf(data.key) >= 0) {
                     data.isSelected = true;
                 }
             });
-          } else if (this.user.lastGamePlayOption && this.user.lastGamePlayOption.tags.length > 0) {
+          } else if (this.user.lastGamePlayOption && this.user.lastGamePlayOption.tags.length > 0 && this.topTags) {
             this.topTags.map(data => {
                 if (this.user.lastGamePlayOption.tags.indexOf(data.key) >=0 ) {
                     data.isSelected = true;
@@ -211,8 +211,10 @@ export class NewGame {
           if (isPlatformBrowser(this.platformId) && this.windowRef && this.windowRef.nativeWindow && this.windowRef.nativeWindow.scrollTo) {
             this.windowRef.nativeWindow.scrollTo(0, 0);
           }
+          return false;
         }
       }
+
       return true;
     } else if (isMobile) {
       return true;
