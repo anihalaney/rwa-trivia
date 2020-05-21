@@ -43,8 +43,7 @@ describe('UserCardComponent', () => {
           ]
         }),
         WindowRef,
-        UserActions,
-        Utils]
+        UserActions]
     });
 
     fixture = TestBed.createComponent(UserCardComponent);
@@ -110,7 +109,7 @@ describe('UserCardComponent', () => {
     expect(url).toBe(`assets/images/avatar-100X200.png`);
   });
 
-  it('ngOnChanges should be called', () => {
+  it('When ngOnchanges function is called , it should call loadUserInfo function', () => {
     const spyLoadUserInfo = spyOn(component, 'loadUserInfo').and.callThrough();
     expect(spyLoadUserInfo);
     component.userDict = testData.userDict;
