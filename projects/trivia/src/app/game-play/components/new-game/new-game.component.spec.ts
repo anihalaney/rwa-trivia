@@ -742,7 +742,7 @@ describe('NewGameComponent', () => {
         expect(component.newGameForm.get('opponentType').reset).toHaveBeenCalledTimes(1);
     });
 
-    it(' verify startNewGame function works', () => {
+    it('verify startNewGame function works', () => {
 
         let newGameOptions = new GameOptions();
         newGameOptions =  {
@@ -764,10 +764,13 @@ describe('NewGameComponent', () => {
             'opponentType': 1
           };
           mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
+            user: testData.userList[0]
             });
-        component.startNewGame(newGameOptions);
         mockStore.refreshState();
-        expect(spy).toHaveBeenLastCalledWith( new gameplayactions.CreateNewGame({ gameOptions: newGameOptions, user: testData.userList[0] }));
+        component.startNewGame(newGameOptions);
+        expect(spy).toHaveBeenLastCalledWith(
+            new gameplayactions.CreateNewGame({ gameOptions: newGameOptions, user: testData.userList[0] })
+            );
     });
 
     // it('verify that selectFriendId() function works correctly', () => {
