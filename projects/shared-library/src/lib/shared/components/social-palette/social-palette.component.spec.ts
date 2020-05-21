@@ -35,13 +35,13 @@ describe('SocialPaletteComponent', () => {
         component.blogData = testData.blogs[0];
         component.closeSocial();
         expect(component.blogData.share_status).toBe(false);
-        expect(component.notify.emit).toHaveBeenCalledWith(component.blogData);
+        expect(component.notify.emit).toHaveBeenCalledWith(testData.blogs[0]);
     });
 
     it('call to ngOnChanges should set blogUrl', () => {
         component.blogData = testData.blogs[0];
         component.ngOnChanges();
-        expect(component.blogUrl).toBe(component.blogData.link);
+        expect(component.blogUrl).toBe(testData.blogs[0].link);
     });
 
 });
