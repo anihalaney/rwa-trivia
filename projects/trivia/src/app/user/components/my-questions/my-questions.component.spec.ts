@@ -15,12 +15,10 @@ describe('MyQuestionsComponent', () => {
     let component: MyQuestionsComponent;
     let fixture: ComponentFixture<MyQuestionsComponent>;
     let spy: any;
-    let categories: any;
     let publishedQuestions: any;
     let unpublishedQuestions: any;
     let user: User;
     const applicationSettings: any[] = [];
-    let tags: any;
     let mockStore: MockStore<AppState>;
 
     beforeEach(async(() => {
@@ -63,7 +61,7 @@ describe('MyQuestionsComponent', () => {
         expect(component.user).toBe(undefined);
     });
 
-    it('user should be set when counstrocter call', () => {
+    it('user should be set when constructor call', () => {
         user = { ...testData.userList[0] };
         mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
             user: user
@@ -73,7 +71,7 @@ describe('MyQuestionsComponent', () => {
         expect(component.user).toEqual(user);
     });
 
-    it('publishedQuestions should be set when counstrocter call', () => {
+    it('publishedQuestions should be set when constructor call', () => {
         publishedQuestions = { ...testData.questions.published };
         mockStore.overrideSelector<AppState, Partial<UserState>>(userState, {
             userPublishedQuestions: publishedQuestions
@@ -83,7 +81,7 @@ describe('MyQuestionsComponent', () => {
         expect(component.publishedQuestions).toEqual(publishedQuestions);
     });
 
-    it('unpublishedQuestions should be set when counstrocter call', () => {
+    it('unpublishedQuestions should be set when constructor call', () => {
         unpublishedQuestions = { ...testData.questions.unpublished };
         mockStore.overrideSelector<AppState, Partial<UserState>>(userState, {
             userUnpublishedQuestions: unpublishedQuestions
@@ -93,7 +91,7 @@ describe('MyQuestionsComponent', () => {
         expect(component.unpublishedQuestions).toEqual(unpublishedQuestions);
     });
 
-    it('Verify quillconfig container options should be set when counstrocter call', () => {
+    it('Verify quillconfig container options should be set when constructor call', () => {
         applicationSettings.push(testData.applicationSettings);
         mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
             applicationSettings: applicationSettings
@@ -103,7 +101,7 @@ describe('MyQuestionsComponent', () => {
         expect(component.quillConfig.toolbar.container[0]).toBe(applicationSettings[0].quill_options.options);
     });
 
-    it('Verify quillconfig container list should be set when counstrocter call', () => {
+    it('Verify quillconfig container list should be set when constructor call', () => {
         applicationSettings.push(testData.applicationSettings);
         mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
             applicationSettings: applicationSettings
@@ -113,7 +111,7 @@ describe('MyQuestionsComponent', () => {
         expect(component.quillConfig.toolbar.container[1]).toBe(applicationSettings[0].quill_options.list);
     });
 
-    it('Verify quillconfig mathEditor mathOptions should be set when counstrocter call', () => {
+    it('Verify quillconfig mathEditor mathOptions should be set when constructor call', () => {
         applicationSettings.push(testData.applicationSettings);
         mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
             applicationSettings: applicationSettings
