@@ -63,42 +63,6 @@ describe('MyQuestionsComponent', () => {
         expect(component.user).toBe(undefined);
     });
 
-    it('categoriesObs should be set when constructor call', () => {
-        categories = testData.categories;
-        publishedQuestions = { ...testData.questions.published };
-        mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
-            categories: categories
-        });
-        mockStore.overrideSelector<AppState, Partial<UserState>>(userState, {
-            userPublishedQuestions: publishedQuestions
-        });
-        mockStore.refreshState();
-        fixture.detectChanges();
-        let componentCategories;
-        component.categoriesObs.subscribe(result => {
-            componentCategories = result;
-        });
-        expect(componentCategories).toEqual(categories);
-    });
-
-    it('tagsObs should be set when counstrocter call', () => {
-        tags = testData.tagList;
-        publishedQuestions = { ...testData.questions.published };
-        mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
-            tags: tags
-        });
-        mockStore.overrideSelector<AppState, Partial<UserState>>(userState, {
-            userPublishedQuestions: publishedQuestions
-        });
-        mockStore.refreshState();
-        fixture.detectChanges();
-        let componentTags;
-        component.tagsObs.subscribe(result => {
-            componentTags = result;
-        });
-        expect(componentTags).toEqual(tags);
-    });
-
     it('user should be set when counstrocter call', () => {
         user = { ...testData.userList[0] };
         mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
