@@ -27,7 +27,8 @@ export const Questions =  {
         ],
         'ordered': false,
         'tags': ['JavaScript', 'front-end', 'ES5'],
-        'categoryIds': [2]
+        'categoryIds': [2],
+        'reason': 'Inappropriate Question'
       },
       {
         'id': '2',
