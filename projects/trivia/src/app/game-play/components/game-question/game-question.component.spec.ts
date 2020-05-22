@@ -10,6 +10,7 @@ import { testData } from 'test/data';
 import { CoreState } from 'shared-library/core/store';
 import { MatSnackBarModule } from '@angular/material';
 
+
 describe('GameQuestionComponent', () => {
 
     let component: GameQuestionComponent;
@@ -56,6 +57,7 @@ describe('GameQuestionComponent', () => {
 
         const dbModel = testData.games[0];
         component.game = Game.getViewModel(dbModel);
+        component.MAX_TIME_IN_SECONDS = 16;
 
     });
 
@@ -134,12 +136,107 @@ describe('GameQuestionComponent', () => {
         expect(component.draw).toHaveBeenCalledTimes(1);
     });
 
-    it('verify if draw() function should work correctly', () => {
-        component.draw = jest.fn();
-        component.question = testData.questions.published[0];
-        fixture.detectChanges();
-        expect(component.draw).toHaveBeenCalledTimes(1);
+    it('verify if ngOnChanges() function should work correctly for timer changes', () => {
+
+        component.ngOnChanges({
+            timer: {
+                currentValue: 5,
+                firstChange: true,
+                previousValue: undefined,
+                isFirstChange: undefined
+              }
+        });
+        expect(component.alpha).toEqual(247.5);
     });
+
+    it('verify if ngOnChanges() function should work correctly for showCurrentQuestion changes', () => {
+        spyOn(component.gameOverButtonClicked, 'emit');
+        component.continueButtonClicked({});
+        component.ngOnChanges({
+            showCurrentQuestion: {
+                currentValue: true,
+                firstChange: true,
+                previousValue: undefined,
+                isFirstChange: undefined
+              }
+        });
+        expect(component.gameOverButtonClicked.emit).toHaveBeenCalledTimes(1);
+    });
+
+    it('verify if ngOnChanges() function should work correctly for showContinueBtn changes with gameOver', () => {
+        spyOn(component.gameOverButtonClicked, 'emit');
+        component.gameOver = true;
+        component.continueButtonClicked({});
+        component.ngOnChanges({
+            showContinueBtn: {
+                currentValue: true,
+                firstChange: true,
+                previousValue: undefined,
+                isFirstChange: undefined
+              }
+        });
+        expect(component.gameOverButtonClicked.emit).toHaveBeenCalledTimes(1);
+    });
+
+    it('verify if ngOnChanges() function should work correctly for showContinueBtn changes with GameOver False', () => {
+        spyOn(component, 'continueButtonClicked');
+        component.gameOver = false;
+        component.continueButtonClicked({});
+        component.ngOnChanges({
+            showContinueBtn: {
+                currentValue: true,
+                firstChange: true,
+                previousValue: undefined,
+                isFirstChange: undefined
+              }
+        });
+        expect(component.continueButtonClicked).toHaveBeenCalledTimes(1);
+    });
+
+    it('verify if ngOnChanges() function should work correctly for gameOver changes true', () => {
+        spyOn(component.gameOverButtonClicked, 'emit');
+        component.continueButtonClicked({});
+        component.ngOnChanges({
+            gameOver: {
+                currentValue: true,
+                firstChange: true,
+                previousValue: undefined,
+                isFirstChange: undefined
+              }
+        });
+        expect(component.gameOverButtonClicked.emit).toHaveBeenCalledTimes(1);
+    });
+
+    it('verify if ngOnChanges() function should work correctly for gameOver changes false', () => {
+        spyOn(component.gameOverButtonClicked, 'emit');
+        component.continueButtonClicked({});
+        component.ngOnChanges({
+            gameOver: {
+                currentValue: false,
+                firstChange: true,
+                previousValue: undefined,
+                isFirstChange: undefined
+              }
+        });
+        expect(component.gameOverButtonClicked.emit).toHaveBeenCalledTimes(0);
+    });
+
+
+    it('verify if draw() function should work correctly for given value the loader attribute should be set correctly', () => {
+        component.loader.nativeElement.setAttribute = jest.fn();
+        component.draw(44, true, component.loader.nativeElement);
+
+        expect(component.loader.nativeElement.setAttribute)
+        .toHaveBeenCalledWith('d', 'M 1 1 v -125 A 125 125 1 1 1 88.38834764831843 -88.38834764831844 z');
+    });
+
+    it('verify if draw() function should be called immediately', (async() => {
+        component.draw(44, true, component.loader.nativeElement);
+        component.draw = jest.fn();
+        await new Promise((r) => setTimeout(r, 1));
+        expect(component.draw)
+        .toHaveBeenCalledTimes(1);
+    }));
 
 
     afterEach(() => {
