@@ -214,13 +214,13 @@ describe('NewGameComponent', () => {
         const topTagsList = cloneDeep(testData.getTopTags);
         mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
             getTopTags: topTagsList,
-            user: testData.userList[3]
+            user: testData.userList[4]
           });
           mockStore.refreshState();
           fixture.detectChanges();
           topTagsList.map(data => {
             data.requiredForGamePlay = false;
-            if (testData.userList[3].lastGamePlayOption.tags.indexOf(data.key) >= 0) {
+            if (testData.userList[4].lastGamePlayOption.tags.indexOf(data.key) >= 0) {
                 data.isSelected = true;
             } else {
                 data.isSelected = false;
@@ -303,7 +303,7 @@ describe('NewGameComponent', () => {
     it(`verify isCategorySelected() function should work for categoryWith requiredForGamePlay as false and part
         of user categorylist`, () => {
         mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
-            user: cloneDeep(testData.userList[4])
+            user: cloneDeep(testData.userList[5])
         });
         mockStore.refreshState();
         expect(component.isCategorySelected(1, false)).toBe(true);
@@ -312,7 +312,7 @@ describe('NewGameComponent', () => {
     it(`verify isCategorySelected() function should work for categoryWith requiredForGamePlay as false and not part
          of user categorylist`, () => {
         mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
-            user: cloneDeep(testData.userList[5])
+            user: cloneDeep(testData.userList[6])
         });
         mockStore.refreshState();
         expect(component.isCategorySelected(1, false)).toBe(false);
@@ -321,7 +321,7 @@ describe('NewGameComponent', () => {
     it(`verify isCategorySelected() function should work for categoryWith requiredForGamePlay as false and part
         of user last played games categorylist`, () => {
         mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
-            user: cloneDeep(testData.userList[3])
+            user: cloneDeep(testData.userList[4])
         });
         mockStore.refreshState();
         expect(component.isCategorySelected(1, false)).toBe(true);
@@ -330,7 +330,7 @@ describe('NewGameComponent', () => {
     it(`verify isCategorySelected() function should work for categoryWith requiredForGamePlay as false and not part
         of user last played games categorylist`, () => {
         mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
-            user: cloneDeep(testData.userList[6])
+            user: cloneDeep(testData.userList[7])
         });
         mockStore.refreshState();
         expect(component.isCategorySelected(1, false)).toBe(false);
