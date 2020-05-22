@@ -110,6 +110,37 @@ describe('GameQuestionComponent', () => {
         expect(component.continueClicked.emit).toHaveBeenCalledTimes(1);
     });
 
+    it('verify if continueButtonClicked() function works correctly with showContinueBtn is false', () => {
+        component.showContinueBtn = false;
+        spyOn(component.continueClicked, 'emit');
+        component.continueButtonClicked({});
+        expect(component.showLoader).toEqual(true);
+        expect(component.continueClicked.emit).toHaveBeenCalledTimes(0);
+    });
+
+
+    it('verify if fillTimer() function works correctly', () => {
+        component.loader.nativeElement.setAttribute = jest.fn();
+        component.question = testData.questions.published[0];
+        fixture.detectChanges();
+        component.fillTimer();
+        expect(component.loader.nativeElement.setAttribute).toHaveBeenCalledTimes(2);
+    });
+
+    it('verify if draw() function should be called', () => {
+        component.draw = jest.fn();
+        component.question = testData.questions.published[0];
+        fixture.detectChanges();
+        expect(component.draw).toHaveBeenCalledTimes(1);
+    });
+
+    it('verify if draw() function should work correctly', () => {
+        component.draw = jest.fn();
+        component.question = testData.questions.published[0];
+        fixture.detectChanges();
+        expect(component.draw).toHaveBeenCalledTimes(1);
+    });
+
 
     afterEach(() => {
         fixture.destroy();
