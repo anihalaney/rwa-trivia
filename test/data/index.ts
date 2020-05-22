@@ -11,9 +11,13 @@ import { CategoryList } from './category-list';
 import { LeaderBoard } from './leaderBoard';
 import { TopTopics } from './top-topics';
 import { UserDict } from './user-dictionary';
+import { FriendsList } from './friends-list';
+
 import { Invitation } from './invitation';
 import { Question } from './question';
 import { QuestionOfTheDay } from './question-of-the-day';
+import { BulkUploads } from './bulk-uploads';
+
 
 export const testData = {
     categories: Categories,
@@ -29,8 +33,10 @@ export const testData = {
     leaderBoard: LeaderBoard,
     topTopics: TopTopics,
     userDict: UserDict,
+    friendsList: FriendsList,
     invitation: Invitation,
     question: Question,
-    questionOfTheDay : QuestionOfTheDay
+    questionOfTheDay: QuestionOfTheDay,
+    bulkUploads: BulkUploads
 };
 

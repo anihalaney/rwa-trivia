@@ -1,5 +1,5 @@
 import { ActionWithPayload, UserActions } from '../actions';
-import { User, Game, Friends, Invitation } from '../../../shared/model';
+import { User, Game, Friend, Invitation } from '../../../shared/model';
 import { Country } from 'shared-library/shared/mobile/component/countryList/model/country.model';
 
 
@@ -72,7 +72,7 @@ export function gameInvites(state: any = [], action: ActionWithPayload<Game[]>):
 }
 
 // Load User Published Question by userId
-export function userFriends(state: any = null, action: ActionWithPayload<Friends>): Friends {
+export function userFriends(state: any = null, action: ActionWithPayload<Friend[]>): Friend[] {
   switch (action.type) {
     case UserActions.LOAD_USER_FRIENDS_SUCCESS:
       return action.payload;

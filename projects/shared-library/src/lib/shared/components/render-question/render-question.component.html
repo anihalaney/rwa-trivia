@@ -1,4 +1,4 @@
-<span id="number" *ngIf="questionIndex && question.isRichEditor">{{questionIndex}}  </span> 
-<span id="question" *ngIf="question.isRichEditor" [innerHtml]='question?.questionText | safeHtml'></span>
-<span *ngIf="!question.isRichEditor"> <span *ngIf="questionIndex">{{questionIndex}}  </span> {{question?.questionText}}</span>
+<span id="number" *ngIf="questionIndex && question?.isRichEditor">{{questionIndex}}  </span> 
+<span id="question" *ngIf="question?.isRichEditor" [innerHtml]='question?.questionText | safeHtml'></span>
+<span *ngIf="!question?.isRichEditor"> <span *ngIf="questionIndex">{{questionIndex}}  </span> {{question?.questionText}}</span>
 
