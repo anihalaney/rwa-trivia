@@ -91,36 +91,45 @@ export class QuestionsTableComponent implements OnInit, OnChanges, AfterViewInit
     if (changes['questions'] && changes['questions'].currentValue !== changes['questions'].previousValue) {
       if (this.isAdmin ||
         (!this.isAdmin &&
-        changes.questions.currentValue &&
-         !changes.questions.previousValue) ||
+          changes.questions.currentValue &&
+          !changes.questions.previousValue) ||
         (!this.isAdmin &&
           changes.questions.currentValue &&
-           changes.questions.previousValue &&
-           changes.questions.currentValue.length !== changes.questions.previousValue.length)
-        ) {
-        (this.clientSidePagination) ? this.setClientSidePaginationDataSource(this.questions) : this.questionsSubject.next(this.questions);
+          changes.questions.previousValue &&
+          changes.questions.currentValue.length !== changes.questions.previousValue.length)
+      ) {
+        if (this.clientSidePagination) {
+          this.setClientSidePaginationDataSource(this.questions);
+        } else {
+          this.setQuestions(this.questions);
+        }
       } else if (!this.isAdmin &&
         this.isDraft !== true && changes.questions.previousValue) {
         changes.questions.currentValue.map(data => {
           const index = changes.questions.previousValue.findIndex(q => q.id === data.id);
-          if ( index >= 0 && ( changes.questions.previousValue[index].status !==  data.status ||
-            changes.questions.previousValue[index].is_draft !==  data.is_draft ) ) {
-          (this.clientSidePagination) ? this.setClientSidePaginationDataSource(this.questions) : this.questionsSubject.next(this.questions);
+          if (index >= 0 && (changes.questions.previousValue[index].status !== data.status ||
+            changes.questions.previousValue[index].is_draft !== data.is_draft)) {
+            // tslint:disable-next-line: max-line-length
+            (this.clientSidePagination) ? this.setClientSidePaginationDataSource(this.questions) : this.setQuestions(this.questions);;
           }
         });
-    }
+      }
       (changes['questions'].previousValue) ? this.setPagination() : '';
     }
 
     if (changes['categoryDictionary'] && changes['categoryDictionary'].currentValue !== changes['categoryDictionary'].previousValue &&
-        this.categoryDictionary ) {
-        for (const key in this.categoryDictionary) {
-          if (this.categoryDictionary.hasOwnProperty(key)) {
-            this.categoryObj[this.categoryDictionary[key].id] = this.categoryDictionary[key].categoryName;
-          }
+      this.categoryDictionary) {
+      for (const key in this.categoryDictionary) {
+        if (this.categoryDictionary.hasOwnProperty(key)) {
+          this.categoryObj[this.categoryDictionary[key].id] = this.categoryDictionary[key].categoryName;
         }
+      }
     }
 
+  }
+
+  setQuestions(questions) {
+    this.questionsSubject.next(questions);
   }
 
   ngAfterViewInit() {
@@ -219,7 +228,7 @@ export class QuestionsTableComponent implements OnInit, OnChanges, AfterViewInit
   }
 
   approveButtonClicked(question: Question) {
-    this.onApproveClicked.emit(question)
+    this.onApproveClicked.emit(question);
   }
   pageChanged(pageEvent: PageEvent) {
     this.onPageChanged.emit(pageEvent);
