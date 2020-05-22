@@ -11,10 +11,16 @@ import { CategoryList } from './category-list';
 import { LeaderBoard } from './leaderBoard';
 import { TopTopics } from './top-topics';
 import { UserDict } from './user-dictionary';
+import { FriendsList } from './friends-list';
+
+import { Invitation } from './invitation';
+import { Question } from './question';
 import { QuestionOfTheDay } from './question-of-the-day';
 import { TopTags } from './top-tags';
 import { Accounts } from './accounts';
 import { NewGameFilteredCategories } from './new-game-filtered-categories';
+import { BulkUploads } from './bulk-uploads';
+
 
 export const testData = {
     categories: Categories,
@@ -33,6 +39,10 @@ export const testData = {
     questionOfTheDay : QuestionOfTheDay,
     getTopTags: TopTags,
     accounts: Accounts,
-    newGameFilteredCategories: NewGameFilteredCategories
+    newGameFilteredCategories: NewGameFilteredCategories,
+    friendsList: FriendsList,
+    invitation: Invitation,
+    question: Question,
+    bulkUploads: BulkUploads
 };
 

@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { ModalDialogParams } from 'nativescript-angular/modal-dialog';
 import { Country } from './model/country.model';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 import { Subscription } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { UserActions, coreState, CoreState } from 'shared-library/core/store';

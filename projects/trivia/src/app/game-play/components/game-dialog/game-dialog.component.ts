@@ -7,7 +7,7 @@ import { GamePlayState } from '../../store';
 import { UserActions } from 'shared-library/core/store/actions';
 import { GameDialog } from './game-dialog';
 import { Utils } from 'shared-library/core/services';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 @Component({
   selector: 'game-dialog',
   templateUrl: './game-dialog.component.html',

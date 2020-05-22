@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, ChangeDetectorRef } from '@angular/
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import { Achievements } from './achievements';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 @Component({
   selector: 'app-achievements',
   templateUrl: './achievements.component.html',

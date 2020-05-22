@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Effect, Actions, ofType } from '@ngrx/effects';
 import { ActionWithPayload, UserActions } from '../actions';
-import { User, RouterStateUrl, Game, Friends, Invitation, Account } from '../../../shared/model';
+import { User, RouterStateUrl, Game, Friends, Friend, Invitation, Account } from '../../../shared/model';
 import { UserService, GameService, Utils } from '../../services';
 import { switchMap, map, distinct, mergeMap, filter, take, debounceTime, distinctUntilChanged, catchError } from 'rxjs/operators';
 import { empty, of } from 'rxjs';
@@ -135,7 +135,7 @@ export class UserEffects {
                     }),
                         switchMap((friendsList: string[]) =>
                             this.svc.getOtherUserGamePlayedStat(action.payload, friendsList)
-                                .pipe(map((friends: Friends) => this.userActions.loadUserFriendsSuccess(friends)))
+                                .pipe(map((friends: Friend[]) => this.userActions.loadUserFriendsSuccess(friends)))
                         ))
             )
         );

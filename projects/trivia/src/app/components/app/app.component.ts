@@ -3,7 +3,7 @@ import { MatSnackBar } from '@angular/material';
 import { NavigationEnd, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { CookieLawComponent } from 'angular2-cookie-law';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 import { filter, skip, take } from 'rxjs/operators';
 import { AuthenticationProvider } from 'shared-library/core/auth';
 import { Utils, WindowRef } from 'shared-library/core/services';

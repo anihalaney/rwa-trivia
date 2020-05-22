@@ -7,7 +7,7 @@ import { bulkState } from '../../store';
 import { User, Category, Question, BulkUploadFileInfo } from 'shared-library/shared/model';
 import { AppState, appState, categoryDictionary, getCategories, getTags } from '../../../store';
 import * as bulkActions from '../../store/actions';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 
 @Component({
   selector: 'bulk-details',

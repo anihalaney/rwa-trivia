@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef, NgZone, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { AppState, appState } from './../store';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 import { ApplicationSettings } from 'shared-library/shared/model';
 import { Subscription } from 'rxjs';
 

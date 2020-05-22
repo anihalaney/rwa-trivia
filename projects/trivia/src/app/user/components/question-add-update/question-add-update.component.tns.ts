@@ -31,7 +31,7 @@ import { ObservableArray } from "tns-core-modules/data/observable-array";
 import { TokenModel } from "nativescript-ui-autocomplete";
 import { RadAutoCompleteTextViewComponent } from "nativescript-ui-autocomplete/angular";
 import { Page, isIOS, isAndroid } from "tns-core-modules/ui/page";
-import { AutoUnsubscribe } from "ngx-auto-unsubscribe";
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 import { WebView, LoadEventData } from "tns-core-modules/ui/web-view";
 import * as webViewInterfaceModule from "nativescript-webview-interface";
 import * as imagepicker from "nativescript-imagepicker";
