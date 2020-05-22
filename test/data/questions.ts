@@ -180,40 +180,9 @@ export const Questions = {
     'questionText': 'Which of the following function of Array object reverses the order of the elements of an array?',
     'answers': [
       {
-<<<<<<< HEAD
-        'id': '1',
-        'questionText': 'Which of the following function of Array object reverses the order of the elements of an array?',
-        'answers': [
-          {
-            'id': 1,
-            'answerText': 'reverse()',
-            'correct': true
-          },
-          {
-            'id': 2,
-            'answerText': 'push()',
-            'correct': false
-          },
-          {
-            'id': 3,
-            'answerText': 'reduce()',
-            'correct': false
-          },
-          {
-            'id': 4,
-            'answerText': 'reduceRight()',
-            'correct': false
-          }
-        ],
-        'ordered': false,
-        'tags': ['JavaScript', 'front-end', 'ES5'],
-        'categoryIds': [2],
-        'reason': 'Inappropriate Question'
-=======
         'id': 1,
         'answerText': 'reverse()',
         'correct': true
->>>>>>> 42d071f638c3d89c619b4943b69b4e8b33bf1323
       },
       {
         'id': 2,
