@@ -24,21 +24,20 @@ export class CropImageDialogComponent implements OnInit, OnDestroy {
   subscriptions = [];
   cropperSettings: CropperSettings;
   profileImageFile: File;
-  cropImage: { image: any } = { image: '/assets/images/default-avatar-small.png' };;
+  cropImage: { image: any } = { image: '/assets/images/default-avatar-small.png' };
   image: any = {};
   errorMsg = '';
   maxImageSize: number;
 
   @ViewChild('cropper', { static: false }) cropper: ImageCropperComponent;
 
-  constructor(@Inject(MAT_DIALOG_DATA) private data: any,
+  constructor(@Inject(MAT_DIALOG_DATA) public data: any,
     public cd: ChangeDetectorRef,
     public dialogRef: MatDialogRef<CropImageDialogComponent>) {
     this.setCropperSettings();
   }
 
   ngOnInit() {
-
     this.maxImageSize = this.data.applicationSettings.max_image_size_of_question;
     this.image = new Image();
     this.profileImageFile = this.data.file;
@@ -51,7 +50,7 @@ export class CropImageDialogComponent implements OnInit, OnDestroy {
     reader.readAsDataURL(this.profileImageFile);
   }
 
-  private setCropperSettings() {
+  public setCropperSettings() {
     this.cropperSettings = new CropperSettings();
     this.cropperSettings.noFileInput = true;
     this.cropperSettings.width = 150;
@@ -69,7 +68,7 @@ export class CropImageDialogComponent implements OnInit, OnDestroy {
   }
 
   closeModel() {
-    this.ref.close();
+    this.dialogRef.close();
   }
 
   ngOnDestroy() {
@@ -105,4 +104,5 @@ export class CropImageDialogComponent implements OnInit, OnDestroy {
       this.dialogRef.close(cropImage);
     }
   }
+
 }

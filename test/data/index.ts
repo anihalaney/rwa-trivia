@@ -37,6 +37,7 @@ export const testData = {
     invitation: Invitation,
     question: Question,
     questionOfTheDay: QuestionOfTheDay,
-    bulkUploads: BulkUploads
+    bulkUploads: BulkUploads,
+    file: File
 };
 

@@ -2,6 +2,7 @@ export const ApplicationSettings = {
   'android_version': 79,
   'answer_max_length': 128,
   'apple_authentication': true,
+  'max_image_size_of_question': 4000,
   'auto_save': {
     'is_enabled': true,
     'time': 30000
