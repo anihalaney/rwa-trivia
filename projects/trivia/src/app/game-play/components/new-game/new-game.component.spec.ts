@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed, tick, fakeAsync } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { NewGameComponent } from './new-game.component';
 import { NO_ERRORS_SCHEMA, PLATFORM_ID } from '@angular/core';
 import { Store } from '@ngrx/store';
@@ -14,13 +14,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { of } from 'rxjs';
 import cloneDeep from 'lodash/cloneDeep';
-import { Category, GameOptions, ApplicationSettings, PlayerMode, OpponentType, userCardType } from 'shared-library/shared/model';
+import { GameOptions, userCardType } from 'shared-library/shared/model';
 import * as gameplayactions from '../../store/actions';
-import { platform } from 'os';
 
-function isPlatformBrowser(platformId) {
-    return true;
-}
 
 describe('NewGameComponent', () => {
 
@@ -29,7 +25,6 @@ describe('NewGameComponent', () => {
     let spy: any;
     let mockStore: MockStore<AppState>;
 
-    // component.isPlatformBrowser = isPlatformBrowser;
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [NewGameComponent],
@@ -275,24 +270,6 @@ describe('NewGameComponent', () => {
           expect(component.filteredCategories).toEqual(testData.newGameFilteredCategories);
     });
 
-
-//     it('verify userFriends is set after the value is emitted ', () => {
-//       //  this is pending ---------------------------------------------------
-//     //   mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
-//     //       userFriends: cloneDeep(testData.userFriends),
-//     //       user: cloneDeep(testData.userList[0])
-//     //     });
-//     //     mockStore.refreshState();
-//     //     fixture.detectChanges();
-//     //     expect(component.uFriends).toEqual(testData.userFriends);
-//   });
-
-
-//     it('verify gameCreateStatus is set then redirectToDashboard() function should be called  ', () => {
-//     //  this is pending ---------------------------------------------------
-//     });
-
-
     it('verify resetNewGame action should be dispatched', () => {
         expect(spy).toHaveBeenCalledWith( new GameActions().resetNewGame());
     });
@@ -493,12 +470,6 @@ describe('NewGameComponent', () => {
         expect(component.utils.showMessage).toHaveBeenCalledTimes(1);
         expect(component.utils.showMessage).toHaveBeenCalledWith('success', 'test message');
     });
-
-
-    it('verify that startNewGame() function works correctly', () => {
-        // to do
-    });
-
 
     it('verify that getImageUrl() function works correctly', () => {
         component.utils.getImageUrl = jest.fn();
@@ -773,13 +744,6 @@ describe('NewGameComponent', () => {
             );
     });
 
-    // it('verify that selectFriendId() function works correctly', () => {
-    //     //  todo write test case for super class function selectFriendId()
-    // });
-
-    // it('verify that userFriends value is set after it is emitted', () => {
-    //     //  todo write test case - need to take cross branch pull for this
-    // });
 
     afterEach(() => {
         fixture.destroy();
