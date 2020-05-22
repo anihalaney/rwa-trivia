@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@ang
 import { Question, QuestionStatus, Category, User, Answer, ApplicationSettings } from '../../model';
 import { QuestionService } from '../../../core/services';
 import { Observable, interval, of, Subject, merge } from 'rxjs';
-import { debounceTime, switchMap, map, multicast, take, skip, mergeMap} from 'rxjs/operators';
+import { debounceTime, switchMap, map, multicast, take, skip, mergeMap } from 'rxjs/operators';
 import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 // import { QuillImageUpload } from 'ng-quill-tex/lib/models/quill-image-upload';
 import { CropImageDialogComponent } from './../crop-image-dialog/crop-image-dialog.component';
@@ -60,28 +60,31 @@ export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
     public questionAction: QuestionActions) {
 
 
-    }
+  }
 
   ngOnInit() {
 
-    this.questionForm = this.fb.group({
-      category: [(this.editQuestion.categories.length > 0 ? this.editQuestion.categories[0] : ''), Validators.required]
-    });
+    if (this.editQuestion) {
+      this.questionForm = this.fb.group({
+        category: [(this.editQuestion.categories.length > 0 ? this.editQuestion.categories[0] : ''), Validators.required]
+      });
 
-    this.createForm(this.editQuestion);
-    if (this.editQuestion.is_draft && this.isAutoSave) {
-      this.autoSave();
+      this.createForm(this.editQuestion);
+      if (this.editQuestion.is_draft && this.isAutoSave) {
+        this.autoSave();
+      }
+
+      const questionControl = this.questionForm.get('questionText');
+      this.filteredTags$ = this.questionForm.get('tags').valueChanges
+        .pipe(map(val => val.length > 0 ? this.filter(val) : []));
+
+      this.subscriptions.push(questionControl.valueChanges.pipe(debounceTime(500)).subscribe(v => this.computeAutoTags()));
+      this.subscriptions.push(this.answers.valueChanges.pipe(debounceTime(500)).subscribe(v => this.computeAutoTags()));
+      this.subscriptions.push(this.categoriesObs.subscribe(categories => this.categories = categories));
+      this.subscriptions.push(this.tagsObs.subscribe(tags => this.tags = tags));
+
     }
 
-    const questionControl = this.questionForm.get('questionText');
-
-    this.filteredTags$ = this.questionForm.get('tags').valueChanges
-    .pipe(map(val => val.length > 0 ? this.filter(val) : []));
-
-    this.subscriptions.push(questionControl.valueChanges.pipe(debounceTime(500)).subscribe(v => this.computeAutoTags()));
-    this.subscriptions.push(this.answers.valueChanges.pipe(debounceTime(500)).subscribe(v => this.computeAutoTags()));
-    this.subscriptions.push(this.categoriesObs.subscribe(categories => this.categories = categories));
-    this.subscriptions.push(this.tagsObs.subscribe(tags => this.tags = tags));
   }
 
   filter(val: string): string[] {
@@ -89,38 +92,42 @@ export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   autoSave() {
-      this.subscriptions.push(this.store.select(coreState).pipe(
-        select(s => s.applicationSettings),
-        map(appSettings => appSettings),
-        switchMap(appSettings => {
-          if (appSettings && appSettings[0]) {
-            if (!this.questionForm.controls.is_draft.value) {
-              this.questionForm.patchValue({ is_draft: true });
-            }
-            if (appSettings[0]['auto_save']['is_enabled']) {
-                return merge(
-                  this.questionForm.valueChanges.pipe(take(1)),
-                  this.questionForm.valueChanges.pipe(debounceTime(appSettings[0]['auto_save']['time'])));
-            } else {
-              return of();
-            }
-        }
-        })).subscribe(data => {
-          if (data) {
-              const question = this.getQuestionFromFormValue(this.questionForm.value);
-              question.categoryIds = [];
-              if (Array.isArray(this.questionForm.get('category').value)) {
-                question.categoryIds = this.questionForm.get('category').value;
-              } else {
-                question.categoryIds.push(this.questionForm.get('category').value);
-              }
-              if (question.isRichEditor) {
-                question.questionText = this.quillObject.questionText;
-                question.questionObject = this.quillObject.jsonObject;
-              }
-              this.store.dispatch(new userActions.AddQuestion({ question: question }));
+    this.subscriptions.push(this.store.select(coreState).pipe(
+      select(s => s.applicationSettings),
+      map(appSettings => appSettings),
+      switchMap(appSettings => {
+        if (appSettings && appSettings[0]) {
+          if (!this.questionForm.controls.is_draft.value) {
+            this.questionForm.patchValue({ is_draft: true });
           }
-    }));
+          if (appSettings[0]['auto_save']['is_enabled']) {
+            return merge(
+              this.questionForm.valueChanges.pipe(take(1)),
+              this.questionForm.valueChanges.pipe(debounceTime(appSettings[0]['auto_save']['time'])));
+          } else {
+            return of();
+          }
+        }
+      })).subscribe(data => {
+        if (data) {
+          this.autoSaveQuestion();
+        }
+      }));
+  }
+
+  autoSaveQuestion() {
+    const question = this.getQuestionFromFormValue(this.questionForm.value);
+    question.categoryIds = [];
+    if (Array.isArray(this.questionForm.get('category').value)) {
+      question.categoryIds = this.questionForm.get('category').value;
+    } else {
+      question.categoryIds.push(this.questionForm.get('category').value);
+    }
+    if (question.isRichEditor) {
+      question.questionText = this.quillObject.questionText;
+      question.questionObject = this.quillObject.jsonObject;
+    }
+    this.store.dispatch(new userActions.AddQuestion({ question: question }));
   }
 
   ngOnChanges() {
@@ -130,20 +137,8 @@ export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   createForm(question: Question) {
-    const fgs: FormGroup[] = question.answers.map((answer, index) => {
-      this.answerTexts[index] = answer.answerObject;
-      const isRichEditor = (answer.isRichEditor) ? answer.isRichEditor : false;
-      const answerText = (answer.isRichEditor) ? answer.answerText : answer.answerText;
-      const fg = new FormGroup({
-        answerText: new FormControl(answerText, Validators.required),
-        correct: new FormControl(answer.correct),
-        isRichEditor: new FormControl(isRichEditor),
-        answerObject: new FormControl(answer.answerObject),
-      });
-      return fg;
-    });
-    const answersFA = new FormArray(fgs);
 
+    const answersFA: FormArray = this.createAnswerFormArray(question);
     let fcs: FormControl[] = question.tags.map(tag => {
       const fc = new FormControl(tag);
       return fc;
@@ -155,7 +150,7 @@ export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
     const questionText = (question.isRichEditor) ? question.questionObject : question.questionText;
 
     if (question.isRichEditor) {
-      this.quillObject.questionText =  question.questionText ;
+      this.quillObject.questionText = question.questionText;
       this.quillObject.jsonObject = question.questionObject;
     }
     this.questionForm = this.fb.group({
@@ -178,6 +173,25 @@ export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
     this.enteredTags = question.tags;
   }
 
+  createAnswerFormArray(question) {
+    const fgs: FormGroup[] = question.answers.map((answer, index) => {
+      this.answerTexts[index] = answer.answerObject;
+      const isRichEditor = (answer.isRichEditor) ? answer.isRichEditor : false;
+      const answerText = (answer.isRichEditor) ? answer.answerText : answer.answerText;
+      const fg = new FormGroup({
+        answerText: new FormControl(answerText, Validators.required),
+        correct: new FormControl(answer.correct),
+        isRichEditor: new FormControl(isRichEditor),
+        answerObject: new FormControl(answer.answerObject),
+      });
+      return fg;
+    });
+    const answersFA = new FormArray(fgs);
+
+    return answersFA;
+
+  }
+
   // Event Handlers
   addTag() {
     const tag = this.questionForm.get('tags').value;
@@ -192,23 +206,23 @@ export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
   removeEnteredTag(tag) {
     this.enteredTags = this.enteredTags.filter(t => t !== tag);
     this.setTagsArray();
-}
+  }
 
   computeAutoTags() {
     const formValue = this.questionForm.value;
     const allTextValues: string[] = [formValue.questionText];
 
     formValue.answers.forEach(answer => allTextValues.push(answer.answerText));
-    if(formValue.isRichEditor && this.quillObject && this.quillObject.questionText){
-      const removedHtmlTag = this.quillObject.questionText.replace( /(<([^>]+)>)/ig, '');
-      allTextValues.push(removedHtmlTag);  
+    if (formValue.isRichEditor && this.quillObject && this.quillObject.questionText) {
+      const removedHtmlTag = this.quillObject.questionText.replace(/(<([^>]+)>)/ig, '');
+      allTextValues.push(removedHtmlTag);
     }
     const wordString: string = allTextValues.join(' ');
     const matchingTags: string[] = [];
     this.tags.forEach(tag => {
       const part = new RegExp('\\b(' + tag.replace('+', '\\+') + ')\\b', 'ig');
       if (wordString.match(part)) {
-        if (this.enteredTags.indexOf(tag) === -1 ) {
+        if (this.enteredTags.indexOf(tag) === -1) {
           matchingTags.push(tag);
         }
       }
@@ -220,7 +234,7 @@ export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
   setTagsArray() {
     this.tagsArray.controls = [];
     [...this.autoTags, ...this.enteredTags].forEach(tag => this.tagsArray.push(new FormControl(tag)));
-    this.questionForm.patchValue({tags: [] });
+    this.questionForm.patchValue({ tags: [] });
   }
 
   onSubmit() {
@@ -315,8 +329,8 @@ export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
   onTextChanged(text) {
     this.quillObject.jsonObject = text.delta;
     this.quillObject.questionText = text.html;
-    if(text.imageParsedName){
-      this.store.dispatch(this.questionAction.deleteQuestionImage(text.imageParsedName));
+    if (text.imageParsedName) {
+      this.store.dispatch(this.questionAction.deleteQuestionImage(text.imageParsedName));
     }
   }
 
@@ -331,18 +345,18 @@ export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
 
     this.dialogRef.componentInstance.ref = this.dialogRef;
     this.subscriptions.push(this.dialogRef.componentInstance.ref.afterClosed()
-    .pipe(mergeMap(result => {
-      const fileName = `questions/${new Date().getTime()}-${file.name}`;
-      return this.questionService.saveQuestionImage(result['image'], fileName);
-    }),
-      mergeMap(image => {
-         return of(this.utils.getQuestionUrl(`${image['name']}`) + `?d=${new Date().getTime()}`);
-      })
-    ).subscribe(imageUrl => {
-      // SetImage callback function called to set image in editor
-      quillImageUpload.setImage(imageUrl);
-      // this.cd.markForCheck();
-    }));
+      .pipe(mergeMap(result => {
+        const fileName = `questions/${new Date().getTime()}-${file.name}`;
+        return this.questionService.saveQuestionImage(result['image'], fileName);
+      }),
+        mergeMap(image => {
+          return of(this.utils.getQuestionUrl(`${image['name']}`) + `?d=${new Date().getTime()}`);
+        })
+      ).subscribe(imageUrl => {
+        // SetImage callback function called to set image in editor
+        quillImageUpload.setImage(imageUrl);
+        // this.cd.markForCheck();
+      }));
 
 
   }
