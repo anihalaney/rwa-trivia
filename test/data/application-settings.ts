@@ -202,39 +202,44 @@ export const ApplicationSettings = {
       'url': 'https://www.github.com/'
     },
     {
-      'display': 'Stack Overflow',
-      'enable': true,
-      'position': 1,
-      'social_name': 'stackoverflowUrl',
-      'url': 'https://www.stackoverflow.com/users/'
+      display: 'Stack Overflow',
+      enable: true,
+      position: 1,
+      social_name: 'stackoverflowUrl',
+      url: 'https://www.stackoverflow.com/users/',
+      socialUrl: 'https://www.stackoverflow.com/users/'
     },
     {
-      'display': 'Hacker News',
-      'enable': true,
-      'position': 2,
-      'social_name': 'hackernewsUrl',
-      'url': 'https://thehackernews.com/'
+      display: 'Hacker News',
+      enable: true,
+      position: 2,
+      social_name: 'hackernewsUrl',
+      url: 'https://thehackernews.com/',
+      socialUrl: 'https://thehackernews.com/'
     },
     {
-      'display': 'Reddit',
-      'enable': true,
-      'position': 3,
-      'social_name': 'redditUrl',
-      'url': 'https://www.reddit.com/user/'
+      display: 'Reddit',
+      enable: true,
+      position: 3,
+      social_name: 'redditUrl',
+      url: 'https://www.reddit.com/user/',
+      socialUrl: 'https://www.reddit.com/user/'
     },
     {
-      'display': 'LinkedIn',
-      'enable': true,
-      'position': 4,
-      'social_name': 'linkedInUrl',
-      'url': 'https://www.linkedin.com/in/'
+      display: 'LinkedIn',
+      enable: true,
+      position: 4,
+      social_name: 'linkedInUrl',
+      url: 'https://www.linkedin.com/in/',
+      socialUrl: 'https://www.linkedin.com/in/'
     },
     {
-      'display': 'Twitter',
-      'enable': true,
-      'position': 5,
-      'social_name': 'twitterUrl',
-      'url': 'https://www.twitter.com/'
+      display: 'Twitter',
+      enable: true,
+      position: 5,
+      social_name: 'twitterUrl',
+      url: 'https://www.twitter.com/',
+      socialUrl: 'https://www.twitter.com/'
     }
   ],
   'tag_count_limit': 10,
