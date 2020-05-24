@@ -1,4 +1,3 @@
-
 export class Friends {
     myFriends: Array<{ [key: string]: FriendsMetadata }>;
     created_uid: string;
@@ -10,4 +9,10 @@ export class FriendsMetadata {
     gamePlayed: number;
     losses: number;
     wins: number;
+}
+
+export class Friend {
+    created_uid: string;
+    date?: number;
+    userId: string;
 }

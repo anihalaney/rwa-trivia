@@ -43,7 +43,7 @@ export class QuestionsSearchComponent implements OnInit, OnChanges, OnDestroy {
     this.categoryAggregation = this.questionsSearchResults.categoryAggregation;
     this.tagsCount = this.questionsSearchResults.tagsCount;
     if (this.questionsSearchResults.searchCriteria) {
-      this.tagsChecked = this.questionsSearchResults.searchCriteria.tags.reduce((map, tag) => { map[tag] = true; return map }, {});
+      this.tagsChecked = this.questionsSearchResults.searchCriteria.tags.reduce((map, tag) => { map[tag] = true; return map; }, {});
     }
   }
 
@@ -67,8 +67,5 @@ export class QuestionsSearchComponent implements OnInit, OnChanges, OnDestroy {
   }
   sortOrderChanged(event: string) {
     this.onSortOrderChanged.emit(event);
-  }
-  onSubmit() {
-
   }
 }
