@@ -315,7 +315,6 @@ describe('QuestionFormComponent', () => {
 
   it(`call to onSubmit it should return undefined if form is in valid`, () => {
     const isValidForm = component.onSubmit();
-    console.log(isValidForm);
     expect(isValidForm).toBeUndefined();
   });
 
