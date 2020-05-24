@@ -55,10 +55,27 @@ describe('QuestionFormComponent', () => {
         ],
       }),
         QuestionActions,
-        QuestionService,
         DbService,
-        Utils,
-        WindowRef],
+        WindowRef,
+      {
+        provide: Utils, useValue: {
+          getQuestionUrl(imageName: string) {
+            return 'https://rwa-trivia-dev-e57fc.firebaseapp.com/v1/question/getQuestionImage/1584710091867?d=1584710092439';
+          },
+          regExpEscape(s: string) {
+            return String(s).replace(/([-()\[\]{}+?*.$\^|,:#<!\\])/g, '\\$1').
+              replace(/\x08/g, '\\x08');
+          }
+        }
+      },
+      {
+        provide: QuestionService, useValue: {
+          saveQuestionImage(image: any, fileName: string) {
+            return of('file_12457850');
+          }
+        }
+      }],
+
       schemas: [NO_ERRORS_SCHEMA],
     });
 
@@ -121,6 +138,45 @@ describe('QuestionFormComponent', () => {
 
   });
 
+  it(`call to computeAutoTags function should get the auto tags from the question and answers, when question is not rich editor`, () => {
+
+    component.questionForm.get('questionText').setValue('Which of the following option leads to the portability and security of Java?');
+
+    const answers = (<FormArray>component.questionForm.get('answers'));
+    answers.controls[0]['controls'].answerText.setValue('A');
+    answers.controls[1]['controls'].answerText.setValue('B');
+    answers.controls[2]['controls'].answerText.setValue('C');
+    answers.controls[3]['controls'].answerText.setValue('D');
+    component.questionForm.get('answers');
+
+    component.tags = testData.tagList;
+
+    component.computeAutoTags();
+    expect(component.autoTags).toEqual(['Java', 'C']);
+    expect(component).toBeTruthy();
+  });
+
+  it(`call to computeAutoTags function should get the auto tags from the question and answers,  when question is rich editor`, () => {
+
+    const quillObj = {
+      questionText: `<p>Which of the following option leads to the portability and security of Java?</p>`
+    };
+    component.questionForm.get('isRichEditor').setValue(true);
+    component.quillObject = quillObj;
+
+    const answers = (<FormArray>component.questionForm.get('answers'));
+    answers.controls[0]['controls'].answerText.setValue('A');
+    answers.controls[1]['controls'].answerText.setValue('B');
+    answers.controls[2]['controls'].answerText.setValue('C');
+    answers.controls[3]['controls'].answerText.setValue('D');
+    component.questionForm.get('answers');
+
+    component.tags = testData.tagList;
+    component.computeAutoTags();
+    expect(component.autoTags).toEqual(['Java', 'C']);
+    expect(component).toBeTruthy();
+  });
+
 
   it('on call onAnswerChanged function it should set delta to answerObject and html to answerText', () => {
     const event = {
@@ -151,7 +207,7 @@ describe('QuestionFormComponent', () => {
   });
 
 
-  it(`call to onTextChanged function should assign  quill text to quillObject and dispatch event for delete question image`, () => {
+  it(`call to onTextChanged function should assign quill text to quillObject and dispatch event for delete question image`, () => {
 
     const event = {
       delta: [{ insert: 'hello' }],
@@ -236,7 +292,7 @@ describe('QuestionFormComponent', () => {
   });
 
 
-  it(`call to autoSaveQuestion function  it should to dispatch event to add question add question`, () => {
+  it(`call to autoSaveQuestion function it should to dispatch event to add question add question`, () => {
     component.user = testData.userList[0];
 
     spy.and.callFake((action: userActions.AddQuestion) => {
@@ -263,6 +319,102 @@ describe('QuestionFormComponent', () => {
     expect(isValidForm).toBeUndefined();
   });
 
+  it(`call to showQuestion function it should emit showQuestion event`, () => {
+    spy = spyOn(component.updateStatus, 'emit');
+    component.showQuestion();
+    expect(component.updateStatus.emit).toHaveBeenCalledWith(true);
+  });
 
+
+  it(`call to onSubmit it should return undefined if form is in valid`, () => {
+
+    component.user = testData.userList[0];
+    component.questionForm.get('questionText').setValue('Which of the following option leads to the portability and security of Java?');
+    const answers = (<FormArray>component.questionForm.get('answers'));
+    answers.controls[0]['controls'].answerText.setValue('A');
+    answers.controls[1]['controls'].answerText.setValue('B');
+    answers.controls[2]['controls'].answerText.setValue('C');
+    answers.controls[3]['controls'].answerText.setValue('D');
+
+    const tagFormArray = component.questionForm.get('tagsArray') as FormArray;
+
+    const formBuilder: FormBuilder = new FormBuilder();
+    tagFormArray.push(formBuilder.control('tes'));
+    tagFormArray.push(formBuilder.control('tes'));
+    tagFormArray.push(formBuilder.control('tes'));
+
+    // component.questionForm.get('answers');
+    const spyOnUpdateQuestion = spyOn(component, 'updateQuestion').and.callThrough();
+
+    const isValidForm = component.onSubmit();
+    expect(spyOnUpdateQuestion).toHaveBeenCalled();
+  });
+
+  it(`call to showQuestion function it should emit showQuestion event`, () => {
+
+    const spyOnAutoSave = spyOn(component, 'autoSave');
+    component.isAutoSave = true;
+    component.editQuestion.is_draft = true;
+    component.ngOnInit();
+    expect(spyOnAutoSave).toHaveBeenCalled();
+
+  });
+
+  // tslint:disable-next-line: max-line-length
+  it('when is draft field is false and auto save is enabled then it should set  is draft to  true when call  auto save function to store question automatically', () => {
+    mockCoreSelector.setResult({ applicationSettings: [testData.applicationSettings] });
+    component.questionForm.get('is_draft').setValue(false);
+    mockStore.refreshState();
+    component.autoSave();
+    expect(component.questionForm.get('is_draft').value).toBeTruthy();
+  });
+
+  // tslint:disable-next-line: max-line-length
+  it(`When call to fileUploaded function it should open dialog to crop image and after close dialog it should upload image and
+       get the image url and call function to set image in edit`, () => {
+    spyOn(component.dialog, 'open').and.returnValue({ afterClosed: () => of(true) });
+
+    const quillImageUpload = {
+      file: '',
+      setImage: () => { },
+    };
+    spyOn(quillImageUpload, 'setImage');
+    component.fileUploaded(quillImageUpload);
+    expect(component.dialog.open).toHaveBeenCalled();
+    expect(quillImageUpload.setImage).toHaveBeenCalled();
+
+  });
+
+  it(`Form should have tagCountInvalid when tagsArray length is less then 3`, () => {
+    component.applicationSettings = testData.applicationSettings;
+    component.user = testData.userList[0];
+    component.createForm(questionObject());
+    expect(component.questionForm.hasError('tagCountInvalid')).toBeTruthy();
+  });
+
+  it(`Form should have correctAnswerCountInvalid error when only one answer is not selected `, () => {
+    component.applicationSettings = testData.applicationSettings;
+    component.user = testData.userList[0];
+    component.createForm(questionObject());
+    const answers = (<FormArray>component.questionForm.get('answers'));
+    answers.controls[3]['controls'].correct.setValue(false);
+    expect(component.questionForm.hasError('correctAnswerCountInvalid')).toBeTruthy();
+  });
+
+  it(`Form should questionText required error when email is not set`, () => {
+    component.applicationSettings = testData.applicationSettings;
+    component.user = testData.userList[0];
+    component.createForm(questionObject());
+    component.questionForm.get('questionText').setValue('');
+    expect(component.questionForm.get('questionText').errors).toEqual({ 'required': true });
+  });
+
+  it(`Form should category required error when email is not set`, () => {
+    component.applicationSettings = testData.applicationSettings;
+    component.user = testData.userList[0];
+    component.createForm(questionObject());
+    component.questionForm.get('category').setValue('');
+    expect(component.questionForm.get('category').errors).toEqual({ 'required': true });
+  });
 
 });

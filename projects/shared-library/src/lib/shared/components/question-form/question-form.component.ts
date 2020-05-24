@@ -343,8 +343,7 @@ export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
       data: { file: file, applicationSettings: this.applicationSettings }
     });
 
-    this.dialogRef.componentInstance.ref = this.dialogRef;
-    this.subscriptions.push(this.dialogRef.componentInstance.ref.afterClosed()
+    this.subscriptions.push(this.dialogRef.afterClosed()
       .pipe(mergeMap(result => {
         const fileName = `questions/${new Date().getTime()}-${file.name}`;
         return this.questionService.saveQuestionImage(result['image'], fileName);
@@ -357,8 +356,6 @@ export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
         quillImageUpload.setImage(imageUrl);
         // this.cd.markForCheck();
       }));
-
-
   }
 
 }
