@@ -17,8 +17,6 @@ export class RenderQuestionComponent implements OnInit {
     ngOnInit(): void {
         if (this.questionIndex) {
             this.questionIndex = this.questionIndex + '.';
-        } else {
-            this.questionIndex = '';
         }
     }
 }
