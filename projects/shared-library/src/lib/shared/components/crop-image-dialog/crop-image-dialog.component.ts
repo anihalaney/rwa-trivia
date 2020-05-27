@@ -28,7 +28,6 @@ export class CropImageDialogComponent implements OnInit, OnDestroy {
   image: any = {};
   errorMsg = '';
   maxImageSize: number;
-
   @ViewChild('cropper', { static: false }) cropper: ImageCropperComponent;
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: any,
@@ -50,7 +49,7 @@ export class CropImageDialogComponent implements OnInit, OnDestroy {
     reader.readAsDataURL(this.profileImageFile);
   }
 
-  public setCropperSettings() {
+  setCropperSettings() {
     this.cropperSettings = new CropperSettings();
     this.cropperSettings.noFileInput = true;
     this.cropperSettings.width = 150;
@@ -84,11 +83,11 @@ export class CropImageDialogComponent implements OnInit, OnDestroy {
     // Convert image into base64
     const reader = new FileReader();
     const file = this.data.file;
-    reader.readAsDataURL(file);
     reader.onload = (fileReader) => {
       base64File = { image: fileReader.target['result'] };
       this.checkImageSize(base64File);
     };
+    reader.readAsDataURL(file);
   }
 
   getImageSize(base64File) {
@@ -104,5 +103,5 @@ export class CropImageDialogComponent implements OnInit, OnDestroy {
       this.dialogRef.close(cropImage);
     }
   }
-
 }
+
