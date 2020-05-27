@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, ViewChild } from "@angular/core";
 import { select, Store } from "@ngrx/store";
 import { Observable, Subscription, timer } from "rxjs";
-import { filter, take } from "rxjs/operators";
+import { filter, take, skipWhile } from "rxjs/operators";
 import { Utils } from "shared-library/core/services";
 import { UserActions } from "shared-library/core/store/actions";
 import {
@@ -72,7 +72,7 @@ export class GameDialog {
   earnedBadgesByOtherUser = [];
   totalBadges: string[];
 
-  private genQuestionComponent: GameQuestionComponent;
+  genQuestionComponent: GameQuestionComponent;
   isMobile = false;
 
   @ViewChild(GameQuestionComponent, { static: false }) set questionComponent(
@@ -91,7 +91,7 @@ export class GameDialog {
     this.subscriptions.push(
       this.store
         .select(appState.coreState)
-        .pipe(take(1))
+        .pipe(skipWhile( s => !s.user), take(1))
         .subscribe(s => (this.user = s.user))
     );
     this.userDict$ = store

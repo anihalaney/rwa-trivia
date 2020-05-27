@@ -17,7 +17,7 @@ import { Invitation } from './invitation';
 import { Question } from './question';
 import { QuestionOfTheDay } from './question-of-the-day';
 import { BulkUploads } from './bulk-uploads';
-
+import { CurrentQuestion } from './current-question';
 
 export const testData = {
     categories: Categories,
@@ -37,6 +37,7 @@ export const testData = {
     invitation: Invitation,
     question: Question,
     questionOfTheDay: QuestionOfTheDay,
-    bulkUploads: BulkUploads
+    bulkUploads: BulkUploads,
+    currentQuestion: CurrentQuestion
 };
 
