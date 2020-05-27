@@ -12,9 +12,6 @@ import { WindowRef } from '../../services';
 import { AngularFireModule, FirebaseAppConfig, FirebaseApp } from '@angular/fire';
 import { AngularFireAuthModule, AngularFireAuth } from '@angular/fire/auth';
 import { CONFIG } from 'shared-library/environments/environment';
-export const firebaseConfig: FirebaseAppConfig = CONFIG.firebaseConfig;
-
-
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
@@ -29,15 +26,12 @@ describe('LoginComponent', () => {
     close: () => { }
   };
 
-  // let firebaseAuthService: FirebaseAuthService;
   let mockCoreSelector: MemoizedSelector<CoreState, Partial<CoreState>>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [LoginComponent],
-      imports: [ReactiveFormsModule, StoreModule.forRoot({}), MatDialogModule,
-        AngularFireModule.initializeApp(firebaseConfig),
-        AngularFireAuthModule],
+      imports: [ReactiveFormsModule, StoreModule.forRoot({}), MatDialogModule],
 
       schemas: [NO_ERRORS_SCHEMA],
       // Set provider
@@ -77,11 +71,6 @@ describe('LoginComponent', () => {
   }));
 
   beforeEach(() => {
-
-    inject([FirebaseApp, AngularFireAuth], (app_: FirebaseApp, _auth: AngularFireAuth) => {
-      app = app_;
-      afAuth = _auth;
-    })();
 
     // create component
     fixture = TestBed.createComponent(LoginComponent);
