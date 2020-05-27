@@ -1,5 +1,18 @@
 export const UserList = [
   {
+    'account': {
+      'avgAnsTime': 5,
+      'badges': 3855,
+      'bits': 948,
+      'bytes': 42,
+      'categories': 232,
+      'contribution': 815,
+      'gamePlayed': 2422,
+      'leaderBoardStats': {},
+      'losses': 1555,
+      'wins': 867,
+      'lives': 3
+    },
     'androidPushTokens': [
       {
         'online': false,
@@ -32,12 +45,34 @@ export const UserList = [
     'phoneNo': null,
     'profilePictureUrl': '/assets/images/default-avatar-small.png',
     'tags': [
-
+      'test',
+      'angular',
+      'net',
+      'cloud',
+      'category'
     ],
+    'hackernewsUrl': '',
+    'linkedInUrl': 'dfdf',
+    'redditUrl': 'dfd',
+    'stackoverflowUrl': 'dfd',
+    'twitterUrl': 'dfdf',
     'totalFriends': 0,
     'userId': '4kFa6HRvP5OhvYXsH9mEsRrXj4o2'
   },
   {
+    'account': {
+      'avgAnsTime': 5,
+      'badges': 3855,
+      'bits': 948,
+      'bytes': 42,
+      'categories': 232,
+      'contribution': 815,
+      'gamePlayed': 2422,
+      'leaderBoardStats': {},
+      'losses': 1555,
+      'wins': 867,
+      'lives': 3
+    },
     'androidPushTokens': [
       {
         'online': false,
@@ -70,8 +105,17 @@ export const UserList = [
     'phoneNo': null,
     'profilePictureUrl': '/assets/images/default-avatar-small.png',
     'tags': [
-
+      'test',
+      'angular',
+      'net',
+      'cloud',
+      'category'
     ],
+    'hackernewsUrl': '',
+    'linkedInUrl': 'dfdf',
+    'redditUrl': 'dfd',
+    'stackoverflowUrl': 'dfd',
+    'twitterUrl': 'dfdf',
     'totalFriends': 0,
     'userId': 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1'
   },
@@ -84,7 +128,7 @@ export const UserList = [
     ],
     'authState': null,
     'bulkUploadPermissionStatus': 'false',
-    'bulkUploadPermissionStatusUpdateTime' : 1588266851711,
+    'bulkUploadPermissionStatusUpdateTime': 1588266851711,
     'croppedImageUrl': '',
     'originalImageUrl': '',
     'imageType': '',

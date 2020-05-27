@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, ViewChild, OnInit, PLATFORM_ID, Inject } from '@angular/core';
-import { FormBuilder, FormControl } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { AutoUnsubscribe } from 'shared-library/shared/decorators';
@@ -7,9 +7,8 @@ import { CropperSettings, ImageCropperComponent } from 'ngx-img-cropper';
 import { Subscription, Subject } from 'rxjs';
 import { Utils, WindowRef } from 'shared-library/core/services';
 import { coreState, UserActions } from 'shared-library/core/store';
-import { profileSettingsConstants, FirebaseAnalyticsKeyConstants, FirebaseAnalyticsEventConstants } from 'shared-library/shared/model';
+import { FirebaseAnalyticsKeyConstants, FirebaseAnalyticsEventConstants } from 'shared-library/shared/model';
 import { AppState } from '../../../store';
-import { userState } from '../../store';
 import { ProfileSettings } from './profile-settings';
 import { MatDialogRef, MatDialog } from '@angular/material';
 import { LocationResetDialogComponent } from './location-reset-dialog/location-reset-dialog.component';
@@ -187,41 +186,6 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnInit,
     this.userForm.get('profilePicture').setValue(fileName);
     this.userForm.updateValueAndValidity();
   }
-
-  setBulkUploadRequest(): void {
-    const userForm = this.userForm.value;
-    if (!userForm.name || !userForm.displayName || !userForm.location || !userForm.profilePicture) {
-      this.setNotificationMsg('Please add name, display name, location and profile picture for bulk upload request', true, 100);
-    } else {
-      this.user.bulkUploadPermissionStatus = profileSettingsConstants.NONE;
-      this.onSubmit();
-    }
-
-  }
-
-  // tags start
-  // Event Handlers
-  addTag() {
-    const tag = this.userForm.get('tags').value;
-    if (tag) {
-      if (this.enteredTags.indexOf(tag) < 0) {
-        this.enteredTags.push(tag);
-      }
-      this.userForm.get('tags').setValue('');
-    }
-    this.setTagsArray();
-  }
-
-  removeEnteredTag(tag) {
-    this.enteredTags = this.enteredTags.filter(t => t !== tag);
-    this.setTagsArray();
-  }
-
-  setTagsArray() {
-    this.tagsArray.controls = [];
-    this.enteredTags.forEach(tag => this.tagsArray.push(new FormControl(tag)));
-  }
-  // tags end
 
   onSubmit(isEditSingleField = false, field = '') {
     // validations

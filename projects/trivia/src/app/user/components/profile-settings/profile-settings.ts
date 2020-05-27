@@ -172,24 +172,7 @@ export class ProfileSettings {
             if (user && user.userId === this.userId) {
               this.user = user;
               this.cd.markForCheck();
-              if (
-                user.authState &&
-                user.authState.providerData &&
-                user.authState.providerData.length > 0
-              ) {
-                this.currentAuthProvider =
-                  user.authState.providerData[0].providerId;
-              } else if (user.authState && user.authState['providers']) {
-                if (user.authState['providers'].length > 1) {
-                  this.currentAuthProvider =
-                    user.authState['providers'][1]['id'];
-                } else if (user.authState['providers'].length === 1) {
-                  this.currentAuthProvider =
-                    user.authState['providers'][0]['id'];
-                }
-              } else {
-                this.currentAuthProvider = '';
-              }
+              this.setUserAuthProvider(user);
 
               this.userType = UserType.userProfile;
               return this.initializeUserProfile();
@@ -202,6 +185,27 @@ export class ProfileSettings {
         )
         .subscribe()
     );
+  }
+
+  setUserAuthProvider(user) {
+    if (
+      user.authState &&
+      user.authState.providerData &&
+      user.authState.providerData.length > 0
+    ) {
+      this.currentAuthProvider =
+        user.authState.providerData[0].providerId;
+    } else if (user.authState && user.authState['providers']) {
+      if (user.authState['providers'].length > 1) {
+        this.currentAuthProvider =
+          user.authState['providers'][1]['id'];
+      } else if (user.authState['providers'].length === 1) {
+        this.currentAuthProvider =
+          user.authState['providers'][0]['id'];
+      }
+    } else {
+      this.currentAuthProvider = '';
+    }
   }
 
   initializeSocialSetting() {
@@ -218,7 +222,6 @@ export class ProfileSettings {
               this.user[profile.social_name] &&
               this.user[profile.social_name] !== ''
           );
-
           this.enableSocialProfile = this.socialProfileSettings.filter(
             profile => profile.enable
           ).length;
@@ -391,7 +394,6 @@ export class ProfileSettings {
   // create the form based on user object
   createForm(user: User) {
     let tagsFA, categoryFA, topicsFA;
-
     if (this.userType === 0) {
       const categoryIds: FormGroup[] = this.categories.map(category => {
         const status =
@@ -411,8 +413,9 @@ export class ProfileSettings {
           filteredTags.splice(filteredTags.indexOf(data.id), 1);
         }
       });
-
-      const topicsList = [...this.topics, ...filteredTags.map(data => { const newid = { id: data, type: 'tag' }; return newid; })];
+      const topicsList = [...this.topics, ...filteredTags.map(data => {
+        const newid = { id: data, type: 'tag' }; return newid;
+      })];
       const topics: FormGroup[] = topicsList.map(topic => {
         const status =
           topic.type === 'category' ?
@@ -437,7 +440,6 @@ export class ProfileSettings {
             : false;
         return category;
       });
-
       if (user.tags === undefined) {
         const a = [];
         user.tags = a;
@@ -523,7 +525,6 @@ export class ProfileSettings {
     }
     this.filteredTags$ = this.userForm.get('tags').valueChanges
       .pipe(map(val => val.length > 0 ? this.filter(val) : []));
-
     this.createSocialProfileControl();
     if (
       isPlatformBrowser(this.platformId) === false &&
@@ -532,7 +533,6 @@ export class ProfileSettings {
       this.isEnableEditProfile = true;
       this.showAllSocialSetting();
     }
-
     if (!this.isEnableEditProfile) {
       this.disableForm(true);
     }
@@ -702,7 +702,6 @@ export class ProfileSettings {
   editSingleField(field: string) {
     this.activeEditField = field;
     this.singleFieldEdit[field] = this.singleFieldEdit[field] ? false : true;
-
     if (field !== 'socialProfile' && field !== 'email' && field !== 'phoneNo') {
       if (this.singleFieldEdit[field]) {
         this.userForm.get(field).enable();
@@ -741,14 +740,12 @@ export class ProfileSettings {
   }
 
   setValidation(field: string) {
-
     for (const property in this.singleFieldEdit) {
       if (property !== 'socialProfile') {
         this.userForm.get(property).clearValidators();
         this.userForm.get(property).updateValueAndValidity();
       }
     }
-
     if (field !== 'socialProfile' && field !== 'email' && field !== 'phoneNo') {
       if (this.singleFieldEdit[field]) {
         this.userForm.get(field).enable();
@@ -796,7 +793,6 @@ export class ProfileSettings {
   getCityAndCountryName(location) {
     let userLocation: string[] = [];
     if (location.results) {
-
       location.results[0].address_components.map(component => {
         const cityList = component.types.filter(
           typeName => { return typeName === 'administrative_area_level_3' }
