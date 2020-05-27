@@ -106,7 +106,6 @@ export class LoginComponent extends Login implements OnDestroy {
       }
 
     } catch (error) {
-      console.log(error);
       this.notificationMsg = error.message;
       this.errorStatus = true;
       this.cd.markForCheck();
