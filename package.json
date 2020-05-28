@@ -126,6 +126,7 @@
     "jasmine-marbles": "^0.6.0",
     "jasmine-spec-reporter": "4.2.1",
     "jest": "^25.4.0",
+    "jest-canvas-mock": "^2.2.0",
     "jest-preset-angular": "^8.1.3",
     "jest-stare": "^2.0.1",
     "jest-zone-patch": "0.0.10",
