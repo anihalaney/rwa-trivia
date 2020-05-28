@@ -1,10 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatDialogModule, MAT_DIALOG_DATA, MatDialogRef, MatSnackBarModule } from '@angular/material';
+import { MatDialogModule, MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { provideMockStore } from '@ngrx/store/testing';
 import { ImageCropperComponent } from 'ngx-img-cropper';
-import { coreState } from '../../../core/store';
-import { Utils, WindowRef } from 'shared-library/core/services';
 import { CropImageDialogComponent } from './crop-image-dialog.component';
 import { testData } from 'test/data';
 
@@ -22,23 +19,13 @@ describe('CropImageDialogComponent', () => {
     TestBed.configureTestingModule({
       declarations: [CropImageDialogComponent, ImageCropperComponent],
       schemas: [NO_ERRORS_SCHEMA],
-      imports: [MatSnackBarModule,
+      imports: [
         MatDialogModule
       ],
       providers: [
         { provide: MAT_DIALOG_DATA, useValue: testData },
-        { provide: MatDialogRef, useValue: dialogRef },
-        provideMockStore({
-          initialState: {},
-          selectors: [
-            {
-              selector: coreState,
-              value: {}
-            }
-          ]
-        }),
-        WindowRef,
-        Utils]
+        { provide: MatDialogRef, useValue: dialogRef }
+      ]
     });
 
     fixture = TestBed.createComponent(CropImageDialogComponent);
@@ -50,7 +37,6 @@ describe('CropImageDialogComponent', () => {
     };
     fixture.detectChanges();
   }));
-
 
   it('should create', () => {
     expect(component).toBeTruthy();
@@ -67,13 +53,15 @@ describe('CropImageDialogComponent', () => {
 
   });
 
-  it('on load component should set applicationSettings', () => {
+  it('on load component should set maxImageSize and profileImageFile', () => {
     const spyCropper = spyOn(component.cropper, 'setImage').and.callThrough();
     expect(spyCropper);
     component.ngOnInit();
     expect(component.maxImageSize).toEqual(testData.applicationSettings.max_image_size_of_question);
     expect(component.profileImageFile).toEqual(file);
     const reader = new FileReader();
+
+    // TODO: need to check if this is the right way to do
     reader.addEventListener('onloadend', function (loadEvent) {
       try {
         expect(component.image.src).toEqual(loadEvent.target['result']);
@@ -101,7 +89,7 @@ describe('CropImageDialogComponent', () => {
   });
 
 
-  it('call to closeModel should close the model dialouge and close function should be call', () => {
+  it('call to closeModel should close the model dialogue and close function should be call', () => {
     spy = spyOn(component.dialogRef, 'close');
     expect(spy);
     component.closeModel();
@@ -133,10 +121,10 @@ describe('CropImageDialogComponent', () => {
   it('call to checkImageSize should call getImageSize function and validate the image size', () => {
     component.maxImageSize = testData.applicationSettings.max_image_size_of_question;
     const cropImage = testData.file.base64Image;
-    const spy1 = spyOn(component, 'getImageSize');
-    const spy2 = spyOn(component.dialogRef, 'close');
-    expect(spy1);
-    expect(spy2);
+    const spyGetImageSize = spyOn(component, 'getImageSize');
+    const spyClose = spyOn(component.dialogRef, 'close');
+    expect(spyGetImageSize);
+    expect(spyClose);
     component.checkImageSize(cropImage);
     expect(component.getImageSize).toHaveBeenCalledWith(cropImage.image);
     expect(component.errorMsg).toEqual('');
@@ -157,8 +145,8 @@ describe('CropImageDialogComponent', () => {
   //   });
 
   it('call to getImageSize should calculate the size of image', () => {
-    const imagesize = component.getImageSize(testData.file.base64Image.image);
-    expect(imagesize).toBe(0.53173828125);
+    const imageSize = component.getImageSize(testData.file.base64Image.image);
+    expect(imageSize).toBe(0.53173828125);
   });
 
 });

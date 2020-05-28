@@ -1,8 +1,5 @@
-import { Component, OnInit, Renderer2, ChangeDetectionStrategy, OnDestroy, ViewChild, ChangeDetectorRef } from '@angular/core';
-import { take } from 'rxjs/operators';
-import { Store } from '@ngrx/store';
+import { Component, OnInit, ChangeDetectionStrategy, OnDestroy, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { User } from 'shared-library/shared/model';
-import { Utils } from 'shared-library/core/services';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { Inject } from '@angular/core';
 import { AutoUnsubscribe } from 'shared-library/shared/decorators';
