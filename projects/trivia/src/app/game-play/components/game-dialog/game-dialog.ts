@@ -121,74 +121,76 @@ export class GameDialog {
     );
     this.subscriptions.push(
       this.gameObs.subscribe(game => {
-        this.showLoader = false;
-        this.game = game;
-        if (this.game.gameOptions.isBadgeWithCategory) {
-          this.earnedBadges = this.game.stats[this.user.userId].badge;
-          if (Number(this.game.gameOptions.playerMode) === PlayerMode.Opponent) {
-            const otherPlayerUserId = this.game.playerIds.filter(
-              playerId => playerId !== this.user.userId
-            )[0];
-            if (otherPlayerUserId) {
-              this.earnedBadgesByOtherUser = this.game.stats[otherPlayerUserId].badge;
+        if (game) {
+          this.showLoader = false;
+          this.game = game;
+          if (this.game.gameOptions.isBadgeWithCategory) {
+            this.earnedBadges = this.game.stats[this.user.userId].badge;
+            if (Number(this.game.gameOptions.playerMode) === PlayerMode.Opponent) {
+              const otherPlayerUserId = this.game.playerIds.filter(
+                playerId => playerId !== this.user.userId
+              )[0];
+              if (otherPlayerUserId) {
+                this.earnedBadgesByOtherUser = this.game.stats[otherPlayerUserId].badge;
+              }
             }
           }
-        }
-        this.playerMode = game.gameOptions.playerMode;
-        this.threeConsecutiveAnswer = false;
-        if (game !== null && game.playerQnAs.length === 3 && !game.gameOptions.isBadgeWithCategory) {
-          let consecutiveCount = 0;
-          this.game.playerQnAs.map(playerQnA => {
-            consecutiveCount = playerQnA.answerCorrect
-              ? ++consecutiveCount
-              : consecutiveCount;
-          });
-          this.threeConsecutiveAnswer =
-            consecutiveCount === 3 && this.game.round === 1 ? true : false;
-        } else if (game !== null && game.stats[this.user.userId] &&
-          game.stats[this.user.userId].badge.length === 3 && game.gameOptions.isBadgeWithCategory && this.game.round === 1 &&
-          Number(this.game.gameOptions.playerMode) === PlayerMode.Opponent) {
-          let consecutiveCount = 0;
-          let isUserIsNotFirstPlayer = this.game.playerQnAs.some(data => data.playerId != this.user.userId);
-          if (!isUserIsNotFirstPlayer) {
+          this.playerMode = game.gameOptions.playerMode;
+          this.threeConsecutiveAnswer = false;
+          if (game !== null && game.playerQnAs.length === 3 && !game.gameOptions.isBadgeWithCategory) {
+            let consecutiveCount = 0;
             this.game.playerQnAs.map(playerQnA => {
-              consecutiveCount = playerQnA.answerCorrect && playerQnA.badge && playerQnA.playerId === this.user.userId
+              consecutiveCount = playerQnA.answerCorrect
                 ? ++consecutiveCount
                 : consecutiveCount;
             });
             this.threeConsecutiveAnswer =
               consecutiveCount === 3 && this.game.round === 1 ? true : false;
+          } else if (game !== null && game.stats[this.user.userId] &&
+            game.stats[this.user.userId].badge.length === 3 && game.gameOptions.isBadgeWithCategory && this.game.round === 1 &&
+            Number(this.game.gameOptions.playerMode) === PlayerMode.Opponent) {
+            let consecutiveCount = 0;
+            const isUserIsNotFirstPlayer = this.game.playerQnAs.some(data => data.playerId !== this.user.userId);
+            if (!isUserIsNotFirstPlayer) {
+              this.game.playerQnAs.map(playerQnA => {
+                consecutiveCount = playerQnA.answerCorrect && playerQnA.badge && playerQnA.playerId === this.user.userId
+                  ? ++consecutiveCount
+                  : consecutiveCount;
+              });
+              this.threeConsecutiveAnswer =
+                consecutiveCount === 3 && this.game.round === 1 ? true : false;
+            }
           }
-        }
-        if (game !== null && !this.isGameLoaded) {
-          this.turnFlag =
-            this.game.GameStatus === GameStatus.STARTED ||
-            this.game.GameStatus === GameStatus.RESTARTED ||
-            ((this.game.GameStatus ===
-              GameStatus.WAITING_FOR_FRIEND_INVITATION_ACCEPTANCE ||
-              this.game.GameStatus === GameStatus.WAITING_FOR_NEXT_Q ||
-              this.game.GameStatus ===
-                GameStatus.WAITING_FOR_RANDOM_PLAYER_INVITATION_ACCEPTANCE ||
-              this.game.GameStatus === GameStatus.JOINED_GAME) &&
-              this.game.nextTurnPlayerId === this.user.userId)
-              ? false
-              : true;
-          this.gameOver = game.gameOver;
+          if (game !== null && !this.isGameLoaded) {
+            this.turnFlag =
+              this.game.GameStatus === GameStatus.STARTED ||
+              this.game.GameStatus === GameStatus.RESTARTED ||
+              ((this.game.GameStatus ===
+                GameStatus.WAITING_FOR_FRIEND_INVITATION_ACCEPTANCE ||
+                this.game.GameStatus === GameStatus.WAITING_FOR_NEXT_Q ||
+                this.game.GameStatus ===
+                  GameStatus.WAITING_FOR_RANDOM_PLAYER_INVITATION_ACCEPTANCE ||
+                this.game.GameStatus === GameStatus.JOINED_GAME) &&
+                this.game.nextTurnPlayerId === this.user.userId)
+                ? false
+                : true;
+            this.gameOver = game.gameOver;
 
-          if (!this.turnFlag) {
-            this.questionIndex = this.game.playerQnAs.filter(
-              p => p.playerId === this.user.userId
-            ).length;
-            this.correctAnswerCount = this.game.stats[this.user.userId].score;
-          }
+            if (!this.turnFlag) {
+              this.questionIndex = this.game.playerQnAs.filter(
+                p => p.playerId === this.user.userId
+              ).length;
+              this.correctAnswerCount = this.game.stats[this.user.userId].score;
+            }
 
-          this.totalRound =
-            Number(this.game.gameOptions.playerMode) === PlayerMode.Single
-              ? 8
-              : 16;
+            this.totalRound =
+              Number(this.game.gameOptions.playerMode) === PlayerMode.Single
+                ? 8
+                : 16;
 
-          if (!game.gameOver) {
-            this.setTurnStatusFlag();
+            if (!game.gameOver) {
+              this.setTurnStatusFlag();
+            }
           }
         }
       })
@@ -342,6 +344,7 @@ export class GameDialog {
           if (this.game.gameOptions.isBadgeWithCategory) {
               this.questionSub = this.gameQuestionObs.subscribe(question => {
                 if (question) {
+                  console.log(question, 'question -------------------->');
                   this.setCurrentQuestion(question);
                   this.showNextBadgeToBeWon(question);
                 }
@@ -375,6 +378,7 @@ export class GameDialog {
           if (!this.game.gameOptions.isBadgeWithCategory) {
             this.subscribeQuestion();
           } else {
+            console.log('------------------------>');
             this.displayQuestionAndStartTimer(question);
           }
           this.cd.detectChanges();
@@ -629,7 +633,7 @@ export class GameDialog {
         round: this.currentQuestion.gameRound
       };
 
-      if (this.game.gameOptions.isBadgeWithCategory) {
+      if (this.game && this.game.gameOptions.isBadgeWithCategory) {
         playerQnA.categoryId = this.game.playerQnAs[this.game.playerQnAs.length - 1].categoryId;
         if (this.game.playerQnAs[this.game.playerQnAs.length - 1].badge) {
         const badge = this.game.playerQnAs[this.game.playerQnAs.length - 1].badge;
