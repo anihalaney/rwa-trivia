@@ -7,25 +7,16 @@ import { OpenUserProfileDirective } from './open-user-profile.directive';
 import { testData } from 'test/data';
 
 @Component({
-  template: `<img
-    [stlOpenUserProfile]="{userId: user?.userId, redirectTo: loggedInUserId === user?.userId ? 'userProfile': 'otherUserProfile'}"
-    src="sample_Image.jpg" alt="User Profile Image" />`
+  template: `<img [stlOpenUserProfile]="{userId: user.userId, redirectTo: 'otherUserProfile'}" src="sample_Image.jpg"
+        alt="User Profile Picture" id="imageId1"/>
+        <img [stlOpenUserProfile]="{userId: user.userId, redirectTo: 'userProfile'}" src="sample_Image.jpg"
+        alt="User Profile Picture" id="imageId2" />`
 })
 
 class TestOpenUserProfileComponent {
   constructor(public router: Router) { }
   @Input('stlOpenUserProfile') user: any;
 
-  @HostListener('click', ['$event'])
-  @HostListener('tap', ['$event'])
-
-  onClick(event) {
-      if (this.user.userId && this.user.userId !== '' && this.user.redirectTo === 'otherUserProfile' && !this.user.isGamePlay) {
-        this.router.navigate([`/user/game-profile/${this.user.userId}`]);
-      } else if (this.user.userId && this.user.userId !== '' && this.user.redirectTo === 'userProfile' && !this.user.isGamePlay) {
-        this.router.navigate([`/user/my/game-profile/${this.user.userId}`]);
-      }
-    }
 }
 
 describe('OpenUserProfileDirective', () => {
@@ -63,18 +54,14 @@ describe('OpenUserProfileDirective', () => {
   });
 
   it(`redirect to other user's game profile if user click on other user's user card`, inject([Router], (mockRouter: Router) => {
-    component.user.redirectTo = 'otherUserProfile';
-    component.user.isGamePlay = false;
     spy = spyOn(mockRouter, 'navigate');
-    component.onClick({});
+    document.getElementById('imageId1').click();
     expect(mockRouter.navigate).toHaveBeenCalledWith([`/user/game-profile/${component.user.userId}`]);
   }));
 
   it(`redirect to own game profile if user click on own user card`, inject([Router], (mockRouter: Router) => {
-    component.user.redirectTo = 'userProfile';
-    component.user.isGamePlay = false;
     spy = spyOn(mockRouter, 'navigate');
-    component.onClick({});
+    document.getElementById('imageId2').click();
     expect(mockRouter.navigate).toHaveBeenCalledWith([`/user/my/game-profile/${component.user.userId}`]);
   }));
 
