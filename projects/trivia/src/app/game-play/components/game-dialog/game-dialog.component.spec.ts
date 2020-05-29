@@ -79,8 +79,6 @@ describe('GameDialogComponent', () => {
 
         component = fixture.debugElement.componentInstance;
 
-        const dbModel = testData.games[0];
-        component.game = Game.getViewModel(dbModel);
         component.MAX_TIME_IN_SECONDS = 16;
     });
 
@@ -127,7 +125,7 @@ describe('GameDialogComponent', () => {
         mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
             user: testData.userList[0]
         });
-        // console.log(testData.games.length);
+
         const dbModel = Game.getViewModel(testData.games[16]);
         mockStore.overrideSelector<AppState, Partial<GamePlayState>>(appState.gamePlayState, {
             currentGame: dbModel
@@ -143,7 +141,7 @@ describe('GameDialogComponent', () => {
         mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
             user: testData.userList[0]
         });
-        // console.log(testData.games.length);
+
         const dbModel = Game.getViewModel(testData.games[3]);
         mockStore.overrideSelector<AppState, Partial<GamePlayState>>(appState.gamePlayState, {
             currentGame: dbModel
@@ -188,6 +186,32 @@ describe('GameDialogComponent', () => {
             user: testData.userList[0]
         });
         const dbModel = Game.getViewModel(testData.games[18]);
+        mockStore.overrideSelector<AppState, Partial<GamePlayState>>(appState.gamePlayState, {
+            currentGame: dbModel
+        });
+        mockStore.refreshState();
+        expect(component.threeConsecutiveAnswer).toEqual(false);
+    });
+
+    it(`test it properly`, () => {
+
+        mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
+            user: testData.userList[0]
+        });
+        const dbModel = Game.getViewModel(testData.games[19]);
+        mockStore.overrideSelector<AppState, Partial<GamePlayState>>(appState.gamePlayState, {
+            currentGame: dbModel
+        });
+        mockStore.refreshState();
+        expect(component.threeConsecutiveAnswer).toEqual(true);
+    });
+
+    it(`test it properly too`, () => {
+
+        mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
+            user: testData.userList[0]
+        });
+        const dbModel = Game.getViewModel(testData.games[20]);
         mockStore.overrideSelector<AppState, Partial<GamePlayState>>(appState.gamePlayState, {
             currentGame: dbModel
         });
@@ -267,6 +291,15 @@ describe('GameDialogComponent', () => {
     });
 
     it(`continueGame() function should work correctly`, () => {
+        mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
+            user: testData.userList[0]
+        });
+
+        const dbModel = Game.getViewModel(testData.games[0]);
+        mockStore.overrideSelector<AppState, Partial<GamePlayState>>(appState.gamePlayState, {
+            currentGame: dbModel
+        });
+        mockStore.refreshState();
         component.setCurrentQuestion = jest.fn();
         component.turnFlag = true;
         component.continueGame();
@@ -275,6 +308,15 @@ describe('GameDialogComponent', () => {
     });
 
     it(`continueGame() function should work correctly with turnFlag true`, () => {
+        mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
+            user: testData.userList[0]
+        });
+
+        const dbModel = Game.getViewModel(testData.games[0]);
+        mockStore.overrideSelector<AppState, Partial<GamePlayState>>(appState.gamePlayState, {
+            currentGame: dbModel
+        });
+        mockStore.refreshState();
         const navigate = spyOn(component.router, 'navigate');
         component.turnFlag = true;
         component.continueGame();
@@ -289,6 +331,15 @@ describe('GameDialogComponent', () => {
     });
 
     it(`continueGame() function should work correctly with isMobile true`, () => {
+        mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
+            user: testData.userList[0]
+        });
+
+        const dbModel = Game.getViewModel(testData.games[0]);
+        mockStore.overrideSelector<AppState, Partial<GamePlayState>>(appState.gamePlayState, {
+            currentGame: dbModel
+        });
+        mockStore.refreshState();
         const navigate = spyOn(component.router, 'navigate');
         component.isMobile = true;
         component.turnFlag = true;

@@ -2903,6 +2903,7 @@ export const Games =  [
       'yP7sLu5TmYRUO9YT4tWrYLAqxSz1'
     ],
     'nextTurnPlayerId': '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
+    'gameOver': true,
     'playerQnAs': [
       {
         'playerId': '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
