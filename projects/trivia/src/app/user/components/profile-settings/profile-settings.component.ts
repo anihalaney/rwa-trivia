@@ -187,6 +187,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnInit,
     this.userForm.updateValueAndValidity();
   }
 
+  // Unit test issue - Cannot read property 'unsubscribe' of undefined (Line - 239 this.checkUserSubscriptions.unsubscribe())
   onSubmit(isEditSingleField = false, field = '') {
     // validations
     this.userForm.updateValueAndValidity();
@@ -254,6 +255,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnInit,
 
   }
 
+  // Unit test issue - navigator.geolocation found undefinde all time that's why function is not execute.
   getLocation() {
     if (isPlatformBrowser(this.platformId) && navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((position) => {
