@@ -4,7 +4,7 @@ import { NO_ERRORS_SCHEMA, ChangeDetectorRef } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { provideMockStore, MockStore } from '@ngrx/store/testing';
 import { Utils } from 'shared-library/core/services';
-import { User, Game, PlayerMode, GameStatus, PlayerQnA } from 'shared-library/shared/model';
+import { User, Game, PlayerMode, GameStatus, PlayerQnA, Answer } from 'shared-library/shared/model';
 import { AppState, appState } from '../../../store';
 import { testData } from 'test/data';
 import { MatSnackBarModule, MAT_DIALOG_DATA } from '@angular/material';
@@ -38,6 +38,14 @@ describe('GameDialogComponent', () => {
                     useValue: {}
                 },
                 {provide: Utils, useValue: {
+                    changeAnswerOrder(answers: Answer[]) {
+                       const newAnswer = [];
+                       newAnswer[0] = answers[2];
+                       newAnswer[1] = answers[0];
+                       newAnswer[2] = answers[1];
+                       newAnswer[3] = answers[3];
+                       return newAnswer;
+                    },
                     getTimeDifference(turnAt: number) {
                         return 1588313130838 - turnAt;
                     },
@@ -193,7 +201,7 @@ describe('GameDialogComponent', () => {
         expect(component.threeConsecutiveAnswer).toEqual(false);
     });
 
-    it(`test it properly`, () => {
+    it(`verify if threeConsecutiveAnswer is true for game without isBadgeWithCategory is set`, () => {
 
         mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
             user: testData.userList[0]
@@ -206,7 +214,7 @@ describe('GameDialogComponent', () => {
         expect(component.threeConsecutiveAnswer).toEqual(true);
     });
 
-    it(`test it properly too`, () => {
+    it(`verify if threeConsecutiveAnswer is false for game without isBadgeWithCategory is set`, () => {
 
         mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
             user: testData.userList[0]
@@ -219,6 +227,295 @@ describe('GameDialogComponent', () => {
         expect(component.threeConsecutiveAnswer).toEqual(false);
     });
 
+
+    it(`verify if threeConsecutiveAnswer is false for game without isBadgeWithCategory is set`, () => {
+        component.isGameLoaded = false;
+        mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
+            user: testData.userList[0]
+        });
+        const dbModel = Game.getViewModel(testData.games[18]);
+        mockStore.overrideSelector<AppState, Partial<GamePlayState>>(appState.gamePlayState, {
+            currentGame: dbModel
+        });
+        mockStore.refreshState();
+        expect(component.turnFlag).toEqual(false);
+    });
+
+    it(`verify if turnFlag is false for game with next round as the currenct user`, () => {
+        component.isGameLoaded = false;
+        mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
+            user: testData.userList[0]
+        });
+        const dbModel = Game.getViewModel(testData.games[18]);
+        mockStore.overrideSelector<AppState, Partial<GamePlayState>>(appState.gamePlayState, {
+            currentGame: dbModel
+        });
+        mockStore.refreshState();
+        expect(component.turnFlag).toEqual(false);
+        expect(component.correctAnswerCount).toEqual(2);
+        expect(component.totalRound).toEqual(16);
+    });
+
+    it(`verify if turnFlag is true for game with next round as not the currenct user`, () => {
+        component.setTurnStatusFlag = jest.fn();
+        mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
+            user: testData.userList[0]
+        });
+        const dbModel = Game.getViewModel(testData.games[22]);
+        dbModel.gameOver = false;
+        mockStore.overrideSelector<AppState, Partial<GamePlayState>>(appState.gamePlayState, {
+            currentGame: dbModel
+        });
+        mockStore.refreshState();
+       expect(component.setTurnStatusFlag).toHaveBeenCalledTimes(1);
+    });
+
+    it(`verify if setTurnStatusFlag() function works correctly with questionAnswered true`, () => {
+        const dbModel = Game.getViewModel(testData.games[18]);
+        mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
+            user: testData.userList[0]
+        });
+        mockStore.overrideSelector<AppState, Partial<GamePlayState>>(appState.gamePlayState, {
+            currentGame: dbModel
+        });
+        mockStore.refreshState();
+        component.questionAnswered = true;
+        component.setTurnStatusFlag();
+       expect(component.isGameLoaded).toEqual(true);
+       expect(component.continueNext).toEqual(true);
+       expect(component.showContinueBtn).toEqual(true);
+    });
+
+    it(`verify if setTurnStatusFlag() function works correctly with questionAnswered false`, () => {
+        const dbModel = Game.getViewModel(testData.games[18]);
+        mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
+            user: testData.userList[0]
+        });
+        mockStore.overrideSelector<AppState, Partial<GamePlayState>>(appState.gamePlayState, {
+            currentGame: dbModel
+        });
+        mockStore.refreshState();
+        component.questionAnswered = false;
+        component.setTurnStatusFlag();
+        expect(component.continueNext).toEqual(false);
+     });
+
+     // it is failing test it again
+     it(`verify if setTurnStatusFlag() function works correctly with gameOver false`, () => {
+        component.isGameLoaded = false;
+        const dbModel = Game.getViewModel(testData.games[18]);
+
+        mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
+            user: testData.userList[0]
+        });
+        mockStore.overrideSelector<AppState, Partial<GamePlayState>>(appState.gamePlayState, {
+            currentGame: dbModel
+        });
+        mockStore.refreshState();
+        component.questionAnswered = false;
+        component.turnFlag = true;
+        // component.gameOver = false;
+        component.setTurnStatusFlag();
+        expect(component.turnFlag).toEqual(true);
+        expect(component.continueNext).toEqual(false);
+
+     });
+
+     it(`verify if initializeOtherUser() function works correctly `, () => {
+         component.initializeOtherUser();
+        expect(component.otherPlayer).toEqual(new User());
+
+     });
+
+
+     it(`verify if getLoader() function works correctly `, (async() => {
+         component.setContinueScreenVisibility = jest.fn();
+         component.utils.unsubscribe = jest.fn();
+         component.isCorrectAnswer = true;
+         component.getLoader(true);
+        expect(component.showWinBadge).toEqual(true);
+        expect(component.timer).toEqual(2);
+        await new Promise((r) => setTimeout(r, 3000));
+        expect(component.showWinBadge).toEqual(false);
+        expect(component.isCorrectAnswer).toEqual(false);
+
+        expect(component.setContinueScreenVisibility).toHaveBeenCalledTimes(1);
+        expect(component.utils.unsubscribe).toHaveBeenCalledTimes(1);
+
+    }));
+
+    it(`verify if getLoader() function works correctly for isCorrectAnswer is false and isLoadContinueScreen is true `, (async() => {
+        component.showBadgeScreen = jest.fn();
+        component.isCorrectAnswer = false;
+        component.getLoader(true);
+       expect(component.showBadgeScreen).toHaveBeenCalledTimes(1);
+
+   }));
+
+   it(`verify if getLoader() function works correctly for isCorrectAnswer is false and isLoadContinueScreen is false `, (async() => {
+        component.setContinueScreenVisibility = jest.fn();
+        component.isCorrectAnswer = false;
+        component.getLoader(false);
+        expect(component.setContinueScreenVisibility).toHaveBeenCalledTimes(1);
+
+    }));
+
+    it(`verify if showBadgeScreen() function works correctly`, (async() => {
+
+        component.setCurrentQuestion = jest.fn();
+        component.showNextBadgeToBeWon = jest.fn();
+        mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
+            user: testData.userList[0]
+        });
+
+        const dbModel = Game.getViewModel(testData.games[3]);
+        mockStore.overrideSelector<AppState, Partial<GamePlayState>>(appState.gamePlayState, {
+            currentGame: dbModel,
+            currentGameQuestion: testData.currentQuestion[0]
+        });
+        mockStore.refreshState();
+        component.showBadgeScreen();
+        expect(component.showLoader).toEqual(true);
+        expect(component.timer).toEqual(2);
+        await new Promise((r) => setTimeout(r, 2000));
+        expect(component.setCurrentQuestion).toHaveBeenCalledTimes(1);
+        expect(component.showNextBadgeToBeWon).toHaveBeenCalledTimes(1);
+
+    }));
+
+    it(`verify if showBadgeScreen() function works correctly for isBadgeWithCategory is not defined`, (async() => {
+
+        component.setCurrentQuestion = jest.fn();
+        component.showNextBadgeToBeWon = jest.fn();
+        mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
+            user: testData.userList[0]
+        });
+
+        const dbModel = Game.getViewModel(testData.games[20]);
+        mockStore.overrideSelector<AppState, Partial<GamePlayState>>(appState.gamePlayState, {
+            currentGame: dbModel,
+            currentGameQuestion: testData.currentQuestion[0]
+        });
+        mockStore.refreshState();
+        component.showBadgeScreen();
+        expect(component.showLoader).toEqual(true);
+        expect(component.timer).toEqual(2);
+        await new Promise((r) => setTimeout(r, 2000));
+        expect(component.setCurrentQuestion).toHaveBeenCalledTimes(0);
+        expect(component.showNextBadgeToBeWon).toHaveBeenCalledTimes(1);
+
+    }));
+
+    it(`verify if showNextBadgeToBeWon() function works correctly with for isBadgeWithCategory true`, (async() => {
+        component.subscribeQuestion  = jest.fn();
+        component.utils.unsubscribe = jest.fn();
+        component.displayQuestionAndStartTimer = jest.fn();
+        mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
+            user: testData.userList[0]
+        });
+
+        const dbModel = Game.getViewModel(testData.games[0]);
+        mockStore.overrideSelector<AppState, Partial<GamePlayState>>(appState.gamePlayState, {
+            currentGame: dbModel,
+            currentGameQuestion: testData.currentQuestion[0]
+        });
+        mockStore.refreshState();
+        component.showNextBadgeToBeWon();
+        expect(component.showLoader).toEqual(false);
+        expect(component.timer).toEqual(2);
+        expect(component.showBadge).toEqual(true);
+        await new Promise((r) => setTimeout(r, 2000));
+        expect(component.utils.unsubscribe).toHaveBeenCalledTimes(1);
+        expect(component.showBadge).toEqual(false);
+        expect(component.subscribeQuestion).toHaveBeenCalledTimes(0);
+        expect(component.displayQuestionAndStartTimer).toHaveBeenCalledTimes(1);
+
+    }));
+
+    it(`verify if showNextBadgeToBeWon() function works correctly`, (async() => {
+        component.subscribeQuestion  = jest.fn();
+        component.utils.unsubscribe = jest.fn();
+        mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
+            user: testData.userList[0]
+        });
+
+        const dbModel = Game.getViewModel(testData.games[20]);
+        mockStore.overrideSelector<AppState, Partial<GamePlayState>>(appState.gamePlayState, {
+            currentGame: dbModel,
+            currentGameQuestion: testData.currentQuestion[0]
+        });
+        mockStore.refreshState();
+        component.showNextBadgeToBeWon();
+        expect(component.showLoader).toEqual(false);
+        expect(component.timer).toEqual(2);
+        expect(component.showBadge).toEqual(true);
+        await new Promise((r) => setTimeout(r, 2000));
+        expect(component.utils.unsubscribe).toHaveBeenCalledTimes(1);
+        expect(component.showBadge).toEqual(false);
+        expect(component.subscribeQuestion).toHaveBeenCalledTimes(1);
+
+    }));
+
+
+    it(`verify if setContinueScreenVisibility() function works correctly`, () => {
+        component.setContinueScreenVisibility(true);
+        expect(component.showContinueScreen).toEqual(true);
+
+    });
+
+    it(`verify if continueButtonClicked() function works correctly`, () => {
+        component.setContinueScreenVisibility = jest.fn();
+        component.getNextQuestion = jest.fn();
+        component.showBadgeScreen = jest.fn();
+        component.continueButtonClicked();
+        expect(component.setContinueScreenVisibility).toHaveBeenCalledTimes(1);
+        expect(component.getNextQuestion).toHaveBeenCalledTimes(1);
+        expect(component.showBadgeScreen).toHaveBeenCalledTimes(1);
+
+    });
+
+    it(`verify if setCurrentQuestion() function works correctly when value is not passed`, () => {
+        component.setCurrentQuestion();
+        expect(component.currentQuestion).toEqual(undefined);
+        expect(component.showCurrentQuestion).toEqual(false);
+    });
+
+    it(`verify if setCurrentQuestion() function works correctly when value is passed`, () => {
+
+        component.setCurrentQuestion(testData.currentQuestion[0]);
+        expect(component.currentQuestion).toEqual(testData.currentQuestion[0]);
+        expect(component.showCurrentQuestion).toEqual(true);
+    });
+
+    it(`verify if subscribeQuestion() function works correctly when value is passed`, () => {
+        component.displayQuestionAndStartTimer = jest.fn();
+        component.subscribeQuestion();
+        expect(component.displayQuestionAndStartTimer).toHaveBeenCalledTimes(1);
+    });
+
+    it(`verify if displayQuestionAndStartTimer() function works correctly with question not defined`, () => {
+        component.setCurrentQuestion = jest.fn();
+        component.displayQuestionAndStartTimer(undefined);
+        expect(component.setCurrentQuestion).toHaveBeenCalledTimes(1);
+    });
+
+    it(`verify if displayQuestionAndStartTimer() function works correctly with question defined`, () => {
+        component.setCurrentQuestion = jest.fn();
+        const dbModel = Game.getViewModel(testData.games[0]);
+        mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
+            user: testData.userList[0]
+        });
+
+        mockStore.overrideSelector<AppState, Partial<GamePlayState>>(appState.gamePlayState, {
+            currentGameQuestion: testData.currentQuestion[0],
+            currentGame: dbModel
+        });
+        mockStore.refreshState();
+        component.displayQuestionAndStartTimer(testData.currentQuestion[0]);
+        expect(component.originalAnswers).toEqual(testData.currentQuestion[0].answers);
+        expect(component.setCurrentQuestion).toHaveBeenCalledTimes(1);
+
+    });
 
     //to do set data for this so we can test it properly
     it(`afterAnswer() function should work correctly if the answer is right`, () => {
