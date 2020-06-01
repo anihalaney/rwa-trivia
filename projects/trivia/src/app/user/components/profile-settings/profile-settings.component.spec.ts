@@ -48,18 +48,6 @@ describe('ProfileSettingsComponent', () => {
         });
     };
 
-    const mockGeolocation = {
-        getCurrentPosition: jest.fn()
-            .mockImplementationOnce(success => Promise.resolve(success({
-                coords: {
-                    latitude: 51.1,
-                    longitude: 45.3
-                }
-            })))
-    };
-    const navigator = { geolocation: null };
-    navigator.geolocation = mockGeolocation;
-
     beforeEach(async(() => {
         // create new instance of FormBuilder
         const formBuilder: FormBuilder = new FormBuilder();
@@ -79,7 +67,25 @@ describe('ProfileSettingsComponent', () => {
                     ]
                 }),
                 Utils,
-                WindowRef,
+                {
+                    provide: WindowRef,
+                    useValue: {
+                        nativeWindow: {
+                            scrollTo() {}
+                        },
+                        getNavigatorGeolocation() {
+                            return {
+                                getCurrentPosition(callback) {
+                                    callback( {
+                                    coords: {
+                                        latitude: 51.1,
+                                        longitude: 45.3
+                                    }});
+                                }
+                            };
+                        }
+                    }
+                },
                 UserActions,
                 UIStateActions,
                 {
@@ -105,8 +111,6 @@ describe('ProfileSettingsComponent', () => {
         mockStore = TestBed.get(Store);
         mockCoreSelector = mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {});
         spy = spyOn(mockStore, 'dispatch');
-        const getGeoLocation = spyOn(navigator.geolocation, 'getCurrentPosition');
-
         component = fixture.debugElement.componentInstance;
         fixture.detectChanges();
         // router = TestBed.get(Router);
@@ -164,6 +168,7 @@ describe('ProfileSettingsComponent', () => {
         );
     });
 
+    // tslint:disable-next-line: max-line-length
     it('Verify data of applicationSettings, socialProfileObj, socialProfileSettings and enableSocialProfile from initializeSocialSetting function', () => {
         user = { ...testData.userList[0] };
         applicationSettings.push(testData.applicationSettings);
@@ -1068,7 +1073,7 @@ describe('ProfileSettingsComponent', () => {
         expect(component.profileImageValidation).toBe(undefined);
     });
 
-    it('Verify saveProfileImage fucntion works correctly', () => {
+    it('Verify saveProfileImage function works correctly', () => {
         component.enableForm = jest.fn();
         component.getUserFromFormValue = jest.fn();
         component.disableForm = jest.fn();
@@ -1116,14 +1121,14 @@ describe('ProfileSettingsComponent', () => {
         expect(component.ValidateUrl(component.userForm.controls.linkedInUrl)).toEqual({ validUrl: true });
     });
 
-    // it('Verify getLocation function work correctly', () => {
-    //     user = { ...testData.userList[0] };
-    //     const userDict = { '4kFa6HRvP5OhvYXsH9mEsRrXj4o2': user };
-    //     applicationSettings.push(testData.applicationSettings);
-    //     getTags.setResult(testData.tagList);
-    //     mockCoreSelector.setResult({ user, account: user.account, applicationSettings, userDict });
-    //     mockStore.refreshState();
-    //     fixture.detectChanges();
-    //     component.getLocation();
-    // });
+    it('Verify getLocation function work correctly', () => {
+        user = { ...testData.userList[0] };
+        applicationSettings.push(testData.applicationSettings);
+        mockCoreSelector.setResult({ user, applicationSettings, account: user.account });
+        mockStore.refreshState();
+        component.getLocation();
+        expect(spy).toHaveBeenCalledWith(
+            new UserActions().loadAddressUsingLatLong('51.1,45.3')
+        );
+    });
 });

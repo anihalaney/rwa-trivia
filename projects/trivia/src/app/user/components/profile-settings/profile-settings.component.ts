@@ -257,8 +257,8 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnInit,
 
   // Unit test issue - navigator.geolocation found undefinde all time that's why function is not execute.
   getLocation() {
-    if (isPlatformBrowser(this.platformId) && navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition((position) => {
+    if (isPlatformBrowser(this.platformId) && this.windowRef.getNavigatorGeolocation()) {
+      this.windowRef.getNavigatorGeolocation().getCurrentPosition((position) => {
         this.store.dispatch(this.userAction.loadAddressUsingLatLong(`${position.coords.latitude},${position.coords.longitude}`));
         const latitude = position.coords.latitude;
         const longitude = position.coords.longitude;

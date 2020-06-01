@@ -47,7 +47,7 @@ export class WindowRef {
         this.nativeWindow.dataLayer.push(this.analyticsParameters);
     }
 
-    getNavigator() {
+    getNavigatorGeolocation() {
         return navigator.geolocation;
     }
 }
