@@ -344,7 +344,6 @@ export class GameDialog {
           if (this.game.gameOptions.isBadgeWithCategory) {
               this.questionSub = this.gameQuestionObs.subscribe(question => {
                 if (question) {
-                  console.log(question, 'question -------------------->');
                   this.setCurrentQuestion(question);
                   this.showNextBadgeToBeWon(question);
                 }
@@ -378,7 +377,6 @@ export class GameDialog {
           if (!this.game.gameOptions.isBadgeWithCategory) {
             this.subscribeQuestion();
           } else {
-            console.log('------------------------>');
             this.displayQuestionAndStartTimer(question);
           }
           this.cd.detectChanges();
