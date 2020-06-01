@@ -13,10 +13,13 @@ describe('getActiveGames', () => {
 
 describe('getActiveGamesSuccess', () => {
     it('should create an action', () => {
-        const game = testData.games;
-        const action = new GameActions().getActiveGamesSuccess(game);
+        const games = testData.games.map(dbModel => {
+            return Game.getViewModel(dbModel);
+          });
+        const action = new GameActions().getActiveGamesSuccess( games  );
+
         expect(action.type).toEqual(GameActions.GET_ACTIVE_GAMES_SUCCESS);
-        expect(action.payload).toEqual(game);
+        expect(action.payload).toEqual( games );
     });
 });
 
