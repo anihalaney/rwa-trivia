@@ -236,7 +236,14 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnInit,
         }
 
         this.isValidDisplayName = null;
+        // This needs to be checked for unit test
+        // from unit test we refresh state which calls subscription in sync
+        // when it is called in sync this.checkUserSubscriptions is not defined yet
+        // normal execution , this does not happen as subscription callback function only called
+        // when store has value;
+        if (this.checkUserSubscriptions) {
         this.checkUserSubscriptions.unsubscribe();
+        }
       }
 
     });

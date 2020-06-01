@@ -20,6 +20,8 @@ import { AuthenticationProvider, FirebaseAuthService } from 'shared-library/core
 import { User, profileSettingsConstants } from 'shared-library/shared/model';
 import { testData } from 'test/data';
 import { CheckDisplayNameComponent } from 'shared-library/shared/components';
+import { ImageCropperComponent } from 'ngx-img-cropper';
+
 
 describe('ProfileSettingsComponent', () => {
     window.scrollTo = jest.fn();
@@ -53,10 +55,11 @@ describe('ProfileSettingsComponent', () => {
         const formBuilder: FormBuilder = new FormBuilder();
 
         TestBed.configureTestingModule({
-            declarations: [ProfileSettingsComponent, CheckDisplayNameComponent],
+            declarations: [ProfileSettingsComponent, CheckDisplayNameComponent ],
             schemas: [NO_ERRORS_SCHEMA],
             imports: [ReactiveFormsModule, FormsModule, MatFormFieldModule,
-                MatInputModule, MatSnackBarModule, RouterTestingModule.withRoutes([]), BrowserAnimationsModule, MatDialogModule],
+                MatInputModule, MatSnackBarModule, RouterTestingModule.withRoutes([]),
+                BrowserAnimationsModule, MatDialogModule],
             providers: [
                 provideMockStore({
                     selectors: [
@@ -1034,30 +1037,32 @@ describe('ProfileSettingsComponent', () => {
         expect(component.filter('C#')).toEqual(['C#']);
     });
 
-    // it('Verify onSubmit function works correctly', () => {
-    //     component.saveUser = jest.fn();
-    //     user = { ...testData.userList[0] };
-    //     const userDict = { '4kFa6HRvP5OhvYXsH9mEsRrXj4o2': user };
-    //     applicationSettings.push(testData.applicationSettings);
-    //     getTags.setResult(testData.tagList);
-    //     mockCoreSelector.setResult({ user, account: user.account, applicationSettings, userDict, checkDisplayName: true });
-    //     mockStore.refreshState();
-    //     fixture.detectChanges();
-    //     // component.userForm.get('displayName').setValue('AP607');
-    //     component.onSubmit(false, '');
-    //     component.checkUserSubscriptions.unsubscribe();
-    //     expect(component.saveUser).toHaveBeenCalledTimes(1);
-    // });
+    it('Verify onSubmit function works correctly', () => {
+        component.saveUser = jest.fn();
+        user = { ...testData.userList[0] };
+        const userDict = { '4kFa6HRvP5OhvYXsH9mEsRrXj4o2': user };
+        applicationSettings.push(testData.applicationSettings);
+        getTags.setResult(testData.tagList);
+        mockCoreSelector.setResult({ user, account: user.account, applicationSettings, userDict, checkDisplayName: true });
+        mockStore.refreshState();
+        fixture.detectChanges();
+        component.onSubmit(false, '');
+        expect(component.saveUser).toHaveBeenCalledTimes(1);
+    });
 
     it('Verify onFileChange function works correctly', () => {
+        // mock image cropper , second argument is passed undefined as we do not need to render anything
+        component.cropper = new ImageCropperComponent(undefined);
+        component.cropper.setImage = jest.fn();
         user = { ...testData.userList[0] };
         const userDict = { '4kFa6HRvP5OhvYXsH9mEsRrXj4o2': user };
         applicationSettings.push(testData.applicationSettings);
         getTags.setResult(testData.tagList);
         mockCoreSelector.setResult({ user, account: user.account, applicationSettings, userDict });
         mockStore.refreshState();
-        // component.cropper.setImage = jest.fn();
-        fixture.detectChanges();
+        // do not uncomment this, in this test case fixture.detectChanges()
+        // messes with mocked cropper
+        // fixture.detectChanges();
         const $event = {
             target: {
                 files: [new File([
@@ -1085,18 +1090,6 @@ describe('ProfileSettingsComponent', () => {
         getTags.setResult(testData.tagList);
         mockCoreSelector.setResult({ user, account: user.account, applicationSettings, userDict });
         mockStore.refreshState();
-        const $event = {
-            target: {
-                files: [new File([
-                    new ArrayBuffer(2e+5)],
-                    'Mac_Apple.jpg',
-                    {
-                        lastModified: null,
-                        type: 'image/jpeg',
-                    })]
-            }
-        };
-        component.onFileChange($event);
         fixture.detectChanges();
         component.saveProfileImage();
         expect(component.enableForm).toHaveBeenCalledTimes(1);
