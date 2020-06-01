@@ -3,7 +3,7 @@
     <div class="col-sm-12 col-xs-12 div-border">
       <div class="sprite cancelicon col-md-offset-3 col-xs-offset-3" (click)="showQuestion()"></div>
       <h4 *ngIf="editQuestion?.is_draft !== true" class="label">Edit it</h4>
-      <p  *ngIf="editQuestion?.is_draft !== true" class="message">{{editQuestion.reason}}</p>
+      <p  *ngIf="editQuestion?.is_draft !== true" class="message">{{editQuestion?.reason}}</p>
       <h4 *ngIf="editQuestion?.is_draft !== true" class="sub-message">Please do the needfull edits and resubmit the question.</h4>
     </div>
     <section id="curentactive" class="col-md-12">
@@ -46,7 +46,7 @@
             <option value="">
               Select a Max time
             </option>
-            <option *ngFor="let maxTime of applicationSettings.game_play_max_time" [value]="maxTime">
+            <option *ngFor="let maxTime of applicationSettings?.game_play_max_time" [value]="maxTime">
               {{maxTime}}
             </option>
           </select>

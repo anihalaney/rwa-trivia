@@ -1,5 +1,5 @@
 import { ActionReducerMap, createSelector, createFeatureSelector } from '@ngrx/store';
-import { User, Category, Question, Game, Friends, Invitation, Account, Topic } from 'shared-library/shared/model';
+import { User, Category, Question, Game, Friend, Invitation, Account, Topic } from 'shared-library/shared/model';
 import {
   user, authInitialized, invitationToken, userDict,
   gameInvites, userFriends, friendInvitations, userProfileSaveStatus, feedback, account, getGameResult, countries,
@@ -42,7 +42,7 @@ export interface CoreState {
   invitationToken: string;
   resetPasswordLogs: string[];
   gameInvites: Game[];
-  userFriends: Friends;
+  userFriends: Friend[];
   friendInvitations: Invitation[];
   newGameId: string;
   userProfileSaveStatus: String;

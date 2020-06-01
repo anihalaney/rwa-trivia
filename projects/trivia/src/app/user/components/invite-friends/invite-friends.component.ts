@@ -2,7 +2,6 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnIni
 import { MatDialog, MatDialogRef, MatPaginator, MatTableDataSource } from '@angular/material';
 import { select, Store } from '@ngrx/store';
 import { AutoUnsubscribe } from 'shared-library/shared/decorators';
-import { Utils } from 'shared-library/core/services';
 import { UserActions } from 'shared-library/core/store/actions';
 import { AppState, appState } from '../../../store';
 import { InviteFriends } from './invite-friends';
@@ -32,10 +31,9 @@ export class InviteFriendsComponent extends InviteFriends implements OnInit, OnD
     public store: Store<AppState>,
     public renderer: Renderer2,
     public userActions: UserActions,
-    public utils: Utils,
     @Inject(PLATFORM_ID) private platformId: Object,
     public cd: ChangeDetectorRef) {
-    super(store, userActions, utils, cd);
+    super(store, userActions, cd);
   }
 
   ngOnInit() {

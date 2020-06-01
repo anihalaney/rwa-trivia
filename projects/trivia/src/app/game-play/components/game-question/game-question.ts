@@ -71,5 +71,4 @@ export class GameQuestion {
       this.showLoader = true;
   }
 
-  fillTimer() { }
 }
