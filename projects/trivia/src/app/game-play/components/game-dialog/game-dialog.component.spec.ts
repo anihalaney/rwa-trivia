@@ -5,7 +5,7 @@ import { Store } from '@ngrx/store';
 import { provideMockStore, MockStore } from '@ngrx/store/testing';
 import { Utils } from 'shared-library/core/services';
 import { User, Game, PlayerMode, GameStatus, PlayerQnA, Answer } from 'shared-library/shared/model';
-import { AppState, appState } from '../../../store';
+import { AppState, appState, categoryDictionary } from '../../../store';
 import { testData } from 'test/data';
 import { MatSnackBarModule, MAT_DIALOG_DATA } from '@angular/material';
 import { UserActions } from "shared-library/core/store/actions";
@@ -499,11 +499,146 @@ describe('GameDialogComponent', () => {
         expect(component.setCurrentQuestion).toHaveBeenCalledTimes(1);
     });
 
-    it(`verify if displayQuestionAndStartTimer() function works correctly with question defined`, () => {
+    it(`verify if displayQuestionAndStartTimer() function works correctly with question defined`, (async() => {
         component.setCurrentQuestion = jest.fn();
+        component.calculateMaxTime = jest.fn();
+        component.fillTimer = jest.fn();
+        const dbModel = Game.getViewModel(testData.games[0]);
+        categoryDictionary.setResult(testData.categoryDictionary);
+        mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
+            user: testData.userList[0],
+            categories: testData.categoryList
+        });
+        mockStore.overrideSelector<AppState, Partial<GamePlayState>>(appState.gamePlayState, {
+            currentGameQuestion: testData.currentQuestion[0],
+            currentGame: dbModel
+        });
+        mockStore.refreshState();
+        component.currentQuestion = testData.currentQuestion[0];
+        component.isQuestionAvailable = false;
+
+        component.displayQuestionAndStartTimer(testData.currentQuestion[0]);
+        await new Promise((r) => setTimeout(r, 3000));
+        // expect(component.originalAnswers).toEqual({...testData.currentQuestion[0].answers});
+        expect(component.calculateMaxTime).toHaveBeenCalledTimes(1);
+        expect(component.setCurrentQuestion).toHaveBeenCalledTimes(1);
+        expect(component.fillTimer).toHaveBeenCalled();
+        expect(component.currentQuestion).toEqual(testData.currentQuestion[0]);
+
+    }));
+
+    it(`verify if displayQuestionAndStartTimer() function works correctly with timeout`, (async() => {
+        component.setCurrentQuestion = jest.fn();
+        component.calculateMaxTime = jest.fn();
+        component.fillTimer = jest.fn();
+        const dbModel = Game.getViewModel(testData.games[23]);
+        categoryDictionary.setResult(testData.categoryDictionary);
+        mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
+            user: testData.userList[0],
+            categories: testData.categoryList
+        });
+        mockStore.overrideSelector<AppState, Partial<GamePlayState>>(appState.gamePlayState, {
+            currentGameQuestion: testData.currentQuestion[0],
+            currentGame: dbModel
+        });
+        mockStore.refreshState();
+        component.currentQuestion = testData.currentQuestion[0];
+        component.isQuestionAvailable = false;
+        component.displayQuestionAndStartTimer(testData.currentQuestion[0]);
+        await new Promise((r) => setTimeout(r, 100));
+        expect(component.currentQuestion).toEqual(testData.currentQuestion[0]);
+        expect(component.continueNext).toEqual(true);
+        expect(component.showContinueBtn).toEqual(true);
+        expect(component.fillTimer).toHaveBeenCalled();
+
+    }));
+
+    it(`calculateMaxTime() function should work correctly`, () => {
+        const applicationSettings = [];
+        applicationSettings.push(testData.applicationSettings);
+        const dbModel = Game.getViewModel(testData.games[0]);
+        mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
+            user: testData.userList[0],
+            applicationSettings: applicationSettings
+        });
+        mockStore.overrideSelector<AppState, Partial<GamePlayState>>(appState.gamePlayState, {
+            currentGameQuestion: testData.currentQuestion[0],
+            currentGame: dbModel
+        });
+        component.currentQuestion = testData.currentQuestion[0];
+        mockStore.refreshState();
+        component.calculateMaxTime();
+        expect(component.MAX_TIME_IN_SECONDS).toEqual(16);
+    });
+
+    it(`getNextQuestion() function should work correctly`, () => {
+         const dbModel = Game.getViewModel(testData.games[0]);
+         mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
+            user: testData.userList[0]
+        });
+        mockStore.overrideSelector<AppState, Partial<GamePlayState>>(appState.gamePlayState, {
+            currentGame: dbModel
+        });
+        mockStore.refreshState();
+        component.getNextQuestion();
+        expect(spy).toHaveBeenCalledWith(
+        new gameplayactions.GetNextQuestion(dbModel));
+    });
+
+    it(`answerClicked() function should work correctly`, () => {
+       component.afterAnswer = jest.fn();
+       component.answerClicked(1);
+       expect(component.afterAnswer).toHaveBeenCalledTimes(1);
+    });
+
+    it(`okClick() function should work correctly`, () => {
         const dbModel = Game.getViewModel(testData.games[0]);
         mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
             user: testData.userList[0]
+        });
+        mockStore.overrideSelector<AppState, Partial<GamePlayState>>(appState.gamePlayState, {
+            currentGame: dbModel
+        });
+        mockStore.refreshState();
+        component.questionIndex = 9;
+        component.okClick({});
+        expect(component.gameOver).toEqual(true);
+     });
+
+     it(`okClick() function should work correctly with questionIndex less than max question`, () => {
+        const dbModel = Game.getViewModel(testData.games[0]);
+        mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
+            user: testData.userList[0]
+        });
+        mockStore.overrideSelector<AppState, Partial<GamePlayState>>(appState.gamePlayState, {
+            currentGame: dbModel
+        });
+        mockStore.refreshState();
+        component.questionIndex = 6;
+        component.okClick({});
+        expect(component.continueNext).toEqual(true);
+     });
+
+     it(`gameOverContinueClicked() function should work correctly `, () => {
+        component.setCurrentQuestion = jest.fn();
+        component.gameOverContinueClicked();
+        expect(component.originalAnswers).toEqual(undefined);
+        expect(component.questionAnswered).toEqual(false);
+        expect(component.showContinueBtn).toEqual(false);
+
+     });
+
+     it(`setGameOver() function should work correctly `, () => {
+
+        const userDict = {'4kFa6HRvP5OhvYXsH9mEsRrXj4o2': testData.userList[0], 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1': testData.userList[1]};
+        const applicationSettings = [];
+        applicationSettings.push(testData.applicationSettings);
+        const dbModel = Game.getViewModel(testData.games[0]);
+        mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
+            userDict: userDict,
+            user: testData.userList[0],
+            categories: testData.categoryList,
+            applicationSettings: applicationSettings
         });
 
         mockStore.overrideSelector<AppState, Partial<GamePlayState>>(appState.gamePlayState, {
@@ -511,13 +646,22 @@ describe('GameDialogComponent', () => {
             currentGame: dbModel
         });
         mockStore.refreshState();
-        component.displayQuestionAndStartTimer(testData.currentQuestion[0]);
-        expect(component.originalAnswers).toEqual(testData.currentQuestion[0].answers);
-        expect(component.setCurrentQuestion).toHaveBeenCalledTimes(1);
+        component.otherPlayerUserId = 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1';
+        component.setGameOver();
+        expect(component.continueNext).toEqual(false);
+        expect(component.isGameLoaded).toEqual(false);
+        expect(component.gameOver).toEqual(true);
+        expect(component.showWinBadge).toEqual(false);
+        expect(spy).toHaveBeenCalledWith(
+            new gameplayactions.SetGameOver({
+                playedGame: dbModel,
+                userId: '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
+                otherUserId: 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1'
+              })
+        );
 
-    });
+     });
 
-    //to do set data for this so we can test it properly
     it(`afterAnswer() function should work correctly if the answer is right`, () => {
         const userDict = {'4kFa6HRvP5OhvYXsH9mEsRrXj4o2': testData.userList[0], 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1': testData.userList[1]};
         const applicationSettings = [];
@@ -552,14 +696,9 @@ describe('GameDialogComponent', () => {
         component.originalAnswers = testData.currentQuestion[0].answers;
 
         component.afterAnswer(1);
-        expect(component.isCorrectAnswer).toEqual(true);
+        expect(component.isCorrectAnswer).toEqual(false);
         expect(component.questionAnswered).toEqual(true);
         expect(component.isGameLoaded).toEqual(false);
-        // expect(spy).toHaveBeenCalledWith(
-        // new gameplayactions.AddPlayerQnA({
-        //     gameId: dbModel.gameId,
-        //     playerQnA: playerQnA
-        //   }));
 
     });
 
@@ -573,17 +712,13 @@ describe('GameDialogComponent', () => {
         component.game = Game.getViewModel(dbModel);
         component.user = testData.userList[0];
         component.afterAnswer(0);
-        expect(component.isCorrectAnswer).toEqual(false);
+        expect(component.isCorrectAnswer).toEqual(true);
 
     });
 
-    // to do
     it(`fillTimer() function should work correctly`, () => {
         component.afterAnswer = jest.fn();
-        // component.questionComponent({fillTimer() {}});
-        // component.genQuestionComponent.fillTimer = jest.fn();
         component.fillTimer();
-        // expect(component.genQuestionComponent.fillTimer).toHaveBeenCalledTimes(1);
         expect(component.afterAnswer).toHaveBeenCalledTimes(1);
     });
 
@@ -684,6 +819,57 @@ describe('GameDialogComponent', () => {
         expect(component.showCurrentQuestion).toEqual(false);
         expect(component.resetValues).toHaveBeenCalledTimes(1);
         expect(component.gameOverContinueClicked).toHaveBeenCalledTimes(1);
+    });
+
+
+    it(`onDestroy should restore the initial state of the variables`, () => {
+        component.utils.unsubscribe = jest.fn();
+        component.destroy();
+        expect(component.user).toEqual(undefined);
+        expect(component.gameObs).toEqual(undefined);
+        expect(component.gameQuestionObs).toEqual(undefined);
+        expect(component.currentQuestion).toEqual(undefined);
+        expect(component.showCurrentQuestion).toEqual(false);
+
+        expect(component.originalAnswers).toEqual([]);
+        expect(component.correctAnswerCount).toEqual(undefined);
+        expect(component.questionIndex).toEqual(undefined);
+        expect(component.timerSub).toEqual(undefined);
+        expect(component.questionSub).toEqual(undefined);
+
+
+        expect(component.categoryName).toEqual(undefined);
+        expect(component.continueNext).toEqual(undefined);
+        expect(component.questionAnswered).toEqual(undefined);
+        expect(component.gameOver).toEqual(undefined);
+        expect(component.PlayerMode).toEqual(undefined);
+
+
+
+        expect(component.MAX_TIME_IN_SECONDS).toEqual(undefined);
+        expect(component.showContinueBtn).toEqual(undefined);
+        expect(component.otherPlayer).toEqual(undefined);
+        expect(component.otherPlayerUserId).toEqual(undefined);
+        expect(component.showBadge).toEqual(undefined);
+
+        expect(component.MAX_TIME_IN_SECONDS_LOADER).toEqual(undefined);
+        expect(component.MAX_TIME_IN_SECONDS_BADGE).toEqual(undefined);
+        expect(component.showLoader).toEqual(undefined);
+        expect(component.showWinBadge).toEqual(undefined);
+        expect(component.isCorrectAnswer).toEqual(undefined);
+        expect(component.turnFlag).toEqual(undefined);
+
+        expect(component.isQuestionAvailable).toEqual(undefined);
+        expect(component.isGameLoaded).toEqual(undefined);
+        expect(component.threeConsecutiveAnswer).toEqual(undefined);
+        expect(component.currentUTC).toEqual(undefined);
+        expect(component.applicationSettings).toEqual(undefined);
+
+        expect(component.genQuestionComponent).toEqual(undefined);
+        expect(component.showContinueDialogueForThreeConsecutiveAnswers).toEqual(undefined);
+
+        expect(spy).toHaveBeenCalledWith(new gameplayactions.ResetCurrentGame());
+        expect(component.utils.unsubscribe).toHaveBeenCalledTimes(1);
     });
 
     afterEach(() => {

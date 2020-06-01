@@ -116,7 +116,7 @@ export class GameDialog {
     this.subscriptions.push(
       this.store
         .select(categoryDictionary)
-        .pipe(take(1))
+        .pipe(skipWhile(c => !c), take(1))
         .subscribe(c => (this.categoryDictionary = c))
     );
     this.subscriptions.push(
@@ -434,7 +434,7 @@ export class GameDialog {
 
         this.categoryName = question.categoryIds
           .map(category => {
-            return this.categoryDictionary[category].categoryName;
+            return this.categoryDictionary && this.categoryDictionary[category] ? this.categoryDictionary[category].categoryName : '';
           })
           .join(",");
 
