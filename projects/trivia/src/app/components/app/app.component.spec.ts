@@ -14,14 +14,18 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { Router, NavigationEnd } from '@angular/router';
 import * as gamePlayActions from '../../game-play/store/actions';
 import { Renderer2, Type } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 
 class MockRouter {
+    url = 'dashboard';
     public ne = new NavigationEnd(1, '/dashboard', '/dashboard');
     public events = new Observable(observer => {
         observer.next(this.ne);
         observer.complete();
     });
+    navigate(commands: any[], extras?) {
+        return;
+    }
 }
 
 describe('AppComponent', () => {
@@ -250,18 +254,19 @@ describe('AppComponent', () => {
     });
 
     it('On load component should call windowRef.addNavigationsInAnalytics function and windowRef.scrollDown function', () => {
-        // const routerEventSpy = spyOn(component.router, 'events');
-        // routerEventSpy.and.returnValue(MockRouter);
-        // user = { ...testData.userList[0] };
-        // user.authState = { uid: user.userId } as any;
-        // mockCoreSelector.setResult({ user });
-        // mockStore.refreshState();
-        // fixture.detectChanges();
-        // component.ngOnInit();
-        // component.windowRef.addNavigationsInAnalytics = jest.fn();
-        // component.windowRef.scrollDown = jest.fn();
-        // expect(component.windowRef.addNavigationsInAnalytics).toHaveBeenCalled();
-        // expect(component.windowRef.scrollDown).toHaveBeenCalled();
+        const routerEventSpy = spyOn(component.router, 'events').and
+        .returnValue(of(new NavigationEnd(1, '/dashboard', '/dashboard')));
+        routerEventSpy.and.returnValue(MockRouter);
+        user = { ...testData.userList[0] };
+        user.authState = { uid: user.userId } as any;
+        mockCoreSelector.setResult({ user });
+        component.windowRef.addNavigationsInAnalytics = jest.fn();
+        component.windowRef.scrollDown = jest.fn();
+        mockStore.refreshState();
+        fixture.detectChanges();
+        component.ngOnInit();
+        expect(component.windowRef.addNavigationsInAnalytics).toHaveBeenCalled();
+        expect(component.windowRef.scrollDown).toHaveBeenCalled();
     });
 
     it('On load component verify intervalSubscription', (async () => {
