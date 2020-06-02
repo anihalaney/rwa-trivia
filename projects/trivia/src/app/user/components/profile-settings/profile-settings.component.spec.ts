@@ -116,7 +116,6 @@ describe('ProfileSettingsComponent', () => {
         spy = spyOn(mockStore, 'dispatch');
         component = fixture.debugElement.componentInstance;
         fixture.detectChanges();
-        // router = TestBed.get(Router);
     });
 
     it('should create', () => {
@@ -137,7 +136,7 @@ describe('ProfileSettingsComponent', () => {
         expect(component.setNotificationMsg).toHaveBeenCalled();
     });
 
-    it('Verify if userProfileSaveStatus is not equle to SUCCESS && NONE && IN PROCESS && MAKE FRIEND SUCCESS', () => {
+    it('Verify if userProfileSaveStatus is not equal to SUCCESS && NONE && IN PROCESS && MAKE FRIEND SUCCESS', () => {
         component.setNotificationMsg = jest.fn();
         mockStore.overrideSelector<AppState, Partial<CoreState>>(coreState, {
             userProfileSaveStatus: 'ERROR'
@@ -623,7 +622,7 @@ describe('ProfileSettingsComponent', () => {
         expect(component.userForm.get('phoneNo').value).toEqual(user['phoneNo']);
     });
 
-    it('Verify saveUserInformation function it shpuld dispatch action to add user data in user profile', () => {
+    it('Verify saveUserInformation function it should dispatch action to add user data in user profile', () => {
         user = { ...testData.userList[0] };
         const userDict = { '4kFa6HRvP5OhvYXsH9mEsRrXj4o2': user };
         applicationSettings.push(testData.applicationSettings);
@@ -892,7 +891,7 @@ describe('ProfileSettingsComponent', () => {
         expect(component.getCityAndCountryName(location)).toEqual('Ahmedabad,Gujarat');
     });
 
-    it('Verify setValidation function, If field included in singleFieldEdit', () => {
+    it('In setValidation function, verify that field is included in singleFieldEdit or not', () => {
         user = { ...testData.userList[0] };
         const userDict = { '4kFa6HRvP5OhvYXsH9mEsRrXj4o2': user };
         applicationSettings.push(testData.applicationSettings);
