@@ -1,0 +1,28 @@
+export const Accounts = [{
+   'avgAnsTime':  5,
+   'badges': 1010,
+   'bits': 4728,
+   'bytes': 170,
+   'categories': 223,
+   'gamePlayed': 885,
+   'id': 'Mq6MYVzQ9AUE0DZYE9acznA17KI2',
+   'isFirstGame': true,
+   'lastGamePlayed': 1590669086000,
+   'lastGamePlayedNotification': false,
+   'lastLiveUpdate': 1572523601000,
+   'leaderBoardStats': {
+      '1': 49,
+      '2': 304,
+      '3': 131,
+      '4': 108,
+      '5': 77,
+      '6': 4,
+      '7': 5,
+      '8': 350,
+   },
+   'lives': 159,
+   'losses': 654,
+   'nextLiveUpdate': 1572525521000,
+   'signUpQuestionAnswered': true,
+   'wins': 231
+}];

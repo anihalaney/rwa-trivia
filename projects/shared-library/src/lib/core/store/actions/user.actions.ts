@@ -211,6 +211,7 @@ export class UserActions {
     };
   }
   loadUserInvitationsSuccess(invitation: Invitation[]): ActionWithPayload<Invitation[]> {
+    
     return {
       type: UserActions.LOAD_FRIEND_INVITATION_SUCCESS,
       payload: invitation
