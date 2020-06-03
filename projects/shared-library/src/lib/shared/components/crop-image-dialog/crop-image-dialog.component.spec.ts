@@ -99,18 +99,15 @@ describe('CropImageDialogComponent', () => {
     expect(component.checkImageSize).toHaveBeenCalled();
   });
 
-  it('call to onSaveClick should check the size of image and read the file', () => {
+  it('call to onSaveClick should check the size of image and read the file', async () => {
     component.data.file = file;
     spy = spyOn(component, 'checkImageSize');
     expect(spy);
     component.onSaveClick();
-    const reader = new FileReader();
-    reader.addEventListener('onload', function (event) {
-      try {
-        expect(component.checkImageSize).toHaveBeenCalled();
-      } catch (error) {
-      }
-    });
+    // we need to wait for file reader onload event to complete
+    // before checking result
+    await new Promise(r => setTimeout(r, 1000));
+    expect(component.checkImageSize).toHaveBeenCalled();
   });
 
   it('call to checkImageSize should call getImageSize function and validate the image size', () => {
