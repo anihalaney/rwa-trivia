@@ -1,6 +1,5 @@
 import { select, Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
-import { take } from 'rxjs/operators';
+import { Observable, Subscription } from 'rxjs';
 import { QuestionActions } from 'shared-library/core/store';
 import { Category, Question, User, ApplicationSettings } from 'shared-library/shared/model';
 import { AppState, appState } from '../../../store';
@@ -17,7 +16,7 @@ export class MyQuestions {
   tagsObs: Observable<string[]>;
   user: User;
   loaderBusy = false;
-  subscriptions = [];
+  subscriptions: Subscription[] = [];
   applicationSettings: ApplicationSettings;
   quillConfig = {
     toolbar: {
@@ -43,7 +42,7 @@ export class MyQuestions {
     this.categoriesObs = store.select(appState.coreState).pipe(select(s => s.categories));
     this.tagsObs = store.select(appState.coreState).pipe(select(s => s.tags));
 
-    this.subscriptions.push(this.store.select(appState.coreState).pipe(take(1)).subscribe((s) => {
+    this.subscriptions.push(this.store.select(appState.coreState).subscribe((s) => {
       this.user = s.user;
     }));
     this.subscriptions.push(this.store.select(userState).pipe(select(s => s.userPublishedQuestions)).subscribe((questions) => {

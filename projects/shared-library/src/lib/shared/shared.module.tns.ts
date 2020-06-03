@@ -20,7 +20,6 @@ import {
   AnimationBoxComponent
 } from './mobile/component';
 import { NativeScriptCommonModule } from 'nativescript-angular/common';
-import { GameFilterPipe } from './pipe/game-filter.pipe';
 import { SearchCountryFilterPipe } from './pipe/search-country-filter.pipe';
 import { TNSCheckBoxModule } from '@nstudio/nativescript-checkbox/angular';
 import { NativeScriptUIAutoCompleteTextViewModule } from 'nativescript-ui-autocomplete/angular';
@@ -45,7 +44,6 @@ import {TimeAgoPipe} from 'time-ago-pipe';
     RenderQuestionComponent,
     CountryListComponent,
     UserCardComponent,
-    GameFilterPipe,
     SearchCountryFilterPipe,
     SafeHtmlPipe,
     ShowHintWhenFocusOutDirective,
@@ -99,7 +97,6 @@ import {TimeAgoPipe} from 'time-ago-pipe';
     DrawerComponent,
     QuestionsTableComponent,
     AuthorComponent,
-    GameFilterPipe,
     SearchCountryFilterPipe,
     ShowHintWhenFocusOutDirective,
     OpenUserProfileDirective,
