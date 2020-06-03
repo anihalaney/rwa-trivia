@@ -53,22 +53,17 @@ describe('CropImageDialogComponent', () => {
 
   });
 
-  it('on load component should set maxImageSize and profileImageFile', () => {
+  it('on load component should set maxImageSize and profileImageFile', async () => {
     const spyCropper = spyOn(component.cropper, 'setImage').and.callThrough();
     expect(spyCropper);
     component.ngOnInit();
     expect(component.maxImageSize).toEqual(testData.applicationSettings.max_image_size_of_question);
     expect(component.profileImageFile).toEqual(file);
-    const reader = new FileReader();
-
-    // TODO: need to check if this is the right way to do
-    reader.addEventListener('onloadend', function (loadEvent) {
-      try {
-        expect(component.image.src).toEqual(loadEvent.target['result']);
-        expect(component.cropper.setImage).toHaveBeenCalled();
-      } catch (error) {
-      }
-    });
+    // we need to wait for file reader onload event to complete
+    // before checking result
+    await new Promise(r => setTimeout(r, 1000));
+    expect(component.image.src).not.toBeUndefined();
+    expect(component.cropper.setImage).toHaveBeenCalled();
   });
 
   it('on load of component, call to setCropperSettings should set cropper Settings', () => {
@@ -131,18 +126,16 @@ describe('CropImageDialogComponent', () => {
     expect(component.dialogRef.close).toHaveBeenCalled();
   });
 
-  // Need to look for below test case
-  // it('Image size validation error should be displayed if selected image size is greater than maxImageSize', () => {
-  //   component.maxImageSize = testData.applicationSettings.max_image_size_of_question;
-  //       const cropImage = { image: dataUrl };
-  //       spy = spyOn(component, 'getImageSize');
-  //       expect(spy);
-  //       component.checkImageSize(cropImage.image);
-  //       expect(component.getImageSize).toHaveBeenCalled();
-  //       const imagesize = component.getImageSize(cropImage.image);
-  //       expect(imagesize).toBe(0.53173828125);
-  //       expect(component.errorMsg).toEqual(`Image size should be less than ${component.maxImageSize} KB`);
-  //   });
+  it('Image size validation error should be displayed if selected image size is greater than maxImageSize', () => {
+    component.maxImageSize = 0.5;
+    const cropImage = testData.file.base64Image;
+    spy = spyOn(component, 'getImageSize').and.callThrough();
+    expect(spy);
+    component.checkImageSize(cropImage);
+    expect(component.getImageSize).toHaveBeenCalled();
+    const imageSize = component.getImageSize(cropImage.image);
+    expect(component.errorMsg).toEqual(`Image size should be less than ${component.maxImageSize} KB`);
+    });
 
   it('call to getImageSize should calculate the size of image', () => {
     const imageSize = component.getImageSize(testData.file.base64Image.image);
