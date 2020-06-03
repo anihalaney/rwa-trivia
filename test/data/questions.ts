@@ -272,6 +272,35 @@ export const Questions = {
     'is_draft': false,
     'status': 5,
     'reason': 'Question is not clear'
+  },
+  {
+    'id': '1',
+    'questionText': 'how would you implement custom event handling in web application?',
+    'answers': [
+      {
+        'id': 1,
+        'answerText': 'Through interpolation',
+        'correct': false
+      },
+      {
+        'id': 2,
+        'answerText': 'Through EventEmitters only',
+        'correct': true
+      },
+      {
+        'id': 3,
+        'answerText': 'Through combination of Outputs Decorators and EventEmitters',
+        'correct': false
+      },
+      {
+        'id': 4,
+        'answerText': 'Through Output Decotators only',
+        'correct': false
+      }
+    ],
+    'ordered': false,
+    'tags': ['JavaScript'],
+    'categoryIds': [2]
   }
   ]
 };
