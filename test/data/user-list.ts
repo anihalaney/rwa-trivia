@@ -8,10 +8,39 @@ export const UserList = [
       'categories': 232,
       'contribution': 815,
       'gamePlayed': 2422,
-      'leaderBoardStats': {},
+      'leaderBoardStats': {
+        '1': 1,
+        '5': 1,
+        '6': 1,
+        '8': 7,
+        '9': 1,
+        'Database': 1,
+        'I/O': 1,
+        'I/O devices': 1,
+        'Java': 7,
+        'Milan': 7,
+        'SQL': 1,
+        'Select': 1,
+        'Test': 6,
+        'area': 1,
+        'base class': 7,
+        'class': 7,
+        'favourite': 1,
+        'flags': 1,
+        'general': 1,
+        'knowledge': 1,
+        'movie': 1,
+        'select': 1,
+      },
       'losses': 1555,
       'wins': 867,
-      'lives': 3
+      'lives': 3,
+      'id': '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
+      'lastGamePlayed': 1589980023000,
+      'lastGamePlayedNotification': false,
+      'lastLiveUpdate': 1587030574000,
+      'nextLiveUpdate': 1587032494000,
+      'signUpQuestionAnswered': true
     },
     'androidPushTokens': [
       {
@@ -68,10 +97,39 @@ export const UserList = [
       'categories': 232,
       'contribution': 815,
       'gamePlayed': 2422,
-      'leaderBoardStats': {},
+      'leaderBoardStats': {
+        '1': 1,
+        '5': 1,
+        '6': 1,
+        '8': 7,
+        '9': 1,
+        'Database': 1,
+        'I/O': 1,
+        'I/O devices': 1,
+        'Java': 7,
+        'Milan': 7,
+        'SQL': 1,
+        'Select': 1,
+        'Test': 6,
+        'area': 1,
+        'base class': 7,
+        'class': 7,
+        'favourite': 1,
+        'flags': 1,
+        'general': 1,
+        'knowledge': 1,
+        'movie': 1,
+        'select': 1,
+      },
       'losses': 1555,
       'wins': 867,
-      'lives': 3
+      'lives': 3,
+      'id': 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1',
+      'lastGamePlayed': 1589980023000,
+      'lastGamePlayedNotification': false,
+      'lastLiveUpdate': 1587030574000,
+      'nextLiveUpdate': 1587032494000,
+      'signUpQuestionAnswered': true
     },
     'androidPushTokens': [
       {
@@ -202,7 +260,7 @@ export const UserList = [
     ],
     'authState': null,
     'bulkUploadPermissionStatus': 'false',
-    'bulkUploadPermissionStatusUpdateTime' : 1588266851711,
+    'bulkUploadPermissionStatusUpdateTime': 1588266851711,
     'croppedImageUrl': '',
     'originalImageUrl': '',
     'imageType': '',
@@ -220,12 +278,12 @@ export const UserList = [
     'displayName': 'test',
     'email': 'test@test.com',
     'idToken': 'eyJhsbGciOiJSUzI1NiIsImtpZCI6Ijg4ODQ4YjVhZmYyZDUyMDEzMzFhNTQ3ZDE5MDZlNWFhZGY2NTEzYzgiLCJ0eXAiOiJKV1QifQ.ey' +
-    +'Jpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vcndhLXRyaXZpYS1kZXYtZTU3ZmMiLCJhdWQiOiJyd2EtdHJpdmlhLWRldi1lNTdmYyIs' +
-    +'ImF1dGhfdGltZSI6MTU4NzEyMTIwNiwidXNlcl9pZCI6IjRrRmE2SFJ2UDVPaHZZWHNIOW1Fc1JyWGo0bzIiLCJzdWIiOiI0a0ZhNkhSdlA1T2h2WVhzSDlt' +
-    +'RXNSclhqNG8yIiwiaWF0IjoxNTg4MjY0OTIzLCJleHAiOjE1ODgyNjg1MjMsImVtYWlsIjoicHJpeWFua2FtYXZhbmk5OSsxMjRAZ21haWwuY29tIiwiZW1' +
-    +'.PYorEbISiEgg728CNYxvFcJU4PxCvts50IoumdTN39xF9yKQl0t1rZt8CkNjPu9lP_eZcvbxHPET583LhqiVR6E-HjxMACV23tTrSpJlEfi3FTcG4BlELDNO' +
-    +'It529Il0xYlDJaLCTnT8D3uJV79dBpyFYQ9tP3RRXxTdJv4HZXYbjiXLmuK3tOwLiLzI_ZWgFDfpYHqg17bJKTtfjTC7blorhpZYfDDrc6BH4y3aJaN84CJtIhTeN'+
-    +'4fNePjEBRWDWa3hNZs2lDik5eslRWXP8HR09k4c251UKw1vcehZm-ISzYSVuYHCMoK9eDjB2Hj4qx6oRhdbJh_WiRul_WvPEw',
+      +'Jpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vcndhLXRyaXZpYS1kZXYtZTU3ZmMiLCJhdWQiOiJyd2EtdHJpdmlhLWRldi1lNTdmYyIs' +
+      +'ImF1dGhfdGltZSI6MTU4NzEyMTIwNiwidXNlcl9pZCI6IjRrRmE2SFJ2UDVPaHZZWHNIOW1Fc1JyWGo0bzIiLCJzdWIiOiI0a0ZhNkhSdlA1T2h2WVhzSDlt' +
+      +'RXNSclhqNG8yIiwiaWF0IjoxNTg4MjY0OTIzLCJleHAiOjE1ODgyNjg1MjMsImVtYWlsIjoicHJpeWFua2FtYXZhbmk5OSsxMjRAZ21haWwuY29tIiwiZW1' +
+      +'.PYorEbISiEgg728CNYxvFcJU4PxCvts50IoumdTN39xF9yKQl0t1rZt8CkNjPu9lP_eZcvbxHPET583LhqiVR6E-HjxMACV23tTrSpJlEfi3FTcG4BlELDNO' +
+      +'It529Il0xYlDJaLCTnT8D3uJV79dBpyFYQ9tP3RRXxTdJv4HZXYbjiXLmuK3tOwLiLzI_ZWgFDfpYHqg17bJKTtfjTC7blorhpZYfDDrc6BH4y3aJaN84CJtIhTeN' +
+      +'4fNePjEBRWDWa3hNZs2lDik5eslRWXP8HR09k4c251UKw1vcehZm-ISzYSVuYHCMoK9eDjB2Hj4qx6oRhdbJh_WiRul_WvPEw',
     'isAutoComplete': false,
     'isCategorySet': true,
     'location': 'Ahmedabad,Gujarat',
