@@ -39,13 +39,13 @@ export function questionDraftSaveStatus(state: any, action: ActionWithPayload<st
     case QuestionActions.ADD_NEW_QUESTION_AS_DRAFT_SUCCESS:
       return action.payload;
     case QuestionActions.UPDATE_QUESTION_AS_DRAFT_SUCCESS:
-        return 'UPDATED';
+      return 'UPDATED';
     default:
-          return state;
+      return state;
   }
 }
 
-export function updateQuestion(state: any = 'NONE', action: ActionWithPayload<string>): string {
+export function updateQuestion(state: any = 'NONE', action: ActionWithPayload<any>): string {
   switch (action.type) {
     case QuestionActions.UPDATE_QUESTION:
       return 'UPDATE';
@@ -56,6 +56,8 @@ export function updateQuestion(state: any = 'NONE', action: ActionWithPayload<st
 
 export function deleteQuestionImage(state: any = null, action: ActionWithPayload<any>): any {
   switch (action.type) {
+    case QuestionActions.DELETE_QUESTION_IMAGE:
+      return action.payload;
     case QuestionActions.DELETE_QUESTION_IMAGE_SUCCESS:
       return action.payload;
     default:
