@@ -48,7 +48,8 @@ export const UserList = [
       'test',
       'angular',
       'net',
-      'cloud'
+      'cloud',
+      'category'
     ],
     'hackernewsUrl': '',
     'linkedInUrl': 'dfdf',
@@ -107,7 +108,8 @@ export const UserList = [
       'test',
       'angular',
       'net',
-      'cloud'
+      'cloud',
+      'category'
     ],
     'hackernewsUrl': '',
     'linkedInUrl': 'dfdf',
