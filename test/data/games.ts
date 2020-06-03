@@ -270,6 +270,7 @@ export const Games =  [
         'score': 1
       }
     },
+    'winnerPlayerId': '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
     'round': 3
   },
   {
@@ -542,6 +543,7 @@ export const Games =  [
         'score': 1
       }
     },
+    'winnerPlayerId': 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1',
     'round': 3
   },
   {
@@ -674,6 +676,7 @@ export const Games =  [
         'score': 2
       }
     },
+    'winnerPlayerId': '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
     'round': 5
   },
   {
@@ -2271,6 +2274,187 @@ export const Games =  [
       }
     },
     'round': 1
-  }
+  },
+  {
+    'gameOptions': {
+      'categoryIds': [
+        1,
+        8,
+        2,
+        3,
+        4,
+        5,
+        7,
+        9
+      ],
+      'gameMode': 0,
+      'isBadgeWithCategory': true,
+      'isChallenge': false,
+      'maxQuestions': 8,
+      'opponentType': 0,
+      'playerMode': 1,
+      'tags': []
+    },
+    'playerIds': [
+      '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
+      'yP7sLu5TmYRUO9YT4tWrYLAqxSz1'
+    ],
+    'nextTurnPlayerId': '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
+    'gameOver': true,
+    'playerQnAs': [
+      {
+        'playerId': '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
+        'questionId': '0OpXYFZSk505ra1jW6fb',
+        'addedOn': 1587463516000,
+        'playerAnswerId': '0',
+        'playerAnswerInSeconds': 2,
+        'answerCorrect': true,
+        'round': 1,
+        'categoryId': [
+          5
+        ],
+        'badge': {
+          'name': 'scissors',
+          'won': true
+        },
+        'isReported': false
+      },
+      {
+        'playerId': 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1',
+        'questionId': '8QgcZTS0cQAokNG7oqQr',
+        'addedOn': 1587463775000,
+        'playerAnswerId': '1',
+        'playerAnswerInSeconds': 4,
+        'answerCorrect': true,
+        'round': 3,
+        'categoryId': [
+          9
+        ],
+        'badge': {
+          'name': 'scissors',
+          'won': true
+        },
+        'isReported': false
+      }
+    ],
+    'gameId': 'vTzY3HeUvy9lXxaGHa0d',
+    'id': 'vTzY3HeUvy9lXxaGHa0d',
+    'GameStatus': 'waiting for next question',
+    'createdAt': 1587463514000,
+    'turnAt': 1588206930838,
+    'gameOverAt': 1587463792000,
+    'reminder32Min': false,
+    'reminder8Hr': false,
+    'stats': {
+      '4kFa6HRvP5OhvYXsH9mEsRrXj4o2': {
+        'avgAnsTime': 2,
+        'badge': [
+          'scissors'
+        ],
+        'consecutiveCorrectAnswers': 1,
+        'score': 10
+      },
+      'yP7sLu5TmYRUO9YT4tWrYLAqxSz1': {
+        'avgAnsTime': 2,
+        'badge': [
+          'lizard'
+        ],
+        'consecutiveCorrectAnswers': 0,
+        'score': 1
+      }
+    },
+    'round': 3
+  },
+  {
+    'gameOptions': {
+      'categoryIds': [
+        1,
+        8,
+        2,
+        3,
+        4,
+        5,
+        7,
+        9
+      ],
+      'gameMode': 0,
+      'isBadgeWithCategory': true,
+      'isChallenge': false,
+      'maxQuestions': 8,
+      'opponentType': 0,
+      'playerMode': 1,
+      'tags': []
+    },
+    'playerIds': [
+      '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
+      'yP7sLu5TmYRUO9YT4tWrYLAqxSz1'
+    ],
+    'nextTurnPlayerId': '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
+    'gameOver': true,
+    'playerQnAs': [
+      {
+        'playerId': '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
+        'questionId': '0OpXYFZSk505ra1jW6fb',
+        'addedOn': 1587463516000,
+        'playerAnswerId': '0',
+        'playerAnswerInSeconds': 2,
+        'answerCorrect': true,
+        'round': 1,
+        'categoryId': [
+          5
+        ],
+        'badge': {
+          'name': 'scissors',
+          'won': true
+        },
+        'isReported': false
+      },
+      {
+        'playerId': 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1',
+        'questionId': '8QgcZTS0cQAokNG7oqQr',
+        'addedOn': 1587463775000,
+        'playerAnswerId': '1',
+        'playerAnswerInSeconds': 4,
+        'answerCorrect': true,
+        'round': 3,
+        'categoryId': [
+          9
+        ],
+        'badge': {
+          'name': 'scissors',
+          'won': true
+        },
+        'isReported': false
+      }
+    ],
+    'gameId': 'vTzY3HeUvy9lXxaGHa0d',
+    'id': 'vTzY3HeUvy9lXxaGHa0d',
+    'GameStatus': 'waiting for next question',
+    'createdAt': 1587463514000,
+    'turnAt': 1588206930838,
+    'gameOverAt': 1587463792000,
+    'reminder32Min': false,
+    'reminder8Hr': false,
+    'stats': {
+      '4kFa6HRvP5OhvYXsH9mEsRrXj4o2': {
+        'avgAnsTime': 2,
+        'badge': [
+          'scissors',
+          'lizard'
+        ],
+        'consecutiveCorrectAnswers': 1,
+        'score': 10
+      },
+      'yP7sLu5TmYRUO9YT4tWrYLAqxSz1': {
+        'avgAnsTime': 2,
+        'badge': [
+          'lizard'
+        ],
+        'consecutiveCorrectAnswers': 0,
+        'score': 1
+      }
+    },
+    'round': 16
+  },
 ];
 

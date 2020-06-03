@@ -120,10 +120,12 @@ export class GameOver implements OnInit, OnChanges {
             if (response.correct && response.answerText === res.userGivenAnswer) {
               this.correctAnswerClassIndexIncrement++;
               let className;
-              if (!this.game.gameOptions.isBadgeWithCategory) {
-                 className = `score${this.correctAnswerClassIndexIncrement}`;
-              } else {
-                 className = res.badge && res.badge.name && res.badge.won ? res.badge.name : '';
+              if (this.game) {
+                if (!this.game.gameOptions.isBadgeWithCategory) {
+                   className = `score${this.correctAnswerClassIndexIncrement}`;
+                } else {
+                   className = res.badge && res.badge.name && res.badge.won ? res.badge.name : '';
+                }
               }
               res.className = className;
               res.ansStatus = true;
