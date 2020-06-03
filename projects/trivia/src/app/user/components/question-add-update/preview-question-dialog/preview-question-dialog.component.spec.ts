@@ -1,18 +1,14 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { PreviewQuestionDialogComponent } from './preview-question-dialog.component';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { provideMockStore, MockStore } from '@ngrx/store/testing';
 import { MatSnackBarModule } from '@angular/material';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/material';
 import { testData } from 'test/data';
-import { Game } from 'shared-library/shared/model';
 
 describe('PreviewQuestionDialogComponent', () => {
 
     let component: PreviewQuestionDialogComponent;
     let fixture: ComponentFixture<PreviewQuestionDialogComponent>;
-    const dbModel = Game.getViewModel(testData.games[0]);
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [PreviewQuestionDialogComponent],
