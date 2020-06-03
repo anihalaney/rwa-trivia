@@ -23,7 +23,8 @@ export const Games =  [
       '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
       'yP7sLu5TmYRUO9YT4tWrYLAqxSz1'
     ],
-    'nextTurnPlayerId': '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
+    'winnerPlayerId': 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1',
+    'nextTurnPlayerId': 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1',
     'gameOver': true,
     'playerQnAs': [
       {
@@ -296,6 +297,7 @@ export const Games =  [
       '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
       'yP7sLu5TmYRUO9YT4tWrYLAqxSz1'
     ],
+    'winnerPlayerId': 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1',
     'nextTurnPlayerId': '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
     'gameOver': true,
     'playerQnAs': [
@@ -558,7 +560,7 @@ export const Games =  [
       'isBadgeWithCategory': true,
       'isChallenge': false,
       'maxQuestions': 8,
-      'playerMode': 0,
+      'playerMode': 1,
       'rematch': true,
       'tags': [
 
@@ -567,6 +569,7 @@ export const Games =  [
     'playerIds': [
       '4kFa6HRvP5OhvYXsH9mEsRrXj4o2'
     ],
+    'winnerPlayerId': 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1',
     'nextTurnPlayerId': '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
     'gameOver': true,
     'playerQnAs': [
@@ -704,6 +707,7 @@ export const Games =  [
     'playerIds': [
       '4kFa6HRvP5OhvYXsH9mEsRrXj4o2'
     ],
+    'winnerPlayerId': 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1',
     'nextTurnPlayerId': '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
     'gameOver': true,
     'playerQnAs': [
@@ -766,6 +770,7 @@ export const Games =  [
     'playerIds': [
       '4kFa6HRvP5OhvYXsH9mEsRrXj4o2'
     ],
+    'winnerPlayerId': 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1',
     'nextTurnPlayerId': '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
     'gameOver': true,
     'playerQnAs': [
@@ -920,6 +925,7 @@ export const Games =  [
     'playerIds': [
       '4kFa6HRvP5OhvYXsH9mEsRrXj4o2'
     ],
+    'winnerPlayerId': 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1',
     'nextTurnPlayerId': '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
     'gameOver': true,
     'playerQnAs': [
@@ -1069,6 +1075,7 @@ export const Games =  [
     'playerIds': [
       '4kFa6HRvP5OhvYXsH9mEsRrXj4o2'
     ],
+    'winnerPlayerId': 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1',
     'nextTurnPlayerId': '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
     'gameOver': true,
     'playerQnAs': [
@@ -1159,7 +1166,7 @@ export const Games =  [
       }
     ],
     'gameId': 'WDX3q3509ZVHcL1R1XS3',
-    'GameStatus': 'completed',
+    'GameStatus': 'joined opponent',
     'createdAt': 1587368863000,
     'turnAt': 1587368912000,
     'gameOverAt': 1587368913000,
@@ -1205,6 +1212,7 @@ export const Games =  [
     'playerIds': [
       '4kFa6HRvP5OhvYXsH9mEsRrXj4o2'
     ],
+    'winnerPlayerId': 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1',
     'nextTurnPlayerId': '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
     'gameOver': true,
     'playerQnAs': [
@@ -1360,6 +1368,7 @@ export const Games =  [
       '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
       'yP7sLu5TmYRUO9YT4tWrYLAqxSz1'
     ],
+    'winnerPlayerId': 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1',
     'nextTurnPlayerId': 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1',
     'gameOver': true,
     'playerQnAs': [
@@ -1431,6 +1440,7 @@ export const Games =  [
     'playerIds': [
       '4kFa6HRvP5OhvYXsH9mEsRrXj4o2'
     ],
+    'winnerPlayerId': 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1',
     'nextTurnPlayerId': '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
     'gameOver': true,
     'playerQnAs': [
@@ -1568,6 +1578,7 @@ export const Games =  [
     'playerIds': [
       '4kFa6HRvP5OhvYXsH9mEsRrXj4o2'
     ],
+    'winnerPlayerId': 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1',
     'nextTurnPlayerId': '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
     'gameOver': true,
     'playerQnAs': [
@@ -1630,6 +1641,7 @@ export const Games =  [
     'playerIds': [
       '4kFa6HRvP5OhvYXsH9mEsRrXj4o2'
     ],
+    'winnerPlayerId': 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1',
     'nextTurnPlayerId': '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
     'gameOver': true,
     'playerQnAs': [
@@ -1784,6 +1796,7 @@ export const Games =  [
     'playerIds': [
       '4kFa6HRvP5OhvYXsH9mEsRrXj4o2'
     ],
+    'winnerPlayerId': 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1',
     'nextTurnPlayerId': '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
     'gameOver': true,
     'playerQnAs': [
@@ -1933,6 +1946,7 @@ export const Games =  [
     'playerIds': [
       '4kFa6HRvP5OhvYXsH9mEsRrXj4o2'
     ],
+    'winnerPlayerId': 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1',
     'nextTurnPlayerId': '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
     'gameOver': true,
     'playerQnAs': [
@@ -2069,6 +2083,7 @@ export const Games =  [
     'playerIds': [
       '4kFa6HRvP5OhvYXsH9mEsRrXj4o2'
     ],
+    'winnerPlayerId': '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
     'nextTurnPlayerId': '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
     'gameOver': true,
     'playerQnAs': [
@@ -2224,6 +2239,7 @@ export const Games =  [
       '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
       'yP7sLu5TmYRUO9YT4tWrYLAqxSz1'
     ],
+    'winnerPlayerId': '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
     'nextTurnPlayerId': 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1',
     'gameOver': true,
     'playerQnAs': [

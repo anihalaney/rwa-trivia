@@ -16,12 +16,12 @@ import * as lodash from 'lodash';
 
 @AutoUnsubscribe({ arrayName: 'subscriptions' })
 export class Dashboard implements OnDestroy {
-  START_A_NEW_GAME = "Start New Game";
-  NEW_GAME_IN = "New Game In";
-  SINGLE_PLAYER = "Single Player";
-  TWO_PLAYER = "Two Player";
-  actionText = "Hi, there!";
-  actionSubText = "SIGN UP/SIGN IN";
+  START_A_NEW_GAME = 'Start New Game';
+  NEW_GAME_IN = 'New Game In';
+  SINGLE_PLAYER = 'Single Player';
+  TWO_PLAYER = 'Two Player';
+  actionText = 'Hi, there!';
+  actionSubText = 'SIGN UP/SIGN IN';
   user: User;
   users: User[];
   activeGames$: Observable<Game[]>;
@@ -67,10 +67,10 @@ export class Dashboard implements OnDestroy {
   startGame = this.START_A_NEW_GAME;
   cd: ChangeDetectorRef;
   serverCreatedTime: number;
-  photoUrl: "";
+  photoUrl: '';
   notifications = [];
   userCardType = userCardType;
-  categoryText = "";
+  categoryText = '';
   categoryDict: { [key: number]: Category };
   constructor(
     public store: Store<AppState>,
@@ -93,7 +93,7 @@ export class Dashboard implements OnDestroy {
     this.userDict$ = store
       .select(appState.coreState)
       .pipe(select(s => s.userDict));
-    this.photoUrl = this.utils.getImageUrl(this.user, 70, 60, "70X60");
+    this.photoUrl = this.utils.getImageUrl(this.user, 70, 60, '70X60');
 
     this.subscriptions.push(
       this.store
@@ -108,9 +108,9 @@ export class Dashboard implements OnDestroy {
           select(s => s.user),
           filter(u => {
             if (u === null) {
-              this.actionText = "Hi, there!";
-              this.actionSubText = "SIGN UP/SIGN IN";
-              this.timeoutLive = "";
+              this.actionText = 'Hi, there!';
+              this.actionSubText = 'SIGN UP/SIGN IN';
+              this.timeoutLive = '';
               this.cd.markForCheck();
               this.gamePlayBtnDisabled = false;
             }
@@ -123,40 +123,42 @@ export class Dashboard implements OnDestroy {
           })
         )
         .subscribe(user => {
-          this.ngZone.run(() => {
-            this.user = user;
-            this.photoUrl = this.utils.getImageUrl(this.user, 70, 60, "70X60");
-            this.actionText = `Hi ${this.user.displayName}`;
-            this.actionSubText = "";
+          if (user) {
+            this.ngZone.run(() => {
+              this.user = user;
+              this.photoUrl = this.utils.getImageUrl(this.user, 70, 60, '70X60');
+              this.actionText = `Hi ${this.user.displayName}`;
+              this.actionSubText = '';
 
-            let topicsList = [];
-            this.actionSubText = "";
-            if (this.user.tags && this.user.tags.length > 0) {
-              topicsList = [...this.user.tags];
-            }
+              let topicsList = [];
+              this.actionSubText = '';
+              if (this.user.tags && this.user.tags.length > 0) {
+                topicsList = [...this.user.tags];
+              }
 
-            if (
-              this.user.categoryIds &&
-              this.user.categoryIds.length > 0 &&
-              this.categoryDict
-            ) {
-              topicsList = [
-                ...topicsList,
-                ...this.user.categoryIds
-                  .map(id =>
-                    this.categoryDict[id] ? this.categoryDict[id].categoryName : ""
-                  )
-                  .filter(name => name !== "")
-              ];
-            }
-            this.actionSubText = topicsList.join(", ");
+              if (
+                this.user.categoryIds &&
+                this.user.categoryIds.length > 0 &&
+                this.categoryDict
+              ) {
+                topicsList = [
+                  ...topicsList,
+                  ...this.user.categoryIds
+                    .map(id =>
+                      this.categoryDict[id] ? this.categoryDict[id].categoryName : ''
+                    )
+                    .filter(name => name !== '')
+                ];
+              }
+              this.actionSubText = topicsList.join(', ');
 
-            this.showNewsCard =
-              this.user && this.user.isSubscribed ? false : true;
-            this.store.dispatch(this.gameActions.getActiveGames(this.user));
-            this.store.dispatch(this.userActions.loadGameInvites(this.user));
-            this.cd.markForCheck();
-          });
+              this.showNewsCard =
+                this.user && this.user.isSubscribed ? false : true;
+              this.store.dispatch(this.gameActions.getActiveGames(this.user));
+              this.store.dispatch(this.userActions.loadGameInvites(this.user));
+              this.cd.markForCheck();
+            });
+          }
         })
     );
 
@@ -178,7 +180,7 @@ export class Dashboard implements OnDestroy {
             ) {
               this.gamePlayBtnDisabled = false;
               if (this.timerSub) {
-                this.timeoutLive = "";
+                this.timeoutLive = '';
                 this.timerSub.unsubscribe();
               }
             }
@@ -186,7 +188,7 @@ export class Dashboard implements OnDestroy {
           if (account) {
             this.account = account;
             if (this.account && !this.account.enable) {
-              this.timeoutLive = "";
+              this.timeoutLive = '';
               if (
                 this.account &&
                 this.account.lives === 0 &&
@@ -224,60 +226,61 @@ export class Dashboard implements OnDestroy {
     );
     this.subscriptions.push(
       this.activeGames$.subscribe(games => {
-        this.activeGames = games;
-        this.cd.markForCheck();
-        this.singlePlayerCount = 0;
-        this.twoPlayerCount = 0;
-        this.theirTurnCount = 0;
-        this.waitingForOpponentCount = 0;
-        if (games.length > 0) {
-          if (
-            !(
-              isPlatformBrowser(this.platformId) === false &&
-              isPlatformServer(this.platformId) === false
-            )
-          ) {
-            this.screenWidth = this.windowRef.nativeWindow.innerWidth;
-            this.checkCardCountPerRow();
+        if (games) {
+          this.activeGames = games;
+          this.cd.markForCheck();
+          this.singlePlayerCount = 0;
+          this.twoPlayerCount = 0;
+          this.theirTurnCount = 0;
+          this.waitingForOpponentCount = 0;
+          if (games.length > 0) {
+            if (
+              !(
+                isPlatformBrowser(this.platformId) === false &&
+                isPlatformServer(this.platformId) === false
+              )
+            ) {
+              this.screenWidth = this.windowRef.nativeWindow.innerWidth;
+              this.checkCardCountPerRow();
+            }
+            this.activeGames.map(game => {
+              const playerIds = game.playerIds;
+
+              if (
+                Number(game.gameOptions.playerMode) ===
+                Number(PlayerMode.Single) &&
+                game.playerIds.length === 1
+              ) {
+                this.singlePlayerCount++;
+              }
+              if (
+                game.nextTurnPlayerId !== this.user.userId &&
+                game.GameStatus === GameStatus.WAITING_FOR_NEXT_Q
+              ) {
+                this.theirTurnCount++;
+              }
+
+              if (
+                Number(game.gameOptions.playerMode) ===
+                Number(PlayerMode.Opponent) &&
+                game.nextTurnPlayerId === this.user.userId
+              ) {
+                this.twoPlayerCount++;
+              }
+              // tslint:disable-next-line:max-line-length
+              if (
+                game.GameStatus === GameStatus.AVAILABLE_FOR_OPPONENT ||
+                game.GameStatus === GameStatus.JOINED_GAME ||
+                game.GameStatus ===
+                GameStatus.WAITING_FOR_FRIEND_INVITATION_ACCEPTANCE ||
+                game.GameStatus ===
+                GameStatus.WAITING_FOR_RANDOM_PLAYER_INVITATION_ACCEPTANCE
+              ) {
+                this.waitingForOpponentCount++;
+              }
+            });
+            this.showGames = true;
           }
-          this.activeGames.map(game => {
-            const playerIds = game.playerIds;
-
-            if (
-              Number(game.gameOptions.playerMode) ===
-              Number(PlayerMode.Single) &&
-              game.playerIds.length === 1
-            ) {
-              this.singlePlayerCount++;
-            }
-
-            if (
-              game.nextTurnPlayerId !== this.user.userId &&
-              game.GameStatus === GameStatus.WAITING_FOR_NEXT_Q
-            ) {
-              this.theirTurnCount++;
-            }
-
-            if (
-              Number(game.gameOptions.playerMode) ===
-              Number(PlayerMode.Opponent) &&
-              game.nextTurnPlayerId === this.user.userId
-            ) {
-              this.twoPlayerCount++;
-            }
-            // tslint:disable-next-line:max-line-length
-            if (
-              game.GameStatus === GameStatus.AVAILABLE_FOR_OPPONENT ||
-              game.GameStatus === GameStatus.JOINED_GAME ||
-              game.GameStatus ===
-              GameStatus.WAITING_FOR_FRIEND_INVITATION_ACCEPTANCE ||
-              game.GameStatus ===
-              GameStatus.WAITING_FOR_RANDOM_PLAYER_INVITATION_ACCEPTANCE
-            ) {
-              this.waitingForOpponentCount++;
-            }
-          });
-          this.showGames = true;
         }
       })
     );
@@ -290,20 +293,22 @@ export class Dashboard implements OnDestroy {
         .select(appState.coreState)
         .pipe(select(s => s.gameInvites))
         .subscribe(iGames => {
-          this.gameInvites = iGames;
-          this.friendCount = 0;
-          this.randomPlayerCount = 0;
-          iGames.map(iGame => {
-            if (
-              Number(iGame.gameOptions.opponentType) === OpponentType.Friend
-            ) {
-              this.friendCount++;
-            } else if (
-              Number(iGame.gameOptions.opponentType) === OpponentType.Random
-            ) {
-              this.randomPlayerCount++;
-            }
-          });
+          if (iGames) {
+            this.gameInvites = iGames;
+            this.friendCount = 0;
+            this.randomPlayerCount = 0;
+            iGames.map(iGame => {
+              if (
+                Number(iGame.gameOptions.opponentType) === OpponentType.Friend
+              ) {
+                this.friendCount++;
+              } else if (
+                Number(iGame.gameOptions.opponentType) === OpponentType.Random
+              ) {
+                this.randomPlayerCount++;
+              }
+            });
+          }
         })
     );
     this.gameInviteSliceStartIndex = 0;
@@ -314,7 +319,7 @@ export class Dashboard implements OnDestroy {
         .select(appState.coreState)
         .pipe(select(s => s.friendInvitations))
         .subscribe(invitations => {
-          if (invitations.length > 0) {
+          if (invitations && invitations.length > 0) {
             this.friendInvitations = invitations;
           }
         })
@@ -328,8 +333,10 @@ export class Dashboard implements OnDestroy {
         store.select(coreState).pipe(select(s => s.friendInvitations)),
         store.select(coreState).pipe(select(s => s.gameInvites))
       ]).subscribe((notify: any) => {
-        this.notifications = notify[0].concat(notify[1]);
-        this.cd.markForCheck();
+        if (notify[0] !== undefined && notify[1] !== undefined) {
+          this.notifications = notify[0].concat(notify[1]);
+          this.cd.markForCheck();
+        }
       })
     );
 
@@ -451,11 +458,11 @@ export class Dashboard implements OnDestroy {
                 );
               }
             } else {
-              let timeOut = "";
+              let timeOut = '';
               if (
                 this.account.lives !== this.applicationSettings.lives.max_lives
               ) {
-                timeOut = this.remainingMinutes + ":" + this.remainingSeconds;
+                timeOut = this.remainingMinutes + ':' + this.remainingSeconds;
               }
               this.timeoutLive = timeOut;
               this.cd.markForCheck();
