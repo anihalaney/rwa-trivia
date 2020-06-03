@@ -38,29 +38,16 @@ export class Login {
       switch (mode) {
         case 1:
           // Sign up
-          // tslint:disable-next-line:max-line-length
-          this.loginForm.get('confirmPassword').setValidators(Validators.compose([Validators.required, Validators.minLength(6)]));
-          this.loginForm.get('confirmPassword').updateValueAndValidity();
-          this.loginForm.get('tnc').setValidators(Validators.required);
-          this.loginForm.get('tnc').updateValueAndValidity();
+          this.setValidatorForSingUp();
           break;
         // no break - fall thru
         case 0:
           // Login or Sign up
-          this.loginForm.get('confirmPassword').clearValidators();
-          this.loginForm.get('tnc').clearValidators();
-          this.loginForm.get('password').setValidators(Validators.compose([Validators.required, Validators.minLength(6)]));
-          this.loginForm.get('password').updateValueAndValidity();
-          this.loginForm.get('confirmPassword').updateValueAndValidity();
+          this.setValidatorForLogin();
           break;
         default:
           // Forgot Password
-          this.loginForm.get('password').clearValidators();
-          this.loginForm.get('confirmPassword').clearValidators();
-          this.loginForm.get('tnc').clearValidators();
-          this.loginForm.get('confirmPassword').updateValueAndValidity();
-          this.loginForm.get('password').updateValueAndValidity();
-          this.loginForm.get('tnc').updateValueAndValidity();
+          this.setValidatorForForgotPassword();
 
       }
       this.loginForm.get('password').updateValueAndValidity();
@@ -79,11 +66,37 @@ export class Login {
     }));
   }
 
-  phoneSignIn() {
+
+  setValidatorForLogin() {
+    this.loginForm.get('confirmPassword').clearValidators();
+    this.loginForm.get('tnc').clearValidators();
+    this.loginForm.get('password').setValidators(Validators.compose([Validators.required, Validators.minLength(6)]));
+    this.loginForm.get('password').updateValueAndValidity();
+    this.loginForm.get('confirmPassword').updateValueAndValidity();
+  }
+
+
+  setValidatorForSingUp() {
+    this.loginForm.get('confirmPassword').setValidators(Validators.compose([Validators.required, Validators.minLength(6)]));
+    this.loginForm.get('confirmPassword').updateValueAndValidity();
+    this.loginForm.get('tnc').setValidators(Validators.required);
+    this.loginForm.get('tnc').updateValueAndValidity();
+  }
+
+  setValidatorForForgotPassword() {
+    this.loginForm.get('password').clearValidators();
+    this.loginForm.get('confirmPassword').clearValidators();
+    this.loginForm.get('tnc').clearValidators();
+    this.loginForm.get('confirmPassword').updateValueAndValidity();
+    this.loginForm.get('password').updateValueAndValidity();
+    this.loginForm.get('tnc').updateValueAndValidity();
+  }
+
+  setPhoneSignIn() {
     this.signInMethod = 'phone';
   }
 
-  emailSignIn() {
+  setEmailSignIn() {
     this.signInMethod = 'email';
   }
 
