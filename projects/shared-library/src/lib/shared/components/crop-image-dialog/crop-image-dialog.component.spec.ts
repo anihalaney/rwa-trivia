@@ -131,7 +131,7 @@ describe('CropImageDialogComponent', () => {
     component.checkImageSize(cropImage);
     expect(component.getImageSize).toHaveBeenCalled();
     const imageSize = component.getImageSize(cropImage.image);
-    expect(component.errorMsg).toEqual(`Image size should be less than ${component.maxImageSize} KB`);
+    expect(component.errorMsg).toEqual(`Image size should be less than 0.5 KB`);
     });
 
   it('call to getImageSize should calculate the size of image', () => {
