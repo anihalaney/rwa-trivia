@@ -37,7 +37,7 @@ export class GameContinue implements OnInit {
   ) {
     this.user$ = this.store.select(appState.coreState).pipe(select(s => s.user));
     this.subscriptions.push(this.user$.subscribe(user => {
-      if (user !== null) {
+      if (user) {
         this.user = user;
         this.playerUserName = this.user.displayName;
       }

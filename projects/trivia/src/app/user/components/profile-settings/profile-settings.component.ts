@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, ViewChild, OnInit, PLATFORM_ID, Inject } from '@angular/core';
-import { FormBuilder, FormControl } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { AutoUnsubscribe } from 'shared-library/shared/decorators';
@@ -7,9 +7,8 @@ import { CropperSettings, ImageCropperComponent } from 'ngx-img-cropper';
 import { Subscription, Subject } from 'rxjs';
 import { Utils, WindowRef } from 'shared-library/core/services';
 import { coreState, UserActions } from 'shared-library/core/store';
-import { profileSettingsConstants, FirebaseAnalyticsKeyConstants, FirebaseAnalyticsEventConstants } from 'shared-library/shared/model';
+import { FirebaseAnalyticsKeyConstants, FirebaseAnalyticsEventConstants } from 'shared-library/shared/model';
 import { AppState } from '../../../store';
-import { userState } from '../../store';
 import { ProfileSettings } from './profile-settings';
 import { MatDialogRef, MatDialog } from '@angular/material';
 import { LocationResetDialogComponent } from './location-reset-dialog/location-reset-dialog.component';
@@ -54,7 +53,6 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnInit,
   ) {
 
     super(fb, store, userAction, utils, cd, route, router, authenticationProvider, platformId);
-
     // if (this.userType === 0) {
     this.setCropperSettings();
     this.setNotificationMsg('', false, 0);
@@ -189,46 +187,10 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnInit,
     this.userForm.updateValueAndValidity();
   }
 
-  setBulkUploadRequest(): void {
-    const userForm = this.userForm.value;
-    if (!userForm.name || !userForm.displayName || !userForm.location || !userForm.profilePicture) {
-      this.setNotificationMsg('Please add name, display name, location and profile picture for bulk upload request', true, 100);
-    } else {
-      this.user.bulkUploadPermissionStatus = profileSettingsConstants.NONE;
-      this.onSubmit();
-    }
-
-  }
-
-  // tags start
-  // Event Handlers
-  addTag() {
-    const tag = this.userForm.get('tags').value;
-    if (tag) {
-      if (this.enteredTags.indexOf(tag) < 0) {
-        this.enteredTags.push(tag);
-      }
-      this.userForm.get('tags').setValue('');
-    }
-    this.setTagsArray();
-  }
-
-  removeEnteredTag(tag) {
-    this.enteredTags = this.enteredTags.filter(t => t !== tag);
-    this.setTagsArray();
-  }
-
-  setTagsArray() {
-    this.tagsArray.controls = [];
-    this.enteredTags.forEach(tag => this.tagsArray.push(new FormControl(tag)));
-  }
-  // tags end
-
+  // Unit test issue - Cannot read property 'unsubscribe' of undefined (Line - 239 this.checkUserSubscriptions.unsubscribe())
   onSubmit(isEditSingleField = false, field = '') {
     // validations
     this.userForm.updateValueAndValidity();
-
-    // this.userForm.controls['displayName'].setErrors({ 'exist': false });
 
     if (this.profileImageFile) {
       this.assignImageValues();
@@ -274,7 +236,14 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnInit,
         }
 
         this.isValidDisplayName = null;
+        // This needs to be checked for unit test
+        // from unit test we refresh state which calls subscription in sync
+        // when it is called in sync this.checkUserSubscriptions is not defined yet
+        // normal execution , this does not happen as subscription callback function only called
+        // when store has value;
+        if (this.checkUserSubscriptions) {
         this.checkUserSubscriptions.unsubscribe();
+        }
       }
 
     });
@@ -293,9 +262,10 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnInit,
 
   }
 
+  // Unit test issue - navigator.geolocation found undefinde all time that's why function is not execute.
   getLocation() {
-    if (isPlatformBrowser(this.platformId) && navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition((position) => {
+    if (isPlatformBrowser(this.platformId) && this.windowRef.getNavigatorGeolocation()) {
+      this.windowRef.getNavigatorGeolocation().getCurrentPosition((position) => {
         this.store.dispatch(this.userAction.loadAddressUsingLatLong(`${position.coords.latitude},${position.coords.longitude}`));
         const latitude = position.coords.latitude;
         const longitude = position.coords.longitude;

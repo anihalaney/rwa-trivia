@@ -18,6 +18,8 @@ import { Question } from './question';
 import { QuestionOfTheDay } from './question-of-the-day';
 import { BulkUploads } from './bulk-uploads';
 import { CurrentQuestion } from './current-question';
+import { Countries } from './counties';
+
 
 export const testData = {
     categories: Categories,
@@ -38,6 +40,7 @@ export const testData = {
     question: Question,
     questionOfTheDay: QuestionOfTheDay,
     bulkUploads: BulkUploads,
-    currentQuestion: CurrentQuestion
+    currentQuestion: CurrentQuestion,
+    countries: Countries
 };
 
