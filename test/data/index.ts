@@ -18,6 +18,7 @@ import { Question } from './question';
 import { QuestionOfTheDay } from './question-of-the-day';
 import { BulkUploads } from './bulk-uploads';
 import { Countries } from './counties';
+import { UserAnsweredQuestion } from './userAnsweredQuestion';
 
 
 export const testData = {
@@ -39,6 +40,7 @@ export const testData = {
     question: Question,
     questionOfTheDay: QuestionOfTheDay,
     bulkUploads: BulkUploads,
-    countries: Countries
+    countries: Countries,
+    userAnsweredQuestion: UserAnsweredQuestion
 };
 
