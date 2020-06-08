@@ -12,7 +12,6 @@ const userData = testData.userList[0];
 
 describe('UserReducer: user', () => {
     const _testReducer = user;
-    // const userData: User = testData.userList[0];
 
     it('Initial State', () => {
         const state: User = _testReducer(undefined, { type: null, payload: null });
@@ -85,7 +84,6 @@ describe('UserReducer: authInitialized', () => {
     });
 
     it('Add user with roles', () => {
-        // const userData: User = testData.userList[0];
         const newState = _testReducer(true, { type: UserActions.ADD_USER_WITH_ROLES, payload: userData });
         expect(newState).toEqual(true);
     });
