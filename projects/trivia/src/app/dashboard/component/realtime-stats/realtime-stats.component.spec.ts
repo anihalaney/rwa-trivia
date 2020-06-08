@@ -77,4 +77,8 @@ describe('RealtimeStatsComponent', () => {
     it('Verify the systemStat is null initially', () => {
         expect(component.systemStats).toBe(undefined);
     });
+
+    afterEach(() => {
+        fixture.destroy();
+    });
 });

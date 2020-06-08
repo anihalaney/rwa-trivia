@@ -99,8 +99,6 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
             this.selectFriendId(this.challengerUserId);
           }
 
-          this.filteredTags$ = this.newGameForm.get('tagControl').valueChanges
-            .pipe(map(val => val.length > 0 ? this.filter(val) : []));
         }),
         flatMap(() => playerModeControl.valueChanges)
       ).subscribe(v => {
@@ -117,19 +115,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
 
   }
 
-  autoOptionClick(event) {
-    // Auto complete doesn't seem to have an event on selection of an entry
-    // tap into the change event of the input box and if the tag matches any entry in the tag list, then add to the selected tag list
-    // else wait for the user to click "Add" if they still want to add tags that are not on the list
 
-    const tag: string = event.srcElement.value;
-    const found = this.tags.find(t => t.toLowerCase() === tag.toLowerCase());
-
-    if (found) {
-      this.addTagToSelectedList(found);
-      this.newGameForm.get('tagControl').setValue('');
-    }
-  }
   addTagToSelectedList(tag: string) {
     if (tag && tag !== '' && this.selectedTags.filter((res) => res.toLowerCase() === tag.toLowerCase()).length === 0) {
       this.selectedTags.push(tag);
@@ -210,7 +196,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     gameOptions.opponentType = (formValue.opponentType) ? formValue.opponentType : null;
     gameOptions.categoryIds = this.selectedCategories;
     gameOptions.gameMode = GameMode.Normal;
-    gameOptions.tags = this.topTags.filter(c => c.requiredForGamePlay || c.isSelected).map(c => c.key);
+    gameOptions.tags = this.topTags ? this.topTags.filter(c => c.requiredForGamePlay || c.isSelected).map(c => c.key) : [];
     gameOptions.isChallenge = formValue.isChallenge;
 
     return gameOptions;
