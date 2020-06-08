@@ -20,6 +20,7 @@ import { TopTags } from './top-tags';
 import { Accounts } from './accounts';
 import { NewGameFilteredCategories } from './new-game-filtered-categories';
 import { BulkUploads } from './bulk-uploads';
+import { file } from './file';
 import { Countries } from './counties';
 
 
@@ -45,6 +46,7 @@ export const testData = {
     invitation: Invitation,
     question: Question,
     bulkUploads: BulkUploads,
+    file: file,
     countries: Countries
 };
 

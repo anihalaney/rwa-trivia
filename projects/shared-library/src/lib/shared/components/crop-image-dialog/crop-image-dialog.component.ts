@@ -1,8 +1,5 @@
-import { Component, OnInit, Renderer2, ChangeDetectionStrategy, OnDestroy, ViewChild, ChangeDetectorRef } from '@angular/core';
-import { take } from 'rxjs/operators';
-import { Store } from '@ngrx/store';
+import { Component, OnInit, ChangeDetectionStrategy, OnDestroy, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { User } from 'shared-library/shared/model';
-import { Utils } from 'shared-library/core/services';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { Inject } from '@angular/core';
 import { AutoUnsubscribe } from 'shared-library/shared/decorators';
@@ -24,21 +21,19 @@ export class CropImageDialogComponent implements OnInit, OnDestroy {
   subscriptions = [];
   cropperSettings: CropperSettings;
   profileImageFile: File;
-  cropImage: { image: any } = { image: '/assets/images/default-avatar-small.png' };;
+  cropImage: { image: any } = { image: '/assets/images/default-avatar-small.png' };
   image: any = {};
   errorMsg = '';
   maxImageSize: number;
-
   @ViewChild('cropper', { static: false }) cropper: ImageCropperComponent;
 
-  constructor(@Inject(MAT_DIALOG_DATA) private data: any,
+  constructor(@Inject(MAT_DIALOG_DATA) public data: any,
     public cd: ChangeDetectorRef,
     public dialogRef: MatDialogRef<CropImageDialogComponent>) {
     this.setCropperSettings();
   }
 
   ngOnInit() {
-
     this.maxImageSize = this.data.applicationSettings.max_image_size_of_question;
     this.image = new Image();
     this.profileImageFile = this.data.file;
@@ -51,7 +46,7 @@ export class CropImageDialogComponent implements OnInit, OnDestroy {
     reader.readAsDataURL(this.profileImageFile);
   }
 
-  private setCropperSettings() {
+  setCropperSettings() {
     this.cropperSettings = new CropperSettings();
     this.cropperSettings.noFileInput = true;
     this.cropperSettings.width = 150;
@@ -69,7 +64,7 @@ export class CropImageDialogComponent implements OnInit, OnDestroy {
   }
 
   closeModel() {
-    this.ref.close();
+    this.dialogRef.close();
   }
 
   ngOnDestroy() {
@@ -85,11 +80,11 @@ export class CropImageDialogComponent implements OnInit, OnDestroy {
     // Convert image into base64
     const reader = new FileReader();
     const file = this.data.file;
-    reader.readAsDataURL(file);
     reader.onload = (fileReader) => {
       base64File = { image: fileReader.target['result'] };
       this.checkImageSize(base64File);
     };
+    reader.readAsDataURL(file);
   }
 
   getImageSize(base64File) {
@@ -106,3 +101,4 @@ export class CropImageDialogComponent implements OnInit, OnDestroy {
     }
   }
 }
+
