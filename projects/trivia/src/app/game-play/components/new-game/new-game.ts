@@ -6,10 +6,10 @@ import { GameActions, UserActions, TagActions } from 'shared-library/core/store/
 import { Category, GameOptions, User, ApplicationSettings, PlayerMode, OpponentType, userCardType } from 'shared-library/shared/model';
 import { Utils, WindowRef } from 'shared-library/core/services';
 import { AppState, appState } from '../../../store';
-import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 import { OnDestroy, ChangeDetectorRef, PLATFORM_ID, Inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { isPlatformBrowser } from '@angular/common';
+import cloneDeep from 'lodash/cloneDeep';
 
 
 export class NewGame {
@@ -35,7 +35,7 @@ export class NewGame {
   loaderStatus = false;
   userCardType = userCardType;
   filteredCategories: Category[];
-  selectedCategories: number[];
+  selectedCategories: number[] = [];
   routeType = '';
   topTagsObs: Observable<any[]>;
   topTags = [];
@@ -51,7 +51,7 @@ export class NewGame {
     public route: ActivatedRoute,
     public router: Router,
     public tagActions: TagActions) {
-    this.categoriesObs = store.select(appState.coreState).pipe(select(s => s.categories), take(1));
+    this.categoriesObs = store.select(appState.coreState).pipe(select(s => s.categories));
     this.tagsObs = store.select(appState.coreState).pipe(select(s => s.tags));
     this.store.dispatch(this.tagActions.loadTopTags());
     this.topTagsObs = this.store.select(appState.coreState).pipe(select(s => s.getTopTags));
@@ -66,38 +66,38 @@ export class NewGame {
         this.router.url.indexOf('play-game-with-random-user') >= 0 ? 'play-game-with-random-user' : '');
     this.subscriptions.push(this.route.params.pipe(map(data => challengerUserId = data.userid),
       switchMap(() => this.topTagsObs.pipe(map(topTags => {
-        this.topTags = topTags;
-        this.topTags.map((tag: any) => {
-          tag.requiredForGamePlay = false;
-          tag.isSelected = false;
-        });
+        this.topTags = cloneDeep(topTags);
+        if (topTags) {
+          this.topTags.map((tag: any) => {
+            tag.requiredForGamePlay = false;
+            tag.isSelected = false;
+          });
+        }
         this.cd.markForCheck();
       }) )),
       switchMap(() => this.store.select(appState.coreState).pipe(select(s => s.user)))).subscribe(user => {
         if (user) {
           this.user = user;
-          if (this.user.tags && this.user.tags.length > 0) {
+          if (this.user.tags && this.user.tags.length > 0 && this.topTags) {
             this.selectedTags = this.user.tags;
             this.topTags.map(data => {
                 if (this.user.tags.indexOf(data.key) >= 0) {
                     data.isSelected = true;
                 }
             });
-          } else if (this.user.lastGamePlayOption && this.user.lastGamePlayOption.tags.length > 0) {
+          } else if (this.user.lastGamePlayOption && this.user.lastGamePlayOption.tags.length > 0 && this.topTags) {
             this.topTags.map(data => {
                 if (this.user.lastGamePlayOption.tags.indexOf(data.key) >=0 ) {
                     data.isSelected = true;
                 }
             });
           }
-          if (!challengerUserId || (challengerUserId && this.routeType !== 'challenge')) {
-            this.store.dispatch(this.userActions.loadUserFriends(user.userId));
-          }
         }
       }));
 
 
-    this.store.select(appState.coreState).pipe(select(s => s.applicationSettings), take(1),
+    this.store.select(appState.coreState).pipe(select(s => s.applicationSettings),
+      skipWhile(applicationSettings => !applicationSettings), take(1),
       map(appSettings => {
         if (appSettings) {
           this.applicationSettings = appSettings[0];
@@ -108,7 +108,7 @@ export class NewGame {
       }),
       flatMap(() => this.store.select(appState.coreState).pipe(select(s => s.account),
         skipWhile(account => !account), take(1), map(account => this.life = account.lives)))).subscribe(data => {
-          if (this.applicationSettings) {
+          if (this.applicationSettings && this.categories) {
             this.selectedCategories = [];
             let filteredCategories = [];
             if (this.applicationSettings && this.applicationSettings.game_play_categories) {
@@ -138,18 +138,23 @@ export class NewGame {
 
 
     this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.userFriends)).subscribe((uFriends: any) => {
-      if (uFriends) {
-        this.uFriends = [];
-        uFriends.map(friend => {
-          if (challengerUserId === friend.userId) {
-            this.uFriends = [friend, ...this.uFriends];
-          } else {
-            this.uFriends = [...this.uFriends, friend];
+      if (this.user) {
+        if (uFriends) {
+          this.uFriends = [];
+          uFriends.map(friend => {
+            if (challengerUserId === friend.userId) {
+              this.uFriends = [friend, ...this.uFriends];
+            } else {
+              this.uFriends = [...this.uFriends, friend];
+            }
+          });
+          this.noFriendsStatus = false;
+        } else {
+          if (this.noFriendsStatus !== true && !challengerUserId || (challengerUserId && this.routeType !== 'challenge')) {
+            this.store.dispatch(this.userActions.loadUserFriends(this.user.userId));
           }
-        });
-        this.noFriendsStatus = false;
-      } else {
-        this.noFriendsStatus = true;
+          this.noFriendsStatus = true;
+        }
       }
       this.cd.markForCheck();
     }));
@@ -206,8 +211,10 @@ export class NewGame {
           if (isPlatformBrowser(this.platformId) && this.windowRef && this.windowRef.nativeWindow && this.windowRef.nativeWindow.scrollTo) {
             this.windowRef.nativeWindow.scrollTo(0, 0);
           }
+          return false;
         }
       }
+
       return true;
     } else if (isMobile) {
       return true;
