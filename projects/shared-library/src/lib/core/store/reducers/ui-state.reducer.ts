@@ -1,6 +1,3 @@
-import { Observable } from 'rxjs';
-import { Action } from '@ngrx/store';
-
 import { ActionWithPayload, UIStateActions } from '../actions';
 
 export function loginRedirectUrl(state: any = null, action: ActionWithPayload<string>): string {
@@ -10,7 +7,7 @@ export function loginRedirectUrl(state: any = null, action: ActionWithPayload<st
     default:
       return state;
   }
-};
+}
 
 export function resetPasswordLogs(state: any = [], action: ActionWithPayload<string[]>): string[] {
   switch (action.type) {
@@ -19,6 +16,4 @@ export function resetPasswordLogs(state: any = [], action: ActionWithPayload<str
     default:
       return state;
   }
-};
-
-
+}
