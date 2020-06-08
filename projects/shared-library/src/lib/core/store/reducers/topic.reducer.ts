@@ -1,6 +1,3 @@
-import { Observable } from 'rxjs';
-import { Action } from '@ngrx/store';
-
 import { ActionWithPayload, TopicActions } from '../actions';
 import { Topic } from '../../../shared/model';
 
