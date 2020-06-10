@@ -61,16 +61,22 @@ export class AppComponent implements OnInit, OnDestroy {
           this.router.navigate([url]);
         }
 
+        // it is required to ensure when computer recover from hibernation
+        // previous interval is clear
+        if (this.intervalSubscription) {
+          this.intervalSubscription.unsubscribe();
+        }
+
         this.intervalSubscription = interval(1000 * 60 * 1)
-        .subscribe(val => {
-          // we are setting user online after every minute
-          // as user may be online from other browser and he may have closed it
-          // as we do not track web user based on token so for web only have status
-          this.authService.setUserOnline();
-          return val;
-        });
-      this.authService.updateUserConnection();
-      this.subscriptions.push(this.intervalSubscription);
+          .subscribe(val => {
+            // we are setting user online after every minute
+            // as user may be online from other browser and he may have closed it
+            // as we do not track web user based on token so for web only have status
+            this.authService.setUserOnline();
+            return val;
+          });
+        this.authService.updateUserConnection();
+        this.subscriptions.push(this.intervalSubscription);
 
       } else {
         // user logs out then redirect to home page
