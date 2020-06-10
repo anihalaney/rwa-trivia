@@ -62,16 +62,15 @@ export class AppComponent implements OnInit, OnDestroy {
         }
 
         this.intervalSubscription = interval(1000 * 60 * 1)
-          .subscribe(val => {
-            const userStatus: UserStatus = new UserStatus();
-            userStatus.userId = this.user.userId;
-            userStatus.online = true;
-            userStatus.lastUpdated = new Date().getTime();
-            this.authService.updateUserConnection();
-            return val;
-          });
-        this.authService.updateUserConnection();
-        this.subscriptions.push(this.intervalSubscription);
+        .subscribe(val => {
+          // we are setting user online after every minute
+          // as user may be online from other browser and he may have closed it
+          // as we do not track web user based on token so for web only have status
+          this.authService.setUserOnline();
+          return val;
+        });
+      this.authService.updateUserConnection();
+      this.subscriptions.push(this.intervalSubscription);
 
       } else {
         // user logs out then redirect to home page
