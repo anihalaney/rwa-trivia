@@ -1,4 +1,5 @@
 module.exports = {
+    setupFiles: ["jest-canvas-mock"],
     collectCoverage: true,
     coverageReporters: ['html', 'text-summary'],
     moduleNameMapper: {

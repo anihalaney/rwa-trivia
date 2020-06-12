@@ -16,7 +16,11 @@ import { FriendsList } from './friends-list';
 import { Invitation } from './invitation';
 import { Question } from './question';
 import { QuestionOfTheDay } from './question-of-the-day';
+import { TopTags } from './top-tags';
+import { Accounts } from './accounts';
+import { NewGameFilteredCategories } from './new-game-filtered-categories';
 import { BulkUploads } from './bulk-uploads';
+import { file } from './file';
 import { Countries } from './counties';
 import { UserAnsweredQuestion } from './userAnsweredQuestion';
 
@@ -35,12 +39,18 @@ export const testData = {
     leaderBoard: LeaderBoard,
     topTopics: TopTopics,
     userDict: UserDict,
+    questionOfTheDay : QuestionOfTheDay,
+    getTopTags: TopTags,
+    accounts: Accounts,
+    newGameFilteredCategories: NewGameFilteredCategories,
     friendsList: FriendsList,
     invitation: Invitation,
     question: Question,
-    questionOfTheDay: QuestionOfTheDay,
     bulkUploads: BulkUploads,
     countries: Countries,
-    userAnsweredQuestion: UserAnsweredQuestion
+    userAnsweredQuestion: UserAnsweredQuestion,
+    file: file,
+    countries: Countries
+
 };
 
