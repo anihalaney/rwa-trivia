@@ -61,8 +61,8 @@ export class AppComponent implements OnInit, OnDestroy {
           this.router.navigate([url]);
         }
 
-        // it is required to ensure when computer recover from hibernation
-        // previous interval is clear
+        // it is required to ensure when user is updated in store
+        // we do not want to create another interval
         if (this.intervalSubscription) {
           this.intervalSubscription.unsubscribe();
         }
