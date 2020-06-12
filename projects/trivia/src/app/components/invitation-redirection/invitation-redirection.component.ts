@@ -21,7 +21,7 @@ export class InvitationRedirectionComponent implements OnInit, OnDestroy {
     @Input() user: User;
     subscriptions = [];
 
-    constructor(private activatedRoute: ActivatedRoute, private router: Router, private store: Store<AppState>,
+    constructor(private activatedRoute: ActivatedRoute, public router: Router, private store: Store<AppState>,
         private userAction: UserActions) {
         this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
             this.user = user;

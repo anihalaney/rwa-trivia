@@ -12,7 +12,7 @@ import { MatDialogRef } from '@angular/material/dialog';
 export class LocationResetDialogComponent {
 
 
-  constructor(private dialogRef: MatDialogRef<LocationResetDialogComponent>) {
+  constructor(public dialogRef: MatDialogRef<LocationResetDialogComponent>) {
   }
   closeModel() {
     this.dialogRef.close();
