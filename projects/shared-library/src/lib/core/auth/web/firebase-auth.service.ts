@@ -17,6 +17,7 @@ export class WebFirebaseAuthService implements FirebaseAuthService {
 
     dialogRef: MatDialogRef<LoginComponent>;
     private user: User;
+    private isUserOnline = false;
 
     constructor(protected afAuth: AngularFireAuth,
         public router: Router,
@@ -66,7 +67,7 @@ export class WebFirebaseAuthService implements FirebaseAuthService {
         await this.afAuth.auth.signOut();
         this.router.navigate(['dashboard']);
         if (isPlatformBrowser(this.platformId)) {
-             this.windowsRef.nativeWindow.location.reload();
+            this.windowsRef.nativeWindow.location.reload();
         }
     }
 
@@ -107,7 +108,7 @@ export class WebFirebaseAuthService implements FirebaseAuthService {
         return this.afAuth.auth.signInWithPopup(new firebase.auth.GithubAuthProvider());
     }
 
-    public appleLogin(): Promise<any>{
+    public appleLogin(): Promise<any> {
         const auth = firebase.auth();
         const provider = new firebase.auth.OAuthProvider('apple.com');
         return auth.signInWithPopup(provider);
@@ -129,20 +130,30 @@ export class WebFirebaseAuthService implements FirebaseAuthService {
         this.user = user;
         this.db.object(`${CollectionConstants.INFO}/${CollectionConstants.CONNECTED}`)
             .valueChanges().subscribe(connected => {
-                const status = connected ? UserStatusConstants.ONLINE : UserStatusConstants.OFFLINE;
-                this.updateTokenStatus(user.userId, UserStatusConstants.ONLINE);
-                this.updateOnDisconnect(user.userId);
+                this.isUserOnline = connected ? true : false;
+                if (!this.isUserOnline) {
+                    // Instead of simply returning, we'll also set Firestore's state
+                    // to 'offline'. This ensures that our Firestore cache is aware
+                    // of the switch to 'offline.'
+                    this.updateTokenStatus(user.userId, UserStatusConstants.OFFLINE);
+                    return;
+                }
+                this.updateOnDisconnect(user);
             });
     }
 
-    private updateOnDisconnect(userId: string) {
-        this.db.database.ref(`${CollectionConstants.USERS}/${userId}`)
+    private updateOnDisconnect(user: User) {
+        this.db.database.ref(`${CollectionConstants.USERS}/${user.userId}`)
             .onDisconnect()
-            .update({ status: UserStatusConstants.OFFLINE });
+            .update({ status: UserStatusConstants.OFFLINE }).then(() => {
+                this.updateTokenStatus(user.userId, UserStatusConstants.ONLINE);
+            });
     }
 
     public updateTokenStatus(userId: string, status: string) {
-        this.db.object(`/${CollectionConstants.USERS}/${userId}`)
-            .set({ status, userId, device: TriggerConstants.WEB, lastUpdated: new Date().getTime() });
+        if (this.isUserOnline) {
+            this.db.object(`/${CollectionConstants.USERS}/${userId}`)
+                .set({ status, userId, device: TriggerConstants.WEB, lastUpdated: new Date().getTime() });
+        }
     }
 }
