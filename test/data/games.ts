@@ -230,8 +230,8 @@ export const Games =  [
       },
       {
         'playerId': '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
-        'questionId': '8QgcZTS0cQAokNG7oqQr',
-        'addedOn': 1587463775000,
+        'questionId': '0hLbLvyErepUWZvCh6wk',
+        'addedOn': 1590397424000,
         'playerAnswerId': '1',
         'playerAnswerInSeconds': 4,
         'answerCorrect': true,
@@ -2287,6 +2287,1372 @@ export const Games =  [
       }
     },
     'round': 1
+  },
+  {
+    'gameOptions': {
+      'categoryIds': [
+        1,
+        8,
+        2,
+        3,
+        4,
+        5,
+        7,
+        9
+      ],
+      'gameMode': 0,
+      'isChallenge': false,
+      'maxQuestions': 8,
+      'opponentType': 0,
+      'playerMode': 1,
+      'tags': []
+    },
+    'playerIds': [
+      '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
+      'yP7sLu5TmYRUO9YT4tWrYLAqxSz1'
+    ],
+    'nextTurnPlayerId': '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
+    'gameOver': true,
+    'playerQnAs': [
+      {
+        'playerId': '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
+        'questionId': '0OpXYFZSk505ra1jW6fb',
+        'addedOn': 1587463516000,
+        'playerAnswerId': '0',
+        'playerAnswerInSeconds': 2,
+        'answerCorrect': true,
+        'round': 1,
+        'categoryId': [
+          5
+        ],
+        'badge': {
+          'name': 'scissors',
+          'won': true
+        },
+        'isReported': false
+      },
+      {
+        'playerId': '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
+        'questionId': 'T5NYSrY4BrlwI2j2zFz4',
+        'addedOn': 1587463525000,
+        'playerAnswerId': '1',
+        'playerAnswerInSeconds': 3,
+        'answerCorrect': true,
+        'round': 1,
+        'categoryId': [
+          2
+        ],
+        'badge': {
+          'name': 'paper',
+          'won': true
+        },
+        'isReported': false
+      },
+      {
+        'playerId': '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
+        'questionId': '0POnDURRgIGOs9kU2nLH',
+        'addedOn': 1587463537000,
+        'playerAnswerId': '3',
+        'playerAnswerInSeconds': 1,
+        'answerCorrect': false,
+        'round': 1,
+        'categoryId': [
+          8
+        ],
+        'badge': {
+          'name': 'lizard',
+          'won': false
+        },
+        'isReported': false
+      },
+      {
+        'playerId': 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1',
+        'questionId': '3o2wdaX1HzBWtKZCLGi6',
+        'addedOn': 1587463593000,
+        'playerAnswerId': '2',
+        'playerAnswerInSeconds': 3,
+        'answerCorrect': true,
+        'round': 1,
+        'categoryId': [
+          8
+        ],
+        'badge': {
+          'name': 'lizard',
+          'won': true
+        },
+        'isReported': false
+      },
+      {
+        'playerId': 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1',
+        'questionId': '4h2XmfCQH1fVP7LtLN26',
+        'addedOn': 1587463604000,
+        'playerAnswerId': '0',
+        'playerAnswerInSeconds': 1,
+        'answerCorrect': false,
+        'round': 1,
+        'categoryId': [
+          2
+        ],
+        'badge': {
+          'name': 'rock',
+          'won': false
+        },
+        'isReported': false
+      },
+      {
+        'playerId': '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
+        'questionId': 'GkHDJPwUUYF8C57hBTfU',
+        'addedOn': 1587463649000,
+        'playerAnswerId': '1',
+        'playerAnswerInSeconds': 2,
+        'answerCorrect': true,
+        'round': 2,
+        'categoryId': [
+          3
+        ],
+        'badge': {
+          'name': 'rock',
+          'won': true
+        },
+        'isReported': false
+      },
+      {
+        'playerId': '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
+        'questionId': '7YPp6rOYJZ1LjUK0E3qy',
+        'addedOn': 1587463658000,
+        'playerAnswerId': '0',
+        'playerAnswerInSeconds': 2,
+        'answerCorrect': true,
+        'round': 2,
+        'categoryId': [
+          8
+        ],
+        'badge': {
+          'name': 'lizard',
+          'won': true
+        },
+        'isReported': false
+      },
+      {
+        'playerId': '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
+        'questionId': 'GMwmK5ckSoQuRXRpB0jb',
+        'addedOn': 1587463668000,
+        'playerAnswerId': '0',
+        'playerAnswerInSeconds': 2,
+        'answerCorrect': true,
+        'round': 2,
+        'categoryId': [
+          4
+        ],
+        'isReported': false
+      },
+      {
+        'playerId': '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
+        'questionId': 'gqyxSCBlWNIL3IUJnop1',
+        'addedOn': 1587463678000,
+        'playerAnswerId': '0',
+        'playerAnswerInSeconds': 2,
+        'answerCorrect': true,
+        'round': 2,
+        'categoryId': [
+          4
+        ],
+        'isReported': false
+      },
+      {
+        'playerId': '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
+        'questionId': 'NmK5ApBbcqV7t3JVZGTh',
+        'addedOn': 1587463686000,
+        'playerAnswerId': '1',
+        'playerAnswerInSeconds': 5,
+        'answerCorrect': false,
+        'round': 2,
+        'categoryId': [
+          4
+        ],
+        'isReported': false
+      },
+      {
+        'playerId': 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1',
+        'questionId': 'ZvRtEegq8CPySojR6RUd',
+        'addedOn': 1587463734000,
+        'playerAnswerId': '1',
+        'playerAnswerInSeconds': 2,
+        'answerCorrect': false,
+        'round': 2,
+        'categoryId': [
+          2
+        ],
+        'badge': {
+          'name': 'paper',
+          'won': false
+        },
+        'isReported': false
+      },
+      {
+        'playerId': '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
+        'questionId': 'USxShnwfA65wkxs2X9rY',
+        'addedOn': 1587463742000,
+        'playerAnswerId': '2',
+        'playerAnswerInSeconds': 1,
+        'answerCorrect': true,
+        'round': 3,
+        'categoryId': [
+          4
+        ],
+        'isReported': false
+      },
+      {
+        'playerId': '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
+        'questionId': '544BhjgXE070vNC0II5q',
+        'addedOn': 1587463751000,
+        'playerAnswerId': '1',
+        'playerAnswerInSeconds': 8,
+        'answerCorrect': true,
+        'round': 3,
+        'categoryId': [
+          4
+        ],
+        'isReported': false
+      },
+      {
+        'playerId': '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
+        'questionId': '8QgcZTS0cQAokNG7oqQr',
+        'addedOn': 1587463775000,
+        'playerAnswerId': '1',
+        'playerAnswerInSeconds': 4,
+        'answerCorrect': true,
+        'round': 3,
+        'categoryId': [
+          9
+        ],
+        'isReported': false
+      }
+    ],
+    'gameId': 'vTzY3HeUvy9lXxaGHa0d',
+    'id': 'vTzY3HeUvy9lXxaGHa0d',
+    'GameStatus': 'waiting for next question',
+    'createdAt': 1587463514000,
+    'turnAt': 1588206930838,
+    'gameOverAt': 1587463792000,
+    'reminder32Min': false,
+    'reminder8Hr': false,
+    'stats': {
+      '4kFa6HRvP5OhvYXsH9mEsRrXj4o2': {
+        'avgAnsTime': 2,
+        'badge': [
+          'scissors',
+          'paper',
+          'rock',
+          'lizard'
+        ],
+        'consecutiveCorrectAnswers': 1,
+        'score': 10
+      },
+      'yP7sLu5TmYRUO9YT4tWrYLAqxSz1': {
+        'avgAnsTime': 2,
+        'badge': [
+          'lizard'
+        ],
+        'consecutiveCorrectAnswers': 0,
+        'score': 1
+      }
+    },
+    'round': 3
+  },
+  {
+    'gameOptions': {
+      'categoryIds': [
+        1,
+        8,
+        2,
+        3,
+        4,
+        5,
+        7,
+        9
+      ],
+      'gameMode': 0,
+      'isBadgeWithCategory': true,
+      'isChallenge': false,
+      'maxQuestions': 8,
+      'opponentType': 0,
+      'playerMode': 1,
+      'tags': []
+    },
+    'playerIds': [
+      '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
+      'yP7sLu5TmYRUO9YT4tWrYLAqxSz1'
+    ],
+    'nextTurnPlayerId': '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
+    'gameOver': true,
+    'playerQnAs': [
+      {
+        'playerId': '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
+        'questionId': '0OpXYFZSk505ra1jW6fb',
+        'addedOn': 1587463516000,
+        'playerAnswerId': '0',
+        'playerAnswerInSeconds': 2,
+        'answerCorrect': true,
+        'round': 1,
+        'categoryId': [
+          5
+        ],
+        'badge': {
+          'name': 'scissors',
+          'won': true
+        },
+        'isReported': false
+      },
+      {
+        'playerId': '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
+        'questionId': 'T5NYSrY4BrlwI2j2zFz4',
+        'addedOn': 1587463525000,
+        'playerAnswerId': '1',
+        'playerAnswerInSeconds': 3,
+        'answerCorrect': true,
+        'round': 1,
+        'categoryId': [
+          2
+        ],
+        'badge': {
+          'name': 'paper',
+          'won': true
+        },
+        'isReported': false
+      },
+      {
+        'playerId': '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
+        'questionId': '0POnDURRgIGOs9kU2nLH',
+        'addedOn': 1587463537000,
+        'playerAnswerId': '3',
+        'playerAnswerInSeconds': 1,
+        'answerCorrect': true,
+        'round': 1,
+        'categoryId': [
+          8
+        ],
+        'isReported': false
+      },
+      {
+        'playerId': '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
+        'questionId': '3o2wdaX1HzBWtKZCLGi6',
+        'addedOn': 1587463593000,
+        'playerAnswerId': '2',
+        'playerAnswerInSeconds': 3,
+        'answerCorrect': true,
+        'round': 1,
+        'categoryId': [
+          8
+        ],
+        'badge': {
+          'name': 'lizard',
+          'won': true
+        },
+        'isReported': false
+      }
+    ],
+    'gameId': 'vTzY3HeUvy9lXxaGHa0d',
+    'id': 'vTzY3HeUvy9lXxaGHa0d',
+    'GameStatus': 'waiting for next question',
+    'createdAt': 1587463514000,
+    'turnAt': 1588206930838,
+    'gameOverAt': 1587463792000,
+    'reminder32Min': false,
+    'reminder8Hr': false,
+    'stats': {
+      '4kFa6HRvP5OhvYXsH9mEsRrXj4o2': {
+        'avgAnsTime': 2,
+        'badge': [
+          'scissors',
+          'paper',
+          'lizard'
+        ],
+        'consecutiveCorrectAnswers': 3,
+        'score': 3
+      },
+      'yP7sLu5TmYRUO9YT4tWrYLAqxSz1': {
+        'avgAnsTime': 2,
+        'badge': [
+        ],
+        'consecutiveCorrectAnswers': 0,
+        'score': 0
+      }
+    },
+    'round': 1
+  },
+  {
+    'gameOptions': {
+      'categoryIds': [
+        1,
+        8,
+        2,
+        3,
+        4,
+        5,
+        7,
+        9
+      ],
+      'gameMode': 0,
+      'isBadgeWithCategory': true,
+      'isChallenge': false,
+      'maxQuestions': 8,
+      'opponentType': 0,
+      'playerMode': 1,
+      'tags': []
+    },
+    'playerIds': [
+      '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
+      'yP7sLu5TmYRUO9YT4tWrYLAqxSz1'
+    ],
+    'nextTurnPlayerId': '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
+    'gameOver': true,
+    'playerQnAs': [
+      {
+        'playerId': '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
+        'questionId': '0OpXYFZSk505ra1jW6fb',
+        'addedOn': 1587463516000,
+        'playerAnswerId': '0',
+        'playerAnswerInSeconds': 2,
+        'answerCorrect': true,
+        'round': 1,
+        'categoryId': [
+          5
+        ],
+        'badge': {
+          'name': 'scissors',
+          'won': true
+        },
+        'isReported': false
+      },
+      {
+        'playerId': '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
+        'questionId': 'T5NYSrY4BrlwI2j2zFz4',
+        'addedOn': 1587463525000,
+        'playerAnswerId': '1',
+        'playerAnswerInSeconds': 3,
+        'answerCorrect': true,
+        'round': 1,
+        'categoryId': [
+          2
+        ],
+        'badge': {
+          'name': 'paper',
+          'won': true
+        },
+        'isReported': false
+      },
+      {
+        'playerId': '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
+        'questionId': '0POnDURRgIGOs9kU2nLH',
+        'addedOn': 1587463537000,
+        'playerAnswerId': '3',
+        'playerAnswerInSeconds': 1,
+        'answerCorrect': false,
+        'round': 1,
+        'categoryId': [
+          8
+        ],
+        'badge': {
+          'name': 'lizard',
+          'won': true
+        },
+        'isReported': false
+      },
+      {
+        'playerId': 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1',
+        'questionId': '3o2wdaX1HzBWtKZCLGi6',
+        'addedOn': 1587463593000,
+        'playerAnswerId': '2',
+        'playerAnswerInSeconds': 3,
+        'answerCorrect': true,
+        'round': 1,
+        'categoryId': [
+          8
+        ],
+        'badge': {
+          'name': 'lizard',
+          'won': true
+        },
+        'isReported': false
+      }
+    ],
+    'gameId': 'vTzY3HeUvy9lXxaGHa0d',
+    'id': 'vTzY3HeUvy9lXxaGHa0d',
+    'GameStatus': 'waiting for next question',
+    'createdAt': 1587463514000,
+    'turnAt': 1588206930838,
+    'gameOverAt': 1587463792000,
+    'reminder32Min': false,
+    'reminder8Hr': false,
+    'stats': {
+      '4kFa6HRvP5OhvYXsH9mEsRrXj4o2': {
+        'avgAnsTime': 2,
+        'badge': [
+          'scissors',
+          'paper',
+          'lizard'
+        ],
+        'consecutiveCorrectAnswers': 0,
+        'score': 2
+      },
+      'yP7sLu5TmYRUO9YT4tWrYLAqxSz1': {
+        'avgAnsTime': 2,
+        'badge': [
+          'lizard'
+        ],
+        'consecutiveCorrectAnswers': 1,
+        'score': 1
+      }
+    },
+    'round': 1
+  },
+  {
+    'gameOptions': {
+      'categoryIds': [
+        1,
+        8,
+        2,
+        3,
+        4,
+        5,
+        7,
+        9
+      ],
+      'gameMode': 0,
+      'isChallenge': false,
+      'maxQuestions': 8,
+      'opponentType': 0,
+      'playerMode': 1,
+      'tags': []
+    },
+    'playerIds': [
+      '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
+      'yP7sLu5TmYRUO9YT4tWrYLAqxSz1'
+    ],
+    'nextTurnPlayerId': '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
+    'gameOver': true,
+    'playerQnAs': [
+      {
+        'playerId': '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
+        'questionId': '0OpXYFZSk505ra1jW6fb',
+        'addedOn': 1587463516000,
+        'playerAnswerId': '0',
+        'playerAnswerInSeconds': 2,
+        'answerCorrect': true,
+        'round': 1,
+        'categoryId': [
+          5
+        ],
+        'isReported': false
+      },
+      {
+        'playerId': '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
+        'questionId': 'T5NYSrY4BrlwI2j2zFz4',
+        'addedOn': 1587463525000,
+        'playerAnswerId': '1',
+        'playerAnswerInSeconds': 3,
+        'answerCorrect': true,
+        'round': 1,
+        'categoryId': [
+          2
+        ],
+        'isReported': false
+      },
+      {
+        'playerId': '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
+        'questionId': '0POnDURRgIGOs9kU2nLH',
+        'addedOn': 1587463537000,
+        'playerAnswerId': '3',
+        'playerAnswerInSeconds': 1,
+        'answerCorrect': true,
+        'round': 1,
+        'categoryId': [
+          8
+        ],
+        'isReported': false
+      }
+    ],
+    'gameId': 'vTzY3HeUvy9lXxaGHa0d',
+    'id': 'vTzY3HeUvy9lXxaGHa0d',
+    'GameStatus': 'waiting for next question',
+    'createdAt': 1587463514000,
+    'turnAt': 1588206930838,
+    'gameOverAt': 1587463792000,
+    'reminder32Min': false,
+    'reminder8Hr': false,
+    'stats': {
+      '4kFa6HRvP5OhvYXsH9mEsRrXj4o2': {
+        'avgAnsTime': 2,
+        'consecutiveCorrectAnswers': 0,
+        'score': 3
+      },
+      'yP7sLu5TmYRUO9YT4tWrYLAqxSz1': {
+        'avgAnsTime': 2,
+        'consecutiveCorrectAnswers': 0,
+        'score': 0
+      }
+    },
+    'round': 1
+  },
+  {
+    'gameOptions': {
+      'categoryIds': [
+        1,
+        8,
+        2,
+        3,
+        4,
+        5,
+        7,
+        9
+      ],
+      'gameMode': 0,
+      'isChallenge': false,
+      'maxQuestions': 8,
+      'opponentType': 0,
+      'playerMode': 1,
+      'tags': []
+    },
+    'playerIds': [
+      '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
+      'yP7sLu5TmYRUO9YT4tWrYLAqxSz1'
+    ],
+    'nextTurnPlayerId': '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
+    'gameOver': true,
+    'playerQnAs': [
+      {
+        'playerId': '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
+        'questionId': '0OpXYFZSk505ra1jW6fb',
+        'addedOn': 1587463516000,
+        'playerAnswerId': '0',
+        'playerAnswerInSeconds': 2,
+        'answerCorrect': true,
+        'round': 1,
+        'categoryId': [
+          5
+        ],
+        'isReported': false
+      },
+      {
+        'playerId': '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
+        'questionId': 'T5NYSrY4BrlwI2j2zFz4',
+        'addedOn': 1587463525000,
+        'playerAnswerId': '1',
+        'playerAnswerInSeconds': 3,
+        'answerCorrect': true,
+        'round': 1,
+        'categoryId': [
+          2
+        ],
+        'isReported': false
+      },
+      {
+        'playerId': '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
+        'questionId': '0POnDURRgIGOs9kU2nLH',
+        'addedOn': 1587463537000,
+        'playerAnswerId': '3',
+        'playerAnswerInSeconds': 1,
+        'answerCorrect': false,
+        'round': 1,
+        'categoryId': [
+          8
+        ],
+        'isReported': false
+      }
+    ],
+    'gameId': 'vTzY3HeUvy9lXxaGHa0d',
+    'id': 'vTzY3HeUvy9lXxaGHa0d',
+    'GameStatus': 'waiting for next question',
+    'createdAt': 1587463514000,
+    'turnAt': 1588206930838,
+    'reminder32Min': false,
+    'reminder8Hr': false,
+    'stats': {
+      '4kFa6HRvP5OhvYXsH9mEsRrXj4o2': {
+        'avgAnsTime': 2,
+        'consecutiveCorrectAnswers': 0,
+        'score': 2
+      },
+      'yP7sLu5TmYRUO9YT4tWrYLAqxSz1': {
+        'avgAnsTime': 2,
+        'consecutiveCorrectAnswers': 0,
+        'score': 0
+      }
+    },
+    'round': 1
+  },
+  {
+    'gameOptions': {
+      'categoryIds': [
+        1,
+        8,
+        2,
+        3,
+        4,
+        5,
+        7,
+        9
+      ],
+      'gameMode': 0,
+      'isBadgeWithCategory': true,
+      'isChallenge': false,
+      'maxQuestions': 8,
+      'opponentType': 0,
+      'playerMode': 1,
+      'tags': []
+    },
+    'playerIds': [
+      '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
+      'yP7sLu5TmYRUO9YT4tWrYLAqxSz1'
+    ],
+    'nextTurnPlayerId': 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1',
+    'gameOver': true,
+    'playerQnAs': [
+      {
+        'playerId': '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
+        'questionId': '0OpXYFZSk505ra1jW6fb',
+        'addedOn': 1587463516000,
+        'playerAnswerId': '0',
+        'playerAnswerInSeconds': 2,
+        'answerCorrect': true,
+        'round': 1,
+        'categoryId': [
+          5
+        ],
+        'badge': {
+          'name': 'scissors',
+          'won': true
+        },
+        'isReported': false
+      },
+      {
+        'playerId': '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
+        'questionId': 'T5NYSrY4BrlwI2j2zFz4',
+        'addedOn': 1587463525000,
+        'playerAnswerId': '1',
+        'playerAnswerInSeconds': 3,
+        'answerCorrect': true,
+        'round': 1,
+        'categoryId': [
+          2
+        ],
+        'badge': {
+          'name': 'paper',
+          'won': true
+        },
+        'isReported': false
+      },
+      {
+        'playerId': '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
+        'questionId': '0POnDURRgIGOs9kU2nLH',
+        'addedOn': 1587463537000,
+        'playerAnswerId': '3',
+        'playerAnswerInSeconds': 1,
+        'answerCorrect': false,
+        'round': 1,
+        'categoryId': [
+          8
+        ],
+        'badge': {
+          'name': 'lizard',
+          'won': true
+        },
+        'isReported': false
+      },
+      {
+        'playerId': 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1',
+        'questionId': '3o2wdaX1HzBWtKZCLGi6',
+        'addedOn': 1587463593000,
+        'playerAnswerId': '2',
+        'playerAnswerInSeconds': 3,
+        'answerCorrect': true,
+        'round': 1,
+        'categoryId': [
+          8
+        ],
+        'badge': {
+          'name': 'lizard',
+          'won': true
+        },
+        'isReported': false
+      }
+    ],
+    'gameId': 'vTzY3HeUvy9lXxaGHa0d',
+    'id': 'vTzY3HeUvy9lXxaGHa0d',
+    'GameStatus': 'waiting for next question',
+    'createdAt': 1587463514000,
+    'turnAt': 1588206930838,
+    'gameOverAt': 1587463792000,
+    'reminder32Min': false,
+    'reminder8Hr': false,
+    'stats': {
+      '4kFa6HRvP5OhvYXsH9mEsRrXj4o2': {
+        'avgAnsTime': 2,
+        'badge': [
+          'scissors',
+          'paper',
+          'lizard'
+        ],
+        'consecutiveCorrectAnswers': 0,
+        'score': 2
+      },
+      'yP7sLu5TmYRUO9YT4tWrYLAqxSz1': {
+        'avgAnsTime': 2,
+        'badge': [
+          'lizard'
+        ],
+        'consecutiveCorrectAnswers': 1,
+        'score': 1
+      }
+    },
+    'round': 1
+  },
+  {
+    'gameOptions': {
+      'categoryIds': [
+        1,
+        8,
+        2,
+        3,
+        4,
+        5,
+        7,
+        9
+      ],
+      'gameMode': 0,
+      'isBadgeWithCategory': true,
+      'isChallenge': false,
+      'maxQuestions': 8,
+      'opponentType': 0,
+      'playerMode': 1,
+      'tags': []
+    },
+    'playerIds': [
+      '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
+      'yP7sLu5TmYRUO9YT4tWrYLAqxSz1'
+    ],
+    'nextTurnPlayerId': '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
+    'gameOver': true,
+    'playerQnAs': [
+      {
+        'playerId': '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
+        'questionId': '0OpXYFZSk505ra1jW6fb',
+        'addedOn': 1587463516000,
+        'playerAnswerId': '0',
+        'playerAnswerInSeconds': 2,
+        'answerCorrect': true,
+        'round': 1,
+        'categoryId': [
+          5
+        ],
+        'badge': {
+          'name': 'scissors',
+          'won': true
+        },
+        'isReported': false
+      },
+      {
+        'playerId': '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
+        'questionId': 'T5NYSrY4BrlwI2j2zFz4',
+        'addedOn': 1587463525000,
+        'playerAnswerId': '1',
+        'playerAnswerInSeconds': 3,
+        'answerCorrect': true,
+        'round': 1,
+        'categoryId': [
+          2
+        ],
+        'badge': {
+          'name': 'paper',
+          'won': true
+        },
+        'isReported': false
+      },
+      {
+        'playerId': '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
+        'questionId': '0POnDURRgIGOs9kU2nLH',
+        'addedOn': 1587463537000,
+        'playerAnswerId': '3',
+        'playerAnswerInSeconds': 1,
+        'answerCorrect': false,
+        'round': 1,
+        'categoryId': [
+          8
+        ],
+        'badge': {
+          'name': 'lizard',
+          'won': false
+        },
+        'isReported': false
+      },
+      {
+        'playerId': 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1',
+        'questionId': '3o2wdaX1HzBWtKZCLGi6',
+        'addedOn': 1587463593000,
+        'playerAnswerId': '2',
+        'playerAnswerInSeconds': 3,
+        'answerCorrect': true,
+        'round': 1,
+        'categoryId': [
+          8
+        ],
+        'badge': {
+          'name': 'lizard',
+          'won': true
+        },
+        'isReported': false
+      },
+      {
+        'playerId': 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1',
+        'questionId': '4h2XmfCQH1fVP7LtLN26',
+        'addedOn': 1587463604000,
+        'playerAnswerId': '0',
+        'playerAnswerInSeconds': 1,
+        'answerCorrect': false,
+        'round': 1,
+        'categoryId': [
+          2
+        ],
+        'badge': {
+          'name': 'rock',
+          'won': false
+        },
+        'isReported': false
+      },
+      {
+        'playerId': '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
+        'questionId': 'GkHDJPwUUYF8C57hBTfU',
+        'addedOn': 1587463649000,
+        'playerAnswerId': '1',
+        'playerAnswerInSeconds': 2,
+        'answerCorrect': true,
+        'round': 2,
+        'categoryId': [
+          3
+        ],
+        'badge': {
+          'name': 'rock',
+          'won': true
+        },
+        'isReported': false
+      },
+      {
+        'playerId': '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
+        'questionId': '7YPp6rOYJZ1LjUK0E3qy',
+        'addedOn': 1587463658000,
+        'playerAnswerId': '0',
+        'playerAnswerInSeconds': 2,
+        'answerCorrect': true,
+        'round': 2,
+        'categoryId': [
+          8
+        ],
+        'badge': {
+          'name': 'lizard',
+          'won': true
+        },
+        'isReported': false
+      },
+      {
+        'playerId': '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
+        'questionId': 'GMwmK5ckSoQuRXRpB0jb',
+        'addedOn': 1587463668000,
+        'playerAnswerId': '0',
+        'playerAnswerInSeconds': 2,
+        'answerCorrect': true,
+        'round': 2,
+        'categoryId': [
+          4
+        ],
+        'isReported': false
+      },
+      {
+        'playerId': '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
+        'questionId': 'gqyxSCBlWNIL3IUJnop1',
+        'addedOn': 1587463678000,
+        'playerAnswerId': '0',
+        'playerAnswerInSeconds': 2,
+        'answerCorrect': true,
+        'round': 2,
+        'categoryId': [
+          4
+        ],
+        'isReported': false
+      },
+      {
+        'playerId': '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
+        'questionId': 'NmK5ApBbcqV7t3JVZGTh',
+        'addedOn': 1587463686000,
+        'playerAnswerId': '1',
+        'playerAnswerInSeconds': 5,
+        'answerCorrect': false,
+        'round': 2,
+        'categoryId': [
+          4
+        ],
+        'isReported': false
+      },
+      {
+        'playerId': 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1',
+        'questionId': 'ZvRtEegq8CPySojR6RUd',
+        'addedOn': 1587463734000,
+        'playerAnswerId': '1',
+        'playerAnswerInSeconds': 2,
+        'answerCorrect': false,
+        'round': 2,
+        'categoryId': [
+          2
+        ],
+        'badge': {
+          'name': 'paper',
+          'won': false
+        },
+        'isReported': false
+      },
+      {
+        'playerId': '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
+        'questionId': 'USxShnwfA65wkxs2X9rY',
+        'addedOn': 1587463742000,
+        'playerAnswerId': '2',
+        'playerAnswerInSeconds': 1,
+        'answerCorrect': true,
+        'round': 3,
+        'categoryId': [
+          4
+        ],
+        'isReported': false
+      },
+      {
+        'playerId': '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
+        'questionId': '544BhjgXE070vNC0II5q',
+        'addedOn': 1587463751000,
+        'playerAnswerId': '1',
+        'playerAnswerInSeconds': 8,
+        'answerCorrect': true,
+        'round': 3,
+        'categoryId': [
+          4
+        ],
+        'isReported': false
+      },
+      {
+        'playerId': '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
+        'questionId': '8QgcZTS0cQAokNG7oqQr',
+        'addedOn': 1587463775000,
+        'playerAnswerId': '1',
+        'playerAnswerInSeconds': 4,
+        'answerCorrect': true,
+        'round': 3,
+        'categoryId': [
+          9
+        ],
+        'isReported': false
+      }
+    ],
+    'gameId': 'vTzY3HeUvy9lXxaGHa0d',
+    'id': 'vTzY3HeUvy9lXxaGHa0d',
+    'GameStatus': 'waiting for next question',
+    'createdAt': 1587463514000,
+    'turnAt': 1588206930838,
+    'gameOverAt': 1587463792000,
+    'reminder32Min': false,
+    'reminder8Hr': false,
+    'stats': {
+      '4kFa6HRvP5OhvYXsH9mEsRrXj4o2': {
+        'avgAnsTime': 2,
+        'badge': [
+          'scissors',
+          'paper',
+          'rock',
+          'lizard'
+        ],
+        'consecutiveCorrectAnswers': 1,
+        'score': 10
+      },
+      'yP7sLu5TmYRUO9YT4tWrYLAqxSz1': {
+        'avgAnsTime': 2,
+        'badge': [
+          'lizard'
+        ],
+        'consecutiveCorrectAnswers': 0,
+        'score': 1
+      }
+    },
+    'round': 3
+  },
+  {
+    'gameOptions': {
+      'categoryIds': [
+        1,
+        8,
+        2,
+        3,
+        4,
+        5,
+        7,
+        9
+      ],
+      'gameMode': 0,
+      'isBadgeWithCategory': true,
+      'isChallenge': false,
+      'maxQuestions': 8,
+      'opponentType': 0,
+      'playerMode': 1,
+      'tags': []
+    },
+    'playerIds': [
+      '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
+      'yP7sLu5TmYRUO9YT4tWrYLAqxSz1'
+    ],
+    'nextTurnPlayerId': '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
+    'gameOver': true,
+    'playerQnAs': [
+      {
+        'playerId': '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
+        'questionId': '0OpXYFZSk505ra1jW6fb',
+        'addedOn': 1587463516000,
+        'playerAnswerId': '0',
+        'playerAnswerInSeconds': 2,
+        'answerCorrect': true,
+        'round': 1,
+        'categoryId': [
+          5
+        ],
+        'badge': {
+          'name': 'scissors',
+          'won': true
+        },
+        'isReported': false
+      },
+      {
+        'playerId': '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
+        'questionId': 'T5NYSrY4BrlwI2j2zFz4',
+        'addedOn': 1587463525000,
+        'playerAnswerId': '1',
+        'playerAnswerInSeconds': 3,
+        'answerCorrect': true,
+        'round': 1,
+        'categoryId': [
+          2
+        ],
+        'badge': {
+          'name': 'paper',
+          'won': true
+        },
+        'isReported': false
+      },
+      {
+        'playerId': '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
+        'questionId': '0POnDURRgIGOs9kU2nLH',
+        'addedOn': 1587463537000,
+        'playerAnswerId': '3',
+        'playerAnswerInSeconds': 1,
+        'answerCorrect': false,
+        'round': 1,
+        'categoryId': [
+          8
+        ],
+        'badge': {
+          'name': 'lizard',
+          'won': false
+        },
+        'isReported': false
+      },
+      {
+        'playerId': 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1',
+        'questionId': '3o2wdaX1HzBWtKZCLGi6',
+        'addedOn': 1587463593000,
+        'playerAnswerId': '2',
+        'playerAnswerInSeconds': 3,
+        'answerCorrect': true,
+        'round': 1,
+        'categoryId': [
+          8
+        ],
+        'badge': {
+          'name': 'lizard',
+          'won': true
+        },
+        'isReported': false
+      },
+      {
+        'playerId': 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1',
+        'questionId': '4h2XmfCQH1fVP7LtLN26',
+        'addedOn': 1587463604000,
+        'playerAnswerId': '0',
+        'playerAnswerInSeconds': 1,
+        'answerCorrect': false,
+        'round': 1,
+        'categoryId': [
+          2
+        ],
+        'badge': {
+          'name': 'rock',
+          'won': false
+        },
+        'isReported': false
+      },
+      {
+        'playerId': '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
+        'questionId': 'GkHDJPwUUYF8C57hBTfU',
+        'addedOn': 1587463649000,
+        'playerAnswerId': '1',
+        'playerAnswerInSeconds': 2,
+        'answerCorrect': true,
+        'round': 2,
+        'categoryId': [
+          3
+        ],
+        'badge': {
+          'name': 'rock',
+          'won': true
+        },
+        'isReported': false
+      },
+      {
+        'playerId': '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
+        'questionId': '7YPp6rOYJZ1LjUK0E3qy',
+        'addedOn': 1587463658000,
+        'playerAnswerId': '0',
+        'playerAnswerInSeconds': 2,
+        'answerCorrect': true,
+        'round': 2,
+        'categoryId': [
+          8
+        ],
+        'badge': {
+          'name': 'lizard',
+          'won': true
+        },
+        'isReported': false
+      },
+      {
+        'playerId': '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
+        'questionId': 'GMwmK5ckSoQuRXRpB0jb',
+        'addedOn': 1587463668000,
+        'playerAnswerId': '0',
+        'playerAnswerInSeconds': 2,
+        'answerCorrect': true,
+        'round': 2,
+        'categoryId': [
+          4
+        ],
+        'isReported': false
+      },
+      {
+        'playerId': '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
+        'questionId': 'gqyxSCBlWNIL3IUJnop1',
+        'addedOn': 1587463678000,
+        'playerAnswerId': '0',
+        'playerAnswerInSeconds': 2,
+        'answerCorrect': true,
+        'round': 2,
+        'categoryId': [
+          4
+        ],
+        'isReported': false
+      },
+      {
+        'playerId': '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
+        'questionId': 'NmK5ApBbcqV7t3JVZGTh',
+        'addedOn': 1587463686000,
+        'playerAnswerId': '1',
+        'playerAnswerInSeconds': 5,
+        'answerCorrect': false,
+        'round': 2,
+        'categoryId': [
+          4
+        ],
+        'isReported': false
+      },
+      {
+        'playerId': 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1',
+        'questionId': 'ZvRtEegq8CPySojR6RUd',
+        'addedOn': 1587463734000,
+        'playerAnswerId': '1',
+        'playerAnswerInSeconds': 2,
+        'answerCorrect': false,
+        'round': 2,
+        'categoryId': [
+          2
+        ],
+        'badge': {
+          'name': 'paper',
+          'won': false
+        },
+        'isReported': false
+      },
+      {
+        'playerId': '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
+        'questionId': 'USxShnwfA65wkxs2X9rY',
+        'addedOn': 1587463742000,
+        'playerAnswerId': '2',
+        'playerAnswerInSeconds': 1,
+        'answerCorrect': true,
+        'round': 3,
+        'categoryId': [
+          4
+        ],
+        'isReported': false
+      },
+      {
+        'playerId': '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
+        'questionId': '544BhjgXE070vNC0II5q',
+        'addedOn': 1587463751000,
+        'playerAnswerId': '1',
+        'playerAnswerInSeconds': 8,
+        'answerCorrect': true,
+        'round': 3,
+        'categoryId': [
+          4
+        ],
+        'isReported': false
+      },
+      {
+        'playerId': '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
+        'questionId': '0hLbLvyErepUWZvCh6wk',
+        'addedOn': 1590397407000,
+        'playerAnswerId': '1',
+        'playerAnswerInSeconds': 4,
+        'answerCorrect': true,
+        'round': 3,
+        'categoryId': [
+          9
+        ],
+        'isReported': false
+      }
+    ],
+    'gameId': 'vTzY3HeUvy9lXxaGHa0d',
+    'id': 'vTzY3HeUvy9lXxaGHa0d',
+    'GameStatus': 'waiting for next question',
+    'createdAt': 1587463514000,
+    'turnAt': 1588206930838,
+    'gameOverAt': 1587463792000,
+    'reminder32Min': false,
+    'reminder8Hr': false,
+    'stats': {
+      '4kFa6HRvP5OhvYXsH9mEsRrXj4o2': {
+        'avgAnsTime': 2,
+        'badge': [
+          'scissors',
+          'paper',
+          'rock',
+          'lizard'
+        ],
+        'consecutiveCorrectAnswers': 1,
+        'score': 10
+      },
+      'yP7sLu5TmYRUO9YT4tWrYLAqxSz1': {
+        'avgAnsTime': 2,
+        'badge': [
+          'lizard'
+        ],
+        'consecutiveCorrectAnswers': 0,
+        'score': 1
+      }
+    },
+    'round': 3
   }
 ];
 
