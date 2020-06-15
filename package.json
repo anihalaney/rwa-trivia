@@ -4,7 +4,7 @@
   "license": "MIT",
   "angular-cli": {},
   "nativescript": {
-    "id": "${packageName}",
+    "id": "io.bitwiser.trivia.dev",
     "tns-android": {
       "version": "6.5.0"
     },
@@ -83,6 +83,7 @@
     "nativescript-ui-autocomplete": "^6.0.1",
     "nativescript-ui-listview": "^8.0.1",
     "nativescript-ui-sidedrawer": "^8.0.0",
+    "nativescript-unit-test-runner": "^0.7.0",
     "nativescript-webview-interface": "^1.4.3",
     "ng-quill-tex": "file:ng-quill-tex-0.0.1.tgz",
     "ngx-auto-unsubscribe": "^3.0.0",
@@ -107,7 +108,7 @@
     "@nativescript/schematics": "^0.6.0",
     "@ngtools/webpack": "~8.2.0",
     "@types/hammerjs": "2.0.36",
-    "@types/jasmine": "3.3.15",
+    "@types/jasmine": "^3.5.9",
     "@types/jest": "^24.9.1",
     "@types/node": "^12.7.11",
     "axios": "^0.19.0",
@@ -131,7 +132,11 @@
     "jest-zone-patch": "0.0.10",
     "jquery": "^3.4.1",
     "json-server": "0.15.0",
+    "karma": "5.1.0",
     "karma-cli": "2.0.0",
+    "karma-jasmine": "3.1.1",
+    "karma-nativescript-launcher": "0.4.0",
+    "karma-webpack": "3.0.5",
     "katex": "^0.10.2",
     "lodash": "^4.17.11",
     "lodash.template": "^4.5.0",

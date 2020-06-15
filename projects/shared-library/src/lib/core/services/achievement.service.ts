@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { CONFIG } from '../../environments/environment';
+import { CONFIG } from './../../environments/environment';
 import { AchievementRule } from '../../shared/model';
 
 @Injectable()

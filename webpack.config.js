@@ -57,7 +57,7 @@ module.exports = env => {
         skipSnapshotTools, // --env.skipSnapshotTools
         compileSnapshot // --env.compileSnapshot
     } = env;
-
+    console.log("UNIT TEST>>>>>>>>>>>>>>>>>>>>>>>", unitTesting);
     const useLibs = compileSnapshot;
     const isAnySourceMapEnabled = !!sourceMap || !!hiddenSourceMap;
     const externals = nsWebpack.getConvertedExternals(env.externals);
@@ -117,7 +117,10 @@ module.exports = env => {
             additionalLazyModuleResources.push(appModuleFolderPath);
         }
     }
+    console.log("ENDDD?????????????", env)
     const envFullPath = (env.prod) ? "prod" : "dev";
+    env.project = env.project || 'trivia';
+    console.log('enviornemtn>>', env.project);
     const ngCompilerPlugin = new AngularCompilerPlugin({
         // hostReplacementPaths: nsWebpack.getResolver([platform, "tns"]),
         hostReplacementPaths: resExt.getResolverExtended([platform, "tns", envFullPath], env.project),
