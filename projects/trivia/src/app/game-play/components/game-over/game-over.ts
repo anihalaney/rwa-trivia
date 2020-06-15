@@ -56,8 +56,8 @@ export class GameOver implements OnInit, OnChanges {
   userInvitations: { [key: string]: Invitation };
   userCardType = userCardType;
   correctAnswerClassIndexIncrement = 0;
-  dialogOpen: boolean = false;
-  openReportDialog: boolean = false;
+  dialogOpen: Boolean = false;
+  openReportDialog: Boolean = false;
   continueButtonClicked(event: any) {
     this.gameOverContinueClicked.emit();
   }
@@ -122,9 +122,9 @@ export class GameOver implements OnInit, OnChanges {
               let className;
               if (this.game) {
                 if (!this.game.gameOptions.isBadgeWithCategory) {
-                   className = `score${this.correctAnswerClassIndexIncrement}`;
+                  className = `score${this.correctAnswerClassIndexIncrement}`;
                 } else {
-                   className = res.badge && res.badge.name && res.badge.won ? res.badge.name : '';
+                  className = res.badge && res.badge.name && res.badge.won ? res.badge.name : '';
                 }
               }
               res.className = className;
@@ -149,24 +149,24 @@ export class GameOver implements OnInit, OnChanges {
       this.game.decideWinner();
       if (this.game.winnerPlayerId && Number(this.game.gameOptions.playerMode) === PlayerMode.Opponent) {
         this.gameStatus = this.game.winnerPlayerId === this.user.userId ? GameStatus.WON :
-                                            (this.game.winnerPlayerId === this.otherUserId ? GameStatus.LOST : -1);
+          (this.game.winnerPlayerId === this.otherUserId ? GameStatus.LOST : -1);
       } else if (Number(this.game.gameOptions.playerMode) === PlayerMode.Single) {
         this.gameStatus = this.game.winnerPlayerId === this.user.userId ? GameStatus.WON : GameStatus.LOST;
       }
 
       if (!this.game.winnerPlayerId && Number(this.game.gameOptions.playerMode) === PlayerMode.Opponent) {
-          if ((!this.game.gameOptions.isBadgeWithCategory &&
-              this.game.stats[this.user.userId].score !== this.game.stats[this.otherUserId].score
-            ) ||
-            (
-              this.game.gameOptions.isBadgeWithCategory &&
-              this.earnedBadges.length === this.earnedBadgesByOtherUser.length
-            )
-          ) {
-             this.gameStatus = GameStatus.TIE;
-          } else if (this.game.round >= 16 ) {
-             this.gameStatus = GameStatus.DRAW;
-          }
+        if ((!this.game.gameOptions.isBadgeWithCategory &&
+          this.game.stats[this.user.userId].score !== this.game.stats[this.otherUserId].score
+        ) ||
+          (
+            this.game.gameOptions.isBadgeWithCategory &&
+            this.earnedBadges.length === this.earnedBadgesByOtherUser.length
+          )
+        ) {
+          this.gameStatus = GameStatus.TIE;
+        } else if (this.game.round >= 16) {
+          this.gameStatus = GameStatus.DRAW;
+        }
 
       }
     }

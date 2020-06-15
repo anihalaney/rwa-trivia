@@ -129,8 +129,8 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
             }));
             this.playerUserName = 'You';
           })
-          .catch((error) => {
-            console.error('oops, something went wrong!', error);
+          .catch((err) => {
+            console.log('oops, something went wrong!', err);
           });
       }, 2000);
     }

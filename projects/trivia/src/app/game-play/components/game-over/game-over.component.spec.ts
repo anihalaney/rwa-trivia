@@ -10,7 +10,7 @@ import { testData } from 'test/data';
 import { CoreState } from 'shared-library/core/store';
 import { UserActions } from 'shared-library/core/store/actions';
 import { MatSnackBarModule, MatDialog } from '@angular/material';
-import {MatDialogModule} from '@angular/material';
+import { MatDialogModule } from '@angular/material';
 import { PLATFORM_ID } from '@angular/core';
 import * as dashboardactions from '../../../dashboard/store/actions';
 import { GamePlayState } from '../../store';
@@ -33,35 +33,37 @@ describe('GameOverComponent', () => {
                 UserActions,
                 WindowRef,
                 { provide: PLATFORM_ID, useValue: 'browser' },
-                {provide: Utils, useValue: {
-                    getTimeDifference(turnAt: number) {
-                        return 1588313130838 - turnAt;
-                    },
-                    convertIntoDoubleDigit(digit: Number) {
-                        return (digit < 10) ? `0${digit}` : `${digit}`;
-                    },
-                    getImageUrl(user, width, height, size) {
-                        return '';
+                {
+                    provide: Utils, useValue: {
+                        getTimeDifference(turnAt: number) {
+                            return 1588313130838 - turnAt;
+                        },
+                        convertIntoDoubleDigit(digit: Number) {
+                            return (digit < 10) ? `0${digit}` : `${digit}`;
+                        },
+                        getImageUrl(user, width, height, size) {
+                            return '';
+                        }
                     }
-                }},
-                provideMockStore( {
+                },
+                provideMockStore({
                     selectors: [
-                      {
-                        selector: appState.coreState,
-                        value: {}
-                      },
-                      {
-                        selector: appState.dashboardState,
-                        value: {}
-                      },
-                      {
-                        selector: appState.gamePlayState,
-                        value: {}
-                      }
+                        {
+                            selector: appState.coreState,
+                            value: {}
+                        },
+                        {
+                            selector: appState.dashboardState,
+                            value: {}
+                        },
+                        {
+                            selector: appState.gamePlayState,
+                            value: {}
+                        }
                     ]
-                  })
+                })
             ],
-            imports: [ MatSnackBarModule, MatDialogModule ]
+            imports: [MatSnackBarModule, MatDialogModule]
         });
 
     }));
@@ -108,7 +110,7 @@ describe('GameOverComponent', () => {
             blogNo: 0,
             share_status: false,
             link: ''
-          });
+        });
     });
 
     it('verify if LoadSocialScoreShareUrlSuccess action is dispatched successfully', () => {
@@ -116,26 +118,30 @@ describe('GameOverComponent', () => {
     });
 
     it('on load component should set userDictionary', () => {
-        const userDict = {'4kFa6HRvP5OhvYXsH9mEsRrXj4o2': testData.userList[0], 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1': testData.userList[1]};
+        const userDict = { '4kFa6HRvP5OhvYXsH9mEsRrXj4o2': testData.userList[0], 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1': testData.userList[1] };
         mockCoreSelector.setResult({ userDict: userDict });
-          mockStore.refreshState();
-          expect(component.userDict).toBe(userDict);
+        mockStore.refreshState();
+        expect(component.userDict).toBe(userDict);
     });
 
     it('on load component should set friendInvitation', () => {
         component.otherUserId = 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1';
-        const userDict = {'4kFa6HRvP5OhvYXsH9mEsRrXj4o2': testData.userList[0], 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1': testData.userList[1]};
-        mockCoreSelector.setResult({ user: testData.userList[0],
-            userDict: userDict, userFriendInvitations: { 'data6@data.com': testData.invitation } });
+        const userDict = { '4kFa6HRvP5OhvYXsH9mEsRrXj4o2': testData.userList[0], 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1': testData.userList[1] };
+        mockCoreSelector.setResult({
+            user: testData.userList[0],
+            userDict: userDict, userFriendInvitations: { 'data6@data.com': testData.invitation }
+        });
         mockStore.refreshState();
         expect(component.userInvitations).toEqual({ 'data6@data.com': testData.invitation });
     });
 
     it('on load component should dispatch loadUserInvitationsInfo', () => {
         component.otherUserId = 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1';
-        const userDict = {'4kFa6HRvP5OhvYXsH9mEsRrXj4o2': testData.userList[0], 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1': testData.userList[1]};
-        mockCoreSelector.setResult({ user: testData.userList[0],
-            userDict: userDict, userFriendInvitations: { 'data6@data.com': testData.invitation } });
+        const userDict = { '4kFa6HRvP5OhvYXsH9mEsRrXj4o2': testData.userList[0], 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1': testData.userList[1] };
+        mockCoreSelector.setResult({
+            user: testData.userList[0],
+            userDict: userDict, userFriendInvitations: { 'data6@data.com': testData.invitation }
+        });
         mockStore.refreshState();
         expect(spy).toHaveBeenCalledWith(new UserActions().loadUserInvitationsInfo(
             testData.userList[0].userId,
@@ -220,7 +226,7 @@ describe('GameOverComponent', () => {
     });
 
     it('verify if continueButtonClicked function works correctly', () => {
-         const gameContinueSpy = spyOn(component.gameOverContinueClicked, 'emit');
+        const gameContinueSpy = spyOn(component.gameOverContinueClicked, 'emit');
         component.continueButtonClicked({});
         expect(gameContinueSpy).toHaveBeenCalledTimes(1);
     });
@@ -228,43 +234,47 @@ describe('GameOverComponent', () => {
     it('verify if ngOnChanges works correctly', () => {
         component.earnedBadges = testData.games[0].stats['4kFa6HRvP5OhvYXsH9mEsRrXj4o2'].badge;
         component.earnedBadgesByOtherUser = testData.games[0].stats['yP7sLu5TmYRUO9YT4tWrYLAqxSz1'].badge;
-        const userDict = {'4kFa6HRvP5OhvYXsH9mEsRrXj4o2': testData.userList[0], 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1': testData.userList[1]};
-        mockCoreSelector.setResult({ user: testData.userList[0],
-            userDict: userDict });
+        const userDict = { '4kFa6HRvP5OhvYXsH9mEsRrXj4o2': testData.userList[0], 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1': testData.userList[1] };
+        mockCoreSelector.setResult({
+            user: testData.userList[0],
+            userDict: userDict
+        });
         mockStore.refreshState();
         const dbModel = testData.games[0];
         component.game = Game.getViewModel(dbModel);
         component.ngOnChanges({
-          game:
-          {
-            previousValue: undefined,
-            currentValue: component.game,
-            firstChange: true,
-            isFirstChange: undefined
-          }
+            game:
+            {
+                previousValue: undefined,
+                currentValue: component.game,
+                firstChange: true,
+                isFirstChange: undefined
+            }
         });
-       expect(component.otherUserId).toEqual('yP7sLu5TmYRUO9YT4tWrYLAqxSz1');
-       expect(component.otherUserInfo).toEqual(testData.userList[1]);
-       expect(component.gameStatus).toEqual(0);
-   });
+        expect(component.otherUserId).toEqual('yP7sLu5TmYRUO9YT4tWrYLAqxSz1');
+        expect(component.otherUserInfo).toEqual(testData.userList[1]);
+        expect(component.gameStatus).toEqual(0);
+    });
 
-   it('verify if ngOnChanges works correctly for game lost', () => {
+    it('verify if ngOnChanges works correctly for game lost', () => {
         component.earnedBadges = testData.games[1].stats['4kFa6HRvP5OhvYXsH9mEsRrXj4o2'].badge;
         component.earnedBadgesByOtherUser = testData.games[1].stats['yP7sLu5TmYRUO9YT4tWrYLAqxSz1'].badge;
-        const userDict = {'4kFa6HRvP5OhvYXsH9mEsRrXj4o2': testData.userList[0], 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1': testData.userList[1]};
-        mockCoreSelector.setResult({ user: testData.userList[0],
-            userDict: userDict });
+        const userDict = { '4kFa6HRvP5OhvYXsH9mEsRrXj4o2': testData.userList[0], 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1': testData.userList[1] };
+        mockCoreSelector.setResult({
+            user: testData.userList[0],
+            userDict: userDict
+        });
         mockStore.refreshState();
         const dbModel = testData.games[1];
         component.game = Game.getViewModel(dbModel);
         component.ngOnChanges({
-        game:
-        {
-            previousValue: undefined,
-            currentValue: component.game,
-            firstChange: true,
-            isFirstChange: undefined
-        }
+            game:
+            {
+                previousValue: undefined,
+                currentValue: component.game,
+                firstChange: true,
+                isFirstChange: undefined
+            }
         });
 
         expect(component.gameStatus).toEqual(1);
@@ -272,20 +282,22 @@ describe('GameOverComponent', () => {
 
     it('verify if ngOnChanges works correctly for single player game won', () => {
         component.earnedBadges = testData.games[2].stats['4kFa6HRvP5OhvYXsH9mEsRrXj4o2'].badge;
-        const userDict = {'4kFa6HRvP5OhvYXsH9mEsRrXj4o2': testData.userList[0], 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1': testData.userList[1]};
-        mockCoreSelector.setResult({ user: testData.userList[0],
-            userDict: userDict });
+        const userDict = { '4kFa6HRvP5OhvYXsH9mEsRrXj4o2': testData.userList[0], 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1': testData.userList[1] };
+        mockCoreSelector.setResult({
+            user: testData.userList[0],
+            userDict: userDict
+        });
         mockStore.refreshState();
         const dbModel = testData.games[2];
         component.game = Game.getViewModel(dbModel);
         component.ngOnChanges({
-        game:
-        {
-            previousValue: undefined,
-            currentValue: component.game,
-            firstChange: true,
-            isFirstChange: undefined
-        }
+            game:
+            {
+                previousValue: undefined,
+                currentValue: component.game,
+                firstChange: true,
+                isFirstChange: undefined
+            }
         });
 
         expect(component.gameStatus).toEqual(0);
@@ -294,20 +306,22 @@ describe('GameOverComponent', () => {
     it('verify if ngOnChanges works correctly for single player game tie', () => {
         component.earnedBadges = testData.games[16].stats['4kFa6HRvP5OhvYXsH9mEsRrXj4o2'].badge;
         component.earnedBadgesByOtherUser = testData.games[16].stats['yP7sLu5TmYRUO9YT4tWrYLAqxSz1'].badge;
-        const userDict = {'4kFa6HRvP5OhvYXsH9mEsRrXj4o2': testData.userList[0], 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1': testData.userList[1]};
-        mockCoreSelector.setResult({ user: testData.userList[0],
-            userDict: userDict });
+        const userDict = { '4kFa6HRvP5OhvYXsH9mEsRrXj4o2': testData.userList[0], 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1': testData.userList[1] };
+        mockCoreSelector.setResult({
+            user: testData.userList[0],
+            userDict: userDict
+        });
         mockStore.refreshState();
         const dbModel = testData.games[16];
         component.game = Game.getViewModel(dbModel);
         component.ngOnChanges({
-        game:
-        {
-            previousValue: undefined,
-            currentValue: dbModel,
-            firstChange: true,
-            isFirstChange: undefined
-        }
+            game:
+            {
+                previousValue: undefined,
+                currentValue: dbModel,
+                firstChange: true,
+                isFirstChange: undefined
+            }
         });
         expect(component.gameStatus).toEqual(2);
     });
@@ -315,32 +329,36 @@ describe('GameOverComponent', () => {
     it('verify if ngOnChanges works correctly for single player game draw', () => {
         component.earnedBadges = testData.games[17].stats['4kFa6HRvP5OhvYXsH9mEsRrXj4o2'].badge;
         component.earnedBadgesByOtherUser = testData.games[17].stats['yP7sLu5TmYRUO9YT4tWrYLAqxSz1'].badge;
-        const userDict = {'4kFa6HRvP5OhvYXsH9mEsRrXj4o2': testData.userList[0], 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1': testData.userList[1]};
-        mockCoreSelector.setResult({ user: testData.userList[0],
-            userDict: userDict });
+        const userDict = { '4kFa6HRvP5OhvYXsH9mEsRrXj4o2': testData.userList[0], 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1': testData.userList[1] };
+        mockCoreSelector.setResult({
+            user: testData.userList[0],
+            userDict: userDict
+        });
         mockStore.refreshState();
         const dbModel = testData.games[17];
         component.game = Game.getViewModel(dbModel);
         component.ngOnChanges({
-        game:
-        {
-            previousValue: undefined,
-            currentValue: dbModel,
-            firstChange: true,
-            isFirstChange: undefined
-        }
+            game:
+            {
+                previousValue: undefined,
+                currentValue: dbModel,
+                firstChange: true,
+                isFirstChange: undefined
+            }
         });
         expect(component.gameStatus).toEqual(3);
     });
 
     it('verify if onNotify() function works correctly', () => {
-        component.onNotify({share_status: 'testData'});
+        component.onNotify({ share_status: 'testData' });
         expect(component.socialFeedData.share_status).toEqual('testData');
     });
 
     it('verify if reMatchGame() function works correctly', () => {
-        mockCoreSelector.setResult({ applicationSettings: [testData.applicationSettings],
-            account: testData.account[1], user: testData.userList[0] });
+        mockCoreSelector.setResult({
+            applicationSettings: [testData.applicationSettings],
+            account: testData.account[1], user: testData.userList[0]
+        });
         mockStore.refreshState();
         component.snackBar.open = jest.fn();
         component.reMatchGame();
@@ -348,8 +366,10 @@ describe('GameOverComponent', () => {
     });
 
     it('verify if reMatchGame() function works correctly if user has more than 0 lives', () => {
-        mockCoreSelector.setResult({ applicationSettings: [testData.applicationSettings],
-            account: testData.account[0], user: testData.userList[0] });
+        mockCoreSelector.setResult({
+            applicationSettings: [testData.applicationSettings],
+            account: testData.account[0], user: testData.userList[0]
+        });
         mockStore.refreshState();
         component.reMatch = jest.fn();
         component.reMatchGame();
@@ -358,8 +378,10 @@ describe('GameOverComponent', () => {
 
     it('verify if shareScore() function works correctly', () => {
 
-        mockCoreSelector.setResult({ applicationSettings: [testData.applicationSettings],
-            account: testData.account[0], user: testData.userList[0] });
+        mockCoreSelector.setResult({
+            applicationSettings: [testData.applicationSettings],
+            account: testData.account[0], user: testData.userList[0]
+        });
 
         mockStore.refreshState();
         component.shareScore();
@@ -370,7 +392,7 @@ describe('GameOverComponent', () => {
 
     });
 
-    it('verify if reportQuestion() function works correctly', (async() => {
+    it('verify if reportQuestion() function works correctly', (async () => {
 
         component.openDialog = jest.fn();
         component.reportQuestion({});
@@ -380,10 +402,12 @@ describe('GameOverComponent', () => {
 
     }));
 
-    it('verify if userProfileSaveStatus value is set', (async() => {
-        const userDict = {'4kFa6HRvP5OhvYXsH9mEsRrXj4o2': testData.userList[0], 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1': testData.userList[1]};
-        mockCoreSelector.setResult({ user: testData.userList[0],
-            userDict: userDict ,userProfileSaveStatus: 'IS FRIEND'  });
+    it('verify if userProfileSaveStatus value is set', (async () => {
+        const userDict = { '4kFa6HRvP5OhvYXsH9mEsRrXj4o2': testData.userList[0], 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1': testData.userList[1] };
+        mockCoreSelector.setResult({
+            user: testData.userList[0],
+            userDict: userDict, userProfileSaveStatus: 'IS FRIEND'
+        });
         component.snackBar.open = jest.fn();
         mockStore.refreshState();
         fixture.detectChanges();

@@ -2541,18 +2541,13 @@ export const Games =  [
       '4kFa6HRvP5OhvYXsH9mEsRrXj4o2': {
         'avgAnsTime': 2,
         'badge': [
-          'scissors',
-          'paper',
-          'rock',
-          'lizard'
         ],
         'consecutiveCorrectAnswers': 1,
-        'score': 10
+        'score': 3
       },
       'yP7sLu5TmYRUO9YT4tWrYLAqxSz1': {
         'avgAnsTime': 2,
         'badge': [
-          'lizard'
         ],
         'consecutiveCorrectAnswers': 0,
         'score': 1
@@ -2679,7 +2674,7 @@ export const Games =  [
         'score': 0
       }
     },
-    'round': 1
+    'round': 16
   },
   {
     'gameOptions': {
