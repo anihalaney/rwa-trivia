@@ -24,7 +24,6 @@ module.exports = env => {
         "tns-core-modules/ui/frame",
         "tns-core-modules/ui/frame/activity",
     ]);
-    console.log('ENV', env);
     const platform = env && (env.android && "android" || env.ios && "ios" || env.platform);
     if (!platform) {
         throw new Error("You need to provide a target platform!");
@@ -116,7 +115,6 @@ module.exports = env => {
             additionalLazyModuleResources.push(appModuleFolderPath);
         }
     }
-    console.log("environment", env)
     const envFullPath = (env.prod) ? "prod" : "dev";
     // env.project = env.project || 'trivia';
     const ngCompilerPlugin = new AngularCompilerPlugin({

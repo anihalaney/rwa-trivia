@@ -45,9 +45,6 @@
     "fullTemplateTypeCheck": true,
     "strictInjectionParameters": true
   },
-  "include": [
-    "projects/trivia/src/tests/**/*.ts"
-  ],
   "exclude": [
     "**/*.tns.ts",
     "**/*.android.ts",

@@ -148,7 +148,6 @@ var copyPlist = function (copyPlistOpts) {
 var copyInfoPlist = function (copyPlistOpts) {
     if (copyPlistOpts.platform === 'android') { return true; }
     else if (copyPlistOpts.platform === 'ios') {
-        console.log(">>>>>>>>>>>>>>", copyPlistOpts.projectDirectoryPath, "configurations", copyPlistOpts.project, "ios", "Info.plist.prod");
         var sourceInfoPlistProd = path.join(copyPlistOpts.projectDirectoryPath, "configurations", copyPlistOpts.project, "ios", "Info.plist.prod");
         var sourceInfoPlistDev = path.join(copyPlistOpts.projectDirectoryPath, "configurations", copyPlistOpts.project, "ios", "Info.plist.dev");
         var destinationInfoPlist = path.join(copyPlistOpts.appResourcesDirectoryPath, "iOS", "Info.plist");
