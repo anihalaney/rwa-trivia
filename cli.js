@@ -196,7 +196,7 @@ const commandList = {
                 "description": 'app e.g. --run',
                 "alias": ['a', 'A'],
                 "default": 'run',
-                "coerce": args => args === 'debug' ? 'debug' : 'run',
+                "coerce": args => args ? args : 'run',
             },
             "noHmr": {
                 "demand": false,
@@ -328,6 +328,21 @@ const commandList = {
                 "alias": 'se'
             }
         }
+    },
+    "tns-test":{
+        "command": "set process.env.tester='10101'; tns test ios --emulator ",
+        "description": "run",
+        "options": {
+            "env": {
+                "demand": true,
+                "description": 'schedular environment dev/prod',
+                "type": 'string',
+                "choices": schedularEnv,
+                "default": 'dev',
+                "alias": 'se'
+            }
+        }
+
     }
 
 }

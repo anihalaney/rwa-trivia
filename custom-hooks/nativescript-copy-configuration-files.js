@@ -7,7 +7,6 @@ module.exports = {
         projectName,
         buildType,
         logger) {
-
         copyFacebookResourceFileOpt = {
             appResourcesDirPath, projectDir, projectName, buildType, logger, originalFileName: "facebooklogin.xml", prodFileName: "facebooklogin.prod.xml", devFileName: "facebooklogin.dev.xml"
         }
@@ -85,7 +84,7 @@ module.exports = {
         platform,
         platformsDir,
         isProdEnv) {
-
+            
         var appResourcesDirectoryPath = appResourcesDirPath
         var projectDirectoryPath = projectDir;
         var forcePrepare = true;

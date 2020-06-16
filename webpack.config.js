@@ -24,7 +24,7 @@ module.exports = env => {
         "tns-core-modules/ui/frame",
         "tns-core-modules/ui/frame/activity",
     ]);
-
+    console.log('ENV', env);
     const platform = env && (env.android && "android" || env.ios && "ios" || env.platform);
     if (!platform) {
         throw new Error("You need to provide a target platform!");
@@ -57,7 +57,6 @@ module.exports = env => {
         skipSnapshotTools, // --env.skipSnapshotTools
         compileSnapshot // --env.compileSnapshot
     } = env;
-    console.log("UNIT TEST>>>>>>>>>>>>>>>>>>>>>>>", unitTesting);
     const useLibs = compileSnapshot;
     const isAnySourceMapEnabled = !!sourceMap || !!hiddenSourceMap;
     const externals = nsWebpack.getConvertedExternals(env.externals);
@@ -117,10 +116,9 @@ module.exports = env => {
             additionalLazyModuleResources.push(appModuleFolderPath);
         }
     }
-    console.log("ENDDD?????????????", env)
+    console.log("environment", env)
     const envFullPath = (env.prod) ? "prod" : "dev";
-    env.project = env.project || 'trivia';
-    console.log('enviornemtn>>', env.project);
+    // env.project = env.project || 'trivia';
     const ngCompilerPlugin = new AngularCompilerPlugin({
         // hostReplacementPaths: nsWebpack.getResolver([platform, "tns"]),
         hostReplacementPaths: resExt.getResolverExtended([platform, "tns", envFullPath], env.project),

@@ -13,7 +13,6 @@ module.exports = function (config) {
     // list of files / patterns to load in the browser
     files: ['projects/trivia/src/tests/**/*.ts'],
 
-
     // list of files to exclude
     exclude: [
     ],
@@ -28,7 +27,7 @@ module.exports = function (config) {
     // test results reporter to use
     // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ['progress'],
+    reporters: ['dots'],
 
 
     // web server port
@@ -100,6 +99,7 @@ function setWebpack(config, options) {
     env[config.platform] = true;
     env.sourceMap = config.debugBrk;
     env.appPath = config.appPath;
+    env.project = "trivia";
     options.webpack = require('./webpack.config')(env);
     delete options.webpack.entry;
     delete options.webpack.output.libraryTarget;
