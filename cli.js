@@ -328,21 +328,6 @@ const commandList = {
                 "alias": 'se'
             }
         }
-    },
-    "tns-test":{
-        "command": "set process.env.tester='10101'; tns test ios --emulator ",
-        "description": "run",
-        "options": {
-            "env": {
-                "demand": true,
-                "description": 'schedular environment dev/prod',
-                "type": 'string',
-                "choices": schedularEnv,
-                "default": 'dev',
-                "alias": 'se'
-            }
-        }
-
     }
 
 }

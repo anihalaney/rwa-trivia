@@ -30,7 +30,6 @@ import { ModalDialogOptions, ModalDialogService } from 'nativescript-angular/mod
 import { WelcomeScreenComponent } from 'shared-library/shared/mobile/component';
 import * as appSettingsStorage from 'tns-core-modules/application-settings';
 import { TopicActions } from 'shared-library/core/store/actions';
-
 import { RadSideDrawerComponent, SideDrawerType } from 'nativescript-ui-sidedrawer/angular';
 
 
