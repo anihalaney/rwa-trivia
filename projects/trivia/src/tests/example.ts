@@ -4,7 +4,4 @@ describe('A suite', () =>  {
     expect(true).toBe(true);
   });
 
-  it('containsss spec with asdsn expectation', () => {
-    expect(true).toBe(true);
-  });
 });
