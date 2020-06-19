@@ -11,7 +11,9 @@ module.exports = function (config) {
 
 
     // list of files / patterns to load in the browser
-    files: ['projects/trivia/src/tests/**/*.ts'],
+    files: [
+      'projects/trivia/src/tests/setup.ts',
+      'projects/trivia/src/tests/**/*.ts'],
 
     // list of files to exclude
     exclude: [

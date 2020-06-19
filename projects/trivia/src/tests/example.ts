@@ -1,6 +1,6 @@
 // A sample Jasmine test
-describe('A suite', () =>  {
-  it('containsss spec with asdsn expectation', () => {
+describe('A suite', () => {
+  it('contain spec with as expectation', () => {
     expect(true).toBe(true);
   });
 
