@@ -23,7 +23,6 @@ export const Games =  [
       '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
       'yP7sLu5TmYRUO9YT4tWrYLAqxSz1'
     ],
-    'winnerPlayerId': 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1',
     'nextTurnPlayerId': 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1',
     'gameOver': true,
     'playerQnAs': [
@@ -271,6 +270,7 @@ export const Games =  [
         'score': 1
       }
     },
+    'winnerPlayerId': '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
     'round': 3
   },
   {
@@ -297,7 +297,6 @@ export const Games =  [
       '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
       'yP7sLu5TmYRUO9YT4tWrYLAqxSz1'
     ],
-    'winnerPlayerId': 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1',
     'nextTurnPlayerId': '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
     'gameOver': true,
     'playerQnAs': [
@@ -544,6 +543,7 @@ export const Games =  [
         'score': 1
       }
     },
+    'winnerPlayerId': 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1',
     'round': 3
   },
   {
@@ -569,7 +569,6 @@ export const Games =  [
     'playerIds': [
       '4kFa6HRvP5OhvYXsH9mEsRrXj4o2'
     ],
-    'winnerPlayerId': 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1',
     'nextTurnPlayerId': '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
     'gameOver': true,
     'playerQnAs': [
@@ -677,6 +676,7 @@ export const Games =  [
         'score': 2
       }
     },
+    'winnerPlayerId': '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
     'round': 5
   },
   {
@@ -2541,18 +2541,13 @@ export const Games =  [
       '4kFa6HRvP5OhvYXsH9mEsRrXj4o2': {
         'avgAnsTime': 2,
         'badge': [
-          'scissors',
-          'paper',
-          'rock',
-          'lizard'
         ],
         'consecutiveCorrectAnswers': 1,
-        'score': 10
+        'score': 3
       },
       'yP7sLu5TmYRUO9YT4tWrYLAqxSz1': {
         'avgAnsTime': 2,
         'badge': [
-          'lizard'
         ],
         'consecutiveCorrectAnswers': 0,
         'score': 1
@@ -2679,7 +2674,7 @@ export const Games =  [
         'score': 0
       }
     },
-    'round': 1
+    'round': 16
   },
   {
     'gameOptions': {
@@ -3347,6 +3342,10 @@ export const Games =  [
         'categoryId': [
           9
         ],
+        'badge': {
+          'name': 'scissors',
+          'won': true
+        },
         'isReported': false
       }
     ],
