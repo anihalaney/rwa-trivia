@@ -116,7 +116,6 @@ module.exports = env => {
         }
     }
     const envFullPath = (env.prod) ? "prod" : "dev";
-    // env.project = env.project || 'trivia';
     const ngCompilerPlugin = new AngularCompilerPlugin({
         // hostReplacementPaths: nsWebpack.getResolver([platform, "tns"]),
         hostReplacementPaths: resExt.getResolverExtended([platform, "tns", envFullPath], env.project),
