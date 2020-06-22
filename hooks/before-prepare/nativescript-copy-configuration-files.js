@@ -6,8 +6,6 @@ module.exports = function ($logger, $projectData, hookArgs) {
             // var isReleaseBuild = (hookArgs.appFilesUpdaterOptions && hookArgs.appFilesUpdaterOptions.release) ? true : false;
              /* Decide whether to prepare for dev or prod environment */
 
-            //  console.log('hookArgs.prepareData >>>>>>>> >>>>', hookArgs.prepareData);
-
             var validProdEnvs = ['prod', 'production'];
             var isProdEnv = false; // building with --env.prod or --env.production flag
             var env = (hookArgs.platformSpecificData || hookArgs.prepareData).env;
