@@ -20,6 +20,9 @@ import { TopTags } from './top-tags';
 import { Accounts } from './accounts';
 import { NewGameFilteredCategories } from './new-game-filtered-categories';
 import { BulkUploads } from './bulk-uploads';
+import { Account } from './account';
+import { UserAnsweredQuestions } from './user-answered-questions';
+import { CurrentQuestion } from './current-question';
 import { file } from './file';
 import { Countries } from './counties';
 
@@ -46,6 +49,9 @@ export const testData = {
     invitation: Invitation,
     question: Question,
     bulkUploads: BulkUploads,
+    account: Account,
+    userAnsweredQuestions: UserAnsweredQuestions,
+    currentQuestion: CurrentQuestion,
     file: file,
     countries: Countries
 };
