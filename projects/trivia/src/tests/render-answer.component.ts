@@ -1,35 +1,20 @@
 import 'reflect-metadata';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture } from '@angular/core/testing';
 import {
     nsTestBedAfterEach,
     nsTestBedBeforeEach,
     nsTestBedRender,
 } from 'nativescript-angular/testing';
 import { RenderAnswerComponent } from 'shared-library/shared/components/render-answer/render-answer.component';
-import { NativeScriptFormsModule } from 'nativescript-angular/forms';
-import { ReactiveFormsModule } from '@angular/forms';
-import { StoreModule, MemoizedSelector, Store } from '@ngrx/store';
-import { provideMockStore, MockStore } from '@ngrx/store/testing';
-import { coreState, CoreState, UserActions, ActionWithPayload } from 'shared-library/core/store';
-import { Utils } from 'shared-library/core/services';
 import { testData } from 'test/data';
-import { LoadEventData, WebView } from 'tns-core-modules/ui/web-view';
-import { of } from 'rxjs';
-import { Observable } from '@nativescript/core/ui/page/page';
+import { LoadEventData } from 'tns-core-modules/ui/web-view';
 import { isIOS } from 'tns-core-modules/platform';
 
 describe('RenderAnswerComponent', () => {
     let component: RenderAnswerComponent;
     let fixture: ComponentFixture<RenderAnswerComponent>;
-    // let mockStore: MockStore<CoreState>;
-    // let spy: any;
-    // let mockCoreSelector: MemoizedSelector<CoreState, Partial<CoreState>>;
     afterEach(nsTestBedAfterEach());
-    beforeEach(nsTestBedBeforeEach(
-        [RenderAnswerComponent],
-        [],
-        []
-    ));
+    beforeEach(nsTestBedBeforeEach([RenderAnswerComponent], [], []));
     beforeEach((async () => {
         fixture = await nsTestBedRender(RenderAnswerComponent);
         component = fixture.componentInstance;

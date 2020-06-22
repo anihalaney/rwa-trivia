@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture } from '@angular/core/testing';
 import {
     nsTestBedAfterEach,
     nsTestBedBeforeEach,
@@ -8,38 +8,22 @@ import {
 import { RenderQuestionComponent } from 'shared-library/shared/components/render-question/render-question.component';
 import { NativeScriptFormsModule } from 'nativescript-angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
-import { StoreModule, MemoizedSelector, Store } from '@ngrx/store';
-import { provideMockStore, MockStore } from '@ngrx/store/testing';
-import { coreState, CoreState, UserActions, ActionWithPayload } from 'shared-library/core/store';
-import { Utils } from 'shared-library/core/services';
+import { StoreModule } from '@ngrx/store';
 import { testData } from 'test/data';
-import { LoadEventData, WebView } from 'tns-core-modules/ui/web-view';
-import { of } from 'rxjs';
-import { Observable } from '@nativescript/core/ui/page/page';
+import { LoadEventData } from 'tns-core-modules/ui/web-view';
 import { isIOS } from 'tns-core-modules/platform';
 
 
 describe('RenderQuestionComponent', () => {
     let component: RenderQuestionComponent;
     let fixture: ComponentFixture<RenderQuestionComponent>;
-    // let mockStore: MockStore<CoreState>;
-    // let spy: any;
-    // let mockCoreSelector: MemoizedSelector<CoreState, Partial<CoreState>>;
+
     afterEach(nsTestBedAfterEach());
-    beforeEach(nsTestBedBeforeEach(
-        [RenderQuestionComponent],
-        [UserActions,
-            {
-                provide: Utils,
-                useValue: {
-                    hideKeyboard() {
-                        return '';
-                    }
-                }
-            },
-        ],
-        [ReactiveFormsModule, NativeScriptFormsModule, StoreModule.forRoot({})]
-    ));
+    beforeEach(nsTestBedBeforeEach([RenderQuestionComponent], [], []));
+
+
+
+
     beforeEach((async () => {
         fixture = await nsTestBedRender(RenderQuestionComponent);
         component = fixture.componentInstance;
