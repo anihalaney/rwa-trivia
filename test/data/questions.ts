@@ -185,8 +185,12 @@ export const Questions = {
       'answers': [
         {
           'id': 1,
-          'answerText': 'Dynamic',
-          'correct': false
+          'answerText': '<p>Dynamic</p>',
+          'answerObject': [{
+            insert: 'Dynamic'
+          }],
+          'correct': false,
+          'isRichEditor': true
         },
         {
           'id': 2,

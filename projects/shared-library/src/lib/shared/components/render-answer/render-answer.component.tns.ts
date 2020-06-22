@@ -19,8 +19,8 @@ export class RenderAnswerComponent implements OnInit, OnChanges {
   @Input() doPlay;
   @Input() bgColor;
   @Output() calAnsHeight = new EventEmitter<number>();
-  private textColor = "black";
-  private backgroundColor = "transparent";
+  textColor = 'black';
+  backgroundColor = 'transparent';
 
   currentAnswer: Answer;
   scriptToGetHeight: string;
@@ -30,18 +30,12 @@ export class RenderAnswerComponent implements OnInit, OnChanges {
   isAndroid = isAndroid;
 
   constructor() {
-    this.scriptToGetHeight = `<script> var body = document.body, html = document.documentElement;
-            var height = Math.max(body.scrollHeight, body.offsetHeight,
-            html.clientHeight, html.scrollHeight, html.offsetHeight);
-            document.location.href += "#" + height;
-            </script><style>pre.ql-syntax { background-color: #23241f;overflow: visible;}</style>`;
-    this.htmlStartTag = `<html><head><body style="font-size:12px; background-color:'#283b66'; 
-            ${this.isGameAnswer ? "font-weight: bold !important;" : ""}
-        padding:10px 0;vertical-align: middle;text-align:center;"><meta name="viewport" content="width=device-width,
-        initial-scale=1, maximum-scale=1.0, user-scalable=no"><script src="${
-      externalUrl.hightlighJs
-      }"></script>`;
-    this.htmlEndTag = `<style> html {background:${this.theme === "dark" ? "#283b66" : "#f7f7f7"};color:red}</style></body><link rel="stylesheet" href="${externalUrl.katexCSS}" crossorigin="anonymous"><link rel="stylesheet" href="${externalUrl.hightlighCSS}" crossorigin="anonymous"></html>`;
+    // tslint:disable-next-line: max-line-length
+    this.scriptToGetHeight = `<script> var body = document.body, html = document.documentElement;var height = Math.max(body.scrollHeight, body.offsetHeight,html.clientHeight, html.scrollHeight, html.offsetHeight);document.location.href += "#" + height;</script><style>pre.ql-syntax { background-color: #23241f;overflow: visible;}</style>`;
+    // tslint:disable-next-line: max-line-length
+    this.htmlStartTag = `<html><head><body style="font-size:12px; background-color:'#283b66';${this.isGameAnswer ? 'font-weight: bold !important;' : ''}padding:10px 0;vertical-align: middle;text-align:center;"><meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1.0, user-scalable=no"><script src="${externalUrl.hightlighJs}"></script>`;
+    // tslint:disable-next-line: max-line-length
+    this.htmlEndTag = `<style> html {background:${this.theme === 'dark' ? '#283b66' : '#f7f7f7'};color:red}</style></body><link rel="stylesheet" href="${externalUrl.katexCSS}" crossorigin="anonymous"><link rel="stylesheet" href="${externalUrl.hightlighCSS}" crossorigin="anonymous"></html>`;
 
   }
 
@@ -59,14 +53,14 @@ export class RenderAnswerComponent implements OnInit, OnChanges {
       // tslint:disable-next-line:max-line-length
 
       if (this.theme) {
-        this.backgroundColor = this.theme === "dark" ? "#283b66" : "#f7f7f7";
-        this.textColor = this.theme === "dark" ? "#a5a5a5" : "#a5a5a5";
+        this.backgroundColor = this.theme === 'dark' ? '#283b66' : '#f7f7f7';
+        this.textColor = this.theme === 'dark' ? '#a5a5a5' : '#a5a5a5';
       }
 
       this.currentAnswer.answerText =
         this.htmlStartTag +
         this.currentAnswer.answerText +
-        `<style> html {background:${this.backgroundColor} !important;color:${this.textColor} !important;font-size:18;}</style> `;
+        `<style> html {background:${this.backgroundColor} !important;color:${this.textColor} !important;font-size:18;}</style> ` +
       this.scriptToGetHeight + this.htmlEndTag;
     }
     if (!this.doPlay) {
@@ -74,13 +68,13 @@ export class RenderAnswerComponent implements OnInit, OnChanges {
     }
   }
   /**
-   *  Calculate lenght of webview for IOS
+   *  Calculate length of webview for IOS
    * @param event:LoadEventData
    */
   onLoadFinished(event: LoadEventData) {
     if (isIOS && this.currentAnswer) {
       const height = event.url
-        ? decodeURIComponent(event.url).split("#")[1]
+        ? decodeURIComponent(event.url).split('#')[1]
         : undefined;
       if (height) {
         this.answerHeight = parseInt(height, 10);

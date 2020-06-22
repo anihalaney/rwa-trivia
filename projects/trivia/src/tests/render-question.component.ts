@@ -18,6 +18,7 @@ import { of } from 'rxjs';
 import { Observable } from '@nativescript/core/ui/page/page';
 import { isIOS } from 'tns-core-modules/platform';
 
+
 describe('RenderQuestionComponent', () => {
     let component: RenderQuestionComponent;
     let fixture: ComponentFixture<RenderQuestionComponent>;
@@ -65,7 +66,6 @@ describe('RenderQuestionComponent', () => {
         const spySetStartTag = spyOn(component, 'setStartTag');
         component.ngOnInit();
         expect(component.setStartTag).toHaveBeenCalled();
-        // console.log('question test> sds>', component.questionText);
         expect(component.questionText).toBe(questionAfterSet);
     });
 
@@ -128,7 +128,7 @@ describe('RenderQuestionComponent', () => {
             {
                 previousValue: undefined,
                 currentValue: question,
-                firstChange: question,
+                firstChange: true,
                 isFirstChange: undefined
             }
         });
@@ -147,8 +147,8 @@ describe('RenderQuestionComponent', () => {
             {
                 previousValue: undefined,
                 currentValue: question,
-                firstChange: question,
-                isFirstChange: false
+                firstChange: true,
+                isFirstChange: undefined
             }
         });
 
@@ -158,7 +158,6 @@ describe('RenderQuestionComponent', () => {
     it(`set setStartTag and set background based on when theme is dark`, () => {
         component.theme = 'dark';
         component.setStartTag();
-        console.log(component.htmlStartTag);
         // tslint:disable-next-line: max-line-length
         expect(component.htmlStartTag).toBe(`<html><head><body style="padding-top:10px;vertical-align: middle;text-align:left;background-color:#283b66;"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"> `);
     });
@@ -166,7 +165,6 @@ describe('RenderQuestionComponent', () => {
     it(`set setStartTag and set background transparent on when theme is not dark`, () => {
         component.theme = 'light';
         component.setStartTag();
-        console.log(component.htmlStartTag);
         // tslint:disable-next-line: max-line-length
         expect(component.htmlStartTag).toBe(`<html><head><body style="padding-top:10px;vertical-align: middle;text-align:left;background-color:#f7f7f7;"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"> `);
     });
