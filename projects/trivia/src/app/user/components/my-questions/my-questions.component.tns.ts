@@ -39,8 +39,7 @@ export class MyQuestionsComponent extends MyQuestions implements OnDestroy, OnIn
     public questionActions: QuestionActions,
     public routerExtension: RouterExtensions,
     public page: Page,
-    public cd: ChangeDetectorRef,
-    private utils: Utils
+    public cd: ChangeDetectorRef
   ) {
     super(store, questionActions, cd);
 
