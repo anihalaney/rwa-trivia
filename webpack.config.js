@@ -24,7 +24,6 @@ module.exports = env => {
         "tns-core-modules/ui/frame",
         "tns-core-modules/ui/frame/activity",
     ]);
-
     const platform = env && (env.android && "android" || env.ios && "ios" || env.platform);
     if (!platform) {
         throw new Error("You need to provide a target platform!");
@@ -57,7 +56,6 @@ module.exports = env => {
         skipSnapshotTools, // --env.skipSnapshotTools
         compileSnapshot // --env.compileSnapshot
     } = env;
-
     const useLibs = compileSnapshot;
     const isAnySourceMapEnabled = !!sourceMap || !!hiddenSourceMap;
     const externals = nsWebpack.getConvertedExternals(env.externals);

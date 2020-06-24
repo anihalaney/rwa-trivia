@@ -37,6 +37,7 @@
   "include": [
     "**/*.spec.ts",
     "**/*.d.ts",
+    "**/*.tns.ts"
   ],
   "exclude": [
     "node_modules",

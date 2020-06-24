@@ -50,5 +50,5 @@
     "**/*.android.ts",
     "**/*.ios.ts",
     "app/main.aot.ts"
-]
+  ]
 }

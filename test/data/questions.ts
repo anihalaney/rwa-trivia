@@ -27,7 +27,8 @@ export const Questions = {
       ],
       'ordered': false,
       'tags': ['JavaScript', 'front-end', 'ES5'],
-      'categoryIds': [2]
+      'categoryIds': [2],
+      'isRichEditor': false
     },
     {
       'id': '2',
@@ -173,7 +174,44 @@ export const Questions = {
       'ordered': false,
       'tags': ['gaming'],
       'categoryIds': [1]
-    }
+    },
+    {
+      'id': '7',
+      'questionText': '<p>Which of the following is not a Java features?</p>',
+      'questionObject': [{
+        insert: 'Which of the following is not a Java features?'
+      }],
+      'isRichEditor': true,
+      'answers': [
+        {
+          'id': 1,
+          'answerText': '<p>Dynamic</p>',
+          'answerObject': [{
+            insert: 'Dynamic'
+          }],
+          'correct': false,
+          'isRichEditor': true
+        },
+        {
+          'id': 2,
+          'answerText': 'Architecture Neutral',
+          'correct': false
+        },
+        {
+          'id': 3,
+          'answerText': 'Use of pointers',
+          'correct': true
+        },
+        {
+          'id': 4,
+          'answerText': 'Object-oriented',
+          'correct': false
+        }
+      ],
+      'ordered': false,
+      'tags': ['gaming'],
+      'categoryIds': [1]
+    },
   ],
   'unpublished': [{
     'id': '0F2DHqEKdMIYujQHZt5k',
