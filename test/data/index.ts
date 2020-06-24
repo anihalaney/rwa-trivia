@@ -55,8 +55,6 @@ export const testData = {
     account: Account,
     userAnsweredQuestions: UserAnsweredQuestions,
     currentQuestion: CurrentQuestion,
-    file: file,
-    countries: Countries
-
+    file: file
 };
 
