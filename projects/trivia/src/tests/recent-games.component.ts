@@ -54,7 +54,6 @@ describe('RecentGamesComponent', () => {
     component.hideActionbar = undefined;
     component.ngOnInit();
     expect(component.hideActionbar).toBeFalsy();
-    console.log('dsfsdfs>>',  component.renderView);
   });
 
   it('On ngOnInit called hide action bar should set true if hideActionbar is false|true', () => {
