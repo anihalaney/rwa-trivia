@@ -113,6 +113,10 @@ describe('MyQuestionsComponent', () => {
         expect(component.tabIndex).toBe(1);
     });
 
+    it('On ngOnDestroy called  it should set renderView to false', () => {
+        component.ngOnDestroy();
+        expect(component.renderView).toBeFalsy();
+    });
 
     it('User should be undefined when component is created', () => {
         expect(component.user).toBe(undefined);
