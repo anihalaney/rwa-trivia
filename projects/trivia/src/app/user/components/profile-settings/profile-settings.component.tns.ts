@@ -68,7 +68,7 @@ export class ProfileSettingsComponent extends ProfileSettings
   showSelectTag = false;
   dataItem;
   customTag: string;
-  private tagItems: ObservableArray<TokenModel>;
+  public tagItems: ObservableArray<TokenModel>;
   SOCIAL_LABEL = "CONNECT YOUR SOCIAL ACCOUNT";
   @ViewChildren("textField", { read: false }) textField: QueryList<ElementRef>;
   platform = Platform;
@@ -317,7 +317,7 @@ export class ProfileSettingsComponent extends ProfileSettings
     }
   }
 
-    // TODO: test
+  // TODO: test
   async cropImage(imageSource) {
     try {
       const imageCropper: ImageCropper = new ImageCropper();
@@ -389,8 +389,11 @@ export class ProfileSettingsComponent extends ProfileSettings
   addCustomTag() {
     this.hideKeyboard();
     this.enteredTags.push(this.customTag);
-    this.customTag = "";
-    this.autocomplete.autoCompleteTextView.resetAutoComplete();
+    this.customTag = '';
+    if (this.autocomplete) {
+      this.autocomplete.autoCompleteTextView.resetAutoComplete();
+    }
+
   }
 
   selectCategory(category) {

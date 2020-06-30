@@ -260,4 +260,25 @@ describe('ProfileSettingsComponent', () => {
     expect(component.userForm.get('profilePicture').value).not.toBeNull();
   });
 
+  it('On call addCustomTag it should hide keyboard and and add tag into enteredTag', () => {
+    component.customTag = 'C#';
+    const spyHideKeyboard = spyOn(component, 'hideKeyboard');
+    component.addCustomTag();
+    expect(spyHideKeyboard).toHaveBeenCalledTimes(1);
+    expect(component.enteredTags).toEqual(['C#']);
+    expect(component.customTag).toBe('');
+  });
+
+  it('On call initDataItems should set tagItems', () => {
+    const tagList = ['java', 'c'];
+    component.tagsAutoComplete = tagList;
+    component.initDataItems();
+
+    const tagItems = new ObservableArray<TokenModel>();
+    for (let i = 0; i < tagList.length; i++) {
+      tagItems.push(new TokenModel(tagList[i], undefined));
+    }
+    expect(component.tagItems).toEqual(tagItems);
+  });
+
 });
