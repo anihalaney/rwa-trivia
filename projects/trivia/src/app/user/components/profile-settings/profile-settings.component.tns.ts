@@ -158,23 +158,23 @@ export class ProfileSettingsComponent extends ProfileSettings
         .subscribe((status: string) => {
           if (
             status &&
-            status !== "NONE" &&
-            status !== "IN PROCESS" &&
-            status !== "SUCCESS" &&
-            status !== "MAKE FRIEND SUCCESS"
+            status !== 'NONE' &&
+            status !== 'IN PROCESS' &&
+            status !== 'SUCCESS' &&
+            status !== 'MAKE FRIEND SUCCESS'
           ) {
-            this.utils.showMessage("success", status);
+            this.utils.showMessage('success', status);
           }
           this.cd.markForCheck();
         })
     );
-
+    // TODO: Need to write test case
     this.subscriptions.push(
       this.gamePlayedChangeObservable.subscribe(data => {
-        if (this.tabsTitles.indexOf("Game Played") < 0) {
-          this.tabsTitles.push("Game Played");
+        if (this.tabsTitles.indexOf('Game Played') < 0) {
+          this.tabsTitles.push('Game Played');
           const segmentedBarItem = <SegmentedBarItem>new SegmentedBarItem();
-          segmentedBarItem.title = "Game Played";
+          segmentedBarItem.title = 'Game Played';
           this.items.push(segmentedBarItem);
         }
       })
@@ -191,14 +191,16 @@ export class ProfileSettingsComponent extends ProfileSettings
           if (location) {
             const cityAndCountry = this.getCityAndCountryName(location);
             this.userForm.patchValue({ location: cityAndCountry });
-            this.acLocation.nativeElement.text = cityAndCountry;
+            if (this.acLocation) {
+              this.acLocation.nativeElement.text = cityAndCountry;
+            }
             this.user.captured = 'mobile';
             this.user.isAutoComplete = false;
           }
         })
     );
   }
-
+  // TODO need to write test case
   ngAfterViewInit(): void {
     if (this.acLocation) {
       this.acLocation.autoCompleteTextView.loadSuggestionsAsync = async text => {
@@ -241,7 +243,10 @@ export class ProfileSettingsComponent extends ProfileSettings
       event.object.readOnly = true;
     } else {
       if (this.userForm.value.location) {
-        this.acLocation.nativeElement.text = this.userForm.value.location;
+        if (this.acLocation) {
+          this.acLocation.nativeElement.text = this.userForm.value.location;
+        }
+
         this.cd.markForCheck();
       }
     }
@@ -270,6 +275,7 @@ export class ProfileSettingsComponent extends ProfileSettings
     return this.tagItems;
   }
 
+  // TODO: test
   onTakePhoto() {
     dialogs
       .action({
@@ -286,6 +292,7 @@ export class ProfileSettingsComponent extends ProfileSettings
       });
   }
 
+  // TODO: test
   async changeProfilePictureFromCamera() {
     const options = {
       width: this.width,
@@ -302,7 +309,7 @@ export class ProfileSettingsComponent extends ProfileSettings
         const imageSource = await fromAsset(imageAsset);
         setTimeout(() => {
           this.cropImage(imageSource);
-        },isIOS ? 250 : 0);
+        }, isIOS ? 250 : 0);
       } catch (error) {
         this.utils.sendErrorToCrashlytics("appLog", error);
         console.error(error);
@@ -310,6 +317,7 @@ export class ProfileSettingsComponent extends ProfileSettings
     }
   }
 
+    // TODO: test
   async cropImage(imageSource) {
     try {
       const imageCropper: ImageCropper = new ImageCropper();
@@ -334,6 +342,7 @@ export class ProfileSettingsComponent extends ProfileSettings
     }
   }
 
+  // TODO: test
   async changeProfilePictureFromGallery() {
     try {
       let imageSource = new ImageSource();
@@ -359,7 +368,7 @@ export class ProfileSettingsComponent extends ProfileSettings
   }
 
   saveProfileImage() {
-    this.getUserFromFormValue(false, "");
+    this.getUserFromFormValue(false, '');
     this.assignImageValues();
     this.saveUser(
       this.user,
@@ -372,8 +381,8 @@ export class ProfileSettingsComponent extends ProfileSettings
     this.user.profilePicture = fileName;
     this.user.originalImageUrl = this.profileImage.image;
     this.user.croppedImageUrl = this.profileImage.image;
-    this.user.imageType = "image/jpeg";
-    this.userForm.get("profilePicture").setValue(fileName);
+    this.user.imageType = 'image/jpeg';
+    this.userForm.get('profilePicture').setValue(fileName);
     this.userForm.updateValueAndValidity();
   }
 
@@ -388,11 +397,12 @@ export class ProfileSettingsComponent extends ProfileSettings
     category.isSelected = !category.isSelected ? true : false;
   }
 
-  private initDataItems() {
+  initDataItems() {
     this.tagItems = new ObservableArray<TokenModel>();
-
-    for (let i = 0; i < this.tagsAutoComplete.length; i++) {
-      this.tagItems.push(new TokenModel(this.tagsAutoComplete[i], undefined));
+    if (this.tagsAutoComplete) {
+      for (let i = 0; i < this.tagsAutoComplete.length; i++) {
+        this.tagItems.push(new TokenModel(this.tagsAutoComplete[i], undefined));
+      }
     }
   }
 
