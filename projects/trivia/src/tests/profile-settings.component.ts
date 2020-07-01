@@ -30,6 +30,8 @@ import { SegmentedBarItem } from 'tns-core-modules/ui/segmented-bar/segmented-ba
 import { CheckDisplayNameComponent } from 'shared-library/shared/components';
 import { ObservableArray } from 'tns-core-modules/data/observable-array/observable-array';
 import { TokenModel } from 'nativescript-ui-autocomplete';
+import * as utils from "tns-core-modules/utils/utils";
+import * as geolocation from "nativescript-geolocation";
 
 describe('ProfileSettingsComponent', () => {
   let component: ProfileSettingsComponent;
@@ -94,6 +96,15 @@ describe('ProfileSettingsComponent', () => {
           sendErrorToCrashlytics(type: any, error: any) {
           },
           showMessage(type: string, message: string) {
+            return true;
+          },
+          focusTextField() {
+            return true;
+          },
+          hideKeyboard() {
+            return true;
+          },
+          openUrl() {
             return true;
           }
         }
@@ -197,14 +208,6 @@ describe('ProfileSettingsComponent', () => {
         readOnly: true
       }
     };
-    // component.user = { ...testData.userList[0] };
-    // user = { ...testData.userList[0] };
-    // applicationSettings.push(testData.applicationSettings);
-    // mockCoreSelector.setResult({ user, applicationSettings, account: user.account, addressUsingLongLat: testData.addressUsingLongLat });
-    // getCategories.setResult(testData.categoryList);
-    // categoryDictionary.setResult(testData.categoryDictionary);
-    // getTopTopics.setResult(testData.topTopics as any);
-    // mockStore.refreshState();
     setUserData();
     component.onLoadedLocation(event);
     expect(component.acLocation.nativeElement.text).toBe('Ahmedabad,Gujarat');
@@ -280,5 +283,160 @@ describe('ProfileSettingsComponent', () => {
     }
     expect(component.tagItems).toEqual(tagItems);
   });
+
+  it('On call onDidAutoComplete it should set customTag', () => {
+    const args = { text: 'Angular' };
+    component.onDidAutoComplete(args);
+    expect(component.customTag).toBe('Angular');
+  });
+
+
+  it('On call onTextChanged it should set customTag', () => {
+    const args = { text: 'Angular' };
+    component.onTextChanged(args);
+    expect(component.customTag).toBe('Angular');
+  });
+
+  it('On call removeEnteredTag it should remove tag if ', () => {
+    const args = { text: 'Angular' };
+    component.onTextChanged(args);
+    expect(component.customTag).toBe('Angular');
+  });
+
+  it('On call setBulkUploadRequest it show error message when form is not valid', () => {
+    setUserData();
+    component.userForm.get('profilePicture').setValue('/assets/images/default-avatar-small.png');
+    const services = TestBed.get(Utils);
+    const spyMessage = spyOn(services, 'showMessage');
+    component.setBulkUploadRequest();
+    expect(spyMessage).toHaveBeenCalled();
+  });
+
+  it('On call setBulkUploadRequest it should submit form ', () => {
+    setUserData();
+    component.userForm.get('name').setValue('Jack');
+    component.userForm.get('profilePicture').setValue('/assets/images/default-avatar-small.png');
+    const spyOnSubmit = spyOn(component, 'onSubmit');
+    component.setBulkUploadRequest();
+    expect(spyOnSubmit).toHaveBeenCalled();
+  });
+
+  it('On call formEditOpen it should it should set focus on selected textbox', () => {
+    setUserData();
+    component.userForm.get('name').setValue('Jack');
+    component.userForm.get('profilePicture').setValue('/assets/images/default-avatar-small.png');
+    const spyEditSingleField = spyOn(component, 'editSingleField');
+
+    const services = TestBed.get(Utils);
+    const spyFocusTextField = spyOn(services, 'focusTextField');
+
+    component.formEditOpen('socialProfile');
+    expect(spyEditSingleField).toHaveBeenCalled();
+    expect(spyFocusTextField).toHaveBeenCalled();
+  });
+
+  it('On call formEditOpen it should it should set enable on textbox', () => {
+    setUserData();
+    component.userForm.get('name').setValue('Jack');
+    component.userForm.get('profilePicture').setValue('/assets/images/default-avatar-small.png');
+    const spyEditSingleField = spyOn(component, 'editSingleField');
+
+    const services = TestBed.get(Utils);
+    const spyFocusTextField = spyOn(services, 'focusTextField');
+
+    component.formEditOpen('displayName');
+    expect(spyEditSingleField).toHaveBeenCalled();
+    expect(spyFocusTextField).not.toHaveBeenCalled();
+  });
+
+  it('On call formEditOpen it should it should set enable on textbox', () => {
+    setUserData();
+    component.userForm.get('name').setValue('Jack');
+    component.userForm.get('profilePicture').setValue('/assets/images/default-avatar-small.png');
+    const spyEditSingleField = spyOn(component, 'editSingleField');
+
+    const services = TestBed.get(Utils);
+    const spyFocusTextField = spyOn(services, 'focusTextField');
+
+    component.formEditOpen('displayName');
+    expect(spyEditSingleField).toHaveBeenCalled();
+    expect(spyFocusTextField).not.toHaveBeenCalled();
+  });
+
+  it('On call onSubmit it should call editLocationField', () => {
+    setUserData();
+    const spyEditLocationField = spyOn(component, 'editLocationField');
+    const spySetValidation = spyOn(component, 'setValidation');
+
+    component.onSubmit(false, 'location');
+    expect(spyEditLocationField).toHaveBeenCalled();
+    expect(spySetValidation).toHaveBeenCalled();
+  });
+
+  it('On call onSubmit it should call displayName', () => {
+    setUserData();
+    const spyCheckDisplayName = spyOn(component, 'checkDisplayName');
+    component.userForm.get('displayName').setValue('ss');
+    component.onSubmit(false, 'displayName');
+    expect(spyCheckDisplayName).toHaveBeenCalled();
+  });
+
+  it('On call hideKeyboard it should hide keyboard', () => {
+    const services = TestBed.get(Utils);
+    const spyHideKeyboard = spyOn(services, 'hideKeyboard');
+    component.hideKeyboard();
+    expect(spyHideKeyboard).toHaveBeenCalledTimes(1);
+  });
+
+
+  it('On call openUrl it should open url in browser', () => {
+    const spyOpenUrl = spyOn(utils, 'openUrl');
+    component.openUrl('https://www.stackoverflow.com/users/', '1245789');
+    expect(spyOpenUrl).toHaveBeenCalledTimes(1);
+  });
+
+  // TODO test get current location
+  it('On call getLocation it should dispatch event for get address', () => {
+    // const spyOpenUrl = spyOn(component, 'getLocationPermission');
+    // const spyGeolocation = spyOn(geolocation, 'getCurrentLocation').and.callThrough();
+    // component.isLocationEnalbed = true;
+    // component.getLocation();
+    // expect(spyOpenUrl).toHaveBeenCalledTimes(1);
+    // expect(spyGeolocation).toHaveBeenCalledTimes(1);
+  });
+
+  it('On call openUrl it should open url in browser', () => {
+    const spyOnSubmit = spyOn(component, 'onSubmit');
+    component.formSubmitted('displayName');
+    expect(spyOnSubmit).toHaveBeenCalledTimes(1);
+  });
+
+  it('On call redirectToChangePassword it should redirect to update-category-tag', () => {
+    const navigate = spyOn(component.router, 'navigate');
+    component.redirectToChangePassword();
+    expect(navigate).toHaveBeenCalledWith(['/user/my/profile/change-password'], undefined);
+  });
+
+  it('On call navigateToPrivacyPolicy it should redirect to privacy-policy', () => {
+    const navigate = spyOn(component.router, 'navigate');
+    component.navigateToPrivacyPolicy();
+    expect(navigate).toHaveBeenCalledWith(['/privacy-policy'], undefined);
+  });
+
+  it('On call navigateToTermsConditions it should redirect to terms-and-conditions', () => {
+    const navigate = spyOn(component.router, 'navigate');
+    component.navigateToTermsConditions();
+    expect(navigate).toHaveBeenCalledWith(['/terms-and-conditions'], undefined);
+  });
+
+
+  it('On call navigateToUserFeedback it should redirect to user-feedback', () => {
+    const navigate = spyOn(component.router, 'navigate');
+    component.navigateToUserFeedback();
+    expect(navigate).toHaveBeenCalledWith(['/user-feedback'], undefined);
+  });
+
+
+
 
 });

@@ -83,8 +83,8 @@ export class ProfileSettingsComponent extends ProfileSettings
   public items: Array<SegmentedBarItem>;
   public selectedIndex = 0;
   tabsTitles: Array<string>;
-  private locations: ObservableArray<TokenModel>;
-  private isLocationEnalbed: boolean;
+  public locations: ObservableArray<TokenModel>;
+  public isLocationEnalbed: boolean;
   iqKeyboard: any;
   isSavingUserName: boolean;
 
@@ -417,10 +417,6 @@ export class ProfileSettingsComponent extends ProfileSettings
     this.customTag = args.text;
   }
 
-  removeEnteredTag(tag) {
-    this.enteredTags = this.enteredTags.filter(t => t !== tag);
-  }
-
   setBulkUploadRequest(): void {
     const userForm = this.userForm.value;
     if (
@@ -430,8 +426,8 @@ export class ProfileSettingsComponent extends ProfileSettings
       !userForm.profilePicture
     ) {
       this.uUtils.showMessage(
-        "error",
-        "Please add name, display name, location and profile picture for bulk upload request"
+        'error',
+        'Please add name, display name, location and profile picture for bulk upload request'
       );
     } else {
       this.onSubmit();
@@ -440,7 +436,7 @@ export class ProfileSettingsComponent extends ProfileSettings
 
   formEditOpen(fieldName: string) {
     this.editSingleField(fieldName);
-    if (fieldName == "socialProfile") {
+    if (fieldName === 'socialProfile') {
       this.cd.markForCheck();
       const socialField = this.socialField.toArray();
       if (socialField.length) {
@@ -449,20 +445,22 @@ export class ProfileSettingsComponent extends ProfileSettings
     }
   }
 
-  onSubmit(isEditSingleField = false, field = "", position = -1) {
+  onSubmit(isEditSingleField = false, field = '', position = -1) {
     // validations
-    if (field === "location") {
+    if (field === 'location') {
       this.editLocationField();
     }
-    if (field === "socialProfile") {
+    if (field === 'socialProfile') {
       this.singleFieldEdit[field] = false;
     }
 
-    if (field === "displayName") {
+    if (field === 'displayName') {
       this.isSavingUserName = true;
     }
+    if (field) {
+      this.setValidation(field);
+    }
 
-    this.setValidation(field);
 
     this.userForm.updateValueAndValidity();
 
@@ -471,12 +469,15 @@ export class ProfileSettingsComponent extends ProfileSettings
     }
 
     if (this.userForm.invalid) {
+      console.log('FOrm IS INVALID');
       this.isSavingUserName = false;
-      this.utils.showMessage("error", "Please fill the field");
+      this.utils.showMessage('error', 'Please fill the field');
       return;
+    } else {
+      console.log('FORM IS VALID');
     }
 
-    this.checkDisplayName(this.userForm.get("displayName").value);
+    this.checkDisplayName(this.userForm.get('displayName').value);
     this.singleFieldEdit[field] = false;
     this.subscriptions.push(
       this.store
@@ -501,8 +502,8 @@ export class ProfileSettingsComponent extends ProfileSettings
             } else {
               this.isSavingUserName = false;
               this.singleFieldEdit.displayName = true;
-              this.userForm.controls["displayName"].setErrors({ exist: true });
-              this.userForm.controls["displayName"].markAsTouched();
+              this.userForm.controls['displayName'].setErrors({ exist: true });
+              this.userForm.controls['displayName'].markAsTouched();
               this.cd.markForCheck();
             }
             this.toggleLoader(false);
@@ -529,7 +530,6 @@ export class ProfileSettingsComponent extends ProfileSettings
       try {
         const position = await geolocation.getCurrentLocation({});
         if (position) {
-          console.log('points>>', position);
           this.user.geoPoint = new firebase.firestore().GeoPoint(position.latitude, position.longitude);
           this.store.dispatch(
             this.userAction.loadAddressUsingLatLong(
@@ -569,19 +569,19 @@ export class ProfileSettingsComponent extends ProfileSettings
   }
 
   redirectToChangePassword() {
-    this.routerExtensions.navigate(["/user/my/profile/change-password"]);
+    this.routerExtensions.navigate(['/user/my/profile/change-password']);
   }
 
   navigateToPrivacyPolicy() {
-    this.routerExtensions.navigate(["/privacy-policy"]);
+    this.routerExtensions.navigate(['/privacy-policy']);
   }
 
   navigateToTermsConditions() {
-    this.routerExtensions.navigate(["/terms-and-conditions"]);
+    this.routerExtensions.navigate(['/terms-and-conditions']);
   }
 
   navigateToUserFeedback() {
-    this.routerExtensions.navigate(["/user-feedback"]);
+    this.routerExtensions.navigate(['/user-feedback']);
   }
 
   getCurrentLocation($event) {
