@@ -22,7 +22,7 @@ export class GameComponent extends Game implements OnInit, OnDestroy, AfterConte
   renderView = false;
   timeout: any;
 
-  constructor(public store: Store<AppState>, private page: Page, private ngZone: NgZone) {
+  constructor(public store: Store<AppState>, public page: Page, private ngZone: NgZone) {
     super(store);
     this.page.actionBarHidden = true;
   }
