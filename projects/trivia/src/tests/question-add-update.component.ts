@@ -31,10 +31,8 @@ import { DbService } from 'shared-library/core/db-service';
 import { QuestionService } from 'shared-library/core/services';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Question, QuestionStatus } from 'shared-library/shared/model';
-import { Page, isIOS, isAndroid } from "tns-core-modules/ui/page";
 import { Observable } from "tns-core-modules/data/observable";
 import { ImageSource } from 'tns-core-modules/image-source';
-import { truncate, truncateSync } from 'fs';
 
 
 describe('QuestionAddUpdateComponent', () => {
@@ -97,7 +95,6 @@ describe('QuestionAddUpdateComponent', () => {
     spy = spyOn(mockStore, 'dispatch');
     router = TestBed.get(Router);
     fixture.detectChanges();
-    const formBuilder: FormBuilder = new FormBuilder();
   }));
 
   it('should create', () => {
