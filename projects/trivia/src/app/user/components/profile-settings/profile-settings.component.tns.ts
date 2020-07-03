@@ -168,7 +168,7 @@ export class ProfileSettingsComponent extends ProfileSettings
           this.cd.markForCheck();
         })
     );
-    // TODO: Need to write test case
+
     this.subscriptions.push(
       this.gamePlayedChangeObservable.subscribe(data => {
         if (this.tabsTitles.indexOf('Game Played') < 0) {
@@ -200,7 +200,6 @@ export class ProfileSettingsComponent extends ProfileSettings
         })
     );
   }
-  // TODO need to write test case
   ngAfterViewInit(): void {
     if (this.acLocation) {
       this.acLocation.autoCompleteTextView.loadSuggestionsAsync = async text => {
@@ -275,24 +274,25 @@ export class ProfileSettingsComponent extends ProfileSettings
     return this.tagItems;
   }
 
-  // TODO: test
-  onTakePhoto() {
-    dialogs
+  async onTakePhoto() {
+    const result = await this.openDialog();
+    if (result === 'Camera') {
+      this.changeProfilePictureFromCamera();
+    } else if (result === 'Gallery') {
+      this.changeProfilePictureFromGallery();
+    }
+
+  }
+
+  async openDialog() {
+    return await dialogs
       .action({
-        message: "Choose option",
-        cancelButtonText: "Cancel",
-        actions: ["Camera", "Gallery"]
-      })
-      .then(result => {
-        if (result === "Camera") {
-          this.changeProfilePictureFromCamera();
-        } else if (result === "Gallery") {
-          this.changeProfilePictureFromGallery();
-        }
+        message: 'Choose option',
+        cancelButtonText: 'Cancel',
+        actions: ['Camera', 'Gallery']
       });
   }
 
-  // TODO: test
   async changeProfilePictureFromCamera() {
     const options = {
       width: this.width,
@@ -301,12 +301,12 @@ export class ProfileSettingsComponent extends ProfileSettings
       saveToGallery: this.saveToGallery
     };
 
-    if (isAvailable()) {
+    if (this.isCameraAvailable()) {
       try {
-        const imageAsset = await takePicture(options);
+        const imageAsset = await this.takePicture(options);
         this.imageTaken = imageAsset;
         const source = new ImageSource();
-        const imageSource = await fromAsset(imageAsset);
+        const imageSource = await this.fromAsset(imageAsset);
         setTimeout(() => {
           this.cropImage(imageSource);
         }, isIOS ? 250 : 0);
@@ -317,20 +317,24 @@ export class ProfileSettingsComponent extends ProfileSettings
     }
   }
 
-  // TODO: test
+  isCameraAvailable(): Boolean {
+    return isAvailable();
+  }
+
+  async takePicture(options) {
+    return await takePicture(options);
+  }
+
+  async fromAsset(imageAsset) {
+    return await ImageSource.fromAsset(imageAsset);
+  }
+
   async cropImage(imageSource) {
     try {
-      const imageCropper: ImageCropper = new ImageCropper();
-      const result: ImageSource = (
-        await imageCropper.show(imageSource, {
-          width: 150,
-          height: 140,
-          lockSquare: false
-        })
-      ).image;
+      const result: ImageSource = await this.getCroppedImage(imageSource);
       if (result) {
         this.profileImage.image = `data:image/jpeg;base64,${result.toBase64String(
-          "jpeg",
+          'jpeg',
           100
         )}`;
         this.saveProfileImage();
@@ -342,22 +346,28 @@ export class ProfileSettingsComponent extends ProfileSettings
     }
   }
 
-  // TODO: test
+  async getCroppedImage(imageSource): Promise<ImageSource> {
+    const imageCropper: ImageCropper = new ImageCropper();
+    return (
+      await imageCropper.show(imageSource, {
+        width: 150,
+        height: 140,
+        lockSquare: false
+      })
+    ).image;
+  }
+
   async changeProfilePictureFromGallery() {
     try {
       let imageSource = new ImageSource();
-      const context = imagepicker.create({
-        mode: "single" // use "multiple" for multiple selection
-      });
-      await context.authorize();
-      const selection = await context.present();
+      const selection = await this.contextSelection();
       const imageAsset = selection.length > 0 ? selection[0] : null;
       imageAsset.options = {
         width: this.width,
         height: this.height,
         keepAspectRatio: true
       };
-      imageSource = await fromAsset(imageAsset);
+      imageSource = await this.fromAsset(imageAsset);
       setTimeout(() => {
         this.cropImage(imageSource);
       }, 1);
@@ -365,6 +375,14 @@ export class ProfileSettingsComponent extends ProfileSettings
       this.utils.sendErrorToCrashlytics("appLog", error);
       console.error(error);
     }
+  }
+
+  async contextSelection() {
+    const context = imagepicker.create({
+      mode: 'single' // use "multiple" for multiple selection
+    });
+    await context.authorize();
+    return await context.present();
   }
 
   saveProfileImage() {
@@ -469,12 +487,9 @@ export class ProfileSettingsComponent extends ProfileSettings
     }
 
     if (this.userForm.invalid) {
-      console.log('FOrm IS INVALID');
       this.isSavingUserName = false;
       this.utils.showMessage('error', 'Please fill the field');
       return;
-    } else {
-      console.log('FORM IS VALID');
     }
 
     this.checkDisplayName(this.userForm.get('displayName').value);
