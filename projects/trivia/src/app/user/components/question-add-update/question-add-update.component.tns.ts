@@ -193,17 +193,57 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate
 
     if (isAvailable()) {
       try {
-        const imageAsset = await takePicture(options);
+        const imageAsset = await this.takePicture(options);
         this.imageTaken = imageAsset;
         const source = new ImageSource();
-        const imageSource = await fromAsset(imageAsset);
+        const imageSource = await this.fromAsset(imageAsset);
         setTimeout(() => {
           this.cropImage(imageSource, webviewElement);
-        },isIOS ? 250 : 0);
+        }, isIOS ? 250 : 0);
       } catch (error) {
         console.error(error);
       }
     }
+  }
+
+  isCameraAvailable(): Boolean {
+    return isAvailable();
+  }
+
+  async takePicture(options) {
+    return await takePicture(options);
+  }
+
+  async fromAsset(imageAsset) {
+    return await ImageSource.fromAsset(imageAsset);
+  }
+
+  async getCroppedImage(imageSource): Promise<ImageSource> {
+    const imageCropper: ImageCropper = new ImageCropper();
+    return (
+      await imageCropper.show(imageSource, {
+        width: 150,
+        height: 140,
+        lockSquare: false
+      })
+    ).image;
+  }
+
+  async contextSelection() {
+    const context = imagepicker.create({
+      mode: 'single' // use "multiple" for multiple selection
+    });
+    await context.authorize();
+    return await context.present();
+  }
+
+  async openDialog() {
+    return await dialogs
+      .action({
+        message: 'Choose option',
+        cancelButtonText: 'Cancel',
+        actions: ['Camera', 'Gallery']
+      });
   }
 
   async cropImage(imageSource, webviewElement) {
@@ -437,4 +477,5 @@ function questionFormValidator(fg: FormGroup): { [key: string]: boolean } {
   if (answers.filter(answer => answer.correct).length !== 1) {
     return { correctAnswerCountInvalid: true };
   }
+
 }
