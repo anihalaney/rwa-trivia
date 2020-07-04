@@ -1,6 +1,6 @@
 <div class="card main-div">
   <mat-card-content class="textcenter" *ngIf="game" id="share-content">
-    <div class="textcenter clearfix gameOver" *ngIf="game.gameOptions.playerMode == PlayerMode.Single">
+    <div class="textcenter clearfix gameOver" *ngIf="game?.gameOptions.playerMode == PlayerMode.Single">
       <app-user-card [userId]="user.userId" [type]="userCardType.USER_WEB_IMAGE_NAME_VERTICAL"></app-user-card>
       <div class="dark div-top-spacing text-style ">Score {{game.stats[user.userId].score}} / {{game.round}}</div>
       <div class="div-top-spacing score-div-height">
@@ -16,9 +16,9 @@
         </ng-template>
       </div>
     </div>
-    <div class="textcenter clearfix gameOver" *ngIf="game.gameOptions.playerMode == PlayerMode.Opponent">
+    <div class="textcenter clearfix gameOver" *ngIf="game?.gameOptions.playerMode == PlayerMode.Opponent">
       <div class="col-sm-3 col-sm-offset-3">
-        <span *ngIf="game.gameOptions.playerMode == PlayerMode.Opponent" class="vs"> Vs</span>
+        <span *ngIf="game?.gameOptions.playerMode == PlayerMode.Opponent" class="vs"> Vs</span>
         <app-user-card [userId]="user.userId" [type]="userCardType.USER_WEB_IMAGE_NAME_VERTICAL"></app-user-card>
         <div class="dark div-top-spacing text-style">Score {{game.stats[user.userId].score}}</div>
         <div class="div-top-spacing">
@@ -56,8 +56,8 @@
       </div>
     </div>
     <div class="category-div">
-      <div class="round" *ngIf="game.gameOptions.playerMode == PlayerMode.Opponent">
-        <span class="round-value">Round {{game.round}} / {{totalRound}}</span>
+      <div class="round" *ngIf="game?.gameOptions.playerMode == PlayerMode.Opponent">
+      <span class="round-value">Round {{game.round}} / {{totalRound}}</span>
       </div>
     </div>
     <div class="continue-button">
