@@ -98,9 +98,9 @@ describe('GameContinueComponent', () => {
         expect(navigate).toHaveBeenCalledWith(['/dashboard'], { clearHistory: true });
     });
     it('On ngOnDestroy called  it should call destroy', () => {
-        // const spyOnDestroy = spyOn(component, 'destroy').and.callFake(null);
-        // component.ngOnDestroy();
-        // expect(spyOnDestroy).toHaveBeenCalledTimes(1);
+        const spyOnDestroy = spyOn(component, 'destroy').and.returnValue('');
+        component.ngOnDestroy();
+        expect(spyOnDestroy).toHaveBeenCalledTimes(1);
     });
 
 });
