@@ -38,7 +38,7 @@ export class GameQuestionComponent extends GameQuestion implements OnInit, OnDes
   elapsedTime: number;
   timerSub: Subscription;
   account: Account;
-  constructor(private utils: Utils, public store: Store<GamePlayState>, private cd: ChangeDetectorRef) {
+  constructor(public utils: Utils, public store: Store<GamePlayState>, private cd: ChangeDetectorRef) {
     super();
     this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
     this.actionText = 'Playing Now';
@@ -90,7 +90,7 @@ export class GameQuestionComponent extends GameQuestion implements OnInit, OnDes
     }
     if (changes.showContinueBtn && changes.showContinueBtn.currentValue && changes.showContinueBtn.currentValue === true) {
       if (this.showLoader && !this.gameOver) {
-        super.continueButtonClicked('');
+        this.continueButtonClicked('');
       } else if (this.showLoader && this.gameOver) {
         this.gameOverButtonClicked.emit('');
       }
@@ -104,9 +104,9 @@ export class GameQuestionComponent extends GameQuestion implements OnInit, OnDes
 
     if (changes.threeConsecutiveAnswer && changes.threeConsecutiveAnswer.currentValue &&
       changes.threeConsecutiveAnswer.currentValue === true) {
-        if (this.showLoader) {
-          this.btnClickedAfterThreeConsecutiveAnswers.emit('');
-        }
+      if (this.showLoader) {
+        this.btnClickedAfterThreeConsecutiveAnswers.emit('');
+      }
     }
 
     if (changes.gameOver && changes.gameOver.currentValue && changes.gameOver.currentValue === true) {
