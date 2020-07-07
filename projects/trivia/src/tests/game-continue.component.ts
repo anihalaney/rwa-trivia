@@ -1,12 +1,12 @@
 import 'reflect-metadata';
-import { ComponentFixture, TestBed, tick, fakeAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import {
     nsTestBedAfterEach,
     nsTestBedBeforeEach,
     nsTestBedRender,
 } from 'nativescript-angular/testing';
 import { GameContinueComponent } from './../app/game-play/components/game-continue/game-continue.component.tns';
-import { StoreModule, MemoizedSelector, Store } from '@ngrx/store';
+import { StoreModule, Store, MemoizedSelector } from '@ngrx/store';
 import { provideMockStore, MockStore } from '@ngrx/store/testing';
 import { CoreState } from 'shared-library/core/store';
 import { testData } from 'test/data';
@@ -15,7 +15,7 @@ import { NativeScriptRouterModule } from 'nativescript-angular/router';
 import { User, Game } from 'shared-library/shared/model';
 import { AppState, appState } from './../app/store';
 import { Router } from '@angular/router';
-import { GameActions, QuestionActions, UserActions } from 'shared-library/core/store/actions';
+import { UserActions } from 'shared-library/core/store/actions';
 import { Utils } from 'shared-library/core/services';
 
 describe('GameContinueComponent', () => {
@@ -25,7 +25,7 @@ describe('GameContinueComponent', () => {
     let router: Router;
     let spy: any;
     let mockStore: MockStore<AppState>;
-    let mockCoreSelector: any; //MemoizedSelector<AppState, Partial<CoreState>>;
+    let mockCoreSelector: MemoizedSelector<AppState, Partial<CoreState>>;
 
     afterEach(nsTestBedAfterEach());
     beforeEach(nsTestBedBeforeEach(
@@ -56,7 +56,6 @@ describe('GameContinueComponent', () => {
         fixture.detectChanges();
     }));
 
-
     it('should create', () => {
         expect(component).toBeTruthy();
     });
@@ -65,20 +64,20 @@ describe('GameContinueComponent', () => {
         user = { ...testData.userList[0] };
         mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
             user: user
-          });
-          mockStore.refreshState();
-          expect(component.user).toBe(user);
-      });
+        });
+        mockStore.refreshState();
+        expect(component.user).toBe(user);
+    });
 
     it('Other user info should be set in ngOnInit', () => {
         const dbModel = testData.games[1];
         user = { ...testData.userList[0] };
         const userDict = { '4kFa6HRvP5OhvYXsH9mEsRrXj4o2': testData.userList[0], 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1': testData.userList[1] };
         component.game = Game.getViewModel(dbModel);
-            mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
-                user: user,
-                userDict: userDict
-            });
+        mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
+            user: user,
+            userDict: userDict
+        });
         mockStore.refreshState();
         fixture.detectChanges();
         component.ngOnInit();
