@@ -3,12 +3,12 @@
     <FlexboxLayout class="game-result">
       <Label text="Game result" class="game-result-title"></Label>
       <GridLayout rows="auto" columns="auto" width="100%" marginTop="7">
-        <Label row="0" col="0" text="{{game.round}}/{{totalRound}}" class="main-title"></Label>
+        <Label row="0" col="0" text="{{game?.round}}/{{totalRound}}" class="main-title"></Label>
         <StackLayout row="0" col="0" horizontalAlignment="left" class="game-round-info-container-grey">
         </StackLayout>
         <StackLayout row="0" col="0" horizontalAlignment="left" verticalAlignment="center"
           class="game-round-info-container"
-          width="{{game.round/totalRound > 0 ? ((game.round/totalRound) * 100) : 0}}%">
+          width="{{game?.round/totalRound > 0 ? ((game?.round/totalRound) * 100) : 0}}%">
         </StackLayout>
       </GridLayout>
     </FlexboxLayout>
