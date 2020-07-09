@@ -73,7 +73,7 @@
         </StackLayout>
 
         <app-question-add-update row="0" rowSpan="2" *ngIf="!displayReasonViewer && displayEditQuestion"
-            [editQuestion]="selectedQuestion" (hideQuestion)="hideQuestion($event)"  [displayBottomBar]="false"></app-question-add-update>
+            [editQuestion]="selectedQuestion" (hideQuestion)="hideQuestion()"  [displayBottomBar]="false"></app-question-add-update>
 
         <!-- <StackLayout row="0" verticalAlignment="bottom" horizontalAlignment="right" ios:margin="0 5 55 0" android:margin="0 10 10 0">
                 <FlexboxLayout *ngIf="!displayReasonViewer && !displayEditQuestion && !loaderBusy"  stlRippleEffect (rippleTap)="navigateToSubmitQuestion()" borderRadius="30" class="fab-button1" padding="10" flexDirection="column" justifyContent="center">
