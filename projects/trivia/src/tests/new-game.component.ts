@@ -16,6 +16,8 @@ import { NavigationService } from 'shared-library/core/services/mobile';
 import { of } from 'rxjs';
 import cloneDeep from 'lodash/cloneDeep';
 import { PlayerMode } from 'shared-library/shared/model';
+import { ObservableArray } from 'tns-core-modules/data/observable-array/observable-array';
+import { TokenModel } from 'nativescript-ui-autocomplete';
 
 describe('NewGameComponent', () => {
 
@@ -504,6 +506,16 @@ describe('NewGameComponent', () => {
 
 
 
+    it('On call initDataItems should set tagItems', () => {
+        const tagList = ['java', 'c'];
+        component.tags = tagList;
+        component.initDataItems();
+        const tagItems = new ObservableArray<TokenModel>();
+        for (let i = 0; i < tagList.length; i++) {
+            tagItems.push(new TokenModel(tagList[i], undefined));
+        }
+        expect(component.tagItems).toEqual(tagItems);
+    });
 
 
 

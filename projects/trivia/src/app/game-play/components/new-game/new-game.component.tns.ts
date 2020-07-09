@@ -245,7 +245,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     return this.tagItems;
   }
 
-  private initDataItems() {
+  public initDataItems() {
     this.tagItems = new ObservableArray<TokenModel>();
     if (this.tags) {
       for (let i = 0; i < this.tags.length; i++) {
