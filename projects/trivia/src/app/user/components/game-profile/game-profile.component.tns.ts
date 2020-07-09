@@ -50,7 +50,7 @@ export class GameProfileComponent extends GameProfile implements OnDestroy, OnIn
         utils.openUrl(url);
     }
 
-    updateCategoryTag(){
+    updateCategoryTag() {
         this.routerExtension.navigate(['/update-category-tag']);
     }
 
