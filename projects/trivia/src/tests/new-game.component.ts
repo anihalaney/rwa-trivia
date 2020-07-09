@@ -11,13 +11,14 @@ import { provideMockStore, MockStore } from '@ngrx/store/testing';
 import { AppState, appState } from './../app/store';
 import { testData } from 'test/data';
 import { coreState, CoreState, UserActions, GameActions, TagActions } from 'shared-library/core/store';
-import { User, GameOptions } from 'shared-library/shared/model';
+import { User, GameOptions, userCardType } from 'shared-library/shared/model';
 import { NavigationService } from 'shared-library/core/services/mobile';
 import { of } from 'rxjs';
 import cloneDeep from 'lodash/cloneDeep';
 import { PlayerMode } from 'shared-library/shared/model';
 import { ObservableArray } from 'tns-core-modules/data/observable-array/observable-array';
 import { TokenModel } from 'nativescript-ui-autocomplete';
+import * as gameplayactions from '../app/game-play/store/actions';
 
 describe('NewGameComponent', () => {
 
@@ -33,7 +34,16 @@ describe('NewGameComponent', () => {
         UserActions,
         GameActions,
         TagActions,
-        WindowRef,
+        {
+            provide: WindowRef,
+            useValue: {
+                nativeWindow: {
+                    scrollTo: (height, width) => {
+                        return '';
+                    }
+                }
+            }
+        },
         NavigationService,
         {
             provide: Utils,
@@ -45,7 +55,14 @@ describe('NewGameComponent', () => {
                     return '';
                 },
                 hideKeyboard() {
-                    return ''
+                    return '';
+                },
+                regExpEscape(s: string) {
+                    return String(s).replace(/([-()\[\]{}+?*.$\^|,:#<!\\])/g, '\\$1').
+                        replace(/\x08/g, '\\x08');
+                },
+                getImageUrl(user: User, width: Number, height: Number, size: string) {
+                    return '';
                 }
             }
         },
@@ -69,12 +86,13 @@ describe('NewGameComponent', () => {
 
 
     beforeEach((async () => {
-        fixture = await nsTestBedRender(NewGameComponent);
-        component = fixture.componentInstance;
         mockStore = TestBed.get(Store);
         spy = spyOn(mockStore, 'dispatch');
+        fixture = await nsTestBedRender(NewGameComponent);
+        component = fixture.componentInstance;
         router = TestBed.get(Router);
         mockCoreSelector = mockStore.overrideSelector<CoreState, Partial<CoreState>>(coreState, {});
+        component.userCardType = userCardType;
     }));
 
     afterEach(nsTestBedAfterEach(true));
@@ -518,5 +536,388 @@ describe('NewGameComponent', () => {
     });
 
 
+    // Common Test case
+
+    it('initial values should be empty', () => {
+        expect(component.categories).toBe(undefined);
+
+        expect(component.tags).toBe(undefined);
+        expect(component.selectedTags).toEqual([]);
+        expect(component.applicationSettings).toBe(undefined);
+
+        expect(component.gameOptions).toEqual(new GameOptions());
+
+        expect(component.showUncheckedCategories).toBe(false);
+
+        expect(component.allCategoriesSelected).toBe(true);
+
+        expect(component.uFriends).toBe(undefined);
+
+        expect(component.userDict).toBe(undefined);
+        expect(component.noFriendsStatus).toBe(undefined);
+        expect(component.user).toBe(undefined);
+        expect(component.friendUserId).toBe(undefined);
+
+        expect(component.errMsg).toBe(undefined);
+        expect(component.life).toBe(undefined);
+        expect(component.gameErrorMsg).toBe('Sorry, don\'t have enough life.');
+        expect(component.loaderStatus).toBe(false);
+
+        expect(component.filteredCategories).toBe(undefined);
+        expect(component.selectedCategories).toEqual([]);
+        expect(component.routeType).toBe('');
+
+        expect(component.topTags).toBe(undefined);
+
+    });
+
+    it('verify set categories list after value is emitted', () => {
+        mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
+            categories: testData.categoryList
+        });
+        mockStore.refreshState();
+        fixture.detectChanges();
+        expect(component.categories).toEqual(testData.categoryList);
+    });
+
+    it('verify tags after value is emitted', () => {
+        mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
+            tags: testData.tagList
+        });
+        mockStore.refreshState();
+        fixture.detectChanges();
+        expect(component.tags).toEqual(testData.tagList);
+    });
+
+
+    it('verify getTopTopics after value is emitted', () => {
+        const topTagsList = cloneDeep(testData.getTopTags);
+        mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
+            getTopTags: topTagsList
+        });
+
+        topTagsList.map((tag: any) => {
+            tag.requiredForGamePlay = false;
+            tag.isSelected = false;
+        });
+
+        mockStore.refreshState();
+        fixture.detectChanges();
+        expect(component.topTags).toEqual(topTagsList);
+    });
+
+
+    it('verify userDictionary after value is emitted', () => {
+        mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
+            userDict: testData.userDict
+        });
+        mockStore.refreshState();
+        fixture.detectChanges();
+        expect(component.userDict).toEqual(testData.userDict);
+    });
+
+    it('verify user after value is emitted', () => {
+        mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
+            getTopTags: cloneDeep(testData.getTopTags),
+            user: testData.userList[0]
+        });
+        mockStore.refreshState();
+        fixture.detectChanges();
+        expect(component.user).toEqual(testData.userList[0]);
+    });
+
+
+    it('verify if tag is selected from user tag list', () => {
+        const topTagsList = cloneDeep(testData.getTopTags);
+        mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
+            getTopTags: topTagsList,
+            user: testData.userList[0]
+        });
+        mockStore.refreshState();
+        fixture.detectChanges();
+        topTagsList.map(data => {
+            data.requiredForGamePlay = false;
+            if (testData.userList[0].tags.indexOf(data.key) >= 0) {
+                data.isSelected = true;
+            } else {
+                data.isSelected = false;
+            }
+        });
+        expect(component.topTags).toEqual(topTagsList);
+    });
+
+    it('verify if tag is selected from user lastGamePlayOption list', () => {
+        const topTagsList = cloneDeep(testData.getTopTags);
+        mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
+            getTopTags: topTagsList,
+            user: testData.userList[7]
+        });
+        mockStore.refreshState();
+        fixture.detectChanges();
+        topTagsList.map(data => {
+            data.requiredForGamePlay = false;
+            if (testData.userList[7].lastGamePlayOption.tags.indexOf(data.key) >= 0) {
+                data.isSelected = true;
+            } else {
+                data.isSelected = false;
+            }
+        });
+        expect(component.topTags).toEqual(topTagsList);
+    });
+
+    it('verify if application settings is set after the value is emitted ', () => {
+        const applicationSettings = [];
+        applicationSettings.push(cloneDeep(testData.applicationSettings));
+        mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
+            applicationSettings: applicationSettings
+        });
+        mockStore.refreshState();
+        fixture.detectChanges();
+        expect(component.applicationSettings).toEqual(applicationSettings[0]);
+    });
+
+
+    it('verify if life is set after the account value is emitted ', () => {
+        const applicationSettings = [];
+        applicationSettings.push(cloneDeep(testData.applicationSettings));
+        const account = cloneDeep(testData.accounts[0]);
+        mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
+            applicationSettings: applicationSettings,
+            account: account
+        });
+        mockStore.refreshState();
+        fixture.detectChanges();
+        expect(component.life).toEqual(account.lives);
+    });
+
+    it('verify filteredCategories is set after the account value is emitted ', () => {
+        const applicationSettings = [];
+        applicationSettings.push(cloneDeep(testData.applicationSettings));
+
+        mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
+            categories: cloneDeep(testData.categoryList),
+            applicationSettings: applicationSettings,
+            account: cloneDeep(testData.accounts[0]),
+            user: cloneDeep(testData.userList[0]),
+            getTopTags: cloneDeep(testData.getTopTags)
+        });
+        mockStore.refreshState();
+        fixture.detectChanges();
+        expect(component.filteredCategories).toEqual(testData.newGameFilteredCategories);
+    });
+
+    it('verify resetNewGame action should be dispatched', () => {
+        // 
+        expect(spy).toHaveBeenCalledWith(new GameActions().resetNewGame());
+    });
+
+    it('verify ResetCurrentGame action should be dispatched', () => {
+        expect(spy).toHaveBeenCalledWith(new gameplayactions.ResetCurrentGame());
+    });
+
+    it('verify gameOptions is initialized', () => {
+        expect(component.gameOptions).toEqual(new GameOptions());
+    });
+
+
+    it('verify isCategorySelected() function should work for categoryWith requiredForGamePlay as true', () => {
+        mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
+            user: cloneDeep(testData.userList[0])
+        });
+        mockStore.refreshState();
+        expect(component.isCategorySelected(1, true)).toBe(true);
+    });
+
+
+    it('verify isCategorySelected() function should work for categoryWith requiredForGamePlay as false', () => {
+        mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
+            user: cloneDeep(testData.userList[0])
+        });
+        mockStore.refreshState();
+        expect(component.isCategorySelected(1, false)).toBe(false);
+    });
+
+
+    it(`verify isCategorySelected() function should work for categoryWith requiredForGamePlay as false and part
+        of user categorylist`, () => {
+        mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
+            user: cloneDeep(testData.userList[8])
+        });
+        mockStore.refreshState();
+        expect(component.isCategorySelected(1, false)).toBe(true);
+    });
+
+    it(`verify isCategorySelected() function should work for categoryWith requiredForGamePlay as false and not part
+         of user categorylist`, () => {
+        mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
+            user: cloneDeep(testData.userList[9])
+        });
+        mockStore.refreshState();
+        expect(component.isCategorySelected(1, false)).toBe(false);
+    });
+
+    it(`verify isCategorySelected() function should work for categoryWith requiredForGamePlay as false and part
+        of user last played games categorylist`, () => {
+        mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
+            user: cloneDeep(testData.userList[7])
+        });
+        mockStore.refreshState();
+        expect(component.isCategorySelected(1, false)).toBe(true);
+    });
+
+    it(`verify isCategorySelected() function should work for categoryWith requiredForGamePlay as false and not part
+        of user last played games categorylist`, () => {
+        mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
+            user: cloneDeep(testData.userList[10])
+        });
+        mockStore.refreshState();
+        expect(component.isCategorySelected(1, false)).toBe(false);
+    });
+
+
+    it('verify that selectTags() function works correctly', () => {
+        mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
+            getTopTags: cloneDeep(testData.getTopTags)
+        });
+        mockStore.refreshState();
+        component.selectTags('java');
+        const dataSelected = component.topTags.filter(data => data.key === 'java')[0].isSelected;
+        expect(dataSelected).toBe(true);
+    });
+
+    it('verify that selectTags() function works correctly if tag is selected', () => {
+        mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
+            getTopTags: cloneDeep(testData.getTopTags)
+        });
+        mockStore.refreshState();
+        const index = component.topTags.findIndex(data => data.key === 'java');
+        component.topTags[index].isSelected = true;
+        component.selectTags('java');
+        const dataSelected = component.topTags.filter(data => data.key === 'java')[0].isSelected;
+        expect(dataSelected).toBe(false);
+    });
+
+    it('verify that filter() function works correctly ', () => {
+        mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
+            tags: cloneDeep(testData.tagList)
+        });
+        mockStore.refreshState();
+        expect(component.filter('av')).toEqual(['Java', 'JavaScript']);
+    });
+
+
+    it('verify that validateGameOptions() function works correctly without friendId set ', () => {
+        let newGameOptions = new GameOptions();
+        newGameOptions = {
+            'isChallenge': false,
+            'playerMode': 1,
+            'gameMode': 0,
+            'categoryIds': [
+                1,
+                8,
+                2
+            ],
+            'tags': [
+                'test',
+                'angular',
+                'net',
+                'cloud'
+            ],
+            'maxQuestions': 8,
+            'opponentType': 1
+        };
+        expect(component.validateGameOptions(false, newGameOptions)).toEqual(false);
+    });
+
+    it('verify that validateGameOptions() function works correctly with friendId set ', () => {
+        const applicationSettings = [];
+        applicationSettings.push(cloneDeep(testData.applicationSettings));
+        mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
+            applicationSettings: applicationSettings
+        });
+        mockStore.refreshState();
+        let newGameOptions = new GameOptions();
+        newGameOptions = {
+            'isChallenge': false,
+            'playerMode': 1,
+            'gameMode': 0,
+            'categoryIds': [
+                1,
+                8,
+                2
+            ],
+            'tags': [
+                'test',
+                'angular',
+                'net',
+                'cloud'
+            ],
+            'maxQuestions': 8,
+            'opponentType': 1
+        };
+        component.friendUserId = 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1';
+        expect(component.validateGameOptions(false, newGameOptions)).toEqual(undefined);
+    });
+
+    it(`verify that validateGameOptions() function works correctly with friendId set then if lives are 0 then
+        redirectToDashboard() function should be called `, () => {
+        const applicationSettings = [];
+        applicationSettings.push(cloneDeep(testData.applicationSettings));
+        mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
+            applicationSettings: applicationSettings
+        });
+        mockStore.refreshState();
+        let newGameOptions = new GameOptions();
+        newGameOptions = {
+            'isChallenge': false,
+            'playerMode': 1,
+            'gameMode': 0,
+            'categoryIds': [
+                1,
+                8,
+                2
+            ],
+            'tags': [
+                'test',
+                'angular',
+                'net',
+                'cloud'
+            ],
+            'maxQuestions': 8,
+            'opponentType': 1
+        };
+        component.friendUserId = 'yP7sLu5TmYRUO9YT4tWrYLAqxSz1';
+        const spyOnRedirectToDashboard = spyOn(component, 'redirectToDashboard');
+        component.life = 0;
+        component.validateGameOptions(false, newGameOptions);
+        expect(spyOnRedirectToDashboard).toHaveBeenCalledTimes(1);
+    });
+
+
+    ;
+
+    it('verify that getImageUrl() function works correctly', () => {
+
+        const services = TestBed.get(Utils);
+        const spyGetImageUrl = spyOn(services, 'getImageUrl');
+
+        component.getImageUrl(testData.userList[0]);
+        expect(component.utils.getImageUrl).toHaveBeenCalledTimes(1);
+        expect(component.utils.getImageUrl).toHaveBeenCalledWith(testData.userList[0], 70, 60, '70X60');
+    });
+
+    it('verify that removeEnteredTag() function works correctly', () => {
+        mockStore.overrideSelector<AppState, Partial<CoreState>>(appState.coreState, {
+            tags: testData.tagList,
+            getTopTags: cloneDeep(testData.getTopTags),
+            user: testData.userList[0]
+        });
+        mockStore.refreshState();
+        fixture.detectChanges();
+
+        expect(component.selectedTags).toContain('angular');
+        component.removeEnteredTag('angular');
+        expect(component.selectedTags).not.toContain('angular');
+    });
 
 });
