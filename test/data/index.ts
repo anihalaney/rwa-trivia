@@ -26,7 +26,7 @@ import { CurrentQuestion } from './current-question';
 import { file } from './file';
 import { Countries } from './counties';
 import { UserAnsweredQuestion } from './userAnsweredQuestion';
-
+import { AddressUsingLongLat } from './address-using-long-lat';
 
 export const testData = {
     categories: Categories,
@@ -42,7 +42,7 @@ export const testData = {
     leaderBoard: LeaderBoard,
     topTopics: TopTopics,
     userDict: UserDict,
-    questionOfTheDay : QuestionOfTheDay,
+    questionOfTheDay: QuestionOfTheDay,
     getTopTags: TopTags,
     accounts: Accounts,
     newGameFilteredCategories: NewGameFilteredCategories,
@@ -55,6 +55,7 @@ export const testData = {
     account: Account,
     userAnsweredQuestions: UserAnsweredQuestions,
     currentQuestion: CurrentQuestion,
-    file: file
+    file: file,
+    addressUsingLongLat: AddressUsingLongLat
 };
 
