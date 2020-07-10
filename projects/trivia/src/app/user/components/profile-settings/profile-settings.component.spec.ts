@@ -41,7 +41,6 @@ describe('ProfileSettingsComponent', () => {
                     user = new User(afUser);
                     user.idToken = token;
                     store.dispatch(this.userActions.loginSuccess(this.user));
-
                 });
             } else {
                 // user not logged in
@@ -126,15 +125,15 @@ describe('ProfileSettingsComponent', () => {
         expect(component.user).toBe(undefined);
     });
 
-    it('Verify if userProfileSaveStatus SUCCESS', () => {
-        component.setNotificationMsg = jest.fn();
-        mockStore.overrideSelector<AppState, Partial<CoreState>>(coreState, {
-            userProfileSaveStatus: 'SUCCESS'
+        it('Verify if userProfileSaveStatus SUCCESS', () => {
+            component.setNotificationMsg = jest.fn();
+            mockStore.overrideSelector<AppState, Partial<CoreState>>(coreState, {
+                userProfileSaveStatus: 'SUCCESS'
+            });
+            mockStore.refreshState();
+            fixture.detectChanges();
+            expect(component.setNotificationMsg).toHaveBeenCalled();
         });
-        mockStore.refreshState();
-        fixture.detectChanges();
-        expect(component.setNotificationMsg).toHaveBeenCalled();
-    });
 
     it('Verify if userProfileSaveStatus is not equal to SUCCESS && NONE && IN PROCESS && MAKE FRIEND SUCCESS', () => {
         component.setNotificationMsg = jest.fn();

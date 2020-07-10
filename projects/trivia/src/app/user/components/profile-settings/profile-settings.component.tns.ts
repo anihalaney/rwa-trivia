@@ -68,7 +68,7 @@ export class ProfileSettingsComponent extends ProfileSettings
   showSelectTag = false;
   dataItem;
   customTag: string;
-  private tagItems: ObservableArray<TokenModel>;
+  public tagItems: ObservableArray<TokenModel>;
   SOCIAL_LABEL = "CONNECT YOUR SOCIAL ACCOUNT";
   @ViewChildren("textField", { read: false }) textField: QueryList<ElementRef>;
   platform = Platform;
@@ -83,8 +83,8 @@ export class ProfileSettingsComponent extends ProfileSettings
   public items: Array<SegmentedBarItem>;
   public selectedIndex = 0;
   tabsTitles: Array<string>;
-  private locations: ObservableArray<TokenModel>;
-  private isLocationEnalbed: boolean;
+  public locations: ObservableArray<TokenModel>;
+  public isLocationEnalbed: boolean;
   iqKeyboard: any;
   isSavingUserName: boolean;
 
@@ -158,12 +158,12 @@ export class ProfileSettingsComponent extends ProfileSettings
         .subscribe((status: string) => {
           if (
             status &&
-            status !== "NONE" &&
-            status !== "IN PROCESS" &&
-            status !== "SUCCESS" &&
-            status !== "MAKE FRIEND SUCCESS"
+            status !== 'NONE' &&
+            status !== 'IN PROCESS' &&
+            status !== 'SUCCESS' &&
+            status !== 'MAKE FRIEND SUCCESS'
           ) {
-            this.utils.showMessage("success", status);
+            this.utils.showMessage('success', status);
           }
           this.cd.markForCheck();
         })
@@ -171,10 +171,10 @@ export class ProfileSettingsComponent extends ProfileSettings
 
     this.subscriptions.push(
       this.gamePlayedChangeObservable.subscribe(data => {
-        if (this.tabsTitles.indexOf("Game Played") < 0) {
-          this.tabsTitles.push("Game Played");
+        if (this.tabsTitles.indexOf('Game Played') < 0) {
+          this.tabsTitles.push('Game Played');
           const segmentedBarItem = <SegmentedBarItem>new SegmentedBarItem();
-          segmentedBarItem.title = "Game Played";
+          segmentedBarItem.title = 'Game Played';
           this.items.push(segmentedBarItem);
         }
       })
@@ -191,14 +191,15 @@ export class ProfileSettingsComponent extends ProfileSettings
           if (location) {
             const cityAndCountry = this.getCityAndCountryName(location);
             this.userForm.patchValue({ location: cityAndCountry });
-            this.acLocation.nativeElement.text = cityAndCountry;
+            if (this.acLocation) {
+              this.acLocation.nativeElement.text = cityAndCountry;
+            }
             this.user.captured = 'mobile';
             this.user.isAutoComplete = false;
           }
         })
     );
   }
-
   ngAfterViewInit(): void {
     if (this.acLocation) {
       this.acLocation.autoCompleteTextView.loadSuggestionsAsync = async text => {
@@ -241,7 +242,10 @@ export class ProfileSettingsComponent extends ProfileSettings
       event.object.readOnly = true;
     } else {
       if (this.userForm.value.location) {
-        this.acLocation.nativeElement.text = this.userForm.value.location;
+        if (this.acLocation) {
+          this.acLocation.nativeElement.text = this.userForm.value.location;
+        }
+
         this.cd.markForCheck();
       }
     }
@@ -270,19 +274,22 @@ export class ProfileSettingsComponent extends ProfileSettings
     return this.tagItems;
   }
 
-  onTakePhoto() {
-    dialogs
+  async onTakePhoto() {
+    const result = await this.openDialog();
+    if (result === 'Camera') {
+      this.changeProfilePictureFromCamera();
+    } else if (result === 'Gallery') {
+      this.changeProfilePictureFromGallery();
+    }
+
+  }
+
+  async openDialog() {
+    return await dialogs
       .action({
-        message: "Choose option",
-        cancelButtonText: "Cancel",
-        actions: ["Camera", "Gallery"]
-      })
-      .then(result => {
-        if (result === "Camera") {
-          this.changeProfilePictureFromCamera();
-        } else if (result === "Gallery") {
-          this.changeProfilePictureFromGallery();
-        }
+        message: 'Choose option',
+        cancelButtonText: 'Cancel',
+        actions: ['Camera', 'Gallery']
       });
   }
 
@@ -294,15 +301,15 @@ export class ProfileSettingsComponent extends ProfileSettings
       saveToGallery: this.saveToGallery
     };
 
-    if (isAvailable()) {
+    if (this.isCameraAvailable()) {
       try {
-        const imageAsset = await takePicture(options);
+        const imageAsset = await this.takePicture(options);
         this.imageTaken = imageAsset;
         const source = new ImageSource();
-        const imageSource = await fromAsset(imageAsset);
+        const imageSource = await this.fromAsset(imageAsset);
         setTimeout(() => {
           this.cropImage(imageSource);
-        },isIOS ? 250 : 0);
+        }, isIOS ? 250 : 0);
       } catch (error) {
         this.utils.sendErrorToCrashlytics("appLog", error);
         console.error(error);
@@ -310,19 +317,24 @@ export class ProfileSettingsComponent extends ProfileSettings
     }
   }
 
+  isCameraAvailable(): Boolean {
+    return isAvailable();
+  }
+
+  async takePicture(options) {
+    return await takePicture(options);
+  }
+
+  async fromAsset(imageAsset) {
+    return await ImageSource.fromAsset(imageAsset);
+  }
+
   async cropImage(imageSource) {
     try {
-      const imageCropper: ImageCropper = new ImageCropper();
-      const result: ImageSource = (
-        await imageCropper.show(imageSource, {
-          width: 150,
-          height: 140,
-          lockSquare: false
-        })
-      ).image;
+      const result: ImageSource = await this.getCroppedImage(imageSource);
       if (result) {
         this.profileImage.image = `data:image/jpeg;base64,${result.toBase64String(
-          "jpeg",
+          'jpeg',
           100
         )}`;
         this.saveProfileImage();
@@ -334,21 +346,28 @@ export class ProfileSettingsComponent extends ProfileSettings
     }
   }
 
+  async getCroppedImage(imageSource): Promise<ImageSource> {
+    const imageCropper: ImageCropper = new ImageCropper();
+    return (
+      await imageCropper.show(imageSource, {
+        width: 150,
+        height: 140,
+        lockSquare: false
+      })
+    ).image;
+  }
+
   async changeProfilePictureFromGallery() {
     try {
       let imageSource = new ImageSource();
-      const context = imagepicker.create({
-        mode: "single" // use "multiple" for multiple selection
-      });
-      await context.authorize();
-      const selection = await context.present();
+      const selection = await this.contextSelection();
       const imageAsset = selection.length > 0 ? selection[0] : null;
       imageAsset.options = {
         width: this.width,
         height: this.height,
         keepAspectRatio: true
       };
-      imageSource = await fromAsset(imageAsset);
+      imageSource = await this.fromAsset(imageAsset);
       setTimeout(() => {
         this.cropImage(imageSource);
       }, 1);
@@ -358,8 +377,16 @@ export class ProfileSettingsComponent extends ProfileSettings
     }
   }
 
+  async contextSelection() {
+    const context = imagepicker.create({
+      mode: 'single' // use "multiple" for multiple selection
+    });
+    await context.authorize();
+    return await context.present();
+  }
+
   saveProfileImage() {
-    this.getUserFromFormValue(false, "");
+    this.getUserFromFormValue(false, '');
     this.assignImageValues();
     this.saveUser(
       this.user,
@@ -372,27 +399,31 @@ export class ProfileSettingsComponent extends ProfileSettings
     this.user.profilePicture = fileName;
     this.user.originalImageUrl = this.profileImage.image;
     this.user.croppedImageUrl = this.profileImage.image;
-    this.user.imageType = "image/jpeg";
-    this.userForm.get("profilePicture").setValue(fileName);
+    this.user.imageType = 'image/jpeg';
+    this.userForm.get('profilePicture').setValue(fileName);
     this.userForm.updateValueAndValidity();
   }
 
   addCustomTag() {
     this.hideKeyboard();
     this.enteredTags.push(this.customTag);
-    this.customTag = "";
-    this.autocomplete.autoCompleteTextView.resetAutoComplete();
+    this.customTag = '';
+    if (this.autocomplete) {
+      this.autocomplete.autoCompleteTextView.resetAutoComplete();
+    }
+
   }
 
   selectCategory(category) {
     category.isSelected = !category.isSelected ? true : false;
   }
 
-  private initDataItems() {
+  initDataItems() {
     this.tagItems = new ObservableArray<TokenModel>();
-
-    for (let i = 0; i < this.tagsAutoComplete.length; i++) {
-      this.tagItems.push(new TokenModel(this.tagsAutoComplete[i], undefined));
+    if (this.tagsAutoComplete) {
+      for (let i = 0; i < this.tagsAutoComplete.length; i++) {
+        this.tagItems.push(new TokenModel(this.tagsAutoComplete[i], undefined));
+      }
     }
   }
 
@@ -404,10 +435,6 @@ export class ProfileSettingsComponent extends ProfileSettings
     this.customTag = args.text;
   }
 
-  removeEnteredTag(tag) {
-    this.enteredTags = this.enteredTags.filter(t => t !== tag);
-  }
-
   setBulkUploadRequest(): void {
     const userForm = this.userForm.value;
     if (
@@ -417,8 +444,8 @@ export class ProfileSettingsComponent extends ProfileSettings
       !userForm.profilePicture
     ) {
       this.uUtils.showMessage(
-        "error",
-        "Please add name, display name, location and profile picture for bulk upload request"
+        'error',
+        'Please add name, display name, location and profile picture for bulk upload request'
       );
     } else {
       this.onSubmit();
@@ -427,7 +454,7 @@ export class ProfileSettingsComponent extends ProfileSettings
 
   formEditOpen(fieldName: string) {
     this.editSingleField(fieldName);
-    if (fieldName == "socialProfile") {
+    if (fieldName === 'socialProfile') {
       this.cd.markForCheck();
       const socialField = this.socialField.toArray();
       if (socialField.length) {
@@ -436,20 +463,22 @@ export class ProfileSettingsComponent extends ProfileSettings
     }
   }
 
-  onSubmit(isEditSingleField = false, field = "", position = -1) {
+  onSubmit(isEditSingleField = false, field = '', position = -1) {
     // validations
-    if (field === "location") {
+    if (field === 'location') {
       this.editLocationField();
     }
-    if (field === "socialProfile") {
+    if (field === 'socialProfile') {
       this.singleFieldEdit[field] = false;
     }
 
-    if (field === "displayName") {
+    if (field === 'displayName') {
       this.isSavingUserName = true;
     }
+    if (field) {
+      this.setValidation(field);
+    }
 
-    this.setValidation(field);
 
     this.userForm.updateValueAndValidity();
 
@@ -459,11 +488,11 @@ export class ProfileSettingsComponent extends ProfileSettings
 
     if (this.userForm.invalid) {
       this.isSavingUserName = false;
-      this.utils.showMessage("error", "Please fill the field");
+      this.utils.showMessage('error', 'Please fill the field');
       return;
     }
 
-    this.checkDisplayName(this.userForm.get("displayName").value);
+    this.checkDisplayName(this.userForm.get('displayName').value);
     this.singleFieldEdit[field] = false;
     this.subscriptions.push(
       this.store
@@ -488,8 +517,8 @@ export class ProfileSettingsComponent extends ProfileSettings
             } else {
               this.isSavingUserName = false;
               this.singleFieldEdit.displayName = true;
-              this.userForm.controls["displayName"].setErrors({ exist: true });
-              this.userForm.controls["displayName"].markAsTouched();
+              this.userForm.controls['displayName'].setErrors({ exist: true });
+              this.userForm.controls['displayName'].markAsTouched();
               this.cd.markForCheck();
             }
             this.toggleLoader(false);
@@ -516,7 +545,6 @@ export class ProfileSettingsComponent extends ProfileSettings
       try {
         const position = await geolocation.getCurrentLocation({});
         if (position) {
-          console.log('points>>', position);
           this.user.geoPoint = new firebase.firestore().GeoPoint(position.latitude, position.longitude);
           this.store.dispatch(
             this.userAction.loadAddressUsingLatLong(
@@ -556,19 +584,19 @@ export class ProfileSettingsComponent extends ProfileSettings
   }
 
   redirectToChangePassword() {
-    this.routerExtensions.navigate(["/user/my/profile/change-password"]);
+    this.routerExtensions.navigate(['/user/my/profile/change-password']);
   }
 
   navigateToPrivacyPolicy() {
-    this.routerExtensions.navigate(["/privacy-policy"]);
+    this.routerExtensions.navigate(['/privacy-policy']);
   }
 
   navigateToTermsConditions() {
-    this.routerExtensions.navigate(["/terms-and-conditions"]);
+    this.routerExtensions.navigate(['/terms-and-conditions']);
   }
 
   navigateToUserFeedback() {
-    this.routerExtensions.navigate(["/user-feedback"]);
+    this.routerExtensions.navigate(['/user-feedback']);
   }
 
   getCurrentLocation($event) {
