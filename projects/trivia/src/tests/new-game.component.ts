@@ -73,13 +73,7 @@ describe('NewGameComponent', () => {
                     value: {}
                 }
             ]
-        }),
-        // {
-        //     provide: ActivatedRoute,
-        //     useValue: {
-        //         params: of({ userid: '4kFa6HRvP5OhvYXsH9mEsRrXj4o2' })
-        //     }
-        // },
+        })
     ],
         [RouterTestingModule.withRoutes([]),
         NativeScriptRouterModule.forRoot([])]));
@@ -194,7 +188,6 @@ describe('NewGameComponent', () => {
         component.onSearchFriendTextChange(event);
         expect(component.searchFriend).toBe('Jack');
     });
-
     it(`on click startGame it should start new game with single play`, () => {
 
         const applicationSettings = [];
