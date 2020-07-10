@@ -15,7 +15,7 @@
                     <div>
                         <div class="question-text">Correct answer :</div>
                         <div class="answer-text">
-                            <span *ngFor="let answer of question.answers">
+                            <span *ngFor="let answer of question?.answers">
                                 <span *ngIf="answer.correct">{{answer.answerText}}</span>
                             </span>
                         </div>
@@ -23,7 +23,7 @@
                     <div>
                         <div class="question-text">Other options :</div>
                         <div class="answer-text">
-                            <span *ngFor="let answer of question.answers">
+                            <span *ngFor="let answer of question?.answers">
                                 <span *ngIf="!answer.correct">{{answer.answerText}}, </span>
                             </span>
                         </div>
