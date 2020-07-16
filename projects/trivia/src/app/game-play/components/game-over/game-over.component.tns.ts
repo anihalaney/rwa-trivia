@@ -3,7 +3,7 @@ import { select, Store } from '@ngrx/store';
 import { ModalDialogService } from 'nativescript-angular/directives/dialogs';
 import { RouterExtensions } from 'nativescript-angular/router';
 import { getImage } from 'nativescript-screenshot';
-import * as SocialShare from "nativescript-social-share";
+import * as SocialShare from 'nativescript-social-share';
 import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 import { WindowRef, Utils } from 'shared-library/core/services';
 import { coreState } from 'shared-library/core/store';
@@ -11,14 +11,9 @@ import { UserActions } from 'shared-library/core/store/actions';
 import { AppState, appState } from '../../../store';
 import { gamePlayState } from '../../store';
 import { GameOver } from './game-over';
-import { ReportGameComponent } from './../report-game/report-game.component';
-import { Image } from "tns-core-modules/ui/image";
-import {
-  appConstants, GameConstant, GameMode, OpponentType, Parameter, PlayerMode, FirebaseScreenNameConstants
-} from 'shared-library/shared/model';
-import {
-  FirebaseAnalyticsEventConstants, FirebaseAnalyticsKeyConstants, GeneralConstants, Question
-} from '../../../../../../shared-library/src/lib/shared/model';
+import { Image } from 'tns-core-modules/ui/image';
+import { appConstants } from 'shared-library/shared/model';
+import { Question } from '../../../../../../shared-library/src/lib/shared/model';
 import { Page } from 'tns-core-modules/ui/page/page';
 
 @Component({

@@ -19,15 +19,15 @@ export class RenderQuestionComponent implements OnInit, OnChanges {
   htmlStartTag: string;
   htmlEndTag: string;
   questionHeight = 0;
-  qIndex = "";
+  qIndex = '';
   isAndroid = isAndroid;
-  questionText = "";
-  backgroundColor = "transparent";
-  textColor = "black";
+  questionText = '';
+  backgroundColor = 'transparent';
+  textColor = 'black';
 
   ngOnInit(): void {
     if (this.question) {
-      this.qIndex = this.questionIndex ? `${this.questionIndex} . ` : "";
+      this.qIndex = this.questionIndex ? `${this.questionIndex} . ` : '';
       if (this.question.isRichEditor) {
         this.setStartTag();
         // tslint:disable-next-line:max-line-length
@@ -44,11 +44,7 @@ export class RenderQuestionComponent implements OnInit, OnChanges {
   }
 
   constructor(private cd: ChangeDetectorRef) {
-    this.scriptToGetHeight = `<script> var body = document.body, html = document.documentElement;
-            var height = Math.max(body.scrollHeight, body.offsetHeight,
-            html.clientHeight, html.scrollHeight, html.offsetHeight);
-            document.location.href += "#" + height;
-            </script><style>pre.ql-syntax { background-color: #efecf4;overflow: visible;}</style>`;
+    this.scriptToGetHeight = `<script> var body = document.body, html = document.documentElement;var height = Math.max(body.scrollHeight, body.offsetHeight,html.clientHeight, html.scrollHeight, html.offsetHeight);document.location.href += "#" + height;</script><style>pre.ql-syntax { background-color: #efecf4;overflow: visible;}</style>`;
 
     // tslint:disable-next-line:max-line-length
     this.htmlStartTag = `<html><head><body style="padding-top:10px;vertical-align: middle;text-align:left;background-color:${this.backgroundColor};"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"> `;
@@ -60,9 +56,8 @@ export class RenderQuestionComponent implements OnInit, OnChanges {
   onLoadFinished(event: LoadEventData) {
     if (isIOS && this.question) {
       const height = event.url
-        ? decodeURIComponent(event.url).split("#")[1]
+        ? decodeURIComponent(event.url).split('#')[1]
         : undefined;
-
       if (height) {
         this.questionHeight = parseInt(height, 10);
         this.calHeight.emit(this.questionHeight);
@@ -73,14 +68,13 @@ export class RenderQuestionComponent implements OnInit, OnChanges {
       const webView = <WebView>event.object,
         jsStr = `var body = document.body;
         var html = document.documentElement;
-        Math.max( body.scrollHeight, body.offsetHeight, 
+        Math.max( body.scrollHeight, body.offsetHeight,
         html.clientHeight, html.scrollHeight, html.offsetHeight);`;
-
       webView.ios.scrollView.scrollEnabled = false;
       webView.ios.evaluateJavaScriptCompletionHandler(jsStr,
         (height, error) => {
           if (error) {
-            console.log("error...");
+            console.log('error...');
           } else if (height) {
 
             if (height) {
@@ -102,23 +96,20 @@ export class RenderQuestionComponent implements OnInit, OnChanges {
       if (changes.question) {
         this.setStartTag();
         this.questionText =
-          this.htmlStartTag +
-          changes.question.currentValue.questionText +
-          this.scriptToGetHeight +
-          this.htmlEndTag;
+          this.htmlStartTag + changes.question.currentValue.questionText + this.scriptToGetHeight + this.htmlEndTag;
       }
     } else if (this.question) {
       this.questionText = this.question.questionText;
     }
-  
     this.cd.markForCheck();
   }
 
   setStartTag() {
     if (this.theme) {
-      this.backgroundColor = this.theme === "dark" ? "#283b66" : "#f7f7f7";
+      this.backgroundColor = this.theme === 'dark' ? '#283b66' : '#f7f7f7';
       // this.textColor = this.theme === "dark" ? "#ffffff" : "#a5a5a5";
     }
+    // tslint:disable-next-line: max-line-length
     this.htmlStartTag = `<html><head><body style="padding-top:10px;vertical-align: middle;text-align:left;background-color:${this.backgroundColor};"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"> `;
   }
 }
