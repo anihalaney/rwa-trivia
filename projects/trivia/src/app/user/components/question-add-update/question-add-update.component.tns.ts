@@ -153,11 +153,11 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate
         .select(appState.coreState)
         .pipe(select(s => s.questionSaveStatus))
         .subscribe(status => {
-          if (status === "SUCCESS") {
+          if (status === 'SUCCESS') {
             this.store.dispatch(this.questionAction.resetQuestionSuccess());
-            this.utils.showMessage("success", "Question saved!");
-            this.routerExtension.navigate(["/user/my/questions"]);
-            this.actionBarTxt = "My Question";
+            this.utils.showMessage('success', 'Question saved!');
+            this.routerExtension.navigate(['/user/my/questions']);
+            this.actionBarTxt = 'My Question';
             setTimeout(() => {
               this.hideQuestion.emit(false);
               this.toggleLoader(false);
@@ -249,12 +249,15 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate
   async cropImage(imageSource, webviewElement) {
     try {
       const result: ImageSource = await this.getCroppedImage(imageSource);
+      // console.log('result', result);
       if (result) {
         const image = `data:image/jpeg;base64,${result.toBase64String(
           'jpeg',
           100
         )}`;
+ 
         this.imagePath = image;
+        // console.log("image>>",this.imagePath);
         this.subscriptions.push(
           this.questionService
             .saveQuestionImage(this.imagePath, '')
@@ -264,7 +267,8 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate
                   const imageName =
                     this.utils.getQuestionUrl(imageObject.name) +
                     `?d=${new Date().getTime()}`;
-                  webviewElement.emit('imageUrl', imageName);
+                  // webviewElement.emit('imageUrl', imageName);
+                  this.oWebViewInterface.emit('imageUrl', imageName);
                 }
               }
             })
@@ -462,20 +466,4 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate
       this.oWebViewInterface.off('uploadImageStart');
     }
   }
-}
-
-// Custom Validators
-function questionFormValidator(fg: FormGroup): { [key: string]: boolean } {
-  const answers: Answer[] = fg.get("answers").value;
-  if (
-    fg.get("isRichEditor").value &&
-    (fg.get("maxTime").value === 0 || fg.get("maxTime").value === null)
-  ) {
-    return { maxTimeNotSelected: true };
-  }
-
-  if (answers.filter(answer => answer.correct).length !== 1) {
-    return { correctAnswerCountInvalid: true };
-  }
-
 }
