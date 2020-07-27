@@ -118,12 +118,13 @@ export class DrawerComponent implements OnInit, OnDestroy {
             }
         }));
 
-        this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.user), filter(u => u !== null)).subscribe(user => {
+        this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.user), filter(u => u !== null)).subscribe(async user => {
             if (user && !this.logOut) {
                 this.photoUrl = this.utils.getImageUrl(user, 70, 60, '70X60');
                 this.user = user;
                 if (!this.pushToken) {
-                    firebase.getCurrentPushToken().then((token) => {
+                    try {
+                        const token = await this.firebaseToken();
                         if (token) {
                             this.pushToken = token;
                             this.authProvider.updateDevicePushToken(token);
@@ -136,7 +137,6 @@ export class DrawerComponent implements OnInit, OnDestroy {
                                     .findIndex((androidPushToken) =>
                                         (androidPushToken === token ||
                                             (androidPushToken && androidPushToken.token && androidPushToken.token === token))) === -1) {
-                                    console.log('Android token', token);
                                     user.androidPushTokens.push(deviceToken);
                                     this.updateUser(user, DrawerConstants.UPDATE_TOKEN_STATUS);
                                 } else {
@@ -149,7 +149,6 @@ export class DrawerComponent implements OnInit, OnDestroy {
                                     .findIndex((iosPushToken) =>
                                         (iosPushToken === token ||
                                             (iosPushToken && iosPushToken.token && iosPushToken.token === token))) === -1) {
-                                    console.log('ios token', token);
                                     user.iosPushTokens.push(deviceToken);
                                     this.updateUser(user, DrawerConstants.UPDATE_TOKEN_STATUS);
                                 } else {
@@ -159,16 +158,23 @@ export class DrawerComponent implements OnInit, OnDestroy {
                             }
                             this.user = user;
                         }
-                    });
+                    } catch (error) {
+
+                    }
                 }
             }
         }));
     }
 
     closeDrawer() {
-        const sideDrawer = <RadSideDrawer>app.getRootView();
+        const sideDrawer = this.sideDrawer();
         sideDrawer.closeDrawer();
         this.loader = false;
+    }
+
+
+    sideDrawer() {
+        return <RadSideDrawer>app.getRootView();
     }
 
     dashboard() {
@@ -265,14 +271,21 @@ export class DrawerComponent implements OnInit, OnDestroy {
     }
 
     get isDrawerOpen() {
-        const sideDrawer = <RadSideDrawer>app.getRootView();
-        if (sideDrawer) {
-            const isDrawerOpenOrClosed = (sideDrawer.getIsOpen() ? 'drawerOpened' : 'drawerClosed');
-            return isDrawerOpenOrClosed;
-        }
+        const sideDrawer = this.sideDrawer();
+        // console.log('SIDE BAR>>>', sideDrawer);
+        // TODO check unit test
+        // if (sideDrawer && sideDrawer.getIsOpen()) {
+        //     const isDrawerOpenOrClosed = (sideDrawer.getIsOpen() ? 'drawerOpened' : 'drawerClosed');
+        //     return isDrawerOpenOrClosed;
+        // }
+        return false;
     }
 
     ngOnDestroy(): void {
+    }
+
+    async firebaseToken() {
+        return await firebase.getCurrentPushToken();
     }
 
 }
