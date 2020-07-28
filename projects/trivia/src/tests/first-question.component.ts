@@ -78,7 +78,7 @@ describe('FirstQuestionComponent', async () => {
         expect(component.applicationSettings).toEqual(applicationSettings[0]);
     });
 
-    it('on load component should set applicationSettings', () => {
+    it('on load component should set categoryDictionary', () => {
         categoryDictionary.setResult(testData.categoryDictionary);
         mockStore.refreshState();
         expect(component.categoryDictionary).toBe(testData.categoryDictionary);
