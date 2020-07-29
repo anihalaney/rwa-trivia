@@ -26,6 +26,7 @@ export class QuestionsTableComponent implements OnInit, OnChanges {
   @Output() displayReason: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() selectedQuestion: EventEmitter<Question> = new EventEmitter<Question>();
   @Output() editQuestion: EventEmitter<Question> = new EventEmitter<Question>();
+
   @ViewChild('listview', { static: true }) radListView: RadListViewComponent;
   showQuestionId = '';
   counter = 0;
@@ -38,14 +39,14 @@ export class QuestionsTableComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes && changes['questions'] && this.questions && (!changes['questions'].currentValue ||
-    (changes['questions'] && changes['questions'].currentValue  && changes['questions'].currentValue !== changes['questions'].previousValue)
+      (changes['questions'] && changes['questions'].currentValue && changes['questions'].currentValue !== changes['questions'].previousValue)
     )) {
-        this.questions.map(data => data['show'] = false);
+      this.questions.map(data => data['show'] = false);
     }
   }
 
   expandQuestion(args: string, isShow: boolean, qIndex = -1) {
-    const questionObj =  [...this.questions];
+    const questionObj = [...this.questions];
     questionObj.map(data => {
       data['show'] = false;
       if (data.id === args) {
@@ -54,12 +55,18 @@ export class QuestionsTableComponent implements OnInit, OnChanges {
     });
     if (qIndex > -1 && isIOS) {
       this.questions = [...questionObj];
-       // wait for the UI to finish the loading
+      // wait for the UI to finish the loading
       setTimeout(() => {
-        this.radListView.listView.scrollToIndex(qIndex, true, ListViewItemSnapMode.Start);
+        this.scrollToIndex(qIndex);
       }, 0);
     }
     this.showQuestionId = args;
+  }
+
+  scrollToIndex(index) {
+    if (this.radListView.listView) {
+      this.radListView.listView.scrollToIndex(index, true, ListViewItemSnapMode.Start);
+    }
   }
 
   setHeight(height: number, id: string) {
@@ -68,13 +75,13 @@ export class QuestionsTableComponent implements OnInit, OnChanges {
     if (!questionObj['height']) {
       questionObj['height'] = height;
       this.questions = [
-        ...this.questions.slice( 0, index ),
+        ...this.questions.slice(0, index),
         {
-            ...this.questions[ index ],
-            ...{ height: height},
+          ...this.questions[index],
+          ...{ height: height },
         },
-        ...this.questions.slice( index + 1 ),
-    ];
+        ...this.questions.slice(index + 1),
+      ];
     }
   }
 
@@ -84,18 +91,18 @@ export class QuestionsTableComponent implements OnInit, OnChanges {
       this.questions[questionIndex].answers[index]['height'] = height;
       if (!this.questions[questionIndex].answers.some(data => !data['height'])) {
         this.questions = [
-          ...this.questions.slice( 0, questionIndex ),
+          ...this.questions.slice(0, questionIndex),
           {
-              ...this.questions[ questionIndex ]
+            ...this.questions[questionIndex]
           },
-          ...this.questions.slice( questionIndex + 1 ),
-      ];
-      if (qIndex > -1 && isIOS) {
-        // wait for the UI to finish the loading
-        setTimeout(() => {
-          // this.radListView.listView.scrollToIndex(qIndex, true, ListViewItemSnapMode.Start);
-        }, 0);
-      }
+          ...this.questions.slice(questionIndex + 1),
+        ];
+        if (qIndex > -1 && isIOS) {
+          // wait for the UI to finish the loading
+          setTimeout(() => {
+            // this.radListView.listView.scrollToIndex(qIndex, true, ListViewItemSnapMode.Start);
+          }, 0);
+        }
       }
     }
   }
