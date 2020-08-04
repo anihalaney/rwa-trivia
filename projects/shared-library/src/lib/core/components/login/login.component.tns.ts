@@ -72,7 +72,7 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
     }
   }
 
-  private validateNumber(): boolean {
+  public validateNumber(): boolean {
     return this.phonenumber.isValidMobile(this.input.phoneNumber, this.input.country);
   }
 
@@ -111,7 +111,6 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
     try {
       this.isCountryListOpened = true;
       const result = await this.modalDialogService.showModal(CountryListComponent, options);
-
       if (result === undefined && this.input.selectedCountry === null) {
         this.isCountryCodeError = true;
       } else if (result) {
