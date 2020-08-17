@@ -30,20 +30,19 @@ export class AppComponent implements OnInit, OnDestroy {
   intervalSubscription: Subscription;
 
   @ViewChild('cookieLaw', { static: true })
-  private cookieLawEl: CookieLawComponent;
+  public cookieLawEl: CookieLawComponent;
 
   constructor(private renderer: Renderer2,
-    private authService: AuthenticationProvider,
+    public authService: AuthenticationProvider,
     private store: Store<AppState>,
     public router: Router,
     public snackBar: MatSnackBar,
     @Inject(PLATFORM_ID) private platformId: Object,
-    private windowRef: WindowRef,
+    public windowRef: WindowRef,
     private userAction: UserActions,
     private applicationSettingsAction: ApplicationSettingsActions,
     private categoryActions: CategoryActions,
     private topicsActions: TopicActions) {
-
     this.store.dispatch(this.applicationSettingsAction.loadApplicationSettings());
     this.store.dispatch(this.categoryActions.loadCategories());
     this.store.dispatch(this.topicsActions.loadTopTopics());
@@ -62,13 +61,18 @@ export class AppComponent implements OnInit, OnDestroy {
           this.router.navigate([url]);
         }
 
+        // it is required to ensure when user is updated in store
+        // we do not want to create another interval
+        if (this.intervalSubscription) {
+          this.intervalSubscription.unsubscribe();
+        }
+
         this.intervalSubscription = interval(1000 * 60 * 1)
           .subscribe(val => {
-            const userStatus: UserStatus = new UserStatus();
-            userStatus.userId = this.user.userId;
-            userStatus.online = true;
-            userStatus.lastUpdated = new Date().getTime();
-            this.authService.updateUserConnection();
+            // we are setting user online after every minute
+            // as user may be online from other browser and he may have closed it
+            // as we do not track web user based on token so for web only have status
+            this.authService.setUserOnline();
             return val;
           });
         this.authService.updateUserConnection();
@@ -85,8 +89,10 @@ export class AppComponent implements OnInit, OnDestroy {
 
     this.subscriptions.push(this.store.select(appState.coreState)
       .pipe(select(s => s.newGameId), filter(g => g !== '')).subscribe(gameObj => {
-        this.router.navigate(['/game-play', gameObj['gameId']]);
-        this.store.dispatch(new gamePlayActions.ResetCurrentQuestion());
+        if (gameObj) {
+          this.router.navigate(['/game-play', gameObj['gameId']]);
+          this.store.dispatch(new gamePlayActions.ResetCurrentQuestion());
+        }
       }));
 
     this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe(status => {

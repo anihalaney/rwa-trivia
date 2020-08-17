@@ -67,7 +67,7 @@ export class GameProfile {
                         this.topics = [...user.tags];
                         this.topicsArray.userTopics = [...user.tags, ...user.categoryIds];
                     }
-                    if (user && user.categoryIds) {
+                    if (user && user.categoryIds && this.categoryDictionary) {
                         this.topics = [...this.topics, user.categoryIds.map((data) => this.categoryDictionary[data].categoryName)];
                     }
 

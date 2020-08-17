@@ -3,12 +3,12 @@
     <FlexboxLayout class="game-result">
       <Label text="Game result" class="game-result-title"></Label>
       <GridLayout rows="auto" columns="auto" width="100%" marginTop="7">
-        <Label row="0" col="0" text="{{game.round}}/{{totalRound}}" class="main-title"></Label>
+        <Label row="0" col="0" text="{{game?.round}}/{{totalRound}}" class="main-title"></Label>
         <StackLayout row="0" col="0" horizontalAlignment="left" class="game-round-info-container-grey">
         </StackLayout>
         <StackLayout row="0" col="0" horizontalAlignment="left" verticalAlignment="center"
           class="game-round-info-container"
-          width="{{game.round/totalRound > 0 ? ((game.round/totalRound) * 100) : 0}}%">
+          width="{{game?.round/totalRound > 0 ? ((game?.round/totalRound) * 100) : 0}}%">
         </StackLayout>
       </GridLayout>
     </FlexboxLayout>
@@ -25,7 +25,7 @@
                                 horizontalAlignment="center" text="Round {{game.round}}/{{totalRound}}"
                                 textWrap="true"></Label> -->
 
-                  <StackLayout *ngIf="game.gameOptions?.playerMode == PlayerMode.Single" class="game-continue">
+                  <StackLayout *ngIf="game?.gameOptions?.playerMode == PlayerMode.Single" class="game-continue">
 
                     <StackLayout marginBottom="10">
                       <StackLayout *ngIf="gameStatus === gameStatusEnum.WON" margin="15"
@@ -71,7 +71,7 @@
                   </StackLayout>
 
                   <GridLayout rows="*,*" columns="*,auto,*" horizontalAlignment="center"
-                    *ngIf="game.gameOptions.playerMode == PlayerMode.Opponent">
+                    *ngIf="game?.gameOptions.playerMode == PlayerMode.Opponent">
                     <StackLayout marginTop="10" row="0" col="0" class="game-continue">
                       <app-user-card [userId]="user.userId" [otherInfo]="{'isScreenShot': isScreenShot ? 'true' : 'false', 'isWinner': gameStatus === gameStatusEnum.WON}"
                         [type]="userCardType.USER_IMAGE_NAME_VERTICAL_GAME_OVER">
@@ -188,10 +188,10 @@
                 <GridLayout rows="auto,auto,auto,auto,auto" columns="auto" horizontalAlignment="center">
 
                   <label row="0" col="0" class="navigate-button-solid SF-Pro-Medium"
-                    [text]="game.gameOptions?.playerMode == PlayerMode.Single ? 'Play Again' : 'Invite to play again'"
+                    [text]="game?.gameOptions?.playerMode == PlayerMode.Single ? 'Play Again' : 'Invite to play again'"
                     (rippleTap)="reMatchGame()" stlRippleEffect></label>
                   <GridLayout
-                    *ngIf="(game.gameOptions.opponentType == opponentType.Random || game.gameOptions.isChallenge )"
+                    *ngIf="(game?.gameOptions.opponentType == opponentType.Random || game?.gameOptions.isChallenge )"
                     row="1" col="0" rows="*" columns="auto,*" class="navigate-button" padding="10">
                     <app-user-card row="0" col="0" [userId]="otherUserId"
                       [type]="userCardType.USER_IMAGE_NAME_PROFILE_HORIZONTAL" [userType]="0">

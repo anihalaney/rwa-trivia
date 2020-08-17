@@ -22,7 +22,7 @@ export class FooterComponent implements OnInit, OnDestroy {
   appStoreUrl = projectMeta.appStoreUrl;
   constructor(private router: Router,
     @Inject(PLATFORM_ID) private platformId: Object,
-    private windowRef: WindowRef) {
+    public windowRef: WindowRef) {
     if (isPlatformBrowser(this.platformId)) {
       this.hostname = `${windowRef.nativeWindow.location.protocol}//${windowRef.nativeWindow.location.hostname}/${DashboardConstants.ADMIN_ROUTE}`;
     }

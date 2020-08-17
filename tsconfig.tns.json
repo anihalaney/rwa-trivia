@@ -10,6 +10,7 @@
       "shared-library/*": [
         "./projects/shared-library/src/lib/*"
       ],
+      "test/*": ["./test/*"],
       "*": [
         "./node_modules/tns-core-modules/*",
         "./node_modules/*"
@@ -29,6 +30,7 @@
     "**/quill-module/*"
   ],
   "include": [
+    "projects/trivia/src/tests/**/*.ts",
     "./projects/shared-library/src/lib/shared",
     "./projects/trivia/src/app/game-play/game-play.module.ts",
     "./projects/trivia/src/app/user/user.module.ts",

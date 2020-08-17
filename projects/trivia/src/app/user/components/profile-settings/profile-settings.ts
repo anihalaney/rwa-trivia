@@ -4,7 +4,7 @@ import {
   ViewChildren,
   Inject,
   PLATFORM_ID
-} from "@angular/core";
+} from '@angular/core';
 import {
   AbstractControl,
   FormArray,
@@ -12,11 +12,11 @@ import {
   FormControl,
   FormGroup,
   Validators
-} from "@angular/forms";
-import { ActivatedRoute, Router } from "@angular/router";
-import { select, Store } from "@ngrx/store";
-import * as cloneDeep from "lodash.clonedeep";
-import { combineLatest, Observable, Subject } from "rxjs";
+} from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { select, Store } from '@ngrx/store';
+// import * as cloneDeep from "lodash.clonedeep";
+import { combineLatest, Observable, Subject } from 'rxjs';
 import {
   flatMap,
   map,
@@ -24,9 +24,9 @@ import {
   switchMap,
   take,
   filter
-} from "rxjs/operators";
-import { Utils } from "shared-library/core/services";
-import { UserActions, getTopTopics } from "shared-library/core/store";
+} from 'rxjs/operators';
+import { Utils } from 'shared-library/core/services';
+import { UserActions, getTopTopics } from 'shared-library/core/store';
 import {
   Account,
   Category,
@@ -35,17 +35,17 @@ import {
   Invitation,
   AuthProviderConstants,
   Topic
-} from "shared-library/shared/model";
+} from 'shared-library/shared/model';
 import {
   AppState,
   appState,
   categoryDictionary,
   getCategories,
   getTags
-} from "../../../store";
-import * as userActions from "../../store/actions";
-import { AuthenticationProvider } from "shared-library/core/auth";
-import { isPlatformBrowser, isPlatformServer } from "@angular/common";
+} from '../../../store';
+// import * as userActions from "../../store/actions";
+import { AuthenticationProvider } from 'shared-library/core/auth';
+import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 
 export enum UserType {
   userProfile,
@@ -57,7 +57,7 @@ export class ProfileSettings {
   gamePlayedChangeSubject = new Subject();
   gamePlayedChangeObservable = this.gamePlayedChangeSubject.asObservable();
 
-  @ViewChildren("myInput") inputEl: QueryList<any>;
+  @ViewChildren('myInput') inputEl: QueryList<any>;
   // Properties
   user: User;
   fb: FormBuilder;
@@ -69,12 +69,12 @@ export class ProfileSettings {
   categoriesObs: Observable<Category[]>;
   userForm: FormGroup;
   userObs: Observable<User>;
-  profileOptions: string[] = ["Only with friends", "With EveryOne"];
-  locationOptions: string[] = ["Only with friends", "With EveryOne"];
+  profileOptions: string[] = ['Only with friends', 'With EveryOne'];
+  locationOptions: string[] = ['Only with friends', 'With EveryOne'];
   socialProfileSettings;
   enableSocialProfile;
   profileImage: { image: any } = {
-    image: "/assets/images/default-avatar-small.png"
+    image: '/assets/images/default-avatar-small.png'
   };
   profileImageValidation: String;
   profileImageFile: File;
@@ -94,8 +94,8 @@ export class ProfileSettings {
   loaderBusy = false;
   subscriptions = [];
   account: Account;
-  userId = "";
-  userProfileImageUrl = "";
+  userId = '';
+  userProfileImageUrl = '';
   userType = UserType.OtherUserProfile;
   isEnableEditProfile = false;
   socialProfileObj: any;
@@ -108,7 +108,7 @@ export class ProfileSettings {
     name: false
   };
 
-  activeEditField = "";
+  activeEditField = '';
   loggedInUser: User;
   gamePlayedAgainst: any;
   applicationSettings: any;
@@ -172,24 +172,7 @@ export class ProfileSettings {
             if (user && user.userId === this.userId) {
               this.user = user;
               this.cd.markForCheck();
-              if (
-                user.authState &&
-                user.authState.providerData &&
-                user.authState.providerData.length > 0
-              ) {
-                this.currentAuthProvider =
-                  user.authState.providerData[0].providerId;
-              } else if (user.authState && user.authState["providers"]) {
-                if (user.authState["providers"].length > 1) {
-                  this.currentAuthProvider =
-                    user.authState["providers"][1]["id"];
-                } else if (user.authState["providers"].length === 1) {
-                  this.currentAuthProvider =
-                    user.authState["providers"][0]["id"];
-                }
-              } else {
-                this.currentAuthProvider = "";
-              }
+              this.setUserAuthProvider(user);
 
               this.userType = UserType.userProfile;
               return this.initializeUserProfile();
@@ -204,6 +187,27 @@ export class ProfileSettings {
     );
   }
 
+  setUserAuthProvider(user) {
+    if (
+      user.authState &&
+      user.authState.providerData &&
+      user.authState.providerData.length > 0
+    ) {
+      this.currentAuthProvider =
+        user.authState.providerData[0].providerId;
+    } else if (user.authState && user.authState['providers']) {
+      if (user.authState['providers'].length > 1) {
+        this.currentAuthProvider =
+          user.authState['providers'][1]['id'];
+      } else if (user.authState['providers'].length === 1) {
+        this.currentAuthProvider =
+          user.authState['providers'][0]['id'];
+      }
+    } else {
+      this.currentAuthProvider = '';
+    }
+  }
+
   initializeSocialSetting() {
     return this.store.select(appState.coreState).pipe(
       select(s => s.applicationSettings),
@@ -216,9 +220,8 @@ export class ProfileSettings {
             profile =>
               this.user &&
               this.user[profile.social_name] &&
-              this.user[profile.social_name] !== ""
+              this.user[profile.social_name] !== ''
           );
-
           this.enableSocialProfile = this.socialProfileSettings.filter(
             profile => profile.enable
           ).length;
@@ -279,7 +282,7 @@ export class ProfileSettings {
             break;
           }
         }
-        if (this.user.roles && this.user.roles["bulkuploader"]) {
+        if (this.user.roles && this.user.roles['bulkuploader']) {
           this.user.bulkUploadPermissionStatus =
             profileSettingsConstants.APPROVED;
         }
@@ -353,25 +356,25 @@ export class ProfileSettings {
   }
 
   get tagsArray(): FormArray {
-    return this.userForm.get("tagsArray") as FormArray;
+    return this.userForm.get('tagsArray') as FormArray;
   }
 
   get categoryList(): FormArray {
-    return this.userForm.get("categoryList") as FormArray;
+    return this.userForm.get('categoryList') as FormArray;
   }
 
   get topicList(): FormArray {
-    return this.userForm.get("topicList") as FormArray;
+    return this.userForm.get('topicList') as FormArray;
   }
 
   get socialAccountList(): FormArray {
-    return this.userForm.get("socialAccountList") as FormArray;
+    return this.userForm.get('socialAccountList') as FormArray;
   }
 
   ValidateUrl(control: AbstractControl) {
     if (
-      control.value.toLowerCase().includes("http") ||
-      control.value.toLowerCase().includes("www")
+      control.value.toLowerCase().includes('http') ||
+      control.value.toLowerCase().includes('www')
     ) {
       return { validUrl: true };
     }
@@ -380,7 +383,7 @@ export class ProfileSettings {
 
   filter(val: string): string[] {
     return this.tagsAutoComplete.filter(option =>
-      new RegExp(this.utils.regExpEscape(`${val}`), "gi").test(option)
+      new RegExp(this.utils.regExpEscape(`${val}`), 'gi').test(option)
     );
   }
 
@@ -391,7 +394,6 @@ export class ProfileSettings {
   // create the form based on user object
   createForm(user: User) {
     let tagsFA, categoryFA, topicsFA;
-
     if (this.userType === 0) {
       const categoryIds: FormGroup[] = this.categories.map(category => {
         const status =
@@ -411,8 +413,9 @@ export class ProfileSettings {
           filteredTags.splice(filteredTags.indexOf(data.id), 1);
         }
       });
-
-      const topicsList = [...this.topics, ...filteredTags.map(data => { const newid = { id: data, type: 'tag' }; return newid; })];
+      const topicsList = [...this.topics, ...filteredTags.map(data => {
+        const newid = { id: data, type: 'tag' }; return newid;
+      })];
       const topics: FormGroup[] = topicsList.map(topic => {
         const status =
           topic.type === 'category' ?
@@ -437,7 +440,6 @@ export class ProfileSettings {
             : false;
         return category;
       });
-
       if (user.tags === undefined) {
         const a = [];
         user.tags = a;
@@ -448,7 +450,7 @@ export class ProfileSettings {
         return fc;
       });
       if (fcs.length === 0) {
-        fcs = [new FormControl("")];
+        fcs = [new FormControl('')];
       }
       tagsFA = new FormArray(fcs);
 
@@ -465,65 +467,64 @@ export class ProfileSettings {
         location: [user.location],
         categoryList: categoryFA ? categoryFA : [],
         topicList: topicsFA ? topicsFA : [],
-        tags: "",
+        tags: '',
         tagsArray: tagsFA ? tagsFA : [],
         profilePicture: [user.profilePicture],
         email: [user.email],
         phoneNo: [user.phoneNo],
-        oldPassword: [""],
-        password: [""],
-        confirmPassword: [""]
+        oldPassword: [''],
+        password: [''],
+        confirmPassword: ['']
       },
       { validator: profileUpdateFormValidator }
     );
     switch (this.currentAuthProvider) {
       case AuthProviderConstants.PASSWORD:
         this.userForm
-          .get("email")
+          .get('email')
           .setValidators(Validators.pattern(this.emailRegex));
         this.userForm
-          .get("phoneNo")
+          .get('phoneNo')
           .setValidators(Validators.pattern(this.phoneNoRegex));
-        this.userForm.get("oldPassword").setValidators(Validators.minLength(6));
-        this.userForm.get("password").setValidators(Validators.minLength(6));
+        this.userForm.get('oldPassword').setValidators(Validators.minLength(6));
+        this.userForm.get('password').setValidators(Validators.minLength(6));
         this.userForm
-          .get("confirmPassword")
+          .get('confirmPassword')
           .setValidators(Validators.minLength(6));
-        this.userForm.get("email").updateValueAndValidity();
-        this.userForm.get("phoneNo").updateValueAndValidity();
-        this.userForm.get("password").updateValueAndValidity();
-        this.userForm.get("oldPassword").updateValueAndValidity();
-        this.userForm.get("confirmPassword").updateValueAndValidity();
+        this.userForm.get('email').updateValueAndValidity();
+        this.userForm.get('phoneNo').updateValueAndValidity();
+        this.userForm.get('password').updateValueAndValidity();
+        this.userForm.get('oldPassword').updateValueAndValidity();
+        this.userForm.get('confirmPassword').updateValueAndValidity();
         break;
       case AuthProviderConstants.GOOGLE:
         this.userForm
-          .get("phoneNo")
+          .get('phoneNo')
           .setValidators(Validators.pattern(this.phoneNoRegex));
-        this.userForm.get("phoneNo").updateValueAndValidity();
+        this.userForm.get('phoneNo').updateValueAndValidity();
         break;
       case AuthProviderConstants.FACEBOOK:
         this.userForm
-          .get("phoneNo")
+          .get('phoneNo')
           .setValidators(Validators.pattern(this.phoneNoRegex));
-        this.userForm.get("phoneNo").updateValueAndValidity();
+        this.userForm.get('phoneNo').updateValueAndValidity();
         break;
       case AuthProviderConstants.APPLE:
         this.userForm
-          .get("phoneNo")
+          .get('phoneNo')
           .setValidators(Validators.pattern(this.phoneNoRegex));
-        this.userForm.get("phoneNo").updateValueAndValidity();
+        this.userForm.get('phoneNo').updateValueAndValidity();
         break;
 
       case AuthProviderConstants.PHONE:
         this.userForm
-          .get("email")
+          .get('email')
           .setValidators(Validators.pattern(this.emailRegex));
-        this.userForm.get("email").updateValueAndValidity();
+        this.userForm.get('email').updateValueAndValidity();
         break;
     }
     this.filteredTags$ = this.userForm.get('tags').valueChanges
       .pipe(map(val => val.length > 0 ? this.filter(val) : []));
-
     this.createSocialProfileControl();
     if (
       isPlatformBrowser(this.platformId) === false &&
@@ -532,7 +533,6 @@ export class ProfileSettings {
       this.isEnableEditProfile = true;
       this.showAllSocialSetting();
     }
-
     if (!this.isEnableEditProfile) {
       this.disableForm(true);
     }
@@ -545,7 +545,7 @@ export class ProfileSettings {
         if (profile.enable) {
           const socialName = this.user[profile.social_name]
             ? this.user[profile.social_name]
-            : "";
+            : '';
           this.userForm.addControl(
             profile.social_name,
             new FormControl(socialName, this.ValidateUrl)
@@ -557,7 +557,7 @@ export class ProfileSettings {
   }
 
   getUserFromFormValue(isEditSingleField, field): void {
-    if (field === "socialProfile") {
+    if (field === 'socialProfile') {
       this.socialProfileObj.map(profile => {
         if (profile.enable) {
           this.user[profile.social_name] = this.userForm.get(
@@ -573,12 +573,12 @@ export class ProfileSettings {
         this.cd.markForCheck();
       }
     } else {
-      this.user.name = this.userForm.get("name").value;
+      this.user.name = this.userForm.get('name').value;
       this.user.categoryIds = [];
       this.user.tags = [];
-      for (const obj of this.userForm.get("topicList").value) {
-        if (obj["isSelected"]) {
-          obj['type'] === 'category' ? this.user.categoryIds.push(obj["topic"]) : this.user.tags.push(obj["topic"]);
+      for (const obj of this.userForm.get('topicList').value) {
+        if (obj['isSelected']) {
+          obj['type'] === 'category' ? this.user.categoryIds.push(obj['topic']) : this.user.tags.push(obj['topic']);
         }
       }
       this.socialProfileObj.map(profile => {
@@ -589,26 +589,26 @@ export class ProfileSettings {
         }
       });
       // this.user.tags = [...this.enteredTags];
-      this.user.profilePicture = this.userForm.get("profilePicture").value
-        ? this.userForm.get("profilePicture").value
-        : "";
+      this.user.profilePicture = this.userForm.get('profilePicture').value
+        ? this.userForm.get('profilePicture').value
+        : '';
 
       switch (this.currentAuthProvider) {
         case AuthProviderConstants.PASSWORD:
-          this.user.email = this.userForm.get("email").value;
-          this.user.phoneNo = this.userForm.get("phoneNo").value;
+          this.user.email = this.userForm.get('email').value;
+          this.user.phoneNo = this.userForm.get('phoneNo').value;
           break;
         case AuthProviderConstants.GOOGLE:
-          this.user.phoneNo = this.userForm.get("phoneNo").value;
+          this.user.phoneNo = this.userForm.get('phoneNo').value;
           break;
         case AuthProviderConstants.FACEBOOK:
-          this.user.phoneNo = this.userForm.get("phoneNo").value;
+          this.user.phoneNo = this.userForm.get('phoneNo').value;
           break;
-          case AuthProviderConstants.APPLE:
-            this.user.phoneNo = this.userForm.get("phoneNo").value;
-            break;
+        case AuthProviderConstants.APPLE:
+          this.user.phoneNo = this.userForm.get('phoneNo').value;
+          break;
         case AuthProviderConstants.PHONE:
-          this.user.email = this.userForm.get("email").value;
+          this.user.email = this.userForm.get('email').value;
           break;
       }
     }
@@ -622,8 +622,8 @@ export class ProfileSettings {
   // store the user object
   async saveUser(user: User, isLocationChanged: boolean) {
     if (this.currentAuthProvider === AuthProviderConstants.PASSWORD) {
-      const currentPassword = this.userForm.get("oldPassword").value;
-      const newPassword = this.userForm.get("password").value;
+      const currentPassword = this.userForm.get('oldPassword').value;
+      const newPassword = this.userForm.get('password').value;
       if (
         currentPassword &&
         currentPassword !== null &&
@@ -639,7 +639,7 @@ export class ProfileSettings {
             newPassword
           );
         } catch (error) {
-          console.log("error--->", error);
+          console.log('error--->', error);
           throw error;
         }
       }
@@ -662,7 +662,7 @@ export class ProfileSettings {
   }
 
   getImageUrl(user: User) {
-    return this.utils.getImageUrl(user, 263, 263, "400X400");
+    return this.utils.getImageUrl(user, 263, 263, '400X400');
   }
 
   disableForm(isDisableAll = false) {
@@ -702,8 +702,7 @@ export class ProfileSettings {
   editSingleField(field: string) {
     this.activeEditField = field;
     this.singleFieldEdit[field] = this.singleFieldEdit[field] ? false : true;
-
-    if (field !== "socialProfile" && field !== "email" && field !== "phoneNo") {
+    if (field !== 'socialProfile' && field !== 'email' && field !== 'phoneNo') {
       if (this.singleFieldEdit[field]) {
         this.userForm.get(field).enable();
         this.userForm.get(field).setValidators([Validators.required]);
@@ -713,21 +712,21 @@ export class ProfileSettings {
         this.userForm.get(field).setValidators([]);
         this.userForm.updateValueAndValidity();
       }
-    } else if (field === "socialProfile") {
+    } else if (field === 'socialProfile') {
       this.socialProfileSettings = this.socialProfileSettings.map(res => {
         res.disable = true;
         return res;
       });
       this.cd.markForCheck();
       this.cd.detectChanges();
-    } else if (field === "email") {
+    } else if (field === 'email') {
       this.userForm
-        .get("email")
+        .get('email')
         .setValidators([Validators.required, Validators.email]);
       this.userForm.updateValueAndValidity();
-    } else if (field === "phoneNo") {
+    } else if (field === 'phoneNo') {
       this.userForm
-        .get("phoneNo")
+        .get('phoneNo')
         .setValidators([
           Validators.required,
           Validators.pattern(this.phoneNoRegex)
@@ -741,15 +740,13 @@ export class ProfileSettings {
   }
 
   setValidation(field: string) {
-
     for (const property in this.singleFieldEdit) {
-      if (property !== "socialProfile") {
+      if (property !== 'socialProfile') {
         this.userForm.get(property).clearValidators();
         this.userForm.get(property).updateValueAndValidity();
       }
     }
-
-    if (field !== "socialProfile" && field !== "email" && field !== "phoneNo") {
+    if (field !== 'socialProfile' && field !== 'email' && field !== 'phoneNo') {
       if (this.singleFieldEdit[field]) {
         this.userForm.get(field).enable();
         this.userForm.controls[field].setValidators([Validators.required]);
@@ -759,24 +756,24 @@ export class ProfileSettings {
         this.userForm.get(field).clearValidators();
         this.userForm.get(field).updateValueAndValidity();
       }
-    } else if (field === "socialProfile") {
+    } else if (field === 'socialProfile') {
       this.socialProfileSettings.map(res => {
         return (res.disable = true);
       });
       this.cd.markForCheck();
-    } else if (field === "email") {
-      this.userForm.controls["email"].setValidators([
+    } else if (field === 'email') {
+      this.userForm.controls['email'].setValidators([
         Validators.required,
         Validators.email
       ]);
-      this.userForm.controls["email"].updateValueAndValidity();
-    } else if (field === "phoneNo") {
-      this.userForm.controls["phoneNo"].setValidators([
+      this.userForm.controls['email'].updateValueAndValidity();
+    } else if (field === 'phoneNo') {
+      this.userForm.controls['phoneNo'].setValidators([
         Validators.required,
         Validators.pattern(this.phoneNoRegex)
       ]);
-      this.userForm.get("phoneNo").markAsTouched();
-      this.userForm.controls["phoneNo"].updateValueAndValidity();
+      this.userForm.get('phoneNo').markAsTouched();
+      this.userForm.controls['phoneNo'].updateValueAndValidity();
     }
   }
 
@@ -796,7 +793,6 @@ export class ProfileSettings {
   getCityAndCountryName(location) {
     let userLocation: string[] = [];
     if (location.results) {
-
       location.results[0].address_components.map(component => {
         const cityList = component.types.filter(
           typeName => { return typeName === 'administrative_area_level_3' }
@@ -828,12 +824,12 @@ export class ProfileSettings {
 
       return userLocation.toString();
     } else {
-      return "";
+      return '';
     }
   }
 
   startNewGame() {
-    this.router.navigate(["/game-play/challenge/", this.user.userId]);
+    this.router.navigate(['/game-play/challenge/', this.user.userId]);
   }
 
   get isLivesEnable(): Boolean {
@@ -860,22 +856,22 @@ export class ProfileSettings {
   changedLocation(event): void {
     this.user.isAutoComplete = true;
   }
-  
+
 }
 
 function profileUpdateFormValidator(fg: FormGroup): { [key: string]: boolean } {
   // Password match validation for password update only
   if (
-    fg.get("password") &&
-    fg.get("confirmPassword") &&
-    fg.get("password").value &&
-    fg.get("confirmPassword").value
+    fg.get('password') &&
+    fg.get('confirmPassword') &&
+    fg.get('password').value &&
+    fg.get('confirmPassword').value
   ) {
-    if (fg.get("password").value !== fg.get("confirmPassword").value) {
+    if (fg.get('password').value !== fg.get('confirmPassword').value) {
       return { passwordmismatch: true };
     }
 
-    if (!fg.get("oldPassword") || !fg.get("oldPassword").value) {
+    if (!fg.get('oldPassword') || !fg.get('oldPassword').value) {
       return { requiredoldpassword: true };
     }
 

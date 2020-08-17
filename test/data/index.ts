@@ -16,10 +16,19 @@ import { FriendsList } from './friends-list';
 import { Invitation } from './invitation';
 import { Question } from './question';
 import { QuestionOfTheDay } from './question-of-the-day';
-import { BulkUploads } from './bulk-uploads';
+import { TopTags } from './top-tags';
 import { Accounts } from './accounts';
-import { Countries } from './Countries';
-import { Suggetions } from './Suggetions';
+import { NewGameFilteredCategories } from './new-game-filtered-categories';
+import { BulkUploads } from './bulk-uploads';
+import { Account } from './account';
+import { Suggestions } from './Suggestions';
+import { UserAnsweredQuestions } from './user-answered-questions';
+import { CurrentQuestion } from './current-question';
+import { file } from './file';
+import { Countries } from './counties';
+import { UserAnsweredQuestion } from './userAnsweredQuestion';
+import { AddressUsingLongLat } from './address-using-long-lat';
+
 
 export const testData = {
     categories: Categories,
@@ -35,13 +44,21 @@ export const testData = {
     leaderBoard: LeaderBoard,
     topTopics: TopTopics,
     userDict: UserDict,
+    questionOfTheDay: QuestionOfTheDay,
+    getTopTags: TopTags,
+    accounts: Accounts,
+    newGameFilteredCategories: NewGameFilteredCategories,
     friendsList: FriendsList,
     invitation: Invitation,
     question: Question,
-    questionOfTheDay: QuestionOfTheDay,
     bulkUploads: BulkUploads,
-    accounts: Accounts,
+    suggestions: Suggestions,
     countries: Countries,
-    suggetions: Suggetions
+    userAnsweredQuestion: UserAnsweredQuestion,
+    account: Account,
+    userAnsweredQuestions: UserAnsweredQuestions,
+    currentQuestion: CurrentQuestion,
+    file: file,
+    addressUsingLongLat: AddressUsingLongLat
 };
 

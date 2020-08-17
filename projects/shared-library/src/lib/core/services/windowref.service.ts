@@ -46,4 +46,8 @@ export class WindowRef {
         this.analyticsParameters[AnalyticsEventConstants.EVENT] = event;
         this.nativeWindow.dataLayer.push(this.analyticsParameters);
     }
+
+    getNavigatorGeolocation() {
+        return navigator.geolocation;
+    }
 }

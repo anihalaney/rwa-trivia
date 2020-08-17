@@ -352,10 +352,10 @@ describe('loadAddressSuggestions', () => {
 
 describe('loadAddressSuggestionsSuccess', () => {
     it('should create an action', () => {
-        const suggetions = testData.suggetions;
-        const action = new UserActions().loadAddressSuggestionsSuccess(suggetions);
+        const suggestions = testData.suggestions;
+        const action = new UserActions().loadAddressSuggestionsSuccess(suggestions);
         expect(action.type).toEqual(UserActions.LOAD_ADDRESS_SUGGESTIONS_SUCCESS);
-        expect(action.payload).toEqual(suggetions);
+        expect(action.payload).toEqual(suggestions);
     });
 });
 

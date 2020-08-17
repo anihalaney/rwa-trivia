@@ -196,7 +196,7 @@ const commandList = {
                 "description": 'app e.g. --run',
                 "alias": ['a', 'A'],
                 "default": 'run',
-                "coerce": args => args === 'debug' ? 'debug' : 'run',
+                "coerce": args => args ? args : 'run',
             },
             "noHmr": {
                 "demand": false,

@@ -27,7 +27,8 @@ export const Questions = {
       ],
       'ordered': false,
       'tags': ['JavaScript', 'front-end', 'ES5'],
-      'categoryIds': [2]
+      'categoryIds': [2],
+      'isRichEditor': false
     },
     {
       'id': '2',
@@ -173,7 +174,44 @@ export const Questions = {
       'ordered': false,
       'tags': ['gaming'],
       'categoryIds': [1]
-    }
+    },
+    {
+      'id': '7',
+      'questionText': '<p>Which of the following is not a Java features?</p>',
+      'questionObject': [{
+        insert: 'Which of the following is not a Java features?'
+      }],
+      'isRichEditor': true,
+      'answers': [
+        {
+          'id': 1,
+          'answerText': '<p>Dynamic</p>',
+          'answerObject': [{
+            insert: 'Dynamic'
+          }],
+          'correct': false,
+          'isRichEditor': true
+        },
+        {
+          'id': 2,
+          'answerText': 'Architecture Neutral',
+          'correct': false
+        },
+        {
+          'id': 3,
+          'answerText': 'Use of pointers',
+          'correct': true
+        },
+        {
+          'id': 4,
+          'answerText': 'Object-oriented',
+          'correct': false
+        }
+      ],
+      'ordered': false,
+      'tags': ['gaming'],
+      'categoryIds': [1]
+    },
   ],
   'unpublished': [{
     'id': '0F2DHqEKdMIYujQHZt5k',
@@ -272,6 +310,35 @@ export const Questions = {
     'is_draft': false,
     'status': 5,
     'reason': 'Question is not clear'
+  },
+  {
+    'id': '1',
+    'questionText': 'how would you implement custom event handling in web application?',
+    'answers': [
+      {
+        'id': 1,
+        'answerText': 'Through interpolation',
+        'correct': false
+      },
+      {
+        'id': 2,
+        'answerText': 'Through EventEmitters only',
+        'correct': true
+      },
+      {
+        'id': 3,
+        'answerText': 'Through combination of Outputs Decorators and EventEmitters',
+        'correct': false
+      },
+      {
+        'id': 4,
+        'answerText': 'Through Output Decotators only',
+        'correct': false
+      }
+    ],
+    'ordered': false,
+    'tags': ['JavaScript'],
+    'categoryIds': [2]
   }
   ]
 };
