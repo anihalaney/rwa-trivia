@@ -12,17 +12,16 @@ import { provideMockStore, MockStore } from '@ngrx/store/testing';
 import { AuthenticationProvider, FirebaseAuthService } from 'shared-library/core/auth';
 import { User, Topic, DrawerConstants } from 'shared-library/shared/model';
 import { testData } from 'test/data';
-import { RouterExtensions } from 'nativescript-angular/router';
-import { of } from 'rxjs';
-import { Router } from '@angular/router';
+import { of, ReplaySubject } from 'rxjs';
+import { Router, RouterEvent, NavigationEnd } from '@angular/router';
 import cloneDeep from 'lodash/cloneDeep';
+
 describe('DrawerComponent', async () => {
 
     let component: DrawerComponent;
     let fixture: ComponentFixture<DrawerComponent>;
     let mockStore: MockStore<CoreState>;
     let mockCoreSelector: MemoizedSelector<CoreState, Partial<CoreState>>;
-    const applicationSettings: any[] = [];
     let spy: any;
     let spyOnSideBar: any;
     let router: Router;
@@ -32,7 +31,6 @@ describe('DrawerComponent', async () => {
         {
             provide: Utils,
             useValue: {
-                showMessage(type: string, message: string) { },
                 getImageUrl(user: User, width: Number, height: Number, size: string) {
                     if (user && user !== null && user.profilePicture && user.profilePicture !== '') {
                         if (this.sanitizer) {
@@ -50,7 +48,6 @@ describe('DrawerComponent', async () => {
                 }
             }
         },
-        FormBuilder,
         UserActions,
         TopicActions,
         UIStateActions,
@@ -86,7 +83,7 @@ describe('DrawerComponent', async () => {
                     value: {}
                 }
             ]
-        }),
+        })
     ],
         [StoreModule.forRoot({}), [RouterTestingModule.withRoutes([]),
         NativeScriptRouterModule.forRoot([])]]
@@ -99,7 +96,7 @@ describe('DrawerComponent', async () => {
         component = fixture.componentInstance;
         spyOnSideBar = spyOn(component, 'sideDrawer').and.returnValue({
             closeDrawer: () => { },
-            getIsOpen: () => { 'dfds'; }
+            getIsOpen: () => { ''; }
         });
 
         mockStore = TestBed.get(Store);
@@ -252,21 +249,78 @@ describe('DrawerComponent', async () => {
         expect(spyOnUpdateUserConnection).toHaveBeenCalledTimes(1);
     });
 
+    it('Verify when route is /leaderboard then it should set activeMenu is Category Leaderboard', () => {
+        const event = new NavigationEnd(0, '/dashboard/leaderboard', '/');
+        TestBed.get(Router).events.next(event);
+        expect(component.activeMenu).toBe('Category Leaderboard');
+    });
 
-    it('verify if userUpdateStatus is set after the value is emitted and update status of user connection', () => {
-        
-        const iosToken = ''
-        spyOn(component, 'firebaseToken').and.returnValue('abcd');
+    it('Verify when route is /dashboard then it should set activeMenu is Home', () => {
+        const event = new NavigationEnd(0, '/dashboard', '/');
+        TestBed.get(Router).events.next(event);
+        expect(component.activeMenu).toBe('Home');
+    });
 
-        const user = testData.userList[0];
-        mockStore.overrideSelector<CoreState, Partial<CoreState>>(coreState, {
-            user
-        });
-        mockStore.refreshState();
-        fixture.detectChanges();
-        // expect(spyOnUpdateUserConnection).toHaveBeenCalledTimes(1);
+    it('Verify when route is /recent-games then it should set activeMenu is Recently Completed Games', () => {
+        const event = new NavigationEnd(0, '/recent-games', '/');
+        TestBed.get(Router).events.next(event);
+        expect(component.activeMenu).toBe('Recently Completed Games');
+    });
+
+    it('Verify when route is /user/my/profile then it should set activeMenu is Profile', () => {
+        const event = new NavigationEnd(0, '/user/my/profile', '/');
+        TestBed.get(Router).events.next(event);
+        expect(component.activeMenu).toBe('Profile');
     });
 
 
+    it('Verify when route is /user/my/game-profile then it should set activeMenu is Game Profile', () => {
+        const event = new NavigationEnd(0, '/user/my/game-profile', '/');
+        TestBed.get(Router).events.next(event);
+        expect(component.activeMenu).toBe('Game Profile');
+    });
+
+    it('Verify when route is /user/my/questions then it should set activeMenu is My Questions', () => {
+        const event = new NavigationEnd(0, '/user/my/questions', '/');
+        TestBed.get(Router).events.next(event);
+        expect(component.activeMenu).toBe('My Questions');
+    });
+
+    it('Verify when route is /user/my/invite-friends then it should set activeMenu is Friend List', () => {
+        const event = new NavigationEnd(0, '/user/my/invite-friends', '/');
+        TestBed.get(Router).events.next(event);
+        expect(component.activeMenu).toBe('Friend List');
+    });
+
+    it('Verify when route is /privacy-policy then it should set activeMenu is Privacy Policy', () => {
+        const event = new NavigationEnd(0, '/privacy-policy', '/');
+        TestBed.get(Router).events.next(event);
+        expect(component.activeMenu).toBe('Privacy Policy');
+    });
+
+
+    it('Verify when route is /terms-and-conditions then it should set activeMenu is T&C', () => {
+        const event = new NavigationEnd(0, '/terms-and-conditions', '/');
+        TestBed.get(Router).events.next(event);
+        expect(component.activeMenu).toBe('T&C');
+    });
+
+    it('Verify when route is /user-feedback then it should set activeMenu is User-Feedback', () => {
+        const event = new NavigationEnd(0, '/user-feedback', '/');
+        TestBed.get(Router).events.next(event);
+        expect(component.activeMenu).toBe('User-Feedback');
+    });
+
+    it('Verify when route is /achievements then it should set activeMenu is achievements', () => {
+        const event = new NavigationEnd(0, '/achievements', '/');
+        TestBed.get(Router).events.next(event);
+        expect(component.activeMenu).toBe('achievements');
+    });
+
+    it('Verify when route is /login then it should set activeMenu is login/signup', () => {
+        const event = new NavigationEnd(0, '/login', '/');
+        TestBed.get(Router).events.next(event);
+        expect(component.activeMenu).toBe('login/signup');
+    });
 
 });

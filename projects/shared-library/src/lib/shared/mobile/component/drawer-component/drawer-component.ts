@@ -272,12 +272,10 @@ export class DrawerComponent implements OnInit, OnDestroy {
 
     get isDrawerOpen() {
         const sideDrawer = this.sideDrawer();
-        // console.log('SIDE BAR>>>', sideDrawer);
-        // TODO check unit test
-        // if (sideDrawer && sideDrawer.getIsOpen()) {
-        //     const isDrawerOpenOrClosed = (sideDrawer.getIsOpen() ? 'drawerOpened' : 'drawerClosed');
-        //     return isDrawerOpenOrClosed;
-        // }
+        if (sideDrawer && (!typeof sideDrawer.getIsOpen)) {
+            const isDrawerOpenOrClosed = (sideDrawer.getIsOpen() ? 'drawerOpened' : 'drawerClosed');
+            return isDrawerOpenOrClosed;
+        }
         return false;
     }
 
