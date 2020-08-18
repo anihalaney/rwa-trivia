@@ -30,7 +30,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
   showSelectCategory = false;
   showSelectTag = false;
   customTag: string;
-  private tagItems: ObservableArray<TokenModel>;
+  public tagItems: ObservableArray<TokenModel>;
   private _filterFriendFunc: (item: any) => any;
   // pagination: any;
   // This is magic variable
@@ -71,11 +71,11 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     this.modeAvailable = false;
     this.page.actionBarHidden = true;
     this.filterFriendFunc = (item: any) => {
-      if (!this.searchFriend  || this.searchFriend === '') {
+      if (!this.searchFriend || this.searchFriend === '') {
         return true;
       }
-      return ( item && item.userId && this.userDict[item.userId] &&
-        this.userDict[item.userId].displayName.toLowerCase().search(this.searchFriend.toLowerCase()) >= 0 ) ? true : false;
+      return (item && item.userId && this.userDict[item.userId] &&
+        this.userDict[item.userId].displayName.toLowerCase().search(this.searchFriend.toLowerCase()) >= 0) ? true : false;
     };
   }
   ngOnInit() {
@@ -135,14 +135,14 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
   }
 
   set filterFriendFunc(value: (item: any) => any) {
-      this._filterFriendFunc = value;
+    this._filterFriendFunc = value;
   }
 
   showDialog() {
     this.dialogOpen = true;
   }
 
-  // it does nothing but stop the tap event from propogate to background component
+  // it does nothing but stop the tap event from propagate to background component
   stopEventPropogation() {
     return false;
   }
@@ -176,14 +176,20 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
       this.selectedTags.push(this.customTag);
     }
     this.customTag = '';
-    this.autocomplete.autoCompleteTextView.resetAutoComplete();
+    if (this.autocomplete) {
+      this.autocomplete.autoCompleteTextView.resetAutoComplete();
+    }
+
   }
 
   onSearchFriendTextChange(event) {
-        this.searchFriend = event.value;
-        const listView = this.listViewComponent.listView;
-        listView.filteringFunction = undefined;
-        listView.filteringFunction = this.filterFriendFunc;
+    this.searchFriend = event.value;
+    if (this.listViewComponent) {
+      const listView = this.listViewComponent.listView;
+      listView.filteringFunction = undefined;
+      listView.filteringFunction = this.filterFriendFunc;
+    }
+
   }
 
   startGame() {
@@ -239,11 +245,12 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     return this.tagItems;
   }
 
-  private initDataItems() {
+  public initDataItems() {
     this.tagItems = new ObservableArray<TokenModel>();
-
-    for (let i = 0; i < this.tags.length; i++) {
-      this.tagItems.push(new TokenModel(this.tags[i], undefined));
+    if (this.tags) {
+      for (let i = 0; i < this.tags.length; i++) {
+        this.tagItems.push(new TokenModel(this.tags[i], undefined));
+      }
     }
   }
 
@@ -259,7 +266,9 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     this.friendUserId = friend.userId;
     this.chooseOptionsStep = 1;
     this.skipNavigation = true;
-    this.listViewComponent.listView.refresh();
+    if (this.listViewComponent) {
+      this.listViewComponent.listView.refresh();
+    }
   }
 
   navigateToInvite() {
@@ -280,16 +289,6 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     return (60 * this.selectedTags.length) + 20;
   }
 
-  changePlayerMode(playerMode: number, opponentType: any) {
-    this.gameOptions.playerMode = playerMode;
-    this.gameOptions.opponentType = opponentType;
-    if (this.gameOptions.playerMode === PlayerMode.Single) {
-      this.actionBarTitle = 'Play as single player';
-    } else {
-      this.actionBarTitle = 'Play as multi player';
-    }
-  }
-
   chooseRandomPlayer() {
     this.gameOptions.opponentType = 0;
     this.gameOptions.playerMode = 1;
@@ -305,11 +304,11 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     this.friendUserId = null;
 
     // Reset friend filter when switch game option playerMode
-    if(this.gameOptions.playerMode !== 0){
+    if (this.gameOptions.playerMode !== 0) {
       this.searchFriend = '';
     }
-   
-    
+
+
   }
 
   hideKeyboard() {

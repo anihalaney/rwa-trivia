@@ -4,7 +4,7 @@ import { AngularFireDatabase } from '@angular/fire/database';
 import { Store } from '@ngrx/store';
 import { defer, from, Observable, of, throwError } from 'rxjs';
 import { filter, map, mapTo, share, take, tap } from 'rxjs/operators';
-import { User } from '../../shared/model';
+import { User, UserStatusConstants } from '../../shared/model';
 import { CoreState, coreState } from '../store';
 import { UIStateActions, UserActions } from '../store/actions';
 import { FirebaseAuthService } from './firebase-auth.service';
@@ -60,6 +60,10 @@ export class AuthenticationProvider {
 
   updateUserConnection() {
     this.firebaseAuthService.updateOnConnect(this.user);
+  }
+
+  setUserOnline() {
+    this.firebaseAuthService.updateTokenStatus(this.user.userId, UserStatusConstants.ONLINE);
   }
 
   ensureLogin(url?: string): Observable<boolean> {

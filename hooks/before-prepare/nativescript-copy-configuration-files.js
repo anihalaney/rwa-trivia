@@ -1,9 +1,11 @@
 var nativeScriptConfig = require("./../../custom-hooks/nativescript-copy-configuration-files");
 module.exports = function ($logger, $projectData, hookArgs) {
+  
     return new Promise(function (resolve, reject) {
             /* do not add this line we do not use --release to decide release environment */
             // var isReleaseBuild = (hookArgs.appFilesUpdaterOptions && hookArgs.appFilesUpdaterOptions.release) ? true : false;
              /* Decide whether to prepare for dev or prod environment */
+
             var validProdEnvs = ['prod', 'production'];
             var isProdEnv = false; // building with --env.prod or --env.production flag
             var env = (hookArgs.platformSpecificData || hookArgs.prepareData).env;
