@@ -1,4 +1,4 @@
-export const Suggetions = [{
+export const Suggestions = [{
     type: 'LOAD_ADDRESS_SUGGESTIONS_SUCCESS',
     payload: {
       predictions: [

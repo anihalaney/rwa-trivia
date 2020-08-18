@@ -21,7 +21,7 @@ import { Accounts } from './accounts';
 import { NewGameFilteredCategories } from './new-game-filtered-categories';
 import { BulkUploads } from './bulk-uploads';
 import { Account } from './account';
-import { Suggestions } from './Suggestions';
+import { Suggestions } from './suggestions';
 import { UserAnsweredQuestions } from './user-answered-questions';
 import { CurrentQuestion } from './current-question';
 import { file } from './file';
