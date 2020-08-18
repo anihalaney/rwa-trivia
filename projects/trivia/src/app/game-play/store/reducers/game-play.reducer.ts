@@ -1,8 +1,8 @@
 import { GamePlayActions, GamePlayActionTypes } from '../actions';
-import { UserActions } from 'shared-library/core/store';
+import { UserActions, ActionWithPayload } from 'shared-library/core/store';
 import { Game, Question } from 'shared-library/shared/model';
 
-export function currentGame(state: any = null, action: GamePlayActions): Game {
+export function currentGame(state: any = null, action: GamePlayActions | ActionWithPayload<any>): Game {
   switch (action.type) {
     case GamePlayActionTypes.LOAD_SUCCESS:
       return action.payload;
@@ -15,7 +15,7 @@ export function currentGame(state: any = null, action: GamePlayActions): Game {
   }
 }
 
-export function currentGameQuestion(state: any = null, action: GamePlayActions): Question {
+export function currentGameQuestion(state: any = null, action: GamePlayActions | ActionWithPayload<any>): Question {
   switch (action.type) {
     case GamePlayActionTypes.GET_NEXT_QUESTION_SUCCESS:
       return action.payload;
@@ -52,6 +52,3 @@ export function saveReportQuestion(state: any = null, action: GamePlayActions): 
       return 'SUCCESS';
   }
 }
-
-
-
