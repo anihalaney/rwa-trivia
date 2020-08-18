@@ -104,5 +104,6 @@ export abstract class UtilsCore {
   abstract setUserLocationFirebaseAnalyticsParameter(user: User, isLocationChanged: boolean): Observable<string>;
   public hideKeyboard(field: any) { }
   public goToDashboard() { }
-  focusTextField(field:any) {}
+  focusTextField(field: any) { }
+  sendErrorToCrashlytics(type: any, error: any) { }
 }

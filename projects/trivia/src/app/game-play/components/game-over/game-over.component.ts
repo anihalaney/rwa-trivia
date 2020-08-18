@@ -129,53 +129,15 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
             }));
             this.playerUserName = 'You';
           })
-          .catch((error) => {
-            console.error('oops, something went wrong!', error);
+          .catch((err) => {
+            console.log('oops, something went wrong!', err);
           });
       }, 2000);
     }
   }
 
-  loadImages(sources, callback) {
-    const images = {};
-    let loadedImages = 0;
-    let numImages = 0;
-    // get num of sources
-    for (const key in sources) {
-      if (sources.hasOwnProperty(key)) {
-        numImages++;
-      }
-    }
-
-    for (const src in sources) {
-      if (sources.hasOwnProperty(src)) {
-        images[src] = new Image();
-        images[src].onload = () => {
-          if (++loadedImages >= numImages) {
-            callback(images);
-          }
-        };
-        images[src].src = sources[src];
 
 
-      }
-    }
-  }
-
-  roundedImage(x, y, width, height, radius, context) {
-    context.beginPath();
-    context.moveTo(x + radius, y);
-    context.lineTo(x + width - radius, y);
-    context.quadraticCurveTo(x + width, y, x + width, y + radius);
-    context.lineTo(x + width, y + height - radius);
-    context.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
-    context.lineTo(x + radius, y + height);
-    context.quadraticCurveTo(x, y + height, x, y + height - radius);
-    context.lineTo(x, y + radius);
-    context.quadraticCurveTo(x, y, x + radius, y);
-    context.closePath();
-    return true;
-  }
 
   onNotify(info: any) {
     this.socialFeedData.share_status = info.share_status;

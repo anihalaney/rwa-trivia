@@ -4,12 +4,12 @@
             <FlexboxLayout class="game-result">
                 <Label text="Round result" class="game-result-title"></Label>
                 <GridLayout rows="auto" columns="auto" width="100%" marginTop="7">
-                    <Label row="0" col="0" text="{{game.round}}/{{totalRound}}" class="main-title"></Label>
+                    <Label row="0" col="0" text="{{game?.round}}/{{totalRound}}" class="main-title"></Label>
                     <StackLayout android:backgroundColor="#f1f1f1" row="0" col="0" horizontalAlignment="left"
                         class="game-round-info-container-grey">
                     </StackLayout>
                     <StackLayout row="0" col="0" horizontalAlignment="left" class="game-round-info-container"
-                        width="{{game.round/totalRound > 0 ? ((game.round/totalRound) * 100) : 0}}%">
+                        width="{{game?.round/totalRound > 0 ? ((game?.round/totalRound) * 100) : 0}}%">
                     </StackLayout>
                 </GridLayout>
             </FlexboxLayout>
@@ -18,7 +18,7 @@
 
                 <GridLayout marginTop="30" (onloaded)="stackLoaded($event)" rows="*,*,*,*,*,*" cols="*"
                     class="game-continue">
-                    <StackLayout row="0" col="0" *ngIf="game.gameOptions?.playerMode == PlayerMode.Single"
+                    <StackLayout row="0" col="0" *ngIf="game?.gameOptions?.playerMode == PlayerMode.Single"
                         marginBottom="10">
                         <app-user-card [userId]="user.userId" [isGamePlay]=true
                             [type]="userCardType.USER_IMAGE_NAME_VERTICAL"> </app-user-card>
@@ -26,17 +26,17 @@
                             horizontalAlignment="center"
                             text="You have collected {{earnedBadges.length}} {{earnedBadges.length>1 ? 'badges':'badge'}} "
                             textWrap="true"></Label>
-                        <Label *ngIf="!game?.gameOptions.isBadgeWithCategory && game.stats[user.userId]?.score>=1" class="roundandscore"
+                        <Label *ngIf="!game?.gameOptions.isBadgeWithCategory && game?.stats[user.userId]?.score>=1" class="roundandscore"
                             horizontalAlignment="center"
-                            text="You have collected {{game.stats[user.userId]?.score}} {{game.stats[user.userId]?.score>1 ? 'badges':'badge'}} "
+                            text="You have collected {{game?.stats[user.userId]?.score}} {{game?.stats[user.userId]?.score>1 ? 'badges':'badge'}} "
                             textWrap="true"></Label>
-                        <FlexboxLayout *ngIf="!game?.gameOptions.isBadgeWithCategory && game.stats[user.userId]?.score>=1" class="earnedsymbolsStack"
+                        <FlexboxLayout *ngIf="!game?.gameOptions.isBadgeWithCategory && game?.stats[user.userId]?.score>=1" class="earnedsymbolsStack"
                             orientation="horizontal" horizontalAlignment="center">
-                            <Image *ngIf="game.stats[user.userId]?.score>=1" src="res://badge1"></Image>
-                            <Image *ngIf="game.stats[user.userId]?.score>=2" src="res://badge2"></Image>
-                            <Image *ngIf="game.stats[user.userId]?.score>=3" src="res://badge3"></Image>
-                            <Image *ngIf="game.stats[user.userId]?.score>=4" src="res://badge4"></Image>
-                            <Image *ngIf="game.stats[user.userId]?.score>=5" src="res://badge5"></Image>
+                            <Image *ngIf="game?.stats[user.userId]?.score>=1" src="res://badge1"></Image>
+                            <Image *ngIf="game?.stats[user.userId]?.score>=2" src="res://badge2"></Image>
+                            <Image *ngIf="game?.stats[user.userId]?.score>=3" src="res://badge3"></Image>
+                            <Image *ngIf="game?.stats[user.userId]?.score>=4" src="res://badge4"></Image>
+                            <Image *ngIf="game?.stats[user.userId]?.score>=5" src="res://badge5"></Image>
                         </FlexboxLayout>
                         <FlexboxLayout *ngIf="game?.gameOptions.isBadgeWithCategory" class="earnedsymbolsStack"
                             orientation="horizontal" horizontalAlignment="center">
@@ -44,25 +44,25 @@
                         </FlexboxLayout>
                     </StackLayout>
                     <GridLayout row="1" col="0" rows="*" columns="*,auto,*"
-                        *ngIf="game.gameOptions.playerMode == PlayerMode.Opponent">
+                        *ngIf="game?.gameOptions.playerMode == PlayerMode.Opponent">
                         <StackLayout row="0" col="0" horizontalAlignment="center">
                             <app-user-card [userId]="user.userId" [isGamePlay]=true
                                 [type]="userCardType.USER_IMAGE_NAME_VERTICAL"> </app-user-card>
                             <FlexboxLayout *ngIf="!game?.gameOptions.isBadgeWithCategory" android:backgroundColor="#f1f1f1" class="background-score">
                                 <Image
-                                    src="{{game.stats[user.userId]?.score>=1 ? 'res://badge1' : 'res://badge1inactive'}}">
+                                    src="{{game?.stats[user.userId]?.score>=1 ? 'res://badge1' : 'res://badge1inactive'}}">
                                 </Image>
                                 <Image
-                                    src="{{game.stats[user.userId]?.score>=2 ? 'res://badge2' : 'res://badge2inactive'}}">
+                                    src="{{game?.stats[user.userId]?.score>=2 ? 'res://badge2' : 'res://badge2inactive'}}">
                                 </Image>
                                 <Image
-                                    src="{{game.stats[user.userId]?.score>=3 ? 'res://badge3' : 'res://badge3inactive'}}">
+                                    src="{{game?.stats[user.userId]?.score>=3 ? 'res://badge3' : 'res://badge3inactive'}}">
                                 </Image>
                                 <Image
-                                    src="{{game.stats[user.userId]?.score>=4 ? 'res://badge4' : 'res://badge4inactive'}}">
+                                    src="{{game?.stats[user.userId]?.score>=4 ? 'res://badge4' : 'res://badge4inactive'}}">
                                 </Image>
                                 <Image
-                                    src="{{game.stats[user.userId]?.score>=5 ? 'res://badge5' : 'res://badge5inactive'}}">
+                                    src="{{game?.stats[user.userId]?.score>=5 ? 'res://badge5' : 'res://badge5inactive'}}">
                                 </Image>
                             </FlexboxLayout>
                             <FlexboxLayout *ngIf="game?.gameOptions.isBadgeWithCategory" android:backgroundColor="#f1f1f1" class="background-score">
@@ -78,19 +78,19 @@
                                 [type]="userCardType.USER_IMAGE_NAME_VERTICAL"> </app-user-card>
                             <FlexboxLayout *ngIf="!game?.gameOptions.isBadgeWithCategory" android:backgroundColor="#f1f1f1" class="background-score">
                                 <Image
-                                    src="{{game.stats[otherUserId]?.score>=1 ? 'res://badge1' : 'res://badge1inactive'}}">
+                                    src="{{game?.stats[otherUserId]?.score>=1 ? 'res://badge1' : 'res://badge1inactive'}}">
                                 </Image>
                                 <Image
-                                    src="{{game.stats[otherUserId]?.score>=2 ? 'res://badge2' : 'res://badge2inactive'}}">
+                                    src="{{game?.stats[otherUserId]?.score>=2 ? 'res://badge2' : 'res://badge2inactive'}}">
                                 </Image>
                                 <Image
-                                    src="{{game.stats[otherUserId]?.score>=3 ? 'res://badge3' : 'res://badge3inactive'}}">
+                                    src="{{game?.stats[otherUserId]?.score>=3 ? 'res://badge3' : 'res://badge3inactive'}}">
                                 </Image>
                                 <Image
-                                    src="{{game.stats[otherUserId]?.score>=4 ? 'res://badge4' : 'res://badge4inactive'}}">
+                                    src="{{game?.stats[otherUserId]?.score>=4 ? 'res://badge4' : 'res://badge4inactive'}}">
                                 </Image>
                                 <Image
-                                    src="{{game.stats[otherUserId]?.score>=5 ? 'res://badge5' : 'res://badge5inactive'}}">
+                                    src="{{game?.stats[otherUserId]?.score>=5 ? 'res://badge5' : 'res://badge5inactive'}}">
                                 </Image>
                             </FlexboxLayout>
                             <FlexboxLayout *ngIf="game?.gameOptions.isBadgeWithCategory" android:backgroundColor="#f1f1f1" class="background-score">
@@ -104,7 +104,7 @@
                         class="score-container">
                         <Image src="res://bits"></Image>
                         <Label class="score-text"
-                            [text]="game.stats[user.userId]?.score * (applicationSettings?.tokens?.earn_bits ? applicationSettings?.tokens?.earn_bits : 0)"
+                            [text]="game?.stats[user.userId]?.score * (applicationSettings?.tokens?.earn_bits ? applicationSettings?.tokens?.earn_bits : 0)"
                             textWrap="true"></Label>
                     </FlexboxLayout>
                     <Button *ngIf="!turnFlag && !threeConsecutiveAnswer" android:elevation="20" ios:elevation="20" android:paddingTop="15" ios:paddingTop="10"

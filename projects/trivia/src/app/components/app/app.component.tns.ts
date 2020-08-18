@@ -27,10 +27,9 @@ import { FirebaseScreenNameConstants, User } from 'shared-library/shared/model';
 import { registerElement } from 'nativescript-angular/element-registry';
 import { Carousel, CarouselItem } from 'nativescript-carousel';
 import { ModalDialogOptions, ModalDialogService } from 'nativescript-angular/modal-dialog';
-import { WelcomeScreenComponent } from 'shared-library/shared/components';
+import { WelcomeScreenComponent } from 'shared-library/shared/mobile/component';
 import * as appSettingsStorage from 'tns-core-modules/application-settings';
 import { TopicActions } from 'shared-library/core/store/actions';
-
 import { RadSideDrawerComponent, SideDrawerType } from 'nativescript-ui-sidedrawer/angular';
 
 
