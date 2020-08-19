@@ -17,7 +17,7 @@ export class QuestionEffects {
     .pipe(
       map((action: any): RouterStateUrl => action.payload.routerState),
       filter((routerState: RouterStateUrl) => {
-        return routerState.url === "/dashboard";
+        return routerState.url === '/dashboard';
       })
     )
     .pipe(
@@ -44,9 +44,8 @@ export class QuestionEffects {
   updateQuestion$ = this.actions$
     .pipe(ofType(QuestionActions.UPDATE_QUESTION))
     .pipe(
-      switchMap((action: ActionWithPayload<Question>) => {
-        this.svc.saveQuestion(action.payload);
-        return empty();
+      switchMap((action: ActionWithPayload<Question>): any => {
+        return this.svc.saveQuestion(action.payload);
       })
     );
 
@@ -58,7 +57,7 @@ export class QuestionEffects {
     .pipe(
       map((action: any): RouterStateUrl => action.payload.routerState),
       filter((routerState: RouterStateUrl) =>
-        routerState.url.toLowerCase().startsWith("/first-question")
+        routerState.url.toLowerCase().startsWith('/first-question')
       )
     )
     .pipe(
