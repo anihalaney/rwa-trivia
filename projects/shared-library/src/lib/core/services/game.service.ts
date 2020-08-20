@@ -1,11 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { combineLatest, forkJoin, Observable, of } from 'rxjs';
+import { combineLatest, forkJoin, Observable, of, from } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 import { CONFIG } from '../../environments/environment';
 import { Game, GameOperations, GameOptions, GameStatus, PlayerQnA, Question, ReportQuestion, User } from '../../shared/model';
 import { DbService } from './../db-service';
-
 
 @Injectable()
 export class GameService {
@@ -25,10 +24,12 @@ export class GameService {
       const queryParams1 = {
         condition: [{ name: 'playerId_0', comparator: '==', value: user.userId },
         { name: 'gameOver', comparator: '==', value: false },
-        { name: 'GameStatus', comparator: 'in',
-        value: [ GameStatus.STARTED, GameStatus.RESTARTED, GameStatus.WAITING_FOR_NEXT_Q,
-                GameStatus.AVAILABLE_FOR_OPPONENT, GameStatus.WAITING_FOR_FRIEND_INVITATION_ACCEPTANCE,
-                GameStatus.WAITING_FOR_RANDOM_PLAYER_INVITATION_ACCEPTANCE, GameStatus.JOINED_GAME ]}
+        {
+          name: 'GameStatus', comparator: 'in',
+          value: [GameStatus.STARTED, GameStatus.RESTARTED, GameStatus.WAITING_FOR_NEXT_Q,
+          GameStatus.AVAILABLE_FOR_OPPONENT, GameStatus.WAITING_FOR_FRIEND_INVITATION_ACCEPTANCE,
+          GameStatus.WAITING_FOR_RANDOM_PLAYER_INVITATION_ACCEPTANCE, GameStatus.JOINED_GAME]
+        }
         ]
       };
 
@@ -37,7 +38,7 @@ export class GameService {
       const queryParams2 = {
         condition: [{ name: 'playerId_1', comparator: '==', value: user.userId },
         { name: 'gameOver', comparator: '==', value: false },
-        { name: 'GameStatus', comparator: 'in', value: [ GameStatus.JOINED_GAME, GameStatus.WAITING_FOR_NEXT_Q] }
+        { name: 'GameStatus', comparator: 'in', value: [GameStatus.JOINED_GAME, GameStatus.WAITING_FOR_NEXT_Q] }
         ]
       };
 
@@ -238,33 +239,33 @@ export class GameService {
     return this.http.put<any>(url, payload);
   }
 
-  userReaction(questionId: string, userId: string, status: string) {
-      const collection = `questions/${questionId}/reactions`;
-      return this.dbService.getDoc(collection, userId).get().then(data => {
-        const reaction = data.data();
-          if (reaction) {
-            if (status !== reaction.status) {
-             return this.dbService.setDoc(collection, userId, { status: status }, {updatedOn: true});
-            } else {
-             return this.dbService.deleteDoc(collection, userId);
-            }
-          } else {
-            return this.dbService.setDoc(collection, userId , { status: status }, {createdOn: true, updatedOn: true});
-          }
-      });
+  userReaction(questionId: string, userId: string, status: string): Observable<any> {
+    const collection = `questions/${questionId}/reactions`;
+    return from(this.dbService.getDoc(collection, userId).get()).pipe(map((res: any) => {
+      const reaction = res.data();
+      if (reaction) {
+        if (status !== reaction.status) {
+          return from(this.dbService.setDoc(collection, userId, { status: status }, { updatedOn: true }));
+        } else {
+          return from(this.dbService.deleteDoc(collection, userId));
+        }
+      } else {
+        return from(this.dbService.setDoc(collection, userId, { status: status }, { createdOn: true, updatedOn: true }));
+      }
+    }));
   }
 
   getUserReaction(questionId: string, userId: string) {
-    return this.dbService.valueChanges(`questions/${questionId}/reactions`, userId );
+    return this.dbService.valueChanges(`questions/${questionId}/reactions`, userId);
   }
 
   getQuestion(questionId: string) {
-    return this.dbService.valueChanges(`questions`, questionId );
+    return this.dbService.valueChanges(`questions`, questionId);
   }
 
   updateQuestionStat(questionId: string, type: string) {
     const url = `${CONFIG.functionsUrl}/question/question-stat-update/`;
     return this.http.post<Question>(url,
-      {questionId: questionId, type: type === 'CREATED' ? type : 'UPDATED', update: type === 'CORRECT' ? true : false });
+      { questionId: questionId, type: type === 'CREATED' ? type : 'UPDATED', update: type === 'CORRECT' ? true : false });
   }
 }

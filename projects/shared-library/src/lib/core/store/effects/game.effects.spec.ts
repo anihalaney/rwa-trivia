@@ -22,7 +22,7 @@ describe('GameEffects', () => {
         GameEffects,
         {
           provide: GameService,
-          useValue: {}
+          useValue: { userReaction: jest.fn() }
         },
         provideMockActions(() => actions$),
       ],
@@ -32,10 +32,10 @@ describe('GameEffects', () => {
     actions$ = TestBed.get(Actions);
   });
 
-  it('Verify user reaction', () => {
+  it('User Reaction', () => {
     const questionId = testData.question.id;
     const userId = testData.userList[0].userId;
-    const action = new GameActions().UserReaction({ questionId: questionId, userId: userId, status: 'SUCCESS' });
+    const action = new GameActions().UserReaction({ questionId: questionId, userId: userId, status: 'Like' });
     const completion = new GameActions().UpdateUserReactionSuccess();
 
     actions$ = hot('-a---', { a: action });
@@ -44,7 +44,7 @@ describe('GameEffects', () => {
     gameService.userReaction = jest.fn(() => {
       return response;
     });
-    // expect(effects.UserReaction$).toBeObservable(expected);
+    expect(effects.UserReaction$).toBeObservable(expected);
   });
 
   it('Get question', () => {
