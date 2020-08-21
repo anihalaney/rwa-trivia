@@ -18,14 +18,14 @@ export class UserEffects {
         .pipe(ofType(UserActions.LOGIN_SUCCESS))
         .pipe(map((action: ActionWithPayload<User>) => action.payload),
             switchMap((user: User) => {
-                if ( user ) {
+                if (user) {
                     return this.svc.loadUserProfile(user).pipe(catchError((error) => {
                         return of();
                     }));
                 } else {
                     return of();
                 }
-              }),
+            }),
             mergeMap((user: User) => this.utils.setLoginFirebaseAnalyticsParameter(user).pipe(catchError((error) => {
                 return of();
             }))),
@@ -53,7 +53,7 @@ export class UserEffects {
     loadOtherUserProfile$ = this.actions$
         .pipe(ofType(UserActions.LOAD_OTHER_USER_PROFILE))
         .pipe(map((action: ActionWithPayload<string>) => action.payload),
-            distinct(null, this.store.select(coreState).pipe(select(s => s.user))),
+            distinct(null, this.store.select(coreState).pipe(select(s => { console.log(s); return s.user; }))),
             mergeMap((userId: string) => this.svc.loadOtherUserProfile(userId)),
             mergeMap((user: User) => this.svc.getUserStatus(user)),
             map((user: User) => this.userActions.loadOtherUserProfileSuccess(user)),
@@ -169,8 +169,7 @@ export class UserEffects {
         .pipe(ofType(UserActions.UPDATE_INVITATION))
         .pipe(
             switchMap((action: ActionWithPayload<Invitation>) => {
-                this.svc.setInvitation(action.payload);
-                return empty();
+                return this.svc.setInvitation(action.payload);
             }
             )
         );
@@ -205,7 +204,7 @@ export class UserEffects {
                 return this.svc.saveUserProfile(action.payload.user).pipe(
                     mergeMap((status: any) =>
                         this.utils.setUserLocationFirebaseAnalyticsParameter(action.payload.user, action.payload.isLocationChanged)),
-                    map((status: any) => this.userActions.addUserProfileSuccess())
+                    map(() => this.userActions.addUserProfileSuccess())
                 );
             })
         );
@@ -274,7 +273,6 @@ export class UserEffects {
             switchMap((action: ActionWithPayload<any>) =>
                 this.svc.getAddressSuggestions(action.payload).pipe(
                     map((result: any) => this.userActions.loadAddressSuggestionsSuccess(result))
-                    
                 ))
         );
 
