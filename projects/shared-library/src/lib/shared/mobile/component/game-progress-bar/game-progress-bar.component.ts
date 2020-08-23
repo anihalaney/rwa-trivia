@@ -10,9 +10,14 @@ export class GameProgressBarComponent implements OnInit {
   @Input() totalRound: number;
   gameProgress: string;
 
-  constructor() { }
+  constructor() {
+    this.gameProgress = '';
+  }
 
   ngOnInit() {
-    this.gameProgress = this.questionRound + '*,' + (this.totalRound - this.questionRound) + '*';
+    if (this.questionRound && this.questionRound) {
+      this.gameProgress = this.questionRound + '*,' + (this.totalRound - this.questionRound) + '*';
+    }
   }
+
 }
