@@ -51,8 +51,6 @@ export class UpdateCategoryTagComponent implements OnInit, OnDestroy {
 
     this.categoriesObs = this.store.select(coreState).pipe(select(s => s.categories));
 
-
-
     this.store.dispatch(this.category.loadTopCategories());
     this.topCategoriesObs = this.store.select(coreState).pipe(select(s => s.getTopCategories));
 
@@ -60,7 +58,8 @@ export class UpdateCategoryTagComponent implements OnInit, OnDestroy {
     this.topTagsObs = this.store.select(coreState).pipe(select(s => s.getTopTags));
 
     this.store.select(coreState).pipe(select(s => s.user),
-      filter(u => { return u !== null;
+      filter(u => {
+        return u !== null;
       }),
       map(user => { this.user = user; }),
       flatMap(() =>
@@ -73,42 +72,48 @@ export class UpdateCategoryTagComponent implements OnInit, OnDestroy {
       flatMap(() =>
         this.topCategoriesObs.pipe(
           map(topCategories => {
-            this.topCategories = topCategories;
-            let categoryData = [];
-            this.topCategories.map(topCategories => {
-              this.tempCategories.map(category => {
-                if (topCategories.key === category.id) {
-                  categoryData.push(category);
-                }
+            if (topCategories) {
+              this.topCategories = topCategories;
+              let categoryData = [];
+              this.topCategories.map(topCategories => {
+                this.tempCategories.map(category => {
+                  if (topCategories.key === category.id) {
+                    categoryData.push(category);
+                  }
+                });
               });
-            });
-            categoryData.map((category: any) => {
-              category.requiredForGamePlay = this.user.categoryIds.some(
-                categoryIds => categoryIds == category.id
-              );
-            });
-            this.categories = categoryData;
+              categoryData.map((category: any) => {
+                category.requiredForGamePlay = this.user.categoryIds.some(
+                  categoryIds => categoryIds == category.id
+                );
+              });
+              this.categories = categoryData;
+            }
+
           })
         )
       ),
       flatMap(() =>
         this.topTagsObs.pipe(
           map(topTags => {
-            this.topTags = topTags;
-            this.topTags.map((tag: any) => {
-              tag.requiredForGamePlay = this.user.tags.some(
-                t => t == tag.key
-              );
-            });
-            this.tags = this.topTags;
+            if (topTags) {
+              this.topTags = topTags;
+              this.topTags.map((tag: any) => {
+                tag.requiredForGamePlay = this.user.tags.some(
+                  t => t == tag.key
+                );
+              });
+              this.tags = this.topTags;
 
-            const filteredTags = [...this.user.tags];
-            this.tags.map(data => {
-              if (filteredTags.indexOf(data.key) >= 0) {
-                filteredTags.splice(filteredTags.indexOf(data.key), 1);
-              }
-            });
-            this.tags = [...this.tags, ...filteredTags.map(data => { const newid = { key: data, requiredForGamePlay: true }; return newid; })];
+              const filteredTags = [...this.user.tags];
+              this.tags.map(data => {
+                if (filteredTags.indexOf(data.key) >= 0) {
+                  filteredTags.splice(filteredTags.indexOf(data.key), 1);
+                }
+              });
+              this.tags = [...this.tags, ...filteredTags.map(data => { const newid = { key: data, requiredForGamePlay: true }; return newid; })];
+
+            }
           })
         )
       )
@@ -118,10 +123,10 @@ export class UpdateCategoryTagComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus))
         .subscribe(status => {
-          if (status === "SUCCESS") {
+          if (status === 'SUCCESS') {
             this.utils.showMessage(
-              "success",
-              "Topics updated successfully"
+              'success',
+              'Topics updated successfully'
             );
           }
           this.cd.markForCheck();
@@ -149,7 +154,10 @@ export class UpdateCategoryTagComponent implements OnInit, OnDestroy {
   }
 
   returnSelectedTagsOrCategories(type) {
-    return type.filter(s => s.requiredForGamePlay);
+    if (type) {
+      return type.filter((s) => s.requiredForGamePlay);
+    }
+    return [];
   }
 
   ngOnDestroy() {
@@ -157,7 +165,7 @@ export class UpdateCategoryTagComponent implements OnInit, OnDestroy {
     this.page.off("loaded");
   }
 
-  continueToFirstQuestion() {
+  updateCategoryTap() {
     const categoryIds = [];
     const tags = [];
     const selectedTopics = this.returnSelectedTagsOrCategories(this.categories);
