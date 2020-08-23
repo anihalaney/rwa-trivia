@@ -22,7 +22,7 @@
                 </GridLayout>
                 <GridLayout row="3" orientation="vertical" margin="10" iosOverflowSafeArea="false">
                     <Button class="SF-Pro-Regular btn-transparent"
-                        (rippleTap)="goToDashboard((answeredText === '' ? 'skip' : 'continue'))"
+                        (rippleTap)="goToNextStep((answeredText === '' ? 'skip' : 'continue'))"
                         [text]="(answeredText === '' ? 'Skip' : 'Continue')" stlRippleEffect
                         stlBackgroundColor="white"></Button>
                 </GridLayout>
