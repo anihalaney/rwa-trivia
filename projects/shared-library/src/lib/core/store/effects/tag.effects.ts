@@ -12,7 +12,7 @@ export class TagEffects {
     // Load tags based on url
     @Effect()
     // handle location update
-    loadRouteCategories$ = this.actions$
+    loadRouteTags$ = this.actions$
         .pipe(ofType(ROUTER_NAVIGATION))
         .pipe(
             map((action: any): RouterStateUrl => action.payload.routerState),
