@@ -46,29 +46,34 @@ export class SelectCategoryTagComponent implements OnInit, OnDestroy {
     this.store.dispatch(this.category.loadTopCategories());
     this.topCategoriesObs = this.store.select(coreState).pipe(select(s => s.getTopCategories));
     this.subscriptions.push(this.topCategoriesObs.subscribe(topCategories => {
-      this.topCategories = topCategories;
-      let categoryData = [];
-      this.topCategories.map((topCategories) => {
-        tempCategories.map((category) => {
-          if (topCategories.key === category.id) {
-            categoryData.push(category);
-          }
+      if (topCategories) {
+        this.topCategories = topCategories;
+        const categoryData = [];
+        this.topCategories.map((topCategories) => {
+          tempCategories.map((category) => {
+            if (topCategories.key === category.id) {
+              categoryData.push(category);
+            }
+          });
         });
-      });
-      categoryData.map((category: any) => {
-        category.requiredForGamePlay = false;
-      });
-      this.categories = categoryData;
+        categoryData.map((category: any) => {
+          category.requiredForGamePlay = false;
+        });
+        this.categories = categoryData;
+      }
+
     }));
 
     this.store.dispatch(this.tag.loadTopTags());
     this.topTagsObs = this.store.select(coreState).pipe(select(s => s.getTopTags));
     this.subscriptions.push(this.topTagsObs.subscribe(topTags => {
-      this.topTags = topTags;
-      this.topTags.map((tag: any) => {
-        tag.requiredForGamePlay = false;
-      });
-      this.tags = this.topTags;
+      if (topTags) {
+        this.topTags = topTags;
+        this.topTags.map((tag: any) => {
+          tag.requiredForGamePlay = false;
+        });
+        this.tags = this.topTags;
+      }
     }));
 
     this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.user)).subscribe(user => {
@@ -109,7 +114,10 @@ export class SelectCategoryTagComponent implements OnInit, OnDestroy {
   }
 
   returnSelectedTagsOrCategories(type) {
-    return type.filter((s) => s.requiredForGamePlay);
+    if (type) {
+      return type.filter((s) => s.requiredForGamePlay);
+    }
+    return [];
   }
 
   ngOnDestroy() {
