@@ -48,6 +48,12 @@ export const UserList = [
         'token': 'ct7vhZOa__U:APA91bFCVEncCZg__c0P8kZo2k0WfCB_nVUds4sViaQiyPmUX7VUf29vfKUEQ4jRQ5BRq9BMRNdZDrVIVgMH-fGB6f1AEXXca4TAjPOGoaFVjKMA7952BMuaLy4-Z9-y0EC76abGDPsJ'
       }
     ],
+    'iosPushTokens': [
+      {
+        'online': false,
+        'token': 'f55QDdp3bRY:APA91bEJXi9P7j5C3OxjO3FJTJ9CIgmqTCIjRskK2LCQB9w9BM3YL7_8lH9IdVxB4oQQDNPhkCA5ndPb'
+      }
+    ],
     'authState': null,
     'bulkUploadPermissionStatus': 'false',
     'bulkUploadPermissionStatusUpdateTime': 1588266851711,
@@ -445,9 +451,9 @@ export const UserList = [
     'phoneNo': null,
     'profilePictureUrl': '/assets/images/default-avatar-small.png',
     'tags': ['test',
-    'angular',
-    'net',
-    'cloud'],
+      'angular',
+      'net',
+      'cloud'],
     'totalFriends': 0,
     'userId': '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
     'lastGamePlayOption': {
@@ -499,9 +505,9 @@ export const UserList = [
     'phoneNo': null,
     'profilePictureUrl': '/assets/images/default-avatar-small.png',
     'tags': ['test',
-    'angular',
-    'net',
-    'cloud'],
+      'angular',
+      'net',
+      'cloud'],
     'totalFriends': 0,
     'userId': '4kFa6HRvP5OhvYXsH9mEsRrXj4o2',
     'lastGamePlayOption': {
