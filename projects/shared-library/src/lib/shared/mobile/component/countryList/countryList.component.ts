@@ -29,8 +29,10 @@ export class CountryListComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.countries)).subscribe(countries => {
       this.cd.markForCheck();
-      if (countries.length > 0) {
-        this.allCountries = countries.sort((prev, next) => prev.name.localeCompare(next.name));
+      if (countries) {
+        if (countries.length > 0) {
+          this.allCountries = countries.sort((prev, next) => prev.name.localeCompare(next.name));
+        }
       }
     }));
     this.country = this._modalDialogParams.context.Country;
