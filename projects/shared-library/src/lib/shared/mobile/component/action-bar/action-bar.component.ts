@@ -64,6 +64,10 @@ export class ActionBarComponent implements OnDestroy, OnInit {
 
     openSidebar() {
         this.open.emit();
+        this.openSideDrawer();
+    }
+
+    openSideDrawer() {
         const sideDrawer = <RadSideDrawer>app.getRootView();
         sideDrawer.showDrawer();
     }
