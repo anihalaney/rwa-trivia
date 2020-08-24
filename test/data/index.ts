@@ -21,12 +21,15 @@ import { Accounts } from './accounts';
 import { NewGameFilteredCategories } from './new-game-filtered-categories';
 import { BulkUploads } from './bulk-uploads';
 import { Account } from './account';
+import { Suggestions } from './suggestions';
 import { UserAnsweredQuestions } from './user-answered-questions';
 import { CurrentQuestion } from './current-question';
 import { file } from './file';
 import { Countries } from './counties';
 import { UserAnsweredQuestion } from './userAnsweredQuestion';
 import { AddressUsingLongLat } from './address-using-long-lat';
+import { TopCategories } from './top-categories';
+
 
 export const testData = {
     categories: Categories,
@@ -50,12 +53,14 @@ export const testData = {
     invitation: Invitation,
     question: Question,
     bulkUploads: BulkUploads,
+    suggestions: Suggestions,
     countries: Countries,
     userAnsweredQuestion: UserAnsweredQuestion,
     account: Account,
     userAnsweredQuestions: UserAnsweredQuestions,
     currentQuestion: CurrentQuestion,
     file: file,
-    addressUsingLongLat: AddressUsingLongLat
+    addressUsingLongLat: AddressUsingLongLat,
+    topCategories: TopCategories,
 };
 

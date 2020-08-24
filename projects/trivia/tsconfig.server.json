@@ -23,7 +23,8 @@
     "./src/main.ns.aot.ts",
     "./src/main.ns.ts",
     "./src/vendor.ts",
-    "./src/**/mobile"
+    "./src/**/mobile",
+    "./src/tests/**/*",
   ],
   "angularCompilerOptions": {
     "entryModule": "src/app/app.server.module#AppServerModule"

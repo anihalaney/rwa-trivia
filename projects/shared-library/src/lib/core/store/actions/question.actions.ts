@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Action } from '@ngrx/store';
 import { ActionWithPayload } from './action-with-payload';
 import { Question } from '../../../shared/model';
 
@@ -7,6 +6,19 @@ import { Question } from '../../../shared/model';
 export class QuestionActions {
 
   static GET_QUESTION_OF_THE_DAY = 'GET_QUESTION_OF_THE_DAY';
+  static GET_QUESTION_OF_THE_DAY_SUCCESS = 'GET_QUESTION_OF_THE_DAY_SUCCESS';
+  static GET_QUESTION_OF_THE_DAY_ERROR = 'GET_QUESTION_OF_THE_DAY_ERROR';
+  static GET_FIRST_QUESTION = 'GET_FIRST_QUESTION';
+  static GET_FIRST_QUESTION_SUCCESS = 'GET_FIRST_QUESTION_SUCCESS';
+  static GET_FIRST_QUESTION_ERROR = 'GET_FIRST_QUESTION_ERROR';
+  static ADD_QUESTION_SUCCESS = 'ADD_QUESTION_SUCCESS';
+  static ADD_NEW_QUESTION_AS_DRAFT_SUCCESS = 'ADD_NEW_QUESTION_AS_DRAFT_SUCCESS';
+  static UPDATE_QUESTION_AS_DRAFT_SUCCESS = 'UPDATE_QUESTION_AS_DRAFT_SUCCESS';
+  static RESET_QUESTION_SUCCESS = 'RESET_QUESTION_SUCCESS';
+  static UPDATE_QUESTION = 'UPDATE_QUESTION';
+  static DELETE_QUESTION_IMAGE = 'DELETE_QUESTION_IMAGE';
+  static DELETE_QUESTION_IMAGE_SUCCESS = 'DELETE_QUESTION_IMAGE_SUCCESS';
+
   getQuestionOfTheDay(): ActionWithPayload<null> {
     return {
       type: QuestionActions.GET_QUESTION_OF_THE_DAY,
@@ -14,7 +26,6 @@ export class QuestionActions {
     };
   }
 
-  static GET_QUESTION_OF_THE_DAY_SUCCESS = 'GET_QUESTION_OF_THE_DAY_SUCCESS';
   getQuestionOfTheDaySuccess(question: Question): ActionWithPayload<Question> {
     return {
       type: QuestionActions.GET_QUESTION_OF_THE_DAY_SUCCESS,
@@ -22,7 +33,6 @@ export class QuestionActions {
     };
   }
 
-  static GET_QUESTION_OF_THE_DAY_ERROR = 'GET_QUESTION_OF_THE_DAY_ERROR';
   getQuestionOfTheDayError(errorObj: any): ActionWithPayload<any> {
     return {
       type: QuestionActions.GET_QUESTION_OF_THE_DAY_ERROR,
@@ -30,7 +40,6 @@ export class QuestionActions {
     };
   }
 
-  static GET_FIRST_QUESTION = 'GET_FIRST_QUESTION';
   getFirstQuestion(): ActionWithPayload<null> {
     return {
       type: QuestionActions.GET_FIRST_QUESTION,
@@ -38,7 +47,6 @@ export class QuestionActions {
     };
   }
 
-  static GET_FIRST_QUESTION_SUCCESS = 'GET_FIRST_QUESTION_SUCCESS';
   getFirstQuestionSuccess(question: Question): ActionWithPayload<Question> {
     return {
       type: QuestionActions.GET_FIRST_QUESTION_SUCCESS,
@@ -46,7 +54,6 @@ export class QuestionActions {
     };
   }
 
-  static GET_FIRST_QUESTION_ERROR = 'GET_FIRST_QUESTION_ERROR';
   getFirstQuestionError(errorObj: any): ActionWithPayload<any> {
     return {
       type: QuestionActions.GET_FIRST_QUESTION_ERROR,
@@ -54,7 +61,6 @@ export class QuestionActions {
     };
   }
 
-  static ADD_QUESTION_SUCCESS = 'ADD_QUESTION_SUCCESS';
   addQuestionSuccess(): ActionWithPayload<null> {
     return {
       type: QuestionActions.ADD_QUESTION_SUCCESS,
@@ -63,7 +69,6 @@ export class QuestionActions {
   }
 
 
-  static ADD_NEW_QUESTION_AS_DRAFT_SUCCESS = 'ADD_NEW_QUESTION_AS_DRAFT_SUCCESS';
   addQuestionDraftSuccess(questionId): ActionWithPayload<string> {
     return {
       type: QuestionActions.ADD_NEW_QUESTION_AS_DRAFT_SUCCESS,
@@ -71,7 +76,6 @@ export class QuestionActions {
     };
   }
 
-  static UPDATE_QUESTION_AS_DRAFT_SUCCESS = 'UPDATE_QUESTION_AS_DRAFT_SUCCESS';
   updateQuestionDraftSuccess(): ActionWithPayload<null> {
     return {
       type: QuestionActions.UPDATE_QUESTION_AS_DRAFT_SUCCESS,
@@ -79,7 +83,6 @@ export class QuestionActions {
     };
   }
 
-  static RESET_QUESTION_SUCCESS = 'RESET_QUESTION_SUCCESS';
   resetQuestionSuccess(): ActionWithPayload<null> {
     return {
       type: QuestionActions.RESET_QUESTION_SUCCESS,
@@ -87,8 +90,6 @@ export class QuestionActions {
     };
   }
 
-
-  static UPDATE_QUESTION = 'UPDATE_QUESTION';
   updateQuestion(question: Question): ActionWithPayload<Question> {
     return {
       type: QuestionActions.UPDATE_QUESTION,
@@ -96,7 +97,6 @@ export class QuestionActions {
     };
   }
 
-  static DELETE_QUESTION_IMAGE = 'DELETE_QUESTION_IMAGE';
   deleteQuestionImage(imageName: string): ActionWithPayload<string> {
     return {
       type: QuestionActions.DELETE_QUESTION_IMAGE,
@@ -104,7 +104,6 @@ export class QuestionActions {
     };
   }
 
-  static DELETE_QUESTION_IMAGE_SUCCESS = 'DELETE_QUESTION_IMAGE_SUCCESS';
   deleteQuestionImageSuccess(msg: string): ActionWithPayload<string> {
     return {
       type: QuestionActions.DELETE_QUESTION_IMAGE_SUCCESS,

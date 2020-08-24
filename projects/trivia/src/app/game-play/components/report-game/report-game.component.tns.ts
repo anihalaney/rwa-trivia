@@ -105,19 +105,32 @@ export class ReportGameComponent implements OnInit, OnDestroy {
     }
 
     get otherAnswer() {
-        const otherAnswer = this.question.answers.filter(ans => !ans.correct);
-        return otherAnswer;
+        if (this.question) {
+            const otherAnswer = this.question.answers.filter(ans => !ans.correct);
+            return otherAnswer;
+        }
+        return '';
+
     }
 
     get correctAnswer() {
-        const correctAnswer = this.question.answers.filter(ans => ans.correct);
-        return correctAnswer;
+        if (this.question) {
+            const correctAnswer = this.question.answers.filter(ans => ans.correct);
+            return correctAnswer;
+        }
+        return '';
     }
     get categoryName() {
-        const categories = this.question.categoryIds.map(id => {
-            return this.categoryDict[id];
-        });
-        return categories.map(category => category.categoryName).join(',');
+        if (this.question) {
+            const categories = this.question.categoryIds.map(id => {
+                return this.categoryDict[id];
+            });
+            if (categories.length > 0) {
+                return categories.map(category => category.categoryName).join(',');
+            }
+
+        }
+        return '';
     }
 
     ngOnDestroy() {
@@ -127,7 +140,7 @@ export class ReportGameComponent implements OnInit, OnDestroy {
         this.utils.hideKeyboard(this.textField);
     }
 
-    private generateNewReportOptions() {
+    public generateNewReportOptions() {
         this.reportOptions = [
             new ReportOption('Offensive content'),
             new ReportOption('Spelling or grammar error'),

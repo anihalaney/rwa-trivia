@@ -1,7 +1,5 @@
 import { Component, EventEmitter, Input, Output, OnDestroy, ChangeDetectorRef, OnInit } from '@angular/core';
-import * as app from 'tns-core-modules/application';
 import { RouterExtensions } from 'nativescript-angular/router';
-import { RadSideDrawer } from 'nativescript-ui-sidedrawer';
 import { select, Store } from '@ngrx/store';
 import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 import { CoreState, coreState, UserActions } from '../../../../core/store';
@@ -40,12 +38,12 @@ export class BulkUploadRequestComponent implements OnDestroy, OnInit {
     }
     setBulkUploadRequest(): void {
         if (!this.user.name || !this.user.displayName || !this.user.location || !this.user.profilePicture) {
-          this.utils.showMessage('error', 'Please add name, display name, location and profile picture for bulk upload request');
+            this.utils.showMessage('error', 'Please add name, display name, location and profile picture for bulk upload request');
         } else {
-          this.user.bulkUploadPermissionStatus = profileSettingsConstants.NONE;
-          this.store.dispatch(this.userAction.addUserProfile(this.user, false));
+            this.user.bulkUploadPermissionStatus = profileSettingsConstants.NONE;
+            this.store.dispatch(this.userAction.addUserProfile(this.user, false));
         }
-      }
+    }
 
     ngOnInit(): void {
         this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.user)).subscribe(user => {
@@ -58,17 +56,13 @@ export class BulkUploadRequestComponent implements OnDestroy, OnInit {
                 }
             }
         }));
-
     }
 
     navigateToUserAccount() {
         this.routerExtensions.navigate(['/user/my/profile', this.user ? this.user.userId : ''],
-        { queryParams: { backUrl: '/user/my/questions/bulk-upload-request' }});
+            { queryParams: { backUrl: '/user/my/questions/bulk-upload-request' } });
     }
 
-
-    ngOnDestroy() {
-
-    }
+    ngOnDestroy() { }
 
 }

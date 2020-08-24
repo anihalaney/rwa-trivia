@@ -32,10 +32,14 @@ export class NotificationComponent implements OnInit, OnDestroy {
     }));
     this.subscriptions.push(combineLatest(this.store.select(coreState).pipe(select(s => s.friendInvitations)),
       this.store.select(coreState).pipe(select(s => s.gameInvites))).subscribe((notify: any) => {
-        this.notifications = notify[0].concat(notify[1]);
-        this.notifications.sort((a, b) => {
-          return b.createdAt - a.createdAt;
-        });
+
+        if (notify[0] && notify[1]) {
+          this.notifications = notify[0].concat(notify[1]);
+          this.notifications.sort((a, b) => {
+            return b.createdAt - a.createdAt;
+          });
+        }
+
       }));
   }
 

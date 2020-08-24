@@ -11,7 +11,7 @@
         </StackLayout>
 
         <Flexboxlayout col="1" verticalAlignment="center">
-            <Label padding="5 10 5 0"  (tap)="back()" [text]="title.replace('_',' ')" class="action-text-title" textWrap="true"></Label>
+            <Label padding="5 10 5 0"  (tap)="back()" [text]="title?.replace('_',' ')" class="action-text-title" textWrap="true"></Label>
         </Flexboxlayout>
 
         <!-- game profile edit icon -->
@@ -49,7 +49,7 @@
         </StackLayout>
 
         <!-- For Search Icon in invite-friends.component.tns.html screen -->
-        <!-- <StackLayout *ngIf="((user && user!== null && !showSkipBtn && title.includes('Friends')))" col="4"
+        <!-- <StackLayout *ngIf="((user && user!== null && !showSkipBtn && title?.includes('Friends')))" col="4"
             ios:margin="3" android:margin="10" verticalAlignment="center" horizontalAlignment="right" marginRight="10"
             android:width="23" ios:width="40">
             <Label stlRippleEffect stlBackgroundColor="transparent" stlOpacity="0.5" stlBackgroundColorAfter="transparent"
@@ -57,7 +57,7 @@
         </StackLayout> -->
 
         <!-- <StackLayout stlRippleEffect stlOpacity="0.5" stlBackgroundColorAfter="transparent"
-            *ngIf="((user && user!== null && !showSkipBtn && title.includes('Notifications')))" col="4" stlRippleEffect
+            *ngIf="((user && user!== null && !showSkipBtn && title?.includes('Notifications')))" col="4" stlRippleEffect
             ios:margin="3" android:margin="10" stlOpacity="0.5" stlBackgroundColorAfter="" verticalAlignment="center"
             horizontalAlignment="right" marginRight="10" android:width="23" ios:width="40">
             <Image src="res://readall" width="28" height="28"></Image>
@@ -69,7 +69,7 @@
                 stlBackgroundColorAfter="transparent" text="Skip" class="fa" fontSize="20" margin="5"></Label>
         </StackLayout>
         <!-- For Add Friend Icon in invite-friends.component.tns.html screen -->
-        <StackLayout *ngIf="((user && user!== null && !showSkipBtn && title.includes('Friends')))" col="3"
+        <StackLayout *ngIf="((user && user!== null && !showSkipBtn && title?.includes('Friends')))" col="3"
             (tap)="navigateToInvite()" ios:margin="3" android:margin="10" verticalAlignment="center"
             horizontalAlignment="right" marginRight="10" android:width="23" ios:width="40">
             <Image stlRippleEffect stlOpacity="0.5" stlBackgroundColorAfter="transparent" src="res://addfriend"

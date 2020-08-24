@@ -7,7 +7,7 @@ import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 import { CoreState, coreState } from '../../../../core/store';
 import { User } from 'shared-library/shared/model';
 import { Router, NavigationEnd } from '@angular/router';
-import { PlatformLocation } from '@angular/common';
+
 
 @Component({
     selector: 'bottom-bar',
@@ -25,16 +25,15 @@ export class BottomBarComponent implements OnChanges, OnDestroy, OnInit {
     animateMenu = '';
     prevMenu = '';
     @Input() isDrawerOpenOrClosed = 'drawerClosed';
-    @Input() screen =  undefined;
+    @Input() screen = undefined;
     @Output() open: EventEmitter<any> = new EventEmitter<any>();
 
 
     constructor(
         private routerExtensions: RouterExtensions,
         public store: Store<CoreState>,
-        private router: Router,
-        private cd: ChangeDetectorRef,
-        private location: PlatformLocation,
+        public router: Router,
+        private cd: ChangeDetectorRef
     ) {
     }
 
@@ -75,7 +74,7 @@ export class BottomBarComponent implements OnChanges, OnDestroy, OnInit {
     }
 
     bottomBarClick(menu) {
-        const sideDrawer = <RadSideDrawer>app.getRootView();
+        const sideDrawer = this.radSideDrawer();
         if (menu === 'play') {
             this.activeMenu = menu;
             this.routerExtensions.navigate(['/dashboard'], { clearHistory: true });
@@ -87,6 +86,7 @@ export class BottomBarComponent implements OnChanges, OnDestroy, OnInit {
         } else if (menu === 'friends') {
             this.routerExtensions.navigate(['/user/my/invite-friends'], { clearHistory: true });
             if (this.router.url === '/user/my/invite-friends') {
+                console.log('called');
                 this.activeMenu = menu;
             }
             sideDrawer.closeDrawer();
@@ -98,7 +98,7 @@ export class BottomBarComponent implements OnChanges, OnDestroy, OnInit {
             sideDrawer.closeDrawer();
         }
         if (menu !== 'more') {
-            this.prevMenu = this.animateMenu !== '' || this.animateMenu == undefined  ? this.animateMenu : 'play';
+            this.prevMenu = this.animateMenu !== '' || this.animateMenu == undefined ? this.animateMenu : 'play';
             this.animateMenu = menu;
         } else {
             this.prevMenu = undefined;
@@ -107,6 +107,9 @@ export class BottomBarComponent implements OnChanges, OnDestroy, OnInit {
         this.cd.markForCheck();
     }
 
+    radSideDrawer() {
+        return <RadSideDrawer>app.getRootView();
+    }
 
     goToDashboard() {
         this.routerExtensions.navigate(['/dashboard'], { clearHistory: true });
