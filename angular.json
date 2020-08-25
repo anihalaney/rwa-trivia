@@ -96,7 +96,9 @@
                 "projects/trivia/src/scripts/google-analytics.js",
                 "./node_modules/jquery/dist/jquery.min.js",
                 "./node_modules/mathquill/build/mathquill.min.js",
-                "./node_modules/highlightjs/highlight.pack.min.js"
+                "./node_modules/highlightjs/highlight.pack.min.js",
+                "./node_modules/katex/dist/katex.min.js",
+                "./node_modules/quill/dist/quill.js"
               ],
               "optimization": true,
               "outputHashing": "all",

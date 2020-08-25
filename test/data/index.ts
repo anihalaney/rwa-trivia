@@ -21,6 +21,7 @@ import { Accounts } from './accounts';
 import { NewGameFilteredCategories } from './new-game-filtered-categories';
 import { BulkUploads } from './bulk-uploads';
 import { Account } from './account';
+import { Suggestions } from './suggestions';
 import { UserAnsweredQuestions } from './user-answered-questions';
 import { CurrentQuestion } from './current-question';
 import { file } from './file';
@@ -29,6 +30,7 @@ import { UserAnsweredQuestion } from './userAnsweredQuestion';
 import { AddressUsingLongLat } from './address-using-long-lat';
 import { addressSuggestion } from './address-suggestion';
 import { GamePlayedWith } from './game-played-with';
+import { TopCategories } from './top-categories';
 
 
 export const testData = {
@@ -53,6 +55,7 @@ export const testData = {
     invitation: Invitation,
     question: Question,
     bulkUploads: BulkUploads,
+    suggestions: Suggestions,
     countries: Countries,
     userAnsweredQuestion: UserAnsweredQuestion,
     account: Account,
@@ -61,6 +64,7 @@ export const testData = {
     file: file,
     addressUsingLongLat: AddressUsingLongLat,
     gamePlayedWith: GamePlayedWith,
-    addressSuggestion: addressSuggestion
+    addressSuggestion: addressSuggestion,
+    topCategories: TopCategories
 };
 

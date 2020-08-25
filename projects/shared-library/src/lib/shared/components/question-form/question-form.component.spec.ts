@@ -238,7 +238,7 @@ describe('QuestionFormComponent', () => {
     const question = component.getQuestionFromFormValue(component.questionForm.value);
     const originalQuestion = {
       isRichEditor: true,
-      id: '',
+      id: '5xLESijm648e2gsZJU8M',
       answers:
         [{
           answerText: 'A',

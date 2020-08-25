@@ -135,8 +135,8 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate
     super(fb, store, utils, questionAction);
     this.isMobile = true;
     requestPermissions();
-    this.submitBtnTxt = "Submit";
-    this.actionBarTxt = "Add_Question";
+    this.submitBtnTxt = 'Submit';
+    this.actionBarTxt = 'Add_Question';
     // this.initDataItems();
     this.question = new Question();
     this.isQFormValid = false;
@@ -153,11 +153,11 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate
         .select(appState.coreState)
         .pipe(select(s => s.questionSaveStatus))
         .subscribe(status => {
-          if (status === "SUCCESS") {
+          if (status === 'SUCCESS') {
             this.store.dispatch(this.questionAction.resetQuestionSuccess());
-            this.utils.showMessage("success", "Question saved!");
-            this.routerExtension.navigate(["/user/my/questions"]);
-            this.actionBarTxt = "My Question";
+            this.utils.showMessage('success', 'Question saved!');
+            this.routerExtension.navigate(['/user/my/questions']);
+            this.actionBarTxt = 'My Question';
             setTimeout(() => {
               this.hideQuestion.emit(false);
               this.toggleLoader(false);
@@ -169,11 +169,11 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate
 
     this.submitBtnTxt =
       (this.editQuestion && this.editQuestion.status === QuestionStatus.REQUIRED_CHANGE)
-        ? "Resubmit"
-        : "Submit";
+        ? 'Resubmit'
+        : 'Submit';
     if (this.editQuestion) {
       this.isQFormValid = true;
-      this.actionBarTxt = "Update Question";
+      this.actionBarTxt = 'Update Question';
     }
 
 
@@ -191,43 +191,84 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate
       saveToGallery: this.saveToGallery
     };
 
-    if (isAvailable()) {
+    if (this.isCameraAvailable()) {
       try {
-        const imageAsset = await takePicture(options);
+        const imageAsset = await this.takePicture(options);
         this.imageTaken = imageAsset;
         const source = new ImageSource();
-        const imageSource = await fromAsset(imageAsset);
+        const imageSource = await this.fromAsset(imageAsset);
         setTimeout(() => {
           this.cropImage(imageSource, webviewElement);
-        },isIOS ? 250 : 0);
+        }, isIOS ? 250 : 0);
       } catch (error) {
         console.error(error);
       }
     }
   }
 
+  isCameraAvailable(): Boolean {
+    return isAvailable();
+  }
+
+  async takePicture(options) {
+    return await takePicture(options);
+  }
+
+  async fromAsset(imageAsset) {
+    return await ImageSource.fromAsset(imageAsset);
+  }
+
+  async getCroppedImage(imageSource): Promise<ImageSource> {
+    const imageCropper: ImageCropper = new ImageCropper();
+    return (
+      await imageCropper.show(imageSource, {
+        width: 150,
+        height: 140,
+        lockSquare: false
+      })
+    ).image;
+  }
+
+  async contextSelection() {
+    const context = imagepicker.create({
+      mode: 'single' // use "multiple" for multiple selection
+    });
+    await context.authorize();
+    return await context.present();
+  }
+
+  async openDialog() {
+    return await dialogs
+      .action({
+        message: 'Choose option',
+        cancelButtonText: 'Cancel',
+        actions: ['Camera', 'Gallery']
+      });
+  }
+
   async cropImage(imageSource, webviewElement) {
     try {
-      const imageCropper: ImageCropper = new ImageCropper();
-      const result: ImageSource = (
-        await imageCropper.show(imageSource, { lockSquare: false })
-      ).image;
+      const result: ImageSource = await this.getCroppedImage(imageSource);
+      // console.log('result', result);
       if (result) {
         const image = `data:image/jpeg;base64,${result.toBase64String(
-          "jpeg",
+          'jpeg',
           100
         )}`;
+ 
         this.imagePath = image;
+        // console.log("image>>",this.imagePath);
         this.subscriptions.push(
           this.questionService
-            .saveQuestionImage(this.imagePath, "")
+            .saveQuestionImage(this.imagePath, '')
             .subscribe(imageObject => {
               if (imageObject != null) {
                 if (imageObject.name) {
                   const imageName =
                     this.utils.getQuestionUrl(imageObject.name) +
                     `?d=${new Date().getTime()}`;
-                  webviewElement.emit("imageUrl", imageName);
+                  // webviewElement.emit('imageUrl', imageName);
+                  this.oWebViewInterface.emit('imageUrl', imageName);
                 }
               }
             })
@@ -241,19 +282,16 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate
 
   async uploadImageFromGallery(webviewElement) {
     try {
+
       let imageSource = new ImageSource();
-      const context = imagepicker.create({
-        mode: "single" // use "multiple" for multiple selection
-      });
-      await context.authorize();
-      const selection = await context.present();
+      const selection = await this.contextSelection();
       const imageAsset = selection.length > 0 ? selection[0] : null;
       imageAsset.options = {
         width: this.width,
         height: this.height,
         keepAspectRatio: true
       };
-      imageSource = await fromAsset(imageAsset);
+      imageSource = await this.fromAsset(imageAsset);
       setTimeout(() => {
         this.cropImage(imageSource, webviewElement);
       }, 1);
@@ -281,7 +319,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate
         // need to wait for the load to be finished before emit the value.
         setTimeout(() => {
           this.oWebViewInterface.emit(
-            "viewType",
+            'viewType',
             this.currentWebViewParentId >= 0 ? "answer" : "question"
           );
         }, 1);
@@ -294,99 +332,105 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate
       webViewInstace,
       CONFIG.editorUrl
     );
+    webInterface.on('editorLoadFinished', this.editorLoadFinished);
 
-    webInterface.on("editorLoadFinished", quillContent => {
-      if (quillContent) {
-        // change is not being detected.
-        this.ngZone.run(() => {
-          this.isWebViewLoaded = true;
-          this.cd.markForCheck();
-        });
-      }
-    });
+    webInterface.on('isFormValid', this.isFormValid);
 
-    webInterface.on("isFormValid", (isFormValid) => {
-        if (isFormValid === true) {
-          this.isQFormValid = true;
-        } else {
-          this.isQFormValid = false;
-        }     
-        this.cd.detectChanges();
+    webInterface.on('quillContent', this.quillContent);
 
-    });
+    webInterface.on('appIsLoaded', this.appIsLoaded);
 
-    webInterface.on("quillContent", quillContent => {
-      if (this.currentWebViewParentId === -1) {
-        this.questionForm
-          .get("questionText")
-          .patchValue(quillContent.html ? quillContent.html : "");
-        this.questionForm.get("questionObject").patchValue(quillContent.delta);
-      } else if (this.currentWebViewParentId >= 0) {
-        const ansForm = (<FormArray>this.questionForm.controls["answers"]).at(
-          this.currentWebViewParentId
-        );
-        ansForm["controls"].answerText.patchValue(
-          quillContent.html ? quillContent.html : ""
-        );
-        ansForm["controls"].answerObject.patchValue(quillContent.delta);
-      }
-    });
+    webInterface.on('question', this.webInterfaceQuestion);
 
+    webInterface.on('deleteImageUrl', this.webInterfaceDeleteImageUrl);
 
-    webInterface.on("appIsLoaded", appIsLoaded => {
-      if (this.editQuestion) {
-        this.oWebViewInterface.emit('editQuestion', this.editQuestion);
-      } else {
-        this.oWebViewInterface.emit('editQuestion', this.question);
-      }
+    webInterface.on('previewQuestion', this.webInterfacePreviewQuestion);
 
-    });
-
-    webInterface.on("question", question => {
-
-      if (!question) {
-        return false;
-      }
-      question.created_uid = this.user.userId;
-      question.is_draft = false;
-      question.status = this.getQuestionStatus(question);
-      this.saveQuestion(question);
-      this.isSaved = true;
-      // }
-
-    });
-
-
-    webInterface.on("deleteImageUrl", deleteImageUrl => {
-      if (deleteImageUrl) {
-        this.store.dispatch(this.questionAction.deleteQuestionImage(deleteImageUrl));
-      }
-    });
-
-
-    webInterface.on("previewQuestion", previewQuestion => {
-      this.previewQuestion = previewQuestion;
-      this.cd.markForCheck();
-    });
-
-    webInterface.on("uploadImageStart", uploadImage => {
-      dialogs
-        .action({
-          message: "Choose option",
-          cancelButtonText: "Cancel",
-          actions: ["Camera", "Gallery"]
-        })
-        .then(async result => {
-          if (result === "Camera") {
-            await this.uploadImageFromCamera(webInterface);
-          } else if (result === "Gallery") {
-            await this.uploadImageFromGallery(webInterface);
-          }
-          this.cd.markForCheck();
-        });
+    webInterface.on('uploadImageStart', uploadImage => {
+      this.webInterfaceUploadImage(uploadImage, webInterface);
     });
 
     return webInterface;
+  }
+
+  editorLoadFinished = (editorLoadFinished) => {
+    if (editorLoadFinished) {
+      // change is not being detected.
+      this.ngZone.run(() => {
+        this.isWebViewLoaded = true;
+        this.cd.markForCheck();
+      });
+    }
+  }
+
+  isFormValid = (isFormValid) => {
+    if (isFormValid === true) {
+      this.isQFormValid = true;
+    } else {
+      this.isQFormValid = false;
+    }
+    this.cd.detectChanges();
+  }
+
+  quillContent = (quillContent) => {
+    if (this.currentWebViewParentId === -1) {
+      this.questionForm
+        .get('questionText')
+        .patchValue(quillContent.html ? quillContent.html : '');
+      this.questionForm.get('questionObject').patchValue(quillContent.delta);
+    } else if (this.currentWebViewParentId >= 0) {
+      const ansForm = (<FormArray>this.questionForm.controls['answers']).at(
+        this.currentWebViewParentId
+      );
+      ansForm['controls'].answerText.patchValue(
+        quillContent.html ? quillContent.html : ''
+      );
+      ansForm['controls'].answerObject.patchValue(quillContent.delta);
+    }
+  }
+
+  appIsLoaded = (appIsLoaded) => {
+    if (this.editQuestion) {
+      this.oWebViewInterface.emit('editQuestion', this.editQuestion);
+    } else {
+      this.oWebViewInterface.emit('editQuestion', this.question);
+    }
+  }
+
+  webInterfaceQuestion = (question) => {
+    if (!question) {
+      return false;
+    }
+    question.created_uid = this.user.userId;
+    question.is_draft = false;
+    question.status = this.getQuestionStatus(question);
+    this.saveQuestion(question);
+    this.isSaved = true;
+  }
+
+  webInterfaceDeleteImageUrl = (deleteImageUrl) => {
+    if (deleteImageUrl) {
+      this.store.dispatch(this.questionAction.deleteQuestionImage(deleteImageUrl));
+    }
+  }
+
+  webInterfacePreviewQuestion = (previewQuestion) => {
+    this.previewQuestion = previewQuestion;
+    this.cd.markForCheck();
+  }
+
+  webInterfaceUploadImage = async (uploadImage, webInterface) => {
+    try {
+      const result = await this.openDialog();
+      if (result === 'Camera') {
+        await this.uploadImageFromCamera(webInterface);
+      } else if (result === 'Gallery') {
+        await this.uploadImageFromGallery(webInterface);
+      }
+      this.cd.markForCheck();
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   back(event) {
@@ -400,9 +444,9 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate
 
   getQuestionStatus(question) {
     if (!question.status) {
-      return QuestionStatus.PENDING
+      return QuestionStatus.PENDING;
     } else if (question.status === QuestionStatus.REQUIRED_CHANGE) {
-      return QuestionStatus.PENDING
+      return QuestionStatus.PENDING;
     }
     return question.status;
   }
@@ -413,28 +457,13 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate
   }
   ngOnDestroy() {
     if (this.oWebViewInterface) {
-      this.oWebViewInterface.off("editorLoadFinished");
-      this.oWebViewInterface.off("isFormValid");
-      this.oWebViewInterface.off("quillContent");
-      this.oWebViewInterface.off("appIsLoaded");
-      this.oWebViewInterface.off("question");
-      this.oWebViewInterface.off("previewQuestion");
-      this.oWebViewInterface.off("uploadImageStart");
+      this.oWebViewInterface.off('editorLoadFinished');
+      this.oWebViewInterface.off('isFormValid');
+      this.oWebViewInterface.off('quillContent');
+      this.oWebViewInterface.off('appIsLoaded');
+      this.oWebViewInterface.off('question');
+      this.oWebViewInterface.off('previewQuestion');
+      this.oWebViewInterface.off('uploadImageStart');
     }
-  }
-}
-
-// Custom Validators
-function questionFormValidator(fg: FormGroup): { [key: string]: boolean } {
-  const answers: Answer[] = fg.get("answers").value;
-  if (
-    fg.get("isRichEditor").value &&
-    (fg.get("maxTime").value === 0 || fg.get("maxTime").value === null)
-  ) {
-    return { maxTimeNotSelected: true };
-  }
-
-  if (answers.filter(answer => answer.correct).length !== 1) {
-    return { correctAnswerCountInvalid: true };
   }
 }

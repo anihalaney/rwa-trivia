@@ -8,29 +8,29 @@ import {
   Input,
   ContentChild,
   AfterContentInit
-} from "@angular/core";
-import { screen } from "tns-core-modules/platform";
-import { Utils } from "shared-library/core/services";
+} from '@angular/core';
+import { screen } from 'tns-core-modules/platform';
+import { Utils } from 'shared-library/core/services';
 
 @Component({
-  selector: "app-animation-box",
-  templateUrl: "./animation-box.component.html",
-  styleUrls: ["./animation-box.component.scss"]
+  selector: 'app-animation-box',
+  templateUrl: './animation-box.component.html',
+  styleUrls: ['./animation-box.component.scss']
 })
 export class AnimationBoxComponent implements OnInit, AfterContentInit {
-  @ViewChild("nameLabel", { static: false }) nameLabel: ElementRef;
-  @ViewChild("nameField", { static: false }) nameField: ElementRef;
-  @ViewChild("nameLabelField", { static: false }) nameLabelField: ElementRef;
-  @ViewChild("textBoxContainer", { static: false })
+  @ViewChild('nameLabel', { static: false }) nameLabel: ElementRef;
+  @ViewChild('nameField', { static: false }) nameField: ElementRef;
+  @ViewChild('nameLabelField', { static: false }) nameLabelField: ElementRef;
+  @ViewChild('textBoxContainer', { static: false })
   textBoxContainers: ElementRef;
 
-  @ContentChild("textFieldContent", { static: false }) textFieldContent;
+  @ContentChild('textFieldContent', { static: false }) textFieldContent;
 
-  @Input("fieldName") fieldName: string;
-  @Input("fieldValue") fieldValue: string;
-  @Input("isValid") isValid;
-  @Input("isDisplay") isDisplay;
-  @Input("type") type;
+  @Input('fieldName') fieldName: string;
+  @Input('fieldValue') fieldValue: string;
+  @Input('isValid') isValid;
+  @Input('isDisplay') isDisplay;
+  @Input('type') type;
 
   @Output() formSubmitted = new EventEmitter();
   @Output() formEditOpen = new EventEmitter();
@@ -53,19 +53,18 @@ export class AnimationBoxComponent implements OnInit, AfterContentInit {
     const nameLabel = this.nameLabel;
     const nameLabelField = this.nameLabelField;
 
-    const reduceSize = screen.mainScreen.widthDIPs - 30;
-
+    const reduceSize = this.screenWidth();
     if (nativeElement.width === reduceSize) {
-      nameField.nativeElement.visibility = "collapsed";
-      nameLabel.nativeElement.visibility = "visible";
-      nameLabelField.nativeElement.visibility = "visible";
+      nameField.nativeElement.visibility = 'collapsed';
+      nameLabel.nativeElement.visibility = 'visible';
+      nameLabelField.nativeElement.visibility = 'visible';
       nameLabel.nativeElement.animate({
         translate: { x: 0, y: 0 },
         opacity: 1,
         duration: 100
       });
-      nameLabel.nativeElement.visibility = "visible";
-      nameLabelField.nativeElement.visibility = "visible";
+      nameLabel.nativeElement.visibility = 'visible';
+      nameLabelField.nativeElement.visibility = 'visible';
 
       nameLabelField.nativeElement.animate({
         translate: { x: 0, y: 0 },
@@ -74,13 +73,13 @@ export class AnimationBoxComponent implements OnInit, AfterContentInit {
       });
 
       nativeElement.animate({
-        width: "auto",
+        width: 'auto',
         duration: 100
       });
       this.formSubmitted.emit(this.fieldName);
     } else {
       if (this.fieldValue) {
-        nameLabelField.nativeElement.visibility = "hidden";
+        nameLabelField.nativeElement.visibility = 'hidden';
 
         nativeElement.animate({
           width: reduceSize,
@@ -92,21 +91,21 @@ export class AnimationBoxComponent implements OnInit, AfterContentInit {
           duration: 100
         });
 
-        nameLabel.nativeElement.visibility = "collapsed";
-        nameLabelField.nativeElement.visibility = "collapsed";
-        nameField.nativeElement.visibility = "visible";
+        nameLabel.nativeElement.visibility = 'collapsed';
+        nameLabelField.nativeElement.visibility = 'collapsed';
+        nameField.nativeElement.visibility = 'visible';
         this.utils.focusTextField(this.textFieldContent);
       } else {
-        nameLabel.nativeElement.visibility = "hidden";
+        nameLabel.nativeElement.visibility = 'hidden';
         nameLabelField.nativeElement.animate({
           translate: { x: 4, y: 7 },
           opacity: 0.8,
           duration: 100
         });
 
-        nameLabelField.nativeElement.visibility = "collapsed";
-        nameLabel.nativeElement.visibility = "collapsed";
-        nameField.nativeElement.visibility = "visible";
+        nameLabelField.nativeElement.visibility = 'collapsed';
+        nameLabel.nativeElement.visibility = 'collapsed';
+        nameField.nativeElement.visibility = 'visible';
 
         nativeElement.animate({
           width: reduceSize,
@@ -119,7 +118,12 @@ export class AnimationBoxComponent implements OnInit, AfterContentInit {
     this.showEdit = !this.showEdit;
   }
 
+  screenWidth(): number {
+    return screen.mainScreen.widthDIPs - 30;
+  }
+
   ngAfterContentInit(): void {
+
     if (this.textFieldContent !== undefined) {
       if (this.showEdit) {
         this.utils.focusTextField(this.textFieldContent);
@@ -127,8 +131,7 @@ export class AnimationBoxComponent implements OnInit, AfterContentInit {
     }
   }
 
-  location(){
-    console.log('location');
+  location() {
     this.getCurrentLocation.emit();
   }
 }

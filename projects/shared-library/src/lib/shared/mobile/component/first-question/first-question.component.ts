@@ -46,8 +46,8 @@ export class FirstQuestionComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    this.answeredText = "";
-    this.correctAnswerText = "";
+    this.answeredText = '';
+    this.correctAnswerText = '';
     this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.applicationSettings))
       .subscribe(appSettings => {
         if (appSettings) {
@@ -59,7 +59,10 @@ export class FirstQuestionComponent implements OnInit, OnDestroy {
 
 
     this.subscriptions.push(this.store.select(categoryDictionary).pipe(map(categories => {
-      this.categoryDictionary = categories;
+      if (categories) {
+        this.categoryDictionary = categories;
+      }
+
     }),
       flatMap(() => this.store.select(coreState).pipe(select(s => s.firstQuestion)))).subscribe((question: Question) => {
         if (question) {
@@ -81,10 +84,10 @@ export class FirstQuestionComponent implements OnInit, OnDestroy {
                 if (this.categoryDictionary[category]) {
                   return this.categoryDictionary[category].categoryName;
                 } else {
-                  return "";
+                  return '';
                 }
               })
-              .join(",");
+              .join(',');
           }
           this.cd.markForCheck();
         }
@@ -98,8 +101,10 @@ export class FirstQuestionComponent implements OnInit, OnDestroy {
     }));
     this.setFirstQuestionBitsObs = this.store.select(coreState).pipe(select(s => s.firstQuestionBits));
     this.subscriptions.push(this.setFirstQuestionBitsObs.pipe(filter(result => result !== null)).subscribe(setBits => {
-      this.routerExtension.navigate(["/user/my/app-invite-friends-dialog", { showSkip: true }]);
-      this.cd.markForCheck();
+      if (setBits) {
+        this.routerExtension.navigate(['/user/my/app-invite-friends-dialog', { showSkip: true }]);
+        this.cd.markForCheck();
+      }
     }));
   }
 
@@ -113,11 +118,11 @@ export class FirstQuestionComponent implements OnInit, OnDestroy {
       this.answerClicked.emit(index);
       if (this.answeredText === this.correctAnswerText) {
         this.store.dispatch(
-          this.gameActions.UpdateQuestionStat(this.question.id, "CORRECT")
+          this.gameActions.UpdateQuestionStat(this.question.id, 'CORRECT')
         );
       } else {
         this.store.dispatch(
-          this.gameActions.UpdateQuestionStat(this.question.id, "WRONG")
+          this.gameActions.UpdateQuestionStat(this.question.id, 'WRONG')
         );
       }
       this.cd.markForCheck();
@@ -133,9 +138,9 @@ export class FirstQuestionComponent implements OnInit, OnDestroy {
     this.cd.markForCheck();
   }
 
-  goToDashboard(nextStep) {
+  goToNextStep(nextStep) {
     if (
-      nextStep === "continue" &&
+      nextStep === 'continue' &&
       this.correctAnswerText === this.answeredText
     ) {
       this.store.dispatch(this.userAction.setFirstQuestionBits(this.user.userId));
