@@ -30,6 +30,8 @@ import { UserAnsweredQuestion } from './userAnsweredQuestion';
 import { AddressUsingLongLat } from './address-using-long-lat';
 import { TopCategories } from './top-categories';
 import { ImageString } from './image-string';
+import { AchievementRules } from './achievement-rules';
+
 
 export const testData = {
     categories: Categories,
@@ -62,6 +64,7 @@ export const testData = {
     file: file,
     addressUsingLongLat: AddressUsingLongLat,
     topCategories: TopCategories,
-    imageString: ImageString
+    imageString: ImageString,
+    achievementRules: AchievementRules
 };
 

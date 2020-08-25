@@ -1,4 +1,4 @@
-import { Observable } from 'rxjs';
+import { Observable, empty } from 'rxjs';
 import { StatsService, UserService, Utils, SocialService, AchievementService, QuestionService } from 'shared-library/core/services';
 import { TestBed, async } from '@angular/core/testing';
 import * as dashboardActions from '../actions/dashboard.actions';
@@ -6,7 +6,7 @@ import { provideMockActions } from '@ngrx/effects/testing';
 import { Actions } from '@ngrx/effects';
 import { hot, cold } from 'jest-marbles';
 import { testData } from 'test/data';
-import { User, Game, Subscribers, RouterStateUrl } from 'shared-library/shared/model';
+import { User, Subscription, Subscribers, RouterStateUrl, SystemStats, AchievementRule } from 'shared-library/shared/model';
 import { DashboardEffects } from './dashboard.effects';
 import { StoreModule, MemoizedSelector, Store } from '@ngrx/store';
 import { provideMockStore, MockStore } from '@ngrx/store/testing';
@@ -23,6 +23,8 @@ describe('DashboardEffects', () => {
     let actions$: Observable<any>;
     let socialService: SocialService;
     let userService: UserService;
+    let achievementService: AchievementService;
+    let statsService: StatsService;
     let utils: Utils;
     let mockStore: MockStore<CoreState>;
     let mockCoreSelector: MemoizedSelector<CoreState, Partial<CoreState>>;
@@ -66,7 +68,8 @@ describe('DashboardEffects', () => {
         mockCoreSelector = mockStore.overrideSelector<CoreState, Partial<CoreState>>(coreState, { user });
         effects = TestBed.get(DashboardEffects);
         socialService = TestBed.get(SocialService);
-        // userService = TestBed.get(UserService);
+        statsService = TestBed.get(StatsService);
+        achievementService = TestBed.get(AchievementService);
         // utils = TestBed.get(Utils);
         actions$ = TestBed.get(Actions);
         mockStore.refreshState();
@@ -74,6 +77,67 @@ describe('DashboardEffects', () => {
 
     // addSubscription
     it('Add Subscription', () => {
+
+        const subscription: Subscription = new Subscription();
+        subscription.userId = user.userId;
+        subscription.email = 'demo@demo.com';
+
+        const action = new dashboardActions.AddSubscriber({ subscription });
+        const completion = new dashboardActions.CheckSubscriptionStatus(true);
+
+        actions$ = hot('-a---', { a: action });
+        const response = cold('-a|', { a: true });
+        const expected = cold('--b', { b: completion });
+        socialService.checkSubscription = jest.fn(() => {
+            return response;
+        });
+        expect(effects.addSubscription$).toBeObservable(expected);
+
+    });
+
+    // addSubscription throws Error
+    it('Add Subscription: throws Error', () => {
+
+        const subscription: Subscription = new Subscription();
+        subscription.userId = user.userId;
+        subscription.email = 'demo@demo.com';
+
+        const action = new dashboardActions.AddSubscriber({ subscription });
+        const completion = new dashboardActions.LoadBlogsError('Error while getting blogs');
+        const error = 'Error while getting blogs';
+
+        actions$ = hot('-a---', { a: action });
+        const response = cold('-#|', {}, error);
+        const expected = cold('--b', { b: completion });
+
+        socialService.checkSubscription = jest.fn(() => {
+            return response;
+        });
+
+        socialService.saveSubscription = jest.fn(() => { });
+
+        expect(effects.addSubscription$).toBeObservable(expected);
+
+    });
+
+
+    it('Add Subscription ', () => {
+
+        const subscription: Subscription = new Subscription();
+        subscription.userId = user.userId;
+        subscription.email = 'demo@demo.com';
+
+        const action = new dashboardActions.AddSubscriber({ subscription });
+        const completion = new dashboardActions.CheckSubscriptionStatus(true);
+
+        actions$ = hot('-a---', { a: action });
+        const response = cold('-a|', { a: true });
+        const expected = cold('--b', { b: completion });
+        socialService.checkSubscription = jest.fn(() => {
+            return response;
+        });
+        expect(effects.addSubscription$).toBeObservable(expected);
+
     });
 
     // getTotalSubscription
@@ -181,19 +245,78 @@ describe('DashboardEffects', () => {
 
     // LoadLeaderBoardInfo
     it('LoadLeaderBoardInfo', () => {
-        categoryList = [{
-            id: '', type : ''
-        }]
-        const action = new dashboardActions.LoadLeaderBoard();
-        const completion = new dashboardActions.GetTotalSubscriberSuccess(subscribers);
+        const categoryList = {
+            data: [
+                { id: '1', type: 'category' },
+                { id: '2', type: 'category' },
+                { id: '3', type: 'category' },
+                { id: 'c', type: 'tag' },
+            ]
+        };
+
+        const leaderBoard = testData.leaderBoard;
+        const action = new dashboardActions.LoadLeaderBoard(categoryList);
+        const completion = new dashboardActions.LoadLeaderBoardSuccess(leaderBoard);
 
         actions$ = hot('-a---', { a: action });
-        const response = cold('-a|', { a: subscribers });
+        const response = cold('-a|', { a: leaderBoard });
         const expected = cold('--b', { b: completion });
-        socialService.getTotalSubscription = jest.fn(() => {
+        statsService.loadLeaderBoardStat = jest.fn(() => {
             return response;
         });
         expect(effects.LoadLeaderBoardInfo$).toBeObservable(expected);
+    });
+
+
+    // LoadSystemStat
+    it('LoadSystemStat', () => {
+
+
+        const systemStats: SystemStats = testData.realTimeStats;
+        const action = new dashboardActions.LoadSystemStat();
+        const completion = new dashboardActions.LoadSystemStatSuccess(systemStats);
+
+        actions$ = hot('-a---', { a: action });
+        const response = cold('-a|', { a: systemStats });
+        const expected = cold('--b', { b: completion });
+        statsService.loadSystemStat = jest.fn(() => {
+            return response;
+        });
+        expect(effects.LoadSystemStat$).toBeObservable(expected);
+    });
+
+    // LoadSystemStat
+    it('LoadSystemStat  throws Error', () => {
+
+        const action = new dashboardActions.LoadSystemStat();
+        const completion = new dashboardActions.LoadSystemStatError('Error while getting blogs');
+        const error = 'Error while getting blogs';
+
+        actions$ = hot('-a---', { a: action });
+        const response = cold('-#|', {}, error);
+        const expected = cold('--b', { b: completion });
+        statsService.loadSystemStat = jest.fn(() => {
+            return response;
+        });
+        expect(effects.LoadSystemStat$).toBeObservable(expected);
+    });
+
+
+    //   // getAchievements
+    it('getAchievements', () => {
+
+
+        const achievementRules: AchievementRule[] = testData.achievementRules;
+        const action = new dashboardActions.LoadAchievements();
+        const completion = new dashboardActions.LoadAchievementsSuccess(achievementRules);
+
+        actions$ = hot('-a---', { a: action });
+        const response = cold('-a|', { a: achievementRules });
+        const expected = cold('--b', { b: completion });
+        achievementService.getAchievements = jest.fn(() => {
+            return response;
+        });
+        expect(effects.getAchievements$).toBeObservable(expected);
     });
 
 });
