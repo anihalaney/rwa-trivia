@@ -29,7 +29,7 @@ import { Countries } from './counties';
 import { UserAnsweredQuestion } from './userAnsweredQuestion';
 import { AddressUsingLongLat } from './address-using-long-lat';
 import { TopCategories } from './top-categories';
-
+import { ImageString } from './image-string';
 
 export const testData = {
     categories: Categories,
@@ -62,5 +62,6 @@ export const testData = {
     file: file,
     addressUsingLongLat: AddressUsingLongLat,
     topCategories: TopCategories,
+    imageString: ImageString
 };
 
