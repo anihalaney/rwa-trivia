@@ -14,10 +14,10 @@ export class TopicActions {
   }
 
 
-  static LOAD_TOP_TOPICS_SUCCEESS = 'LOAD_TOP_TOPICS_SUCCEESS';
+  static LOAD_TOP_TOPICS_SUCCESS = 'LOAD_TOP_TOPICS_SUCCESS';
   loadTopTopicsSuccess(topics: any[]): ActionWithPayload<Topic[]> {
     return {
-      type: TopicActions.LOAD_TOP_TOPICS_SUCCEESS,
+      type: TopicActions.LOAD_TOP_TOPICS_SUCCESS,
       payload: topics
     };
   }
