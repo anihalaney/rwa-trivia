@@ -53,7 +53,7 @@ export class UserEffects {
     loadOtherUserProfile$ = this.actions$
         .pipe(ofType(UserActions.LOAD_OTHER_USER_PROFILE))
         .pipe(map((action: ActionWithPayload<string>) => action.payload),
-            distinct(null, this.store.select(coreState).pipe(select(s => { console.log(s); return s.user; }))),
+            distinct(null, this.store.select(coreState).pipe(select(s => s.user))),
             mergeMap((userId: string) => this.svc.loadOtherUserProfile(userId)),
             mergeMap((user: User) => this.svc.getUserStatus(user)),
             map((user: User) => this.userActions.loadOtherUserProfileSuccess(user)),

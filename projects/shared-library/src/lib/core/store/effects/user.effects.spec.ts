@@ -49,7 +49,7 @@ describe('Effects: UserEffects', () => {
                     useValue: { loadOtherUserProfile() { } }
                 },
                 provideMockStore({
-                    initialState: { coreState: {} },
+                    initialState: {'core': {}},
                     selectors: [
                         {
                             selector: coreState,
@@ -110,7 +110,7 @@ describe('Effects: UserEffects', () => {
         // console.log('user tester????', completion);
         actions$ = hot('-a---', { a: action });
         const response = cold('-a|', { a: user });
-        const expected = cold('----b', { b: completion });
+        const expected = cold('---b', { b: completion });
 
         const spy = spyOn(userService, 'loadOtherUserProfile').and.callThrough();
 
