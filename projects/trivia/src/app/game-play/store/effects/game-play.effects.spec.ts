@@ -1,4 +1,4 @@
-import { Observable, empty } from 'rxjs';
+import { Observable } from 'rxjs';
 import { GameService, Utils } from 'shared-library/core/services';
 import { TestBed, async } from '@angular/core/testing';
 import * as GamePlayActions from '../actions';
@@ -6,13 +6,11 @@ import { provideMockActions } from '@ngrx/effects/testing';
 import { Actions } from '@ngrx/effects';
 import { hot, cold } from 'jest-marbles';
 import { testData } from 'test/data';
-import { User, Game, GameOptions, ReportQuestion, QuestionMetadata } from 'shared-library/shared/model';
+import { User, Game, GameOptions, ReportQuestion, QuestionMetadata, RouterStateUrl } from 'shared-library/shared/model';
 import { GamePlayEffects } from './game-play.effects';
 import { StoreModule, MemoizedSelector, Store } from '@ngrx/store';
 import { provideMockStore, MockStore } from '@ngrx/store/testing';
-import { coreState, CoreState, ActionWithPayload } from 'shared-library/core/store';
-import { of } from 'rxjs';
-import { UploadTaskSnapshot } from '@angular/fire/storage/interfaces';
+import { coreState, CoreState } from 'shared-library/core/store';
 import { RouterNavigationPayload, RouterNavigationAction, ROUTER_NAVIGATION } from '@ngrx/router-store';
 import { RoutesRecognized } from '@angular/router';
 import { GameActions } from 'shared-library/core/store/actions/game.actions';
@@ -62,26 +60,31 @@ describe('GamePlayEffects', () => {
     mockStore.refreshState();
   }));
 
-  // startNewGame
-  it('Start New Game', () => {
+  // loadGame2
+  it('loadGame2 with game-play/ route', () => {
 
     const game = Game.getViewModel(testData.games[0]);
-    const gameOptions: GameOptions = game.gameOptions;
+    const routerState: RouterStateUrl = { url: `/game-play/${game.gameId}`, queryParams: {}, params: {} };
+    const event: RoutesRecognized = new RoutesRecognized(1, `/game-play/${game.gameId}`, '', null);
+    const payload: RouterNavigationPayload<RouterStateUrl> = {
+      routerState,
+      event
+    };
 
-    const action = new GamePlayActions.CreateNewGame({ gameOptions, user });
-    const completion = new GameActions().createNewGameSuccess(game.gameId);
+    const action: RouterNavigationAction<RouterStateUrl> = {
+      type: ROUTER_NAVIGATION,
+      payload
+    };
+
+    const completion = new GamePlayActions.LoadGameSuccess(game);
 
     actions$ = hot('-a---', { a: action });
-    const response = cold('-a|', { a: game.gameId });
-    const expected = cold('---b', { b: completion });
-    gameService.createNewGame = jest.fn(() => {
+    const response = cold('-a|', { a: game });
+    const expected = cold('--b', { b: completion });
+    gameService.getGame = jest.fn(() => {
       return response;
     });
-    utils.setNewGameFirebaseAnalyticsParameter = jest.fn(() => {
-      return response;
-    });
-    expect(effects.startNewGame$).toBeObservable(expected);
-
+    expect(effects.loadGame2$).toBeObservable(expected);
   });
 
   // startNewGame throws Error
@@ -97,6 +100,29 @@ describe('GamePlayEffects', () => {
     actions$ = hot('-a---', { a: action });
     const response = cold('-#|', {}, { error });
     const expected = cold('--b', { b: completion });
+    gameService.createNewGame = jest.fn(() => {
+      return response;
+    });
+    utils.setNewGameFirebaseAnalyticsParameter = jest.fn(() => {
+      return response;
+    });
+    expect(effects.startNewGame$).toBeObservable(expected);
+
+  });
+
+
+  // startNewGame
+  it('Start New Game', () => {
+
+    const game = Game.getViewModel(testData.games[0]);
+    const gameOptions: GameOptions = game.gameOptions;
+
+    const action = new GamePlayActions.CreateNewGame({ gameOptions, user });
+    const completion = new GameActions().createNewGameSuccess(game.gameId);
+
+    actions$ = hot('-a---', { a: action });
+    const response = cold('-a|', { a: game.gameId });
+    const expected = cold('---b', { b: completion });
     gameService.createNewGame = jest.fn(() => {
       return response;
     });
