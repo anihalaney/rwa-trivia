@@ -67,8 +67,7 @@ export class UserEffects {
         .pipe(ofType(UserActionTypes.ADD_QUESTION))
         .pipe(
             switchMap((action: userActions.AddQuestion) => {
-                this.questionService.saveQuestion(action.payload.question);
-                return empty();
+                return this.questionService.saveQuestion(action.payload.question);
             })
         );
 
