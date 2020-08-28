@@ -6,7 +6,7 @@ import { provideMockActions } from '@ngrx/effects/testing';
 import { Actions } from '@ngrx/effects';
 import { hot, cold } from 'jest-marbles';
 import { testData } from 'test/data';
-import { User, Game } from 'shared-library/shared/model';
+import { User, Game, RouterStateUrl } from 'shared-library/shared/model';
 import { UserEffects } from './user.effects';
 import { StoreModule, MemoizedSelector, Store } from '@ngrx/store';
 import { provideMockStore, MockStore } from '@ngrx/store/testing';
@@ -14,6 +14,8 @@ import { coreState, CoreState, ActionWithPayload } from 'shared-library/core/sto
 import { empty, of } from 'rxjs';
 import { Invitation, DrawerConstants } from '../../../shared/model';
 import { debounce, debounceTime } from 'rxjs/operators';
+import { RouterNavigationPayload, RouterNavigationAction, ROUTER_NAVIGATION } from '@ngrx/router-store';
+import { RoutesRecognized } from '@angular/router';
 
 
 describe('Effects: UserEffects', () => {
@@ -49,7 +51,7 @@ describe('Effects: UserEffects', () => {
                     useValue: { loadOtherUserProfile() { } }
                 },
                 provideMockStore({
-                    initialState: {'core': {}},
+                    initialState: { 'core': { user } },
                     selectors: [
                         {
                             selector: coreState,
@@ -71,7 +73,6 @@ describe('Effects: UserEffects', () => {
     }));
 
     it('Load user profile', () => {
-        const user: User = testData.userList[0];
         const action = new UserActions().loginSuccess(user);
         const completion = new UserActions().addUserWithRoles(user);
 
@@ -85,7 +86,6 @@ describe('Effects: UserEffects', () => {
     });
 
     it('Load user account', () => {
-        const user: User = testData.userList[0];
         const action = new UserActions().loginSuccess(user);
         const completion = new UserActions().loadAccountsSuccess(user.account);
 
@@ -98,16 +98,10 @@ describe('Effects: UserEffects', () => {
         expect(effects.loadUserAccounts$).toBeObservable(expected);
     });
 
-    // TODO: Remain write unit test
     // loadOtherUserProfile
     it('Load other user profile', () => {
-        const user: User = testData.userList[0];
-        // mockStore.overrideSelector<CoreState, Partial<CoreState>>(coreState, user);
-        // mockCoreSelector.setResult({ user });
-        // mockStore.refreshState();
         const action = new UserActions().loadOtherUserProfile(user.userId);
         const completion = new UserActions().loadOtherUserProfileSuccess(user);
-        // console.log('user tester????', completion);
         actions$ = hot('-a---', { a: action });
         const response = cold('-a|', { a: user });
         const expected = cold('---b', { b: completion });
@@ -121,30 +115,43 @@ describe('Effects: UserEffects', () => {
             return response;
         });
         expect(effects.loadOtherUserProfile$).toBeObservable(expected);
-
-        // effects.loadOtherUserProfile$.subscribe(res => {
-        //     expect(res).toMatchObject(completion);
-        //     expect(spy).toHaveBeenCalledTimes(1);
-        //     // done();
-        // });
     });
 
-    // TODO: Remain write unit test
+
+    // loadOtherUserProfile Error
+    it('Load other user profile error should return empty object', () => {
+        const action = new UserActions().loadOtherUserProfile(user.userId);
+        const completion = new UserActions().loadOtherUserProfileSuccess(null);
+        actions$ = hot('-a---', { a: action });
+        const response = cold('-a#', { a: null });
+        const expected = cold('---|');
+
+        const spy = spyOn(userService, 'loadOtherUserProfile').and.callThrough();
+
+        userService.loadOtherUserProfile = jest.fn(() => {
+            return response;
+        });
+        userService.getUserStatus = jest.fn(() => {
+            return response;
+        });
+        expect(effects.loadOtherUserProfile$).toBeObservable(expected);
+    });
+
     // loadOtherUserExtendedInfo
-    // it('Load other user exiended info', () => {
-    //     const user: User = testData.userList[0];
-    //     const action = new UserActions().loadOtherUserExtendedInfo(user.userId);
-    //     const completion = new UserActions().loadOtherUserProfileWithExtendedInfoSuccess(user);
-    //     // mockStore.overrideSelector<CoreState, Partial<CoreState>>(coreState, (user));
-    //     // mockStore.refreshState();
-    //     actions$ = hot('-a---', { a: action });
-    //     const response = cold('-a|', { a: user.account });
-    //     const expected = cold('--b', { b: completion });
-    //     userService.loadOtherUserProfileWithExtendedInfo = jest.fn(() => {
-    //         return response;
-    //     });
-    //     expect(effects.loadOtherUserExtendedInfo$).toBeObservable(expected);
-    // });
+    it('Load other user exiended info', () => {
+        const action = new UserActions().loadOtherUserExtendedInfo(user.userId);
+        const completion = new UserActions().loadOtherUserProfileWithExtendedInfoSuccess(user);
+        actions$ = hot('-a---', { a: action });
+        const response = cold('-a|', { a: user });
+        const expected = cold('---b', { b: completion });
+        userService.loadOtherUserProfileWithExtendedInfo = jest.fn(() => {
+            return response;
+        });
+        userService.getUserStatus = jest.fn(() => {
+            return response;
+        });
+        expect(effects.loadOtherUserExtendedInfo$).toBeObservable(expected);
+    });
 
 
     // loadUserInvitationsInfo
@@ -239,14 +246,39 @@ describe('Effects: UserEffects', () => {
     });
 
     // TODO Need to write unit test
-    // // loadFriendInvitations
-    // it('loadFriendInvitations', () => {
-    //     const gameId = testData.games[0].gameId;
-    //     const action = new UserActions().rejectGameInvitation(gameId);
-    //     const completion = new UserActions().updateGameSuccess();
+    // loadFriendInvitations
+    it('loadFriendInvitations', () => {
 
-    //     expect(effects.loadFriendInvitations$).toBeObservable(expected);
-    // });
+        const invitations: Invitation[] = [testData.invitation];
+        const game = Game.getViewModel(testData.games[0]);
+        const routerState: RouterStateUrl = { url: `/dashboard`, queryParams: {}, params: {} };
+        const event: RoutesRecognized = new RoutesRecognized(1, `/dashboard`, '', null);
+        const payload: RouterNavigationPayload<RouterStateUrl> = {
+            routerState,
+            event
+        };
+
+        const action: RouterNavigationAction<RouterStateUrl> = {
+            type: ROUTER_NAVIGATION,
+            payload
+        };
+
+        const completion = new UserActions().loadUserInvitationsSuccess(invitations);
+
+        actions$ = hot('-a---', { a: action });
+        const response = cold('-a|', { a: invitations });
+        const expected = cold('--b', { b: completion });
+        userService.loadFriendInvitations = jest.fn(() => {
+            return response;
+        });
+        expect(effects.loadFriendInvitations$).toBeObservable(expected);
+
+        // const gameId = testData.games[0].gameId;
+        // const action = new UserActions().rejectGameInvitation(gameId);
+        // const completion = new UserActions().updateGameSuccess();
+
+        // expect(effects.loadFriendInvitations$).toBeObservable(expected);
+    });
 
     // UpdateInvitation
     it('UpdateInvitation', () => {
@@ -266,6 +298,41 @@ describe('Effects: UserEffects', () => {
             return response;
         });
         expect(effects.UpdateInvitation$).toBeObservable(expected);
+    });
+
+
+    // makeFriend
+    it('makeFriend', () => {
+        const invitationId = 'DFld3ZlJhbGJ7Ko';
+        const payload = { token: invitationId, email: user.email, userId: user.userId }
+        const action = new UserActions().makeFriend(payload);
+        const completion = new UserActions().makeFriendSuccess();
+
+        actions$ = hot('-a---', { a: action });
+        const response = cold('--a|', { a: null });
+        const expected = cold('---b', { b: completion });
+        userService.checkInvitationToken = jest.fn(() => {
+            return response;
+        });
+        expect(effects.makeFriend$).toBeObservable(expected);
+    });
+
+
+    // saveInvitation
+    it('saveInvitation', () => {
+
+        const message = { messages: 'Your Invitation sent successfully' };
+        const action = new UserActions().addUserInvitation(user);
+        const completion = new UserActions().addUserInvitationSuccess(message.messages);
+
+        actions$ = hot('-a---', { a: action });
+        const response = cold('--a|', { a: message });
+        const expected = cold('---b', { b: completion });
+        userService.saveUserInvitations = jest.fn(() => {
+            return response;
+        });
+
+        expect(effects.saveInvitation$).toBeObservable(expected);
     });
 
 
