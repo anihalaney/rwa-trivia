@@ -1,10 +1,10 @@
 import { Observable } from 'rxjs';
 import { GameService, UserService, Utils } from 'shared-library/core/services';
-import { TestBed, async } from '@angular/core/testing';
+import { TestBed, async, tick, fakeAsync } from '@angular/core/testing';
 import { UserActions } from '../actions';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { Actions } from '@ngrx/effects';
-import { hot, cold } from 'jest-marbles';
+import { hot, cold, Scheduler } from 'jest-marbles';
 import { testData } from 'test/data';
 import { User, Game, RouterStateUrl } from 'shared-library/shared/model';
 import { UserEffects } from './user.effects';
@@ -16,7 +16,7 @@ import { Invitation, DrawerConstants } from '../../../shared/model';
 import { debounce, debounceTime } from 'rxjs/operators';
 import { RouterNavigationPayload, RouterNavigationAction, ROUTER_NAVIGATION } from '@ngrx/router-store';
 import { RoutesRecognized } from '@angular/router';
-
+import { TestScheduler } from 'rxjs/testing';
 
 describe('Effects: UserEffects', () => {
     let effects: UserEffects;
@@ -27,6 +27,12 @@ describe('Effects: UserEffects', () => {
     let mockStore: MockStore<CoreState>;
     let mockCoreSelector: MemoizedSelector<CoreState, Partial<CoreState>>;
     const user: User = testData.userList[0];
+
+    // const mockDebounceTime =  () => {
+    //     return spyOn(Observable.arguments, 'debounceTime').and.callFake(()=> {
+    //         return this;
+    //     });
+    // };
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
@@ -85,12 +91,78 @@ describe('Effects: UserEffects', () => {
         expect(effects.loadUserProfile$).toBeObservable(expected);
     });
 
+
+    it('When loadUserProfile service return error then it should return empty observable ', () => {
+        const action = new UserActions().loginSuccess(user);
+        const completion = new UserActions().addUserWithRoles(null);
+
+        actions$ = hot('-a---', { a: action });
+        const response = cold('-a#', { a: null });
+        const expected = cold('--b', { b: completion });
+        userService.loadUserProfile = jest.fn(() => {
+            return response;
+        });
+        expect(effects.loadUserProfile$).toBeObservable(expected);
+    });
+
+    it('When setLoginFirebaseAnalyticsParameter service return error then it should return empty observable ', () => {
+        const action = new UserActions().loginSuccess(null);
+        const completion = new UserActions().addUserWithRoles(null);
+
+        actions$ = hot('-a-b-', { a: action });
+        const response = cold('-a|', { a: null });
+        const responseLogin = cold('-b#', { b: { error: 'error message' } });
+        const expected = cold('---|', { b: completion });
+        userService.loadUserProfile = jest.fn(() => {
+            return response;
+        });
+
+        utils.setLoginFirebaseAnalyticsParameter = jest.fn(() => {
+            return responseLogin;
+        });
+
+        expect(effects.loadUserProfile$).toBeObservable(expected);
+    });
+
+
+
+    it('When loadUserProfile service return error then it should return empty observable ', () => {
+        const action = new UserActions().loginSuccess(null);
+        const completion = new UserActions().addUserWithRoles(null);
+
+        actions$ = hot('-a---', { a: action });
+        const response = cold('----', { a: null });
+        const expected = cold('----');
+        userService.loadUserProfile = jest.fn(() => {
+            return response;
+        });
+        expect(effects.loadUserProfile$).toBeObservable(expected);
+    });
+
+
+
+
+
     it('Load user account', () => {
         const action = new UserActions().loginSuccess(user);
         const completion = new UserActions().loadAccountsSuccess(user.account);
 
         actions$ = hot('-a---', { a: action });
         const response = cold('-a|', { a: user.account });
+        const expected = cold('--b', { b: completion });
+        userService.loadAccounts = jest.fn(() => {
+            return response;
+        });
+        expect(effects.loadUserAccounts$).toBeObservable(expected);
+    });
+
+
+    it('Load user account: when error error occurred then it should return null array', () => {
+        const action = new UserActions().loginSuccess(user);
+        const completion = new UserActions().loadAccountsSuccess(null);
+
+        actions$ = hot('-a---', { a: action });
+        const response = cold('-a#', { a: null });
         const expected = cold('--b', { b: completion });
         userService.loadAccounts = jest.fn(() => {
             return response;
@@ -450,22 +522,27 @@ describe('Effects: UserEffects', () => {
         expect(effects.loadAddressUsingLatLong).toBeObservable(expected);
     });
 
-    // // loadAddressSuggestions
-    // it('loadAddressSuggestions', () => {
+    //  loadAddressSuggestions
+    // TODO Debounce
+    // it('loadAddressSuggestions', fakeAsync(() => {
     //     const location = 'Ahme';
     //     const addressSuggestion = [testData.addressSuggestion];
     //     const action = new UserActions().loadAddressSuggestions(location);
     //     const completion = new UserActions().loadAddressSuggestionsSuccess(addressSuggestion);
 
+
     //     actions$ = hot('-a---', { a: action });
-    //     const response = cold('-a|', { a: addressSuggestion });
+    //     const response = cold('--a|', { a: addressSuggestion });
     //     const expected = cold('--b', { b: completion });
 
     //     userService.getAddressSuggestions = jest.fn(() => {
     //         return response;
     //     });
+    //     // mockDebounceTime();
+
     //     expect(effects.loadAddressSuggestions).toBeObservable(expected);
-    // });
+
+    // }));
 
 
     // checkDisplayName

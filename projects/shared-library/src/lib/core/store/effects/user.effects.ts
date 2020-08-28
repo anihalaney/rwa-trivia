@@ -31,7 +31,6 @@ export class UserEffects {
             }))),
             map((user: User) => this.userActions.addUserWithRoles(user)),
             catchError((error) => {
-                console.log(error);
                 this.userActions.logoff();
                 return of();
             })
@@ -58,7 +57,6 @@ export class UserEffects {
             mergeMap((user: User) => this.svc.getUserStatus(user)),
             map((user: User) => this.userActions.loadOtherUserProfileSuccess(user)),
             catchError((error) => {
-                console.log(error);
                 this.userActions.logoff();
                 return empty();
             }));
@@ -154,7 +152,8 @@ export class UserEffects {
                     filter(u => !!u),
                     take(1),
                     map(user => user.email || user.authState.phoneNumber))
-            ))
+            )
+        )
         .pipe(
             switchMap((email: string) => {
                 return this.svc.loadFriendInvitations(email).pipe(map((invitations: Invitation[]) =>
