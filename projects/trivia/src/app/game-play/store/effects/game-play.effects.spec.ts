@@ -90,50 +90,37 @@ describe('GamePlayEffects', () => {
   });
 
 
-  // loadGame2 check RESET_CURRENT called or not
-  // it('loadGame2 with RESET_CURRENT', () => {
+  // loadGame2 check ResetCurrentGame called
+  it('loadGame2 it should dispatch ResetCurrentGame action', () => {
 
-  //   const game = Game.getViewModel(testData.games[0]);
-  //   const routerState: RouterStateUrl = { url: `/game-play/${game.gameId}`, queryParams: {}, params: {} };
-  //   const event: RoutesRecognized = new RoutesRecognized(1, `/game-play/${game.gameId}`, '', null);
-  //   const payload: RouterNavigationPayload<RouterStateUrl> = {
-  //     routerState,
-  //     event
-  //   };
+    const game = Game.getViewModel(testData.games[0]);
+    const routerState: RouterStateUrl = { url: `/game-play/${game.gameId}`, queryParams: {}, params: {} };
+    const event: RoutesRecognized = new RoutesRecognized(1, `/game-play/${game.gameId}`, '', null);
+    const payload: RouterNavigationPayload<RouterStateUrl> = {
+      routerState,
+      event
+    };
 
-  //   const action: RouterNavigationAction<RouterStateUrl> = {
-  //     type: ROUTER_NAVIGATION,
-  //     payload
-  //   };
+    const action: RouterNavigationAction<RouterStateUrl> = {
+      type: ROUTER_NAVIGATION,
+      payload
+    };
 
-  //   const completion = new GamePlayActions.LoadGameSuccess(game);
+    actions$ = hot('-a---', { a: action });
+    const response = cold('-a|', { a: game });
+    gameService.getGame = jest.fn(() => {
+      return response;
+    });
 
-  //   actions$ = hot('-a---', { a: action });
-  //   const response = cold('-a|', { a: game });
-  //   const expected = cold('--b', { b: completion });
-  //   gameService.getGame = jest.fn(() => {
-  //     return response;
-  //   });
+    spy.and.callFake((action: ActionWithPayload<string>) => {
+      expect(action.type).toEqual(GamePlayActions.GamePlayActionTypes.RESET_CURRENT);
+      expect(action.payload).toEqual(null);
+    });
 
-  //   spy.and.callFake((action: ActionWithPayload<string>) => {
-  //     expect(action.type).toEqual(GamePlayActions.GamePlayActionTypes.RESET_CURRENT);
-  //     expect(action.payload).toEqual(null);
-  //   });
-
-  //   effects.loadGame2$.subscribe(res => {
-  //     // console.log('resFFF', res);
-  //     console.log("CLLEED>>>>>", res);
-  //     expect(mockStore.dispatch).toHaveBeenCalled();
-  //   });
-  //   // console.log('called>>>', new GamePlayActions.ResetCurrentGame().type);
-
-  //   // expect(mockStore.dispatch).toHaveBeenCalled();
-
-  //   // expect(effects.loadGame2$).toBeObservable(expected);
-  //   // console.log('mock>>>', mockStore.dispatch);
-  //   // expect(mockStore.dispatch).toHaveBeenCalled();
-
-  // });
+    effects.loadGame2$.subscribe(res => {
+      expect(mockStore.dispatch).toHaveBeenCalled();
+    });
+  });
 
 
   // loadGame2 with game-play/challenge
