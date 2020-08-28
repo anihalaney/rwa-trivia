@@ -118,6 +118,32 @@ describe('DashboardEffects', () => {
 
     });
 
+
+    // addSubscription
+    it('Add Subscription it should call saveSubscription', () => {
+
+        const subscription: Subscription = new Subscription();
+        subscription.userId = user.userId;
+        subscription.email = 'demo@demo.com';
+        const action = new dashboardActions.AddSubscriber({ subscription });
+
+        actions$ = hot('-a---', { a: action });
+        const response = cold('-a|', { a: false });
+
+        socialService.checkSubscription = jest.fn(() => {
+            return response;
+        });
+
+        const mockService = socialService.saveSubscription = jest.fn(() => {
+            return response;
+        });
+
+        effects.addSubscription$.subscribe(res => {
+            expect(mockService).toHaveBeenCalled();
+        });
+
+    });
+
     // addSubscription throws Error
     it('Add Subscription: throws Error', () => {
 
