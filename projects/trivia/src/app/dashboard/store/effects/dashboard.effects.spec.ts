@@ -1,5 +1,5 @@
-import { Observable, empty } from 'rxjs';
-import { StatsService, UserService, Utils, SocialService, AchievementService, QuestionService } from 'shared-library/core/services';
+import { Observable } from 'rxjs';
+import { StatsService, SocialService, AchievementService, QuestionService } from 'shared-library/core/services';
 import { TestBed, async } from '@angular/core/testing';
 import * as dashboardActions from '../actions/dashboard.actions';
 import { provideMockActions } from '@ngrx/effects/testing';
@@ -10,9 +10,7 @@ import { User, Subscription, Subscribers, RouterStateUrl, SystemStats, Achieveme
 import { DashboardEffects } from './dashboard.effects';
 import { StoreModule, MemoizedSelector, Store } from '@ngrx/store';
 import { provideMockStore, MockStore } from '@ngrx/store/testing';
-import { coreState, CoreState, ActionWithPayload } from 'shared-library/core/store';
-import { of } from 'rxjs';
-import { UploadTaskSnapshot } from '@angular/fire/storage/interfaces';
+import { coreState, CoreState } from 'shared-library/core/store';
 import { RouterNavigationPayload, RouterNavigationAction, ROUTER_NAVIGATION } from '@ngrx/router-store';
 import { RoutesRecognized } from '@angular/router';
 
@@ -22,10 +20,9 @@ describe('DashboardEffects', () => {
     let effects: DashboardEffects;
     let actions$: Observable<any>;
     let socialService: SocialService;
-    let userService: UserService;
+    let questionService: QuestionService;
     let achievementService: AchievementService;
     let statsService: StatsService;
-    let utils: Utils;
     let mockStore: MockStore<CoreState>;
     let mockCoreSelector: MemoizedSelector<CoreState, Partial<CoreState>>;
     const user: User = testData.userList[0];
@@ -34,7 +31,6 @@ describe('DashboardEffects', () => {
         TestBed.configureTestingModule({
             imports: [StoreModule.forRoot({})],
             providers: [
-                // DashboardActions,
                 {
                     provide: SocialService,
                     useValue: {}
@@ -53,7 +49,7 @@ describe('DashboardEffects', () => {
                 },
                 DashboardEffects,
                 provideMockStore({
-                    initialState: { coreState: {} },
+                    initialState: { 'core': { user } },
                     selectors: [
                         {
                             selector: coreState,
@@ -70,7 +66,7 @@ describe('DashboardEffects', () => {
         socialService = TestBed.get(SocialService);
         statsService = TestBed.get(StatsService);
         achievementService = TestBed.get(AchievementService);
-        // utils = TestBed.get(Utils);
+        questionService = TestBed.get(QuestionService);
         actions$ = TestBed.get(Actions);
         mockStore.refreshState();
     }));
@@ -95,6 +91,33 @@ describe('DashboardEffects', () => {
 
     });
 
+
+    // addSubscription
+    it('Add Subscription', () => {
+
+        const subscription: Subscription = new Subscription();
+        subscription.userId = user.userId;
+        subscription.email = 'demo@demo.com';
+
+        const action = new dashboardActions.AddSubscriber({ subscription });
+        const completion = new dashboardActions.CheckSubscriptionStatus(false);
+
+        actions$ = hot('-a---', { a: action });
+        const response = cold('-a|', { a: false });
+        const expected = cold('--b', { b: completion });
+
+        socialService.checkSubscription = jest.fn(() => {
+            return response;
+        });
+
+        socialService.saveSubscription = jest.fn(() => {
+            return response;
+        });
+
+        expect(effects.addSubscription$).toBeObservable(expected);
+
+    });
+
     // addSubscription throws Error
     it('Add Subscription: throws Error', () => {
 
@@ -103,7 +126,7 @@ describe('DashboardEffects', () => {
         subscription.email = 'demo@demo.com';
 
         const action = new dashboardActions.AddSubscriber({ subscription });
-        const completion = new dashboardActions.LoadBlogsError('Error while getting blogs');
+        const completion = new dashboardActions.AddSubscriberError('Error while getting blogs');
         const error = 'Error while getting blogs';
 
         actions$ = hot('-a---', { a: action });
@@ -317,6 +340,33 @@ describe('DashboardEffects', () => {
             return response;
         });
         expect(effects.getAchievements$).toBeObservable(expected);
+    });
+
+
+    // loadUserLatestPublishedRouteQuestions
+    it('loadUserLatestPublishedRouteQuestions', () => {
+        const publishedQuestion = testData.questions.published[0];
+        const routerState: RouterStateUrl = { url: `/`, queryParams: {}, params: { id: publishedQuestion.id } };
+        const event: RoutesRecognized = new RoutesRecognized(1, `/`, '', null);
+        const payload: RouterNavigationPayload<RouterStateUrl> = {
+            routerState,
+            event
+        };
+
+        const action: RouterNavigationAction<RouterStateUrl> = {
+            type: ROUTER_NAVIGATION,
+            payload
+        };
+
+        const completion = new dashboardActions.LoadUserLatestPublishedQuestionSuccess(publishedQuestion);
+
+        actions$ = hot('-a---', { a: action });
+        const response = cold('-a|', { a: publishedQuestion });
+        const expected = cold('--b', { b: completion });
+        questionService.getUserLatestQuestion = jest.fn(() => {
+            return response;
+        });
+        expect(effects.loadUserLatestPublishedRouteQuestions$).toBeObservable(expected);
     });
 
 });
