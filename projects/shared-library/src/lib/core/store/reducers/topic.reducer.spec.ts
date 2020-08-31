@@ -11,7 +11,7 @@ describe('TopicReducer: topTopics', () => {
         expect(state).toEqual([]);
     });
 
-    it('Verify topTopics function when action type is `LOAD_TOP_TOPICS_SUCEESS`', () => {
+    it('Verify topTopics function when action type is `LOAD_TOP_TOPICS_SUCCEESS`', () => {
         const categoryData: any[] = [];
         const topics: Topic[] = [];
         categoryData.push(testData.categoryDictionary);
@@ -19,7 +19,7 @@ describe('TopicReducer: topTopics', () => {
             topics[data.id] = data;
         });
 
-        const newState: Topic[] = _testReducer(topics, { type: TopicActions.LOAD_TOP_TOPICS_SUCEESS, payload: topics });
+        const newState: Topic[] = _testReducer(topics, { type: TopicActions.LOAD_TOP_TOPICS_SUCCEESS, payload: topics });
         expect(newState).toEqual(topics);
     });
 });

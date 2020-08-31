@@ -1,13 +1,12 @@
 import { TopicActions } from './topic.actions';
 import { testData } from 'test/data';
 
-
-describe('loadTopics', () => {
-  it('should create an action', () => {
-    const action = new TopicActions().loadTopTopics();
-    expect(action.type).toEqual(TopicActions.LOAD_TOP_TOPICS);
-    expect(action.payload).toEqual(null);
-  });
+describe('TopicAction: loadTopTopics', () => {
+    it('Verify loadTopTopics function work correctly', () => {
+        const action = new TopicActions().loadTopTopics();
+        expect(action.type).toEqual(TopicActions.LOAD_TOP_TOPICS);
+        expect(action.payload).toEqual(null);
+    });
 });
 
 
