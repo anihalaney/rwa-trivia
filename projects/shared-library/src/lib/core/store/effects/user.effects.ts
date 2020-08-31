@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Effect, Actions, ofType } from '@ngrx/effects';
+import { Effect, Actions, ofType, createEffect } from '@ngrx/effects';
 import { ActionWithPayload, UserActions } from '../actions';
 import { User, RouterStateUrl, Game, Friends, Friend, Invitation, Account } from '../../../shared/model';
 import { UserService, GameService, Utils } from '../../services';
 import { switchMap, map, distinct, mergeMap, filter, take, debounceTime, distinctUntilChanged, catchError } from 'rxjs/operators';
-import { empty, of } from 'rxjs';
+import { empty, of, asyncScheduler } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { coreState, CoreState } from '../reducers';
 import { ROUTER_NAVIGATION } from '@ngrx/router-store';
@@ -264,16 +264,20 @@ export class UserEffects {
         );
 
     @Effect()
-    loadAddressSuggestions = this.actions$
+    loadAddressSuggestions = createEffect(() => ({
+        // assign default values
+        debounce = 2000,
+        scheduler = asyncScheduler
+      } = {}) => this.actions$
         .pipe(ofType(UserActions.LOAD_ADDRESS_SUGGESTIONS))
         .pipe(
-            debounceTime(2000),
+            debounceTime(debounce, scheduler),
             distinctUntilChanged(),
             switchMap((action: ActionWithPayload<any>) =>
                 this.svc.getAddressSuggestions(action.payload).pipe(
                     map((result: any) => this.userActions.loadAddressSuggestionsSuccess(result))
                 ))
-        );
+        ));
 
     @Effect()
     // check display Name

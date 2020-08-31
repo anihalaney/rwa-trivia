@@ -10,13 +10,11 @@ import { User, Game, RouterStateUrl } from 'shared-library/shared/model';
 import { UserEffects } from './user.effects';
 import { StoreModule, MemoizedSelector, Store } from '@ngrx/store';
 import { provideMockStore, MockStore } from '@ngrx/store/testing';
-import { coreState, CoreState, ActionWithPayload } from 'shared-library/core/store';
-import { empty, of } from 'rxjs';
+import { coreState, CoreState } from 'shared-library/core/store';
+import { of } from 'rxjs';
 import { Invitation, DrawerConstants } from '../../../shared/model';
-import { debounce, debounceTime } from 'rxjs/operators';
 import { RouterNavigationPayload, RouterNavigationAction, ROUTER_NAVIGATION } from '@ngrx/router-store';
 import { RoutesRecognized } from '@angular/router';
-import { TestScheduler } from 'rxjs/testing';
 
 describe('Effects: UserEffects', () => {
     let effects: UserEffects;
@@ -27,12 +25,6 @@ describe('Effects: UserEffects', () => {
     let mockStore: MockStore<CoreState>;
     let mockCoreSelector: MemoizedSelector<CoreState, Partial<CoreState>>;
     const user: User = testData.userList[0];
-
-    // const mockDebounceTime =  () => {
-    //     return spyOn(Observable.arguments, 'debounceTime').and.callFake(()=> {
-    //         return this;
-    //     });
-    // };
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
@@ -317,7 +309,6 @@ describe('Effects: UserEffects', () => {
         expect(effects.LoadUserFriends$).toBeObservable(expected);
     });
 
-    // TODO Need to write unit test
     // loadFriendInvitations
     it('loadFriendInvitations', () => {
 
@@ -344,12 +335,6 @@ describe('Effects: UserEffects', () => {
             return response;
         });
         expect(effects.loadFriendInvitations$).toBeObservable(expected);
-
-        // const gameId = testData.games[0].gameId;
-        // const action = new UserActions().rejectGameInvitation(gameId);
-        // const completion = new UserActions().updateGameSuccess();
-
-        // expect(effects.loadFriendInvitations$).toBeObservable(expected);
     });
 
     // UpdateInvitation
@@ -429,8 +414,6 @@ describe('Effects: UserEffects', () => {
         expect(effects.addUser$).toBeObservable(expected);
     });
 
-
-
     // addFeedback
     it('addFeedback', () => {
         const feedback = 'bitWiser app is awesome';
@@ -441,7 +424,6 @@ describe('Effects: UserEffects', () => {
         actions$ = hot('-a---', { a: action });
         const response = cold('-a|', { a: '' });
         const expected = cold('--b', { b: completion });
-
 
         userService.addFeedback = jest.fn(() => {
             return response;
@@ -460,7 +442,6 @@ describe('Effects: UserEffects', () => {
         const response = cold('-a|', { a: countries });
         const expected = cold('--b', { b: completion });
 
-
         userService.getCountries = jest.fn(() => {
             return response;
         });
@@ -472,7 +453,6 @@ describe('Effects: UserEffects', () => {
 
         const action = new UserActions().addUserLives(user.userId);
         const completion = new UserActions().addUserLivesSuccess();
-
         actions$ = hot('-a---', { a: action });
         const response = cold('-a|', { a: '' });
         const expected = cold('--b', { b: completion });
@@ -505,47 +485,7 @@ describe('Effects: UserEffects', () => {
     });
 
 
-    // loadAddressUsingLatLong
-    it('loadAddressUsingLatLong', () => {
-        const latLong = '23.0457344,72.64010240000002';
-        const addressUsingLongLat = [testData.addressUsingLongLat];
-        const action = new UserActions().loadAddressUsingLatLong(latLong);
-        const completion = new UserActions().loadAddressUsingLatLongSuccess(addressUsingLongLat);
-
-        actions$ = hot('-a---', { a: action });
-        const response = cold('-a|', { a: addressUsingLongLat });
-        const expected = cold('--b', { b: completion });
-
-        userService.getAddressByLatLang = jest.fn(() => {
-            return response;
-        });
-        expect(effects.loadAddressUsingLatLong).toBeObservable(expected);
-    });
-
-    //  loadAddressSuggestions
-    // TODO Debounce
-    // it('loadAddressSuggestions', fakeAsync(() => {
-    //     const location = 'Ahme';
-    //     const addressSuggestion = [testData.addressSuggestion];
-    //     const action = new UserActions().loadAddressSuggestions(location);
-    //     const completion = new UserActions().loadAddressSuggestionsSuccess(addressSuggestion);
-
-
-    //     actions$ = hot('-a---', { a: action });
-    //     const response = cold('--a|', { a: addressSuggestion });
-    //     const expected = cold('--b', { b: completion });
-
-    //     userService.getAddressSuggestions = jest.fn(() => {
-    //         return response;
-    //     });
-    //     // mockDebounceTime();
-
-    //     expect(effects.loadAddressSuggestions).toBeObservable(expected);
-
-    // }));
-
-
-    // checkDisplayName
+    // // checkDisplayName
     it('checkDisplayName', () => {
         const userName = 'PI';
         const action = new UserActions().checkDisplayName(userName);
@@ -577,6 +517,54 @@ describe('Effects: UserEffects', () => {
         });
         expect(effects.setFirstQuestionBits).toBeObservable(expected);
     });
+
+
+    // loadAddressUsingLatLong
+    it('loadAddressUsingLatLong', () => {
+        const latLong = '23.0457344,72.64010240000002';
+        const addressUsingLongLat = [testData.addressUsingLongLat];
+        const action = new UserActions().loadAddressUsingLatLong(latLong);
+        const completion = new UserActions().loadAddressUsingLatLongSuccess(addressUsingLongLat);
+
+        actions$ = hot('-a---', { a: action });
+        const response = cold('-a|', { a: addressUsingLongLat });
+        const expected = cold('--b', { b: completion });
+
+        userService.getAddressByLatLang = jest.fn(() => {
+            return response;
+        });
+        expect(effects.loadAddressUsingLatLong).toBeObservable(expected);
+    });
+
+    //  loadAddressSuggestions
+    it('loadAddressSuggestions', fakeAsync(() => {
+
+        const location = 'Ahme';
+        const addressSuggestion = [testData.addressSuggestion];
+        const action = new UserActions().loadAddressSuggestions(location);
+
+        const location2 = 'Ahmeme';
+        const action2 = new UserActions().loadAddressSuggestions(location2);
+
+        // create an actions stream to represent a user that is typing
+        actions$ = hot('-a-b-', {
+            a: action,
+            b: action2,
+        });
+        const completion = new UserActions().loadAddressSuggestionsSuccess(addressSuggestion);
+        const response = cold('-a|', { a: addressSuggestion });
+        const expected: any = hot('------b', { b: completion });
+
+        userService.getAddressSuggestions = jest.fn(() => {
+            return response;
+        });
+        expect(
+            effects.loadAddressSuggestions({
+                debounce: 20,
+                scheduler: Scheduler.get(),
+            })
+        ).toBeObservable(expected);
+    }));
 
 });
 
