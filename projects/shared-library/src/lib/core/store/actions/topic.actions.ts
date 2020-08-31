@@ -6,6 +6,8 @@ import { Topic } from '../../../shared/model';
 export class TopicActions {
 
   static LOAD_TOP_TOPICS = 'LOAD_TOP_TOPICS';
+  static LOAD_TOP_TOPICS_SUCEESS = 'LOAD_TOP_TOPICS_SUCCESS';
+
   loadTopTopics(): ActionWithPayload<Topic[]> {
     return {
       type: TopicActions.LOAD_TOP_TOPICS,
@@ -13,11 +15,9 @@ export class TopicActions {
     };
   }
 
-
-  static LOAD_TOP_TOPICS_SUCCESS = 'LOAD_TOP_TOPICS_SUCCESS';
   loadTopTopicsSuccess(topics: any[]): ActionWithPayload<Topic[]> {
     return {
-      type: TopicActions.LOAD_TOP_TOPICS_SUCCESS,
+      type: TopicActions.LOAD_TOP_TOPICS_SUCEESS,
       payload: topics
     };
   }
