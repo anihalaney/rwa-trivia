@@ -6,7 +6,7 @@ import { Topic } from '../../../shared/model';
 export class TopicActions {
 
   static LOAD_TOP_TOPICS = 'LOAD_TOP_TOPICS';
-  static LOAD_TOP_TOPICS_SUCEESS = 'LOAD_TOP_TOPICS_SUCEESS';
+  static LOAD_TOP_TOPICS_SUCCEESS = 'LOAD_TOP_TOPICS_SUCCEESS';
 
   loadTopTopics(): ActionWithPayload<Topic[]> {
     return {

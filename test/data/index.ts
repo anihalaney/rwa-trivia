@@ -29,6 +29,8 @@ import { Countries } from './counties';
 import { UserAnsweredQuestion } from './userAnsweredQuestion';
 import { AddressUsingLongLat } from './address-using-long-lat';
 import { TopCategories } from './top-categories';
+import { ImageString } from './image-string';
+import { AchievementRules } from './achievement-rules';
 
 
 export const testData = {
@@ -62,5 +64,7 @@ export const testData = {
     file: file,
     addressUsingLongLat: AddressUsingLongLat,
     topCategories: TopCategories,
+    imageString: ImageString,
+    achievementRules: AchievementRules
 };
 
