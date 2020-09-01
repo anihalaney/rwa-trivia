@@ -31,6 +31,8 @@ import { AddressUsingLongLat } from './address-using-long-lat';
 import { addressSuggestion } from './address-suggestion';
 import { GamePlayedWith } from './game-played-with';
 import { TopCategories } from './top-categories';
+import { ImageString } from './image-string';
+import { AchievementRules } from './achievement-rules';
 
 
 export const testData = {
@@ -65,6 +67,8 @@ export const testData = {
     addressUsingLongLat: AddressUsingLongLat,
     gamePlayedWith: GamePlayedWith,
     addressSuggestion: addressSuggestion,
-    topCategories: TopCategories
+    topCategories: TopCategories,
+    imageString: ImageString,
+    achievementRules: AchievementRules
 };
 
