@@ -31,8 +31,7 @@ export class BulkDetailsComponent implements OnChanges, OnInit, OnDestroy {
   tagsObs: Observable<string[]>;
   categoriesObs: Observable<Category[]>;
 
-  constructor(private store: Store<AppState>,
-    private router: Router) {
+  constructor(private store: Store<AppState>) {
     this.categoryDictObs = store.select(categoryDictionary);
   }
 
