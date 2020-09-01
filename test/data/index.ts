@@ -31,7 +31,7 @@ import { AddressUsingLongLat } from './address-using-long-lat';
 import { TopCategories } from './top-categories';
 import { ImageString } from './image-string';
 import { AchievementRules } from './achievement-rules';
-
+import { Topics } from './topics';
 
 export const testData = {
     categories: Categories,
@@ -65,6 +65,7 @@ export const testData = {
     addressUsingLongLat: AddressUsingLongLat,
     topCategories: TopCategories,
     imageString: ImageString,
-    achievementRules: AchievementRules
+    achievementRules: AchievementRules,
+    topics: Topics
 };
 
