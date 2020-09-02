@@ -168,7 +168,8 @@ export class UserEffects {
         .pipe(ofType(UserActions.UPDATE_INVITATION))
         .pipe(
             switchMap((action: ActionWithPayload<Invitation>) => {
-                return this.svc.setInvitation(action.payload);
+                return this.svc.setInvitation(action.payload
+                ).pipe(map(() => this.userActions.updateInvitationSuccess()));
             }
             )
         );
@@ -268,7 +269,7 @@ export class UserEffects {
         // assign default values
         debounce = 2000,
         scheduler = asyncScheduler
-      } = {}) => this.actions$
+    } = {}) => this.actions$
         .pipe(ofType(UserActions.LOAD_ADDRESS_SUGGESTIONS))
         .pipe(
             debounceTime(debounce, scheduler),

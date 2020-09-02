@@ -50,6 +50,8 @@ export class UserActions {
 
   static UPDATE_INVITATION = 'UPDATE_INVITATION';
 
+  static UPDATE_INVITATION_SUCCESS = 'UPDATE_INVITATION_SUCCESS';
+
   static MAKE_FRIEND = 'MAKE_FRIEND';
 
   static MAKE_FRIEND_SUCCESS = 'MAKE_FRIEND_SUCCESS';
@@ -211,7 +213,7 @@ export class UserActions {
     };
   }
   loadUserInvitationsSuccess(invitation: Invitation[]): ActionWithPayload<Invitation[]> {
-    
+
     return {
       type: UserActions.LOAD_FRIEND_INVITATION_SUCCESS,
       payload: invitation
@@ -223,6 +225,14 @@ export class UserActions {
       payload: invitation
     };
   }
+
+  updateInvitationSuccess() {
+    return {
+      type: UserActions.UPDATE_INVITATION_SUCCESS,
+      payload: null
+    };
+  }
+
   makeFriend(makeFriend): ActionWithPayload<String> {
     return {
       type: UserActions.MAKE_FRIEND,

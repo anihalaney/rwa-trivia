@@ -346,11 +346,12 @@ describe('Effects: UserEffects', () => {
             id: 'OYXPXnqU2ua2mwXlbRHT',
             status: 'pending'
         };
+        const completion = new UserActions().updateInvitationSuccess();
 
         const action = new UserActions().updateInvitation(invited);
         actions$ = hot('-a---', { a: action });
         const response = cold('-a|', { a: '' });
-        const expected = cold('--b', { b: '' });
+        const expected = cold('--b', { b: completion });
         userService.setInvitation = jest.fn(() => {
             return response;
         });
