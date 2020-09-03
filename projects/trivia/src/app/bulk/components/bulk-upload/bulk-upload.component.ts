@@ -61,8 +61,8 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
     this.categoriesObs = store.select(appState.coreState).pipe(select(s => s.categories));
     this.tagsObs = store.select(appState.coreState).pipe(select(s => s.tags));
     this.subscriptions.push(this.store.select(appState.coreState).pipe(take(1)).subscribe(s => {
-       this.user = s.user;
-       this.cd.markForCheck();
+      this.user = s.user;
+      this.cd.markForCheck();
     }));
   }
 
@@ -72,8 +72,8 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
       this.cd.markForCheck();
     }));
     this.subscriptions.push(this.tagsObs.subscribe(tags => {
-     this.tags = tags;
-     this.cd.markForCheck();
+      this.tags = tags;
+      this.cd.markForCheck();
     }));
 
     this.uploadFormGroup = this.fb.group({
@@ -83,7 +83,7 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
     });
 
     this.filteredTags$ = this.uploadFormGroup.get('tagControl').valueChanges
-      .pipe(map(val => val.length > 0 ? this.filter(val) : []));
+      .pipe(map(val => { console.log(val); return (val.length > 0 ? this.filter(val) : []) }));
 
     this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
       if (appSettings) {
@@ -94,6 +94,7 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
   }
 
   filter(val: string): string[] {
+    console.log('called', val);
     return this.tags.filter(option => new RegExp(this.utils.regExpEscape(`${val}`), 'gi').test(option));
   }
 
@@ -104,16 +105,20 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
       const file = this.file = event.target.files[0];
       this.uploadFormGroup.get('csvFile').setValue(file);
       reader.readAsText(file);
-      reader.onload = () => {
-        this.bulkUploadFileInfo = new BulkUploadFileInfo();
-        this.questions = [];
-        this.parsedQuestions = [];
-        this.primaryTag = this.primaryTagOld = '';
-        this.bulkUploadFileInfo.fileName = file['name'];
-        this.generateQuestions(reader.result);
-      };
+      reader.onload = this.getLoadCallback(file, reader);
     }
+  }
 
+  getLoadCallback(file, reader): () => void {
+    return () => {
+      this.bulkUploadFileInfo = new BulkUploadFileInfo();
+      console.log('testerer');
+      this.questions = [];
+      this.parsedQuestions = [];
+      this.primaryTag = this.primaryTagOld = '';
+      this.bulkUploadFileInfo.fileName = file['name'];
+      this.generateQuestions(reader.result);
+    };
   }
 
   generateQuestions(csvString: any): void {
