@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Observable, Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 import {
@@ -83,7 +83,7 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
     });
 
     this.filteredTags$ = this.uploadFormGroup.get('tagControl').valueChanges
-      .pipe(map(val => { console.log(val); return (val.length > 0 ? this.filter(val) : []) }));
+      .pipe(map(val => (val.length > 0 ? this.filter(val) : [])));
 
     this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
       if (appSettings) {
@@ -94,7 +94,6 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
   }
 
   filter(val: string): string[] {
-    console.log('called', val);
     return this.tags.filter(option => new RegExp(this.utils.regExpEscape(`${val}`), 'gi').test(option));
   }
 
@@ -112,7 +111,6 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
   getLoadCallback(file, reader): () => void {
     return () => {
       this.bulkUploadFileInfo = new BulkUploadFileInfo();
-      console.log('testerer');
       this.questions = [];
       this.parsedQuestions = [];
       this.primaryTag = this.primaryTagOld = '';
@@ -141,7 +139,7 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
             this.questions =
               output.map(element => {
                 const question: Question = new Question();
-                question.questionText = element['Question'];
+                question.questionText = element['Question'].trim();
                 question.answers = [
                   { 'id': 1, 'answerText': element['Option 1'], correct: false },
                   { 'id': 2, 'answerText': element['Option 2'], correct: false },
@@ -165,7 +163,6 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
                 question.explanation = 'status - not approved';
                 question.status = QuestionStatus.PENDING;
                 question.created_uid = this.user.userId;
-
                 if (!question.questionText || question.questionText.trim() === '') {
                   this.questionValidationError = true;
                   question.validationErrorMessages.push('Missing Question');
@@ -176,18 +173,15 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
                 } else if (question.answers.filter(a => a.correct).length !== 1) {
                   this.questionValidationError = true;
                   question.validationErrorMessages.push('Must have exactly one correct answer');
-                } else if (question.answers.filter(a => !a.answerText || a.answerText.trim() === '').length > 0) {
-                  this.questionValidationError = true;
-                  question.validationErrorMessages.push('Missing Answer');
                 } else if (question.questionText.length > this.applicationSettings.question_max_length) {
                   this.questionValidationError = true;
-                  question.validationErrorMessages.push(`${this.applicationSettings.question_max_length}
-                   characters are allowed for Question Text`);
+                  // tslint:disable-next-line: max-line-length
+                  question.validationErrorMessages.push(`${this.applicationSettings.question_max_length} characters are allowed for Question Text`);
                 } else if (question.answers.some(
                   (answer) => answer.answerText.trim().length > this.applicationSettings.answer_max_length)) {
                   this.questionValidationError = true;
-                  question.validationErrorMessages.push(`${this.applicationSettings.answer_max_length}
-                   characters are allowed for Answer Text`);
+                  // tslint:disable-next-line: max-line-length
+                  question.validationErrorMessages.push(`${this.applicationSettings.answer_max_length} characters are allowed for Answer Text`);
                 } else if (question.tags.length < 3) {
                   this.questionValidationError = true;
                   question.validationErrorMessages.push('Atleast 3 tags required');
@@ -218,7 +212,7 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
 
   }
 
-  private prepareUpload(): any {
+  public prepareUpload(): any {
     const input = new FormData();
     input.append('category', this.uploadFormGroup.get('category').value);
     input.append('tag', this.uploadFormGroup.get('tagControl').value);
