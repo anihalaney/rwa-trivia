@@ -212,14 +212,6 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
 
   }
 
-  public prepareUpload(): any {
-    const input = new FormData();
-    input.append('category', this.uploadFormGroup.get('category').value);
-    input.append('tag', this.uploadFormGroup.get('tagControl').value);
-    input.append('csvFile', this.uploadFormGroup.get('csvFile').value);
-    return input;
-  }
-
   onUploadSubmit() {
     // validate
     if (!this.uploadFormGroup.valid) {
@@ -230,7 +222,6 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
       return;
 
     } else {
-      const formModel = this.prepareUpload();
       const dbQuestions: Array<Question> = [];
       // add primary tag to question tag list
       this.primaryTag = this.uploadFormGroup.get('tagControl').value;
