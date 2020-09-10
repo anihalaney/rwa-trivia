@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Effect, Actions, ofType } from '@ngrx/effects';
 import { switchMap, map } from 'rxjs/operators';
-import { empty } from 'rxjs';
+import { empty, from } from 'rxjs';
 
 import { BulkService, QuestionService } from 'shared-library/core/services';
 import { BulkUploadFileInfo, Question } from 'shared-library/shared/model';
@@ -90,7 +90,7 @@ export class BulkEffects {
     addBulkQuestions$ = this.actions$
         .pipe(ofType(BulkActionTypes.ADD_BULK_QUESTIONS))
         .pipe(
-            switchMap((action: bulkActions.AddBulkQuestions) => {
+            switchMap((action: bulkActions.AddBulkQuestions): any => {
                 this.questionService.saveBulkQuestions(action.payload.bulkUpload);
                 return empty();
             })
@@ -101,9 +101,9 @@ export class BulkEffects {
         .pipe(ofType(BulkActionTypes.ARCHIVE_BULK_UPLOAD))
         .pipe(
             switchMap((action: bulkActions.ArchiveBulkUpload) =>
-                this.bulkService.archiveBulkUpload(action.payload.archiveArray, action.payload.user).then(ref => {
-                    return new bulkActions.ArchiveBulkUploadSuccess();
-                })
+                from(this.bulkService.archiveBulkUpload(action.payload.archiveArray, action.payload.user)).pipe(
+                    map(() => new bulkActions.ArchiveBulkUploadSuccess())
+                )
             ));
 
     // for get bulk object based on Id
