@@ -100,6 +100,7 @@ export class GameProfile {
                 this.topics = [];
                 this.user = userDict[this.userId];
                 this.account = this.user.account;
+                this.cd.markForCheck();
                 this.gamePlayedAgainst = this.user.gamePlayed;
                 if (this.gamePlayedAgainst && this.loggedInUser && this.loggedInUser.userId && this.userType === 1) {
                     this.gamePlayedChangeSubject.next(true);

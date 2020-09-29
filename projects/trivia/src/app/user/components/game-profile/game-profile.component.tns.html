@@ -112,31 +112,31 @@
             <FlexboxLayout flexWrap="wrap" margin="0 10 20 10" horizontalAlignment="center">
                 <FlexboxLayout class="stats-box" margin="0 10 10 0">
                     <FlexboxLayout alignSelf="center" flexDirection="column" alignItems="flex-start">
-                        <Label [text]="account?.gamePlayed || 0" class="bold-text text-color" textWrap="true"></Label>
+                        <Label text="{{account?.gamePlayed || 0}}" class="bold-text text-color" textWrap="true"></Label>
                         <Label text="Played" class="text-black" fontSize="15" textWrap="true"></Label>
                     </FlexboxLayout>
                 </FlexboxLayout>
                 <FlexboxLayout class="stats-box" margin="0 10 10 0">
                     <FlexboxLayout alignSelf="center" flexDirection="column">
-                        <Label [text]="account?.wins || 0" class="bold-text text-color" textWrap="true"></Label>
+                        <Label text="{{account?.wins || 0}}" class="bold-text text-color" textWrap="true"></Label>
                         <Label text="Won" class="text-black" fontSize="15" textWrap="true"></Label>
                     </FlexboxLayout>
                 </FlexboxLayout>
                 <FlexboxLayout class="stats-box" marginBottom="10">
                     <FlexboxLayout alignSelf="center" flexDirection="column">
-                        <Label [text]="account?.badges || 0" class="bold-text text-color" textWrap="true"></Label>
+                        <Label text="{{account?.badges || 0}}" class="bold-text text-color" textWrap="true"></Label>
                         <Label text="Badges" class="text-black" fontSize="15" textWrap="true"></Label>
                     </FlexboxLayout>
                 </FlexboxLayout>
                 <FlexboxLayout class="stats-box" marginRight="10">
                     <FlexboxLayout alignSelf="center" flexDirection="column">
-                        <Label [text]="account?.categories || 0" class="bold-text text-color" textWrap="true"></Label>
+                        <Label text="{{account?.categories || 0}}" class="bold-text text-color" textWrap="true"></Label>
                         <Label text="Categories" class="text-black" fontSize="15" textWrap="true"></Label>
                     </FlexboxLayout>
                 </FlexboxLayout>
                 <FlexboxLayout class="stats-box" marginRight="10">
                     <FlexboxLayout alignSelf="center" flexDirection="column">
-                        <Label [text]="user?.totalFriends || 0" class="bold-text text-color" textWrap="true"></Label>
+                        <Label text="{{user?.totalFriends || 0}}" class="bold-text text-color" textWrap="true"></Label>
                         <Label text="Friends" class="text-black" fontSize="15" textWrap="true"></Label>
                     </FlexboxLayout>
                 </FlexboxLayout>
