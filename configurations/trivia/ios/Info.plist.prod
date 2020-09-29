@@ -67,12 +67,14 @@
     <array>
     <string>remote-notification</string>
     </array>
-	<key>NSPhotoLibraryUsageDescription</key>
-    <string>Please allow gallery access</string>
 	<key>NSLocationUsageDescription</key>
-	<string>App would like to access your location to offer you suggestion for current location</string>
+	<string>${PRODUCT_NAME} would like to access your location to offer you suggestion for current location</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>App would like to access your location to offer you suggestion for current location</string>
+	<string>${PRODUCT_NAME} would like to access your location to offer you suggestion for current location</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+    <string>${PRODUCT_NAME} would like to access your photo library, This allows you to select your photo as profile picture</string>
+	<key>NSCameraUsageDescription</key>
+	<string>${PRODUCT_NAME} would like to access your camera, This allows you to take photo for profile picture</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 </dict>
