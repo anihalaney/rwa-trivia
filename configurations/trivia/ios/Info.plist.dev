@@ -68,13 +68,13 @@
     <string>remote-notification</string>
     </array>
 	<key>NSLocationUsageDescription</key>
-	<string>${PRODUCT_NAME} would like to access your location to offer you suggestion for current location</string>
+	<string>bitWiser would like to access your location to offer you suggestion for current location</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>${PRODUCT_NAME} would like to access your location to offer you suggestion for current location</string>
+	<string>bitWiser would like to access your location to offer you suggestion for current location</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-    <string>${PRODUCT_NAME} would like to access your photo library, This will allow you to select your  photo as profile picture</string>
+    <string>bitWiser would like to access your photo library, This will allow you to select your  photo as profile picture</string>
 	<key>NSCameraUsageDescription</key>
-	<string>${PRODUCT_NAME} would like to access your camera, This will allow you to take photo  for profile picture</string>
+	<string>bitWiser would like to access your camera, This will allow you to take photo  for profile picture</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 </dict>
