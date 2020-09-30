@@ -104,7 +104,7 @@
                         class="score-container">
                         <Image src="res://bits"></Image>
                         <Label class="score-text"
-                            [text]="game?.stats[user.userId]?.score * (applicationSettings?.tokens?.earn_bits ? applicationSettings?.tokens?.earn_bits : 0)"
+                            text="{{game?.stats[user.userId]?.score * (applicationSettings?.tokens?.earn_bits ? applicationSettings?.tokens?.earn_bits : 0)}}"
                             textWrap="true"></Label>
                     </FlexboxLayout>
                     <Button *ngIf="!turnFlag && !threeConsecutiveAnswer" android:elevation="20" ios:elevation="20" android:paddingTop="15" ios:paddingTop="10"
