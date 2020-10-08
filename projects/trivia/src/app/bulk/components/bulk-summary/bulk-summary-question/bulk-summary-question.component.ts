@@ -46,10 +46,9 @@ export class BulkSummaryQuestionComponent implements OnInit, OnDestroy {
 
   constructor(
     private store: Store<AppState>,
-    private snackBar: MatSnackBar,
-    private storage: AngularFireStorage,
+    public snackBar: MatSnackBar,
     private activatedRoute: ActivatedRoute,
-    private router: Router,
+    public router: Router,
     public cd: ChangeDetectorRef,
     private questionActions: QuestionActions,
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -96,23 +95,23 @@ export class BulkSummaryQuestionComponent implements OnInit, OnDestroy {
       if (obj) {
         this.bulkUploadFileInfo = obj;
         this.fileInfoDS = new MatTableDataSource<BulkUploadFileInfo>([obj]);
-
         // get published question by BulkUpload Id
-        this.store.dispatch(new bulkActions.LoadBulkUploadPublishedQuestions({ bulkUploadFileInfo: this.bulkUploadFileInfo }));
-
+        this.loadPublishQuestion(this.bulkUploadFileInfo);
         // get unpublished question by BulkUpload Id
-        this.store.dispatch(new bulkActions.LoadBulkUploadUnpublishedQuestions({ bulkUploadFileInfo: this.bulkUploadFileInfo }));
-
-        // get the download file url
-        // tslint:disable-next-line:max-line-length
-        const filePath = `bulk_upload/${this.bulkUploadFileInfo.created_uid}/${this.bulkUploadFileInfo.id}-${this.bulkUploadFileInfo.fileName}`;
-        const ref = this.storage.ref(filePath);
-        this.downloadUrl = ref.getDownloadURL();
-        ref.getDownloadURL().subscribe(res => {
-          this.downloadUrl = res;
-        });
+        this.loadUnPublishQuestion(this.bulkUploadFileInfo);
       }
     }));
+
+  }
+
+  loadPublishQuestion(bulkUploadFileInfo: BulkUploadFileInfo) {
+    // get published question by BulkUpload Id
+    this.store.dispatch(new bulkActions.LoadBulkUploadPublishedQuestions({ bulkUploadFileInfo: bulkUploadFileInfo }));
+  }
+
+  loadUnPublishQuestion(bulkUploadFileInfo) {
+    // get unpublished question by BulkUpload Id
+    this.store.dispatch(new bulkActions.LoadBulkUploadUnpublishedQuestions({ bulkUploadFileInfo: bulkUploadFileInfo }));
 
   }
 
