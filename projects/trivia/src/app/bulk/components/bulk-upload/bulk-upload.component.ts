@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Observable, Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 import {
@@ -61,8 +61,8 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
     this.categoriesObs = store.select(appState.coreState).pipe(select(s => s.categories));
     this.tagsObs = store.select(appState.coreState).pipe(select(s => s.tags));
     this.subscriptions.push(this.store.select(appState.coreState).pipe(take(1)).subscribe(s => {
-       this.user = s.user;
-       this.cd.markForCheck();
+      this.user = s.user;
+      this.cd.markForCheck();
     }));
   }
 
@@ -72,8 +72,8 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
       this.cd.markForCheck();
     }));
     this.subscriptions.push(this.tagsObs.subscribe(tags => {
-     this.tags = tags;
-     this.cd.markForCheck();
+      this.tags = tags;
+      this.cd.markForCheck();
     }));
 
     this.uploadFormGroup = this.fb.group({
@@ -83,7 +83,7 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
     });
 
     this.filteredTags$ = this.uploadFormGroup.get('tagControl').valueChanges
-      .pipe(map(val => val.length > 0 ? this.filter(val) : []));
+      .pipe(map(val => (val.length > 0 ? this.filter(val) : [])));
 
     this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
       if (appSettings) {
@@ -104,16 +104,19 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
       const file = this.file = event.target.files[0];
       this.uploadFormGroup.get('csvFile').setValue(file);
       reader.readAsText(file);
-      reader.onload = () => {
-        this.bulkUploadFileInfo = new BulkUploadFileInfo();
-        this.questions = [];
-        this.parsedQuestions = [];
-        this.primaryTag = this.primaryTagOld = '';
-        this.bulkUploadFileInfo.fileName = file['name'];
-        this.generateQuestions(reader.result);
-      };
+      reader.onload = this.getLoadCallback(file, reader);
     }
+  }
 
+  getLoadCallback(file, reader): () => void {
+    return () => {
+      this.bulkUploadFileInfo = new BulkUploadFileInfo();
+      this.questions = [];
+      this.parsedQuestions = [];
+      this.primaryTag = this.primaryTagOld = '';
+      this.bulkUploadFileInfo.fileName = file['name'];
+      this.generateQuestions(reader.result);
+    };
   }
 
   generateQuestions(csvString: any): void {
@@ -136,7 +139,7 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
             this.questions =
               output.map(element => {
                 const question: Question = new Question();
-                question.questionText = element['Question'];
+                question.questionText = element['Question'].trim();
                 question.answers = [
                   { 'id': 1, 'answerText': element['Option 1'], correct: false },
                   { 'id': 2, 'answerText': element['Option 2'], correct: false },
@@ -160,7 +163,6 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
                 question.explanation = 'status - not approved';
                 question.status = QuestionStatus.PENDING;
                 question.created_uid = this.user.userId;
-
                 if (!question.questionText || question.questionText.trim() === '') {
                   this.questionValidationError = true;
                   question.validationErrorMessages.push('Missing Question');
@@ -171,18 +173,15 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
                 } else if (question.answers.filter(a => a.correct).length !== 1) {
                   this.questionValidationError = true;
                   question.validationErrorMessages.push('Must have exactly one correct answer');
-                } else if (question.answers.filter(a => !a.answerText || a.answerText.trim() === '').length > 0) {
-                  this.questionValidationError = true;
-                  question.validationErrorMessages.push('Missing Answer');
                 } else if (question.questionText.length > this.applicationSettings.question_max_length) {
                   this.questionValidationError = true;
-                  question.validationErrorMessages.push(`${this.applicationSettings.question_max_length}
-                   characters are allowed for Question Text`);
+                  // tslint:disable-next-line: max-line-length
+                  question.validationErrorMessages.push(`${this.applicationSettings.question_max_length} characters are allowed for Question Text`);
                 } else if (question.answers.some(
                   (answer) => answer.answerText.trim().length > this.applicationSettings.answer_max_length)) {
                   this.questionValidationError = true;
-                  question.validationErrorMessages.push(`${this.applicationSettings.answer_max_length}
-                   characters are allowed for Answer Text`);
+                  // tslint:disable-next-line: max-line-length
+                  question.validationErrorMessages.push(`${this.applicationSettings.answer_max_length} characters are allowed for Answer Text`);
                 } else if (question.tags.length < 3) {
                   this.questionValidationError = true;
                   question.validationErrorMessages.push('Atleast 3 tags required');
@@ -213,14 +212,6 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
 
   }
 
-  private prepareUpload(): any {
-    const input = new FormData();
-    input.append('category', this.uploadFormGroup.get('category').value);
-    input.append('tag', this.uploadFormGroup.get('tagControl').value);
-    input.append('csvFile', this.uploadFormGroup.get('csvFile').value);
-    return input;
-  }
-
   onUploadSubmit() {
     // validate
     if (!this.uploadFormGroup.valid) {
@@ -231,7 +222,6 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
       return;
 
     } else {
-      const formModel = this.prepareUpload();
       const dbQuestions: Array<Question> = [];
       // add primary tag to question tag list
       this.primaryTag = this.uploadFormGroup.get('tagControl').value;
