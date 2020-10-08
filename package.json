@@ -139,7 +139,7 @@
     "karma-nativescript-launcher": "0.4.0",
     "karma-webpack": "3.0.5",
     "katex": "^0.10.2",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.20",
     "lodash.template": "^4.5.0",
     "mathquill": "^0.10.1-a",
     "nativescript-dev-webpack": "^1.5.1",
