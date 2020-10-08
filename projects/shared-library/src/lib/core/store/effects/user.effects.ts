@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Effect, Actions, ofType } from '@ngrx/effects';
+import { Effect, Actions, ofType, createEffect } from '@ngrx/effects';
 import { ActionWithPayload, UserActions } from '../actions';
 import { User, RouterStateUrl, Game, Friends, Friend, Invitation, Account } from '../../../shared/model';
 import { UserService, GameService, Utils } from '../../services';
 import { switchMap, map, distinct, mergeMap, filter, take, debounceTime, distinctUntilChanged, catchError } from 'rxjs/operators';
-import { empty, of } from 'rxjs';
+import { empty, of, asyncScheduler } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { coreState, CoreState } from '../reducers';
 import { ROUTER_NAVIGATION } from '@ngrx/router-store';
@@ -18,20 +18,19 @@ export class UserEffects {
         .pipe(ofType(UserActions.LOGIN_SUCCESS))
         .pipe(map((action: ActionWithPayload<User>) => action.payload),
             switchMap((user: User) => {
-                if ( user ) {
+                if (user) {
                     return this.svc.loadUserProfile(user).pipe(catchError((error) => {
                         return of();
                     }));
                 } else {
                     return of();
                 }
-              }),
+            }),
             mergeMap((user: User) => this.utils.setLoginFirebaseAnalyticsParameter(user).pipe(catchError((error) => {
                 return of();
             }))),
             map((user: User) => this.userActions.addUserWithRoles(user)),
             catchError((error) => {
-                console.log(error);
                 this.userActions.logoff();
                 return of();
             })
@@ -58,7 +57,6 @@ export class UserEffects {
             mergeMap((user: User) => this.svc.getUserStatus(user)),
             map((user: User) => this.userActions.loadOtherUserProfileSuccess(user)),
             catchError((error) => {
-                console.log(error);
                 this.userActions.logoff();
                 return empty();
             }));
@@ -154,7 +152,8 @@ export class UserEffects {
                     filter(u => !!u),
                     take(1),
                     map(user => user.email || user.authState.phoneNumber))
-            ))
+            )
+        )
         .pipe(
             switchMap((email: string) => {
                 return this.svc.loadFriendInvitations(email).pipe(map((invitations: Invitation[]) =>
@@ -169,8 +168,8 @@ export class UserEffects {
         .pipe(ofType(UserActions.UPDATE_INVITATION))
         .pipe(
             switchMap((action: ActionWithPayload<Invitation>) => {
-                this.svc.setInvitation(action.payload);
-                return empty();
+                return this.svc.setInvitation(action.payload
+                ).pipe(map(() => this.userActions.updateInvitationSuccess()));
             }
             )
         );
@@ -205,7 +204,7 @@ export class UserEffects {
                 return this.svc.saveUserProfile(action.payload.user).pipe(
                     mergeMap((status: any) =>
                         this.utils.setUserLocationFirebaseAnalyticsParameter(action.payload.user, action.payload.isLocationChanged)),
-                    map((status: any) => this.userActions.addUserProfileSuccess())
+                    map(() => this.userActions.addUserProfileSuccess())
                 );
             })
         );
@@ -266,17 +265,20 @@ export class UserEffects {
         );
 
     @Effect()
-    loadAddressSuggestions = this.actions$
+    loadAddressSuggestions = createEffect(() => ({
+        // assign default values
+        debounce = 2000,
+        scheduler = asyncScheduler
+    } = {}) => this.actions$
         .pipe(ofType(UserActions.LOAD_ADDRESS_SUGGESTIONS))
         .pipe(
-            debounceTime(2000),
+            debounceTime(debounce, scheduler),
             distinctUntilChanged(),
             switchMap((action: ActionWithPayload<any>) =>
                 this.svc.getAddressSuggestions(action.payload).pipe(
                     map((result: any) => this.userActions.loadAddressSuggestionsSuccess(result))
-                    
                 ))
-        );
+        ));
 
     @Effect()
     // check display Name

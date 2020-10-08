@@ -28,6 +28,8 @@ import { file } from './file';
 import { Countries } from './counties';
 import { UserAnsweredQuestion } from './userAnsweredQuestion';
 import { AddressUsingLongLat } from './address-using-long-lat';
+import { addressSuggestion } from './address-suggestion';
+import { GamePlayedWith } from './game-played-with';
 import { TopCategories } from './top-categories';
 import { ImageString } from './image-string';
 import { AchievementRules } from './achievement-rules';
@@ -63,6 +65,8 @@ export const testData = {
     currentQuestion: CurrentQuestion,
     file: file,
     addressUsingLongLat: AddressUsingLongLat,
+    gamePlayedWith: GamePlayedWith,
+    addressSuggestion: addressSuggestion,
     topCategories: TopCategories,
     imageString: ImageString,
     achievementRules: AchievementRules

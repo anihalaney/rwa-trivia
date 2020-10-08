@@ -201,6 +201,14 @@ describe('updateInvitation', () => {
     });
 });
 
+describe('updateInvitationSuccess', () => {
+    it('should create an action', () => {
+        const action = new UserActions().updateInvitationSuccess();
+        expect(action.type).toEqual(UserActions.UPDATE_INVITATION_SUCCESS);
+        expect(action.payload).toEqual(null);
+    });
+});
+
 describe('makeFriend', () => {
     it('should create an action', () => {
         const payload: any = { token: testData.invitation.id, email: testData.userList[0].email, userId: testData.userList[0].userId };
@@ -228,7 +236,7 @@ describe('addUserInvitation', () => {
 
 describe('addUserInvitationSuccess', () => {
     it('should create an action', () => {
-        const payload: any = { email: 'demo@gmail.com'};
+        const payload: any = { email: 'demo@gmail.com' };
         const action = new UserActions().addUserInvitationSuccess(payload);
         expect(action.type).toEqual(UserActions.ADD_USER_INVITATION_SUCCESS);
         expect(action.payload).toEqual(payload);

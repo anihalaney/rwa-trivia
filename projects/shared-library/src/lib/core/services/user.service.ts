@@ -171,8 +171,8 @@ export class UserService {
     }
 
 
-    setInvitation(invitation: Invitation) {
-        this.dbService.updateDoc('invitations', invitation.id, invitation);
+    setInvitation(invitation: Invitation): Observable<any> {
+        return from(this.dbService.updateDoc('invitations', invitation.id, invitation));
     }
 
     getGameInvites(user: User): Observable<Game[]> {
