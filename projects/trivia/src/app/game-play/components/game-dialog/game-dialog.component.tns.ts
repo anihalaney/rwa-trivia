@@ -6,13 +6,14 @@ import { GamePlayState } from '../../store';
 import { GameActions, UserActions } from 'shared-library/core/store/actions';
 import { Utils } from 'shared-library/core/services';
 import { GameDialog } from './game-dialog';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
+import { FirebaseScreenNameConstants } from 'shared-library/shared/model';
+
 import {
   resumeEvent, suspendEvent, ApplicationEventData,
   on as applicationOn, off as applicationOff,
 } from 'tns-core-modules/application';
-
-import { Observable, Subscription, timer } from 'rxjs';
+import { Page } from 'tns-core-modules/ui/page/page';
 
 
 @Component({
@@ -27,22 +28,33 @@ export class GameDialogComponent extends GameDialog implements OnDestroy {
 
   suspendTime: number;
   resumeTime: number;
+
+
   constructor(public store: Store<GamePlayState>, public gameActions: GameActions, public router: Router,
     public userActions: UserActions, public utils: Utils, public cd: ChangeDetectorRef) {
-    super(store, userActions, utils, cd);
+    super(store, userActions, utils, cd, router);
     this.registerLifeCycleEvent();
+    this.isMobile = true;
   }
 
   resumeCallBack(args: ApplicationEventData) {
     if (args.ios) {
       this.resumeTime = this.utils.getUTCTimeStamp();
       const remainTime = Math.round((this.resumeTime - this.suspendTime) / 1000);
-      if ((this.timer - remainTime) < 0) {
-        this.timer = 0;
+      if ([true, false].indexOf(this.game.playerQnAs[this.game.playerQnAs.length - 1].answerCorrect) >= 0) {
         this.utils.unsubscribe([this.timerSub]);
-        this.fillTimer();
       } else {
-        this.timer = (this.timer - remainTime);
+        if ((this.timer - remainTime) < 0) {
+          this.timer = 0;
+          this.utils.unsubscribe([this.timerSub]);
+          if (!(this.showContinueDialogueForThreeConsecutiveAnswers ||
+              (this.showContinueScreen && !this.gameOver))
+            ) {
+            this.fillTimer();
+          }
+        } else {
+          this.timer = (this.timer - remainTime);
+        }
       }
     }
   }
@@ -61,48 +73,20 @@ export class GameDialogComponent extends GameDialog implements OnDestroy {
   }
 
 
-  continueClicked($event) {
-    this.currentQuestion = undefined;
-    this.originalAnswers = undefined;
-    if (this.turnFlag) {
-      this.continueNext = false;
-      this.store.dispatch(new gameplayactions.ResetCurrentGame());
-      this.store.dispatch(new gameplayactions.ResetCurrentQuestion());
-      this.store.dispatch(new gameplayactions.UpdateGameRound(this.game.gameId));
-      this.navigateToDashboard();
-    } else {
-      this.questionAnswered = false;
-      this.showContinueBtn = false;
-      this.continueNext = false;
-      this.store.dispatch(new gameplayactions.ResetCurrentQuestion());
-      this.checkGameOver();
-      if (!this.gameOver) {
-        this.getLoader(false);
-      }
-    }
-    this.cd.markForCheck();
+
+  btnClickedAfterThreeConsecutiveAnswers($event) {
+    this.showContinueDialogueForThreeConsecutiveAnswers = true;
+    console.log('show continue screen ', this.showContinueDialogueForThreeConsecutiveAnswers);
   }
 
-  navigateToDashboard() {
-    this.router.navigate(['/dashboard']);
-  }
+
+
 
   ngOnDestroy() {
     applicationOff(resumeEvent, this.resumeCallBack);
     applicationOff(suspendEvent, this.suspendCallBack);
-    this.store.dispatch(new gameplayactions.ResetCurrentGame());
-    this.utils.unsubscribe([this.timerSub, this.questionSub]);
     this.destroy();
   }
 
-  // Hide menu if question display
-  get isDispayMenu() {
-    if (this.currentQuestion && this.showContinueBtn) {
-      return undefined;
-    }
-    if (this.currentQuestion && !this.showLoader && !this.showBadge) {
-      return true;
-    }
-    return undefined;
-  }
+
 }

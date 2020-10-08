@@ -1,14 +1,16 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "module": "es2015",
+    "module": "esnext",
     "moduleResolution": "node",
     "experimentalDecorators": true,
     "baseUrl": "./",
+    "skipLibCheck": true,
     "paths": {
       "shared-library/*": [
         "./projects/shared-library/src/lib/*"
       ],
+      "test/*": ["./test/*"],
       "*": [
         "./node_modules/tns-core-modules/*",
         "./node_modules/*"
@@ -24,5 +26,17 @@
     "./scheduler/*",
     "**/*.spec.ts",
     "server.ts",
+    "./projects/shared-library/src/lib/shared/components/*",
+    "**/quill-module/*"
+  ],
+  "include": [
+    "projects/trivia/src/tests/**/*.ts",
+    "./projects/shared-library/src/lib/shared",
+    "./projects/trivia/src/app/game-play/game-play.module.ts",
+    "./projects/trivia/src/app/user/user.module.ts",
+    "./projects/trivia/src/app/dashboard/dashboard.module.ts",
+    "./projects/trivia/src/main.ns.ts",
+    "./projects/shared-library/src/lib/shared/components/author/*",
+    "./projects/shared-library/src/lib/shared/components/check-display-name/*",
   ]
 }

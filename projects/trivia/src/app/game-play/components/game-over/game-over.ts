@@ -1,5 +1,5 @@
-import { Input, Output, EventEmitter, OnInit, ChangeDetectorRef } from '@angular/core';
-import { User, Game, PlayerMode, OpponentType, Account, ApplicationSettings } from 'shared-library/shared/model';
+import { Input, Output, EventEmitter, OnInit, ChangeDetectorRef, OnChanges, SimpleChanges } from '@angular/core';
+import { User, Game, PlayerMode, OpponentType, Account, ApplicationSettings, Invitation, userCardType } from 'shared-library/shared/model';
 import { Utils } from 'shared-library/core/services';
 import { AppState, appState } from '../../../store';
 import { UserActions } from 'shared-library/core/store/actions';
@@ -8,8 +8,17 @@ import { Store, select } from '@ngrx/store';
 import * as gameplayactions from '../../store/actions';
 import * as dashboardactions from '../../../dashboard/store/actions';
 import { gamePlayState } from '../../store';
+import { skipWhile, map, flatMap, take } from 'rxjs/operators';
 
-export class GameOver implements OnInit {
+export enum GameStatus {
+  WON,
+  LOST,
+  TIE,
+  DRAW,
+  START
+}
+
+export class GameOver implements OnInit, OnChanges {
 
   @Input() correctCount: number;
   @Input() noOfQuestions: number;
@@ -19,7 +28,12 @@ export class GameOver implements OnInit {
   @Input() game: Game;
   @Input() userDict: { [key: string]: User };
   @Input() totalRound: number;
+  @Input() earnedBadgesByOtherUser;
+  @Input() earnedBadges;
+  @Input() totalBadges: string[];
 
+  gameStatus: number;
+  gameStatusEnum = GameStatus;
   user$: Observable<User>;
   user: User;
   otherUserId: string;
@@ -39,7 +53,11 @@ export class GameOver implements OnInit {
   applicationSettings: ApplicationSettings;
   liveErrorMsg = 'Sorry, don\'t have enough life.';
   subscriptions = [];
-
+  userInvitations: { [key: string]: Invitation };
+  userCardType = userCardType;
+  correctAnswerClassIndexIncrement = 0;
+  dialogOpen: Boolean = false;
+  openReportDialog: Boolean = false;
   continueButtonClicked(event: any) {
     this.gameOverContinueClicked.emit();
   }
@@ -71,28 +89,86 @@ export class GameOver implements OnInit {
     };
     this.store.dispatch(new dashboardactions.LoadSocialScoreShareUrlSuccess(null));
 
-    this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
-    this.subscriptions.push(this.userDict$.subscribe(userDict => {
-      this.userDict = userDict;
-    }));
+    this.subscriptions.push(store.select(appState.coreState).pipe(select(s => s.userDict),
+      map(userDict => {
+        this.userDict = userDict;
+      }),
+      flatMap(() => this.store.select(appState.coreState).pipe(select(s => s.userFriendInvitations),
+        skipWhile(userInvitations => !(userInvitations && this.game)),
+        take(1),
+        map(userInvitations => {
+          if (this.game && this.userDict[this.otherUserId]) {
+            this.otherUserId = this.game.playerIds.filter(userId => userId !== this.user.userId)[0];
+            this.otherUserInfo = this.userDict[this.otherUserId];
+            this.cd.markForCheck();
+            this.userInvitations = userInvitations;
+            if (this.user && this.user.email && !this.userInvitations[this.user.email]) {
+              this.store.dispatch(this.userActions.loadUserInvitationsInfo(
+                this.user.userId, this.userDict[this.otherUserId].email, this.otherUserId));
+            }
+          }
+        })
+      ))).subscribe());
 
     this.subscriptions.push(this.store.select(gamePlayState).pipe(select(s => s.userAnsweredQuestion)).subscribe(stats => {
       if (stats != null) {
         this.questionsArray = stats;
-        this.questionsArray.map((question) => {
-          if (!this.userDict[question.created_uid]) {
-            this.store.dispatch(this.userActions.loadOtherUserProfile(question.created_uid));
-          }
+        this.questionsArray.map((res) => {
+          res.openReport = false;
+          res.ansStatus = false;
+          res.answers.map((response) => {
+            if (response.correct && response.answerText === res.userGivenAnswer) {
+              this.correctAnswerClassIndexIncrement++;
+              let className;
+              if (this.game) {
+                if (!this.game.gameOptions.isBadgeWithCategory) {
+                  className = `score${this.correctAnswerClassIndexIncrement}`;
+                } else {
+                  className = res.badge && res.badge.name && res.badge.won ? res.badge.name : '';
+                }
+              }
+              res.className = className;
+              res.ansStatus = true;
+            }
+          });
+          return res;
         });
-        this.cd.detectChanges();
+        this.cd.markForCheck();
       }
     }));
   }
 
   ngOnInit() {
-    if (this.game) {
+
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes && changes.game && changes.game.currentValue) {
       this.otherUserId = this.game.playerIds.filter(userId => userId !== this.user.userId)[0];
       this.otherUserInfo = this.userDict[this.otherUserId];
+      this.game.decideWinner();
+      if (this.game.winnerPlayerId && Number(this.game.gameOptions.playerMode) === PlayerMode.Opponent) {
+        this.gameStatus = this.game.winnerPlayerId === this.user.userId ? GameStatus.WON :
+          (this.game.winnerPlayerId === this.otherUserId ? GameStatus.LOST : -1);
+      } else if (Number(this.game.gameOptions.playerMode) === PlayerMode.Single) {
+        this.gameStatus = this.game.winnerPlayerId === this.user.userId ? GameStatus.WON : GameStatus.LOST;
+      }
+
+      if (!this.game.winnerPlayerId && Number(this.game.gameOptions.playerMode) === PlayerMode.Opponent) {
+        if ((!this.game.gameOptions.isBadgeWithCategory &&
+          this.game.stats[this.user.userId].score !== this.game.stats[this.otherUserId].score
+        ) ||
+          (
+            this.game.gameOptions.isBadgeWithCategory &&
+            this.earnedBadges.length === this.earnedBadgesByOtherUser.length
+          )
+        ) {
+          this.gameStatus = GameStatus.TIE;
+        } else if (this.game.round >= 16) {
+          this.gameStatus = GameStatus.DRAW;
+        }
+
+      }
     }
   }
 
@@ -137,7 +213,6 @@ export class GameOver implements OnInit {
     this.loaderStatus = undefined;
     this.opponentType = undefined;
     this.disableFriendInviteBtn = undefined;
-    this.subscriptions = [];
     this.account = undefined;
     this.applicationSettings = undefined;
   }

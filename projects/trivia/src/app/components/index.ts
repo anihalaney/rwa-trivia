@@ -6,8 +6,6 @@ import { InvitationRedirectionComponent } from './invitation-redirection/invitat
 import { PrivacyPolicyComponent } from './privacy-policy/privacy-policy.component';
 import { UserStatsCardComponent } from './user-stats-card/user-stats-card.component';
 import { ProfileCardComponent } from './profile-card/profile-card.component';
-import { RecentGamesComponent } from './recent-games/recent-games.component';
-import { RecentGameCardComponent } from './recent-games/recent-game-card/recent-game-card.component';
 import { AchievementsComponent } from './achievements/achievements.component';
 export {
     AppComponent,
@@ -18,8 +16,6 @@ export {
     PrivacyPolicyComponent,
     UserStatsCardComponent,
     ProfileCardComponent,
-    RecentGamesComponent,
-    RecentGameCardComponent,
     AchievementsComponent
 };
 
@@ -32,7 +28,5 @@ export default [
     PrivacyPolicyComponent,
     UserStatsCardComponent,
     ProfileCardComponent,
-    RecentGamesComponent,
-    RecentGameCardComponent,
     AchievementsComponent
 ];

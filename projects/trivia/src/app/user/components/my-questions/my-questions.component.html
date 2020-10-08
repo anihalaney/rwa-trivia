@@ -1,6 +1,7 @@
 <div class="row">
   <div class="pageheading col-md-4 col-sm-4  col-xs-12 hidden-xs">My Questions</div>
-  <div *ngIf="user && user.roles && (user.roles['bulkuploader'] || user.roles['admin'])" class="col-md-4 col-sm-4 col-xs-12 align-right spacing-bottom">
+  <div *ngIf="user && user.roles && (user.roles['bulkuploader'] || user.roles['admin'])"
+    class="col-md-4 col-sm-4 col-xs-12 align-right spacing-bottom">
     <a [routerLink]="['/bulk']" class="btn startupload">Bulk Upload</a>
   </div>
   <div class="col-md-4 col-xs-12 col-sm-4 align-right spacing-bottom">
@@ -13,16 +14,19 @@
   <mat-card-content>
     <mat-tab-group>
       <mat-tab label="Published">
-        <question-table [showSort]="false" [showPaginator]="false" [questions]="publishedQuestions" [totalCount]="10"
-          [categoryDictionary]="categoryDictObs | async" [user]="user" [showApproveButton]="false">
+        <question-table [showSort]="false" [showPaginator]="false"
+          [questions]="publishedQuestions" [totalCount]="10" [categoryDictionary]="categoriesObs | async"
+          [user]="user" [showApproveButton]="false" [categoriesObs]="categoriesObs"  [tagsObs]="tagsObs" [quillConfig]="quillConfig" [applicationSettings]="applicationSettings">
         </question-table>
       </mat-tab>
       <mat-tab label="Pending">
-        <question-table [showSort]="false" [showPaginator]="false" [questions]="unpublishedQuestions" [totalCount]="10"
-          [categoryDictionary]="categoryDictObs | async" [user]="user" [showApproveButton]="false">
+        <question-table [showSort]="false" [tagsObs]="tagsObs" [categoriesObs]="categoriesObs" [showPaginator]="false"
+          [questions]="unpublishedQuestions" [totalCount]="10" [categoryDictionary]="categoriesObs | async"
+          [user]="user" [showApproveButton]="false" (updateUnpublishedQuestions)="updateUnpublishedQuestions($event)" [quillConfig]="quillConfig" [applicationSettings]="applicationSettings">
         </question-table>
       </mat-tab>
     </mat-tab-group>
   </mat-card-content>
 </div>
 <!-- </mat-card> -->
+<!-- updateUnpublishedQuestions -->

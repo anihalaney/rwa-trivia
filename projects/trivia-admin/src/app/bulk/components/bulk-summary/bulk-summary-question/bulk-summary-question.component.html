@@ -43,7 +43,7 @@
     <ng-container cdkColumnDef="download">
       <mat-header-cell *cdkHeaderCellDef> Download File </mat-header-cell>
       <mat-cell class="col-status cursor bulk-summary-question-table-cell" *cdkCellDef="let row">
-        <a (click)="downloadFile(row)">Download</a>
+        <a (click)="downloadFile()">Download</a>
       </mat-cell>
     </ng-container>
 
@@ -65,7 +65,7 @@
     </mat-tab>
     <mat-tab label="Unpublished">
       <question-table *ngIf="unPublishedCount != 0" [bulkUploadFileInfo]="bulkUploadFileInfo" [showSort]="false" [showPaginator]="true"
-        [showButtons]="UNPUBLISHED_SHOW_BUTTON_STATE && isAdminUrl" [questions]="unPublishedQuestions" [totalCount]="unPublishedCount"
+        [isAdmin]="true" [showButtons]="UNPUBLISHED_SHOW_BUTTON_STATE && isAdminUrl" [questions]="unPublishedQuestions" [totalCount]="unPublishedCount"
         [categoryDictionary]="categoryDictObs| async" [showApproveButton]="false" [clientSidePagination]="true" [user]="user"
         [tagsObs]="tagsObs" [categoriesObs]="categoriesObs" (approveUnpublishedQuestion)="approveUnpublishedQuestions($event)"
         (updateBulkUpload)="updateBulkUpload($event)" (loadBulkUploadById)="loadBulkUploadById($event)" (updateBulkUploadedApprovedQuestionStatus)="updateBulkUploadedApprovedQuestionStatus($event)"

@@ -13,6 +13,10 @@ class UserRoutes {
     constructor() {
         this.userRoutes = express.Router();
 
+         //  '/add-bits-first-question'
+         this.userRoutes.get(`/${RoutesConstants.ADD_BITS_FIRST_QUESTION}`,
+         AuthMiddleware.authorizedOnly, UserController.addBitsFirstQuestion);
+
         //  '/:userId'
         this.userRoutes.get(`/:${this.UID}`,
             UserController.getUserById);
@@ -30,9 +34,25 @@ class UserRoutes {
         this.userRoutes.post(`/${RoutesConstants.UPDATE_DASH_LIVES}`,
             AuthMiddleware.authorizedOnly, UserController.updateLives);
 
-        //  'extendedInfo/:userId'
+        //  'extendedInfo/:userId/:loginUserId'
         this.userRoutes.get(`/${RoutesConstants.EXTENDEDINFO}/:${this.UID}`,
-        UserController.getUserProfileById);
+            UserController.getUserProfileById);
+
+        //  '/check/display-name/:displayName'
+        this.userRoutes.get(
+            `/${RoutesConstants.CHECK}/${RoutesConstants.DISPLAY_NAME}/:${RoutesConstants.DISPLAY_DASH_NAME}`,
+            AuthMiddleware.authorizedOnly, UserController.checkDisplayName);
+
+        // `/addressSuggestion/:location`
+        this.userRoutes.get(`/${RoutesConstants.ADDRESS_SUGGESTION}/:${RoutesConstants.LOCATION}`,
+            AuthMiddleware.authorizedOnly, UserController.addressSuggestion);
+
+        // `/addressByLatLang/:latLong`
+        this.userRoutes.get(`/${RoutesConstants.ADDRESS_BY_LAT_LANG}/:${RoutesConstants.LAT_LONG}`,
+            AuthMiddleware.authorizedOnly, UserController.addressByLatLang);
+
+       
+
 
     }
 }

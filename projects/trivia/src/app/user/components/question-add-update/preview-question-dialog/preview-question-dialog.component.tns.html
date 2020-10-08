@@ -1,0 +1,31 @@
+<StackLayout orientation="horizontal" backgroundColor="white">
+  <ScrollView>
+      <GridLayout padding="0 5" rows="*,*,*,*" columns="*">
+        <render-box margin="0 10" [theme]="'dark'" class="dark-theme">
+          <StackLayout row="0" col="0" margin="10">
+            <render-question [question]="question"></render-question>
+          </StackLayout>
+          <StackLayout row="1" col="0" color="black" orientation="horizontal" margin="5 10 10 10"
+            iosOverflowSafeArea="false">
+            <Label text="Categories:" marginRight="5" fontSize="15" fontWeight="500" textWrap="true"></Label>
+            <Label [text]="categoryName" class="SF-Pro-Regular" fontSize="15" textWrap="true"></Label>
+          </StackLayout>
+          <FlexboxLayout row="2" col="0" margin="0 7.5" flexWrap="wrap">
+            <StackLayout *ngFor="let tags of question?.tags, let i = index">
+              <Label [style.backgroundColor]="theme === 'dark' ? '#405177':'#e2e2e2'"
+                [style.color]="theme === 'dark' ? '#a5a5a5' : '#808080'" borderRadius="22" margin="2.5 2.5"
+                [text]="tags" padding="5 10" textWrap="true"></Label>
+            </StackLayout>
+          </FlexboxLayout>
+          <StackLayout row="3" col="0">
+            <ng-template ngFor let-answer [ngForOf]="question?.answers">
+              <StackLayout orientation="horizontal" class="question-answered question-box" margin="10"
+                [style.padding]="answer?.isRichEditor? 0 : 15">
+                <render-answer  [answer]="answer" [bgColor]="'#9ccc65'"></render-answer>
+              </StackLayout>
+            </ng-template>
+          </StackLayout>
+        </render-box>
+      </GridLayout>
+  </ScrollView>
+</StackLayout>

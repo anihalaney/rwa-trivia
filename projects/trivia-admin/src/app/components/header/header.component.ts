@@ -1,7 +1,7 @@
-import { Component, Input, Output, OnInit, OnDestroy, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
-
 import { User } from 'shared-library/shared/model';
+
 
 @Component({
   selector: 'app-header',

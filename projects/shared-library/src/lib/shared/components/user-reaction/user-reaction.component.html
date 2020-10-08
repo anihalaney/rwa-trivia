@@ -1,0 +1,10 @@
+<div class="reaction-div-container">
+    <div class="reaction-div m-r-12">
+        <img (click)="userReaction('like')" [src]="user && userReactionStatus?.status === 'like' ?  'assets/images/like.png' : 'assets/images/like-default.png'" alt="like">
+        <span>{{question?.stats?.reactionsCount?.like ? question?.stats?.reactionsCount?.like : 0}}</span>    
+    </div>
+    <div class="reaction-div">
+        <img (click)="userReaction('dislike')"  [src]="user &&  userReactionStatus?.status === 'dislike' ? 'assets/images/dislike.png' : 'assets/images/dislike-default.png'" alt="like">
+        <span>{{question?.stats?.reactionsCount?.dislike ? question?.stats?.reactionsCount?.dislike : 0}}</span>    
+    </div>
+</div>

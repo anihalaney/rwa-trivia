@@ -1,21 +1,16 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { MatCheckboxChange, MatTabChangeEvent, PageEvent } from '@angular/material';
+import { Router } from '@angular/router';
+import { select, Store } from '@ngrx/store';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
+import { Observable, Subscription } from 'rxjs';
 import { map, take } from 'rxjs/operators';
-import { Store, select } from '@ngrx/store';
-
-import { PageEvent, MatCheckboxChange } from '@angular/material';
-import { AppState, appState, categoryDictionary, getCategories, getTags } from '../../../store';
-import {
-  User, Question, Category, SearchResults,
-  SearchCriteria, BulkUploadFileInfo, QuestionStatus
-} from 'shared-library/shared/model';
-
+import { UserActions } from 'shared-library/core/store';
+import { Category, Question, QuestionStatus, SearchCriteria, SearchResults, User, ApplicationSettings } from 'shared-library/shared/model';
+import * as bulkActions from '../../../bulk/store/actions';
+import { AppState, appState, getCategories, getTags } from '../../../store';
 import { adminState } from '../../store';
 import * as adminActions from '../../store/actions';
-import * as bulkActions from '../../../bulk/store/actions'; 0
-import { Router } from '@angular/router';
-import { UserActions } from 'shared-library/core/store';
-import { MatTabChangeEvent } from '@angular/material';
 
 @Component({
   selector: 'admin-questions',
@@ -23,7 +18,8 @@ import { MatTabChangeEvent } from '@angular/material';
   styleUrls: ['./admin-questions.component.scss']
 })
 
-export class AdminQuestionsComponent implements OnInit {
+@AutoUnsubscribe({ 'arrayName': 'subscriptions' })
+export class AdminQuestionsComponent implements OnInit, OnDestroy {
   questionsSearchResultsObs: Observable<SearchResults>;
   unpublishedQuestionsObs: Observable<Question[]>;
   categoryDictObs: Observable<{ [key: number]: Category }>;
@@ -41,12 +37,38 @@ export class AdminQuestionsComponent implements OnInit {
   PENDING = QuestionStatus.PENDING;
   REJECTED = QuestionStatus.REJECTED;
   REQUIRED_CHANGE = QuestionStatus.REQUIRED_CHANGE;
+  applicationSettings: ApplicationSettings;
+  quillConfig = {
+    toolbar: {
+      container: [],
+      handlers: {
+        // handlers object will be merged with default handlers object
+        'mathEditor': () => {
+        }
+      }
+    },
+    mathEditor: {},
+    blotFormatter: {},
+    syntax: true
+  };
+  subscriptions: Subscription[] = [];
 
-  constructor(private store: Store<AppState>, private router: Router, private userActions: UserActions) {
+  constructor(private store: Store<AppState>,
+    private router: Router,
+    private userActions: UserActions) {
+
+    this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
+      if (appSettings) {
+        this.applicationSettings = appSettings[0];
+        this.quillConfig.toolbar.container.push(this.applicationSettings.quill_options.options);
+        this.quillConfig.toolbar.container.push(this.applicationSettings.quill_options.list);
+        this.quillConfig.mathEditor = { mathOptions: this.applicationSettings };
+      }
+    }));
 
     this.questionsSearchResultsObs = this.store.select(adminState).pipe(select(s => s.questionsSearchResults));
     this.unpublishedQuestionsObs = this.store.select(adminState).pipe(select(s => s.unpublishedQuestions), map((question) => {
-      const questionList = question;
+      const questionList = question.filter( data => ( data.is_draft === false || (data.is_draft === true && data.status !== 4)));
       if (questionList) {
         questionList.map((q) => {
           if (this.userDict[q.created_uid] === undefined) {
@@ -59,21 +81,21 @@ export class AdminQuestionsComponent implements OnInit {
     }));
 
     this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
-    this.userDict$.subscribe(userDict => this.userDict = userDict);
+    this.subscriptions.push(this.userDict$.subscribe(userDict => this.userDict = userDict));
 
 
-    this.categoryDictObs = store.select(categoryDictionary);
+    this.categoryDictObs = store.select(appState.coreState).pipe(select(s => s.categories));
     this.criteria = new SearchCriteria();
 
     const url = this.router.url;
     this.toggleValue = url.includes('bulk') ? true : false;
 
-    this.store.select(adminState).pipe(select(s => s.getQuestionToggleState)).subscribe((stat) => {
+    this.subscriptions.push(this.store.select(adminState).pipe(select(s => s.getQuestionToggleState)).subscribe((stat) => {
       if (stat != null) {
-        this.selectedTab = stat === 'Published' ? 0 : 1
+        this.selectedTab = stat === 'Published' ? 0 : 1;
       }
-    });
-    this.store.select(adminState).pipe(select(s => s.getArchiveToggleState)).subscribe((state) => {
+    }));
+    this.subscriptions.push(this.store.select(adminState).pipe(select(s => s.getArchiveToggleState)).subscribe((state) => {
       if (state != null) {
         this.toggleValue = state;
         (this.toggleValue) ? this.router.navigate(['admin/questions/bulk-questions']) : this.router.navigate(['/admin/questions']);
@@ -81,7 +103,7 @@ export class AdminQuestionsComponent implements OnInit {
         this.toggleValue = false;
         this.router.navigate(['/admin/questions']);
       }
-    });
+    }));
 
     this.categoriesObs = store.select(getCategories);
     this.tagsObs = this.store.select(getTags);
@@ -91,7 +113,7 @@ export class AdminQuestionsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.store.select(appState.coreState).pipe(take(1)).subscribe(s => this.user = s.user);
+    this.subscriptions.push(this.store.select(appState.coreState).pipe(take(1)).subscribe(s => this.user = s.user));
   }
 
   approveQuestion(question: Question) {
@@ -174,5 +196,6 @@ export class AdminQuestionsComponent implements OnInit {
     this.store.dispatch(new bulkActions.UpdateQuestion({ question: question }));
   }
 
+  ngOnDestroy() { }
 
 }

@@ -1,0 +1,48 @@
+.user-img{ text-align: center; margin-bottom: 20px }
+img{ border-radius: 50%; width: 50%; max-width:70px;  display: inline-block;border:1px solid; padding: 2px }
+.btn{ padding: 10px 25px;font-size: 16px; cursor: pointer}
+.reject-btn{
+   padding: 10px 25px;
+   font-size: 16px;
+   font-family: 'hindbold';
+  border-radius: 4px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  cursor: pointer; 
+  background-color: #f50057 !important
+}
+.clinton{ font-size: 16px; }
+.T-tagging{ font-size: 14px; text-transform: uppercase; letter-spacing: 1px}
+.text-align{text-align: left;}
+.btn-mobile{
+  background-color: rgba(255, 0, 0, 0.0);
+  border-color:rgba(255, 0, 0, 0.0);
+  border-width: 0;
+}
+
+
+@media screen and ( max-width:767px){
+  .text-align{text-align: center;}
+}
+
+
+@media screen and ( min-width:1000px){
+  .user-img{ margin-bottom: 0 }
+  img { width: 44px;max-width: inherit; }
+  .btn,.reject-btn{ margin: 2% }
+  .clinton, .T-tagging{ line-height: 45px; }
+  img { padding: 1px }
+}
+@media screen and ( min-width:767px){
+  .btn{font-size: 14px;padding: 5% 5%; }
+  .reject-btn{font-size: 14px;padding: 5%;}
+}
+
+@media screen and ( max-width:767px){
+  .text-align{text-align: center;}
+  .btn{ margin-bottom: 10px;}
+}
+
+Button{
+  border-radius: 1px; 
+}

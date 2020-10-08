@@ -5,7 +5,7 @@ import { AppState, appState } from '../../store';
 import { Store, select } from '@ngrx/store';
 import { Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 
 @Component({
   selector: 'profile-card',
@@ -22,11 +22,11 @@ export class ProfileCardComponent implements OnDestroy {
   userProfileImageUrl: string;
   subscriptions = [];
 
-  constructor(private store: Store<AppState>, private router: Router, private utils: Utils) {
+  constructor(private store: Store<AppState>, public router: Router, private utils: Utils) {
     this.userObs = this.store.select(appState.coreState).pipe(select(s => s.user));
 
     this.subscriptions.push(this.userObs.subscribe(user => {
-      if (user !== null) {
+      if (user !== undefined) {
         this.user = user;
         (this.user.location) ? this.location = this.user.location : '';
         this.userProfileImageUrl = this.getImageUrl(this.user);

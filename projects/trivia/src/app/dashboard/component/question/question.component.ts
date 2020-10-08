@@ -4,8 +4,9 @@ import { AppState, appState, categoryDictionary } from '../../../store';
 import { Store, select } from '@ngrx/store';
 import { QuestionActions } from 'shared-library/core/store/actions';
 import { Utils } from 'shared-library/core/services';
-import { Subscription } from 'rxjs';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
+import { GameActions } from 'shared-library/core/store/actions';
+import { skipWhile, map, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'question',
@@ -13,14 +14,14 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
   styleUrls: ['./question.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-
-@AutoUnsubscribe({ 'arrayName': 'subscriptions' })
+@AutoUnsubscribe({ arrayName: 'subscriptions' })
 export class QuestionComponent implements OnDestroy {
-
   question: Question;
   categoryName: string;
-  @Input() userDict: { [key: string]: User };
 
+  @Input() userDict: { [key: string]: User };
+  @Input() user: User;
+  @Input() theme: string;
   @Output() answerClicked = new EventEmitter<number>();
   @Output() continueClicked = new EventEmitter();
 
@@ -29,17 +30,22 @@ export class QuestionComponent implements OnDestroy {
   doPlay = true;
   categoryDictionary: any;
   subscriptions = [];
-
   constructor(private store: Store<AppState>, private questionAction: QuestionActions, private utils: Utils,
-    private cd: ChangeDetectorRef) {
+    private cd: ChangeDetectorRef, public gameActions: GameActions) {
+
     this.answeredText = '';
     this.correctAnswerText = '';
-    this.subscriptions.push(this.store.select(categoryDictionary).subscribe(categories => {
-      this.categoryDictionary = categories;
-      this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.questionOfTheDay)).subscribe(questionOfTheDay => {
+
+    this.subscriptions.push(this.store.select(categoryDictionary)
+      .pipe(skipWhile(categories => Object.entries(categories).length === 0 && categories.constructor === Object),
+        map(categories => (this.categoryDictionary = categories)),
+        switchMap(() => { return this.store.select(appState.coreState).pipe(select(s => s.questionOfTheDay)); })
+      ).subscribe(questionOfTheDay => {
         if (questionOfTheDay) {
+          this.doPlay = true;
           this.question = questionOfTheDay;
           this.cd.markForCheck();
+
           this.question.answers = utils.changeAnswerOrder(questionOfTheDay.answers);
           if (this.question.answers) {
             this.question.answers.forEach((item, index) => {
@@ -48,7 +54,6 @@ export class QuestionComponent implements OnDestroy {
               }
             });
           }
-
           if (this.question.categoryIds) {
             this.categoryName = this.question.categoryIds.map(category => {
               if (this.categoryDictionary[category]) {
@@ -56,39 +61,48 @@ export class QuestionComponent implements OnDestroy {
               } else {
                 return '';
               }
-            }).join(',');
+            })
+              .join(',');
           }
           this.cd.markForCheck();
         }
-      }));
-      this.cd.markForCheck();
-    }));
-
-
+        this.cd.markForCheck();
+      })
+    );
   }
 
   answerButtonClicked(answer: Answer) {
     if (this.doPlay) {
       this.answeredText = answer.answerText;
       this.doPlay = false;
-      const index = this.question.answers.findIndex(x => x.answerText === answer.answerText);
+      const index = this.question.answers.findIndex(
+        x => x.answerText === answer.answerText
+      );
+      if (this.answeredText === this.correctAnswerText) {
+        this.store.dispatch(this.gameActions.UpdateQuestionStat(this.question.id, "CORRECT"));
+      } else {
+        this.store.dispatch(this.gameActions.UpdateQuestionStat(this.question.id, "WRONG"));
+      }
       this.answerClicked.emit(index);
+      this.cd.markForCheck();
     }
   }
 
   getNextQuestion() {
     this.answeredText = '';
     this.correctAnswerText = '';
-    this.doPlay = true;
     this.store.dispatch(this.questionAction.getQuestionOfTheDay());
-
   }
 
   rippleTap(answer) {
     this.answerButtonClicked(answer);
   }
-  ngOnDestroy(): void {
 
+  selectedAnswer(answer: Answer) {
+    this.answeredText = answer.answerText;
+    this.answerButtonClicked(answer);
+    this.cd.markForCheck();
   }
 
+  ngOnDestroy(): void { }
 }

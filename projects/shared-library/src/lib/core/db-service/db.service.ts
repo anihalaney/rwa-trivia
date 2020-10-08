@@ -14,11 +14,11 @@ export abstract class DbService {
     public CreateDocWithoutDocID(collectionName: string, document: any): any {
     }
 
-    public setDoc(collectionName: string, docId: any, document: any): any {
+    public setDoc(collectionName: string, docId: any, document: any, timeStamp?: { createdOn?: boolean, updatedOn?: boolean }): any {
 
     }
 
-    public updateDoc(collectionName: string, docId: any, document: any) {
+    public updateDoc(collectionName: string, docId: any, document: any): any {
 
     }
     public valueChanges(collectionName: string, path?: any, queryParams?: any): Observable<any> {
@@ -43,4 +43,9 @@ export abstract class DbService {
     public upload(filePath: string, imageBlob: any): any {
 
     }
+
+    public deleteDoc(collectionName: string, docId: any): any {
+
+    }
+
 }

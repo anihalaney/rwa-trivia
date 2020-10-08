@@ -7,7 +7,7 @@ import { bulkState } from '../../store';
 import { User, Category, Question, BulkUploadFileInfo } from 'shared-library/shared/model';
 import { AppState, appState, categoryDictionary, getCategories, getTags } from '../../../store';
 import * as bulkActions from '../../store/actions';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 
 @Component({
   selector: 'bulk-details',
@@ -31,8 +31,7 @@ export class BulkDetailsComponent implements OnChanges, OnInit, OnDestroy {
   tagsObs: Observable<string[]>;
   categoriesObs: Observable<Category[]>;
 
-  constructor(private store: Store<AppState>,
-    private router: Router) {
+  constructor(private store: Store<AppState>) {
     this.categoryDictObs = store.select(categoryDictionary);
   }
 

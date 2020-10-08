@@ -5,23 +5,29 @@ module.exports = function($logger, $projectData, hookArgs) {
 
 return new Promise(function(resolve, reject) {
 
-        /* Decide whether to prepare for dev or prod environment */
-
-       
+        /* do not add this line we do not use --release to decide release environment */
+        // var isReleaseBuild = (hookArgs.appFilesUpdaterOptions || hookArgs.prepareData).release;
+         /* Decide whether to prepare for dev or prod environment */
         var validProdEnvs = ['prod','production'];
         var isProdEnv = false; // building with --env.prod or --env.production flag
+        var env = (hookArgs.platformSpecificData || hookArgs.prepareData).env;
 
-        if (hookArgs.platformSpecificData.env) {
-            Object.keys(hookArgs.platformSpecificData.env).forEach((key) => {
+        if (env) {
+            Object.keys(env).forEach((key) => {
                 if (validProdEnvs.indexOf(key)>-1) { isProdEnv=true; }
             });
         }
 
-        var buildType = isProdEnv ? 'production' : 'development';
+        /* do not change this line 
+         we use --env.prod to decide release environment
+         we do not use --release to decide release environment */
+        var buildType =  isProdEnv ? 'production' : 'development';
+        const platformFromHookArgs = hookArgs && (hookArgs.platform || (hookArgs.prepareData && hookArgs.prepareData.platform));
+        const platform = (platformFromHookArgs  || '').toLowerCase();
 
         /* Create info file in platforms dir so we can detect changes in environment and force prepare if needed */
 
-        var npfInfoPath = path.join($projectData.platformsDir, hookArgs.platform.toLowerCase(), ".pluginfirebaseinfo");
+        var npfInfoPath = path.join($projectData.platformsDir, platform, ".pluginfirebaseinfo");
         var npfInfo = {
             buildType: buildType,
         };
@@ -33,13 +39,13 @@ return new Promise(function(resolve, reject) {
 
 
         /* Handle preparing of Google Services files */
-
-        if (hookArgs.platform.toLowerCase() === 'android') {
+        var project = hookArgs.prepareData.env.project;
+        if (platform === 'android') {
             var destinationGoogleJson = path.join($projectData.platformsDir, "android", "app", "google-services.json");
             var destinationGoogleJsonAlt = path.join($projectData.platformsDir, "android", "google-services.json");
             var sourceGoogleJson = path.join($projectData.appResourcesDirectoryPath, "Android", "google-services.json");
-            var sourceGoogleJsonProd = path.join($projectData.appResourcesDirectoryPath, "Android", "google-services.json.prod");
-            var sourceGoogleJsonDev = path.join($projectData.appResourcesDirectoryPath, "Android", "google-services.json.dev");
+            var sourceGoogleJsonProd = path.join($projectData.projectDir, 'configurations' , project, platform, `google-services.json.prod`);
+            var sourceGoogleJsonDev = path.join($projectData.projectDir, 'configurations' , project , platform ,`google-services.json.dev`);
 
             // ensure we have both dev/prod versions so we never overwrite singlular google-services.json
             if (fs.existsSync(sourceGoogleJsonProd) && fs.existsSync(sourceGoogleJsonDev)) {
@@ -49,12 +55,12 @@ return new Promise(function(resolve, reject) {
 
             // copy correct version to destination
             if (fs.existsSync(sourceGoogleJson) && fs.existsSync(path.dirname(destinationGoogleJson))) {
-                $logger.out("Copy " + sourceGoogleJson + " to " + destinationGoogleJson + ".");
+                $logger.info("Copy " + sourceGoogleJson + " to " + destinationGoogleJson + ".");
                 fs.writeFileSync(destinationGoogleJson, fs.readFileSync(sourceGoogleJson));
                 resolve();
             } else if (fs.existsSync(sourceGoogleJson) && fs.existsSync(path.dirname(destinationGoogleJsonAlt))) {
                 // NativeScript < 4 doesn't have the 'app' folder
-                $logger.out("Copy " + sourceGoogleJson + " to " + destinationGoogleJsonAlt + ".");
+                $logger.info("Copy " + sourceGoogleJson + " to " + destinationGoogleJsonAlt + ".");
                 fs.writeFileSync(destinationGoogleJsonAlt, fs.readFileSync(sourceGoogleJson));
                 resolve();
             } else {

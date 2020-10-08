@@ -1,16 +1,23 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { combineLatest, Observable, of } from 'rxjs';
-import { map, mergeMap } from 'rxjs/operators';
+import { combineLatest, Observable, of, from } from 'rxjs';
+import { map, mergeMap, catchError } from 'rxjs/operators';
 import {
-    friendInvitationConstants, Friends, Game, GameOperations, GameStatus, Invitation, QueryParam, QueryParams, User
+    friendInvitationConstants, Friends, Game, GameOperations, GameStatus, Invitation, QueryParam, QueryParams, User, RoutesConstants,
+    Question,
+    UserStatus
 } from './../../../lib/shared/model';
 import { CONFIG } from './../../environments/environment';
 import { DbService } from './../db-service';
+
+import { Country } from 'shared-library/shared/mobile/component/countryList/model/country.model';
 import { Utils } from './utils';
+
 
 @Injectable()
 export class UserService {
+
+    private RC = RoutesConstants;
 
     constructor(
         private http: HttpClient,
@@ -31,6 +38,9 @@ export class UserService {
                     const dbUser = Object.assign({}, user); // object to be saved
                     delete dbUser.authState;
                     delete dbUser.profilePictureUrl;
+
+                    console.log('db User ====> ', dbUser);
+
                     this.dbService.setDoc('users', dbUser.userId, dbUser);
                 }
                 return user;
@@ -38,12 +48,35 @@ export class UserService {
                 mergeMap(u => this.getUserProfileImage(u)));
     }
 
+    getOtherUserGamePlayedStat(userId: string, friendList: string[]): Observable<any> {
+        const gamesPlayedWithObs = friendList.map(friendId =>
+            this.dbService.valueChanges('users', `/${userId}/game_played_with/${friendId}`));
+        return combineLatest(gamesPlayedWithObs)
+            .pipe(map((values) => {
+                return values.map((value, index) => {
+                    if (value) {
+                        value.userId = friendList[index];
+                        return value;
+                    } else {
+                        value = {};
+                        value.userId = friendList[index];
+                        value.created_uid = friendList[index];
+                        return value;
+                    }
+                });
+            }),
+                catchError(error => {
+                    console.log(error);
+                    return of(null);
+                }));
+    }
+
     loadAccounts(user): Observable<any> {
         return this.dbService.valueChanges('accounts', user.userId);
     }
 
     saveUserProfile(user: User): Observable<any> {
-        const url = `${CONFIG.functionsUrl}/app/user/profile`;
+        const url = `${CONFIG.functionsUrl}/user/profile`;
         user.roles = (!user.roles) ? {} : user.roles;
         const dbUser = Object.assign({}, user); // object to be saved
         delete dbUser.authState;
@@ -56,15 +89,41 @@ export class UserService {
         return this.dbService.CreateDocWithoutDocID('feedback', feedback);
     }
 
+    getCountries(): Observable<Country[]> {
+        return this.dbService.valueChanges('countries');
+    }
 
     loadOtherUserProfile(userId: string): Observable<User> {
-        const url = `${CONFIG.functionsUrl}/app/user/${userId}`;
+        const url = `${CONFIG.functionsUrl}/user/${userId}`;
         return this.http.get<User>(url);
     }
 
     loadOtherUserProfileWithExtendedInfo(userId: string): Observable<User> {
-        const url = `${CONFIG.functionsUrl}/app/user/extendedInfo/${userId}`;
+        const url = `${CONFIG.functionsUrl}/user/extendedInfo/${userId}`;
         return this.http.get<User>(url);
+    }
+
+    loadUserInvitationsInfo(userId: string, invitedUserEmail: string, invitedUserId: string): Observable<Invitation> {
+        const queryParams = {
+            condition: [
+                { name: 'created_uid', comparator: '==', value: userId },
+                { name: 'email', comparator: '==', value: invitedUserEmail }
+            ],
+            limit: 1
+        };
+        return combineLatest(this.dbService.valueChanges('invitations', '', queryParams), this.dbService.valueChanges('friends', userId))
+            .pipe(
+                map(values => {
+                    if (values[1] && values[1].myFriends && values[1].myFriends.some((friend => friend[invitedUserId]))) {
+                        return { 'email': invitedUserEmail, 'created_uid': null, 'status': 'approved' };
+                    } else if (values[0].length > 0) {
+                        return values[0][0];
+                    } else {
+                        return { 'email': invitedUserEmail, 'created_uid': null, 'status': 'add' };
+                    }
+                })
+            );
+
     }
 
 
@@ -83,12 +142,12 @@ export class UserService {
     }
 
     saveUserInvitations(obj: any): Observable<string> {
-        const url = `${CONFIG.functionsUrl}/app/friend/invitation`;
+        const url = `${CONFIG.functionsUrl}/friend/invitation`;
         return this.http.post<any>(url, obj);
     }
 
     checkInvitationToken(obj: any): Observable<any> {
-        const url = `${CONFIG.functionsUrl}/app/friend`;
+        const url = `${CONFIG.functionsUrl}/friend`;
         return this.http.post<any>(url, obj);
     }
 
@@ -111,8 +170,9 @@ export class UserService {
             map(invitations => invitations));
     }
 
-    setInvitation(invitation: Invitation) {
-        this.dbService.updateDoc('invitations', invitation.id, invitation);
+
+    setInvitation(invitation: Invitation): Observable<any> {
+        return from(this.dbService.updateDoc('invitations', invitation.id, invitation));
     }
 
     getGameInvites(user: User): Observable<Game[]> {
@@ -145,19 +205,54 @@ export class UserService {
     }
 
     rejectGameInvitation(gameId: string) {
-        return this.http.put(`${CONFIG.functionsUrl}/app/game/${gameId}`,
+        return this.http.put(`${CONFIG.functionsUrl}/game/${gameId}`,
             {
                 operation: GameOperations.REJECT_GAME
             });
     }
 
-    updateUser(user: User) {
+    updateUser(user: User): Observable<any> {
         const dbUser = Object.assign({}, user);
-        this.dbService.setDoc('users', dbUser.userId, dbUser);
+        return from(this.dbService.setDoc('users', dbUser.userId, dbUser));
     }
 
     addUserLives(userId: string) {
-        const url = `${CONFIG.functionsUrl}/app/user/update-lives`;
+        const url = `${CONFIG.functionsUrl}/user/update-lives`;
         return this.http.post<any>(url, { userId: userId });
+    }
+
+    checkDisplayName(displayName: string): Observable<any> {
+        const url = `${CONFIG.functionsUrl}/${this.RC.USER}/${this.RC.CHECK}/${this.RC.DISPLAY_NAME}/${encodeURIComponent(displayName)}`;
+        return this.http.get<any>(url);
+    }
+
+    getAddressByLatLang(latlong) {
+        const url = `${CONFIG.functionsUrl}/${this.RC.USER}/${this.RC.ADDRESS_BY_LAT_LANG}/${latlong}`;
+        return this.http.get<any>(url);
+    }
+
+    getAddressSuggestions(address) {
+        const url = `${CONFIG.functionsUrl}/${this.RC.USER}/${this.RC.ADDRESS_SUGGESTION}/${address}`;
+        return this.http.get<any>(url);
+    }
+
+    getUserStatus(user: User): Observable<User> {
+
+        return this.dbService.valueChanges('user_status', user.userId)
+            .pipe(map(u => {
+                user.online = (u) ? u.online : false;
+                return user;
+            }, (error) => {
+                return user;
+            }));
+    }
+
+    updateUserStatus(userStatus: UserStatus) {
+        this.dbService.updateDoc('user_status', userStatus.userId, userStatus);
+    }
+
+    firstQuestionSetBits(userId: string): Observable<any> {
+        const url = `${CONFIG.functionsUrl}/user/add-bits-first-question`;
+        return this.http.get<any>(url);
     }
 }

@@ -1,7 +1,7 @@
 import {
-    Component, OnInit, OnDestroy, ViewChild, ElementRef, AfterViewInit,
-    SimpleChanges, OnChanges, ChangeDetectionStrategy, ChangeDetectorRef
-  } from '@angular/core';
+  Component, OnInit, OnDestroy, ViewChild, ElementRef, AfterViewInit,
+  SimpleChanges, OnChanges, ChangeDetectionStrategy, ChangeDetectorRef
+} from '@angular/core';
 import { GameQuestion } from './game-question';
 @Component({
   selector: 'game-question',
@@ -11,15 +11,17 @@ import { GameQuestion } from './game-question';
 })
 export class GameQuestionComponent extends GameQuestion implements OnInit, OnDestroy, AfterViewInit, OnChanges {
 
-  @ViewChild('overlay') overlay: ElementRef;
-  @ViewChild('loader') loader: ElementRef;
+  @ViewChild('overlay', { static: false }) overlay: ElementRef;
+  @ViewChild('loader', { static: true }) loader: ElementRef;
   alpha = 0;
   setTimeOutLimit = 0;
+
   constructor(private cd: ChangeDetectorRef) {
     super();
   }
 
   ngOnInit() {
+    this.cd.markForCheck();
   }
 
   ngOnDestroy() {
@@ -60,6 +62,26 @@ export class GameQuestionComponent extends GameQuestion implements OnInit, OnDes
     if (changes.timer && changes.timer.firstChange) {
       const elapsedTime = this.MAX_TIME_IN_SECONDS - changes.timer.currentValue;
       this.alpha = (360 * elapsedTime) / this.MAX_TIME_IN_SECONDS;
+    }
+
+    if (changes.showContinueBtn && changes.showContinueBtn.currentValue && changes.showContinueBtn.currentValue === true) {
+        if (this.showLoader && !this.gameOver) {
+            super.continueButtonClicked('');
+        } else if (this.showLoader && this.gameOver) {
+          this.gameOverButtonClicked.emit('');
+        }
+    }
+
+    if (changes.showCurrentQuestion && changes.showCurrentQuestion.currentValue && changes.showCurrentQuestion.currentValue === true) {
+      if (this.showLoader) {
+        this.gameOverButtonClicked.emit('');
+      }
+    }
+
+    if (changes.gameOver && changes.gameOver.currentValue && changes.gameOver.currentValue === true) {
+      if (this.showLoader) {
+        this.gameOverButtonClicked.emit('');
+      }
     }
   }
 }

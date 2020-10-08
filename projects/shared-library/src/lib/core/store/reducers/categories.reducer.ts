@@ -15,9 +15,17 @@ export function categories(state: any = [], action: ActionWithPayload<Category[]
 
 //selectors
 export const getCategoryDictionary = (state: Category[]) => {
-  return state.reduce((result, category) => {
+  return !state ? {} : state.reduce((result, category) => {
     result[category.id] = category;
     return result;
   }, {});
 };
 
+export function topCategories(state: any = [], action: ActionWithPayload<any[]>): any[] {
+  switch (action.type) {
+    case CategoryActions.LOAD_TOP_CATEGORIES_SUCEESS:
+      return action.payload;
+    default:
+      return state;
+  }
+}

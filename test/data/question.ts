@@ -1,0 +1,20 @@
+export const Question = {
+    categories: [],
+    categoryIds: [1],
+    created_uid: '',
+    explanation: '',
+    id: '5xLESijm648e2gsZJU8M',
+    isRichEditor: true,
+    is_draft: false,
+    maxTime: 8,
+    ordered: false,
+    published: false,
+    answers: [{ answerText: 'A', correct: null, isRichEditor: false, answerObject: null },
+        { answerText: 'B', correct: null, isRichEditor: false, answerObject: null },
+        { answerText: 'C', correct: null, isRichEditor: false, answerObject: null },
+        { answerText: 'D', correct: true, isRichEditor: false, answerObject: null }
+    ],
+    questionObject: '',
+    questionText: '',
+    tags: [],
+};

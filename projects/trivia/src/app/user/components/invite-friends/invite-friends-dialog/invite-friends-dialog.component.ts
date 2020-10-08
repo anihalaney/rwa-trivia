@@ -1,11 +1,11 @@
-import { Component, OnInit, Renderer2, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import { take } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import { User } from 'shared-library/shared/model';
-import { Utils } from 'shared-library/core/services';
 import { AppState, appState } from '../../../../store';
 import { Subscription } from 'rxjs';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-invite-friends-dialog',
@@ -16,18 +16,21 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class InviteFriendsDialogComponent implements OnInit, OnDestroy {
-
   user: User;
   navLinks = [];
   ref: any;
-  subscriptions = [];
-
-  constructor(private store: Store<AppState>, private renderer: Renderer2, private utils: Utils) {
-    this.subscriptions.push(this.store.select(appState.coreState).pipe(take(1)).subscribe(s => this.user = s.user));
+  subscriptions: Subscription[] = [];
+  showSkipBtn: boolean;
+  constructor(private store: Store<AppState>, private route: ActivatedRoute) {
   }
 
   ngOnInit() {
+    this.subscriptions.push(this.store.select(appState.coreState).pipe(take(1)).subscribe(s => this.user = s.user));
 
+    this.route.params.subscribe((params) => {
+      const boolValue = (params.showSkip === 'true' ? true : false);
+      this.showSkipBtn = boolValue;
+    });
   }
 
   closeModel() {

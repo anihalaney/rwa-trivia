@@ -11,9 +11,13 @@ import {
   InviteFriendsComponent,
   QuestionAddUpdateComponent,
   InviteFriendsDialogComponent,
-  InviteMailFriendsComponent
+  LocationResetDialogComponent,
+  PreviewQuestionDialogComponent,
+  GameProfileComponent
 } from './components';
-
+import { BulkUploadRequestComponent } from '../../../../shared-library/src/lib/shared/mobile/component';
+import { ChangePasswordComponent } from 'shared-library/shared/mobile/component';
+import { DropDownModule } from 'nativescript-drop-down/angular';
 @NgModule({
   declarations: [
     ProfileSettingsComponent,
@@ -22,13 +26,18 @@ import {
     InviteFriendsComponent,
     QuestionAddUpdateComponent,
     InviteFriendsDialogComponent,
-    InviteMailFriendsComponent
+    LocationResetDialogComponent,
+    PreviewQuestionDialogComponent,
+    GameProfileComponent,
+    BulkUploadRequestComponent,
+    ChangePasswordComponent
   ],
   imports: [
     // rwa modules
     SharedModule,
     NativeScriptRouterModule,
     UserRoutingModule,
+    DropDownModule,
 
     //ngrx feature store
     StoreModule.forFeature('user', reducer),
@@ -36,14 +45,21 @@ import {
     //ngrx effects
     EffectsModule.forFeature(effects)
 
-
   ],
   providers: [],
   exports: [
     ProfileSettingsComponent,
     QuestionAddUpdateComponent,
     MyQuestionsComponent,
-    InviteFriendsComponent
+    InviteFriendsComponent,
+    LocationResetDialogComponent,
+    GameProfileComponent,
+    BulkUploadRequestComponent,
+    ChangePasswordComponent
+  ],
+  entryComponents: [
+    LocationResetDialogComponent,
+    PreviewQuestionDialogComponent
   ],
   schemas: [NO_ERRORS_SCHEMA]
 })

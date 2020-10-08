@@ -5,12 +5,12 @@ import { AuthGuard, BulkLoadGuard, CategoriesResolver, TagsResolver } from 'shar
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: '/dashboard',
+    redirectTo: 'dashboard',
     pathMatch: 'full'
   },
   {
     path: 'dashboard',
-    loadChildren: '../dashboard/dashboard.module#DashboardModule',
+    loadChildren: () => import('../dashboard/dashboard.module').then(m => m.DashboardModule),
   },
   {
     path: 'privacy-policy',
@@ -22,18 +22,18 @@ export const routes: Routes = [
   },
   {
     path: 'user',
-    loadChildren: '../user/user.module#UserModule',
+    loadChildren: () => import('../user/user.module').then(m => m.UserModule),
     resolve: { "categories": CategoriesResolver, "tags": TagsResolver }
   },
   {
     path: 'game-play',
-    loadChildren: '../game-play/game-play.module#GamePlayModule',
+    loadChildren: () => import('../game-play/game-play.module').then(m => m.GamePlayModule),
     canActivate: [AuthGuard],
     resolve: { "categories": CategoriesResolver, "tags": TagsResolver }
   },
   {
     path: 'bulk',
-    loadChildren: '../bulk/bulk.module#BulkModule',
+    loadChildren: () => import('../bulk/bulk.module').then(m => m.BulkModule),
     canActivate: [AuthGuard],
     canLoad: [BulkLoadGuard]
   },

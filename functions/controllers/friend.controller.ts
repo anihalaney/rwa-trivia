@@ -13,7 +13,6 @@ export class FriendController {
         const token = req.body.token;
         const userId = req.body.userId;
         const email = req.body.email;
-
         try {
             const makeFriends: MakeFriends = new MakeFriends(token, userId, email);
             const invitee = await makeFriends.validateToken();

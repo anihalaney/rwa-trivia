@@ -1,15 +1,12 @@
-import { Component, OnInit, OnDestroy, Renderer2, ViewChild, ChangeDetectionStrategy } from '@angular/core';
-import { MatDialog, MatDialogRef } from '@angular/material';
-import { InviteFriendsDialogComponent } from './invite-friends-dialog/invite-friends-dialog.component';
-import { User } from 'shared-library/shared/model';
-import { Utils } from 'shared-library/core/services';
-import { AppState, appState } from '../../../store';
-import { Store, select } from '@ngrx/store';
-import { MatPaginator, MatTableDataSource } from '@angular/material';
-import { Observable, Subscription } from 'rxjs';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, Renderer2, ViewChild, PLATFORM_ID, Inject } from '@angular/core';
+import { MatDialog, MatDialogRef, MatPaginator, MatTableDataSource } from '@angular/material';
+import { select, Store } from '@ngrx/store';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 import { UserActions } from 'shared-library/core/store/actions';
+import { AppState, appState } from '../../../store';
 import { InviteFriends } from './invite-friends';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { InviteFriendsDialogComponent } from './invite-friends-dialog/invite-friends-dialog.component';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-invite-friends',
@@ -26,32 +23,30 @@ export class InviteFriendsComponent extends InviteFriends implements OnInit, OnD
     'won', 'lost'];
   uFriends: Array<any>;
   dataSource: any;
-  subscriptions = [];
   defaultAvatar = 'assets/images/default-avatar.png';
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
   constructor(public dialog: MatDialog,
     public store: Store<AppState>,
     public renderer: Renderer2,
     public userActions: UserActions,
-    public utils: Utils) {
-    super(store, userActions, utils);
+    @Inject(PLATFORM_ID) private platformId: Object,
+    public cd: ChangeDetectorRef) {
+    super(store, userActions, cd);
   }
 
   ngOnInit() {
-    this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.userFriends)).subscribe(uFriends => {
+    this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.userFriends)).subscribe((uFriends: any) => {
       if (uFriends !== null && uFriends !== undefined) {
         this.uFriends = [];
-        uFriends.myFriends.map((friend, index) => {
-          this.store.dispatch(this.userActions.loadOtherUserProfile(Object.keys(friend)[0]));
-          this.uFriends.push(friend[Object.keys(friend)[0]]);
-          this.uFriends[index].userId = Object.keys(friend)[0];
-        });
-      }
 
-      this.dataSource = new MatTableDataSource<any>(this.uFriends);
-      this.setPaginatorAndSort();
+        uFriends.map(friend => {
+          this.uFriends.push(friend);
+        });
+        this.dataSource = new MatTableDataSource<any>(uFriends);
+        this.setPaginatorAndSort();
+      }
     }));
   }
 
@@ -68,13 +63,15 @@ export class InviteFriendsComponent extends InviteFriends implements OnInit, OnD
       disableClose: false
     });
     this.dialogRef.componentInstance.ref = this.dialogRef;
+    if (isPlatformBrowser(this.platformId)) {
+      this.subscriptions.push(this.dialogRef.afterOpen().subscribe(x => {
+        this.renderer.addClass(document.body, 'dialog-open');
+      }));
+      this.subscriptions.push(this.dialogRef.afterClosed().subscribe(x => {
+        this.renderer.removeClass(document.body, 'dialog-open');
+      }));
+    }
 
-    this.subscriptions.push(this.dialogRef.afterOpen().subscribe(x => {
-      this.renderer.addClass(document.body, 'dialog-open');
-    }));
-    this.subscriptions.push(this.dialogRef.afterClosed().subscribe(x => {
-      this.renderer.removeClass(document.body, 'dialog-open');
-    }));
   }
 
   ngOnDestroy() {

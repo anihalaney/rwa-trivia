@@ -1,4 +1,4 @@
-<div *ngIf="questions && categoryAggregation && tagsCount" class="question-table-form">
+<div *ngIf="questions && categoryAggregation && tagsCount && applicationSettings" class="question-table-form">
   <div fxLayout="row" fxLayoutAlign="space-between">
     <div class="filter-facet-column" fxLayout="column">
       <mat-list dense>
@@ -40,8 +40,8 @@
     <div class="example-container mat-elevation-z8">
 
       <question-table [showSort]="true" [showPaginator]="true" [questions]="questions" [totalCount]="totalCount" [categoryDictionary]="categoryDictionary"
-        [showApproveButton]="false" [clientSidePagination]="false" (onApproveClicked)="approveClicked($event)" (onPageChanged)="pageChanged($event)"
-        (onSortOrderChanged)="sortOrderChanged($event)">
+        [isAdmin]="true" [showApproveButton]="false" [clientSidePagination]="false" (onApproveClicked)="approveButtonClicked($event)" (onPageChanged)="pageChanged($event)"
+        (onSortOrderChanged)="sortOrderChanged($event)"  [categoriesObs]="categoriesObs" [quillConfig]="quillConfig" [applicationSettings]="applicationSettings">
       </question-table>
     </div>
 

@@ -3,7 +3,9 @@ import { readFileSync } from 'fs';
 import { resolve } from 'path';
 import { Question, SearchCriteria, SearchResults } from '../../projects/shared-library/src/lib/shared/model';
 import { Utils } from './utils';
-
+import { AppSettings } from './../services/app-settings.service';
+import { QuestionService } from '../services/question.service';
+import { StatsService } from '../services/stats.service';
 const elasticSearchConfig = JSON.parse(readFileSync(resolve(__dirname, '../../../config/elasticsearch.config.json'), 'utf8'));
 
 export class ESUtils {
@@ -170,12 +172,14 @@ export class ESUtils {
     const seed = date.getUTCFullYear().toString() + date.getUTCMonth().toString() + date.getUTCDate().toString();
     const hits = await ESUtils.getRandomItems(ESUtils.QUESTIONS_INDEX, 1, (isNextQuestion) ? '' : seed);
     hits[0]['_source'].serverTimeQCreated = Utils.getUTCTimeStamp();
+      await StatsService.updateQuestionStats(hits[0]._id, 'CREATED');
+
     // convert hit to Question
-    return Question.getViewModelFromES(hits[0]);
+    return  Question.getViewModelFromES(hits[0]);
   }
 
-  static async getRandomGameQuestion(gameCategories: Array<number>, excludedQId: Array<string>): Promise<Question> {
-    const hits = await ESUtils.getRandomQuestionES(ESUtils.QUESTIONS_INDEX, 1, '', gameCategories, [], excludedQId);
+  static async getRandomGameQuestion(gameCategories: Array<number>, excludedQId: Array<string>, attemptedCategories: Array<number>): Promise<Question> {
+    const hits = await ESUtils.getRandomQuestionES(ESUtils.QUESTIONS_INDEX, 1, '', gameCategories, [], excludedQId, attemptedCategories);
     return Question.getViewModelFromES(hits[0]);
   }
 
@@ -249,12 +253,64 @@ export class ESUtils {
     }
   }
 
+  static async getTopCategories(index: string): Promise<any> {
+    const client: ElasticSearch.Client = ESUtils.getElasticSearchClient();
+    index = ESUtils.getIndex(index);
+    const appSetting = await AppSettings.Instance.getAppSettings();
+    const body = {
+      'aggregations': {
+        'category_counts': {
+          'terms': { 'field': 'categoryIds', "size" : appSetting.category_count_limit }
+        }
+      }
+    };
+
+    try {
+      const response = await client.search({
+        'index': index,
+        'body': body
+      });
+
+      return response.aggregations.category_counts.buckets;
+
+    } catch (error) {
+      console.error('Error : ', error);
+      throw error;
+    }
+  }
+
+  static async getTopTags(index: string): Promise<any> {
+    const client: ElasticSearch.Client = ESUtils.getElasticSearchClient();
+    index = ESUtils.getIndex(index);
+    const appSetting = await AppSettings.Instance.getAppSettings();
+    const body = {
+      'aggs': {
+        'tag_counts': {
+          'terms': { 'field': 'tags', "size" : appSetting.tag_count_limit }
+        }
+      }
+    };
+
+    try {
+      const response = await client.search({
+        'index': index,
+        'body': body
+      });
+
+      return response.aggregations.tag_counts.buckets;
+
+    } catch (error) {
+      console.error('Error : ', error);
+      throw error;
+    }
+  }
+
   static async getRandomItems(index: string, size: number, seed: string): Promise<any> {
     try {
       const client: ElasticSearch.Client = ESUtils.getElasticSearchClient();
       index = ESUtils.getIndex(index);
 
-      const body: Elasticsearch.SearchResponse<any> = await client.search({
+      const body: ElasticSearch.SearchResponse<any> = await client.search({
         'index': index,
         'size': size,
         'body': {
@@ -279,18 +335,14 @@ export class ESUtils {
   }
 
   static async getRandomQuestionES(index: string, size: number, seed: string,
-    categories: number[], tags: string[], excludeIds: string[]): Promise<any> {
+    categories: number[], tags: string[], excludeIds: string[], attemptedCategories: number[]): Promise<any> {
     const client: ElasticSearch.Client = ESUtils.getElasticSearchClient();
     index = ESUtils.getIndex(index);
 
-    let filter = null;
     const randomSeed = (seed === '') ? null : seed;
-    if (categories && categories.length > 0) {
-      filter = { 'terms': { 'categoryIds': categories } };
-    }
 
     try {
-      const body: Elasticsearch.SearchResponse<any> = await client.search({
+      const body: ElasticSearch.SearchResponse<any> = await client.search({
         'index': index,
         'size': size,
         'body': {
@@ -299,13 +351,20 @@ export class ESUtils {
               'query': {
                 'bool': {
                   'must': { 'match_all': {} },
-                  'must_not': [{ 'ids': { 'values': excludeIds } }],
-                  'filter': filter
+                  'must_not': [{ 'ids': { 'values': excludeIds } }]
                 }
               },
               'functions': [
                 {
                   'random_score': { 'seed': randomSeed }
+                },
+                {
+                  'filter': { 'terms': { 'categoryIds': categories } },
+                  'weight': 100
+                },
+                {
+                  'filter': { 'terms': { 'categoryIds': attemptedCategories } },
+                  'weight': 0
                 }
               ]
             }

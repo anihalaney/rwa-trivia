@@ -34,9 +34,14 @@
   .card .enterquestion h3{margin-top: 40px}
   .formfield, .mysetting .formfield { display: inline-block; }
   .savebox a.btn.startg{ display: inline-block; margin-right: 70px}
-  .enterquestion .formfield{ width: calc(50% - 3px) }
-  .enterquestion .formfield:nth-child(2n + 1){ text-align: right; }
-  .enterquestion .formfield > input{width: calc(85%) }
+  // .enterquestion .formfield{ width: calc(50% - 3px) }
+  .enterquestion .formfield{ width: 100%; display: block;}
+  // .enterquestion .formfield:nth-child(2n + 1){ text-align: right; }
+  // .enterquestion .formfield > input{width: calc(85%) }
+  .enterquestion .mathseditor{
+    display: inline-block;
+    width: 85%;
+  }
 }
 /*
 //commenting this out as @ 1024px the menu appears; unless we want to add max-width of 1024 here.
@@ -102,7 +107,7 @@ textarea
   padding: 1px 0px 1px 12px;
   font-family: 'hindseminormal';
 }
-.resubmit-btn{margin-top: 10px;}
+.resubmit-btn{margin-top: 10px; min-width: 110px;}
 .closeicon
 {
   padding-top: 4px;

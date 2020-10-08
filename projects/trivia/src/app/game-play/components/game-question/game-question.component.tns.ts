@@ -1,5 +1,5 @@
-import { Component, Input, OnInit, OnDestroy, SimpleChanges, OnChanges, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
-import { User, Answer } from 'shared-library/shared/model';
+import { Component, Input, OnInit, OnDestroy, SimpleChanges, OnChanges, ChangeDetectionStrategy, ChangeDetectorRef, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
+import { User, FirebaseScreenNameConstants, Account } from 'shared-library/shared/model';
 import { Utils } from 'shared-library/core/services';
 import { GameQuestion } from './game-question';
 import { Store, select } from '@ngrx/store';
@@ -7,7 +7,9 @@ import { GamePlayState } from '../../store';
 import { appState } from '../../../store';
 import { Observable, timer, Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
+import { projectMeta } from 'shared-library/environments/environment';
+
 
 @Component({
   selector: 'game-question',
@@ -19,38 +21,45 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class GameQuestionComponent extends GameQuestion implements OnInit, OnDestroy, OnChanges {
 
-  @Input() user: User;
+
   subscriptions = [];
   answeredIndex: number;
   correctAnswerIndex: number;
   minutes = 0.62;
   public progressValue: number;
   stopProcessBar;
-  columns;
   doPlay = true;
-  photoUrl: String = '~/assets/icons/icon-192x192.png';
+  actionText: string;
+  theme: string;
+
+  photoUrl: String = `~/assets/icons/${projectMeta.projectName}/icon-192x192.png`;
   userDict$: Observable<{ [key: string]: User }>;
   processTimeInterval: number;
   elapsedTime: number;
   timerSub: Subscription;
-  constructor(private utils: Utils, public store: Store<GamePlayState>, private cd: ChangeDetectorRef) {
+  account: Account;
+  constructor(public utils: Utils, public store: Store<GamePlayState>, private cd: ChangeDetectorRef) {
     super();
     this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
+    this.actionText = 'Playing Now';
   }
 
   ngOnInit() {
     this.progressValue = 0;
     this.photoUrl = this.utils.getImageUrl(this.user, 70, 60, '70X60');
+    this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.account)).subscribe(account => {
+      this.account = account;
+    }));
+    this.cd.markForCheck();
   }
 
   ngOnDestroy() {
-
   }
 
   fillTimer() {
-   if (this.answeredIndex === undefined) {
+    if (this.answeredIndex === undefined) {
       this.progressValue = 100;
-   }
+    }
   }
 
   getImage(userId) {
@@ -79,5 +88,40 @@ export class GameQuestionComponent extends GameQuestion implements OnInit, OnDes
           });
       this.subscriptions.push(this.timerSub);
     }
+    if (changes.showContinueBtn && changes.showContinueBtn.currentValue && changes.showContinueBtn.currentValue === true) {
+      if (this.showLoader && !this.gameOver) {
+        this.continueButtonClicked('');
+      } else if (this.showLoader && this.gameOver) {
+        this.gameOverButtonClicked.emit('');
+      }
+    }
+
+    if (changes.showCurrentQuestion && changes.showCurrentQuestion.currentValue && changes.showCurrentQuestion.currentValue === true) {
+      if (this.showLoader) {
+        this.gameOverButtonClicked.emit('');
+      }
+    }
+
+    if (changes.threeConsecutiveAnswer && changes.threeConsecutiveAnswer.currentValue &&
+      changes.threeConsecutiveAnswer.currentValue === true) {
+      if (this.showLoader) {
+        this.btnClickedAfterThreeConsecutiveAnswers.emit('');
+      }
+    }
+
+    if (changes.gameOver && changes.gameOver.currentValue && changes.gameOver.currentValue === true) {
+      if (this.showLoader) {
+        this.gameOverButtonClicked.emit('');
+      }
+    }
   }
+
+  checkRoundOver(event) {
+    if (this.gameOver) {
+      this.gameOverButtonClicked.emit(event);
+    } else if (this.threeConsecutiveAnswer) {
+      this.btnClickedAfterThreeConsecutiveAnswers.emit(event);
+    }
+  }
+
 }

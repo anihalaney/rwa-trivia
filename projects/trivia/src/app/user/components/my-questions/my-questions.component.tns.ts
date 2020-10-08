@@ -1,4 +1,4 @@
-import { Component, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnDestroy, ChangeDetectorRef, ChangeDetectionStrategy, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { RouterExtensions } from 'nativescript-angular/router';
@@ -7,17 +7,20 @@ import { User, Question, QuestionStatus } from 'shared-library/shared/model';
 import { AppState, appState } from '../../../store';
 import { MyQuestions } from './my-questions';
 import { Page } from 'tns-core-modules/ui/page';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
-
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
+import { FirebaseScreenNameConstants } from 'shared-library/shared/model';
+import { Utils } from 'shared-library/core/services';
+import * as Platform from "tns-core-modules/platform";
 
 @Component({
   selector: 'my-questions',
   templateUrl: './my-questions.component.html',
-  styleUrls: ['./my-questions.component.css']
+  styleUrls: ['./my-questions.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
-export class MyQuestionsComponent extends MyQuestions implements OnDestroy {
+export class MyQuestionsComponent extends MyQuestions implements OnDestroy, OnInit {
 
   userDict$: Observable<{ [key: string]: User }>;
   userDict: { [key: string]: User } = {};
@@ -25,24 +28,41 @@ export class MyQuestionsComponent extends MyQuestions implements OnDestroy {
   displayEditQuestion = false;
   selectedQuestion: Question;
   tabIndex = 0;
-  subscriptions = [];
+  renderView = false;
+  tab = 'published';
+  platform = Platform;
+
+
+
 
   constructor(public store: Store<AppState>,
     public questionActions: QuestionActions,
-    private routerExtension: RouterExtensions,
-    private page: Page, private cd: ChangeDetectorRef) {
-    super(store, questionActions);
-    this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
+    public routerExtension: RouterExtensions,
+    public page: Page,
+    public cd: ChangeDetectorRef
+  ) {
+    super(store, questionActions, cd);
+
+  }
+
+  ngOnInit(): void {
+
+    this.userDict$ = this.store.select(appState.coreState).pipe(select(s => s.userDict));
     this.subscriptions.push(this.userDict$.subscribe(userDict => {
       this.userDict = userDict;
       this.cd.markForCheck();
     }));
+    this.page.on('loaded', () => { this.renderView = true; this.cd.markForCheck(); });
+    // this.page.on('navigatedFrom', () => this.ngOnDestroy());
   }
 
-
-  navigateToSubmitQuestion() {
-    this.routerExtension.navigate(['/user/my/questions/add']);
+  onSelectTab(args) {
+    this.tab = args;
   }
+
+  // navigateToSubmitQuestion() {
+  //   this.routerExtension.navigate(['/user/my/questions/add']);
+  // }
 
   displayReason(reasonFlag: boolean) {
     this.displayReasonViewer = reasonFlag;
@@ -59,10 +79,12 @@ export class MyQuestionsComponent extends MyQuestions implements OnDestroy {
     this.page.actionBarHidden = !displayFlag;
   }
 
-  hideQuestion(displayEditQuestion: boolean) {
+  hideQuestion() {
     this.displayEditQuestion = false;
     this.page.actionBarHidden = false;
+    this.cd.markForCheck();
   }
+
 
   getDisplayStatus(status: number): string {
     return QuestionStatus[status];
@@ -72,6 +94,8 @@ export class MyQuestionsComponent extends MyQuestions implements OnDestroy {
     this.tabIndex = index;
   }
   ngOnDestroy() {
+    this.page.off('loaded');
+    this.renderView = false;
   }
 
 }

@@ -1,0 +1,12 @@
+<!-- on android the background color is too light to notice in white background so we need to use darker shade  -->
+<GridLayout android:backgroundColor="#ededed" ios:backgroundColor="#f9f9f9"  borderRadius="11" borderWidth="0" rows="*" columns="*, 50, 50" justifyContent="center" padding="0 5 5 5" iosOverflowSafeArea="false">
+    <app-user-card row="0" col="0" [userId]="game.playerIds[0]"
+        [type]="userCardType.USER_IMAGE_NAME_CATEGORY_HORIZONTAL"
+        [otherInfo]="otherInfo(game)" [isGame]="true">
+    </app-user-card>
+    <Button  row="0" col="1" text="&#xf00c;" class="fa text-icon-field" verticalAlignment="middle" backgroundColor="#71b02b" stlRippleEffect color="#fff"
+        (rippleTap)="acceptGameInvitation(game?.gameId)" width="28" height="28" borderRadius="15">
+    </Button>
+    <Button  row="0" col="2" text="&#xf00d;" class="fa text-icon-field" verticalAlignment="middle" backgroundColor="#f50057" stlRippleEffect color="#fff" 
+        (rippleTap)="rejectGameInvitation()"  width="28" height="28" borderRadius="15"></Button>
+</GridLayout>

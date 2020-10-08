@@ -2,7 +2,7 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "outDir": "../out-tsc/app",
-    "module": "es2015",
+    "module": "esnext",
     "types": []
   },
   "exclude": [
@@ -14,6 +14,7 @@
     "./src/main.ns.aot.ts",
     "./src/main.ns.ts",
     "./src/vendor.ts",
-    "./src/**/mobile"
+    "./src/**/mobile",
+    "./src/tests/**/*",
   ]
 }

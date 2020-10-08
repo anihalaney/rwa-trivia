@@ -1,24 +1,19 @@
-import { Component, OnInit, OnDestroy, ViewChild, ViewContainerRef, ChangeDetectionStrategy, ChangeDetectorRef, NgZone } from '@angular/core';
-import { Observable, Subscription } from 'rxjs';
-import { Store, select } from '@ngrx/store';
-import { GameActions, UserActions } from 'shared-library/core/store/actions';
-import { Category, PlayerMode, OpponentType } from 'shared-library/shared/model';
-import { AppState, appState } from '../../../store';
-import { NewGame } from './new-game';
-import { Utils } from 'shared-library/core/services';
-import { ObservableArray } from 'tns-core-modules/data/observable-array';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit, ViewChild, Inject, PLATFORM_ID, QueryList, ElementRef, ViewChildren } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { select, Store } from '@ngrx/store';
+import { RouterExtensions } from 'nativescript-angular/router';
 import { TokenModel } from 'nativescript-ui-autocomplete';
 import { RadAutoCompleteTextViewComponent } from 'nativescript-ui-autocomplete/angular';
-import { RouterExtensions } from 'nativescript-angular/router';
-import * as gamePlayActions from './../../store/actions';
-import { filter, take } from 'rxjs/operators';
 import { RadListViewComponent } from 'nativescript-ui-listview/angular';
-import * as Toast from 'nativescript-toast';
-import { Router } from '@angular/router';
-import { coreState } from 'shared-library/core/store';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
-import { ListViewEventData } from 'nativescript-ui-listview';
-import { Page } from 'tns-core-modules/ui/page/page';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
+import { Utils, WindowRef } from 'shared-library/core/services';
+import { GameActions, UserActions, TagActions } from 'shared-library/core/store/actions';
+import { Category, PlayerMode } from 'shared-library/shared/model';
+import { ObservableArray } from 'tns-core-modules/data/observable-array';
+import { Page, isIOS } from 'tns-core-modules/ui/page/page';
+import { AppState, appState } from '../../../store';
+import { NewGame } from './new-game';
+import { NavigationService } from 'shared-library/core/services/mobile';
 
 @Component({
   selector: 'new-game',
@@ -30,112 +25,103 @@ import { Page } from 'tns-core-modules/ui/page/page';
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
 
-  playerMode = 0;
+
   showSelectPlayer = false;
   showSelectCategory = false;
   showSelectTag = false;
-  dataItem;
-  categoriesObs: Observable<Category[]>;
-  categories: Category[];
   customTag: string;
-  categoryIds: number[] = [];
-  private tagItems: ObservableArray<TokenModel>;
-  filteredCategories: Category[];
-  subscriptions = [];
+  public tagItems: ObservableArray<TokenModel>;
+  private _filterFriendFunc: (item: any) => any;
+  // pagination: any;
   // This is magic variable
   // it delay complex UI show Router navigation can finish first to have smooth transition
   renderView = false;
+  challengerUserId: string;
+  actionBarTitle = 'Play as single player';
 
-  @ViewChild('autocomplete') autocomplete: RadAutoCompleteTextViewComponent;
-  @ViewChild('friendListView') listViewComponent: RadListViewComponent;
+  showModal = false;
+  showGameStartLoader = false;
+  dialogOpen;
+  searchFriend = '';
+  selectedTopFilter = 0;
+  chooseOptionsStep = 0;
+  skipNavigation = false;
+  theme: string;
 
+  @ViewChild('autocomplete', { static: false }) autocomplete: RadAutoCompleteTextViewComponent;
+  @ViewChild('friendListView', { static: false }) listViewComponent: RadListViewComponent;
+  @ViewChildren("textField", { read: false }) textField: QueryList<ElementRef>;
+  modeAvailable: boolean;
   constructor(public store: Store<AppState>,
     public gameActions: GameActions,
     public utils: Utils,
     private routerExtension: RouterExtensions,
     public userActions: UserActions,
-    private router: Router,
+    public router: Router,
+    public route: ActivatedRoute,
+    public tagActions: TagActions,
     public cd: ChangeDetectorRef,
     private page: Page,
-    private ngZone: NgZone) {
-    super(store, utils, gameActions, userActions, cd);
+    public windowRef: WindowRef,
+    @Inject(PLATFORM_ID) public platformId: Object,
+    private ngZone: NgZone,
+    private navigationService: NavigationService) {
+    super(store, utils, gameActions, userActions, windowRef, platformId, cd, route, router, tagActions);
     this.initDataItems();
+    this.modeAvailable = false;
+    this.page.actionBarHidden = true;
+    this.filterFriendFunc = (item: any) => {
+      if (!this.searchFriend || this.searchFriend === '') {
+        return true;
+      }
+      return (item && item.userId && this.userDict[item.userId] &&
+        this.userDict[item.userId].displayName.toLowerCase().search(this.searchFriend.toLowerCase()) >= 0) ? true : false;
+    };
   }
   ngOnInit() {
 
-    this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.newGameId), filter(g => g !== '')).subscribe(gameObj => {
-      if (gameObj && gameObj['gameId']) {
-        this.routerExtension.navigate(['/game-play', gameObj['gameId']], { clearHistory: true });
-        this.store.dispatch(new gamePlayActions.ResetCurrentQuestion());
-        this.cd.markForCheck();
-      }
-
-    }));
-
-    this.categoriesObs.pipe(take(1)).subscribe(categories => {
-      categories.map(category => {
-        if (this.user.categoryIds && this.user.categoryIds.length > 0) {
-          category.isSelected = this.user.categoryIds.includes(category.id);
-        } else if (this.user.lastGamePlayOption && this.user.lastGamePlayOption.categoryIds.length > 0) {
-          category.isSelected = this.user.lastGamePlayOption.categoryIds.includes(category.id);
-        } else {
-          category.isSelected = true;
+    this.userDict$ = this.store.select(appState.coreState).pipe(select(s => s.userDict));
+    this.subscriptions.push(this.userDict$.subscribe(userDict => {
+      this.userDict = userDict;
+      // Here listview is refresh in ios because it is not able to render user details.
+      // https://github.com/NativeScript/nativescript-ui-feedback/issues/753
+      if (this.listViewComponent) {
+        if (isIOS) {
+          // this.listViewComponent.listView.refresh();
         }
-        this.cd.markForCheck();
-        return category;
-      });
-      this.cd.markForCheck();
-      this.store.select(appState.coreState).pipe(select(s => s.applicationSettings), take(1)).subscribe(
-        appSettings => {
-          if (appSettings) {
-            this.applicationSettings = appSettings[0];
-            let filteredCategories = [];
-            if (this.applicationSettings) {
-              filteredCategories = this.categories.filter((category) => {
-                if (this.applicationSettings.game_play_categories.indexOf(Number(category.id)) > -1) {
-                  return category;
-                }
-              });
-              if (this.applicationSettings && this.applicationSettings.lives.enable) {
-                this.store.select(appState.coreState).pipe(select(s => s.account), take(1)).subscribe(account => {
-                  if (account) {
-                    this.life = account.lives;
-                  }
-                  this.cd.markForCheck();
-                });
-              }
-            } else {
-              filteredCategories = this.categories;
-            }
+      }
+    }));
 
-            this.filteredCategories = [...filteredCategories.filter(c => c.requiredForGamePlay),
-            ...filteredCategories.filter(c => !c.requiredForGamePlay)];
+    this.subscriptions.push(
+      this.route.params.subscribe(data => {
+        if (data && data.userid) {
+          this.challengerUserId = data.userid;
+          this.gameOptions.playerMode = 1;
+          this.gameOptions.opponentType = 1;
+          if (this.router.url.indexOf('challenge') > 0) {
+            this.gameOptions.isChallenge = true;
           }
-          this.cd.markForCheck();
-        });
-
-    });
-
-    this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.gameCreateStatus)).subscribe(gameCreateStatus => {
-      if (gameCreateStatus) {
-        this.redirectToDashboard(gameCreateStatus);
-      }
-      this.cd.markForCheck();
-    }));
-
-    this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.userFriends)).subscribe(uFriends => {
-      if (uFriends) {
-        this.uFriends = [];
-        uFriends.myFriends.map(friend => {
-          this.uFriends = [...this.uFriends, ...Object.keys(friend)];
-        });
-        this.dataItem = this.uFriends;
-        this.noFriendsStatus = false;
-      } else {
-        this.noFriendsStatus = true;
-      }
-      this.cd.markForCheck();
-    }));
+          this.chooseOptionsStep = 1;
+          this.friendUserId = data.userid;
+        }
+        if (this.router.url.indexOf('play-game-with-random-user') >= 0) {
+          this.gameOptions.playerMode = 1;
+          this.gameOptions.opponentType = 0;
+          this.chooseOptionsStep = 1;
+        }
+        if (data && data.mode) {
+          this.modeAvailable = true;
+          if (data.mode === 'Single') {
+            this.gameOptions.playerMode = 0;
+            this.actionBarTitle = 'Play as single player';
+          } else {
+            this.gameOptions.playerMode = 1;
+            this.gameOptions.opponentType = 1;
+            this.chooseOptionsStep = 0;
+            this.actionBarTitle = 'Play as two player';
+          }
+        }
+      }));
 
     // update to variable needed to do in ngZone otherwise it did not understand it
     this.page.on('loaded', () => this.ngZone.run(() => {
@@ -144,52 +130,85 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     }));
   }
 
+  get filterFriendFunc(): (item: any) => any {
+    return this._filterFriendFunc;
+  }
+
+  set filterFriendFunc(value: (item: any) => any) {
+    this._filterFriendFunc = value;
+  }
+
+  showDialog() {
+    this.dialogOpen = true;
+  }
+
+  // it does nothing but stop the tap event from propagate to background component
+  stopEventPropogation() {
+    return false;
+  }
+
+  back() {
+    if (this.chooseOptionsStep === 0 || !this.skipNavigation) {
+      this.navigationService.back();
+    } else {
+      this.chooseOptionsStep = 0;
+      this.gameOptions.opponentType = 1;
+    }
+  }
+
   ngOnDestroy() {
-    this.playerMode = undefined;
     this.showSelectPlayer = undefined;
     this.showSelectCategory = undefined;
     this.showSelectTag = undefined;
-    this.dataItem = undefined;
-    this.categoriesObs = undefined;
     this.categories = [];
     this.subscriptions = [];
     this.customTag = undefined;
-    this.categoryIds = [];
     this.tagItems = undefined;
     this.filteredCategories = [];
     this.destroy();
     this.page.off('loaded');
+    this.renderView = false;
   }
 
   addCustomTag() {
-    this.selectedTags.push(this.customTag);
+    if (this.customTag && this.customTag !== '' &&
+      this.selectedTags.filter((res) => res.toLowerCase() === this.customTag.toLowerCase()).length === 0) {
+      this.selectedTags.push(this.customTag);
+    }
     this.customTag = '';
-    this.autocomplete.autoCompleteTextView.resetAutocomplete();
+    if (this.autocomplete) {
+      this.autocomplete.autoCompleteTextView.resetAutoComplete();
+    }
+
+  }
+
+  onSearchFriendTextChange(event) {
+    this.searchFriend = event.value;
+    if (this.listViewComponent) {
+      const listView = this.listViewComponent.listView;
+      listView.filteringFunction = undefined;
+      listView.filteringFunction = this.filterFriendFunc;
+    }
+
   }
 
   startGame() {
-    this.gameOptions.tags = this.selectedTags;
+    this.showGameStartLoader = true;
+    this.gameOptions.tags = this.topTags.filter(c => c.requiredForGamePlay || c.isSelected).map(c => c.key);
     this.gameOptions.categoryIds = this.filteredCategories.filter(c => c.requiredForGamePlay || c.isSelected).map(c => c.id);
-    if (Number(this.gameOptions.playerMode) === PlayerMode.Opponent && Number(this.gameOptions.opponentType) === OpponentType.Friend
-      && !this.friendUserId) {
-      if (!this.friendUserId) {
-        this.errMsg = 'Please Select Friend';
-        Toast.makeText(this.errMsg).show();
+    if (this.validateGameOptions(true, this.gameOptions)) {
+      if (this.gameOptions.playerMode === PlayerMode.Single) {
+        delete this.gameOptions.opponentType;
       }
-      return;
+      this.startNewGame(this.gameOptions);
     }
-    if (this.applicationSettings.lives.enable && this.life === 0) {
-      this.redirectToDashboard(this.gameErrorMsg);
-      return false;
-    }
-    if (this.gameOptions.playerMode === PlayerMode.Single) {
-      delete this.gameOptions.opponentType;
-    }
-    this.startNewGame(this.gameOptions);
+
   }
 
-  selectCategory(args: ListViewEventData) {
-    const category: Category = this.filteredCategories[args.index];
+
+
+  selectCategory(args: number) {
+    const category: Category = this.filteredCategories[args];
     if (!category.requiredForGamePlay) {
       category.isSelected = !category.isSelected;
       this.filteredCategories = [... this.filteredCategories];
@@ -226,11 +245,12 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     return this.tagItems;
   }
 
-  private initDataItems() {
+  public initDataItems() {
     this.tagItems = new ObservableArray<TokenModel>();
-
-    for (let i = 0; i < this.tags.length; i++) {
-      this.tagItems.push(new TokenModel(this.tags[i], undefined));
+    if (this.tags) {
+      for (let i = 0; i < this.tags.length; i++) {
+        this.tagItems.push(new TokenModel(this.tags[i], undefined));
+      }
     }
   }
 
@@ -242,19 +262,23 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     this.customTag = args.text;
   }
 
-  selectFriendId(friendId: string) {
-    this.friendUserId = friendId;
-    this.listViewComponent.listView.refresh();
+  selectFriendIdApp(friend: any) {
+    this.friendUserId = friend.userId;
+    this.chooseOptionsStep = 1;
+    this.skipNavigation = true;
+    if (this.listViewComponent) {
+      this.listViewComponent.listView.refresh();
+    }
   }
 
   navigateToInvite() {
     this.ngOnDestroy();
-    this.router.navigate(['/user/my/app-invite-friends-dialog']);
+    this.router.navigate(['/user/my/app-invite-friends-dialog', { showSkip: false }]);
   }
 
   redirectToDashboard(msg) {
     this.router.navigate(['/dashboard']);
-    Toast.makeText(msg).show();
+    this.utils.showMessage('success', msg);
   }
 
   get categoryListHeight() {
@@ -265,5 +289,29 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     return (60 * this.selectedTags.length) + 20;
   }
 
-}
+  chooseRandomPlayer() {
+    this.gameOptions.opponentType = 0;
+    this.gameOptions.playerMode = 1;
+    this.chooseOptionsStep = 1;
+    this.friendUserId = null;
+    this.skipNavigation = true;
+  }
 
+  changePlayGameWith(playerMode = 1) {
+    this.gameOptions.playerMode = playerMode;
+    this.gameOptions.opponentType = 1;
+    this.chooseOptionsStep = 0;
+    this.friendUserId = null;
+
+    // Reset friend filter when switch game option playerMode
+    if (this.gameOptions.playerMode !== 0) {
+      this.searchFriend = '';
+    }
+
+
+  }
+
+  hideKeyboard() {
+    this.utils.hideKeyboard(this.textField);
+  }
+}

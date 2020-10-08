@@ -9,7 +9,7 @@ import * as gameplayactions from '../../store/actions';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
 import { Utils } from 'shared-library/core/services';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 
 @Component({
     selector: 'report-game',
@@ -44,9 +44,7 @@ export class ReportGameComponent implements OnInit, OnDestroy {
             this.categoryDict = categoryDict;
             this.cd.markForCheck();
         }));
-
     }
-
 
     ngOnInit() {
         this.reportQuestion = new ReportQuestion();
@@ -62,17 +60,17 @@ export class ReportGameComponent implements OnInit, OnDestroy {
 
     saveReportQuestion() {
         this.reportQuestion.gameId = this.game.gameId;
-        let reason = '';
+        const reasons: string[] = [];
 
         this.reportQuestion.created_uid = this.user.userId;
         if (this.reportQuestionForm.get('reason').value === 'other') {
-            reason = this.reportQuestionForm.get('otherReason').value;
+            reasons.push(this.reportQuestionForm.get('otherReason').value);
         } else {
-            reason = this.reportQuestionForm.get('reason').value;
+            reasons.push(this.reportQuestionForm.get('reason').value);
         }
         const info: { [key: string]: QuestionMetadata } = {};
         const questionMetadata = new QuestionMetadata();
-        questionMetadata.reason = reason;
+        questionMetadata.reasons = reasons;
 
         info[this.question.id] = { ...questionMetadata };
         this.reportQuestion.questions = info;

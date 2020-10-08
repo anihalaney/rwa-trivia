@@ -68,6 +68,24 @@ export class AccountService {
         }
     }
 
+
+    /**
+     * getAccountsWithLagInGamePlay
+     * return accounts
+     */
+    static async getAccountsWithLagInGamePlay(startTime): Promise<any> {
+        try {
+            return Utils.getValesFromFirebaseSnapshot(
+                await AccountService.accountFireStoreClient
+                    .collection(CollectionConstants.ACCOUNTS)
+                    .where(AccountConstants.LAST_GAME_PLAYED, GeneralConstants.LESS_THAN_OR_EQUAL, startTime)
+                    .where(AccountConstants.LAST_GAME_PLAYED_NOTIFICATION, GeneralConstants.DOUBLE_EQUAL, false)
+                    .get()
+            );
+        } catch (error) {
+            return Utils.throwError(error);
+        }
+    }
     /**
      * deleteAllAccounts
      * return any
@@ -90,7 +108,7 @@ export class AccountService {
      * return account
      */
     static calculateAccountStat(account: AccountAtomic, game: Game, categoryIds: Array<number>,
-        userId: string, isMigration: boolean): AccountAtomic {
+        userId: string, isMigration: boolean, tagIds: Array<string>): AccountAtomic {
 
         const score = game.stats[userId].score;
 
@@ -111,6 +129,12 @@ export class AccountService {
             account.leaderBoardStats = (account.leaderBoardStats) ? account.leaderBoardStats : {};
             account.leaderBoardStats[id] = (account.leaderBoardStats && account.leaderBoardStats[id]) ?
                 account.leaderBoardStats[id] + 1 : 1;
+        }
+
+        for (const tagId of tagIds) {
+            account.leaderBoardStats = (account.leaderBoardStats) ? account.leaderBoardStats : {};
+            account.leaderBoardStats[tagId] = (account.leaderBoardStats && account.leaderBoardStats[tagId]) ?
+                account.leaderBoardStats[tagId] + 1 : 1;
         }
 
         account[LeaderBoardConstants.LEADER_BOARD_STATS] = { ...account.leaderBoardStats };
@@ -338,6 +362,35 @@ export class AccountService {
             } else {
                 accountRef.set({ bytes: bytes, id: userId }, { merge: true });
             }
+        } catch (error) {
+            return Utils.throwError(error);
+        }
+    }
+
+    /**
+   * updateBits
+   * return account
+   */
+    static async updateBits(userId: string, bits: number): Promise<any> {
+        try {
+            const accountData = await AccountService.getAccountById(userId);
+            accountData.bits = accountData.bits ? Utils.changeFieldValue(bits) : bits;
+            await AccountService.updateAccountData(accountData);
+        } catch (error) {
+            return Utils.throwError(error);
+        }
+    }
+
+    /**
+   * updateTimeStamp
+   * return account
+   */
+  static async setLastGamePlayedStat(userId: string): Promise<any> {
+        try {
+            const accountData = await AccountService.getAccountById(userId);
+            accountData.lastGamePlayed = Utils.getUTCTimeStamp();
+            accountData.lastGamePlayedNotification = false;
+            await AccountService.updateAccountData(accountData);
         } catch (error) {
             return Utils.throwError(error);
         }

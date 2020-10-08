@@ -1,17 +1,18 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild, PLATFORM_ID, Inject } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material';
-import { Router } from '@angular/router';
-import { select, Store } from '@ngrx/store';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
+import { SwiperConfigInterface, SwiperDirective } from 'ngx-swiper-wrapper';
 import { Observable } from 'rxjs';
-import { map, take } from 'rxjs/operators';
+import { flatMap, map } from 'rxjs/operators';
 import { Utils, WindowRef } from 'shared-library/core/services';
-import { GameActions, UserActions } from 'shared-library/core/store/actions';
-import { Category, GameMode, GameOptions, OpponentType, PlayerMode } from 'shared-library/shared/model';
-import { AppState, appState } from '../../../store';
+import { GameActions, UserActions, TagActions } from 'shared-library/core/store/actions';
+import { Category, GameMode, GameOptions } from 'shared-library/shared/model';
+import { AppState } from '../../../store';
 import { NewGame } from './new-game';
-import { SwiperDirective, SwiperConfigInterface } from 'ngx-swiper-wrapper';
+
 @Component({
   selector: 'new-game',
   templateUrl: './new-game.component.html',
@@ -21,12 +22,11 @@ import { SwiperDirective, SwiperConfigInterface } from 'ngx-swiper-wrapper';
 
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
-  categories: Category[];
+
   sortedCategories: Category[];
   tags: string[];
-  subscriptions = [];
   selectedTags: string[];
-  selectedCategories = [];
+
 
   newGameForm: FormGroup;
   gameOptions: GameOptions;
@@ -35,8 +35,9 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
   filteredTags$: Observable<string[]>;
 
   friendUserId: string;
-  loaderStatus = false;
 
+
+  challengerUserId: string;
   public config: SwiperConfigInterface = {
     a11y: true,
     direction: 'horizontal',
@@ -47,7 +48,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     navigation: true,
     pagination: false
   };
-  @ViewChild(SwiperDirective) directiveRef?: SwiperDirective;
+  @ViewChild(SwiperDirective, { static: false }) directiveRef?: SwiperDirective;
 
   get categoriesFA(): FormArray {
     return this.newGameForm.get('categoriesFA') as FormArray;
@@ -55,61 +56,16 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
   constructor(private fb: FormBuilder,
     public store: Store<AppState>,
     public gameActions: GameActions,
-    private windowRef: WindowRef,
-    private router: Router,
+    public windowRef: WindowRef,
+    @Inject(PLATFORM_ID) public platformId: Object,
+    public router: Router,
+    public route: ActivatedRoute,
     public userActions: UserActions,
     public utils: Utils,
     public snackBar: MatSnackBar,
-    public cd: ChangeDetectorRef) {
-    super(store, utils, gameActions, userActions, cd);
-
-    this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.gameCreateStatus)).subscribe(gameCreateStatus => {
-      if (gameCreateStatus) {
-        this.redirectToDashboard(gameCreateStatus);
-      }
-      this.cd.markForCheck();
-    }));
-
-    this.store.select(appState.coreState).pipe(select(s => s.applicationSettings), take(1))
-      .subscribe(appSettings => {
-        if (appSettings) {
-          this.applicationSettings = appSettings[0];
-          this.selectedCategories = [];
-          let filteredCategories = [];
-          if (this.applicationSettings && this.applicationSettings.game_play_categories) {
-            filteredCategories = this.categories.filter((category) => {
-              if (this.applicationSettings.game_play_categories.indexOf(Number(category.id)) > -1) {
-                return category;
-              }
-            });
-          } else {
-            filteredCategories = this.categories;
-          }
-
-          if (this.applicationSettings && this.applicationSettings.lives.enable) {
-            this.store.select(appState.coreState).pipe(select(s => s.account), take(1)).subscribe(account => {
-              if (account) {
-                this.life = account.lives;
-              }
-              this.cd.markForCheck();
-            });
-          }
-
-          const sortedCategories = [...filteredCategories.filter(c => c.requiredForGamePlay),
-          ...filteredCategories.filter(c => !c.requiredForGamePlay)];
-
-          this.sortedCategories = sortedCategories;
-
-          sortedCategories.map(category => {
-            category.isCategorySelected = this.isCategorySelected(category.id, category.requiredForGamePlay);
-            if (this.isCategorySelected(category.id, category.requiredForGamePlay)) {
-              this.selectedCategories.push(category.id);
-            }
-          });
-          this.cd.markForCheck();
-          // this.cd.detectChanges();
-        }
-      });
+    public cd: ChangeDetectorRef,
+    public tagActions: TagActions) {
+    super(store, utils, gameActions, userActions, windowRef, platformId, cd, route, router, tagActions);
   }
 
   ngOnInit() {
@@ -117,40 +73,51 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     this.gameOptions = new GameOptions();
 
     this.newGameForm = this.createForm(this.gameOptions);
-
     const playerModeControl = this.newGameForm.get('playerMode');
-    playerModeControl.setValue('0');
     const opponentTypeControl = this.newGameForm.get('opponentType');
+    this.subscriptions.push(
+      this.route.params.pipe(
+        map(params => {
+          this.challengerUserId = params.userid;
+          playerModeControl.setValue((this.challengerUserId || this.router.url.indexOf('play-game-with-random-user') >= 0 ) ? '1' : '0');
+          const isChallengeControl = this.newGameForm.get('isChallenge');
+          isChallengeControl.setValue(this.challengerUserId && this.router.url.indexOf('challenge') >= 0  ? true : false);
+          if (this.challengerUserId) {
+            opponentTypeControl.setValue('1');
+          } else if (params.mode && params.mode === 'Two') {
+            playerModeControl.setValue('1');
+            opponentTypeControl.setValue('0');
+          } else if (params.mode && params.mode === 'Single') {
+            playerModeControl.setValue('0');
+          }
 
-    this.subscriptions.push(playerModeControl.valueChanges.subscribe(v => {
-      if (v === '1') {
-        opponentTypeControl.enable();
-        opponentTypeControl.setValue('0');
-      } else {
-        opponentTypeControl.disable();
-        opponentTypeControl.reset();
-      }
-    }));
+          if (this.router.url.indexOf('play-game-with-random-user') >= 0) {
+            opponentTypeControl.setValue('0');
+          }
 
-    this.filteredTags$ = this.newGameForm.get('tagControl').valueChanges
-      .pipe(map(val => val.length > 0 ? this.filter(val) : []));
+          if (this.challengerUserId) {
+            this.selectFriendId(this.challengerUserId);
+          }
+
+        }),
+        flatMap(() => playerModeControl.valueChanges)
+      ).subscribe(v => {
+        if (v === '1') {
+          opponentTypeControl.enable();
+          opponentTypeControl.setValue('0');
+        } else {
+          opponentTypeControl.disable();
+          opponentTypeControl.reset();
+        }
+
+      })
+    );
+
   }
 
-  autoOptionClick(event) {
-    // Auto complete doesn't seem to have an event on selection of an entry
-    // tap into the change event of the input box and if the tag matches any entry in the tag list, then add to the selected tag list
-    // else wait for the user to click "Add" if they still want to add tags that are not on the list
 
-    const tag: string = event.srcElement.value;
-    const found = this.tags.find(t => t.toLowerCase() === tag.toLowerCase());
-
-    if (found) {
-      this.addTagToSelectedList(found);
-      this.newGameForm.get('tagControl').setValue('');
-    }
-  }
   addTagToSelectedList(tag: string) {
-    if (tag && tag !== '') {
+    if (tag && tag !== '' && this.selectedTags.filter((res) => res.toLowerCase() === tag.toLowerCase()).length === 0) {
       this.selectedTags.push(tag);
     }
   }
@@ -176,13 +143,14 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     }
 
     const tagsFA = new FormArray(fcs);
-
     const form: FormGroup = this.fb.group({
       playerMode: [gameOptions.playerMode, Validators.required],
       opponentType: [gameOptions.opponentType],
       gameMode: [gameOptions.gameMode, Validators.required],
       tagControl: '',
-      tagsArray: tagsFA
+      tagsArray: tagsFA,
+      isChallenge: gameOptions.isChallenge,
+      friendUserId: ''
     } //, {validator: questionFormValidator}
     );
     return form;
@@ -192,6 +160,8 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
   selectFriendId(friendId: string) {
     this.friendUserId = friendId;
     this.errMsg = undefined;
+    const friendUserIdControl = this.newGameForm.get('friendUserId');
+    friendUserIdControl.setValue(friendId);
   }
 
   selectCategory(event: any, categoryId: number): void {
@@ -203,7 +173,6 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
   }
 
   onSubmit() {
-    // validations
     this.newGameForm.updateValueAndValidity();
     if (this.newGameForm.invalid) {
       return;
@@ -213,21 +182,8 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
 
     const gameOptions: GameOptions = this.getGameOptionsFromFormValue(this.newGameForm.value);
 
-    if (Number(gameOptions.playerMode) === PlayerMode.Opponent && Number(gameOptions.opponentType) === OpponentType.Friend
-      && !this.friendUserId) {
-      if (!this.friendUserId) {
-        this.errMsg = 'Please Select Friend';
-      }
-      this.loaderStatus = false;
-      if (this.windowRef && this.windowRef.nativeWindow && this.windowRef.nativeWindow.scrollTo) {
-        this.windowRef.nativeWindow.scrollTo(0, 0);
-      }
-      return;
-    }
-    // if (this.applicationSettings.lives.enable && this.life === 0) {
-    //   this.redirectToDashboard(this.gameErrorMsg);
-    //   return false;
-    // }
+    this.validateGameOptions(false, gameOptions);
+
     this.startNewGame(gameOptions);
   }
 
@@ -240,29 +196,15 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     gameOptions.opponentType = (formValue.opponentType) ? formValue.opponentType : null;
     gameOptions.categoryIds = this.selectedCategories;
     gameOptions.gameMode = GameMode.Normal;
-    gameOptions.tags = this.selectedTags;
+    gameOptions.tags = this.topTags ? this.topTags.filter(c => c.requiredForGamePlay || c.isSelected).map(c => c.key) : [];
+    gameOptions.isChallenge = formValue.isChallenge;
 
     return gameOptions;
   }
 
-  redirectToDashboard(msg) {
-    this.router.navigate(['/dashboard']);
-    this.snackBar.open(String(msg), '', {
-      duration: 2000,
-    });
-  }
+
   ngOnDestroy() {
   }
 
-  isCategorySelected(categoryId: number, requiredForGamePlay: boolean) {
-    if (requiredForGamePlay) {
-      return true;
-    }
-    if (this.user.categoryIds && this.user.categoryIds.length > 0) {
-      return this.user.categoryIds.includes(categoryId);
-    } else if (this.user.lastGamePlayOption && this.user.lastGamePlayOption.categoryIds.length > 0) {
-      return this.user.lastGamePlayOption.categoryIds.includes(categoryId);
-    }
-    return true;
-  }
+
 }

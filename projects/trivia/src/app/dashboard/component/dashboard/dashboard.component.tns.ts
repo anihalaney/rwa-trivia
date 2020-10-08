@@ -1,20 +1,18 @@
-import { Component, OnInit, Inject, NgZone, OnDestroy, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
-import { Store, select } from '@ngrx/store';
-import { PLATFORM_ID } from '@angular/core';
-import { QuestionActions, GameActions, UserActions } from 'shared-library/core/store/actions';
-import { PlayerMode, GameStatus } from 'shared-library/shared/model';
-import { WindowRef, Utils } from 'shared-library/core/services';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, NgZone, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
+import { select, Store } from '@ngrx/store';
+import { RouterExtensions } from 'nativescript-angular/router';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
+import { Utils, WindowRef } from 'shared-library/core/services';
+import { GameActions, QuestionActions, UserActions } from 'shared-library/core/store/actions';
+import { GameStatus } from 'shared-library/shared/model';
+import { Page } from 'tns-core-modules/ui/page/page';
 import { AppState, appState } from '../../../store';
 import { Dashboard } from './dashboard';
-import { RouterExtensions } from 'nativescript-angular/router';
-import { User, Game } from 'shared-library/shared/model';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
-import { Page } from 'tns-core-modules/ui/page/page';
 
 @Component({
   selector: 'dashboard',
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.scss', './dashboard.scss'],
+  styleUrls: ['./dashboard.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
@@ -22,11 +20,9 @@ import { Page } from 'tns-core-modules/ui/page/page';
 export class DashboardComponent extends Dashboard implements OnInit, OnDestroy {
 
   gameStatus: any;
-  subscriptions = [];
   // This is magic variable
   // it delay complex UI show Router navigation can finish first to have smooth transition
   renderView = false;
-
 
   constructor(public store: Store<AppState>,
     questionActions: QuestionActions,
@@ -49,56 +45,56 @@ export class DashboardComponent extends Dashboard implements OnInit, OnDestroy {
       utils,
       cd);
     this.gameStatus = GameStatus;
+    this.page.actionBarHidden = true;
 
   }
 
   ngOnInit() {
-
+    // update to variable needed to do in ngZone otherwise it did not understand it
+    this.page.on('loaded', () => { this.renderView = true; this.cd.markForCheck(); });
     this.userDict$ = this.store.select(appState.coreState).pipe(select(s => s.userDict));
     this.subscriptions.push(this.userDict$.subscribe(userDict => { this.userDict = userDict; this.cd.markForCheck(); }));
-    // update to variable needed to do in ngZone otherwise it did not understand it
-    this.page.on('loaded', () => this.ngZone.run(() => {
-      this.renderView = true;
-      this.cd.markForCheck();
-    }
-    ));
   }
 
-  startNewGame() {
-    if (this.applicationSettings && this.applicationSettings.lives.enable) {
-      if (this.account.lives > 0) {
-        this.routerExtension.navigate(['/game-play'], { clearHistory: true });
+  startNewGame(mode: string) {
+   if (this.applicationSettings && this.applicationSettings.lives.enable) {
+      if (this.account && this.account.lives > 0) {
+        this.routerExtension.navigate(['/game-play/game-options', mode], { clearHistory: true });
+      } else if (!this.account) {
+        this.routerExtension.navigate(['/game-play/game-options', mode], { clearHistory: true });
       }
     } else {
-      this.routerExtension.navigate(['/game-play'], { clearHistory: true });
+      this.routerExtension.navigate(['/game-play/game-options', mode]);
     }
 
   }
 
-  filterGame(game: Game): boolean {
-    return game.GameStatus === GameStatus.AVAILABLE_FOR_OPPONENT ||
-      game.GameStatus === GameStatus.JOINED_GAME ||
-      game.GameStatus === GameStatus.WAITING_FOR_FRIEND_INVITATION_ACCEPTANCE
-      || game.GameStatus === GameStatus.WAITING_FOR_RANDOM_PLAYER_INVITATION_ACCEPTANCE;
+  navigateToMyQuestion() {
+    this.routerExtension.navigate(['/user/my/questions/add']);
   }
 
-
-  filterSinglePlayerGame(game: Game): boolean {
-    return Number(game.gameOptions.playerMode) === Number(PlayerMode.Single) && game.playerIds.length === 1;
+  gotToNotification() {
+    this.routerExtension.navigate(['/notification']);
   }
 
-  filterTwoPlayerGame = (game: Game): boolean => {
-    return Number(game.gameOptions.playerMode) === Number(PlayerMode.Opponent) &&
-      (game.nextTurnPlayerId === this.user.userId);
+  navigateToProfileSettings() {
+    if (this.user && this.user !== null) {
+       this.routerExtension.navigate(['/user/my/profile', this.user.userId]);
+    }
   }
 
-  filterTwoPlayerWaitNextQGame = (game: Game): boolean => {
-    return game.GameStatus === GameStatus.WAITING_FOR_NEXT_Q && game.nextTurnPlayerId !== this.user.userId;
+  navigateToCategories() {
+    if (this.user && this.user !== null) {
+      this.routerExtension.navigate(['/update-category-tag']);
+      // this.routerExtension.navigate(['/user/my/profile', this.user.userId]);
+    } else {
+      this.routerExtension.navigate(['/login'], { clearHistory: true });
+    }
   }
 
   ngOnDestroy(): void {
     this.page.off('loaded');
+    this.renderView = false;
+    this.cd.markForCheck();
   }
 }
-
-

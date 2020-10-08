@@ -1,0 +1,45 @@
+<StackLayout class="gameplay {{theme}}-theme">
+  <StackLayout margin="10">
+    <render-question [question]="question" [theme]="theme"></render-question>
+  </StackLayout>
+
+  <FlexboxLayout *ngIf="question && question.tags" margin="0 10" flexWrap="wrap">
+       <Label *ngIf="categoryName" [style.backgroundColor]="theme === 'dark' ? '#405177':'#e2e2e2'"
+        [style.color]="theme === 'dark' ? '#a5a5a5' : '#808080'" borderRadius="22" margin="2.5 2.5"
+        [text]="categoryName" padding="5 10" textWrap="true"></Label> 
+      <Label  *ngFor="let tags of question.tags" [style.backgroundColor]="theme === 'dark' ? '#405177':'#e2e2e2'"
+        [style.color]="theme === 'dark' ? '#a5a5a5' : '#808080'" borderRadius="22" margin="2.5 2.5" [text]="tags"
+        padding="5 10" textWrap="true"></Label>
+    <GridLayout marginTop="15">
+      <Label [style.color]="theme === 'dark' ? '#a5a5a5' : '#808080'" text="Choose any one" textWrap="true"></Label>
+    </GridLayout>
+  </FlexboxLayout>
+
+  <StackLayout *ngIf="question" iosOverflowSafeArea="false">
+    <StackLayout iosOverflowSafeArea="false" class="question-answered SF-Pro-Medium" margin="10"
+      *ngFor="let answer of question.answers" [class.players-answer]="answeredText === answer.answerText"
+      [class.wrong]="answeredText === answer.answerText && correctAnswerText !== answer.answerText"
+      [class.right]="answeredText !== '' && correctAnswerText === answer.answerText" [isUserInteractionEnabled]="doPlay"
+      borderRadius="5" stlRippleEffect (rippleTap)="rippleTap(answer)"
+      [style.backgroundColor]="
+      (answeredText === answer.answerText && correctAnswerText !== answer.answerText && theme === 'dark') ? '#d54937' : 
+      (answeredText === answer.answerText && correctAnswerText !== answer.answerText && theme === 'light') ? '#d54937' : 'transparent'"
+      [style.backgroundColor]="
+      (answeredText !== '' && correctAnswerText === answer.answerText && theme === 'dark') ? '#71b02f' :
+      (answeredText !== '' && correctAnswerText === answer.answerText && theme === 'light') ? '#71b02f' : 'transparent'">
+
+      <render-answer [answer]="answer" [isGameAnswer]="true"
+        [isWrong]="answeredText === answer.answerText && correctAnswerText !== answer.answerText"
+        [isRight]="(answeredText != '') && (correctAnswerText == answer.answerText)" [doPlay]="doPlay"
+        [isUserInteractionEnabled]="doPlay" [theme]="theme"></render-answer>
+    </StackLayout>
+  </StackLayout>
+  <StackLayout>
+    <StackLayout margin="0 10">
+      <author *ngIf="question" [isGamePlay]=false [userId]="question.created_uid" [theme]="theme"></author>
+    </StackLayout>
+    <StackLayout orientation="horizontal" horizontalAlignment="center">
+      <user-reaction *ngIf="answeredText!==''" [user]='user' [question]='question' [theme]="theme"></user-reaction>
+    </StackLayout>
+  </StackLayout>
+</StackLayout>

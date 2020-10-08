@@ -1,4 +1,4 @@
-import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
+import { BrowserModule, BrowserTransferStateModule, Title } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule, Inject, NgZone } from '@angular/core';
 
@@ -18,8 +18,7 @@ import { CookieLawModule } from 'angular2-cookie-law';
 import {
   AppComponent,
   SideNavComponent, HeaderComponent, FooterComponent, InvitationRedirectionComponent,
-  PrivacyPolicyComponent, UserStatsCardComponent, RecentGameCardComponent, RecentGamesComponent,
-  ProfileCardComponent, AchievementsComponent,
+  PrivacyPolicyComponent, UserStatsCardComponent, ProfileCardComponent, AchievementsComponent
 } from './components';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from 'shared-library/environments/environment';
@@ -27,6 +26,7 @@ import { SwUpdate } from '@angular/service-worker';
 import { PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { interval } from 'rxjs';
+import { WindowRef } from 'shared-library/core/services';
 
 @NgModule({
   declarations: [
@@ -37,8 +37,6 @@ import { interval } from 'rxjs';
     InvitationRedirectionComponent,
     PrivacyPolicyComponent,
     ProfileCardComponent,
-    RecentGamesComponent,
-    RecentGameCardComponent,
     UserStatsCardComponent,
     AchievementsComponent
   ],
@@ -65,20 +63,20 @@ import { interval } from 'rxjs';
     ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [
-    { provide: RouterStateSerializer, useClass: CustomSerializer }
+    { provide: RouterStateSerializer, useClass: CustomSerializer }, Title
   ],
   bootstrap: [AppComponent]
 })
 export class AppModule {
 
-  constructor(updates: SwUpdate, @Inject(PLATFORM_ID) private platformId: Object, ngZone: NgZone) {
+  constructor(updates: SwUpdate, @Inject(PLATFORM_ID) private platformId: Object, ngZone: NgZone, private windowRef: WindowRef) {
 
     if (isPlatformBrowser(this.platformId) && environment.production) {
 
       if (updates.isEnabled) {
         updates.available.subscribe(() => {
           alert('New version available. Load New Version?');
-          window.location.reload();
+          windowRef.nativeWindow.location.reload();
         });
       }
       ngZone.runOutsideAngular(() => {

@@ -1,37 +1,40 @@
-<ns-action-bar title="Feedback" class="Roboto-Regular" showAdd="true"></ns-action-bar>
-<StackLayout>
-  <ScrollView>
-    <StackLayout  (tap)="hideKeyboard()"  [formGroup]="feedbackForm" class="profile-settings Roboto-Regular">
-      <CardView iosOverflowSafeArea="false" margin="5 10 5 10" backgroundColor="white">
-        <StackLayout>
-            <StackLayout padding="10" class="input-field">
-                <Label *ngIf="user && user.email"  class="label" text="Email: {{user.email}}" padding="10" fontSize="16" textWrap="true" fontWeight="400" color="#616161"></Label>
-                <TextField *ngIf="!(user && user.email)" #textField hint="Email" formControlName="email" class="input"></TextField>
+<ns-action-bar title="Feedback" class="SF-Pro-Regular" showAdd="true"></ns-action-bar>
+
+<GridLayout rows="*" columns="*">
+
+  <AbsoluteLayout row="0"  backgroundColor="rgb(249,249,249)"   android:rotate="155" ios:rotate="152"
+       translateX="-120"  translateY="20"  height="80%"  borderRadius="15">
+  </AbsoluteLayout>
+
+  <ScrollView row="0" *ngIf="renderView">
+      <PreviousNextView> 
+        <StackLayout (tap)="hideKeyboard()" [formGroup]="feedbackForm" class="feedbackForm profile-settings SF-Pro-Regular">
+              <StackLayout padding="5 0" class="input-field">
+                <TextField  #textField hint="Email" formControlName="email" class="text-field" [editable]="!(user && user.email)">
+                </TextField>
                 <StackLayout *ngIf="!feedbackForm.controls.email.pristine && feedbackForm.controls.email.errors">
-                    <Label *ngIf="feedbackForm.controls.email.errors.required" class="error" textWrap="true"
-                        text="Email is required!"></Label>
-                    <Label marginTop="10"  *ngIf="feedbackForm.controls.email.hasError('pattern')" class="error" textWrap="true"
-                        text="Invalid Email!"></Label>
+                  <Label *ngIf="feedbackForm.controls.email.errors.required" class="error" textWrap="true"
+                    text="Email is required!"></Label>
+                  <Label  *ngIf="feedbackForm.controls.email.hasError('pattern')" class="error"
+                    textWrap="true" text="Invalid Email!"></Label>
                 </StackLayout>
-            </StackLayout>
-            <StackLayout borderBottomWidth="1" borderColor="#e5e5e5" padding="10">
-              <TextView  #textField  hint="Feedback" formControlName="feedback" class="input" height="150"
-              borderWidth="1" borderRadius="3" borderColor="#a3a3a3" padding="10"></TextView>
+              </StackLayout>
+              <StackLayout padding="5 0">
+                <TextView #textField hint="Feedback" formControlName="feedback" class="text-field" height="150"
+                  padding="15"></TextView>
                 <StackLayout *ngIf="!feedbackForm.controls.feedback.pristine && feedbackForm.controls.feedback.errors">
-                    <Label *ngIf="feedbackForm.controls.feedback.errors.required" class="error" textWrap="true"
-                        text="Feedback is required !"></Label>
-                    <Label *ngIf="feedbackForm.controls.feedback.errors.minlength" class="error" textWrap="true"
-                        text="{{feedbacklength.min}} characters are required !"></Label>
-                    <Label *ngIf="feedbackForm.controls.feedback.errors.maxlength" class="error" textWrap="true"
-                        text="{{feedbacklength.max}} characters are allowed !"></Label>
+                  <Label *ngIf="feedbackForm.controls.feedback.errors.required" class="error" textWrap="true"
+                    text="Feedback is required !"></Label>
+                  <Label *ngIf="feedbackForm.controls.feedback.errors.minlength" class="error" textWrap="true"
+                    text="{{feedbacklength.min}} characters are required !"></Label>
+                  <Label *ngIf="feedbackForm.controls.feedback.errors.maxlength" class="error" textWrap="true"
+                    text="{{feedbacklength.max}} characters are allowed !"></Label>
                 </StackLayout>
+              </StackLayout>
+            <StackLayout class="button-section" margin="15" >
+              <Button stlRippleEffect text="SEND"  (rippleTap)="onSubmit()" class="SF-Pro-Medium" margin="10"></Button>
             </StackLayout>
-        </StackLayout>
-    </CardView>
-      <StackLayout class="profile-buttons">
-        <Button stlRippleEffect text="SEND" backgroundColor="{{feedbackForm.valid ? '#71b02f' : 'silver' }}" (rippleTap)="onSubmit()" [disabled]="feedbackForm.invalid" class="Roboto-Medium" backgroundColor="#71b02f" color="#ffffff"
-          padding="20 0"></Button>
-      </StackLayout>
-    </StackLayout>
+          </StackLayout>
+    </PreviousNextView>
   </ScrollView>
-</StackLayout>
+</GridLayout>

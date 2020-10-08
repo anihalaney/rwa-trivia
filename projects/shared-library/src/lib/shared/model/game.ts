@@ -9,17 +9,29 @@ export class PlayerQnA {
   isReported?: boolean;
   addedOn?: number;
   round?: number;
+  badge?: { name: string, won: boolean};
+  categoryId?: number[];
 }
 
 export class Stat {
   score: number;
   avgAnsTime: number;
   consecutiveCorrectAnswers: number;
+  badge: string[];
   constructor() {
     this.score = 0;
     this.avgAnsTime = 0;
     this.consecutiveCorrectAnswers = 0;
+    this.badge = [];
   }
+}
+
+export class GamePlayedWith {
+  date: number;
+  created_uid: string;
+  gamePlayed: number;
+  losses: number;
+  wins: number;
 }
 
 export class Game {
@@ -36,10 +48,12 @@ export class Game {
   public turnAt: number;
   public gameOverAt: number;
   public round: number;
+  public reminder32Min: boolean;
+  public reminder8Hr: boolean;
 
   constructor(gameOptions: GameOptions, player1UUId: string, gameId?: string, playerQnAs?: any, gameOver?: boolean,
     nextTurnPlayerId?: string, player2UUId?: string, winnerPlayerId?: string, gameStatus?: string, createdAt?: number, turnAt?: number,
-    gameOverAt?: number, round?: number) {
+    gameOverAt?: number, round?: number, reminder32Min?: boolean, reminder8Hr?: boolean) {
     //defaults
     this._gameOptions = gameOptions;
     this._playerIds = [player1UUId];
@@ -61,6 +75,9 @@ export class Game {
         (qna['playerAnswerInSeconds'] !== undefined) ? playerOnA.playerAnswerInSeconds = qna.playerAnswerInSeconds : '';
         (qna['answerCorrect'] !== undefined) ? playerOnA.answerCorrect = qna.answerCorrect : '';
         (qna['round'] !== undefined) ? playerOnA.round = qna.round : '';
+        (qna['categoryId'] !== undefined) ? playerOnA.categoryId = qna.categoryId : '';
+        (qna['badge'] !== undefined) ? playerOnA.badge = qna.badge : '';
+        // console.log(playerOnA.categoryId, '=== ');
         playerOnA.isReported = (qna.isReported) ? true : false;
         this.playerQnAs.push({ ...playerOnA });
       }
@@ -87,6 +104,19 @@ export class Game {
 
     if (gameOverAt) {
       this.gameOverAt = gameOverAt;
+    }
+
+    if (reminder32Min) {
+      this.reminder32Min = reminder32Min;
+    } else {
+      this.reminder32Min = false;
+    }
+
+
+    if (reminder8Hr) {
+      this.reminder8Hr = reminder8Hr;
+    } else {
+      this.reminder8Hr = false;
     }
 
     this.stats = {};
@@ -142,6 +172,7 @@ export class Game {
       this.stats[playerId].consecutiveCorrectAnswers : 0;
     const stat: Stat = new Stat();
     stat.score = this.playerQnAs.filter((p) => p.answerCorrect && p.playerId === playerId).length;
+    stat.badge = this.getEarnedBadges(playerId);
     let totalQTime = 0;
     this.playerQnAs.map((playerQn) => {
       if (playerQn.playerId === playerId) {
@@ -157,26 +188,39 @@ export class Game {
   decideWinner() {
     const playerId_0 = this.playerIds[0];
     if (Number(this.gameOptions.playerMode) === PlayerMode.Opponent && this.playerIds.length > 1) {
-      if (this.round < 16) {
+      if (this.round <= 16) {
         const playerId_1 = this.playerIds[1];
-        if ((this.stats[playerId_0].score > this.stats[playerId_1].score)) {
+        const player_0_score = this.gameOptions.isBadgeWithCategory ? this.stats[playerId_0].badge.length :  this.stats[playerId_0].score;
+        const player_1_score = this.gameOptions.isBadgeWithCategory ? this.stats[playerId_1].badge.length :  this.stats[playerId_1].score;
+        if ((player_0_score >= 5)) {
           this.winnerPlayerId = playerId_0;
-        } else if ((this.stats[playerId_0].score < this.stats[playerId_1].score)) {
+        } else if (player_1_score >= 5) {
           this.winnerPlayerId = playerId_1;
         }
       }
     } else {
-      if (this.stats[playerId_0].score >= 5) {
+      const player_0_score = this.gameOptions.isBadgeWithCategory ? this.stats[playerId_0].badge.length : this.stats[playerId_0].score;
+      if (player_0_score >= 5) {
         this.winnerPlayerId = playerId_0;
       }
     }
+  }
+
+  getEarnedBadges(playerId: string) {
+    return this.playerQnAs.map(data => data.badge &&
+      data.badge.won && data.playerId ===  playerId ?  data.badge.name : '').filter(data => data !== '');
   }
 
   decideNextTurn(playerQnA: PlayerQnA, userId: string) {
     if (Number(this.gameOptions.playerMode) === PlayerMode.Opponent) {
       const otherPlayerUserId = this.playerIds.filter(playerId => playerId !== userId)[0];
       let consecutiveCorrectAnswers = (this.stats[userId].consecutiveCorrectAnswers) ? this.stats[userId].consecutiveCorrectAnswers : 0;
-      consecutiveCorrectAnswers = (!playerQnA.answerCorrect) ? 0 : consecutiveCorrectAnswers + 1;
+      if (this.gameOptions.isBadgeWithCategory) {
+        consecutiveCorrectAnswers = (!playerQnA.answerCorrect) ? 0 : (playerQnA.badge ? (consecutiveCorrectAnswers + 1) : consecutiveCorrectAnswers);
+      } else {
+        consecutiveCorrectAnswers = (!playerQnA.answerCorrect) ? 0 : consecutiveCorrectAnswers + 1;
+      }
+
 
       if (Number(this.gameOptions.opponentType) === OpponentType.Random) {
         if (this.GameStatus === GameStatus.STARTED && (!playerQnA.answerCorrect || consecutiveCorrectAnswers === 3)) {
@@ -250,7 +294,9 @@ export class Game {
       'playerQnAs': this.playerQnAs,
       'nextTurnPlayerId': (this.nextTurnPlayerId) ? this.nextTurnPlayerId : '',
       'GameStatus': (this.GameStatus) ? this.GameStatus : GameStatus.STARTED,
-      'round': this.round
+      'round': this.round,
+      'reminder32Min': this.reminder32Min,
+      'reminder8Hr': this.reminder8Hr
     };
 
     if (this.winnerPlayerId) {
@@ -266,6 +312,14 @@ export class Game {
 
     if (this.turnAt) {
       dbModel['turnAt'] = this.turnAt;
+    }
+
+    if (this.reminder32Min) {
+      dbModel['reminder32Min'] = this.reminder32Min;
+    }
+
+    if (this.reminder8Hr) {
+      dbModel['reminder8Hr'] = this.reminder8Hr;
     }
 
     if (this.gameOverAt) {
@@ -290,7 +344,8 @@ export class Game {
     const game: Game = new Game(dbModel['gameOptions'], dbModel['playerIds'][0], dbModel['id'],
       dbModel['playerQnAs'], dbModel['gameOver'], dbModel['nextTurnPlayerId'],
       (dbModel['playerIds'].length > 1) ? dbModel['playerIds'][1] : undefined, dbModel['winnerPlayerId'],
-      dbModel['GameStatus'], dbModel['createdAt'], dbModel['turnAt'],dbModel['gameOverAt'],  dbModel['round']);
+      dbModel['GameStatus'], dbModel['createdAt'], dbModel['turnAt'],dbModel['gameOverAt'],  dbModel['round'], dbModel['reminder32Min'],
+      dbModel['reminder8Hr']);
     if (dbModel['playerIds'].length > 1) {
       game.addPlayer(dbModel['playerIds'][1]);  //2 players
     }

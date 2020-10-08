@@ -1,0 +1,34 @@
+<ns-action-bar title="Choose your desired topic" class="SF-Pro-Regular" hideMenu="true"></ns-action-bar>
+<GridLayout rows="*,auto" columns="*" *ngIf="renderView">
+  <ScrollView>
+    <GridLayout rows="auto,auto,auto,auto,auto,auto" columns="*" row="0" class="profile-settings SF-Pro-Regular">
+      
+      <Label row="0" text="Choose your desired topic" margin="15 15 0 15" fontSize="30" fontWeight="bold" color="#2f3f6b" textWrap="true"></Label>
+
+      <Label row="1" padding="10 15 15 15"
+        text="Select atleast five topics of your choice, this will help us show contents based on your topics"
+        fontSize="20" textWrap="true"></Label>
+
+      <Label row="2" fontSize="16" padding="0 15 15 15" class="font-weight-bold" text="Popular topics" textWrap="true"></Label>
+
+        <FlexboxLayout row="3" flexWrap="wrap" margin="0 10 0 10" horizontalAlignment="center">
+            <FlexboxLayout *ngFor="let item of categories, let i = index" stlRippleEffect flexDirection="column" justifyContent="center" alignItems="center"
+              (rippleTap)="selectTopic(i)"
+              [ngStyle]="{background: (item.requiredForGamePlay ? '#48b24e' : '#fafafa'), color : (item.requiredForGamePlay ? '#fff' : '#9b92e7') }"
+              borderRadius="5" class="stats-box border">
+              <Label [text]="item.categoryName" padding="15 10" ></Label>
+            </FlexboxLayout>
+            <FlexboxLayout *ngFor="let item of tags, let i = index" class="stats-box border" stlRippleEffect flexDirection="column" justifyContent="center" alignItems="center"
+            (rippleTap)="selectTags(i)"
+            [ngStyle]="{background: (item.requiredForGamePlay ? '#48b24e' : '#fafafa'), color : (item.requiredForGamePlay ? '#fff' : '#9b92e7') }"
+            borderRadius="5">
+            <Label [text]="item.key" padding="15 10" ></Label>
+          </FlexboxLayout>
+        </FlexboxLayout>
+    </GridLayout>
+  </ScrollView>
+  <GridLayout rows="auto" row="1" margin="15">
+    <Button row="0" [isEnabled]="(selectedCategories + selectedTags) >= 5" (tap)="continueToFirstQuestion()"
+      text="{{selectedCategories + selectedTags}}/{{categories.length + tags.length}}" borderRadius="5" height="40"></Button>
+  </GridLayout>
+</GridLayout>

@@ -3,6 +3,8 @@ node_modules/
 platforms/
 hooks/
 projects/trivia/src/**/*.js
+ng-quill-tex-0.0.1.tgz
+.migration_backup/
 
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
@@ -33,7 +35,8 @@ projects/trivia/src/**/*.js
 # misc
 /.sass-cache
 /connect.lock
-/coverage/*
+/test/coverage
+/test/result
 /libpeerconnection.log
 npm-debug.log
 yarn-error.log
@@ -71,3 +74,5 @@ certificates/*
 release/*
 /**/*.apk
 /**/*.ipa
+
+ng-quill-tex-0.0.1.tgz

@@ -1,0 +1,8 @@
+<!--  If component is called from other than profile page-->
+<TextField *ngIf="!isProfilePage" class="display-name text-field bottom-border" [disabled]="disabled" [hint]="hint" [(ngModel)]="myValue" (ngModelChange)="onTextChange($event)">
+</TextField>
+
+<!--  If component is called from profile page-->
+<TextField  #textField *ngIf="isProfilePage" [hint]="hint" width="200" #textField   [(ngModel)]="myValue" (ngModelChange)="onTextChange($event)"></TextField>
+
+

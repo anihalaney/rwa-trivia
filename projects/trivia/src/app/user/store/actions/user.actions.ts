@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import { User, Question } from 'shared-library/shared/model';
+import { User, Question, UserStatus } from 'shared-library/shared/model';
 
 export enum UserActionTypes {
 
@@ -10,7 +10,6 @@ export enum UserActionTypes {
     ADD_QUESTION = '[User] AddQuestions',
     ADD_QUESTION_SUCCESS = '[User] AddQuestionsSuccess',
     UPDATE_USER_SUCCESS = '[User] UpdateUserSuccess',
-    ADD_USER_INVITATION = '[User] AddUserInvitation',
 }
 
 // Load User Published Question by userId
@@ -48,7 +47,6 @@ export class UpdateUserSuccess implements Action {
     readonly type = UserActionTypes.UPDATE_USER_SUCCESS;
     constructor(public payload: User) { }
 }
-
 
 export type UserActions
     = LoadUserPublishedQuestions

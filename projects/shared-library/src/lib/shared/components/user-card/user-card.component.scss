@@ -1,0 +1,193 @@
+.textcenter.clearfix .yourimg {
+  margin: 0 auto 16px;
+}
+.innerli .yourimg {
+  position: relative;
+  width: 94%;
+  max-width: 70px;
+  border-radius: 50%;
+  height: auto; /*box-shadow: 0 3px 7px rgba(0,0,0,0.25);*/
+  margin-bottom: 16px;
+  border: 1px solid;
+  padding: 2px;
+}
+.yourimg img {
+  display: block;
+  width: 70px;
+  height: 60px;
+  border-radius: 50%;
+}
+.text-style {
+  font-family: "hindmedium";
+  font-size: 16px;
+}
+
+.author {
+  display: flex;
+  & img {
+    border-radius: 50%;
+    max-width: 30px;
+    margin-left: 2%;
+    border: 1px solid;
+    padding: 2px;
+    vertical-align: middle;
+  }
+}
+.alignment-left {
+  margin-left: 1%;
+}
+.text-alignment {
+  vertical-align: middle;
+  line-height: 30px;
+}
+.truncate {
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  max-width: 50%;
+}
+
+.recent-completed {
+  .yourimg {
+    width: 94%;
+    position: relative;
+    max-width: 50px;
+    border-radius: 50%;
+    height: auto;
+    margin: auto; /*box-shadow: 0 3px 7px rgba(0,0,0,0.25);*/
+    margin-bottom: 5px;
+    border: 1px solid;
+    padding: 2px;
+  }
+  .yourimg img {
+    display: block;
+    width: 50px;
+    height: 40px;
+    border-radius: 50%;
+  }
+}
+
+.profile {
+  max-height: 50px;
+  max-width: 60px;
+  border-radius: 50%;
+  height: auto;
+  margin-bottom: 5px;
+  border: 1px solid;
+  padding: 2px;
+  float: left;
+  margin-right: 10%;
+  margin-top: 5px;
+}
+.profile img {
+  border-radius: 50%;
+  vertical-align: middle;
+  max-height: 40px;
+}
+
+@media (max-width: 810px) {
+  .display-name {
+    padding-top: 10%;
+  }
+}
+
+.pt-6 {
+  padding-top: 6px;
+}
+
+.user-img img {
+  border-radius: 50%;
+  width: 50%;
+  max-width: 70px;
+  display: inline-block;
+  border: 1px solid;
+  padding: 2px;
+}
+@media screen and (max-width: 767px) {
+  .text-align,
+  .user-img {
+    text-align: center;
+  }
+  .friend-invite .online-dot {
+    right: 80px !important;
+    bottom: 7px !important;
+  }
+
+  // .{ text-align: center;}
+}
+
+@media screen and (min-width: 1000px) {
+  .user-img {
+    margin-bottom: 0;
+  }
+  .user-img img {
+    width: 44px;
+    max-width: inherit;
+  }
+  .btn {
+    margin: 2%;
+  }
+  .clinton,
+  .T-tagging {
+    line-height: 45px;
+  }
+  img {
+    padding: 1px;
+  }
+  .invitation-left {
+    text-align: left;
+  }
+}
+
+.friend-list.display-name {
+  display: flex;
+  align-items: center;
+  height: 50px;
+}
+
+.online-dot {
+  position: absolute;
+  height: 15px;
+  width: 15px;
+  background: #71b02f;
+  border-radius: 10px;
+  right: 0;
+  bottom: 0;
+}
+
+.author .online-dot {
+  height: 10px;
+  width: 10px;
+  bottom: 1px;
+}
+
+.innerli .online-dot {
+  right: 2px;
+  bottom: 2px;
+}
+
+.friend-invite .online-dot {
+  right: 50px;
+  bottom: 5px;
+}
+
+.author-user-card {
+  position: relative;
+  padding-left: 5px;
+}
+
+.user-img {
+  position: relative;
+  max-width: fit-content;
+  .online-dot {
+    position: absolute;
+    height: 12px;
+    width: 12px;
+    background: #71b02f;
+    border-radius: 10px;
+    right: 0px;
+    bottom: 7px;
+  }
+}

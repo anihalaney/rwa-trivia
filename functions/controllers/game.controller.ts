@@ -1,5 +1,5 @@
 import {
-    Account, Game, GameOperations, HeaderConstants, interceptorConstants, PlayerQnA, ResponseMessagesConstants
+    Account, Game, GameOperations, HeaderConstants, interceptorConstants, PlayerQnA, ResponseMessagesConstants, appConstants
 } from '../../projects/shared-library/src/lib/shared/model';
 import { AccountService } from '../services/account.service';
 import { AppSettings } from '../services/app-settings.service';
@@ -23,7 +23,7 @@ export class GameController {
                 // Game Option is not added
                 Utils.sendResponse(res, interceptorConstants.BAD_REQUEST, ResponseMessagesConstants.GAME_OPTION_NOT_FOUND);
             }
-
+            gameOptions.isBadgeWithCategory = true;
             if (!userId) {
                 // userId is not added
                 Utils.sendResponse(res, interceptorConstants.BAD_REQUEST, ResponseMessagesConstants.USER_ID_NOT_FOUND);
@@ -33,9 +33,21 @@ export class GameController {
             // Get App Settings
             const appSetting = await AppSettings.Instance.getAppSettings();
 
+            const account: Account = await AccountService.getAccountById(userId);
             if (appSetting.lives.enable) {
                 // Get Account Info
-                const account: Account = await AccountService.getAccountById(userId);
+                if (!account.signUpQuestionAnswered) {
+                    await AccountService.updateBits(userId, appSetting.game_question_bits);
+                    account.signUpQuestionAnswered = true;
+                    await AccountService.updateAccountData(account);
+                } else {
+                    // Decrement lives from user account
+                    AccountService.decreaseLife(userId);
+                    // Decrement Second Player's life
+                    if (gameOptions.friendId) {
+                        AccountService.decreaseLife(gameOptions.friendId);
+                    }
+                }
                 // if lives is less then or equal to 0 then send with error
                 if (account.lives <= 0) {
                     Utils.sendResponse(res, interceptorConstants.FORBIDDEN, ResponseMessagesConstants.NOT_ENOUGH_LIFE);
@@ -43,15 +55,6 @@ export class GameController {
             }
 
             const gameId = await GameMechanics.createNewGame(userId, gameOptions);
-
-            if (appSetting.lives.enable) {
-                // Decrement lives from user account
-                AccountService.decreaseLife(userId);
-                // Decrement Second Player's life
-                if (gameOptions.friendId) {
-                    AccountService.decreaseLife(gameOptions.friendId);
-                }
-            }
             Utils.sendResponse(res, interceptorConstants.SUCCESS, { gameId: gameId });
         } catch (error) {
             Utils.sendError(res, error);
@@ -114,7 +117,7 @@ export class GameController {
     static async createSocialContent(req, res) {
 
         const websiteUrl = Utils.getWebsiteUrl();
-        const imageUrl = `${websiteUrl}/app/game/social-image/${req.params.userId}/${req.params.socialId}`;
+        const imageUrl = `${websiteUrl}/${appConstants.API_VERSION}/game/social-image/${req.params.userId}/${req.params.socialId}`;
 
         const htmlContent = `<!DOCTYPE html>
                                <html>

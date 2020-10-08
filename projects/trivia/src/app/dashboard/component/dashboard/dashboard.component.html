@@ -1,22 +1,55 @@
 <div class="pageinner">
   <div class="row">
-    <div class="pageheading col-md-6 col-xs-12">
-      <span class="hidden-xs pull-left">Dashboard</span>
+    <div class="pageheading col-md-6 col-xs-12 col-md-12">
+        <span class="hidden-xs pull-left">Dashboard</span>
 
-      <div *ngIf="applicationSettings?.tokens?.enable && user && account" class="points pull-left m-l-20"> 
-       <div class="p-t-10"> Bits  </div>
-        <label class="points-count" [ngClass]="{'points-count-f-12': account.bits > 9999 }"> {{account.bits || 0 }}</label>
-       </div>
-   
-       <div *ngIf="applicationSettings?.tokens?.enable && user && account" class="points bytes pull-left m-l-20"> 
-          <div class="p-t-10"> Bytes  </div>
-           <label class="points-count" [ngClass]="{'points-count-f-12': account.bytes > 9999 }" > {{account?.bytes || 0}}</label>
+      <div *ngIf="applicationSettings?.tokens?.enable && user && account" style="display: inline-block;"
+        class="points pull-left m-l-20">
+        <div class="p-t-10"> Bits </div>
+        <label class="points-count" [ngClass]="{'points-count-f-12': account.bits > 9999 }">
+          {{account.bits || 0 }}</label>
+      </div>
+
+      <div *ngIf="applicationSettings?.tokens?.enable && user && account" style="display: inline-block;"
+        class="points bytes pull-left m-l-20">
+        <div class="p-t-10"> Bytes </div>
+        <label class="points-count" [ngClass]="{'points-count-f-12': account.bytes > 9999 }">
+          {{account?.bytes || 0}}</label>
       </div>
 
     </div>
-    <div class="col-md-6 col-xs-12 align-right">
-      <button [disabled] = "gamePlayBtnDisabled" [ngClass]="{'min-startgame': timeoutLive && isLivesEnable}" class="startgame" [routerLink]="['/game-play']"> {{ gameStart }} </button>
-      <div class="lives" *ngIf="user && account && account.lives >=0 && isLivesEnable" > <span class="lives-text">{{account.lives}}</span> </div>
+
+    <!-- <div class="lives" *ngIf="user && account && account?.lives >=0 && isLivesEnable" > <span class="lives-text">{{account && account?.lives}}</span> </div> -->
+    <div class="col-md-6 col-xs-12 col-md-12 align-right play-game-div-container">
+      <div *ngIf="user && account && account?.lives >=0 && isLivesEnable" class="flex-div">
+        <span style="font-size: 22px;" class="icon icon-life-icon"></span>
+        <div  class="lives-text lives-div">
+          <span> {{ (account && account?.lives / 10 < 1) && (account && account?.lives / 10 > 0)  ? '0' : '' }}{{account && account?.lives}} </span>
+        </div>
+      </div>
+      <div class="flex-div play-game-btn-container">
+        <div class="single-player-btn-container">
+          <button [disabled]="gamePlayBtnDisabled" (click)="startNewGame('Single')" class="startgame"> Single Player
+          </button>
+        </div>
+        <div class="multi-player-btn-container">
+          <button [disabled]="gamePlayBtnDisabled" (click)="startNewGame('Two')" class="startgame"> Multi Player </button>
+        </div>
+      </div>
+      <div *ngIf="user && applicationSettings?.lives?.enable && timeoutLive">
+        <div class="flex-div">
+          <img class="img-20" src="assets/images/clock.png" alt="" />
+          <div class="lives-text lives-sub-text">
+            <span>Life will be credited in</span>
+          </div>
+        </div>
+        <div class="flex-div">
+          <div class="lives-text lives-timer">
+            <span>{{timeoutLive}} minutes</span>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 
@@ -35,8 +68,9 @@
 
       </div>
       <ul class="row" *ngIf="showGames">
-        <li *ngFor="let game of activeGames | slice:gameSliceStartIndex:gameSliceLastIndex" class="col-lg-3 col-md-4 col-sm-12 col-xs-12 ">
-          <game-card [game]="game"></game-card>
+        <li *ngFor="let game of activeGames | slice:gameSliceStartIndex:gameSliceLastIndex"
+          class="col-lg-3 col-md-4 col-sm-12 col-xs-12 ">
+          <game-card [game]="game" [applicationSettings]="applicationSettings" [categoryDict]="categoryDict" ></game-card>
         </li>
         <ng-container *ngIf="activeGames.length > 0">
           <li *ngFor="let number of numbers" class="col-lg-3 col-md-4 col-sm-12 col-xs-12 hidden-xs">
@@ -48,7 +82,8 @@
       </ul>
     </div>
 
-    <div class="col-sm-12 col-xs-12 view-all-btn" *ngIf="showGames && activeGames.length!=gameSliceLastIndex && activeGames.length > 8 ">
+    <div class="col-sm-12 col-xs-12 view-all-btn"
+      *ngIf="showGames && activeGames.length!=gameSliceLastIndex && activeGames.length > 8 ">
       <a class="viewall" (click)="displayMoreGames()">view more</a>
     </div>
 
@@ -79,15 +114,23 @@
     <ul class="invitationlist">
 
       <li *ngFor="let game of gameInvites| slice:gameInviteSliceStartIndex:gameInviteSliceLastIndex">
-        <game-invite [userDict]="userDict" [game]="game"></game-invite>
+        <game-invite [game]="game"></game-invite>
       </li>
     </ul>
 
-    <div class="col-sm-12 col-xs-12 view-all-btn" *ngIf="gameInvites && gameInvites.length > 3 && gameInvites.length!=gameInviteSliceLastIndex">
+    <div class="col-sm-12 col-xs-12 view-all-btn"
+      *ngIf="gameInvites && gameInvites.length > 3 && gameInvites.length!=gameInviteSliceLastIndex">
       <a class="viewall" (click)="displayMoreGameInvites()">view more</a>
     </div>
   </section>
   <!-- Invitation to play games end   -->
+
+  <!-- Play Game With Friend -->
+  <div *ngIf="user" class="card">
+        <app-invite-to-play [userId]="user?.userId" *ngIf="user && user!==null"></app-invite-to-play>
+  </div>
+
+  <!-- Friend Invitation -->
 
   <!-- Friend Invitation -->
   <section *ngIf="user && userDict && friendInvitations.length > 0 " class="card">
@@ -98,11 +141,12 @@
     </div>
     <ul class="invitationlist">
       <li *ngFor="let invitation of friendInvitations | slice:friendInviteSliceStartIndex:friendInviteSliceLastIndex">
-        <app-friend-invite [userDict]="userDict" [invitation]="invitation" [user]="user"></app-friend-invite>
+        <app-friend-invite [invitation]="invitation" [user]="user"></app-friend-invite>
       </li>
     </ul>
 
-    <div class="col-sm-12 col-xs-12 view-all-btn" *ngIf="friendInvitations && friendInvitations.length > 3 && friendInvitations.length!=friendInviteSliceLastIndex">
+    <div class="col-sm-12 col-xs-12 view-all-btn"
+      *ngIf="friendInvitations && friendInvitations.length > 3 && friendInvitations.length!=friendInviteSliceLastIndex">
       <a class="viewall" (click)="displayMoreFriendInvites()">view more</a>
     </div>
 
@@ -112,7 +156,7 @@
   <div class="row">
     <!-- Question of the day -->
     <div [ngClass]="showNewsCard?'col-lg-7 col-md-12 col-sm-12':'col-lg-12 col-md-12 col-sm-12' ">
-      <question [userDict]="userDict"></question>
+      <question [user]="user" [userDict]="userDict"></question>
     </div>
     <!-- Question of the day end -->
 

@@ -1,0 +1,42 @@
+.question-answered {
+  border-color: #000;
+  border-width: 1;
+  border-radius: 2;
+}
+
+.m-b-70 {
+  margin-bottom: 70;
+}
+button {
+  border-radius: 1;
+}
+
+.btn-transparent {
+  background: white;
+  color: #3b5998;
+  font-size: 20;
+  padding: 15;
+  border-width: 1;
+  border-color: #e2e2e2;
+  height: 70;
+}
+
+.timeout-text,
+.incorrect-text,
+.correct-text {
+  color: #fff;
+  padding: 5 15;
+  border-radius: 30;
+}
+
+.red {
+  background: rgb(244, 67, 54);
+}
+
+.green {
+  background: #71b02f;
+}
+
+.yellow {
+  background: rgb(255, 193, 7);
+}

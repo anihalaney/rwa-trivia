@@ -6,6 +6,7 @@ import { GameOverComponent } from './game-over/game-over.component';
 import { GameDialogComponent } from './game-dialog/game-dialog.component';
 import { ReportGameComponent } from './report-game/report-game.component';
 import { GameContinueComponent } from './game-continue/game-continue.component';
+
 export {
     NewGameComponent,
     GameComponent,

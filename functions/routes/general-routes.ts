@@ -26,6 +26,18 @@ class GeneralRoutes {
         this.generalRoutes.get(`/${RoutesConstants.ES}/${RoutesConstants.CHECK}`,
             AuthMiddleware.adminOnly, GeneralController.testES);
 
+        //  'updateAppVersion'
+        this.generalRoutes.post(`/${RoutesConstants.UPDATE_APP_VERSION}`,
+            AuthMiddleware.authTokenOnly, GeneralController.updateAppVersion);
+
+        // `/getTopCategories` 
+        this.generalRoutes.get(`/${RoutesConstants.TOP_CATEGORIES_COUNT}`,
+            GeneralController.getTopCategories);
+
+        // `/getTopTags` 
+        this.generalRoutes.get(`/${RoutesConstants.TOP_TAGS_COUNT}`,
+            GeneralController.getTopTags);
+
     }
 }
 

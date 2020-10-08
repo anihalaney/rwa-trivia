@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable, of, combineLatest } from 'rxjs';
-import { map, catchError } from 'rxjs/operators';
+import { map, catchError, tap, filter } from 'rxjs/operators';
 import { CONFIG } from '../../environments/environment';
 import {
   Question, QuestionStatus, SearchResults, SearchCriteria,
@@ -11,7 +11,6 @@ import { Store } from '@ngrx/store';
 import { CoreState } from '../store';
 import { QuestionActions } from '../store/actions';
 import { DbService } from './../db-service';
-
 @Injectable()
 export class QuestionService {
 
@@ -24,13 +23,13 @@ export class QuestionService {
 
   // Elasticsearch
   getQuestionOfTheDay(isNextQuestion: boolean): Observable<Question> {
-    let url: string = CONFIG.functionsUrl + '/app/question/day';
+    let url = `${CONFIG.functionsUrl}/question/day`;
     url = (isNextQuestion) ? `${url}/next` : `${url}/current`;
     return this.http.get<Question>(url);
   }
 
   getQuestions(startRow: number, pageSize: number, criteria: SearchCriteria): Observable<SearchResults> {
-    const url: string = CONFIG.functionsUrl + '/app/question/';
+    const url = `${CONFIG.functionsUrl}/question/`;
 
     return this.http.post<SearchResults>(url + startRow + '/' + pageSize, criteria);
   }
@@ -38,7 +37,10 @@ export class QuestionService {
   // Firestore
   getUserQuestions(userId: string, published: boolean): Observable<Question[]> {
     const collection = (published) ? 'questions' : 'unpublished_questions';
-    const queryParams = { condition: [{ name: 'created_uid', comparator: '==', value: userId }] };
+    const queryParams = {
+      condition: [{ name: 'created_uid', comparator: '==', value: userId }],
+      orderBy: [{ name: 'createdOn', value: 'desc' }]
+    };
     return this.dbService.valueChanges(collection, '', queryParams)
       .pipe(
         map(qs => qs.map(q => Question.getViewModelFromDb(q))),
@@ -101,20 +103,28 @@ export class QuestionService {
   }
 
 
-  saveQuestion(question: Question) {
+  saveQuestion(question: Question): Observable<null> {
     const dbQuestion = Object.assign({}, question); // object to be saved
-
     if (!question.id || question.id === '') {
       dbQuestion['source'] = 'question';
+      dbQuestion['id'] = this.dbService.createId();
       this.dbService.createDoc('unpublished_questions', dbQuestion).then(ref => {
-        this.store.dispatch(this.questionActions.addQuestionSuccess());
+        if (question.is_draft) {
+          this.store.dispatch(this.questionActions.addQuestionDraftSuccess(dbQuestion['id']));
+        } else {
+          this.store.dispatch(this.questionActions.addQuestionSuccess());
+        }
       });
     } else {
       this.dbService.setDoc('unpublished_questions', dbQuestion.id, dbQuestion).then(ref => {
-        this.store.dispatch(this.questionActions.addQuestionSuccess());
+        if (dbQuestion.is_draft) {
+          this.store.dispatch(this.questionActions.updateQuestionDraftSuccess());
+        } else {
+          this.store.dispatch(this.questionActions.addQuestionSuccess());
+        }
       });
     }
-
+    return of();
   }
 
   saveBulkQuestions(bulkUpload: BulkUpload) {
@@ -178,4 +188,43 @@ export class QuestionService {
       );
     });
   }
+
+  saveQuestionImage(image: any, fileName) {
+    const url = `${CONFIG.functionsUrl}/question/uploadQuestionImage`;
+    return this.http.post<any>(url, { image: image });
+
+  }
+
+
+  getQuestionDownloadUrl(image: string) {
+    return this.dbService.getFireStorageReference(image).getDownloadURL();
+  }
+
+  // Firestore
+  getUserLatestQuestion(userId: string): Observable<Question> {
+    const collection = 'questions';
+    const queryParams = {
+      condition: [{ name: 'created_uid', comparator: '==', value: userId }],
+      orderBy: [{ name: 'createdOn', value: 'desc' }],
+      limit: 1
+    };
+    return this.dbService.valueChanges(collection, '', queryParams)
+      .pipe(
+        map(qs => {
+          if (qs[0]) {
+            return Question.getViewModelFromDb(qs[0]);
+          }
+          return null;
+        }
+        ),
+        catchError(error => {
+          console.log(error);
+          return of(null);
+        }));
+  }
+
+  deleteQuestionImage(imageName: string) {
+    return this.http.delete(`${CONFIG.functionsUrl}/question/deleteQuestionImage/${imageName}`);
+  }
+
 }

@@ -15,83 +15,84 @@
       </div>
     </div>
     <div class="textcenter clearfix gameOver" *ngIf="game.gameOptions.playerMode == PlayerMode.Single">
-      <div class="yourimg">
-        <img [stlOpenUserProfile]="{userId: user.userId, redirectTo: 'userProfile'}" [src]="getImageUrl(user)" alt="User Profile Image" />
-      </div>
-      <label href="#" id="you" class="dark text-style ">{{playerUserName}}</label>
+      <app-user-card [userId]="user.userId" [type]="userCardType.USER_WEB_IMAGE_70X60_IMAGE_VERTICAL"></app-user-card>
       <div class="dark div-top-spacing text-style ">Score {{game.stats[user.userId].score}} / {{game.round}}</div>
       <div class="div-top-spacing score-div-height">
-        <div *ngIf="game.stats[user.userId].score>= 1" class="sprite score1"></div>
-        <div *ngIf="game.stats[user.userId].score >= 2" class="sprite score2"></div>
-        <div *ngIf="game.stats[user.userId].score >= 3" class="sprite score3"></div>
-        <div *ngIf="game.stats[user.userId].score >= 4" class="sprite score4"></div>
-        <div *ngIf="game.stats[user.userId].score >= 5" class="sprite score5"></div>
-      </div>
-    </div>
-    <div class="textcenter clearfix gameOver" *ngIf="game.gameOptions.playerMode == PlayerMode.Opponent">
-      <div class="col-sm-3 col-sm-offset-3">
-        <div class="yourimg" [ngClass]="{'vs': game.playerIds.length>1 }">
-          <img [stlOpenUserProfile]="{userId: user.userId, redirectTo: 'userProfile'}" [src]="getImageUrl(user)" alt="User Profile Image" />
-        </div>
-        <label href="#" class="dark text-style">{{playerUserName}}</label>
-        <div class="dark div-top-spacing text-style">Score {{game.stats[user.userId].score}}</div>
-        <div class="div-top-spacing">
-          <div *ngIf="game.stats[user.userId].score >= 1" class="sprite score1"></div>
+        <ng-template *ngIf="game.gameOptions.isBadgeWithCategory; else showBadge" ngFor let-i="index"  let-badge [ngForOf]="totalBadges" >
+          <div class="sprite {{applicationSettings?.badges[earnedBadges[i]]?.class ? applicationSettings?.badges[earnedBadges[i]]?.class : 'score0'}}"></div>
+        </ng-template>
+        <ng-template   #showBadge>
+          <div *ngIf="game.stats[user.userId].score>= 1" class="sprite score1"></div>
           <div *ngIf="game.stats[user.userId].score >= 2" class="sprite score2"></div>
           <div *ngIf="game.stats[user.userId].score >= 3" class="sprite score3"></div>
           <div *ngIf="game.stats[user.userId].score >= 4" class="sprite score4"></div>
           <div *ngIf="game.stats[user.userId].score >= 5" class="sprite score5"></div>
+        </ng-template>
+        
+
+      </div>
+    </div>
+    <div class="textcenter clearfix gameOver" *ngIf="game.gameOptions.playerMode == PlayerMode.Opponent">
+      <div class="col-sm-3 col-sm-offset-3">
+        <app-user-card [userId]="user.userId" [type]="userCardType.USER_WEB_IMAGE_70X60_IMAGE_VERTICAL"></app-user-card>
+        <div class="dark div-top-spacing text-style">Score {{game.stats[user.userId].score}}</div>
+        <div class="div-top-spacing">
+          <ng-template *ngIf="game.gameOptions.isBadgeWithCategory; else showBadgeTwoPlayer" ngFor let-i="index"  let-badge [ngForOf]="totalBadges" >
+            <div class="sprite {{applicationSettings?.badges[earnedBadges[i]]?.class ? applicationSettings?.badges[earnedBadges[i]]?.class : 'score0'}}"></div>
+          </ng-template>
+          <ng-template  #showBadgeTwoPlayer>
+            <div *ngIf="game.stats[user.userId].score >= 1" class="sprite score1"></div>
+            <div *ngIf="game.stats[user.userId].score >= 2" class="sprite score2"></div>
+            <div *ngIf="game.stats[user.userId].score >= 3" class="sprite score3"></div>
+            <div *ngIf="game.stats[user.userId].score >= 4" class="sprite score4"></div>
+            <div *ngIf="game.stats[user.userId].score >= 5" class="sprite score5"></div>
+          </ng-template>
+          
         </div>
       </div>
       <div class="col-sm-3 yourimg-spacing">
-        <div class="yourimg">
-          <img [stlOpenUserProfile]="{userId: otherUserId, redirectTo: 'otherUserProfile'}" [src]="getImageUrl(otherUserInfo)" alt="User Profile Image" />
-        </div>
-        <label href="#" class="dark text-style">{{otherUserInfo?.displayName}}</label>
+        <app-user-card [userId]="otherUserId" [type]="userCardType.USER_WEB_IMAGE_70X60_IMAGE_VERTICAL"></app-user-card>
         <div class="dark div-top-spacing text-style">Score {{game.stats[otherUserId].score}}</div>
         <div class="div-top-spacing">
+          <ng-template *ngIf="game.gameOptions.isBadgeWithCategory; else showBadgeTwoPlayerOpponent" ngFor let-i="index"  let-badge [ngForOf]="totalBadges" >
+            <div class="sprite {{applicationSettings?.badges[earnedBadgesByOtherUser[i]]?.class ? applicationSettings?.badges[earnedBadgesByOtherUser[i]]?.class : 'score0'}}"></div>
+          </ng-template>
+          <ng-template #showBadgeTwoPlayerOpponent >
           <div *ngIf="game.stats[otherUserId].score >= 1" class="sprite score1"></div>
           <div *ngIf="game.stats[otherUserId].score >= 2" class="sprite score2"></div>
           <div *ngIf="game.stats[otherUserId].score >= 3" class="sprite score3"></div>
           <div *ngIf="game.stats[otherUserId].score >= 4" class="sprite score4"></div>
           <div *ngIf="game.stats[otherUserId].score >= 5" class="sprite score5"></div>
+        </ng-template>
         </div>
       </div>
     </div>
     <div class="div-top-spacing win-icon-div">
-      <div class="win-icon" *ngIf="
-      (game.gameOptions.playerMode != PlayerMode.Single && 
-       game.round < 16 &&
-       game.stats[user.userId].score > game.stats[otherUserId].score)
-      ||
-      (game.gameOptions.playerMode == PlayerMode.Single &&
-       game.playerQnAs.length - game.stats[user.userId].score !== 4)">
+      <div class="win-icon" *ngIf="gameStatus === gameStatusEnum.WON">
         <div class="sprite thumb-up"></div>
         <span class="win-text">{{playerUserName}} Won</span>
       </div>
-      <div class="win-icon" *ngIf="
-      (game.gameOptions.playerMode != PlayerMode.Single &&
-       game.round < 16 &&
-       game.stats[user.userId].score < game.stats[otherUserId].score)
-      ||
-      (game.gameOptions.playerMode == PlayerMode.Single &&
-       game.playerQnAs.length - game.stats[user.userId].score === 4)">
+      <div class="win-icon" *ngIf="gameStatus === gameStatusEnum.LOST">
         <div class="sprite thumb-down"></div>
         <span class="win-text">{{playerUserName}} Lost</span>
       </div>
-      <div class="win-icon" *ngIf="
-      (game.gameOptions.playerMode != PlayerMode.Single &&
-       game.round < 16 &&
-       game.stats[user.userId].score == game.stats[otherUserId].score)">
+      <div class="win-icon" *ngIf="gameStatus === gameStatusEnum.TIE">
         <div class="sprite thumb-up"></div>
         <span class="win-text">It's a Tie</span>
       </div>
-      <div class="win-icon" *ngIf="
-      game.gameOptions.playerMode != PlayerMode.Single &&
-       game.round === 16">
+      <div class="win-icon" *ngIf="gameStatus === gameStatusEnum.DRAW">
         <div class="sprite thumb-up"></div>
         <span class="win-text">It's a Draw</span>
       </div>
+    </div>
+    <div class="col-xs-12" class="bits-n-bityes-container">
+        <span>You have earned</span>
+    </div>
+    <div class="col-xs-12" class="bits-n-bityes-container">
+        <img src="/assets/images/bits-bytes.png"/>
+        <span>Earned {{applicationSettings?.tokens?.enable === true && applicationSettings?.tokens?.earn_bits * game.stats[user.userId].score}} bits</span>
+        <img class="m-l-28"src="/assets/images/bits-bytes.png"/>
+        <span>Earned {{applicationSettings?.tokens?.enable === true && applicationSettings?.tokens?.earn_bytes *  (game.stats[user.userId].score >=5 ? 1 : 0 ) }} bytes</span>
     </div>
 
   </mat-card-content>
@@ -108,8 +109,14 @@
         <button class="btn-share" type="button" (click)="reMatchGame()"
           *ngIf="game.gameOptions.playerMode == PlayerMode.Single">Play Again</button>
         <button class="btn-share" type="button" (click)="inviteAsFriend()"
-          *ngIf="game.gameOptions.opponentType == opponentType.Random && !disableFriendInviteBtn">Invite as
+          *ngIf="(game.gameOptions.opponentType == opponentType.Random || game.gameOptions.isChallenge ) && otherUserInfo?.email && userInvitations &&  userInvitations[otherUserInfo?.email]?.status === 'add'">Invite as
           Friend</button>
+        <button class="btn-share friend-request-sent" type="button"
+          *ngIf="(game.gameOptions.opponentType == opponentType.Random || game.gameOptions.isChallenge ) && otherUserInfo?.email && userInvitations && userInvitations[otherUserInfo?.email]?.status === 'pending'">Friend Request Sent</button>
+
+        <button class="btn-share friends" type="button"
+          *ngIf="(game.gameOptions.opponentType == opponentType.Random || game.gameOptions.isChallenge ) && otherUserInfo?.email  && userInvitations && userInvitations[otherUserInfo?.email]?.status === 'approved'">Friends</button>
+
         <img *ngIf="disableRematchBtn" src="/assets/images/ajax-loader.gif" class="rematch-loaderimage"
           alt="Loader Image">
         <button class="btn-share" type="button" [routerLink]="['/']">Home</button>
@@ -146,12 +153,15 @@
                             [ngClass]="answer.answerText === row.userGivenAnswer  && answer.correct? 'answer-label':'label'"
                             class="text-style your-answer-label">Your ans.</label>
                           <span class="text-style"
-                            [ngClass]="answer.answerText === row.userGivenAnswer  && answer.correct? '':'label'">{{row.userGivenAnswer}}
+                            [ngClass]="answer.answerText === row.userGivenAnswer  && answer.correct? '':'label'">{{row.userGivenAnswer}}  
+                          </span> 
+                          <span [ngClass]="!game?.gameOptions?.isBadgeWithCategory ? row.className : (row?.className  && applicationSettings?.badges ? applicationSettings?.badges[row?.className].class : '' )"
+                           class="sprite">
                           </span>
                         </p>
                       </span>
                       <div class="row col-sm-12 col-xs-12 alignment">
-                        <author [userDict]="userDict" [userId]="row.created_uid"></author>
+                        <author [userId]="row.created_uid"></author>
                       </div>
                     </div>
                   </div>

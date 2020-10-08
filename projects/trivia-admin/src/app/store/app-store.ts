@@ -19,7 +19,8 @@ export const appState = {
 
 //Selectors from coreStore
 //TODO: a good way to slice this when there are multiple feature stores??
-export const getCategories = coreStore.getCategories
+export const getCategories = coreStore.getCategories;
 export const categoryDictionary = coreStore.categoryDictionary;
 export const getTags = coreStore.getTags;
+
 

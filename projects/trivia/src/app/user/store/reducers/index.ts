@@ -2,9 +2,8 @@ import { ActionReducerMap, createFeatureSelector } from '@ngrx/store';
 
 import { Question } from 'shared-library/shared/model';
 import {
-     userPublishedQuestions, userUnpublishedQuestions,
+    userPublishedQuestions, userUnpublishedQuestions
 } from './user.reducer';
-
 
 export * from './user.reducer';
 

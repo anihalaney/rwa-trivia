@@ -1,21 +1,32 @@
 const path = require('path');
 const webpack = require('webpack');
 
-
-
 module.exports = {
-  entry: { server: './server.ts' },
-  resolve: { extensions: ['.js', '.ts'] },
   mode: 'none',
+  entry: { server: './server.ts' },
+  externals: [],
   target: 'node',
-  externals: [/(node_modules|main(\\|\/)..*(\\|\/).js)/],
+  resolve: { extensions: ['.js', '.ts'] },
+  optimization: {
+    minimize: false
+  },
   output: {
-    path: path.join(__dirname, `functions/server/functions`),
+    path: path.join(__dirname, `functions/dist`),
+    library: 'app',
+    libraryTarget: 'umd',
     filename: '[name].js'
   },
+  // This is required to solve SDK_VERSION issue 
+  // https://github.com/firebase/firebase-js-sdk/issues/1754
+  resolve: {
+    alias: {
+      ['firebase/app']: path.resolve(__dirname, 'node_modules/firebase/app/dist/index.cjs.js')
+    }
+  },
   module: {
+    noParse: /polyfills-.*\.js/,
     rules: [
-      { test: /\.ts$/, loader: 'ts-loader', exclude: /^(?!.*\.spec\.ts$).*\.ts$/  },
+      { test: /\.ts$/, loader: 'ts-loader', exclude: /^(?!.*\.spec\.ts$).*\.ts$/ },
       {
         test: /(\\|\/)@angular(\\|\/)core(\\|\/).+\.js$/,
         parser: { system: true }
@@ -33,5 +44,7 @@ module.exports = {
       path.join(__dirname, 'src'),
       {}
     )
+
+
   ]
 };

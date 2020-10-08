@@ -5,8 +5,11 @@ import { CoreState, UIStateActions } from '../../store';
 import { Store } from '@ngrx/store';
 import { FirebaseAuthService } from './../../auth/firebase-auth.service';
 import { Login } from './login';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
-
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
+import * as firebase from 'firebase/app';
+import * as firebaseui from 'firebaseui';
+import { WindowRef } from 'shared-library/core/services';
+import { CONFIG } from 'shared-library/environments/environment';
 @Component({
   selector: 'login',
   templateUrl: './login.component.html',
@@ -15,128 +18,150 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 })
 
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
-export class LoginComponent extends Login implements OnInit, OnDestroy {
+export class LoginComponent extends Login implements OnDestroy {
+  ui: any;
+  uiConfig: any;
 
   constructor(public fb: FormBuilder,
     public store: Store<CoreState>,
     public dialogRef: MatDialogRef<LoginComponent>,
     private uiStateActions: UIStateActions,
     private firebaseAuthService: FirebaseAuthService,
-    private cd: ChangeDetectorRef) {
-    super(fb, store);
+    public cd: ChangeDetectorRef,
+    private windowsRef: WindowRef) {
+    super(fb, store, cd);
+
+    this.uiConfig = {
+      callbacks: {
+        // used this function to return false for do not redirect after success
+        signInSuccessWithAuthResult: (authResult, redirectUrl) => false
+      },
+      autoUpgradeAnonymousUsers: false,
+      signInOptions: [
+        firebase.auth.PhoneAuthProvider.PROVIDER_ID,
+      ],
+      signInFlow: 'popup',
+      tosUrl: CONFIG.termsAndConditionsUrl,
+      privacyPolicyUrl: () => windowsRef.nativeWindow.open(CONFIG.privacyUrl, '_blank')
+    };
   }
 
-  ngOnInit() { }
+  phoneSignIn() {
+    this.setPhoneSignIn();
+    if (!this.ui) {
+      this.ui = new firebaseui.auth.AuthUI(firebase.auth());
+    }
+    this.ui.start('#firebaseui-auth-container', this.uiConfig);
+  }
 
-  onSubmit() {
+  emailSignIn() {
+    if (this.ui && this.signInMethod === 'phone') {
+      this.ui.reset();
+    }
+    this.setEmailSignIn();
+  }
+  async onSubmit() {
+    let user;
     if (!this.loginForm.valid) {
       return;
     }
-    switch (this.mode) {
-      case 0:
-        // Login
-        this.firebaseAuthService.signInWithEmailAndPassword(
-          this.loginForm.get('email').value,
-          this.loginForm.get('password').value
-        ).then((user: any) => {
-          // Success
-          this.dialogRef.close();
-        }, (error: Error) => {
-          // Error
-          this.notificationMsg = error.message;
-          this.errorStatus = true;
-        }).catch((error: Error) => {
-          this.notificationMsg = error.message;
-          this.errorStatus = true;
-        },
-       ).finally( () => {
-          this.cd.detectChanges();
-        });
-        break;
-      case 1:
-        // Sign up
-        this.firebaseAuthService.createUserWithEmailAndPassword(
-          this.loginForm.get('email').value,
-          this.loginForm.get('password').value
-        ).then((user: any) => {
-          // Success
-          this.dialogRef.close();
-          if (user && !user.emailVerified) {
-            this.firebaseAuthService.sendEmailVerification(user).then(() => {
-              this.notificationMsg = `email verification sent to ${this.loginForm.get('email').value}`;
-              this.errorStatus = false;
-            }, (error: Error) => {
-              // Error
-              this.notificationMsg = error.message;
-              this.errorStatus = true;
-            });
+    try {
+      switch (this.mode) {
+        case 0:
+          // Login
+          user = await this.firebaseAuthService.signInWithEmailAndPassword(
+            this.loginForm.get('email').value,
+            this.loginForm.get('password').value
+          );
+          if (user) {
+            this.dialogRef.close();
           }
-        }, (error: Error) => {
-          // Error
-          this.notificationMsg = error.message;
-          this.errorStatus = true;
-        }).catch((error: Error) => {
-          this.notificationMsg = error.message;
-          this.errorStatus = true;
-        }).finally( () => {
-          this.cd.detectChanges();
-        });
-        break;
-      case 2:
-        // Forgot Password
-        this.firebaseAuthService.sendPasswordResetEmail(this.loginForm.get('email').value)
-          .then((a: any) => {
+          break;
+        case 1:
+          // Sign up
+          user = await this.firebaseAuthService.createUserWithEmailAndPassword(
+            this.loginForm.get('email').value,
+            this.loginForm.get('password').value
+          );
+          if (user) {
+            this.dialogRef.close();
+            if (user && !user.emailVerified) {
+              const verifyUser = await this.firebaseAuthService.sendEmailVerification(user);
+              if (verifyUser) {
+                this.notificationMsg = `email verification sent to ${this.loginForm.get('email').value}`;
+                this.errorStatus = false;
+              }
+            }
+          }
+          break;
+        case 2:
+          // Forgot Password
+          const isEmailSent = await this.firebaseAuthService.sendPasswordResetEmail(this.loginForm.get('email').value);
+          if (isEmailSent) {
             this.notificationMsg = `email sent to ${this.loginForm.get('email').value}`;
             this.errorStatus = false;
             this.notificationLogs.push(this.loginForm.get('email').value);
             this.store.dispatch(this.uiStateActions.saveResetPasswordNotificationLogs(this.notificationLogs));
-            this.cd.detectChanges();
-          }, (error: Error) => {
-            // Error
-            this.notificationMsg = error.message;
-            this.errorStatus = true;
-            this.cd.detectChanges();
-          }).catch((error: Error) => {
-            this.notificationMsg = error.message;
-            this.errorStatus = true;
-            this.cd.detectChanges();
-          });
+          }
+      }
+
+    } catch (error) {
+      this.notificationMsg = error.message;
+      this.errorStatus = true;
+      this.cd.markForCheck();
+    } finally {
+      this.cd.markForCheck();
     }
   }
 
-  googleLogin() {
-    this.firebaseAuthService.googleLogin().catch((error: Error) => {
+  async googleLogin() {
+    try {
+      await this.firebaseAuthService.googleLogin();
+    } catch (error) {
       this.notificationMsg = error.message;
       this.errorStatus = true;
       this.cd.detectChanges();
-    });
+    }
   }
 
-  fbLogin() {
-    this.firebaseAuthService.facebookLogin()
-      .catch((error: Error) => {
-        this.notificationMsg = error.message;
-        this.errorStatus = true;
-         this.cd.detectChanges();
-      });
+  async fbLogin() {
+    try {
+      await this.firebaseAuthService.facebookLogin();
+    } catch (error) {
+      this.notificationMsg = error.message;
+      this.errorStatus = true;
+      this.cd.detectChanges();
+    }
   }
 
-  twitterLogin() {
-    this.firebaseAuthService.twitterLogin()
-      .catch((error: Error) => {
-        this.notificationMsg = error.message;
-        this.errorStatus = true;
-        this.cd.detectChanges();
-      });
+  async appleSignIn() {
+    try {
+      await this.firebaseAuthService.appleLogin();
+    } catch (error) {
+      this.notificationMsg = error.message;
+      this.errorStatus = true;
+      this.cd.detectChanges();
+    }
   }
 
-  githubLogin() {
-    this.firebaseAuthService.githubLogin()
-      .catch((error: Error) => {
-        this.notificationMsg = error.message;
-        this.errorStatus = true;
-        this.cd.detectChanges();
-      });
+  async twitterLogin() {
+    try {
+      await this.firebaseAuthService.twitterLogin();
+    } catch (error) {
+      this.notificationMsg = error.message;
+      this.errorStatus = true;
+      this.cd.detectChanges();
+    }
+  }
+
+  async githubLogin() {
+    try {
+      await this.firebaseAuthService.githubLogin();
+    } catch (error) {
+      this.notificationMsg = error.message;
+      this.errorStatus = true;
+      this.cd.detectChanges();
+    }
   }
 
   validateLogs() {
@@ -144,7 +169,9 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
       this.notificationMsg = `Password is sent on your email ${this.loginForm.get('email').value}`;
       return true;
     }
-    this.notificationMsg = '';
+    if (!this.errorStatus) {
+      this.notificationMsg = '';
+    }
     return false;
   }
 

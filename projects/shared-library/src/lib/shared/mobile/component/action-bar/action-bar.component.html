@@ -1,18 +1,81 @@
-<ActionBar title="" class="action-bar action-title">
+<ActionBar flat="true" background="#fff" title="" class="action-bar "
+    [ngClass]=" subTitle ? 'action-subtitle' : 'action-title' ">
+
     <NavigationButton visibility="collapsed"></NavigationButton>
-    <GridLayout ios:rows="auto" android:rows="auto" ios:columns="auto,*,auto" android:columns="auto,*,auto" width="100%">
 
-        <StackLayout stlRippleEffect stlBackgroundColor="#13284F" stlOpacity="0.5" stlBackgroundColorAfter="" verticalAlignment="center" width="45" col="0" (tap)="openSidebar()">
-            <Label *ngIf="!hideMenu" text="&#xf0c9;" class="fa text-left padding-back" padding="10" fontSize="20"></Label>
+    <GridLayout ios:rows="auto" android:rows="auto" ios:columns="auto,*,auto,auto,auto"
+        android:columns="auto,*,auto,auto,auto" width="100%">
+
+        <StackLayout col="0" verticalAlignment="center" stlRippleEffect horizontalAlignment="left" (rippleTap)="back()">
+            <Label padding="5 10 5 0" color="#000000" text="&#xe906;" fontSize="20" class="ico icon-back"></Label>
         </StackLayout>
 
-        <StackLayout col="1" verticalAlignment="center">
-            <Label [text]="title" marginLeft="20" class="action-text-title" fontSize="20"></Label>
+        <Flexboxlayout col="1" verticalAlignment="center">
+            <Label padding="5 10 5 0"  (tap)="back()" [text]="title?.replace('_',' ')" class="action-text-title" textWrap="true"></Label>
+        </Flexboxlayout>
+
+        <!-- game profile edit icon -->
+        <StackLayout col="2" *ngIf="showEdit?.showEditOrOptions === 'edit' && showEdit?.userId" marginRight="10"
+            verticalAlignment="center" horizontalAlignment="right" (tap)="navigateToProfile()">
+            <Label stlRippleEffect stlBackgroundColorAfter="transparent" stlBackgroundColor="transparent"
+                stlOpacity="0.5" text="&#xe927;" class="ico icon-edit" fontSize="18" padding="5 10"
+                color="#14418B"></Label>
         </StackLayout>
 
-        <StackLayout stlRippleEffect stlBackgroundColor="#13284F" stlOpacity="0.5" stlBackgroundColorAfter="" ios:marginRight="14" verticalAlignment="center" horizontalAlignment="right" width="45" col="2" (rippleTap)="goToDashboard()">
-            <Label *ngIf="!hideHomeIcon" text="&#xf015;" class="fa" padding="10" fontSize="22" ></Label>
+        <!-- game profile option icon -->
+        <StackLayout col="2" *ngIf="showEdit?.showEditOrOptions === 'options' && showEdit?.userId && false"
+            marginRight="10" verticalAlignment="center" horizontalAlignment="right">
+            <Label stlRippleEffect stlBackgroundColorAfter="transparent" stlBackgroundColor="transparent"
+                stlOpacity="0.5" text="&#xf142;" fontSize="22" padding="5 10" class="fa"></Label>
         </StackLayout>
+
+        <StackLayout col="2" *ngIf="((user && user!== null && !showSkipBtn && title==='Questions'))" stlRippleEffect
+            ios:margin="3" ios:marginRight="30" android:margin="10" stlOpacity="0.5"
+            stlBackgroundColorAfter="transparent" verticalAlignment="center" horizontalAlignment="right"
+            android:width="23" ios:width="23" (rippleTap)="navigateToSubmitQuestion()">
+            <Image src="res://addquestion" class="icon-add" width="28" height="28"></Image>
+        </StackLayout>
+       
+        <StackLayout stlRippleEffect  backgroundColor="#6c63ff" (rippleTap)="navigateToBulkUpload()" width="25" height="25" borderRadius="20"   col="2" *ngIf="(user && user!== null && !showSkipBtn && title == 'Add_Question' || title == 'Update Question' )"
+            ios:margin="3" ios:marginRight="30" android:margin="10" verticalAlignment="center"
+            horizontalAlignment="center"  orientation="horizontal">
+            <Label  text="&#xf062;"  stlOpacity="0.5" class="fa fa-arrow-circle-up approve-btn"  color="#fff"  fontSize="14"  ios:margin="3" android:margin="5 3 0 3"></Label>
+        </StackLayout>
+
+        <StackLayout *ngIf="showSkipBtn" col="2" ios:margin="3" margin="10" android:margin="5"
+            verticalAlignment="center" (tap)="goToDashboard()">
+            <Label stlRippleEffect stlBackgroundColor="#13284F" stlOpacity="0.5" stlBackgroundColorAfter="transparent"
+                text="Skip" class="fa" fontSize="20" margin="5"></Label>
+        </StackLayout>
+
+        <!-- For Search Icon in invite-friends.component.tns.html screen -->
+        <!-- <StackLayout *ngIf="((user && user!== null && !showSkipBtn && title?.includes('Friends')))" col="4"
+            ios:margin="3" android:margin="10" verticalAlignment="center" horizontalAlignment="right" marginRight="10"
+            android:width="23" ios:width="40">
+            <Label stlRippleEffect stlBackgroundColor="transparent" stlOpacity="0.5" stlBackgroundColorAfter="transparent"
+                color="#3b5998" text="&#xe942;" fontSize="20" class="ico icon-search"></Label>
+        </StackLayout> -->
+
+        <!-- <StackLayout stlRippleEffect stlOpacity="0.5" stlBackgroundColorAfter="transparent"
+            *ngIf="((user && user!== null && !showSkipBtn && title?.includes('Notifications')))" col="4" stlRippleEffect
+            ios:margin="3" android:margin="10" stlOpacity="0.5" stlBackgroundColorAfter="" verticalAlignment="center"
+            horizontalAlignment="right" marginRight="10" android:width="23" ios:width="40">
+            <Image src="res://readall" width="28" height="28"></Image>
+        </StackLayout> -->
+
+        <StackLayout *ngIf="showSkipBtn" col="2" ios:margin="3" margin="10" android:margin="5"
+            verticalAlignment="center" (tap)="goToDashboard()">
+            <Label stlRippleEffect stlBackgroundColor="transparent" stlOpacity="0.5"
+                stlBackgroundColorAfter="transparent" text="Skip" class="fa" fontSize="20" margin="5"></Label>
+        </StackLayout>
+        <!-- For Add Friend Icon in invite-friends.component.tns.html screen -->
+        <StackLayout *ngIf="((user && user!== null && !showSkipBtn && title?.includes('Friends')))" col="3"
+            (tap)="navigateToInvite()" ios:margin="3" android:margin="10" verticalAlignment="center"
+            horizontalAlignment="right" marginRight="10" android:width="23" ios:width="40">
+            <Image stlRippleEffect stlOpacity="0.5" stlBackgroundColorAfter="transparent" src="res://addfriend"
+                width="28" height="28"></Image>
+        </StackLayout>
+
 
     </GridLayout>
 </ActionBar>

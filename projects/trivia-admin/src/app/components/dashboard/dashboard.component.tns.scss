@@ -1,0 +1,50 @@
+mat-card {
+  margin: 15px;
+}
+.dash-card {
+  width: 400px;
+  min-width: 350px;
+}
+mat-card>:last-child{
+  margin-bottom: 15px;
+}
+mat-card>:first-child{
+  margin-top: 15px;
+}
+.card-spacing
+{
+  margin-right: 3%;
+}
+.no-card
+{
+  height: 415px;
+  border-style: dashed;
+  border-width: 2px;
+  display: table;
+  width: 100%;
+  border-radius: 4px;
+}
+.no-card p
+{
+  font-family: 'hindmedium';
+  font-size: 14px;
+  text-align:center; 
+  vertical-align: middle;
+  display: table-cell;  
+   
+}
+.subtext
+{
+  line-height: 2;
+}
+.invitation-title span
+{
+  padding-left: 0px;
+}
+
+.action-user-profile
+{
+  margin-right: 10;
+  border-radius: 50;
+  margin-left: 5;
+}

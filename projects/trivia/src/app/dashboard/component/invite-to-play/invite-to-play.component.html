@@ -1,0 +1,20 @@
+<section>
+        <div>
+            <h2>Bitwiser is more fun with your best buddies</h2>
+        </div>
+        <div  *ngIf="uFriends && uFriends.length > 0" class="sub-title">
+            Invite your friends to play
+        </div>
+        <div  *ngIf="uFriends && uFriends.length > 0" class="user-card-container">   
+            <div class="user-card-container-sub" *ngFor="let frienduser of uFriends| slice:0:5;">
+                <app-user-card (click)="startNewGame('friend',frienduser?.userId )" [userId]="frienduser?.userId" [type]="userCardType.USER_WEB_IMAGE_WITH_ONLINE_STATUS">
+                </app-user-card>
+            </div>
+        </div>
+        <div  *ngIf="uFriends && uFriends.length > 0" class="sub-title">
+            OR
+        </div>
+        <div [style.paddingTop]="!uFriends || uFriends.length <= 0 ? '10px': ''" class="find-a-friend-link" (click)="startNewGame('random')">
+            Find a friend for me >
+        </div>
+</section>

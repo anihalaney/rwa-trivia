@@ -1,0 +1,18 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../../out-tsc/app",
+    "types": []
+  },
+  "exclude": [
+    "src/test.ts",
+    "**/*.spec.ts",
+    "./src/**/*.tns.ts",
+    "./src**/*.android.ts",
+    "./src/**/*.ios.ts",
+    "./src/main.ns.aot.ts",
+    "./src/main.ns.ts",
+    "./src/vendor.ts",
+    "./src/**/mobile"
+  ]
+}

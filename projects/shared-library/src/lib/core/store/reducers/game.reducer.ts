@@ -34,3 +34,40 @@ export function gameCreateStatus(state: any = '', action: ActionWithPayload<Stri
       return null;
   }
 }
+
+
+export function updateUserReactionStatus(state: any = null, action: any): any {
+  switch (action.type) {
+    case GameActions.UPADTE_USER_REACTION_SUCCESS:
+      return action.payload;
+  }
+}
+
+
+export function getUserReactionStatus(state: any = null, action: ActionWithPayload<any>): any {
+  switch (action.type) {
+    case GameActions.GET_USER_REACTION_SUCCESS:
+      return action.payload;
+    default:
+      return state;
+  }
+}
+
+
+
+export function getQuestionSuccess(state: any = null, action: ActionWithPayload<any>): any {
+  switch (action.type) {
+    case GameActions.GET_QUESTION_SUCCESS:
+      return action.payload;
+    default:
+      return state;
+  }
+}
+
+export function updateQuestionStatSuccess(state: any = null, action: any): any {
+  switch (action.type) {
+    case GameActions.UPDATE_QUESTION_STAT_SUCCESS:
+      return action.payload;
+  }
+}
+

@@ -1,11 +1,11 @@
-import { Component, ChangeDetectionStrategy, OnInit, NgZone, OnDestroy } from '@angular/core';
-import { Utils } from 'shared-library/core/services';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { AppState } from '../../../store';
 import { Store } from '@ngrx/store';
 import { UserActions } from 'shared-library/core/store/actions';
 import { InviteFriends } from './invite-friends';
 import { RouterExtensions } from 'nativescript-angular/router';
 import { Page } from 'tns-core-modules/ui/page/page';
+import { FirebaseScreenNameConstants } from 'shared-library/shared/model';
 
 @Component({
   selector: 'app-invite-friends',
@@ -18,19 +18,17 @@ export class InviteFriendsComponent extends InviteFriends implements OnInit, OnD
   // it delay complex UI show Router navigation can finish first to have smooth transition
   renderView = false;
 
-  constructor(public store: Store<AppState>, public userActions: UserActions, public utils: Utils,
-    private routerExtension: RouterExtensions, private page: Page, private ngZone: NgZone) {
-    super(store, userActions, utils);
+  constructor(public store: Store<AppState>, public userActions: UserActions,
+    private page: Page, public cd: ChangeDetectorRef) {
+    super(store, userActions, cd);
   }
 
   ngOnInit() {
-    // update to variable needed to do in ngZone otherwise it did not understand it
-    this.page.on('loaded', () => this.ngZone.run(() => this.renderView = true));
+    this.page.on('loaded', () => { this.renderView = true; this.cd.markForCheck(); });
   }
-  navigateToInvite() {
-    this.routerExtension.navigate(['user/my/app-invite-friends-dialog']);
-  }
+
   ngOnDestroy() {
+    this.renderView = false;
     this.page.off('loaded');
   }
 }

@@ -2,9 +2,9 @@
   <div class="row edit-form">
     <div class="col-sm-12 col-xs-12 div-border">
       <div class="sprite cancelicon col-md-offset-3 col-xs-offset-3" (click)="showQuestion()"></div>
-      <h4 class="label">Edit it</h4>
-      <p class="message">{{editQuestion.reason}}</p>
-      <h4 class="sub-message">Please do the needfull edits and resubmit the question.</h4>
+      <h4 *ngIf="editQuestion?.is_draft !== true" class="label">Edit it</h4>
+      <p  *ngIf="editQuestion?.is_draft !== true" class="message">{{editQuestion?.reason}}</p>
+      <h4 *ngIf="editQuestion?.is_draft !== true" class="sub-message">Please do the needfull edits and resubmit the question.</h4>
     </div>
     <section id="curentactive" class="col-md-12">
       <div class="optionbox">
@@ -28,19 +28,50 @@
       </div>
       <div class="optionbox row col-md-11 formfield">
         <p class="field-caption">Enter Your Question</p>
-        <textarea placeholder="Enter Your Question" formControlName="questionText" class="required col-md-12 col-xs-12" aria-label="questionText"></textarea>
+         <textarea  *ngIf="!questionForm.value.isRichEditor" placeholder="Enter Your Question" formControlName="questionText" class="required col-md-12 col-xs-12" aria-label="questionText"></textarea> 
+        <!-- *ngIf="questionForm.value.isRichEditor" [modules]="quillConfig" -->
+
+        <ng-quill-tex *ngIf="questionForm.value.isRichEditor" (textChanged)="onTextChanged($event)"   [modules]="quillConfig"
+        (fileUploaded)="fileUploaded($event)"  [group]="questionForm" [controlName]="'questionText'">
+        </ng-quill-tex>  
+
         <p *ngIf="questionForm.controls.questionText.errors && !questionForm.controls.questionText.pristine" class="error">Question
           is required!</p>
       </div>
-      <div class="optionbox row col-md-11 enterquestion">
+
+      <div class="form-group row col-md-12" *ngIf="questionForm.value.isRichEditor" style="margin-top:15px;">
+        <p class="field-caption">Select a Max time:</p>
+        <div class="formfield">
+          <select placeholder="Select Max time" class="required" formControlName="maxTime">
+            <option value="">
+              Select a Max time
+            </option>
+            <option *ngFor="let maxTime of applicationSettings?.game_play_max_time" [value]="maxTime">
+              {{maxTime}}
+            </option>
+          </select>
+          <p *ngIf="questionForm.controls.maxTime.errors && !questionForm.controls.maxTime.pristine" class="error">
+            Select a max time
+          </p>
+        </div>
+      </div>
+
+      <div class="optionbox row col-md-12 enterquestion">
         <p class="field-caption">Answers</p>
         <ng-container formArrayName="answers">
-          <div *ngFor="let answer of answers.controls; let i=index" [formGroupName]="i" class="formfield col-md-6 ">
+          <div *ngFor="let answer of answers.controls; let i=index" [formGroupName]="i" class="formfield">
             <label>
               <input type="checkbox" formControlName="correct">
             </label>
-            <input [placeholder]="'Enter Option ' + (i+1)" formControlName="answerText" type="text" class="required edit-form-input-field"
+            <input *ngIf="!answer.value.isRichEditor" [placeholder]="'Enter Option ' + (i+1)" formControlName="answerText" type="text" class="required edit-form-input-field"
               aria-label="answerText">
+            <div class="mathseditor" *ngIf="answer.value.isRichEditor">
+                <ng-quill-tex  [modules]="quillConfig" (textChanged)="onAnswerChanged($event,i)" 
+                (fileUploaded)="fileUploaded($event)"  [content]="answerTexts[i]">
+                </ng-quill-tex> 
+            </div>
+           
+
           </div>
         </ng-container>
         <div class="error" *ngIf="!answers.valid && !answers.pristine">
@@ -66,18 +97,23 @@
             </mat-basic-chip>
           </mat-chip-list>
           <input type="text" class="type-zone margin-bottom-8 edit-form-input-field" contenteditable="true" formControlName="tags"
-            placeholder="add tags" aria-label="tags">
+            placeholder="add tags" aria-label="tags" [matAutocomplete]="tagAuto">
+          <mat-autocomplete #tagAuto="matAutocomplete">
+            <mat-option *ngFor="let tag of filteredTags$ | async" [value]="tag">
+              {{tag}}
+            </mat-option>
+          </mat-autocomplete>
           <div>
-            <button type="button" class="add-tag-btn" [disabled]="questionForm.controls.tags.value==''" (click)="addTag()" aria-label="password">Add</button>
-          </div>
+              <button type="button" class="add-tag-btn" [disabled]="questionForm.controls.tags.value==''" (click)="addTag()" aria-label="password">Add</button>
+            </div>
 
-          <div class="error row col-md-12" *ngIf="answers.valid && questionForm.controls.questionText.valid && questionForm.hasError('tagCountInvalid')">
+            <div class="error row col-md-12" *ngIf="answers.valid && questionForm.controls.questionText.valid && questionForm.hasError('tagCountInvalid')">
             Must have atleast 3 tags
           </div>
         </div>
       </div>
       <div class="savebox">
-        <button class="btn resubmit-btn" type="submit" [disabled]="!questionForm.valid" aria-label="submit">Resubmit</button>
+        <button class="btn resubmit-btn" type="submit" [disabled]="!questionForm.valid"  aria-label="submit">{{editQuestion?.is_draft ===true ? 'Submit  ': 'Resubmit'}}</button>
       </div>
     </section>
   </div>

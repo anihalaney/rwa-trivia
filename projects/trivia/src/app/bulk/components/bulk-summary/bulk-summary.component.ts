@@ -6,7 +6,7 @@ import { AppState } from '../../../store';
 import * as bulkActions from '../../store/actions';
 import { bulkState } from '../../store';
 import { Utils } from 'shared-library/core/services';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 
 @Component({
   selector: 'app-bulk-summary',
@@ -35,7 +35,7 @@ export class BulkSummaryComponent implements OnInit, OnChanges, OnDestroy {
       }
     }));
     this.subscriptions.push(this.store.select(bulkState).pipe(select(s => s.getArchiveList)).subscribe((list) => {
-      if (list.length > 0) {
+      if (list && list.length > 0) {
         this.isArchive = true;
       } else {
         this.isArchive = false;

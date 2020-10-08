@@ -1,20 +1,18 @@
 import {
   Component, Input, ViewChild, OnChanges, Output, EventEmitter,
-  OnInit, SimpleChanges, ChangeDetectionStrategy, OnDestroy
+  OnInit, SimpleChanges, ChangeDetectionStrategy, OnDestroy, Inject, PLATFORM_ID
 } from '@angular/core';
-import { Observable, Subscription } from 'rxjs';
-import { map, take } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { take } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 import { bulkState } from '../../../store';
 import { BulkUploadFileInfo, Category, User } from 'shared-library/shared/model';
 import { AppState, appState, categoryDictionary } from '../../../../store';
 import { MatPaginator, MatTableDataSource, MatSort } from '@angular/material';
-import { Sort } from '@angular/material';
-import { AngularFireStorage } from '@angular/fire/storage';
 import * as bulkActions from '../../../store/actions';
 import { Router } from '@angular/router';
-import { Utils } from 'shared-library/core/services';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'bulk-summary-table',
@@ -40,8 +38,8 @@ export class BulkSummaryTableComponent implements OnInit, OnChanges, OnDestroy {
 
   @Input() bulkSummaryDetailPath: String;
   @Input() showSummaryTable: boolean;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
   @Output() showBulkUploadBtn = new EventEmitter<String>();
   @Input() isArchiveBtnClicked: boolean;
   @Input() toggleValue: boolean;
@@ -49,8 +47,8 @@ export class BulkSummaryTableComponent implements OnInit, OnChanges, OnDestroy {
 
   constructor(
     private store: Store<AppState>,
-    private storage: AngularFireStorage, private router: Router,
-    private utils: Utils) {
+    private router: Router,
+    @Inject(PLATFORM_ID) private platformId: Object) {
     this.categoryDictObs = store.select(categoryDictionary);
 
     this.subscriptions.push(this.categoryDictObs.subscribe(categoryDict => this.categoryDict = categoryDict));
@@ -60,7 +58,7 @@ export class BulkSummaryTableComponent implements OnInit, OnChanges, OnDestroy {
     }));
 
     this.subscriptions.push(this.store.select(bulkState).pipe(select(s => s.bulkUploadFileUrl)).subscribe((url) => {
-      if (url) {
+      if (isPlatformBrowser(this.platformId) && url) {
         const link = document.createElement('a');
         document.body.appendChild(link);
         link.href = url;
@@ -77,21 +75,12 @@ export class BulkSummaryTableComponent implements OnInit, OnChanges, OnDestroy {
     }));
 
     this.subscriptions.push(this.store.select(bulkState).pipe(select(s => s.getArchiveList)).subscribe((list) => {
-      if (list.length > 0) {
+      if (list && list.length > 0) {
         this.archivedArray = list;
       } else {
         this.archivedArray = [];
       }
     }));
-
-    this.subscriptions.push(this.store.select(bulkState).pipe(select(s => s.getArchiveList)).subscribe((list) => {
-      if (list.length > 0) {
-        this.archivedArray = list;
-      } else {
-        this.archivedArray = [];
-      }
-    }));
-
 
   }
 
@@ -102,7 +91,8 @@ export class BulkSummaryTableComponent implements OnInit, OnChanges, OnDestroy {
   }
   ngOnChanges(changes: SimpleChanges) {
     if (this.isArchiveBtnClicked) {
-      this.store.dispatch(new bulkActions.ArchiveBulkUpload({ archiveArray: this.archivedArray, user: this.user }));
+      this.dispatchArchiveBulkUpload();
+      // this.store.dispatch(new bulkActions.ArchiveBulkUpload({ archiveArray: this.archivedArray, user: this.user }));
     }
 
     if (changes['toggleValue'] && changes['toggleValue'].currentValue !== undefined
@@ -112,6 +102,10 @@ export class BulkSummaryTableComponent implements OnInit, OnChanges, OnDestroy {
         new bulkActions.LoadBulkUpload({ user: this.user, archive: this.toggleValue }) :
         new bulkActions.LoadUserBulkUpload({ user: this.user, archive: this.toggleValue }));
     }
+  }
+
+  dispatchArchiveBulkUpload() {
+    this.store.dispatch(new bulkActions.ArchiveBulkUpload({ archiveArray: this.archivedArray, user: this.user }));
   }
 
   loadBulkSummaryData() {

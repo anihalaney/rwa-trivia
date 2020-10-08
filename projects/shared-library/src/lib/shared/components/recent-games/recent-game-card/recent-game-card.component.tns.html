@@ -1,0 +1,64 @@
+<StackLayout class="SF-Pro-Regular recent-game" horizontalAlignment="center"
+    *ngIf="game.gameOptions?.playerMode == PlayerMode.Single">
+    <Label text="WON" textWrap="true" class="label-success SF-Pro-Bold"
+        *ngIf="game.winnerPlayerId && game.winnerPlayerId === user.userId" horizontalAlignment="center"></Label>
+    <Label text="LOST" textWrap="true" class="label-failed SF-Pro-Bold" *ngIf="game.winnerPlayerId !== user.userId"
+        horizontalAlignment="center"></Label>
+    <Label text="{{categoryDict[game.gameOptions?.categoryIds[0]]?.categoryName?.charAt(0)?.toUpperCase() +
+        categoryDict[game.gameOptions?.categoryIds[0]]?.categoryName?.slice(1)}}" textWrap="true"
+        class="label-category" horizontalAlignment="center"></Label>
+    <app-user-card [userId]="user.userId" [type]="userCardType.USER_IMAGE_NAME_VERTICAL"> </app-user-card>
+    <Label text="Score {{game?.stats[user?.userId]?.score}} / {{game?.round}}" class="label-score" textWrap="true"
+        horizontalAlignment="center"></Label>
+    <Label horizontalAlignment="center" text="You did not answer in time." textWrap="true" class="label-score"
+        *ngIf="game.GameStatus === GameStatus.TIME_EXPIRED"></Label>
+</StackLayout>
+
+<GridLayout rows="auto" columns="*,auto,*" *ngIf="game.gameOptions.playerMode == PlayerMode.Opponent" padding="15">
+    <StackLayout row="0" col="0" class="SF-Pro-Regular recent-game">
+        <app-user-card [userId]="user.userId" [type]="userCardType.USER_IMAGE_NAME_VERTICAL"> </app-user-card>
+        <Label text="Score {{game.stats[user.userId]?.score}}" textWrap="true" class="label-score"
+            horizontalAlignment="center"></Label>
+    </StackLayout>
+    <StackLayout row="0" col="1" class="SF-Pro-Bold">
+        <StackLayout orientation="horizontal" horizontalAlignment="center" verticalAlignment="center"
+            class="border-left" height="50">
+        </StackLayout>
+        <Label text="WON" textWrap="true" class="label-success"
+            *ngIf="game.winnerPlayerId && game.winnerPlayerId === user.userId" horizontalAlignment="center"></Label>
+        <Label text="LOST" textWrap="true" class="label-failed"
+            *ngIf="game.winnerPlayerId && game.winnerPlayerId !== user.userId" horizontalAlignment="center"></Label>
+        <Label text="TIE" textWrap="true" class="label-success"
+            *ngIf="game.round >= 16 && !game.winnerPlayerId && 
+            ((game?.gameOptions?.isBadgeWithCategory &&  game?.stats[game?.playerIds[0]]?.badge?.length === game?.stats[game.playerIds[1]]?.badge?.length) ||
+            (!game?.gameOptions?.isBadgeWithCategory &&  game?.stats[game?.playerIds[0]]?.score === game?.stats[game.playerIds[1]]?.score))"
+            horizontalAlignment="center"></Label>
+        <Label text="REJECTED" textWrap="true" class="label-failed"
+            *ngIf="!game.winnerPlayerId && game.GameStatus === GameStatus.REJECTED"
+            horizontalAlignment="center"></Label>
+        <Label text="INVITATION TIMEOUT" textWrap="true" class="label-failed"
+            *ngIf="game.GameStatus === GameStatus.INVITATION_TIMEOUT"
+            horizontalAlignment="center"></Label>
+        <Label text="DRAW" textWrap="true" class="label-failed" *ngIf="game.round >= 16 && !game.winnerPlayerId &&
+            ((game?.gameOptions?.isBadgeWithCategory &&  game?.stats[game?.playerIds[0]]?.badge?.length !== game?.stats[game.playerIds[1]]?.badge?.length) ||
+            (!game?.gameOptions?.isBadgeWithCategory &&  game?.stats[game?.playerIds[0]]?.score !== game?.stats[game.playerIds[1]]?.score))"
+            horizontalAlignment="center"></Label>
+        <Label class="label-category SF-Pro-Regular" text="{{categoryDict[game.gameOptions?.categoryIds[0]]?.categoryName?.charAt(0)?.toUpperCase() +
+                categoryDict[game.gameOptions?.categoryIds[0]]?.categoryName?.slice(1)}}" textWrap="true"
+            horizontalAlignment="center"></Label>
+        <StackLayout orientation="horizontal" horizontalAlignment="center" verticalAlignment="center"
+            class="border-left" height="50">
+        </StackLayout>
+    </StackLayout>
+    <StackLayout row="0" col="2" class="SF-Pro-Regular recent-game">
+        <app-user-card [userId]="getOpponentId(game)" [type]="userCardType.USER_IMAGE_NAME_VERTICAL"> </app-user-card>
+        <Label text="Score {{game.stats[getOpponentId(game)]?.score}}" textWrap="true" class="label-score"
+            horizontalAlignment="center"></Label>
+    </StackLayout>
+</GridLayout>
+<StackLayout *ngIf="game.gameOptions.playerMode == PlayerMode.Opponent" horizontalAlignment="center" padding="10">
+    <Label text="Your opponent did not answer in time." textWrap="true" class="label-score"
+        *ngIf="game.winnerPlayerId === user.userId && game.GameStatus === GameStatus.TIME_EXPIRED"></Label>
+    <Label text="You did not answer in time." textWrap="true" class="label-score"
+        *ngIf="game.winnerPlayerId !== user.userId && game.GameStatus === GameStatus.TIME_EXPIRED"></Label>
+</StackLayout>

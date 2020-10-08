@@ -1,28 +1,56 @@
-.action-bar{
-    background-color: #3e5b95;
-    color: white;
-    font-size: 15;
-   
+.action-bar {
+  /* background-color: #3e5b95; */
+  color: black;
+  font-size: 15;
+  padding: 0 10;
+  border: 0;
 }
 
-.action-title{
-    padding: 9 16 9 0;
-    height: 56;
+.action-title {
+  padding: 9 10 9 0;
+  height: 56;
+  font-size: 13px;
+  /* font-family: "Inter"; */
+  font-weight: 400;
 }
+
+.action-subtitle {
+  padding: 9 10 9 0;
+  height: 80;
+}
+
 .action-bar-button {
-    font-size: 25;
-    line-height: 22;
-    text-align: center;
+  font-size: 25;
+  line-height: 22;
+  text-align: center;
 }
 
-.action-text-title{
-    margin: 0 0 0 31;
-    font-size:20;     
+.action-sub-text-title {
+  font-size: 12;
 }
-.action-text-save{
-    font-size:14;
-    line-height: 11;
-    font-weight: bold;
-    height: 16;
-    
+
+.action-text-title {
+  font-size: 20;
+}
+
+.action-edit-icon {
+  margin-left: 5;
+  font-size: 15;
+}
+
+.action-text-save {
+  font-size: 14;
+  line-height: 11;
+  font-weight: bold;
+  height: 16;
+}
+
+
+.no-notification {
+  /* padding-right: 5; */
+}
+
+ActionBar {
+  border-width: 0;
+  border-color: transparent;
 }

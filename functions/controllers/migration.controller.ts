@@ -363,4 +363,58 @@ export class MigrationController {
         }
     }
 
+    /**
+     * Update user Game Played with stat
+     * return status
+     */
+    static async updateUserGamePlayedWithStat(req, res) {
+        try {
+            await UserService.updateUserGamePlayedWithStat();
+            Utils.sendResponse(res, interceptorConstants.SUCCESS, ResponseMessagesConstants.MIGRATED_COLLECTION);
+        } catch (error) {
+            Utils.sendError(res, error);
+        }
+    }
+    /**
+     * Generate rendered View for questions and unpublished question
+     *
+     */
+
+    static async generateRenderedQuestion(req, res) {
+        try {
+            // getAllUnpublishedQuestions
+            const updatePromises = [];
+            const unPublishedQs: Question[] = await QuestionService.getAllUnpublishedQuestions();
+
+            for (const question of unPublishedQs) {
+                question.isRichEditor = false;
+                const dbQuestionObj = { ...question };
+                updatePromises.push(QuestionService.updateQuestion(MigrationConstants.UNPUBLISHED_QUESTIONS, dbQuestionObj));
+            }
+
+            const publishedQs: Question[] = await QuestionService.getAllQuestions();
+
+            for (const question of publishedQs) {
+                question.isRichEditor = false;
+                const dbQuestionObj = { ...question };
+                updatePromises.push(QuestionService.updateQuestion(MigrationConstants.QUESTIONS, dbQuestionObj));
+            }
+
+
+
+            Utils.sendResponse(res, interceptorConstants.SUCCESS, await Promise.all(updatePromises));
+        } catch (error) {
+            Utils.sendError(res, error);
+        }
+    }
+
+
+    static async updateQuestionStats(req, res) {
+        try {
+            await QuestionService.migrateStats();
+            Utils.sendResponse(res, interceptorConstants.SUCCESS, ResponseMessagesConstants.MIGRATED_COLLECTION);
+        } catch (error) {
+            Utils.sendError(res, error);
+        }
+    }
 }

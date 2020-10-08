@@ -8,7 +8,28 @@ export class ApplicationSettings {
     social_profile: Array<SocialProfile>;
     tokens: Tokens;
     earn_bytes_on_question_contribute: number;
+    enabled_rich_editor: boolean;
     display_achievements: boolean;
+    quill_options: { list, options, custom_toolbar_position: string, web_view_question_options, web_view_answer_options };
+    max_image_size_of_question?: number;
+    android_version: number;
+    ios_version: number;
+    phone_authentication: boolean;
+    game_play_max_time: number[];
+    default_names: Array<string>;
+    user_display_name_value: number;
+    first_question_bits?: number;
+    show_welcome_screen: boolean;
+    show_category_screen?: boolean;
+    category_count_limit?: number;
+    tag_count_limit?: number;
+    game_question_bits?: number;
+    invite_bits?: number;
+    invite_bits_enabled?: boolean;
+    auto_save: { is_enabled: boolean, time: number };
+    apple_authentication: boolean;
+    badges: {};
+    notification_template: { [key: string]: { message: string} };
 }
 
 export class TimerLoader {

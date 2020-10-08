@@ -1,11 +1,10 @@
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { map } from 'rxjs/operators';
-import { Store, select } from '@ngrx/store';
-
-import { AppState, appState } from '../../../store';
+import { select, Store } from '@ngrx/store';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 import { User } from 'shared-library/shared/model';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { AppState, appState } from '../../../store';
+
 
 @Component({
   selector: 'admin-dashboard',
@@ -26,7 +25,7 @@ export class AdminComponent implements OnInit, OnDestroy {
 
       }
 
-      this.user = user
+      this.user = user;
     });
   }
 

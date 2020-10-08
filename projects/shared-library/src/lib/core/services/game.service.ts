@@ -1,11 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { combineLatest, forkJoin, Observable, of } from 'rxjs';
+import { combineLatest, forkJoin, Observable, of, from } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 import { CONFIG } from '../../environments/environment';
 import { Game, GameOperations, GameOptions, GameStatus, PlayerQnA, Question, ReportQuestion, User } from '../../shared/model';
 import { DbService } from './../db-service';
-
 
 @Injectable()
 export class GameService {
@@ -14,81 +13,38 @@ export class GameService {
   }
 
   createNewGame(gameOptions: GameOptions, user: User): Observable<string> {
-    const url: string = CONFIG.functionsUrl + '/app/game';
+    const url = `${CONFIG.functionsUrl}/game`;
     const payload = { gameOptions: gameOptions, userId: user.userId };
     return this.http.post<string>(url, payload);
   }
 
   getActiveGames(user: User): Observable<Game[]> {
     if (user && user.userId) {
+      // in query only support up to 10 values
       const queryParams1 = {
         condition: [{ name: 'playerId_0', comparator: '==', value: user.userId },
         { name: 'gameOver', comparator: '==', value: false },
-        { name: 'GameStatus', comparator: '==', value: GameStatus.STARTED }
+        {
+          name: 'GameStatus', comparator: 'in',
+          value: [GameStatus.STARTED, GameStatus.RESTARTED, GameStatus.WAITING_FOR_NEXT_Q,
+          GameStatus.AVAILABLE_FOR_OPPONENT, GameStatus.WAITING_FOR_FRIEND_INVITATION_ACCEPTANCE,
+          GameStatus.WAITING_FOR_RANDOM_PLAYER_INVITATION_ACCEPTANCE, GameStatus.JOINED_GAME]
+        }
         ]
       };
-      const userGames1 = this.dbService.valueChanges('games', '', queryParams1);
+
+      const userGames = this.dbService.valueChanges('games', '', queryParams1);
+
       const queryParams2 = {
-        condition: [{ name: 'playerId_0', comparator: '==', value: user.userId },
-        { name: 'gameOver', comparator: '==', value: false },
-        { name: 'GameStatus', comparator: '==', value: GameStatus.RESTARTED }
-        ]
-      };
-      const userGames2 = this.dbService.valueChanges('games', '', queryParams2);
-      const queryParams3 = {
-        condition: [{ name: 'playerId_0', comparator: '==', value: user.userId },
-        { name: 'gameOver', comparator: '==', value: false },
-        { name: 'GameStatus', comparator: '==', value: GameStatus.WAITING_FOR_NEXT_Q }
-        ]
-      };
-      const userGames3 = this.dbService.valueChanges('games', '', queryParams3);
-      const queryParams4 = {
-        condition: [{ name: 'playerId_0', comparator: '==', value: user.userId },
-        { name: 'gameOver', comparator: '==', value: false },
-        { name: 'GameStatus', comparator: '==', value: GameStatus.AVAILABLE_FOR_OPPONENT }
-        ]
-      };
-      const userGames4 = this.dbService.valueChanges('games', '', queryParams4);
-      const queryParams5 = {
-        condition: [{ name: 'playerId_0', comparator: '==', value: user.userId },
-        { name: 'gameOver', comparator: '==', value: false },
-        { name: 'GameStatus', comparator: '==', value: GameStatus.WAITING_FOR_FRIEND_INVITATION_ACCEPTANCE }
-        ]
-      };
-
-      const userGames5 = this.dbService.valueChanges('games', '', queryParams5);
-      const queryParams6 = {
-        condition: [{ name: 'playerId_0', comparator: '==', value: user.userId },
-        { name: 'gameOver', comparator: '==', value: false },
-        { name: 'GameStatus', comparator: '==', value: GameStatus.WAITING_FOR_RANDOM_PLAYER_INVITATION_ACCEPTANCE }
-        ]
-      };
-
-      const userGames6 = this.dbService.valueChanges('games', '', queryParams6);
-      const queryParams7 = {
-        condition: [{ name: 'playerId_0', comparator: '==', value: user.userId },
-        { name: 'gameOver', comparator: '==', value: false },
-        { name: 'GameStatus', comparator: '==', value: GameStatus.JOINED_GAME }
-        ]
-      };
-
-      const userGames7 = this.dbService.valueChanges('games', '', queryParams7);
-      const queryParams8 = {
         condition: [{ name: 'playerId_1', comparator: '==', value: user.userId },
         { name: 'gameOver', comparator: '==', value: false },
-        { name: 'GameStatus', comparator: '==', value: GameStatus.JOINED_GAME }
+        { name: 'GameStatus', comparator: 'in', value: [GameStatus.JOINED_GAME, GameStatus.WAITING_FOR_NEXT_Q] }
         ]
       };
 
-      const OtherGames2 = this.dbService.valueChanges('games', '', queryParams8);
-      const queryParams9 = {
-        condition: [{ name: 'playerId_1', comparator: '==', value: user.userId },
-        { name: 'gameOver', comparator: '==', value: false },
-        { name: 'GameStatus', comparator: '==', value: GameStatus.WAITING_FOR_NEXT_Q }
-        ]
-      };
-      const OtherGames3 = this.dbService.valueChanges('games', '', queryParams9);
-      return combineLatest(userGames1, userGames2, userGames3, userGames4, userGames5, userGames6, userGames7, OtherGames2, OtherGames3)
+      const OtherGames = this.dbService.valueChanges('games', '', queryParams2);
+
+      return combineLatest([userGames, OtherGames])
         .pipe(
           map(games => [].concat.apply([], games)),
           map(gs => gs.map(g => Game.getViewModel(g))),
@@ -123,13 +79,13 @@ export class GameService {
   }
 
   getNextQuestion(game: Game): Observable<Question> {
-    const url: string = CONFIG.functionsUrl + '/app/question/next/';
+    const url = `${CONFIG.functionsUrl}/question/next/`;
     return this.http.post<Question>(url + game.gameId, {});
   }
 
 
   addPlayerQnAToGame(gameId: string, playerQnA: PlayerQnA): Observable<any> {
-    const url = `${CONFIG.functionsUrl}/app/game/${gameId}`;
+    const url = `${CONFIG.functionsUrl}/game/${gameId}`;
     const payload = {
       playerQnA: playerQnA,
       operation: GameOperations.CALCULATE_SCORE
@@ -139,21 +95,21 @@ export class GameService {
 
 
   setGameOver(gameId: string) {
-    return this.http.put(`${CONFIG.functionsUrl}/app/game/${gameId}`,
+    return this.http.put(`${CONFIG.functionsUrl}/game/${gameId}`,
       {
         operation: GameOperations.GAME_OVER
       });
   }
 
   updateGameRound(gameId: string) {
-    return this.http.put(`${CONFIG.functionsUrl}/app/game/${gameId}`,
+    return this.http.put(`${CONFIG.functionsUrl}/game/${gameId}`,
       {
         operation: GameOperations.UPDATE_ROUND
       });
   }
 
   rejectGameInvitation(gameId: string) {
-    return this.http.put(`${CONFIG.functionsUrl}/app/game/${gameId}`,
+    return this.http.put(`${CONFIG.functionsUrl}/game/${gameId}`,
       {
         operation: GameOperations.REJECT_GAME
       });
@@ -227,16 +183,16 @@ export class GameService {
   }
 
 
-  checkUserQuestion(playerQnA: PlayerQnA): Observable<any> {
+  checkUserQuestion(playerQnA: PlayerQnA): Observable<Question> {
 
-    return this.http.post(`${CONFIG.functionsUrl}/app/question/${playerQnA.questionId}`,
+    return this.http.post<Question>(`${CONFIG.functionsUrl}/question/${playerQnA.questionId}`,
       {
         playerQnA: playerQnA
       });
   }
 
   getUsersAnsweredQuestion(userId: string, game: Game): Observable<Question[]> {
-    const observables = [];
+    const observables: Observable<Question>[] = [];
 
     for (const playerQnA of game.playerQnAs) {
       if (playerQnA.playerId === userId) {
@@ -275,11 +231,41 @@ export class GameService {
     let playerQnA = new PlayerQnA();
     playerQnA = game.playerQnAs.filter(info => info.questionId === Object.keys(report.questions)[0])[0];
     playerQnA.isReported = true;
-    const url = `${CONFIG.functionsUrl}/app/game/${game.gameId}`;
+    const url = `${CONFIG.functionsUrl}/game/${game.gameId}`;
     const payload = {
       playerQnA: playerQnA,
       operation: GameOperations.REPORT_STATUS
     };
     return this.http.put<any>(url, payload);
+  }
+
+  userReaction(questionId: string, userId: string, status: string): Observable<any> {
+    const collection = `questions/${questionId}/reactions`;
+    return from(this.dbService.getDoc(collection, userId).get()).pipe(map((res: any) => {
+      const reaction = res.data();
+      if (reaction) {
+        if (status !== reaction.status) {
+          return from(this.dbService.setDoc(collection, userId, { status: status }, { updatedOn: true }));
+        } else {
+          return from(this.dbService.deleteDoc(collection, userId));
+        }
+      } else {
+        return from(this.dbService.setDoc(collection, userId, { status: status }, { createdOn: true, updatedOn: true }));
+      }
+    }));
+  }
+
+  getUserReaction(questionId: string, userId: string) {
+    return this.dbService.valueChanges(`questions/${questionId}/reactions`, userId);
+  }
+
+  getQuestion(questionId: string) {
+    return this.dbService.valueChanges(`questions`, questionId);
+  }
+
+  updateQuestionStat(questionId: string, type: string) {
+    const url = `${CONFIG.functionsUrl}/question/question-stat-update/`;
+    return this.http.post<Question>(url,
+      { questionId: questionId, type: type === 'CREATED' ? type : 'UPDATED', update: type === 'CORRECT' ? true : false });
   }
 }

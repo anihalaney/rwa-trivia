@@ -1,0 +1,75 @@
+@import "../../../../app-variables";
+.bold-text {
+  font-size: 28;
+  font-weight: bold;
+}
+.bits-text {
+  font-size: 18;
+  color: $black-title;
+}
+
+.stats-box {
+  height: 100;
+  width: 30%;
+  background: #f2f2f2;
+  border-radius: 5;
+  padding-left: 15;
+}
+
+.border {
+  border-color: $midnight-light;
+  border-width: 2;
+}
+
+.text-blue {
+  color: $midnight-light;
+}
+
+.font-bold {
+  font-weight: bold;
+}
+
+.text-black {
+  color: $black-title;
+}
+
+.friends_box {
+  border-color: #e4e4e4;
+  border-width: 1 0 1 0;
+  margin-bottom: 20;
+
+  &-border {
+    border-width: 0 1 0 0;
+    border-color: #e4e4e4;
+    width: 50%;
+    justify-content: center;
+    padding: 10 0;
+  }
+
+  &-no-border {
+    width: 50%;
+    justify-content: center;
+    padding: 10 0;
+  }
+
+  &-text {
+    color: $midnight-light;
+    font-size: 18;
+
+    &.green {
+      color: #9ccc65;
+    }
+  }
+}
+
+.logged-in-profile {
+  .text-color {
+    color: $midnight-light;
+  }
+}
+
+.user-profile {
+  .text-color {
+    color: $black-title;
+  }
+}

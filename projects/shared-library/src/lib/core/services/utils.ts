@@ -1,88 +1,103 @@
-import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
-import { Subscription } from 'rxjs';
-import { CONFIG } from '../../environments/environment';
-import { Answer, User } from '../../shared/model';
+import { UtilsCore } from './utilsCore';
+import { DomSanitizer } from '@angular/platform-browser';
+import { MatSnackBar } from '@angular/material';
+import { Observable, of } from 'rxjs';
+// tslint:disable-next-line:max-line-length
+import { GameOptions, Game, User, FirebaseAnalyticsKeyConstants, FirebaseAnalyticsEventConstants, OpponentType, GameConstants, GameMode, PlayerMode, GeneralConstants } from 'shared-library/shared/model';
+import { WindowRef } from './windowref.service';
+import { isPlatformBrowser } from '@angular/common';
 
 @Injectable()
-export class Utils {
+export class Utils extends UtilsCore {
 
   constructor(
-    @Inject(PLATFORM_ID) private platformId: Object) {
+    @Inject(PLATFORM_ID) public platformId: Object,
+    public sanitizer: DomSanitizer,
+    private snackBar: MatSnackBar,
+    private windowRef: WindowRef
+  ) {
+    super(platformId, sanitizer);
   }
 
-  regExpEscape(s: string) {
-    return String(s).replace(/([-()\[\]{}+?*.$\^|,:#<!\\])/g, '\\$1').
-      replace(/\x08/g, '\\x08');
-  }
-
-  unsubscribe(subs: Subscription[]) {
-    subs.forEach(sub => {
-      if (sub && sub instanceof Subscription) {
-        sub.unsubscribe();
-      }
+  showMessage(type: string, msg: string) {
+    this.snackBar.open(String(msg), '', {
+      duration: 2000,
     });
   }
 
-  getRandomInt(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  }
-
-  dataURItoBlob(dataURI: any) {
-    const binary = atob(dataURI.split(',')[1]);
-    const array = [];
-    for (let i = 0; i < binary.length; i++) {
-      array.push(binary.charCodeAt(i));
+  setLoginFirebaseAnalyticsParameter(user: User): Observable<User> {
+    if (isPlatformBrowser(this.platformId) && this.windowRef.isDataLayerAvailable()) {
+      this.windowRef.addAnalyticsParameters(FirebaseAnalyticsKeyConstants.USER_ID, user.userId);
+      this.windowRef.pushAnalyticsEvents(FirebaseAnalyticsEventConstants.USER_LOGIN);
     }
-    return new Blob([new Uint8Array(array)]);
+    return of(user);
   }
 
-  getImageUrl(user: User, width: Number, height: Number, size: string) {
+  setNewGameFirebaseAnalyticsParameter(gameOptions: GameOptions, userId: string, gameId: string): Observable<string> {
+    if (isPlatformBrowser(this.platformId) && this.windowRef.isDataLayerAvailable()) {
+      this.windowRef.addAnalyticsParameters(FirebaseAnalyticsKeyConstants.USER_ID, userId);
+      this.windowRef.addAnalyticsParameters(FirebaseAnalyticsKeyConstants.OPPONENT_TYPE,
+        gameOptions.opponentType === OpponentType.Random ? GameConstants.RANDOM : GameConstants.FRIEND);
+      this.windowRef.addAnalyticsParameters(FirebaseAnalyticsKeyConstants.GAME_MODE,
+        gameOptions.gameMode === GameMode.Normal ? GameConstants.NORMAL : GameConstants.OFFLINE);
+      this.windowRef.addAnalyticsParameters(FirebaseAnalyticsKeyConstants.CATEGORY_IDS, JSON.stringify(gameOptions.categoryIds));
+      this.windowRef.addAnalyticsParameters(FirebaseAnalyticsKeyConstants.TAGS, JSON.stringify(gameOptions.tags));
+      this.windowRef.pushAnalyticsEvents(FirebaseAnalyticsEventConstants.START_NEW_GAME);
+    }
+    return of(gameId);
+  }
 
-    if (user && user.profilePicture && user.profilePicture !== '') {
-      return `${CONFIG.functionsUrl}/app/user/profile/${user.userId}/${user.profilePicture}/${width}/${height}`;
-    } else {
-      if (isPlatformBrowser(this.platformId) === false && isPlatformServer(this.platformId) === false) {
-        return `~/assets/images/avatar-${size}.png`;
+  setEndGameFirebaseAnalyticsParameter(game: Game, userId: string, otherUserId: string): Observable<string> {
+    if (isPlatformBrowser(this.platformId) && this.windowRef.isDataLayerAvailable()) {
+      this.windowRef.addAnalyticsParameters(FirebaseAnalyticsKeyConstants.GAME_ID, game.gameId);
+      this.windowRef.addAnalyticsParameters(FirebaseAnalyticsKeyConstants.USER_ID, userId);
+      this.windowRef.addAnalyticsParameters(FirebaseAnalyticsKeyConstants.PLAYER_MODE,
+        game.gameOptions.playerMode === PlayerMode.Single ? GameConstants.SINGLE : GameConstants.OPPONENT);
+
+      if (game.gameOptions.playerMode === PlayerMode.Opponent) {
+        this.windowRef.addAnalyticsParameters(FirebaseAnalyticsKeyConstants.OPPONENT_TYPE,
+          game.gameOptions.opponentType === OpponentType.Random ? GameConstants.RANDOM : GameConstants.FRIEND);
+        this.windowRef.addAnalyticsParameters(FirebaseAnalyticsKeyConstants.OTHER_USER_ID, otherUserId);
+        this.windowRef.addAnalyticsParameters(FirebaseAnalyticsKeyConstants.OTHER_USER_SCORE,
+          game.stats[otherUserId].score.toString());
+
+        if (game.round < 16 && game.stats[userId].score === game.stats[otherUserId].score) {
+          this.windowRef.addAnalyticsParameters(FirebaseAnalyticsKeyConstants.IS_TIE, GeneralConstants.TRUE);
+        } else {
+          let winPlayerId = otherUserId;
+          if (game.round < 16 && game.stats[userId].score > game.stats[otherUserId].score) {
+            winPlayerId = userId;
+          }
+          this.windowRef.addAnalyticsParameters(FirebaseAnalyticsKeyConstants.WINNER_PLAYER_ID, winPlayerId);
+        }
+
       } else {
-        return `assets/images/avatar-${size}.png`;
+        this.windowRef.addAnalyticsParameters(FirebaseAnalyticsKeyConstants.GAME_STATUS,
+          (game.playerQnAs.length - game.stats[userId].score !== 4) ? GeneralConstants.WIN : GeneralConstants.LOST);
       }
+
+      this.windowRef.addAnalyticsParameters(FirebaseAnalyticsKeyConstants.USER_SCORE,
+        game.stats[userId].score.toString());
+      this.windowRef.addAnalyticsParameters(FirebaseAnalyticsKeyConstants.GAME_MODE,
+        game.gameOptions.gameMode === GameMode.Normal ? GameConstants.NORMAL : GameConstants.OFFLINE);
+      this.windowRef.addAnalyticsParameters(FirebaseAnalyticsKeyConstants.CATEGORY_IDS, JSON.stringify(game.gameOptions.categoryIds));
+      this.windowRef.addAnalyticsParameters(FirebaseAnalyticsKeyConstants.TAGS, JSON.stringify(game.gameOptions.tags));
+      this.windowRef.addAnalyticsParameters(FirebaseAnalyticsKeyConstants.ROUND, game.round.toString());
+      this.windowRef.pushAnalyticsEvents(FirebaseAnalyticsEventConstants.COMPLETED_GAME);
     }
+    return of('success');
   }
 
-  convertIntoDoubleDigit(digit: Number) {
-    return (digit < 10) ? `0${digit}` : `${digit}`;
-  }
-
-  changeAnswerOrder(answers: Answer[]) {
-    if (answers) {
-      for (let i = answers.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        const temp = answers[i];
-        answers[i] = answers[j];
-        answers[j] = temp;
-      }
+  setUserLocationFirebaseAnalyticsParameter(user: User, isLocationChanged: boolean): Observable<string> {
+    if (isPlatformBrowser(this.platformId) && this.windowRef.isDataLayerAvailable() && isLocationChanged) {
+      this.windowRef.addAnalyticsParameters(FirebaseAnalyticsKeyConstants.USER_ID, user.userId);
+      this.windowRef.addAnalyticsParameters(FirebaseAnalyticsKeyConstants.LOCATION, user.location);
+      this.windowRef.pushAnalyticsEvents(FirebaseAnalyticsEventConstants.USER_LOCATION);
     }
-    return answers;
+    return of('success');
   }
 
-  getTimeDifference(pastTime: number, currentTime?: number): number {
-    if (!currentTime) {
-      const utcDate = new Date(new Date().toUTCString());
-      currentTime = utcDate.getTime();
-    }
-    const diff = currentTime - pastTime;
-    return diff;
-  }
 
-  public getUTCTimeStamp() {
-    const date = new Date(new Date().toUTCString());
-    const millis = date.getTime();
-    return millis;
-  }
-
-  public convertMilliSIntoMinutes(millis) {
-    return millis / 60000;
-  }
 
 }

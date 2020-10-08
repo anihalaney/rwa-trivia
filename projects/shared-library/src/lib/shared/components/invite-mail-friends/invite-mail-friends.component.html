@@ -1,0 +1,21 @@
+<div>
+  <div fxLayoutAlign="center" class="mail-icon-div">
+    <img class="mail-icon" src="assets/images/mail-icon.png" alt="Mail Icon">
+  </div>
+  <div fxLayoutAlign="left">
+    <form *ngIf="invitationForm" (ngSubmit)="onSubscribe()" [formGroup]="invitationForm"
+      class="col-md-12 col-sm-12 col-lg-12 col-xs-12" #formDir="ngForm">
+      <input type="text" formControlName="email" class="required" placeholder="Email address" aria-label="email">
+      <button class="btn send-btn">Send Invite</button>
+      <span *ngIf="invitationForm.controls.email.invalid && formDir.submitted" class="label">
+        Email is required!
+      </span>
+      <span *ngIf="showErrorMsg" class="label row col-sm-12"> {{errorMsg}} </span>
+      <span *ngIf="showErrorMsg" class="label row col-sm-12">{{invalidEmailList}}</span>
+      <span *ngIf="showSuccessMsg" class="success row col-sm-12" [innerHtml]="showSuccessMsg"></span>
+    </form>
+  </div>
+  <div *ngIf="applicationSettings?.invite_bits_enabled && applicationSettings?.invite_bits > 0" class="addBits">
+    Earn + {{applicationSettings?.invite_bits}} bits
+  </div>
+</div>

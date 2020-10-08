@@ -1,23 +1,23 @@
 <div class="innerli">
-  <div class="T-tagging">{{categoryDict[game.gameOptions.categoryIds[randomCategoryId]].categoryName.charAt(0).toUpperCase()
-    + categoryDict[game.gameOptions.categoryIds[randomCategoryId]].categoryName.slice(1)}}</div>
+<div *ngIf="categoryList" class="T-tagging ellipsis" >{{categoryList.join(", ")}}</div>
   <div class="row">
     <ng-container *ngIf="game.gameOptions.playerMode == PlayerMode.Single">
       <div class="col-xs-12 textcenter clearfix">
-        <div class="yourimg">
-          <img [stlOpenUserProfile]="{userId: user.userId, redirectTo: 'userProfile'}" [src]="getImageUrl(user)" alt="User Profile Image">
-        </div>
-        <div class="clear"></div>
-        <span class="dark ellipsis" title="{{user.displayName}}">{{user.displayName}}</span>
-        <div class="light ellipsis div-location" title="{{user?.location}}">{{user?.location}}</div>
+        <app-user-card [userId]="user?.userId" [type]="userCardType.USER_WEB_IMAGE_NAME_LOCATION_VERTICAL"></app-user-card>
         <hr>
-        <div class="dark">Score {{game.stats[user.userId].score}}</div>
+        <div class="dark">Score {{game.stats[user?.userId].score}}</div>
         <div class="div-badge">
-          <div [ngClass]="game.stats[user.userId].score >= 1?'score1':'score0'" class="sprite"></div>
-          <div [ngClass]="game.stats[user.userId].score >= 2?'score2':'score0'" class="sprite"></div>
-          <div [ngClass]="game.stats[user.userId].score >= 3?'score3':'score0'" class="sprite"></div>
-          <div [ngClass]="game.stats[user.userId].score >= 4?'score4':'score0'" class="sprite"></div>
-          <div [ngClass]="game.stats[user.userId].score >= 5?'score5':'score0'" class="sprite"></div>
+          <ng-template *ngIf="game?.gameOptions.isBadgeWithCategory; else showBadge" ngFor let-i="index"  let-badge [ngForOf]="totalBadges" >
+            <div class="sprite {{applicationSettings?.badges[game?.stats[user?.userId]?.badge[i]]?.class ? applicationSettings?.badges[game?.stats[user?.userId]?.badge[i]]?.class : 'score0'}}"></div>
+          </ng-template>
+          <ng-template #showBadge >
+            <div [ngClass]="game.stats[user?.userId].score >= 1?'score1':'score0'" class="sprite"></div>
+            <div [ngClass]="game.stats[user?.userId].score >= 2?'score2':'score0'" class="sprite"></div>
+            <div [ngClass]="game.stats[user?.userId].score >= 3?'score3':'score0'" class="sprite"></div>
+            <div [ngClass]="game.stats[user?.userId].score >= 4?'score4':'score0'" class="sprite"></div>
+            <div [ngClass]="game.stats[user?.userId].score >= 5?'score5':'score0'" class="sprite"></div>
+          </ng-template>
+
         </div>
       </div>
     </ng-container>
@@ -25,9 +25,8 @@
     <ng-container *ngIf="game.gameOptions.playerMode == PlayerMode.Opponent && game.playerIds.length == 1">
       <div class="textcenter clearfix">
         <div class="col-xs-6 div-right-border">
-          <div class="yourimg vs">
-            <img [stlOpenUserProfile]="{userId: user.userId, redirectTo: 'userProfile'}" [src]="getImageUrl(user)" alt="User Profile Image" />
-          </div>
+          <app-user-card [userId]="user.userId" [type]="userCardType.USER_WEB_IMAGE_NAME_LOCATION_VERTICAL"></app-user-card>
+          <span class="vs"> Vs </span>
         </div>
         <div class="col-xs-6">
           <div class="yourimg ">
@@ -38,27 +37,23 @@
         </div>
       </div>
       <div class="textcenter clearfix">
-        <div class="col-xs-6 ellipsis" [ngClass]="user.displayName?'div-right-border':''">
-          <span class="dark" title="{{user.displayName}}">{{user.displayName}}</span>
-        </div>
-      </div>
-      <div class="textcenter clearfix ">
-        <div class="col-xs-6 ellipsis div-right-border div-location">
-          <span class="light" *ngIf="user?.location" title="{{user.location}}">{{user.location}}</span>
-        </div>
-      </div>
-      <div class="textcenter clearfix">
         <div class="col-xs-6 div-right-border div-score">
           <div class="dark">Score {{game.stats[user.userId].score}}</div>
         </div>
       </div>
       <div class="text-align clearfix">
         <div class="div-width div-right-border float-left">
-          <div [ngClass]="game.stats[user.userId].score >= 1?'score1':'score0'" class="sprite"></div>
-          <div [ngClass]="game.stats[user.userId].score >= 2?'score2':'score0'" class="sprite"></div>
-          <div [ngClass]="game.stats[user.userId].score >= 3?'score3':'score0'" class="sprite"></div>
-          <div [ngClass]="game.stats[user.userId].score >= 4?'score4':'score0'" class="sprite"></div>
-          <div [ngClass]="game.stats[user.userId].score >= 5?'score5':'score0'" class="sprite"></div>
+          <ng-template *ngIf="game?.gameOptions.isBadgeWithCategory; else showBadgeForSinglePlayer" ngFor let-i="index"  let-badge [ngForOf]="totalBadges" >
+            <div class="sprite {{applicationSettings?.badges[game?.stats[user?.userId]?.badge[i]]?.class ? applicationSettings?.badges[game?.stats[user?.userId]?.badge[i]]?.class : 'score0'}}"></div>
+          </ng-template>
+          <ng-template  #showBadgeForSinglePlayer>
+            <div [ngClass]="game.stats[user.userId].score >= 1?'score1':'score0'" class="sprite"></div>
+            <div [ngClass]="game.stats[user.userId].score >= 2?'score2':'score0'" class="sprite"></div>
+            <div [ngClass]="game.stats[user.userId].score >= 3?'score3':'score0'" class="sprite"></div>
+            <div [ngClass]="game.stats[user.userId].score >= 4?'score4':'score0'" class="sprite"></div>
+            <div [ngClass]="game.stats[user.userId].score >= 5?'score5':'score0'" class="sprite"></div>
+          </ng-template>
+
         </div>
 
         <div class="div-width text-align padding-right float-right">
@@ -74,30 +69,11 @@
     <ng-container *ngIf="game.gameOptions.playerMode == PlayerMode.Opponent && game.playerIds.length > 1">
       <div class="textcenter clearfix">
         <div class="col-xs-6 div-right-border">
-          <div class="yourimg " [ngClass]="{'vs': game.playerIds.length>1 }">
-            <img [stlOpenUserProfile]="{userId: user.userId, redirectTo: 'userProfile'}" [src]="getImageUrl(user)" alt="User Profile Picture" />
-          </div>
+          <app-user-card [userId]="user.userId" [type]="userCardType.USER_WEB_IMAGE_NAME_LOCATION_VERTICAL"></app-user-card>
+          <span class="vs"> Vs </span>
         </div>
         <div class="col-xs-6">
-          <div class="yourimg ">
-            <img  [stlOpenUserProfile]="{userId: otherUserInfo?.userId, redirectTo: 'otherUserProfile'}" [src]="getImageUrl(otherUserInfo)" alt="User Profile Picture" />
-          </div>
-        </div>
-      </div>
-      <div class="textcenter clearfix">
-        <div class="col-xs-6 ellipsis " [ngClass]="user.displayName?.length > otherUserInfo?.displayName.length ?'div-right-border':''">
-          <span class="dark" title="{{user.displayName}}">{{user.displayName}}</span>
-        </div>
-        <div class="col-xs-6 ellipsis" [ngClass]="user.displayName?.length > otherUserInfo?.displayName.length?'':'div-left-border'">
-          <span class="dark" title="{{otherUserInfo?.displayName}}">{{otherUserInfo?.displayName}}</span>
-        </div>
-      </div>
-      <div class="textcenter clearfix">
-        <div class="col-xs-6 ellipsis div-location div-right-border">
-          <span class="light" *ngIf="user?.location" title="{{user.location}}">{{user.location}}</span>
-        </div>
-        <div class="col-xs-6 ellipsis div-location">
-          <span class="light" *ngIf="otherUserInfo?.displayName" title="{{otherUserInfo?.location}}">{{otherUserInfo?.location}}</span>
+          <app-user-card [userId]="otherUserId" [type]="userCardType.USER_WEB_IMAGE_NAME_LOCATION_VERTICAL"></app-user-card>
         </div>
       </div>
       <div class="clearfix">
@@ -110,19 +86,30 @@
       </div>
       <div class="text-align clearfix">
         <div class="div-width div-right-border float-left">
-          <div [ngClass]="game.stats[user.userId].score >= 1?'score1':'score0'" class="sprite"></div>
-          <div [ngClass]="game.stats[user.userId].score >= 2?'score2':'score0'" class="sprite"></div>
-          <div [ngClass]="game.stats[user.userId].score >= 3?'score3':'score0'" class="sprite"></div>
-          <div [ngClass]="game.stats[user.userId].score >= 4?'score4':'score0'" class="sprite"></div>
-          <div [ngClass]="game.stats[user.userId].score >= 5?'score5':'score0'" class="sprite"></div>
+          <ng-template  *ngIf="game?.gameOptions?.isBadgeWithCategory; else showBadgeForTwoPlayer" ngFor let-i="index"  let-badge [ngForOf]="totalBadges" >
+              <div class="sprite {{applicationSettings?.badges[game?.stats[user?.userId]?.badge[i]]?.class ? applicationSettings?.badges[game?.stats[user?.userId]?.badge[i]]?.class : 'score0'}}"></div>
+          </ng-template>
+          <ng-template #showBadgeForTwoPlayer >
+              <div [ngClass]="game.stats[user.userId].score >= 1?'score1':'score0'" class="sprite"></div>
+              <div [ngClass]="game.stats[user.userId].score >= 2?'score2':'score0'" class="sprite"></div>
+              <div [ngClass]="game.stats[user.userId].score >= 3?'score3':'score0'" class="sprite"></div>
+              <div [ngClass]="game.stats[user.userId].score >= 4?'score4':'score0'" class="sprite"></div>
+              <div [ngClass]="game.stats[user.userId].score >= 5?'score5':'score0'" class="sprite"></div>
+          </ng-template>
+
         </div>
 
         <div class="div-width text-align padding-right float-right">
-          <div [ngClass]="game.stats[otherUserId].score >= 1?'score1':'score0'" class="sprite"></div>
-          <div [ngClass]="game.stats[otherUserId].score >= 2?'score2':'score0'" class="sprite"></div>
-          <div [ngClass]="game.stats[otherUserId].score >= 3?'score3':'score0'" class="sprite"></div>
-          <div [ngClass]="game.stats[otherUserId].score >= 4?'score4':'score0'" class="sprite"></div>
-          <div [ngClass]="game.stats[otherUserId].score >= 5?'score5':'score0'" class="sprite"></div>
+          <ng-template *ngIf="game?.gameOptions?.isBadgeWithCategory; else showBadgeForTwoPlayerOpponent" ngFor let-i="index"  let-badge [ngForOf]="totalBadges" >
+              <div class="sprite {{applicationSettings?.badges[game?.stats[otherUserId].badge[i]]?.class ? applicationSettings?.badges[game?.stats[otherUserId].badge[i]]?.class : 'score0'}}"></div>
+          </ng-template>
+          <ng-template #showBadgeForTwoPlayerOpponent >
+            <div [ngClass]="game.stats[otherUserId].score >= 1?'score1':'score0'" class="sprite"></div>
+            <div [ngClass]="game.stats[otherUserId].score >= 2?'score2':'score0'" class="sprite"></div>
+            <div [ngClass]="game.stats[otherUserId].score >= 3?'score3':'score0'" class="sprite"></div>
+            <div [ngClass]="game.stats[otherUserId].score >= 4?'score4':'score0'" class="sprite"></div>
+            <div [ngClass]="game.stats[otherUserId].score >= 5?'score5':'score0'" class="sprite"></div>
+          </ng-template>
         </div>
       </div>
     </ng-container>
@@ -132,13 +119,13 @@
   </div>
 
   <div class="textcenter">
-    <a *ngIf="myTurn" [routerLink]="['/game-play', game.gameId]" class="playnow btn">
+    <a *ngIf="myTurn && !isHidePlayNow" [routerLink]="['/game-play', game.gameId]" class="playnow btn">
       <span>Your Turn</span>
       <p>Play Now</p>
     </a>
   </div>
 
-  <div *ngIf="myTurn" class="opponent">
+  <div *ngIf="myTurn" [class.m-t-44]="isHidePlayNow" class="opponent">
     <p class="dark">{{remainingHours }}:{{remainingMinutes}} hrs</p>
     <p class="ellipsis">remaining to play your turn</p>
   </div>

@@ -1,0 +1,282 @@
+#curentactive {
+  text-align: center;
+  background-color: #f1f2f2;
+}
+
+.f-between {
+  display: flex;
+  justify-content: space-between;
+}
+
+.enterquestion {
+  margin-top: 25px;
+  background-color: #f1f2f2;
+}
+
+.card .enterquestion h3 {
+  font-size: 18px;
+  margin: 16px 0 16px;
+}
+.card .enterquestion h3:before {
+  display: none;
+}
+
+.enterquestion .formfield > input,
+.formfield select {
+  padding: 10px 25px;
+  font-size: 18px;
+  display: inline-block;
+  width: calc(100% - 34px);
+}
+.enterquestion .formfield > label {
+  width: 30px;
+  display: inline-block;
+  vertical-align: -4px;
+}
+
+.submitpage .card {
+  padding: 0px 0 0;
+}
+.submitpage .optionbox {
+  padding: 0 10px;
+}
+
+.other-user-avatar-container {
+  position: relative;
+  min-height: 140px;
+}
+
+.custom-file-upload {
+  border: 1px solid;
+  display: block;
+  border-radius: 4px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: 0.3s ease-in-out;
+  width: 151px;
+  margin: 0 auto 20px;
+  position: relative;
+}
+label.custom-file-upload-image:after {
+  content: "";
+  position: absolute;
+  right: 7px;
+  bottom: 7px;
+  width: 28px;
+  height: 28px;
+  background: url(/assets/images/editicon.png) no-repeat;
+  opacity: 0.3;
+  transition: 0.3s ease-in-out;
+}
+label.custom-file-upload-image:hover:after {
+  opacity: 0.5;
+}
+
+.custom-file-upload img {
+  display: block;
+}
+
+.expand-width {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+.other-profile-img-container {
+  width: 150px;
+  margin: 0 auto;
+}
+
+.user-info-div {
+  margin-bottom: 18px;
+}
+.user-info-div label {
+  text-align: right;
+  font-size: 20px;
+  padding-right: 25px;
+  line-height: 40px;
+}
+.table-div {
+  display: table;
+  width: 100%;
+}
+.flex-info-div {
+  display: flex;
+  text-align: center;
+}
+.margin-auto {
+  margin: 0 auto;
+}
+.flex-sub-div {
+  display: flex;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.new-game-btn-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.startgame {
+  min-width: 190px;
+  font-family: "hindsemibold";
+  text-transform: uppercase;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  line-height: 34px;
+  border-radius: 4px;
+  display: inline-block;
+  text-align: center;
+  letter-spacing: 1px;
+  font-size: 14px;
+}
+
+.startgame:disabled {
+  background: silver;
+}
+
+.text-display {
+  font-size: 20px;
+  line-height: 20px;
+  text-align: left;
+}
+
+.statsview #stats,
+.statsview #graph {
+  padding: 17px;
+}
+.statsview #stats li {
+  border-bottom: 1px solid transparent;
+  text-align: left;
+}
+.statsview #stats li {
+  border-color: rgba(204, 204, 204, 0.44);
+}
+.statsview #stats li {
+  padding: 7px 0;
+  display: block;
+}
+.statsview #stats li:last-child,
+.statsview #graph li:last-child {
+  border-bottom: 0;
+}
+.statsview .sprite {
+  width: 25px;
+  height: 26px;
+  margin-right: 10px;
+}
+
+.viewtext {
+  display: inline-block;
+  align-self: center;
+  font-size: 16px;
+}
+.viewcount {
+  display: inline-block;
+  align-self: center;
+  width: 30%;
+  font-size: 16px;
+  letter-spacing: 0.75px;
+  font-family: "hindmedium";
+  line-height: 1;
+  text-align: right;
+}
+
+.m-b-55 {
+  margin-bottom: 55px;
+}
+
+.tab-content {
+  width: 50%;
+  margin: 0 auto;
+  margin-top: 30px;
+  border: 1px solid #e2e2e2;
+}
+
+.social {
+  width: 25px;
+  border-radius: 5px;
+  margin: 0 5px;
+}
+
+@media screen and (min-width: 1000px) {
+  .submitpage .optionbox h2 {
+    margin-bottom: 7px;
+  }
+  .submitpage .optionbox {
+    margin-top: 0;
+    padding: 0;
+  }
+}
+
+@media screen and (min-width: 767px) {
+  .card .enterquestion h3 {
+    margin-top: 0px;
+  }
+}
+
+@media (min-width: 1355px) {
+  .mainpage {
+    max-width: 100%;
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .viewtext {
+    width: 50%;
+  }
+
+  .flex-sub-div {
+    label {
+      font-size: 16px;
+    }
+  }
+}
+
+.points {
+  background-color: #3b5998;
+  width: 130px;
+  color: #fff;
+  border-radius: 30px;
+  padding-left: 23px;
+  font-size: 15px;
+  height: 42px;
+  line-height: 42px
+}
+
+.m-l-20 {
+  margin-left: 20px
+}
+
+.p-t-10 {
+  float: left;
+}
+
+.bytes {
+  background-color: #71b02f !important;
+}
+
+.points-count-f-12 {
+  font-size: 12px;
+}
+
+.points-count {
+  background-color: #fff;
+  color: #000;
+  border-radius: 20px;
+  // padding: 0px 5px;
+  margin: 3px 0 0 0;
+  float: right;
+  margin-left: 18px;
+  width: auto;
+  min-width: 36px;
+  border-radius: 50%;
+  line-height: 37px !important;
+  height: 36px;
+  text-align: center !important;
+  margin-right: 5px;
+  font-size: 15px !important;
+  padding-right: 0 !important;
+}

@@ -1,9 +1,9 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, NgZone } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Utils } from 'shared-library/core/services';
 import { AppState } from '../../../store';
-import { UserActions } from 'shared-library/core/store/actions';
+import { UserActions, TagActions, TopicActions } from 'shared-library/core/store/actions';
 import { Leaderboard } from './leaderboard';
 
 @Component({
@@ -13,14 +13,20 @@ import { Leaderboard } from './leaderboard';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-
 export class LeaderboardComponent extends Leaderboard {
 
   constructor(protected store: Store<AppState>,
     protected  userActions: UserActions,
     protected  utils: Utils,
     protected  route: ActivatedRoute,
-    protected  cd: ChangeDetectorRef) {
-    super(store, userActions, utils, route, cd);
+    protected  cd: ChangeDetectorRef,
+    protected ngZone: NgZone,
+    protected tag: TagActions,
+    protected topic: TopicActions) {
+    super(store, userActions, utils, route, cd, ngZone, tag, topic);
+  }
+
+  trackByFn(index, item) {
+    return index; // or item.id
   }
 }

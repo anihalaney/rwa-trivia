@@ -1,32 +1,53 @@
-<ns-action-bar title="My Question" class="Roboto-Regular" showAdd="true"></ns-action-bar>
-
+<ns-action-bar *ngIf="!displayEditQuestion" title="Questions" class="SF-Pro-Regular" showAdd="true"></ns-action-bar>
+<GridLayout rows="*,auto" columns="*">
 <StackLayout>
     <StackLayout *ngIf="loaderBusy">
-        <ActivityIndicator [busy]="loaderBusy" width="100" height="100" marginTop="225" class="activity-indicator"></ActivityIndicator>
+        <ActivityIndicator [busy]="loaderBusy" width="100" height="100" marginTop="225" class="activity-indicator">
+        </ActivityIndicator>
     </StackLayout>
-    <GridLayout row="*,*" col="*" *ngIf="!loaderBusy">
-        <StackLayout row="0" rowSpan="2" visibility="{{ !displayReasonViewer && !displayEditQuestion && !loaderBusy ? 'visible' : 'hidden' }}">
-            <TabView androidSelectedTabHighlightColor="#ef4545" tabTextFontSize="14" tabTextColor="#3b5998"
-                selectedTabTextColor="#3b5998">
-                <StackLayout stlRippleEffect *tabItem="{title: 'Published', textTransform: 'none'}" fontSize="16" fontWeight="600">
+    <GridLayout row="*,*,*" col="*" *ngIf="!loaderBusy">
+        <GridLayout row="0" rowSpan="2"
+            visibility="{{ !displayReasonViewer && !displayEditQuestion && !loaderBusy ? 'visible' : 'hidden' }}">
+            <GridLayout rows="auto,*" columns="*">
+                <GridLayout row="0" col="0" rows="*" columns="*,*" marginTop="5" marginBottom="5">
+                    <StackLayout class="tab-container" (tap)="onSelectTab('published')"
+                        row="0" col="0">
+                        <StackLayout padding="15" [ngClass]="{'active': tab === 'published'}">
+                            <Label text="Published" horizontalAlignment="center" textWrap="true"></Label>
+                        </StackLayout>
+                    </StackLayout>
+                    <StackLayout class="tab-container" (tap)="onSelectTab('unpublished')" row="0"
+                        col="1">
+                        <StackLayout padding="15" [ngClass]="{'active': tab === 'unpublished'}">
+                            <Label text="Unpublished" horizontalAlignment="center" textWrap="true"></Label>
+                        </StackLayout>
+                    </StackLayout>
+                </GridLayout>
+                <StackLayout *ngIf="tab === 'published'" row="1" col="0" stlRippleEffect fontSize="16" fontWeight="600">
                     <StackLayout>
-                        <question-table *ngIf="!loaderBusy" [questions]="publishedQuestions" [categoryDictionary]="categoryDictObs | async"
-                            [user]="user" [showApproveButton]="false" [userDict]="userDict">
+                        <question-table *ngIf="!loaderBusy" [questions]="publishedQuestions"
+                            [categoryDictionary]="categoriesObs | async" [user]="user" [showApproveButton]="false"
+                            [userDict]="userDict" [categoriesObs]="categoriesObs">
                         </question-table>
                     </StackLayout>
                 </StackLayout>
-                <StackLayout stlRippleEffect *tabItem="{title: 'Pending', textTransform: 'none'}" fontSize="16" fontWeight="600">
+                <StackLayout *ngIf="tab === 'unpublished'" row="1" col="0" stlRippleEffect fontSize="16" fontWeight="600">
                     <StackLayout>
-                        <question-table [questions]="unpublishedQuestions" [categoryDictionary]="categoryDictObs | async"
-                            [user]="user" [showApproveButton]="false" [userDict]="userDict" [displayReasonViewer]="displayReasonViewer"
+                        <question-table (editQuestion)="showUpdateQuestion(true);setSelectedQuestion($event)"
+                            [questions]="unpublishedQuestions" [categoryDictionary]="categoriesObs | async"
+                            [categoriesObs]="categoriesObs" [user]="user" [showApproveButton]="false"
+                            [userDict]="userDict" [displayReasonViewer]="displayReasonViewer"
                             (displayReason)="displayReason($event)" (selectedQuestion)="setSelectedQuestion($event)">
-                            <Button class="fa approve-btn" text="&#xf00c;" textWrap="true" top="70" width="90" height="25"
-                                fontSize="16" fontWeight="bold"></Button>
+                            <Button class="fa approve-btn" text="&#xf00c;" textWrap="true" top="70" width="90"
+                                height="25" fontSize="16" fontWeight="bold"></Button>
                         </question-table>
                     </StackLayout>
                 </StackLayout>
-            </TabView>
-        </StackLayout>
+            </GridLayout>
+        </GridLayout>
+        <!-- <TabView androidSelectedTabHighlightColor="#ef4545" tabTextFontSize="14" tabTextColor="#3b5998"
+                selectedTabTextColor="#3b5998">
+            </TabView> -->
 
         <StackLayout row="0" rowSpan="2" *ngIf="displayReasonViewer && !displayEditQuestion">
             <StackLayout>
@@ -34,31 +55,37 @@
                     <GridLayout row="*" col="*,*" height="80">
                         <Button col="0" colSpan="2" text="Reason" textWrap="true" fontSize="23" backgroundColor="white"
                             width="400"></Button>
-                        <Button col="1" class="fa " horizontalAlignment="left" text="&#xf00d;" textWrap="true" fontSize="25"
-                            backgroundColor="white" width="80" (tap)="displayReason(false)"></Button>
+                        <Button col="1" class="fa " horizontalAlignment="left" text="&#xf00d;" textWrap="true"
+                            fontSize="25" backgroundColor="white" width="80" stlRippleEffect (rippleTap)="displayReason(false)"></Button>
                     </GridLayout>
                 </CardLayout>
-                <StackLayout class="Roboto-Medium" padding="30 20 30 20">
+                <StackLayout class="SF-Pro-Medium" padding="30 20 30 20">
                     <TextView hint="Reason" [text]="selectedQuestion.reason" class="input" border="none"
                         borderBottomWidth="1" borderColor="#f3f3f3" [editable]="false"></TextView>
                     <Label text="Please do the needful edits and resubmit the question." textWrap="true" class="label"
                         fontWeight="400" color="#989898" marginTop="20"></Label>
-                    <Button text="RESUBMIT" class="Roboto-Regular" *ngIf="getDisplayStatus(selectedQuestion.status)==='REQUIRED_CHANGE'"
-                        color="#ffffff" backgroundColor="#71b02f" marginTop="10" padding="20" borderRadius="3" fontSize="20"
-                        fontWeight="bold" (tap)="showUpdateQuestion(true)"></Button>
+                    <Button text="RESUBMIT" class="SF-Pro-Regular"
+                        *ngIf="getDisplayStatus(selectedQuestion.status)==='REQUIRED_CHANGE'" color="#ffffff"
+                        backgroundColor="#71b02f" marginTop="10" padding="20" borderRadius="3" fontSize="20"
+                        fontWeight="bold" stlRippleEffect (rippleTap)="showUpdateQuestion(true)"></Button>
                 </StackLayout>
             </StackLayout>
         </StackLayout>
 
-        <app-question-add-update row="0" rowSpan="2" *ngIf="!displayReasonViewer && displayEditQuestion" [editQuestion]="selectedQuestion"
-            (hideQuestion)="hideQuestion($event)"></app-question-add-update>
+        <app-question-add-update row="0" rowSpan="2" *ngIf="!displayReasonViewer && displayEditQuestion"
+            [editQuestion]="selectedQuestion" (hideQuestion)="hideQuestion()"  [displayBottomBar]="false"></app-question-add-update>
 
-        <StackLayout row="0" verticalAlignment="bottom" horizontalAlignment="right" ios:margin="0 5 55 0" android:margin="0 10 10 0">
-            <FAB *ngIf="!displayReasonViewer && !displayEditQuestion && !loaderBusy" (tap)="navigateToSubmitQuestion()"
-                icon="~/assets/images/add.png" class="fab-button1"></FAB>
-
-        </StackLayout>
+        <!-- <StackLayout row="0" verticalAlignment="bottom" horizontalAlignment="right" ios:margin="0 5 55 0" android:margin="0 10 10 0">
+                <FlexboxLayout *ngIf="!displayReasonViewer && !displayEditQuestion && !loaderBusy"  stlRippleEffect (rippleTap)="navigateToSubmitQuestion()" borderRadius="30" class="fab-button1" padding="10" flexDirection="column" justifyContent="center">
+                        <Image src="~/assets/images/add.png"></Image>
+                </FlexboxLayout>
+        </StackLayout> -->
 
     </GridLayout>
 
 </StackLayout>
+<Absolutelayout *ngIf="platform.isIOS" row="1" verticalAlignment="bottom">
+    <bottom-bar [screen]="'profile-settings'">
+    </bottom-bar>
+  </Absolutelayout>
+</GridLayout>

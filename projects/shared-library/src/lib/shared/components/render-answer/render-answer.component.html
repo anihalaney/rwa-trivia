@@ -1,0 +1,3 @@
+<div *ngIf="answer.isRichEditor" [innerHtml]='answer.answerText | safeHtml'></div>
+<span class="" *ngIf="!answer.isRichEditor"> {{answer.answerText}}</span>
+

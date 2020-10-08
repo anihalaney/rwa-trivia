@@ -1,9 +1,0 @@
-<GridLayout rows="auto,auto,auto" columns="auto,*,auto" padding="5" iosOverflowSafeArea="false">
-    <Image [stlOpenUserProfile]="{userId: invitation.created_uid, redirectTo: 'otherUserProfile'}" row="0" col="0" rowSpan="3" [src]="getImageUrl(userDict[invitation.created_uid])" 
-    stretch="aspectFill" height="50" width="50"
-    marginLeft="10" verticalAlignment="center" marginRight="10"  borderRadius="50" paddingLeft="10" paddingTop="10"></Image>
-    <Label row="0" col="1" text="{{userDict[invitation.created_uid]?.displayName}}" textWrap="true" class="sub-title"></Label>
-    <Label row="1" col="1" text="{{invitation.status}}" fontSize="12"></Label>
-    <Button row="0" col="2" rowSpan="2" text="Accept" verticalAlignment="top" backgroundColor="#71b02b" stlRippleEffect color="#fff" (tap)="acceptFriendInvitation()"></Button>
-    <Button row="2" col="2" text="Reject" verticalAlignment="top" backgroundColor="#f50057" color="#fff" stlRippleEffect (tap)="rejectFriendInvitation()"></Button>
-</GridLayout>

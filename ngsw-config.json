@@ -1,5 +1,29 @@
 {
+  "$schema": "./node_modules/@angular/service-worker/config/schema.json",
   "index": "/index.html",
+  "dataGroups":
+  [
+    {
+      "name": "admin",
+      "urls": ["/admin"],
+      "cacheConfig": {
+        "maxSize": 0,
+        "maxAge": "0u",
+        "strategy": "freshness"
+      }
+    },
+    {
+      "name": "editor",
+      "urls": [
+        "/editor"
+      ],
+      "cacheConfig": {
+        "maxSize": 0,
+        "maxAge": "0u",
+        "strategy": "freshness"
+      }
+    }
+  ],
   "assetGroups": [
     {
       "name": "app",
@@ -13,8 +37,7 @@
           "/*.js"
         ],
         "urls": [
-          "https://cdnjs.cloudflare.com/ajax/libs/core-js/2.4.1/shim.min.js",
-          "https://fonts.googleapis.com/icon?family=Material+Icons"
+          "https://cdnjs.cloudflare.com/ajax/libs/core-js/2.4.1/shim.min.js"
         ]
       }
     },

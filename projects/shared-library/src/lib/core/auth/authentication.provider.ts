@@ -1,11 +1,12 @@
-import { Injectable, PLATFORM_ID, APP_ID, Inject } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { Observable, defer, throwError, from, of } from 'rxjs';
-import { share, take, tap, mapTo, map, filter } from 'rxjs/operators';
-import { CoreState, coreState } from '../store';
-import { User } from '../../shared/model';
-import { UserActions, UIStateActions } from '../store/actions';
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
+import { APP_ID, Inject, Injectable, PLATFORM_ID } from '@angular/core';
+import { AngularFireDatabase } from '@angular/fire/database';
+import { Store } from '@ngrx/store';
+import { defer, from, Observable, of, throwError } from 'rxjs';
+import { filter, map, mapTo, share, take, tap } from 'rxjs/operators';
+import { User, UserStatusConstants } from '../../shared/model';
+import { CoreState, coreState } from '../store';
+import { UIStateActions, UserActions } from '../store/actions';
 import { FirebaseAuthService } from './firebase-auth.service';
 
 @Injectable()
@@ -13,6 +14,7 @@ export class AuthenticationProvider {
 
   refreshTokenObserver: Observable<any>;
   user: User;
+  pushToken: string;
 
   constructor(private store: Store<CoreState>,
     private userActions: UserActions,
@@ -27,6 +29,7 @@ export class AuthenticationProvider {
           this.user = new User(afUser);
           this.user.idToken = token;
           this.store.dispatch(this.userActions.loginSuccess(this.user));
+
         });
       } else {
         // user not logged in
@@ -34,11 +37,33 @@ export class AuthenticationProvider {
       }
     });
 
+
     this.refreshTokenObserver = defer(() => {
-      return from(this.generateToken(true));
+      return from(this.generateToken(true)).pipe(tap((tokenResponse) => {
+        if (this.user) {
+          this.user.idToken = tokenResponse;
+          this.store.dispatch(this.userActions.loginSuccess(this.user));
+        }
+        return tokenResponse;
+      },
+        (err) => {
+          return throwError(err);
+        }));
     }).pipe(share());
 
 
+  }
+
+  updateDevicePushToken(token: string) {
+    this.firebaseAuthService.updatePushToken(token);
+  }
+
+  updateUserConnection() {
+    this.firebaseAuthService.updateOnConnect(this.user);
+  }
+
+  setUserOnline() {
+    this.firebaseAuthService.updateTokenStatus(this.user.userId, UserStatusConstants.ONLINE);
   }
 
   ensureLogin(url?: string): Observable<boolean> {
@@ -68,14 +93,7 @@ export class AuthenticationProvider {
 
 
   refreshToken(): Observable<any> {
-    return this.refreshTokenObserver.pipe(tap((tokenResponse) => {
-      this.user.idToken = tokenResponse;
-      this.store.dispatch(this.userActions.loginSuccess(this.user));
-      return tokenResponse;
-    },
-      (err) => {
-        return throwError(err);
-      }));
+    return this.refreshTokenObserver;
   }
 
 
@@ -85,17 +103,21 @@ export class AuthenticationProvider {
 
   }
 
-  logout() {
-    this.firebaseAuthService.signOut();
-  }
+  async updatePassword(email: string, currentPassword: string, newPassword: string) {
+    await this.firebaseAuthService.updatePassword(email, currentPassword, newPassword);
+}
 
-  get isAuthenticated(): boolean {
-    let user: User;
-    this.store.select(coreState).pipe(take(1)).subscribe(s => user = s.user);
-    if (user) {
-      return true;
-    }
-    return false;
+logout() {
+  this.firebaseAuthService.signOut();
+}
+
+get isAuthenticated(): boolean {
+  let user: User;
+  this.store.select(coreState).pipe(take(1)).subscribe(s => user = s.user);
+  if (user) {
+    return true;
   }
+  return false;
+}
 
 }
