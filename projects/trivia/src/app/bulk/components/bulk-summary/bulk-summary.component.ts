@@ -35,7 +35,7 @@ export class BulkSummaryComponent implements OnInit, OnChanges, OnDestroy {
       }
     }));
     this.subscriptions.push(this.store.select(bulkState).pipe(select(s => s.getArchiveList)).subscribe((list) => {
-      if (list.length > 0) {
+      if (list && list.length > 0) {
         this.isArchive = true;
       } else {
         this.isArchive = false;
